@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
@@ -85,6 +86,24 @@ class const _Body({required final LearnProgress progress}) extends StatelessWidg
             ],
           ),
         ),
+        if (progress.resumeStage case final stage?)
+          ListSection(
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: LearnStageIcon(stage: stage),
+                title: Text(context.l10n.resumeLearning),
+                subtitle: Text(stage.title(context.l10n)),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () => Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(LearnStageScreen.buildRoute(stage)),
+              ),
+            ],
+          ),
         for (final category in learnCategories)
           ListSection(
             header: Text(category.name(context.l10n)),

@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -800,7 +801,7 @@ class _EloChartState() extends State<_EloChart> {
                 .where((dateRange) => _dateIsInRange(dateRange))
                 .map(
                   (dateRange) => _RangeButton(
-                    text: dateRange.toString(),
+                    text: dateRange.label(context.l10n),
                     onPressed: () {
                       setState(() {
                         _selectedRange = dateRange;
@@ -940,8 +941,7 @@ enum DateRange() {
   oneYear,
   allTime;
 
-  @override
-  String toString() => switch (this) {
+  String label(AppLocalizations _) => switch (this) {
     DateRange.oneWeek => '1W',
     DateRange.oneMonth => '1M',
     DateRange.threeMonths => '3M',

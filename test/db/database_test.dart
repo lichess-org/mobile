@@ -68,6 +68,12 @@ void main() {
       final path = p.join(dir.path, 'lichess_mobile.db');
 
       final oldDb = await databaseFactoryFfi.openDatabase(
+    test('an upgrade from v7 adds the practice progress table and keeps learn progress', () async {
+      final dir = await Directory.systemTemp.createTemp('db_upgrade');
+      addTearDown(() => dir.delete(recursive: true));
+      final path = '${dir.path}/app.db';
+
+      final v7 = await databaseFactoryFfi.openDatabase(
         path,
         options: OpenDatabaseOptions(
           version: 7,
@@ -98,6 +104,21 @@ void main() {
         'data': '{"status":"resign"}',
       });
       await oldDb.close();
+            await db.execute(
+              'CREATE TABLE learn_progress(stageKey TEXT NOT NULL, levelId INTEGER NOT NULL, '
+              'score INTEGER NOT NULL, lastModified TEXT NOT NULL, syncedAt TEXT, '
+              'PRIMARY KEY (stageKey, levelId))',
+            );
+            await db.insert('learn_progress', {
+              'stageKey': 'rook',
+              'levelId': 1,
+              'score': 500,
+              'lastModified': DateTime.now().toIso8601String(),
+            });
+          },
+        ),
+      );
+      await v7.close();
 
       final db = await openAppDatabase(databaseFactoryFfi, path);
       addTearDown(db.close);
@@ -108,6 +129,14 @@ void main() {
       expect(rows[0]['hasRegisteredMove'], 1);
       expect(rows[1]['status'], 'resign');
       expect(rows[1]['hasRegisteredMove'], 0);
+      expect(await db.getVersion(), 8);
+      expect(await db.query('learn_progress'), hasLength(1));
+      await db.insert('practice_progress', {
+        'chapterId': 'dW7KIuoY',
+        'nbMoves': 3,
+        'lastModified': DateTime.now().toIso8601String(),
+      });
+      expect(await db.query('practice_progress'), hasLength(1));
     });
   });
 }

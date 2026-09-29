@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
@@ -29,6 +28,8 @@ import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -661,12 +662,6 @@ void _checkResponseSuccess(Uri url, Response response) {
   throw ServerException(response.statusCode, message, url, jsonError);
 }
 
-/// A JSON decoder that decodes UTF-8 bytes.
-///
-/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
-/// than decoding the bytes to a string and then parsing the JSON.
-final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
-
 extension ClientExtension on Client {
   /// Sends an HTTP POST request with the given headers and body to the given URL and read response body.
   ///
@@ -899,12 +894,8 @@ extension ClientRefExtension on Ref {
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
   Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
-    final link = keepAlive();
-    final timer = Timer(duration, link.close);
+    final link = cacheFor(duration);
     final client = read(lichessClientProvider);
-    onDispose(() {
-      timer.cancel();
-    });
     try {
       return await fn(client);
     } on ServerException {
@@ -925,13 +916,9 @@ extension ClientRefExtension on Ref {
     Future<U> Function(LichessClient, Aggregator) fn,
     Duration duration,
   ) async {
-    final link = keepAlive();
-    final timer = Timer(duration, link.close);
+    final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     final aggregator = read(aggregatorProvider);
-    onDispose(() {
-      timer.cancel();
-    });
     try {
       return await fn(client, aggregator);
     } on ServerException {

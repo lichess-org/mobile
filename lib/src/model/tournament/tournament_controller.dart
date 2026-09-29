@@ -148,6 +148,10 @@ class TournamentController(final TournamentId id)
         .read(tournamentRepositoryProvider)
         .loadPage(state.requireValue.tournament, page);
 
+    if (!state.hasValue) {
+      return;
+    }
+
     state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }
 
@@ -161,6 +165,10 @@ class TournamentController(final TournamentId id)
     final tournament = await ref
         .read(tournamentRepositoryProvider)
         .reload(state.requireValue.tournament);
+
+    if (!state.hasValue) {
+      return;
+    }
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();

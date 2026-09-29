@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -240,7 +241,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                         onTap: () async {
                           await Clipboard.setData(ClipboardData(text: challengeLink));
                           if (!context.mounted) return;
-                          showSnackBar(context, 'Copied.'); // TODO l10n
+                          showSnackBar(context, context.l10n.mobileCopied);
                         },
                         child: Text.rich(
                           TextSpan(
@@ -353,7 +354,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
         BottomBar(
           children: [
             BottomBarButton(
-              label: 'Share challenge URL', // TODO l10n
+              label: context.l10n.mobileShareChallengeUrl,
               onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
               showLabel: true,
               icon: Icons.share,

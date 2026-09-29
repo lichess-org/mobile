@@ -311,8 +311,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                 ),
               if (editorState.variant == Variant.standard)
                 BottomSheetAction(
-                  // TODO: l10n
-                  makeLabel: (context) => const Text('Challenge from position'),
+                  makeLabel: (context) => Text(context.l10n.mobileChallengeFromPosition),
                   onPressed: () {
                     final authUser = ref.read(authControllerProvider);
                     if (authUser == null) {
@@ -329,7 +328,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                           if (user.id == authUser.user.id) {
                             showSnackBar(
                               context,
-                              'You cannot challenge yourself',
+                              context.l10n.mobileYouCannotChallengeYourself,
                               type: SnackBarType.error,
                             );
                           }
@@ -345,8 +344,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                             },
                           );
                         },
-                        // TODO: l10n
-                        title: const Text('Challenge from position'),
+                        title: Text(context.l10n.mobileChallengeFromPosition),
                       ),
                     );
                   },
@@ -410,7 +408,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
           icon: Icons.biotech,
         ),
         BottomBarButton(
-          label: 'Filters',
+          label: context.l10n.mobileFilters,
           onTap: () => showModalBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
@@ -467,12 +465,26 @@ class _FenDialogState() extends State<_FenDialog> {
 
     _controller.text = text;
     try {
-      final pos = Chess.fromSetup(Setup.parseFen(text));
-      widget.onFenLoaded(pos.fen);
-    } catch (_) {
+      widget.onFenLoaded(_fenToLoad(Setup.parseFen(text)));
+    } on FenException {
       showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
     } finally {
       Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  /// The FEN to load into the editor for [setup].
+  ///
+  /// The position [setup] describes may be illegal: a missing king, the side
+  /// not to move in check, ... It is loaded all the same, as if the pieces had
+  /// been dragged onto the board, so that the user can fix it there.
+  static String _fenToLoad(Setup setup) {
+    try {
+      // Going through a Position drops what cannot be true of the board, such
+      // as an en passant square that no pawn could have created.
+      return Chess.fromSetup(setup).fen;
+    } on PositionSetupException {
+      return setup.fen;
     }
   }
 

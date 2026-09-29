@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -1097,7 +1098,7 @@ class const _TournamentCompleteWidget({required final TournamentState state})
                 builder: (context, isLoading, fetchData) {
                   return ListTile(
                     leading: const Icon(Icons.download),
-                    title: const Text('Download my games'),
+                    title: Text(context.l10n.mobileDownloadMyGames),
                     enabled: !isLoading,
                     onTap: () async {
                       final file = await fetchData();

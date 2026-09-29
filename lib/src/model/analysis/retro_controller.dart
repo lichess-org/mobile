@@ -252,6 +252,8 @@ class RetroController(final RetroOptions options)
   }
 
   void onUserMove(Move move) {
+    if (!state.hasValue) return;
+
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
@@ -261,6 +263,8 @@ class RetroController(final RetroOptions options)
   }
 
   void userNext() {
+    if (!state.hasValue) return;
+
     _setPath(
       state.requireValue.currentPath +
           _root.nodeAt(state.requireValue.currentPath).children.first.id,
@@ -269,10 +273,14 @@ class RetroController(final RetroOptions options)
   }
 
   void userPrevious() {
+    if (!state.hasValue) return;
+
     _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
   }
 
   void viewSolution() {
+    if (!state.hasValue) return;
+
     final currentMistake = state.value?.currentMistake;
     if (currentMistake != null) {
       onUserMove(currentMistake.serverMove);
@@ -281,14 +289,20 @@ class RetroController(final RetroOptions options)
   }
 
   Future<void> flipSide() async {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(await _computeMistakes(state.requireValue.pov.opposite));
   }
 
   void restart() {
+    if (!state.hasValue) return;
+
     _showMistake(0);
   }
 
   void nextMistake() {
+    if (!state.hasValue) return;
+
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
@@ -374,6 +388,8 @@ class RetroController(final RetroOptions options)
   }
 
   void _onIncorrectMove() {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.incorrect));
     userPrevious();
   }
@@ -384,6 +400,8 @@ class RetroController(final RetroOptions options)
 
   @override
   void onCurrentPathEvalChanged(bool isSameEvalString) {
+    if (!state.hasValue) return;
+
     _refreshCurrentNode(recomputeRootView: !isSameEvalString);
 
     if (state.requireValue.feedback == RetroFeedback.evalMove) {
