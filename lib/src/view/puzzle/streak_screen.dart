@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart';
+﻿import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -235,7 +235,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           );
 
                       if (orientation == Orientation.landscape) {
-                        final boardSize = boardSizeConstraints(constraints);
+                        final boardSize = landscapeBoardSizeConstraints(constraints);
                         return Padding(
                           padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                           child: Row(
