@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
@@ -25,8 +26,8 @@ class const PracticeScreen({super.key}) extends ConsumerWidget {
     final structure = ref.watch(practiceStructureProvider);
     final progress = ref.watch(practiceProgressProvider);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.practice),
         actions: [
           if (progress case AsyncData(value: final progress) when !progress.isEmpty)
