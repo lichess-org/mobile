@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_progress_gate.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -37,48 +38,15 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
         actions: const [ToggleSoundButton()],
       ),
       // The controller reads the saved progress to pick the level to start with.
-      body: _ProgressGate(stage: stage),
+      body: LearnProgressGate(
+        builder: (context, progress) => _Body(stage: stage, progress: progress),
+      ),
     );
   }
 }
 
-/// Keeps the level in progress mounted while the progress reloads.
-///
-/// Unmounting the body disposes the stage controller, which cancels its pending opponent moves
-/// and restarts the level from its initial position. A reload is not rare: it happens on every
-/// account change, and a background request that finds an expired session invalidates the auth
-/// state too. So the body is mounted from the first successful load onwards, and only an error
-/// before any load replaces it.
-class const _ProgressGate({required final LearnStage stage}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_ProgressGate> createState() => _ProgressGateState();
-}
-
-class _ProgressGateState() extends ConsumerState<_ProgressGate> {
-  /// Whether progress has loaded at least once, so the body stays mounted across a reload.
-  ///
-  /// Only used to decide between a spinner and the body. The error branch is deliberately not
-  /// gated on it: latching would make the error unreachable for the rest of the screen's life, so
-  /// a failed reload would leave the stage running on empty progress, inviting the user to
-  /// replay levels they already finished. [_Body] reads the provider itself, so the in-progress
-  /// level keeps its own state either way.
-  bool hasLoaded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final progress = ref.watch(learnProgressProvider);
-    if (progress.hasValue) {
-      hasLoaded = true;
-    } else if (progress.hasError) {
-      return Center(child: Text('Could not load progress: ${progress.error}'));
-    } else if (!hasLoaded) {
-      return const Center(child: CircularProgressIndicator.adaptive());
-    }
-    return _Body(stage: widget.stage);
-  }
-}
-
-class const _Body({required final LearnStage stage}) extends ConsumerStatefulWidget {
+class const _Body({required final LearnStage stage, required final LearnProgress progress})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
@@ -156,7 +124,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 },
               );
 
-              final table = _Table(state: state);
+              final table = _Table(state: state, progress: widget.progress);
 
               return isLandscape
                   ? Row(
@@ -188,7 +156,9 @@ class _BodyState() extends ConsumerState<_Body> {
             child: _StageIntro(stage: widget.stage, onStart: controller.hideIntro),
           )
         else if (state.stageCompleted)
-          _Overlay(child: _StageComplete(stage: widget.stage)),
+          _Overlay(
+            child: _StageComplete(stage: widget.stage, progress: widget.progress),
+          ),
       ],
     );
   }
@@ -291,13 +261,13 @@ class const _Apple() extends StatelessWidget {
 }
 
 /// The goal of the level, its result, and the progress through the stage.
-class const _Table({required final LearnStageState state}) extends ConsumerWidget {
+class const _Table({required final LearnStageState state, required final LearnProgress progress})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(learnStageControllerProvider(state.stage).notifier);
     final level = state.level;
     final l10n = context.l10n;
-    final progress = ref.watch(learnProgressProvider).value ?? LearnProgress.empty;
 
     final Widget result;
     if (level.failed) {
@@ -516,11 +486,11 @@ class const _StageIntro({required final LearnStage stage, required final VoidCal
   }
 }
 
-class const _StageComplete({required final LearnStage stage}) extends ConsumerWidget {
+class const _StageComplete({required final LearnStage stage, required final LearnProgress progress})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final progress = ref.watch(learnProgressProvider).value ?? LearnProgress.empty;
     final stageIndex = learnStages.indexOf(stage);
     final next = stageIndex + 1 < learnStages.length ? learnStages[stageIndex + 1] : null;
     return Column(
