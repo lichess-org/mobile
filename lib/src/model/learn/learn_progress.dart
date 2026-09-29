@@ -199,7 +199,7 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   Future<LearnProgress> build() async {
     final storage = await ref.watch(learnProgressStorageProvider.future);
     final progress = await storage.fetch();
-    unawaited(_flushUnsynced(storage));
+    unawaited(_syncWithServer(storage));
     return progress;
   }
 
@@ -235,6 +235,44 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     if (ref.read(authControllerProvider) == null) return;
     final storage = await ref.read(learnProgressStorageProvider.future);
     await _pushScore(storage, stageKey, levelIndex, score);
+  }
+
+  /// Merges the server scores into the local ones, then uploads whatever the server is missing.
+  ///
+  /// The merge runs first on purpose: flushing before it would push a stale local score over a
+  /// better server one. After it, every level holds the best of both sides, so persisting and
+  /// pushing can only raise a score, never lower one.
+  Future<void> _syncWithServer(LearnProgressStorage storage) async {
+    if (ref.read(authControllerProvider) == null) return;
+    try {
+      final server = await ref.withClient((client) => LearnRepository(client).fetchProgress());
+      for (final stageEntry in server.entries) {
+        for (final levelEntry in stageEntry.value.entries) {
+          // The keep-max guard leaves the local score alone when the server is behind.
+          await storage.saveScore(
+            stageKey: stageEntry.key,
+            levelIndex: levelEntry.key,
+            score: levelEntry.value,
+          );
+          // Stamps only when the row now holds exactly the server score, so a level where the
+          // local copy is better stays dirty and is uploaded by the flush below.
+          await storage.markSynced(
+            stageKey: stageEntry.key,
+            levelIndex: levelEntry.key,
+            score: levelEntry.value,
+          );
+        }
+      }
+      final current = state.value;
+      if (current != null) {
+        // Merged into the current state, so a level completed during the round-trip is kept.
+        final merged = current.mergedWithServer(server);
+        if (!identical(merged, current)) state = AsyncData(merged);
+      }
+    } catch (_) {
+      // Offline or errored: the local progress stands, and the flush still gets its chance.
+    }
+    await _flushUnsynced(storage);
   }
 
   /// Uploads the scores saved while offline, one row at a time.
