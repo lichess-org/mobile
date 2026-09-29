@@ -96,6 +96,56 @@ void main() {
       expect((await storage.fetch(bob)).levelScore(rook, 0), 200);
     });
 
+    test('tracks a reset waiting to reach the server', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+      const bob = UserId('bob');
+
+      expect(await storage.isResetPending(alice), isFalse);
+      await storage.setResetPending(alice, pending: true);
+      expect(await storage.isResetPending(alice), isTrue);
+      // Per account: Bob's reset state is untouched by Alice's.
+      expect(await storage.isResetPending(bob), isFalse);
+      await storage.setResetPending(alice, pending: false);
+      expect(await storage.isResetPending(alice), isFalse);
+    });
+
+    test('drops a row for a level this version cannot represent', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+
+      expect(isStorableLevel('rook', 0), isTrue);
+      expect(isStorableLevel('rook', rook.levels.length), isFalse);
+      expect(isStorableLevel('rook', -1), isFalse);
+      expect(isStorableLevel('not-a-stage', 0), isFalse);
+
+      await storage.saveScore(userId: alice, stageKey: 'pins', levelIndex: 0, score: 500);
+      expect(await storage.fetchUnsynced(alice), hasLength(1));
+
+      await storage.drop(userId: alice, stageKey: 'pins', levelIndex: 0);
+      expect(await storage.fetchUnsynced(alice), isEmpty);
+    });
+
     test('the notifier updates its state', () async {
       final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
       final container = await makeContainer(

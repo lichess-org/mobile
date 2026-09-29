@@ -55,6 +55,13 @@ class const _ProgressGate({required final LearnStage stage}) extends ConsumerSta
 }
 
 class _ProgressGateState() extends ConsumerState<_ProgressGate> {
+  /// Whether progress has loaded at least once, so the body stays mounted across a reload.
+  ///
+  /// Only used to decide between a spinner and the body. The error branch is deliberately not
+  /// gated on it: latching would make the error unreachable for the rest of the screen's life, so
+  /// a failed reload would leave the stage running on empty progress, inviting the user to
+  /// replay levels they already finished. [_Body] reads the provider itself, so the in-progress
+  /// level keeps its own state either way.
   bool hasLoaded = false;
 
   @override
@@ -62,10 +69,9 @@ class _ProgressGateState() extends ConsumerState<_ProgressGate> {
     final progress = ref.watch(learnProgressProvider);
     if (progress.hasValue) {
       hasLoaded = true;
+    } else if (progress.hasError) {
+      return Center(child: Text('Could not load progress: ${progress.error}'));
     } else if (!hasLoaded) {
-      if (progress.hasError) {
-        return Center(child: Text('Could not load progress: ${progress.error}'));
-      }
       return const Center(child: CircularProgressIndicator.adaptive());
     }
     return _Body(stage: widget.stage);

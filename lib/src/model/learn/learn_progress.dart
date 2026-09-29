@@ -93,11 +93,22 @@ class const LearnProgress(final IMap<String, IMap<int, int>> _scores) {
   }
 }
 
+/// Whether this app version has a level at [levelIndex] of the stage [stageKey].
+///
+/// A stage or level outside the catalogue cannot be shown and the server rejects it, so such a
+/// row must not be stored or uploaded.
+bool isStorableLevel(String stageKey, int levelIndex) {
+  final stage = learnStageByKey(stageKey);
+  return stage != null && levelIndex >= 0 && levelIndex < stage.levels.length;
+}
+
 /// The [server] scores this app version can store and display: a stage it knows, a level within
 /// that stage, and a positive score.
 ///
-/// Applied before anything is written or uploaded, so a malformed or outdated payload cannot
-/// leave rows that are stored and re-POSTed on every start.
+/// Applied before anything is written, so a malformed or outdated payload cannot leave rows that
+/// are stored and re-POSTed on every start. It also empties the map for a payload the build
+/// cannot make sense of, which is indistinguishable from "no progress": callers must not read
+/// an empty result as a reset.
 IMap<String, IMap<int, int>> _validServerScores(IMap<String, IMap<int, int>> server) {
   return {
     for (final stageEntry in server.entries)
@@ -229,16 +240,16 @@ class const LearnProgressStorage(final Database _db) {
     );
   }
 
-  /// Deletes the rows the server has already accepted.
-  ///
-  /// For when the server reports no progress at all: a clean row reached the server once, so
-  /// the server losing it means the progress was reset elsewhere, and the local copy has to go
-  /// as well. Dirty rows are kept, the server never had them.
-  Future<void> deleteSynced(UserId? userId) async {
+  /// Removes one level's row, used to discard a row this build cannot represent.
+  Future<void> drop({
+    required UserId? userId,
+    required String stageKey,
+    required int levelIndex,
+  }) async {
     await _db.delete(
       _tableName,
-      where: 'userId = ? AND syncedAt IS NOT NULL',
-      whereArgs: [_accountKey(userId)],
+      where: 'userId = ? AND stageKey = ? AND levelId = ?',
+      whereArgs: [_accountKey(userId), stageKey, levelIndex + 1],
     );
   }
 
@@ -271,22 +282,27 @@ final learnProgressProvider = AsyncNotifierProvider<LearnProgressNotifier, Learn
 class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   final _logger = Logger('LearnProgressNotifier');
 
-  /// The account the current build belongs to.
+  /// The account this build of the notifier belongs to.
   ///
-  /// Watched so that signing in or out rebuilds the progress for the right account, and reused
-  /// by every background operation as the account it is allowed to touch.
-  UserId? get _userId => ref.read(authControllerProvider)?.user.id;
-
-  /// Whether [_userId] is still the signed-in account.
+  /// Captured in [build], and compared against the live auth state before every read, write and
+  /// POST. A getter cannot be used for the comparison: it would re-read the same provider and
+  /// compare the live value with itself, which is always true and never catches a switch.
   ///
-  /// This notifier is not `autoDispose`, so Riverpod reuses the same instance across a rebuild
+  /// The notifier is not `autoDispose`, so Riverpod reuses the same instance across a rebuild
   /// while `invalidate` cancels nothing. An `await` can therefore resume after the account
-  /// changed, and every read, write and POST re-checks this before acting.
-  bool get _accountUnchanged => ref.read(authControllerProvider)?.user.id == _userId;
+  /// changed, and everything below checks this first.
+  UserId? _account;
+
+  /// The account the user is signed in to right now, or null.
+  UserId? get _signedIn => ref.read(authControllerProvider)?.user.id;
+
+  /// Whether the signed-in account is still the one this build belongs to.
+  bool get _accountUnchanged => _signedIn == _account;
 
   @override
   Future<LearnProgress> build() async {
     final userId = ref.watch(authControllerProvider.select((auth) => auth?.user.id));
+    _account = userId;
     final storage = await ref.watch(learnProgressStorageProvider.future);
     final progress = await storage.fetch(userId);
     unawaited(_syncWithServer(storage, userId));
@@ -304,10 +320,14 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     // POSTing a score that is not an improvement would destroy the server-side best. Do not
     // rely on withScore returning an identical instance, that is an implementation detail.
     if (current.levelScore(stage, levelIndex) >= score) return;
-    final userId = _userId;
+    // The row goes to [_account], the account whose progress is being mutated here, so the row
+    // and the state can never disagree about whose they are. The upload is separate: the POST
+    // authenticates as whoever is signed in at send time, so it only runs while that is still
+    // this account. A level completed across a switch is kept locally and uploaded by the next
+    // flush, which runs for the account that owns it.
+    final userId = _account;
     state = AsyncData(current.withScore(stage, levelIndex, score));
     final storage = await ref.read(learnProgressStorageProvider.future);
-    if (!_accountUnchanged) return;
     await storage.saveScore(
       userId: userId,
       stageKey: stage.key,
@@ -323,7 +343,7 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   /// as pending until it lands. Otherwise a reset done offline would be undone by the next
   /// start, which would read the still-intact server copy back into the local rows.
   Future<void> reset() async {
-    final userId = _userId;
+    final userId = _account;
     final storage = await ref.read(learnProgressStorageProvider.future);
     if (userId == null) {
       await storage.reset(null);
@@ -332,6 +352,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     }
     await storage.setResetPending(userId, pending: true);
     await storage.reset(userId);
+    if (!_accountUnchanged) {
+      // The account switched while the local rows were being cleared. Clearing the state would
+      // wipe what the new account is showing, and the server call would run as the new account.
+      _logger.warning('Skipped the server half of the reset, the account changed');
+      return;
+    }
     state = const AsyncData(LearnProgress.empty);
     unawaited(_syncReset(userId));
   }
@@ -342,8 +368,14 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   /// flush.
   Future<void> _syncScore(UserId? userId, String stageKey, int levelIndex) async {
     if (userId == null) return;
-    final storage = await ref.read(learnProgressStorageProvider.future);
-    await _pushScore(storage, userId, stageKey, levelIndex);
+    try {
+      final storage = await ref.read(learnProgressStorageProvider.future);
+      await _pushScore(storage, userId, stageKey, levelIndex);
+    } catch (e, st) {
+      // Reached from an unawaited call in saveScore, so a throw here would surface as an
+      // unhandled zone error. The row stays dirty and the next flush picks it up.
+      _logger.warning('Could not upload the learn score for $stageKey level $levelIndex', e, st);
+    }
   }
 
   /// Merges the server scores into the local ones, then uploads whatever the server is missing.
@@ -357,19 +389,27 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
       if (await storage.isResetPending(userId)) {
         // A previous reset never reached the server. Clear it there before reading progress
         // back, otherwise the merge would restore exactly what the user asked to erase.
-        await _resetOnServer(storage, userId);
+        if (!await _resetOnServer(storage, userId)) {
+          // The reset is still not on the server, so merging now would put the old progress
+          // straight back into the local rows and keep resetting on every start. Wait for the
+          // network instead.
+          _logger.warning('Learn reset still pending, not merging the server progress yet');
+          return;
+        }
       }
       final server = _validServerScores(
         await ref.withClient((client) => LearnRepository(client).fetchProgress()),
       );
       if (!_accountUnchanged) return;
       if (server.isEmpty) {
-        // A reset performed on the web leaves the server with no progress, and the scores it
-        // drops are never pushed back, so the local copy has to be dropped as well. Otherwise
-        // a reset done on the website would silently never reach the app.
-        await storage.deleteSynced(userId);
-        if (!_accountUnchanged || !ref.mounted) return;
-        state = AsyncData(await storage.fetch(userId));
+        // Deliberately nothing here. An empty payload cannot be told apart from a payload this
+        // build cannot make sense of, because _validServerScores drops both. Deleting on it
+        // meant a lila stage rename, or a captive portal answering 200 with an empty object,
+        // wiped every synced row while the server still held the data and nothing could restore
+        // it. A reset done on the web therefore does not reach the app: a late update is better
+        // than an unrecoverable deletion. Clearing it needs a server signal that distinguishes
+        // "no progress" from "progress I do not understand".
+        _logger.info('Server reported no learn progress, keeping the local copy');
       } else {
         for (final stageEntry in server.entries) {
           for (final levelEntry in stageEntry.value.entries) {
@@ -391,7 +431,7 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
             );
           }
         }
-        if (!_accountUnchanged || !ref.mounted) return;
+        if (!_accountUnchanged) return;
         final current = state.value;
         if (current != null) {
           // Merged into the current state, so a level completed during the round-trip is kept.
@@ -419,6 +459,19 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     var failed = 0;
     for (final unsynced in await storage.fetchUnsynced(userId)) {
       if (!_accountUnchanged) return;
+      // A stage or level this build does not know can never be accepted, so retrying it on
+      // every start would post the same doomed request forever. The row is dropped instead.
+      if (!isStorableLevel(unsynced.stageKey, unsynced.levelIndex)) {
+        _logger.warning(
+          'Dropping ${unsynced.stageKey} level ${unsynced.levelIndex}, unknown to this version',
+        );
+        await storage.drop(
+          userId: userId,
+          stageKey: unsynced.stageKey,
+          levelIndex: unsynced.levelIndex,
+        );
+        continue;
+      }
       if (!await _pushScore(storage, userId, unsynced.stageKey, unsynced.levelIndex)) failed++;
     }
     if (failed > 0) {
@@ -470,14 +523,18 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   }
 
   /// Wipes the server progress of [userId], clearing the pending flag once it lands.
-  Future<void> _resetOnServer(LearnProgressStorage storage, UserId userId) async {
-    if (!_accountUnchanged) return;
+  ///
+  /// Returns whether the server confirmed it, so a caller can hold off on reading progress back.
+  Future<bool> _resetOnServer(LearnProgressStorage storage, UserId userId) async {
+    if (!_accountUnchanged) return false;
     try {
       await ref.withClient((client) => LearnRepository(client).reset());
-      if (!_accountUnchanged) return;
+      if (!_accountUnchanged) return false;
       await storage.setResetPending(userId, pending: false);
+      return true;
     } catch (e, st) {
       _logger.warning('Could not reset the server learn progress', e, st);
+      return false;
     }
   }
 
