@@ -59,10 +59,6 @@ class CoordinateTrainingPreferences()
 
   Future<void> addScore({required Side side, required int score}) {
     final updated = state.addScore(side: side, score: score);
-    // `save` publishes state only once the write completes, so two scores recorded before the
-    // first write lands would both derive from the same base and the second would drop the
-    // first. Publish first, then write: a failed write leaves the score in memory, and the next
-    // successful write carries it to storage.
     state = updated;
     return save(updated);
   }
