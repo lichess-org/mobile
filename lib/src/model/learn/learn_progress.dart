@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/learn/learn_repository.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -79,22 +80,33 @@ class const LearnProgress(final IMap<String, IMap<int, int>> _scores) {
 
   /// Returns a copy where each level holds the best score of this progress and the [server]
   /// scores, keyed by stage key and level index.
-  ///
-  /// Scores of a stage this app version does not know, or of a level beyond the stage's length,
-  /// are ignored: they cannot be shown and must not resurrect a stage.
   LearnProgress mergedWithServer(IMap<String, IMap<int, int>> server) {
     var merged = this;
-    for (final stageEntry in server.entries) {
-      final stage = learnStageByKey(stageEntry.key);
-      if (stage == null) continue;
+    for (final stageEntry in _validServerScores(server).entries) {
+      final stage = learnStageByKey(stageEntry.key)!;
       for (final levelEntry in stageEntry.value.entries) {
-        if (levelEntry.key < stage.levels.length) {
-          merged = merged.withScore(stage, levelEntry.key, levelEntry.value);
-        }
+        merged = merged.withScore(stage, levelEntry.key, levelEntry.value);
       }
     }
     return merged;
   }
+}
+
+/// The [server] scores this app version can store and display: a stage it knows, a level within
+/// that stage, and a positive score.
+///
+/// Applied before anything is written or uploaded, so a malformed or outdated payload cannot
+/// leave rows that are stored and re-POSTed on every start.
+IMap<String, IMap<int, int>> _validServerScores(IMap<String, IMap<int, int>> server) {
+  return {
+    for (final stageEntry in server.entries)
+      if (learnStageByKey(stageEntry.key) case final stage?)
+        stageEntry.key: {
+          for (final levelEntry in stageEntry.value.entries)
+            if (levelEntry.key >= 0 && levelEntry.key < stage.levels.length && levelEntry.value > 0)
+              levelEntry.key: levelEntry.value,
+        }.lock,
+  }.lock;
 }
 
 /// A provider for [LearnProgressStorage].
@@ -207,6 +219,8 @@ final learnProgressProvider = AsyncNotifierProvider<LearnProgressNotifier, Learn
 );
 
 class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
+  final _logger = Logger('LearnProgressNotifier');
+
   @override
   Future<LearnProgress> build() async {
     final storage = await ref.watch(learnProgressStorageProvider.future);
@@ -257,7 +271,9 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   Future<void> _syncWithServer(LearnProgressStorage storage) async {
     if (ref.read(authControllerProvider) == null) return;
     try {
-      final server = await ref.withClient((client) => LearnRepository(client).fetchProgress());
+      final server = _validServerScores(
+        await ref.withClient((client) => LearnRepository(client).fetchProgress()),
+      );
       for (final stageEntry in server.entries) {
         for (final levelEntry in stageEntry.value.entries) {
           // The keep-max guard leaves the local score alone when the server is behind.
@@ -281,10 +297,15 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
         final merged = current.mergedWithServer(server);
         if (!identical(merged, current)) state = AsyncData(merged);
       }
-    } catch (_) {
+    } catch (e, st) {
       // Offline or errored: the local progress stands, and the flush still gets its chance.
+      _logger.warning('Could not read the server learn progress', e, st);
     }
-    await _flushUnsynced(storage);
+    try {
+      await _flushUnsynced(storage);
+    } catch (e, st) {
+      _logger.warning('Could not flush the unsynced learn scores', e, st);
+    }
   }
 
   /// Uploads the scores saved while offline, one row at a time.
@@ -293,8 +314,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   /// cannot stall the flush.
   Future<void> _flushUnsynced(LearnProgressStorage storage) async {
     if (ref.read(authControllerProvider) == null) return;
+    var failed = 0;
     for (final unsynced in await storage.fetchUnsynced()) {
-      await _pushScore(storage, unsynced.stageKey, unsynced.levelIndex);
+      if (!await _pushScore(storage, unsynced.stageKey, unsynced.levelIndex)) failed++;
+    }
+    if (failed > 0) {
+      _logger.warning('$failed learn scores still unsynced, they will be retried on next start');
     }
   }
 
