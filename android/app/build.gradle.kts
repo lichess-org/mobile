@@ -35,25 +35,106 @@ abstract class CopyChessgroundPieceAssetsTask : DefaultTask() {
     }
 
     val config = JsonSlurper().parse(configFile) as Map<*, *>
+
     @Suppress("UNCHECKED_CAST")
     val packages = config["packages"] as List<Map<*, *>>
     val chessground = packages.first { it["name"] == "chessground" }
     val packageDir = File(URI(chessground["rootUri"] as String))
-    val sourceDir = File(packageDir, "assets/piece_sets/cburnett")
-    check(sourceDir.exists()) { "Could not find cburnett piece assets at $sourceDir" }
 
-    val outDir = File(outputDirectory.get().asFile, "drawable-nodpi")
+
+    val outDir = outputDirectory.get().asFile
     outDir.deleteRecursively()
     outDir.mkdirs()
+    val drawableDir = File(outDir, "drawable-nodpi")
 
-    sourceDir.listFiles { f -> f.isFile && f.extension == "webp" }
-      ?.forEach { source ->
-        source.copyTo(File(outDir, "piece_cburnett_${source.nameWithoutExtension.lowercase()}.webp"))
-      }
+    copyPieceAssets(packageDir, drawableDir)
+    copyBoardThemes(packageDir, drawableDir, File(outDir, "raw"))
   }
-}
 
-val copyChessgroundPieceAssets = tasks.register<CopyChessgroundPieceAssetsTask>("copyChessgroundPieceAssets") {
+  private fun copyPieceAssets(packageDir: File, drawableDir: File) {
+    drawableDir.mkdirs()
+    val pieceRoot = File(packageDir, "assets/piece_sets")
+    check(pieceRoot.exists()) { "Could not find piece sets at $pieceRoot" }
+
+    val pieceCodes = listOf("bB", "bK", "bN", "bP", "bQ", "bR", "wB", "wK", "wN", "wP", "wQ", "wR")
+
+    val setDirs = pieceRoot.listFiles { f -> f.isDirectory } ?: emptyArray()
+    for (setDir in setDirs){
+      val androidSetName = setDir.name.replace("-", "").lowercase()
+
+      if (setDir.name == "disguised"){
+        val wSrc = File(setDir, "w.webp")
+        val bSrc = File(setDir, "b.webp")
+        if(wSrc.exists() && bSrc.exists()){
+          for (code in pieceCodes){
+            val src = if(code.startsWith("w")) wSrc else bSrc
+            src.copyTo(File(drawableDir, "piece_${androidSetName}_${code.lowercase()}.webp"))
+          }
+        }
+        continue
+      }
+
+      if (!File(setDir, "bB.webp").exists()) continue
+      for (code in pieceCodes){
+        val src = File(setDir, "$code.webp")
+        if(src.exists()){
+          src.copyTo(File(drawableDir, "piece_${androidSetName}_${code.lowercase()}.webp"))
+        }
+      }
+    }
+  }
+  private fun copyBoardThemes(packageDir: File,drawableDir: File, rawDir: File) {
+    val schemeFile = File(packageDir, "lib/src/board_color_scheme.dart")
+    check(schemeFile.exists()) { "Could not find board_color_scheme.dart at $schemeFile" }
+    val source = schemeFile.readText()
+
+    val blockStart = Regex("""static const (\w+) = ChessboardColorScheme\(""")
+    val matches = blockStart.findAll(source).toList()
+    check(matches.isNotEmpty()) { "Parsed zero themes from $schemeFile — its format may have changed" }
+
+    val lightRegex = Regex("""lightSquare:\s*Color\((0x[0-9a-fA-F]{8})\)""")
+    val darkRegex = Regex("""darkSquare:\s*Color\((0x[0-9a-fA-F]{8})\)""")
+    val lastMoveRegex =
+      Regex("""lastMove:\s*HighlightDetails\(\s*solidColor:\s*Color\((0x[0-9a-fA-F]{8})\)""")
+    val imageBackgroundRegex = Regex("""background:\s*ImageChessboardBackground""")
+    val assetImageRegex = Regex("""AssetImage\('\${'$'}_boardsPath/([\w.\-]+)'""")
+    val boardsDir = File(packageDir, "assets/boards")
+
+    fun toAndroidHex(dartHex: String) = "#${dartHex.removePrefix("0x")}"
+
+    val entries = mutableListOf<String>()
+    for (i in matches.indices) {
+      val name = matches[i].groupValues[1]
+      val start = matches[i].range.last
+      val end = if (i + 1 < matches.size) matches[i + 1].range.first else source.length
+      val block = source.substring(start, end)
+
+      val light = lightRegex.find(block)?.groupValues?.get(1) ?: continue
+      val dark = darkRegex.find(block)?.groupValues?.get(1) ?: continue
+      val lastMove = lastMoveRegex.find(block)?.groupValues?.get(1) ?: "0x809cc700"
+
+      var boardResourceName: String? = null
+      if (imageBackgroundRegex.containsMatchIn(block)) {
+        val assetFile = assetImageRegex.find(block)?.groupValues?.get(1)
+        val src = assetFile?.let { File(boardsDir, it) }
+        if (src != null && src.exists()) {
+          val resName = "board_${name.lowercase()}"
+          src.copyTo(File(drawableDir, "$resName.${src.extension}"))
+          boardResourceName = resName
+        }
+      }
+
+      val boardField = boardResourceName?.let { "\"$it\"" } ?: "null"
+      entries += "  \"$name\": {\"light\": \"${toAndroidHex(light)}\", " +
+        "\"dark\": \"${toAndroidHex(dark)}\", \"lastMove\": \"${toAndroidHex(lastMove)}\", " +
+        "\"board\": $boardField}"
+    }
+      check(entries.isNotEmpty()) { "Extracted zero valid theme entries from $schemeFile" }
+      rawDir.mkdirs()
+      File(rawDir, "board_themes.json").writeText("{\n${entries.joinToString(",\n")}\n}\n")
+    }
+}
+  val copyChessgroundPieceAssets = tasks.register<CopyChessgroundPieceAssetsTask>("copyChessgroundPieceAssets") {
   packageConfigFile.set(file("../../.dart_tool/package_config.json"))
   outputDirectory.set(layout.buildDirectory.dir("generated/chessgroundAssets/res"))
 }

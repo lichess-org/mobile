@@ -27,7 +27,6 @@ import org.lichess.mobileV2.R
 import org.lichess.mobileV2.MainActivity
 
 
-
 class DailyPuzzleWidgetProvider : AppWidgetProvider() {
 
   data class DailyPuzzle(
@@ -120,6 +119,8 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     try {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
+      val boardTheme = prefs.getString("boardTheme", "brown") ?: "brown"
+      val pieceSet = prefs.getString("pieceSet", "cburnett") ?: "cburnett"
       val puzzle = fetchDailyPuzzle(lichessHost)
 
       if(puzzle == null){
@@ -134,7 +135,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
         val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
         val cornerRadiusPx = (12 * context.resources.displayMetrics.density).toInt()
 
-        val boardBitmap = getBoardBitmap(context, minWidth, puzzle.fen, puzzle.lastMove)
+        val boardBitmap = getBoardBitmap(context, minWidth, puzzle.fen, puzzle.lastMove, boardTheme, pieceSet)
         val roundBoard = getRoundedCornerBitmap(boardBitmap, cornerRadiusPx)
         boardBitmap.recycle()
         remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
@@ -183,24 +184,33 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     return setOf(lastMove.substring(0, 2), lastMove.substring(2, 4))
   }
 
-  private fun getPieceBitmap(context: Context, piece : Char): Bitmap?{
+  private fun getPieceBitmap(context: Context, piece : Char, pieceSet: String): Bitmap?{
     val color = if(piece.isUpperCase()) "w" else "b"
     val kind = piece.lowercaseChar()
-    val name = "piece_cburnett_$color$kind"
+    val setName = pieceSet.lowercase()
 
-    val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
-    if(resId == 0){
-      Log.e("Daily Puzzle Widget", "Missing piece asset: $name")
-      return null
+    fun load(set: String): Bitmap? {
+      val name = "piece_${set}_$color$kind"
+      val resId = context.resources.getIdentifier(name, "drawable", context.packageName)
+      return if(resId != 0) BitmapFactory.decodeResource(context.resources, resId) else null
     }
-    return BitmapFactory.decodeResource(context.resources, resId)
+
+    return load(setName) ?: if (setName != "cburnett"){
+      Log.e("Daily Puzzle Widget", "Missing piece asset for set '$setName', falling back to cburnett")
+      load("cburnett")
+    } else {
+      Log.e("Daily Puzzle Widget", "Missing piece asset: piece_cburnett_$color$kind")
+      null
+    }
   }
 
   private fun getBoardBitmap(
     context : Context,
     minWidth : Int,
     fen : String,
-    lastMove: String
+    lastMove: String,
+    boardTheme: String,
+    pieceSet : String
   ) : Bitmap
   {
     val boardSizedPx = (minWidth * context.resources.displayMetrics.density).toInt()
@@ -208,16 +218,27 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     val canvas = Canvas(bitmap)
 
     val sqrSize = boardSizedPx / 8
-    val lightPaint = Paint().apply { color = Color.rgb(0xF0, 0xD9, 0xB6) }
-    val darkPaint = Paint().apply { color = Color.rgb(0xB5, 0x88, 0x63) }
-    val highlightedPaint = Paint().apply { color = Color.argb(128, 156, 199, 0)}
+    val colors = boardColorsFor(context, boardTheme)
+    val lightPaint = Paint().apply { color = colors.light }
+    val darkPaint = Paint().apply { color = colors.dark }
+    val highlightedPaint = Paint().apply { color = colors.lastMove}
+
+    val boardTextureBitmap = colors.board?.let { resName ->
+      val resId = context.resources.getIdentifier(resName, "drawable", context.packageName)
+      if(resId != 0) BitmapFactory.decodeResource(context.resources, resId) else null
+    }
+    if (boardTextureBitmap !=  null) {
+      canvas.drawBitmap(boardTextureBitmap, null, Rect(0, 0, boardSizedPx, boardSizedPx), null)
+      boardTextureBitmap.recycle()
+    }
 
     val highlighted = highlightedSquare(lastMove)
     val boardData = parseFen(fen)
     val piecesInFen = boardData.flatten().filterNotNull().toSet()
-    val pieceBitmap = piecesInFen.associateWith { getPieceBitmap(context, it) }
+    val pieceBitmap = piecesInFen.associateWith { getPieceBitmap(context, it, pieceSet) }
     val isWhiteToMove = fen.split(" ").getOrNull(1) == "w"
     val flipped = !isWhiteToMove
+
 
     for(row in 0 until 8){
       for(col in 0 until 8){
@@ -230,7 +251,9 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
         val piece = boardData.getOrNull(rankIndex)?.getOrNull(fileIndex)
         val name = sqrName(rankIndex, fileIndex)
 
-        canvas.drawRect(sqrRect, if(isLight) lightPaint else darkPaint)
+        if (boardTextureBitmap == null) {
+          canvas.drawRect(sqrRect, if (isLight) lightPaint else darkPaint)
+        }
         if(highlighted.contains(name)){
           canvas.drawRect(sqrRect, highlightedPaint)
         }
@@ -265,4 +288,38 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
 
     return output
   }
+
+  private data class BoardColors(
+    val light: Int,
+    val dark: Int,
+    val lastMove: Int,
+    val board: String?
+  )
+
+  private fun boardColorsFor(context: Context, themeName: String): BoardColors{
+    val fallback = BoardColors(
+      light = Color.parseColor("#F0D9B6"),
+      dark = Color.parseColor("#B58863"),
+      lastMove = Color.parseColor("#809CC700"),
+      board = null
+    )
+
+    return try{
+      context.resources.openRawResource(R.raw.board_themes).use { stream ->
+        val json = JSONObject(stream.bufferedReader().use { it.readText()})
+        val theme = json.optJSONObject(themeName) ?: json.optJSONObject("brown") ?: return fallback
+        val board = theme.optString("board").takeIf { it.isNotBlank() }
+        BoardColors(
+          light = Color.parseColor(theme.getString("light")),
+          dark = Color.parseColor(theme.getString("dark")),
+          lastMove = Color.parseColor(theme.getString("lastMove")),
+          board = board
+        )
+      }
+    } catch (e : Exception){
+      Log.e("DailyPuzzleWidget", "Eror loading board theme colors", e)
+      fallback
+    }
+  }
+
 }

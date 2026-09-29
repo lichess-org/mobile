@@ -155,7 +155,7 @@ class _AppState extends ConsumerState<Application> {
     }
     HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
 
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isAndroid) {
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
@@ -173,7 +173,11 @@ class _AppState extends ConsumerState<Application> {
             HomeWidget.saveWidgetData<String>('boardTheme', state.boardTheme.name),
             HomeWidget.saveWidgetData<String>('pieceSet', state.pieceSet.name),
           ]).then((_) {
-            HomeWidget.updateWidget(iOSName: 'DailyPuzzleLargeWidget');
+            HomeWidget.updateWidget(
+              iOSName: 'DailyPuzzleLargeWidget',
+              androidName: 'org.lichess.mobileV2.widgets.DailyPuzzleWidgetProvider',
+              );
+           
           });
         }
       }, fireImmediately: true);

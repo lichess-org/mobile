@@ -92,19 +92,18 @@ function arbToAndroidValue(value, param) {
   return param ? value.replace(/\{param\}/g, '%1$s') : value;
 }
 
-  // Group by Android locale qualifier so multiple ARB entries can share one strings.xml.
-const androidLocaleGroups = new Map(); // qualifier -> { name: value }
+const androidLocaleGroups = new Map(); 
 
 for (const { file, locale: arbLocaleRaw } of arbFiles) {
   const arbLocale = file.replace(/^app_/, '').replace(/\.arb$/, '');
-    if (arbLocale === 'en') continue; // English stays in the default values/strings.xml
-    const qualifier = `b+${arbLocale.replace(/_/g, '+')}`; // BCP47 qualifier, safe since minSdk 26
+    if (arbLocale === 'en') continue; 
+    const qualifier = `b+${arbLocale.replace(/_/g, '+')}`; 
     const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));
 
    for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
       if (!androidName) continue;
       const raw = arb[arbKey];
-      if (raw == null || raw === fallback) continue; // no translation beyond the English default
+      if (raw == null || raw === fallback) continue; 
       const value = arbToAndroidValue(raw, param);
       if (!androidLocaleGroups.has(qualifier)) androidLocaleGroups.set(qualifier, {});
       androidLocaleGroups.get(qualifier)[androidName] = value;
