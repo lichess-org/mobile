@@ -236,11 +236,11 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   /// affect level completion.
   Future<void> saveScore(LearnStage stage, int levelIndex, int score) async {
     final current = await future;
-    final next = current.withScore(stage, levelIndex, score);
-    // Not an improvement: nothing to save, and never POST, since the server keeps whatever it
-    // receives and would overwrite a better score with this one.
-    if (identical(next, current)) return;
-    state = AsyncData(next);
+    // Compared explicitly rather than by identity: the server overwrites unconditionally, so
+    // POSTing a score that is not an improvement would destroy the server-side best. Do not
+    // rely on withScore returning an identical instance, that is an implementation detail.
+    if (current.levelScore(stage, levelIndex) >= score) return;
+    state = AsyncData(current.withScore(stage, levelIndex, score));
     final storage = await ref.read(learnProgressStorageProvider.future);
     await storage.saveScore(stageKey: stage.key, levelIndex: levelIndex, score: score);
     unawaited(_syncScore(stage.key, levelIndex));
