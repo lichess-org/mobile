@@ -69,7 +69,7 @@ class const PuzzleErrorBoardWidget({final String? errorMessage}) extends Consume
                   }
 
                   if (orientation == Orientation.landscape) {
-                    final boardSize = boardSizeConstraints(constraints);
+                    final boardSize = landscapeBoardSizeConstraints(constraints);
                     return Padding(
                       padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                       child: Row(mainAxisSize: MainAxisSize.max, children: [board(boardSize)]),

@@ -235,7 +235,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           );
 
                       if (orientation == Orientation.landscape) {
-                        final boardSize = boardSizeConstraints(constraints);
+                        final boardSize = landscapeBoardSizeConstraints(constraints);
                         return Padding(
                           padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                           child: Row(

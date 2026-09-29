@@ -99,7 +99,7 @@ class const _Body({required final AnalysisOptions options, required final Analys
                     ? Orientation.landscape
                     : Orientation.portrait;
                 if (orientation == Orientation.landscape) {
-                  final boardSize = boardSizeConstraints(constraints);
+                  final boardSize = landscapeBoardSizeConstraints(constraints);
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [

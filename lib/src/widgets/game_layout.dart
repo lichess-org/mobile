@@ -17,7 +17,7 @@ import 'package:material_ui/material_ui.dart';
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
 
-double boardSizeConstraints(BoxConstraints constraints) {
+double landscapeBoardSizeConstraints(BoxConstraints constraints) {
   final defaultBoardSize = constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
   final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
   return sideWidth >= 250
@@ -548,9 +548,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                 ),
               ),
               Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                    : EdgeInsets.zero,
+                padding: boardSidePadding(isTablet),
                 child: BoardWidget(
                   size: effectiveBoardSize,
                   orientation: widget.orientation,
