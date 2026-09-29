@@ -202,10 +202,13 @@ class const _Category({
   @override
   Widget build(BuildContext context) {
     final (categoryName, themes) = category;
+    final isCategoryAvailable =
+        hasConnectivity || themes.any((theme) => savedThemes.containsKey(theme));
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
+        enabled: isCategoryAvailable,
         title: Text(categoryName),
         children: [
           ListSection(
