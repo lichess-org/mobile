@@ -105,8 +105,8 @@ final learnProgressStorageProvider = FutureProvider<LearnProgressStorage>((Ref r
 
 const _tableName = 'learn_progress';
 
-/// A score stored locally that the server does not know about yet.
-typedef LearnUnsyncedScore = ({String stageKey, int levelIndex, int score});
+/// A level stored locally that the server does not know about yet.
+typedef LearnUnsyncedRef = ({String stageKey, int levelIndex});
 
 /// Local storage of the learn scores.
 ///
@@ -148,11 +148,24 @@ class const LearnProgressStorage(final Database _db) {
     });
   }
 
-  /// The scores saved but never uploaded to the server.
-  Future<IList<LearnUnsyncedScore>> fetchUnsynced() async {
+  /// The current score of a level, or null if the level has no row.
+  Future<int?> fetchScore({required String stageKey, required int levelIndex}) async {
     final rows = await _db.query(
       _tableName,
-      columns: ['stageKey', 'levelId', 'score'],
+      columns: ['score'],
+      where: 'stageKey = ? AND levelId = ?',
+      whereArgs: [stageKey, levelIndex + 1],
+    );
+    return rows.firstOrNull?['score'] as int?;
+  }
+
+  /// The levels saved but never uploaded to the server.
+  ///
+  /// Only the keys: the score must be read again right before the POST, see [fetchScore].
+  Future<IList<LearnUnsyncedRef>> fetchUnsynced() async {
+    final rows = await _db.query(
+      _tableName,
+      columns: ['stageKey', 'levelId'],
       where: 'syncedAt IS NULL',
     );
     return [
@@ -161,7 +174,6 @@ class const LearnProgressStorage(final Database _db) {
           stageKey: row['stageKey']! as String,
           // Level ids start at 1, as on lichess.org.
           levelIndex: (row['levelId']! as int) - 1,
-          score: row['score']! as int,
         ),
     ].lock;
   }
@@ -217,7 +229,7 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     state = AsyncData(next);
     final storage = await ref.read(learnProgressStorageProvider.future);
     await storage.saveScore(stageKey: stage.key, levelIndex: levelIndex, score: score);
-    unawaited(_syncScore(stage.key, levelIndex, score));
+    unawaited(_syncScore(stage.key, levelIndex));
   }
 
   Future<void> reset() async {
@@ -231,10 +243,10 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   ///
   /// Anonymous users have no server progress, and a failure leaves the row dirty for the next
   /// flush.
-  Future<void> _syncScore(String stageKey, int levelIndex, int score) async {
+  Future<void> _syncScore(String stageKey, int levelIndex) async {
     if (ref.read(authControllerProvider) == null) return;
     final storage = await ref.read(learnProgressStorageProvider.future);
-    await _pushScore(storage, stageKey, levelIndex, score);
+    await _pushScore(storage, stageKey, levelIndex);
   }
 
   /// Merges the server scores into the local ones, then uploads whatever the server is missing.
@@ -282,19 +294,22 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   Future<void> _flushUnsynced(LearnProgressStorage storage) async {
     if (ref.read(authControllerProvider) == null) return;
     for (final unsynced in await storage.fetchUnsynced()) {
-      await _pushScore(storage, unsynced.stageKey, unsynced.levelIndex, unsynced.score);
+      await _pushScore(storage, unsynced.stageKey, unsynced.levelIndex);
     }
   }
 
-  /// Posts one score and stamps the row when the server accepted it.
+  /// Posts the current score of a level and stamps the row when the server accepted it.
+  ///
+  /// The score is re-read here rather than taken from a snapshot taken when the flush started:
+  /// a better score saved in between must be the one uploaded, because the server overwrites
+  /// unconditionally and would otherwise keep the older, lower value while the local row stays
+  /// marked clean.
   ///
   /// Returns false on failure, leaving the row dirty for the next flush.
-  Future<bool> _pushScore(
-    LearnProgressStorage storage,
-    String stageKey,
-    int levelIndex,
-    int score,
-  ) async {
+  Future<bool> _pushScore(LearnProgressStorage storage, String stageKey, int levelIndex) async {
+    final score = await storage.fetchScore(stageKey: stageKey, levelIndex: levelIndex);
+    // The row disappeared (a reset) between the listing and now: nothing to upload.
+    if (score == null) return true;
     try {
       await ref.withClient(
         (client) =>
