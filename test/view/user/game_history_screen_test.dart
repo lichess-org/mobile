@@ -16,7 +16,7 @@ const historyUser = LightUser(id: UserId('testuser'), name: 'testUser');
 
 void main() {
   group('GameHistoryScreen filter sheet', () {
-    testWidgets('shows an Analysis section with Analysed and Not analysed chips and applies them', (
+    testWidgets('shows a Property section with Analysed and Not analysed chips and applies them', (
       tester,
     ) async {
       final requestedGameUrls = <Uri>[];
@@ -44,10 +44,10 @@ void main() {
       await tester.tap(find.byIcon(Icons.filter_list));
       await tester.pumpAndSettle();
 
-      await tester.ensureVisible(find.text('Analysis'));
+      await tester.ensureVisible(find.text('Property'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Analysis'), findsOneWidget);
+      expect(find.text('Property'), findsOneWidget);
       expect(find.text('Analysed'), findsOneWidget);
       expect(find.text('Not analysed'), findsOneWidget);
 
@@ -88,7 +88,7 @@ void main() {
 
       await tester.tap(find.byIcon(Icons.filter_list));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Analysis'));
+      await tester.ensureVisible(find.text('Property'));
       await tester.pumpAndSettle();
 
       await tester.tap(find.widgetWithText(mui.ChoiceChip, 'Not analysed'));
@@ -101,7 +101,7 @@ void main() {
 
       await tester.tap(find.byIcon(Icons.filter_list));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Analysis'));
+      await tester.ensureVisible(find.text('Property'));
       await tester.pumpAndSettle();
 
       final chip = tester.widget<mui.ChoiceChip>(
@@ -119,7 +119,7 @@ void main() {
 
       await tester.tap(find.byIcon(Icons.filter_list));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Analysis'));
+      await tester.ensureVisible(find.text('Property'));
       await tester.pumpAndSettle();
 
       final clearedChip = tester.widget<mui.ChoiceChip>(

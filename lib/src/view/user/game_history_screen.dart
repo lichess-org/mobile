@@ -426,8 +426,8 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
         const PlatformDivider(thickness: 1, indent: 0),
         filterGroupSpace,
         Filter<GameAnalysisFilter>(
-          // TODO: use a l10n key once lila has an 'analysis' filter label
-          filterName: 'Analysis',
+          // TODO: use a l10n key once lila has a 'property' filter label
+          filterName: 'Property',
           filterType: FilterType.singleChoice,
           choices: GameAnalysisFilter.values,
           choiceSelected: (choice) => filter.analysis == choice,
