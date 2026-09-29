@@ -82,6 +82,11 @@ class const GameRepository(
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
               if (filter.opponent != null) 'vs': filter.opponent!.id.value,
+              if (filter.analysis case final analysis?)
+                'analysed': switch (analysis) {
+                  GameAnalysisFilter.analysed => 'true',
+                  GameAnalysisFilter.notAnalysed => 'false',
+                },
               if (withBookmarked) 'withBookmarked': 'true',
             },
           ),

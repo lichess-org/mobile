@@ -5,6 +5,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 
 import '../../test_container.dart';
@@ -36,6 +37,44 @@ void main() {
       expect(result[0].game.arenaTournamentId, const TournamentId('ZZQ9tunK'));
       expect(result[0].game.arenaTournamentName, 'Test Arena');
       expect(result[1].game.arenaTournamentId, isNull);
+    });
+
+    test('sends the analysed parameter when the analysis filter is set', () async {
+      final requestedUris = <Uri>[];
+      const response = '''
+{"id":"ANLZ1234","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Thibault","id":"thibault"},"rating":1772},"black":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806}},"winner":"white"}
+''';
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/games/user/testUser') {
+          requestedUris.add(request.url);
+          return mockResponse(response, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(gameRepositoryProvider);
+
+      final analysed = await repo.getUserGames(
+        const UserId('testUser'),
+        filter: const GameFilterState(analysis: GameAnalysisFilter.analysed),
+      );
+      expect(analysed.single.game.id, const GameId('ANLZ1234'));
+
+      final notAnalysed = await repo.getUserGames(
+        const UserId('testUser'),
+        filter: const GameFilterState(analysis: GameAnalysisFilter.notAnalysed),
+      );
+      expect(notAnalysed.single.game.id, const GameId('ANLZ1234'));
+
+      final unfiltered = await repo.getUserGames(const UserId('testUser'));
+      expect(unfiltered.single.game.id, const GameId('ANLZ1234'));
+
+      expect(requestedUris, hasLength(3));
+      expect(requestedUris[0].queryParameters['analysed'], 'true');
+      expect(requestedUris[1].queryParameters['analysed'], 'false');
+      expect(requestedUris[2].queryParameters, isNot(contains('analysed')));
     });
   });
 
