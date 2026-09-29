@@ -86,6 +86,9 @@ final learnProgressStorageProvider = FutureProvider<LearnProgressStorage>((Ref r
 
 const _tableName = 'learn_progress';
 
+/// A score stored locally that the server does not know about yet.
+typedef LearnUnsyncedScore = ({String stageKey, int levelIndex, int score});
+
 /// Local storage of the learn scores.
 ///
 /// Only improvements are saved: a lower score never overwrites a higher one.
@@ -124,6 +127,24 @@ class const LearnProgressStorage(final Database _db) {
         'syncedAt': null,
       }, conflictAlgorithm: ConflictAlgorithm.replace);
     });
+  }
+
+  /// The scores saved but never uploaded to the server.
+  Future<IList<LearnUnsyncedScore>> fetchUnsynced() async {
+    final rows = await _db.query(
+      _tableName,
+      columns: ['stageKey', 'levelId', 'score'],
+      where: 'syncedAt IS NULL',
+    );
+    return [
+      for (final row in rows)
+        (
+          stageKey: row['stageKey']! as String,
+          // Level ids start at 1, as on lichess.org.
+          levelIndex: (row['levelId']! as int) - 1,
+          score: row['score']! as int,
+        ),
+    ].lock;
   }
 
   Future<void> reset() async {
