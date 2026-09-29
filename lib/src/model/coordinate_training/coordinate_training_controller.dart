@@ -63,8 +63,6 @@ class CoordinateTrainingController() extends Notifier<CoordinateTrainingState> {
   }
 
   void _finishTraining() {
-    // Recorded from a timer callback, which can't await: `addScore` publishes the new state
-    // synchronously and the storage write completes on its own.
     unawaited(
       ref
           .read(coordinateTrainingPreferencesProvider.notifier)
