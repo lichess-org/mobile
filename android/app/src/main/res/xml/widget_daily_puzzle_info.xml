@@ -7,4 +7,4 @@
   android:initialLayout="@layout/widget_daily_puzzle"
   android:resizeMode="none"
   android:widgetCategory="home_screen"
-  android:previewImage="@drawable/widget_daily_puzzle_preview" />
+  android:previewImage="@drawable/widget_daily_puzzle_preview_image" />
