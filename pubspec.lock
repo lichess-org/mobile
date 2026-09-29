@@ -316,12 +316,11 @@ packages:
   dartchess:
     dependency: "direct main"
     description:
-      path: "."
-      ref: ed64d8a58ea16e3597f71a037ff0f50733b8604d
-      resolved-ref: ed64d8a58ea16e3597f71a037ff0f50733b8604d
-      url: "https://github.com/lichess-org/dartchess.git"
-    source: git
-    version: "0.14.0"
+      name: dartchess
+      sha256: d1750f765be1c81bbd529413e4bf4804dd9814a871cbce5f427cb4d1e7a3ae7a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.13.1"
   dbus:
     dependency: transitive
     description:
@@ -986,11 +985,10 @@ packages:
   lc0:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "04284fa88176930a0e2ffd475979fa289710169e"
-      resolved-ref: "04284fa88176930a0e2ffd475979fa289710169e"
-      url: "https://github.com/lichess-org/dart-lc0.git"
-    source: git
+      name: lc0
+      sha256: ea2db73120ded5f829aabcbf7f0a6f26bfb9d957c4a2dc4be4b79e58b489347b
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   leak_tracker:
     dependency: transitive
@@ -1107,38 +1105,34 @@ packages:
   multistockfish:
     dependency: "direct main"
     description:
-      path: "pkgs/multistockfish"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish
+      sha256: e8047ef53eaa9f9bce5b4b0516038c67d407db6e4372d000b4e838bbae96f990
+      url: "https://pub.dev"
+    source: hosted
     version: "0.6.0"
   multistockfish_chess:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_chess"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_chess
+      sha256: "72bfdc7011d42abd718b05a782d037d4a0ec1b79ff84c25dd11df59857a347eb"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.6.0"
   multistockfish_light:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_light"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_light
+      sha256: "5014bb65425eeb16025be556e850078d93bd89185690a7cee4be5e6c6cf2b84e"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   multistockfish_variant:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_variant"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_variant
+      sha256: c3107c927355f295f9785318a9541e0307fd230e35836c2ba9931a629407ce42
+      url: "https://pub.dev"
+    source: hosted
     version: "0.4.0"
   native_toolchain_c:
     dependency: transitive
