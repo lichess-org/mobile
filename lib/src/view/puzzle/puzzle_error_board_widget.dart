@@ -1,4 +1,4 @@
-﻿import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -69,7 +69,7 @@ class const PuzzleErrorBoardWidget({final String? errorMessage}) extends Consume
                   }
 
                   if (orientation == Orientation.landscape) {
-                    final boardSize = landscapeBoardSizeConstraints(constraints);
+                    final boardSize = boardSizeConstraints(constraints);
                     return Padding(
                       padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                       child: Row(mainAxisSize: MainAxisSize.max, children: [board(boardSize)]),

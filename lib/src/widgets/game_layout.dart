@@ -1,4 +1,4 @@
-﻿import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -17,7 +17,7 @@ import 'package:material_ui/material_ui.dart';
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
 
-double landscapeBoardSizeConstraints(BoxConstraints constraints) {
+double boardSizeConstraints(BoxConstraints constraints) {
   final defaultBoardSize = constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
   final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
   return sideWidth >= 250
@@ -250,7 +250,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
     final newGameData = _gameDataFor(newParams);
 
     if (!fenChanged) {
-      // Only game metadata changed (e.g. playerSide, validMoves) â€” update without animation.
+      // Only game metadata changed (e.g. playerSide, validMoves) — update without animation.
       ctrl.updatePosition(newGameData);
       return;
     }
@@ -261,7 +261,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
     }
 
     // A revert (e.g. takeback) rolls the line back to a lower ply. A premove
-    // must never be played in that case â€” clear it instead.
+    // must never be played in that case — clear it instead.
     final oldParams = old.boardParams;
     final isRevert =
         newParams is InteractiveBoardParams &&
@@ -299,7 +299,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
 
   /// Builds the move list content for [type], using the [GameLayout.moveListBuilder]
   /// when provided, otherwise the inline [GameLayout.moves]. Must only be called
-  /// when [_hasMoveList] is true. Does not apply zen-mode handling â€” callers do.
+  /// when [_hasMoveList] is true. Does not apply zen-mode handling — callers do.
   Widget _moveListContent(MoveListType type) {
     final builder = widget.moveListBuilder;
     if (builder != null) return builder(type);
@@ -449,7 +449,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
         );
 
         if (orientation == Orientation.landscape) {
-          final boardSize = landscapeBoardSizeConstraints(constraints);
+          final boardSize = boardSizeConstraints(constraints);
 
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
@@ -548,7 +548,9 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                 ),
               ),
               Padding(
-                padding: boardSidePadding(isTablet),
+                padding: isTablet
+                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                    : EdgeInsets.zero,
                 child: BoardWidget(
                   size: effectiveBoardSize,
                   orientation: widget.orientation,

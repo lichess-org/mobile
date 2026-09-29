@@ -1,4 +1,4 @@
-﻿import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/services.dart';
@@ -212,7 +212,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           );
 
                       if (orientation == Orientation.landscape) {
-                        final boardSize = landscapeBoardSizeConstraints(constraints);
+                        final boardSize = boardSizeConstraints(constraints);
                         return Padding(
                           padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                           child: Row(
@@ -410,11 +410,11 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                 ),
                 TextSpan(text: '\n\n'),
                 TextSpan(text: 'Bonus values:\n'),
-                TextSpan(text: 'â€¢ 5 moves: +3s\n'),
-                TextSpan(text: 'â€¢ 12 moves: +5s\n'),
-                TextSpan(text: 'â€¢ 20 moves: +7s\n'),
-                TextSpan(text: 'â€¢ 30 moves: +10s\n'),
-                TextSpan(text: 'â€¢ Then +10s every 10 other moves.\n'),
+                TextSpan(text: '• 5 moves: +3s\n'),
+                TextSpan(text: '• 12 moves: +5s\n'),
+                TextSpan(text: '• 20 moves: +7s\n'),
+                TextSpan(text: '• 30 moves: +10s\n'),
+                TextSpan(text: '• Then +10s every 10 other moves.\n'),
                 TextSpan(text: '\n'),
                 TextSpan(
                   text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',

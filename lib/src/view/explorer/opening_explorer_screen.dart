@@ -1,4 +1,4 @@
-﻿import 'package:collection/collection.dart';
+import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -99,7 +99,7 @@ class const _Body({required final AnalysisOptions options, required final Analys
                     ? Orientation.landscape
                     : Orientation.portrait;
                 if (orientation == Orientation.landscape) {
-                  final boardSize = landscapeBoardSizeConstraints(constraints);
+                  final boardSize = boardSizeConstraints(constraints);
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [

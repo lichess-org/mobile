@@ -141,8 +141,7 @@ class const AnalysisLayout({
                   final headerAndFooterHeight =
                       (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
                       (boardFooter != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0);
-                  final boardSize =
-                      landscapeBoardSizeConstraints(constraints) - headerAndFooterHeight;
+                  final boardSize = boardSizeConstraints(constraints) - headerAndFooterHeight;
 
                   final boardPrefs = ref.watch(boardPreferencesProvider);
 
