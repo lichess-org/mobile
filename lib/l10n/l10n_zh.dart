@@ -485,66 +485,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => '标准';
-
-  @override
-  String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
-
-  @override
-  String get variantChess960 => 'Chess960';
-
-  @override
-  String get variantChess960Title => '底线棋子的起始位置随机生成';
-
-  @override
-  String get variantKingOfTheHill => '山丘之王';
-
-  @override
-  String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
-
-  @override
-  String get variantThreeCheck => '三次将军';
-
-  @override
-  String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
-
-  @override
-  String get variantAntichess => '弃子棋';
-
-  @override
-  String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
-
-  @override
-  String get variantAtomic => '原子棋';
-
-  @override
-  String get variantAtomicTitle => '“核爆”对手的王即可获胜';
-
-  @override
-  String get variantHorde => '部落棋';
-
-  @override
-  String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
-
-  @override
-  String get variantRacingKings => '竞速棋';
-
-  @override
-  String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
-
-  @override
-  String get variantFromPosition => '自定义局面';
-
-  @override
-  String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
-
-  @override
   String get activityActivity => '动态';
 
   @override
@@ -2095,6 +2035,207 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get perfStatNow => '现在';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => '注册以保存您的进度';
+
+  @override
+  String get practiceSecHeadCheckmates => '将杀';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => '基础战术';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => '高级战术';
+
+  @override
+  String get practiceSecHeadPawnEndgames => '兵残局';
+
+  @override
+  String get practiceSecHeadRookEndgames => '车残局';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => '棋子将杀 I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => '将杀模式 I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => '将杀模式 II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => '将杀模式 III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => '将杀模式 IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => '棋子将杀 II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => '马象将杀';
+
+  @override
+  String get practiceStNamThePin => '牵制';
+
+  @override
+  String get practiceStNamTheSkewer => '串击';
+
+  @override
+  String get practiceStNamTheFork => '捉双';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => '闪击';
+
+  @override
+  String get practiceStNamDoubleCheck => '双将';
+
+  @override
+  String get practiceStNamOverloadedPieces => '子力超载';
+
+  @override
+  String get practiceStNamZwischenzug => '过渡着';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => '楚茨文格';
+
+  @override
+  String get practiceStNamInterference => '拦截';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => '引离';
+
+  @override
+  String get practiceStNamAttraction => '引入';
+
+  @override
+  String get practiceStNamUnderpromotion => '低升变';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => '腾挪';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => '偏好设置';
@@ -7268,6 +7409,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => '双重认证';
+
+  @override
   String get timeagoJustNow => '即将开始';
 
   @override
@@ -7427,15 +7571,72 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => '双重认证';
-
-  @override
   String get ublogCommunity => '社区';
 
   @override
   String ublogXBlog(String param) {
     return '$param 的博客';
   }
+
+  @override
+  String get variantStandard => '标准';
+
+  @override
+  String get variantStandardTitle => '国际象棋标准规则（国际棋联）';
+
+  @override
+  String get variantChess960 => 'Chess960';
+
+  @override
+  String get variantChess960Title => '底线棋子的起始位置随机生成';
+
+  @override
+  String get variantKingOfTheHill => '山丘之王';
+
+  @override
+  String get variantKingOfTheHillTitle => '将您的王移至中心区域即可获胜';
+
+  @override
+  String get variantThreeCheck => '三次将军';
+
+  @override
+  String get variantThreeCheckTitle => '将军对手 3 次即可获胜';
+
+  @override
+  String get variantAntichess => '弃子棋';
+
+  @override
+  String get variantAntichessTitle => '输掉所有棋子（或被逼和）即可获胜';
+
+  @override
+  String get variantAtomic => '原子棋';
+
+  @override
+  String get variantAtomicTitle => '“核爆”对手的王即可获胜';
+
+  @override
+  String get variantHorde => '部落棋';
+
+  @override
+  String get variantHordeTitle => '一方拥有大量兵，另一方拥有常规军队';
+
+  @override
+  String get variantRacingKings => '竞速棋';
+
+  @override
+  String get variantRacingKingsTitle => '将您的王移动至棋盘另一侧即可获胜';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
+  String get variantCrazyhouseTitle => '被吃掉的棋子可以放回棋盘上，代替走子';
+
+  @override
+  String get variantFromPosition => '自定义局面';
+
+  @override
+  String get variantFromPositionTitle => '来自自定义局面的标准国际象棋';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -7698,66 +7899,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileWatchTab => '觀戰';
-
-  @override
-  String get variantStandard => '標準';
-
-  @override
-  String get variantStandardTitle => '標準西洋棋規則（國際棋聯）';
-
-  @override
-  String get variantChess960 => 'Chess960';
-
-  @override
-  String get variantChess960Title => '棋子的初始排列順序為隨機產生。';
-
-  @override
-  String get variantKingOfTheHill => '山丘之王';
-
-  @override
-  String get variantKingOfTheHillTitle => '將國王移至中心即可獲勝。';
-
-  @override
-  String get variantThreeCheck => '三將';
-
-  @override
-  String get variantThreeCheckTitle => '將軍對手 3 次即可獲勝。';
-
-  @override
-  String get variantAntichess => '有子必吃（反西洋棋）';
-
-  @override
-  String get variantAntichessTitle => '失去所有棋子（或被逼和）即可獲勝。';
-
-  @override
-  String get variantAtomic => '原子棋';
-
-  @override
-  String get variantAtomicTitle => '炸毀對手的國王即可獲勝。';
-
-  @override
-  String get variantHorde => '部落棋';
-
-  @override
-  String get variantHordeTitle => '一方擁有大量的兵，另一方則擁有標準陣容。';
-
-  @override
-  String get variantRacingKings => '競速棋';
-
-  @override
-  String get variantRacingKingsTitle => '將國王移至棋盤的另一端即可獲勝。';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
-
-  @override
-  String get variantFromPosition => '自定義局面';
-
-  @override
-  String get variantFromPositionTitle => '從自訂局面開始的標準西洋棋';
 
   @override
   String get activityActivity => '活動';
@@ -13925,6 +14066,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
   String get timeagoJustNow => '剛剛';
 
   @override
@@ -14084,13 +14228,70 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get tfaTwoFactorAuth => '兩步驟驗證';
-
-  @override
   String get ublogCommunity => '社群';
 
   @override
   String ublogXBlog(String param) {
     return '$param的部落格';
   }
+
+  @override
+  String get variantStandard => '標準';
+
+  @override
+  String get variantStandardTitle => '標準西洋棋規則（國際棋聯）';
+
+  @override
+  String get variantChess960 => 'Chess960';
+
+  @override
+  String get variantChess960Title => '棋子的初始排列順序為隨機產生。';
+
+  @override
+  String get variantKingOfTheHill => '山丘之王';
+
+  @override
+  String get variantKingOfTheHillTitle => '將國王移至中心即可獲勝。';
+
+  @override
+  String get variantThreeCheck => '三將';
+
+  @override
+  String get variantThreeCheckTitle => '將軍對手 3 次即可獲勝。';
+
+  @override
+  String get variantAntichess => '有子必吃（反西洋棋）';
+
+  @override
+  String get variantAntichessTitle => '失去所有棋子（或被逼和）即可獲勝。';
+
+  @override
+  String get variantAtomic => '原子棋';
+
+  @override
+  String get variantAtomicTitle => '炸毀對手的國王即可獲勝。';
+
+  @override
+  String get variantHorde => '部落棋';
+
+  @override
+  String get variantHordeTitle => '一方擁有大量的兵，另一方則擁有標準陣容。';
+
+  @override
+  String get variantRacingKings => '競速棋';
+
+  @override
+  String get variantRacingKingsTitle => '將國王移至棋盤的另一端即可獲勝。';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
+  String get variantCrazyhouseTitle => '除了移動棋子以外，也可將吃掉的棋子打入回盤面。';
+
+  @override
+  String get variantFromPosition => '自定義局面';
+
+  @override
+  String get variantFromPositionTitle => '從自訂局面開始的標準西洋棋';
 }

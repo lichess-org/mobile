@@ -1577,6 +1577,7 @@
   "teamTeam": "Թիմ",
   "teamIncorrectEntryCode": "Մուտքի սխալ կոդ։",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} թիմով մրցաշար} other{{count} թիմով մրցաշար}}",
+  "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
   "timeagoJustNow": "հենց հիմա",
   "timeagoRightNow": "հենց հիմա",
   "timeagoCompleted": "ավարտված",
@@ -1593,6 +1594,5 @@
   "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}",
-  "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
   "ublogXBlog": "{param}-ի բլոգ"
 }

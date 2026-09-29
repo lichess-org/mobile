@@ -485,66 +485,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Standard';
-
-  @override
-  String get variantStandardTitle => 'Règles standard des échecs (FIDE)';
-
-  @override
-  String get variantChess960 => 'Échecs 960';
-
-  @override
-  String get variantChess960Title => 'La position de départ des pièces de la première rangée est randomisée.';
-
-  @override
-  String get variantKingOfTheHill => 'Roi de la colline';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Amenez votre roi au centre pour gagner la partie.';
-
-  @override
-  String get variantThreeCheck => 'Trois-échecs';
-
-  @override
-  String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
-
-  @override
-  String get variantAntichess => 'Antiéchecs';
-
-  @override
-  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
-
-  @override
-  String get variantAtomic => 'Atomique';
-
-  @override
-  String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
-
-  @override
-  String get variantHorde => 'Horde';
-
-  @override
-  String get variantHordeTitle => 'Un camp a un grand nombre de pions, l\'autre a un nombre de pièces normales.';
-
-  @override
-  String get variantRacingKings => 'Sprint des rois';
-
-  @override
-  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquier pour gagner la partie.';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => 'Au lieu de bouger une pièce, vous pouvez replacer sur l\'échiquier une pièce capturée.';
-
-  @override
-  String get variantFromPosition => 'À partir d\'une position';
-
-  @override
-  String get variantFromPositionTitle => 'Échecs standard à partir d\'une position personnalisée';
-
-  @override
   String get activityActivity => 'Activité';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get perfStatNow => 'maintenant';
+
+  @override
+  String get practiceMakesPerfect => 'améliore votre jeu';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Inscrivez-vous pour enregistrer vos progrès';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Mats';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Tactiques fondamentales';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Tactiques avancées';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Finale de pions';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Finales de tours';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Mats de pièces I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Motifs de mat I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Motifs de mat II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Motifs de mat III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Motifs de mat IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Mats de pièces II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Mat avec fou et cavalier';
+
+  @override
+  String get practiceStNamThePin => 'Le clouage';
+
+  @override
+  String get practiceStNamTheSkewer => 'L\'enfilade';
+
+  @override
+  String get practiceStNamTheFork => 'La fourchette';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Attaque à la découverte';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Échec double';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Pièces surchargées';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'Motif rayons X';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interférence';
+
+  @override
+  String get practiceStNamGreekGift => 'Cheval de Troie';
+
+  @override
+  String get practiceStNamDeflection => 'Déviation';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Sous-promotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Contre-échec';
+
+  @override
+  String get practiceStNamUndermining => 'Affaiblissement de la défense';
+
+  @override
+  String get practiceStNamClearance => 'Dégagement';
+
+  @override
+  String get practiceStNamKeySquares => 'Cases clés';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => 'Pion tour sur la 7ᵉ rangée';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Finales de tours de base';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Finales de tours intermédiaires';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Finales de tours pratiques';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Mats de base';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Reconnaitre les motifs';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Mats difficiles';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Leçon interactive';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Clouage gagnant';
+
+  @override
+  String get practiceStDesYumSkewers => 'Des enfilades – excellent!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Utilise la fourchette, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Incluant des échecs à la découverte';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'Une tactique très efficace';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'Elles ont trop de travail';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'Coups intermédiaires';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attaquer à travers une pièce ennemie';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Coup forcé';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interposer une pièce avec succès';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Étudiez le motif Cheval de Troie';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distraire un défenseur';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Attirer une pièce sur une mauvaise case';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promouvoir – mais pas en une dame!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Une pièce est perdue, mais elle peut quand même aider';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Répondez à un échec par un échec';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Éliminer la pièce défensive';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Dégagez!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Atteignez une case clé';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Prenez l\'opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Contre une dame';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'Et tour passive vs tour active';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena et Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Élargissez vos connaissances';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Finales de tours avec plusieurs pions';
 
   @override
   String get preferencesPreferences => 'Préférences';
@@ -7345,6 +7486,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Authentification à deux facteurs';
+
+  @override
   String get timeagoJustNow => 'Maintenant';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Authentification à deux facteurs';
-
-  @override
   String get ublogCommunity => 'Communauté';
 
   @override
   String ublogXBlog(String param) {
     return 'Blogue de $param';
   }
+
+  @override
+  String get variantStandard => 'Standard';
+
+  @override
+  String get variantStandardTitle => 'Règles standard des échecs (FIDE)';
+
+  @override
+  String get variantChess960 => 'Échecs 960';
+
+  @override
+  String get variantChess960Title => 'La position de départ des pièces de la première rangée est randomisée.';
+
+  @override
+  String get variantKingOfTheHill => 'Roi de la colline';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Amenez votre roi au centre pour gagner la partie.';
+
+  @override
+  String get variantThreeCheck => 'Trois-échecs';
+
+  @override
+  String get variantThreeCheckTitle => 'Mettez votre adversaire en échec trois fois pour gagner la partie.';
+
+  @override
+  String get variantAntichess => 'Antiéchecs';
+
+  @override
+  String get variantAntichessTitle => 'Si vous perdez toutes vos pièces (ou êtes en pat), vous gagnez la partie.';
+
+  @override
+  String get variantAtomic => 'Atomique';
+
+  @override
+  String get variantAtomicTitle => 'Faites exploser le roi adverse pour gagner la partie.';
+
+  @override
+  String get variantHorde => 'Horde';
+
+  @override
+  String get variantHordeTitle => 'Un camp a un grand nombre de pions, l\'autre a un nombre de pièces normales.';
+
+  @override
+  String get variantRacingKings => 'Sprint des rois';
+
+  @override
+  String get variantRacingKingsTitle => 'Amenez votre roi de l\'autre côté de l\'échiquier pour gagner la partie.';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
+  String get variantCrazyhouseTitle => 'Au lieu de bouger une pièce, vous pouvez replacer sur l\'échiquier une pièce capturée.';
+
+  @override
+  String get variantFromPosition => 'À partir d\'une position';
+
+  @override
+  String get variantFromPositionTitle => 'Échecs standard à partir d\'une position personnalisée';
 }

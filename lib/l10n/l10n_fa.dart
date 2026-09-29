@@ -485,66 +485,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'اِستانده';
-
-  @override
-  String get variantStandardTitle => 'قانون‌های اِستاندهٔ شطرنج (فیده)';
-
-  @override
-  String get variantChess960 => 'شطرنج۹۶۰';
-
-  @override
-  String get variantChess960Title => 'وضعیتِ آغازشِ مُهره‌های عرضِ سواران تصادفی است.';
-
-  @override
-  String get variantKingOfTheHill => 'پادشاهِ تَپه‌ها';
-
-  @override
-  String get variantKingOfTheHillTitle => 'برای پیروزی در بازی، شاه‌تان را به تپه بَرید.';
-
-  @override
-  String get variantThreeCheck => 'سه‌کیش';
-
-  @override
-  String get variantThreeCheckTitle => 'برای پیروزی در بازی، ۳ بار به حریف‌تان کیش دهید.';
-
-  @override
-  String get variantAntichess => 'مَطرَنج';
-
-  @override
-  String get variantAntichessTitle => 'برای پیروزی در بازی، همهٔ مُهره‌های‌تان را ببازید (یا پات شوید).';
-
-  @override
-  String get variantAtomic => 'اِنفجار';
-
-  @override
-  String get variantAtomicTitle => 'برای پیروزی، شاهِ حریف را بِپُکانید.';
-
-  @override
-  String get variantHorde => 'لشکر';
-
-  @override
-  String get variantHordeTitle => 'یک طرف پیاده‌های زیادی دارد و دیگری یک ارتشِ عادی دارد.';
-
-  @override
-  String get variantRacingKings => 'دویِ شاهان';
-
-  @override
-  String get variantRacingKingsTitle => 'برای پیروزی، شاه‌تان را به طرفِ دیگر بَرید.';
-
-  @override
-  String get variantCrazyhouse => 'دیوانه‌خانه';
-
-  @override
-  String get variantCrazyhouseTitle => 'می‌توان جای حرکتِ یک مهره، مهره‌های گرفته را روی تخته گذاشت.';
-
-  @override
-  String get variantFromPosition => 'از وضعیت';
-
-  @override
-  String get variantFromPositionTitle => 'شطرنج اِستانده از وضعیتِ دلخواه';
-
-  @override
   String get activityActivity => 'فعالیت';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get perfStatNow => 'حالا';
+
+  @override
+  String get practiceMakesPerfect => 'شطرنج‌تان را بی‌نقص می‌کند';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'برای ذخیرهٔ پیشرفت‌تان نام‌نویسی کنید';
+
+  @override
+  String get practiceSecHeadCheckmates => 'مات';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'راهکنش اساسی';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'راهکنش پیشرفته';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'آخربازیِ پیاده';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'آخربازیِ رخ';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'مات با سوار ۱';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'الگوهای مات ۱';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'الگوهای مات ۲';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'الگوهای مات ۳';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'الگوهای مات ۴';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'مات با سوار ۲';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'ماتِ اسب و فیل';
+
+  @override
+  String get practiceStNamThePin => 'آچمزی';
+
+  @override
+  String get practiceStNamTheSkewer => 'سیخ‌کباب';
+
+  @override
+  String get practiceStNamTheFork => 'چنگال';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'حملهٔ برخاست';
+
+  @override
+  String get practiceStNamDoubleCheck => 'کیش دوگانه';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'مهرهٔ بیش‌بارمند';
+
+  @override
+  String get practiceStNamZwischenzug => 'بِینابِین';
+
+  @override
+  String get practiceStNamXRay => 'اشعهٔ ایکس';
+
+  @override
+  String get practiceStNamZugzwang => 'اِکراه';
+
+  @override
+  String get practiceStNamInterference => 'اَندَرزَنِش';
+
+  @override
+  String get practiceStNamGreekGift => 'هدیهٔ یونانی';
+
+  @override
+  String get practiceStNamDeflection => 'اِنحراف';
+
+  @override
+  String get practiceStNamAttraction => 'جلب';
+
+  @override
+  String get practiceStNamUnderpromotion => 'کم‌ارتقا';
+
+  @override
+  String get practiceStNamDesperado => 'یاغی';
+
+  @override
+  String get practiceStNamCounterCheck => 'پادکیش';
+
+  @override
+  String get practiceStNamUndermining => 'زیرحَفر';
+
+  @override
+  String get practiceStNamClearance => 'آزادسازی';
+
+  @override
+  String get practiceStNamKeySquares => 'خانه‌های کلیدی';
+
+  @override
+  String get practiceStNamOpposition => 'تقابل';
+
+  @override
+  String get practiceStNam7thRankRookPawn => 'پیادهٔ عرضِ ۷';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'آخربازی‌های پایهٔ رخ';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'آخربازیِ میان‌رده رخ';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'آخربازیِ کاربردی رخ';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'مات‌های پایه';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'تشخیصِ الگو';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'مات‌های چالشی';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'درس تعاملی';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'آچمز کنید تا ببَرید';
+
+  @override
+  String get practiceStDesYumSkewers => 'بَه‌بَه - سیخ‌کباب!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'از چنگال ببَهر، مَشتی';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'شامل کیش‌های برخاست';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'راهکنشی بسیار قدرتمند';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'کارشان خیلی زیاد است';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'حرکت بِینابِین';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'تنظیمات';
@@ -7345,6 +7486,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
+
+  @override
   String get timeagoJustNow => 'چند لحظه پیش';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
-
-  @override
   String get ublogCommunity => 'همدارگان';
 
   @override
   String ublogXBlog(String param) {
     return 'وبنوشتِ $param';
   }
+
+  @override
+  String get variantStandard => 'اِستانده';
+
+  @override
+  String get variantStandardTitle => 'قانون‌های اِستاندهٔ شطرنج (فیده)';
+
+  @override
+  String get variantChess960 => 'شطرنج۹۶۰';
+
+  @override
+  String get variantChess960Title => 'وضعیتِ آغازشِ مُهره‌های عرضِ سواران تصادفی است.';
+
+  @override
+  String get variantKingOfTheHill => 'پادشاهِ تَپه‌ها';
+
+  @override
+  String get variantKingOfTheHillTitle => 'برای پیروزی در بازی، شاه‌تان را به تپه بَرید.';
+
+  @override
+  String get variantThreeCheck => 'سه‌کیش';
+
+  @override
+  String get variantThreeCheckTitle => 'برای پیروزی در بازی، ۳ بار به حریف‌تان کیش دهید.';
+
+  @override
+  String get variantAntichess => 'مَطرَنج';
+
+  @override
+  String get variantAntichessTitle => 'برای پیروزی در بازی، همهٔ مُهره‌های‌تان را ببازید (یا پات شوید).';
+
+  @override
+  String get variantAtomic => 'اِنفجار';
+
+  @override
+  String get variantAtomicTitle => 'برای پیروزی، شاهِ حریف را بِپُکانید.';
+
+  @override
+  String get variantHorde => 'لشکر';
+
+  @override
+  String get variantHordeTitle => 'یک طرف پیاده‌های زیادی دارد و دیگری یک ارتشِ عادی دارد.';
+
+  @override
+  String get variantRacingKings => 'دویِ شاهان';
+
+  @override
+  String get variantRacingKingsTitle => 'برای پیروزی، شاه‌تان را به طرفِ دیگر بَرید.';
+
+  @override
+  String get variantCrazyhouse => 'دیوانه‌خانه';
+
+  @override
+  String get variantCrazyhouseTitle => 'می‌توان جای حرکتِ یک مهره، مهره‌های گرفته را روی تخته گذاشت.';
+
+  @override
+  String get variantFromPosition => 'از وضعیت';
+
+  @override
+  String get variantFromPositionTitle => 'شطرنج اِستانده از وضعیتِ دلخواه';
 }

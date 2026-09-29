@@ -485,66 +485,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Estándar';
-
-  @override
-  String get variantStandardTitle => 'Reglas de ajedrez estándar (FIDE)';
-
-  @override
-  String get variantChess960 => 'Ajedrez 960';
-
-  @override
-  String get variantChess960Title => 'La posición inicial de las piezas es aleatoria.';
-
-  @override
-  String get variantKingOfTheHill => 'Rey de la colina';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Lleva a tu rey al centro para ganar la partida.';
-
-  @override
-  String get variantThreeCheck => 'Tres jaques';
-
-  @override
-  String get variantThreeCheckTitle => 'Poner en jaque a tu oponente 3 veces para ganar la partida.';
-
-  @override
-  String get variantAntichess => 'Antiajedrez';
-
-  @override
-  String get variantAntichessTitle => 'Pierde todas tus piezas (o una posición de ahogado) para ganar la partida.';
-
-  @override
-  String get variantAtomic => 'Atómico';
-
-  @override
-  String get variantAtomicTitle => 'Haz explotar al rey de tu oponente para ganar.';
-
-  @override
-  String get variantHorde => 'Horda';
-
-  @override
-  String get variantHordeTitle => 'Un jugador tiene un gran número de peones, el otro posee un ejército normal.';
-
-  @override
-  String get variantRacingKings => 'Reyes en carrera';
-
-  @override
-  String get variantRacingKingsTitle => 'Lleva a tu rey al otro lado del tablero para ganar.';
-
-  @override
-  String get variantCrazyhouse => 'Revuelta';
-
-  @override
-  String get variantCrazyhouseTitle => 'Las piezas capturadas pueden volver a colocarse en el tablero en lugar de hacer un movimiento.';
-
-  @override
-  String get variantFromPosition => 'De la posición';
-
-  @override
-  String get variantFromPositionTitle => 'Ajedrez estándar desde una posición personalizada';
-
-  @override
   String get activityActivity => 'Actividad';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get perfStatNow => 'ahora';
+
+  @override
+  String get practiceMakesPerfect => 'hace que tu ajedrez sea perfecto';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Regístrate para guardar tu progreso';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Jaques mate';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Tácticas fundamentales';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Tácticas avanzadas';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Finales de peones';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Finales de torres';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Mates de piezas I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Patrones de Mate I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Patrones de Mate II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Patrones de Mate III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Patrones de Mate IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Mates de piezas II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Mate de Caballo y Alfil';
+
+  @override
+  String get practiceStNamThePin => 'La Clavada';
+
+  @override
+  String get practiceStNamTheSkewer => 'La Enfilada';
+
+  @override
+  String get practiceStNamTheFork => 'La Horquilla';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Ataques a la descubierta';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Jaque doble';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Piezas sobrecargadas';
+
+  @override
+  String get practiceStNamZwischenzug => 'Contramenaza';
+
+  @override
+  String get practiceStNamXRay => 'Rayos X';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interposición';
+
+  @override
+  String get practiceStNamGreekGift => 'Regalo envenenado';
+
+  @override
+  String get practiceStNamDeflection => 'Desviación';
+
+  @override
+  String get practiceStNamAttraction => 'Atracción';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Subpromoción';
+
+  @override
+  String get practiceStNamDesperado => 'Pieza loca';
+
+  @override
+  String get practiceStNamCounterCheck => 'Contrajaque';
+
+  @override
+  String get practiceStNamUndermining => 'Derribo';
+
+  @override
+  String get practiceStNamClearance => 'Despeje';
+
+  @override
+  String get practiceStNamKeySquares => 'Casillas clave';
+
+  @override
+  String get practiceStNamOpposition => 'Oposición';
+
+  @override
+  String get practiceStNam7thRankRookPawn => 'Peón de torre en 7ª fila';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Finales básicos de torre';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Finales intermedios de torre';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Finales prácticos de torre';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Mates básicos';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Reconocer los patrones';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Mates complejos';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Lección interactiva';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Clava para ganar';
+
+  @override
+  String get practiceStDesYumSkewers => 'Ñam, ¡enfiladas!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Usa la horquilla, chiquilla';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Incluye jaques a la descubierta';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'Una táctica muy fuerte';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'Tienen demasiado trabajo';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'Jugadas intermedias';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Atacar a través de una pieza enemiga';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Preferencias';
@@ -7345,6 +7486,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
+
+  @override
   String get timeagoJustNow => 'hace un momento';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
-
-  @override
   String get ublogCommunity => 'Comunidad';
 
   @override
   String ublogXBlog(String param) {
     return 'Blog de $param';
   }
+
+  @override
+  String get variantStandard => 'Estándar';
+
+  @override
+  String get variantStandardTitle => 'Reglas de ajedrez estándar (FIDE)';
+
+  @override
+  String get variantChess960 => 'Ajedrez 960';
+
+  @override
+  String get variantChess960Title => 'La posición inicial de las piezas es aleatoria.';
+
+  @override
+  String get variantKingOfTheHill => 'Rey de la colina';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Lleva a tu rey al centro para ganar la partida.';
+
+  @override
+  String get variantThreeCheck => 'Tres jaques';
+
+  @override
+  String get variantThreeCheckTitle => 'Poner en jaque a tu oponente 3 veces para ganar la partida.';
+
+  @override
+  String get variantAntichess => 'Antiajedrez';
+
+  @override
+  String get variantAntichessTitle => 'Pierde todas tus piezas (o una posición de ahogado) para ganar la partida.';
+
+  @override
+  String get variantAtomic => 'Atómico';
+
+  @override
+  String get variantAtomicTitle => 'Haz explotar al rey de tu oponente para ganar.';
+
+  @override
+  String get variantHorde => 'Horda';
+
+  @override
+  String get variantHordeTitle => 'Un jugador tiene un gran número de peones, el otro posee un ejército normal.';
+
+  @override
+  String get variantRacingKings => 'Reyes en carrera';
+
+  @override
+  String get variantRacingKingsTitle => 'Lleva a tu rey al otro lado del tablero para ganar.';
+
+  @override
+  String get variantCrazyhouse => 'Revuelta';
+
+  @override
+  String get variantCrazyhouseTitle => 'Las piezas capturadas pueden volver a colocarse en el tablero en lugar de hacer un movimiento.';
+
+  @override
+  String get variantFromPosition => 'De la posición';
+
+  @override
+  String get variantFromPositionTitle => 'Ajedrez estándar desde una posición personalizada';
 }

@@ -1631,6 +1631,7 @@
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{यहां अपना PGN टेक्स्ट डाले,{count} खेल तक} other{यहां अपना PGN टेक्स्ट डाले,{count} खेल तक}}",
   "teamTeam": "टीम",
   "teamIncorrectEntryCode": "अवैध प्रवेश कूट",
+  "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण",
   "timeagoJustNow": "अभी",
   "timeagoRightNow": "अभी",
   "timeagoCompleted": "पूर्ण",
@@ -1649,6 +1650,5 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} वर्ष पहले} other{{count} वर्षों पहले}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} मिनट बचा है} other{{count} मिनट बचे हैं}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} घंटा बचा है} other{{count} घंटे बचे हैं}}",
-  "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण",
   "ublogXBlog": "{param} का ब्लॉग"
 }

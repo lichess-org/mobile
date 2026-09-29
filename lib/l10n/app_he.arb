@@ -51,8 +51,6 @@
   "mobileWaitingForOpponentToJoin": "ממתין שיריב יצטרף...",
   "mobileWatchTab": "צפייה",
   "mobileCustomizeButton": "התאימו אישית",
-  "variantStandard": "רגיל",
-  "variantKingOfTheHillTitle": "לבוא את המלך שלך למרכז כדי לנצח.",
   "activityActivity": "פעילות",
   "activityHostedALiveStream": "על\\תה לשידור חי",
   "activityRankedInSwissTournament": "סיים/ה במקום {param1} ב־{param2}",
@@ -1784,6 +1782,7 @@
   "teamIncorrectEntryCode": "סיסמא שגויה.",
   "teamBattleOfNbTeams": "{count, plural, =1{קרב של קבוצה {count}} =2{קרב של {count} קבוצות} other{קרב של {count} קבוצות}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{מנהיג אחד בכל קבוצה} =2{{count} מנהיגים בכל קבוצה} other{{count} מנהיגים בכל קבוצה}}",
+  "tfaTwoFactorAuth": "אימות דו־שלבי",
   "timeagoJustNow": "בדיוק עכשיו",
   "timeagoRightNow": "עכשיו",
   "timeagoCompleted": "הושלם",
@@ -1802,6 +1801,7 @@
   "timeagoNbYearsAgo": "{count, plural, =1{לפני שנה {count}} =2{לפני {count} שנים} other{לפני {count} שנים}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{דקה {count} נותרה} =2{{count} דקות נותרו} other{{count} דקות נותרו}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{שעה {count} נותרה} =2{{count} שעות נותרו} other{{count} שעות נותרו}}",
-  "tfaTwoFactorAuth": "אימות דו־שלבי",
-  "ublogXBlog": "הבלוג של {param}"
+  "ublogXBlog": "הבלוג של {param}",
+  "variantStandard": "רגיל",
+  "variantKingOfTheHillTitle": "לבוא את המלך שלך למרכז כדי לנצח."
 }

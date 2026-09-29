@@ -485,66 +485,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'Standart';
-
-  @override
-  String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
-
-  @override
-  String get variantChess960 => 'Satranç960';
-
-  @override
-  String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
-
-  @override
-  String get variantKingOfTheHill => 'Merkezin Şahı';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
-
-  @override
-  String get variantThreeCheck => 'Üç-Şah';
-
-  @override
-  String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
-
-  @override
-  String get variantAntichess => 'Antisatranç';
-
-  @override
-  String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
-
-  @override
-  String get variantAtomic => 'Atomik';
-
-  @override
-  String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
-
-  @override
-  String get variantHorde => 'Sürü';
-
-  @override
-  String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
-
-  @override
-  String get variantRacingKings => 'Yarışan Şahlar';
-
-  @override
-  String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
-
-  @override
-  String get variantCrazyhouse => 'Çılgın Satranç';
-
-  @override
-  String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
-
-  @override
-  String get variantFromPosition => 'Konumdan';
-
-  @override
-  String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
-
-  @override
   String get activityActivity => 'Son Etkinlikler';
 
   @override
@@ -2117,6 +2057,207 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get perfStatNow => 'şimdi';
+
+  @override
+  String get practiceMakesPerfect => 'satrancınızı mükemmelleştirir';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'İlerlemenizi kaydetmek için kaydolun';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Şah Matlar';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Temel taktikler';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Gelişmiş taktikler';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Piyon Oyun Sonları';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Kale Oyun Sonları';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Şah Mat Desenleri I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Şah Mat Desenleri II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Şah Mat Desenleri III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Şah Mat Desenleri IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'At & Fil Matı';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'Şiş';
+
+  @override
+  String get practiceStNamTheFork => 'Çatal';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Açarak Saldırılar';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Çifte Şah';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Aşırı Yüklenmiş Taşlar';
+
+  @override
+  String get practiceStNamZwischenzug => 'Ara Hamle';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Yol Kesme';
+
+  @override
+  String get practiceStNamGreekGift => 'Yunan Hediyesi';
+
+  @override
+  String get practiceStNamDeflection => 'Saptırma';
+
+  @override
+  String get practiceStNamAttraction => 'Cezbetme';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Düşük terfi';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Anahtar Kareler';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7. Sıra Kale Piyonu';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Temel Kale Oyun Sonları';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Orta Seviye Kale Sonları';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Pratik Kale Sonları';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Temel şah matlar';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Desenleri tanıyın';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Zorlu şah matlar';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Etkileşimli ders';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Nefis - şişler!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Çatalı kullan Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'Çok güçlü bir taktik';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Hareket etmeye zorlanmak';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Tercihler';
@@ -7345,6 +7486,9 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
+
+  @override
   String get timeagoJustNow => 'şu anda';
 
   @override
@@ -7519,13 +7663,70 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
-
-  @override
   String get ublogCommunity => 'Topluluk';
 
   @override
   String ublogXBlog(String param) {
     return '$param Bloğu';
   }
+
+  @override
+  String get variantStandard => 'Standart';
+
+  @override
+  String get variantStandardTitle => 'Satrancın standart kuralları (FIDE)';
+
+  @override
+  String get variantChess960 => 'Satranç960';
+
+  @override
+  String get variantChess960Title => 'Kendi sıranızdaki taşlarınızın başlangıç ​​pozisyonu rastgele belirlenir.';
+
+  @override
+  String get variantKingOfTheHill => 'Merkezin Şahı';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Oyunu kazanmak için şahınızı merkeze getirin.';
+
+  @override
+  String get variantThreeCheck => 'Üç-Şah';
+
+  @override
+  String get variantThreeCheckTitle => 'Oyunu kazanmak için rakibinize 3 kez şah çekin.';
+
+  @override
+  String get variantAntichess => 'Antisatranç';
+
+  @override
+  String get variantAntichessTitle => 'Oyunu kazanmak için tüm taşlarınızı kaybedin (veya pat olun).';
+
+  @override
+  String get variantAtomic => 'Atomik';
+
+  @override
+  String get variantAtomicTitle => 'Kazanmak için rakibinizin şahını patlatın.';
+
+  @override
+  String get variantHorde => 'Sürü';
+
+  @override
+  String get variantHordeTitle => 'Bir tarafta çok sayıda piyon varken, öbür tarafta normal ordu vardır.';
+
+  @override
+  String get variantRacingKings => 'Yarışan Şahlar';
+
+  @override
+  String get variantRacingKingsTitle => 'Kazanmak için şahınızı tahtanın öbür tarafına geçirin.';
+
+  @override
+  String get variantCrazyhouse => 'Çılgın Satranç';
+
+  @override
+  String get variantCrazyhouseTitle => 'Hamle yapmak yerine yediğiniz taşları tahtaya koyabilirsiniz.';
+
+  @override
+  String get variantFromPosition => 'Konumdan';
+
+  @override
+  String get variantFromPositionTitle => 'Özel pozisyondan standart satranç';
 }

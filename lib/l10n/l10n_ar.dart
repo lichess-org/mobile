@@ -485,66 +485,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
-  String get variantStandard => 'الأساسي';
-
-  @override
-  String get variantStandardTitle => 'قواعد الشطرنج القياسية (FIDE)';
-
-  @override
-  String get variantChess960 => 'شطرنج960';
-
-  @override
-  String get variantChess960Title => 'يتم توزيع قطع الصف الخلفي عشوائيًا في وضعية البداية.';
-
-  @override
-  String get variantKingOfTheHill => 'ملك التل';
-
-  @override
-  String get variantKingOfTheHillTitle => 'أحضر الملك إلى المركز للفوز باللعبة.';
-
-  @override
-  String get variantThreeCheck => 'كش ملك ثلاث مرات';
-
-  @override
-  String get variantThreeCheckTitle => 'تفوز بالمباراة إذا نجحت في إعطاء كش لملك خصمك 3 مرات.';
-
-  @override
-  String get variantAntichess => 'الشطرنج العكسية';
-
-  @override
-  String get variantAntichessTitle => 'افقد جميع القطع الخاصة بك (أو الحصول على تعادل) للفوز باللعبة.';
-
-  @override
-  String get variantAtomic => 'ذري';
-
-  @override
-  String get variantAtomicTitle => 'فجّر ملك خصمك لتنتصر.';
-
-  @override
-  String get variantHorde => 'حشد';
-
-  @override
-  String get variantHordeTitle => 'لدى أحد الجانبين عدد كبير من الجنود، ولدى الطرف الآخر جيش عادي.';
-
-  @override
-  String get variantRacingKings => 'سباق الملوك';
-
-  @override
-  String get variantRacingKingsTitle => 'أوصل ملكك إلى الجانب الآخر من اللوحة للفوز.';
-
-  @override
-  String get variantCrazyhouse => 'البيت المجنون';
-
-  @override
-  String get variantCrazyhouseTitle => 'يمكنك إلقاء القطع المصطادة مرة أخرى على اللوحة بدلا من تحريك قطعة.';
-
-  @override
-  String get variantFromPosition => 'من وضع';
-
-  @override
-  String get variantFromPositionTitle => 'الشطرنج الطبيعي من موضع مخصص';
-
-  @override
   String get activityActivity => 'الأنشطة';
 
   @override
@@ -2205,6 +2145,207 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get perfStatNow => 'الآن';
+
+  @override
+  String get practiceMakesPerfect => 'يجعل لعبك في الشطرنج أكثر إتقانًا';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'سجّل حسابًا لحفظ تقدّمك';
+
+  @override
+  String get practiceSecHeadCheckmates => 'كش مات';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'التكتيكات الأساسية';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'تكتيكات المتقدمة';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'نهايات البيادق';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'نهايات الرخ';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'كش مات بالقطع I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'أنماط كشّ مات I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'أنماط كشّ مات II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'أنماط كشّ مات III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'أنماط كشّ مات IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'كش مات بالقطع II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'كش مات بالفيل & الحصان';
+
+  @override
+  String get practiceStNamThePin => 'التثبيت';
+
+  @override
+  String get practiceStNamTheSkewer => 'السيخ';
+
+  @override
+  String get practiceStNamTheFork => 'الشوكة';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'الهجمات المكتشفة';
+
+  @override
+  String get practiceStNamDoubleCheck => 'الكش المزدوج';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'القطع المُثقلة';
+
+  @override
+  String get practiceStNamZwischenzug => 'النقلة البينية';
+
+  @override
+  String get practiceStNamXRay => 'الأشعة السينية';
+
+  @override
+  String get practiceStNamZugzwang => 'الزُّوغتسفانغ';
+
+  @override
+  String get practiceStNamInterference => 'التشويش';
+
+  @override
+  String get practiceStNamGreekGift => 'التضحية اليونانية';
+
+  @override
+  String get practiceStNamDeflection => 'الإبعاد';
+
+  @override
+  String get practiceStNamAttraction => 'الاستدراج';
+
+  @override
+  String get practiceStNamUnderpromotion => 'الترقية الناقصة';
+
+  @override
+  String get practiceStNamDesperado => 'النقلة اليائسة';
+
+  @override
+  String get practiceStNamCounterCheck => 'الكش المضاد';
+
+  @override
+  String get practiceStNamUndermining => 'تقويض الدفاع';
+
+  @override
+  String get practiceStNamClearance => 'الإخلاء';
+
+  @override
+  String get practiceStNamKeySquares => 'المربعات الرئيسية';
+
+  @override
+  String get practiceStNamOpposition => 'المعارضة';
+
+  @override
+  String get practiceStNam7thRankRookPawn => 'بيدق الرخ في الصف 7';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'نهايات الرخ الأساسية';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'نهايات الرخ المتوسطة';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'نهايات الرخ العملية';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'كش مات أساسي';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'تعرّف على الأنماط';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'كش مات صعب';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'درس تفاعلي';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'ثبّت القطعة لتفوز';
+
+  @override
+  String get practiceStDesYumSkewers => 'يممم… أسياخ!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'استخدم الشوكة يا لوك';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'بما في ذلك الكشات المكتشفة';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'تكتيك قوي جدًا';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'لديها الكثير من المهام';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'النقلات البينية';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'الهجوم عبر قطعة للخصم';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'الإجبار على التحرك';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'إقحام قطعة بفعالية كبيرة';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'دراسة التضحية اليونانية';
+
+  @override
+  String get practiceStDesDistractingADefender => 'إشغال المدافع';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'استدراج قطعة إلى مربع سيئ';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'رقِّ البيدق، ولكن ليس إلى وزير!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'قطعة خاسرة، لكنها لا تزال مفيدة';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'الرد على الكش بكش';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'أزِل القطعة المدافعة';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'أفسح الطريق!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'الوصول إلى مربع رئيسي';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'أخذ المعارضة';
+
+  @override
+  String get practiceStDesVersusAQueen => 'ضد الوزير';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'والرخ السلبي ضد الرخ';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'لوسينا وفيلدور';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'وسّع معرفتك';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'نهايات الرخ مع عدة بيادق';
 
   @override
   String get preferencesPreferences => 'تفضيلات';
@@ -7653,6 +7794,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get tfaTwoFactorAuth => 'التوثيق الثنائي';
+
+  @override
   String get timeagoJustNow => 'الآن';
 
   @override
@@ -7887,13 +8031,70 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'التوثيق الثنائي';
-
-  @override
   String get ublogCommunity => 'المجتمع';
 
   @override
   String ublogXBlog(String param) {
     return 'مدونة $param';
   }
+
+  @override
+  String get variantStandard => 'الأساسي';
+
+  @override
+  String get variantStandardTitle => 'قواعد الشطرنج القياسية (FIDE)';
+
+  @override
+  String get variantChess960 => 'شطرنج960';
+
+  @override
+  String get variantChess960Title => 'يتم توزيع قطع الصف الخلفي عشوائيًا في وضعية البداية.';
+
+  @override
+  String get variantKingOfTheHill => 'ملك التل';
+
+  @override
+  String get variantKingOfTheHillTitle => 'أحضر الملك إلى المركز للفوز باللعبة.';
+
+  @override
+  String get variantThreeCheck => 'كش ملك ثلاث مرات';
+
+  @override
+  String get variantThreeCheckTitle => 'تفوز بالمباراة إذا نجحت في إعطاء كش لملك خصمك 3 مرات.';
+
+  @override
+  String get variantAntichess => 'الشطرنج العكسية';
+
+  @override
+  String get variantAntichessTitle => 'افقد جميع القطع الخاصة بك (أو الحصول على تعادل) للفوز باللعبة.';
+
+  @override
+  String get variantAtomic => 'ذري';
+
+  @override
+  String get variantAtomicTitle => 'فجّر ملك خصمك لتنتصر.';
+
+  @override
+  String get variantHorde => 'حشد';
+
+  @override
+  String get variantHordeTitle => 'لدى أحد الجانبين عدد كبير من الجنود، ولدى الطرف الآخر جيش عادي.';
+
+  @override
+  String get variantRacingKings => 'سباق الملوك';
+
+  @override
+  String get variantRacingKingsTitle => 'أوصل ملكك إلى الجانب الآخر من اللوحة للفوز.';
+
+  @override
+  String get variantCrazyhouse => 'البيت المجنون';
+
+  @override
+  String get variantCrazyhouseTitle => 'يمكنك إلقاء القطع المصطادة مرة أخرى على اللوحة بدلا من تحريك قطعة.';
+
+  @override
+  String get variantFromPosition => 'من وضع';
+
+  @override
+  String get variantFromPositionTitle => 'الشطرنج الطبيعي من موضع مخصص';
 }
