@@ -7,16 +7,14 @@ typedef LearnProgressBuilder = Widget Function(BuildContext context, LearnProgre
 
 /// Resolves the learn progress for a subtree, without tearing it down on every reload.
 ///
-/// [builder] is called with the progress, and stays mounted across a reload: the progress
-/// provider rebuilds on every account change, and a background request that finds an expired
-/// session invalidates the auth state too, so a rebuild is routine rather than exceptional.
-/// Unmounting on it is costly on the stage screen, where it disposes the stage controller and
-/// throws away the level in progress, and jarring on the stage list, where the whole list
-/// flashes to a spinner.
+/// The provider rebuilds on every account change, and a background request finding an expired
+/// session invalidates the auth state too, so a rebuild is routine. Unmounting on it disposes the
+/// stage controller and throws away the level in progress on the stage screen, and flashes the
+/// list to a spinner on the stage list.
 ///
-/// The error is not latched behind "has loaded once". Doing so makes it unreachable for the rest
-/// of the screen's life, so a failed reload would leave the subtree running on empty progress and
-/// invite the user to replay levels they already finished.
+/// The error is not latched behind "has loaded once": that makes it unreachable for the rest of
+/// the screen's life, leaving the subtree on empty progress and inviting a replay of finished
+/// levels.
 // A declaring parameter cannot hold a function type, so the field is declared explicitly.
 class const LearnProgressGate({
   // ignore: use_declaring_parameters
@@ -33,8 +31,8 @@ class _LearnProgressGateState() extends ConsumerState<LearnProgressGate> {
   /// The last progress that loaded, used while a reload is in flight.
   ///
   /// `AsyncValue.value` is null while loading, so without this the subtree would be rebuilt from
-  /// nothing. Riverpod keeps the previous value on a failed rebuild, so this also covers an error
-  /// after a successful load.
+  /// nothing. Riverpod keeps the previous value on a failed rebuild, so this covers an error after
+  /// a successful load too.
   LearnProgress? lastLoaded;
 
   @override

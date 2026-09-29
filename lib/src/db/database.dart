@@ -300,10 +300,10 @@ void _createLearnProgressTableV9(Batch batch) {
     ''');
 }
 
-// Unlike the other progress tables, the learn scores are uploaded to the server. They must be
-// keyed by account, or a second user on the device would be sent the first one's progress.
-// The pre-v9 rows predate any sync, so they cannot be attributed to an account: they are kept
-// under the anonymous bucket, which no signed-in user reads and no sync ever uploads.
+// Unlike the other progress tables, these scores are uploaded, so they are keyed by account: a
+// second user on the device would otherwise be sent the first one's progress. The pre-v9 rows
+// predate any sync and cannot be attributed, so they land in the anonymous bucket, which no
+// signed-in user reads and no sync uploads.
 void _updateLearnProgressTableToV9(Batch batch) {
   batch.execute('''
     CREATE TABLE learn_progress_new(

@@ -124,7 +124,7 @@ final learnProgressStorageProvider = FutureProvider<LearnProgressStorage>((Ref r
 const _tableName = 'learn_progress';
 const _stateTableName = 'learn_sync_state';
 
-/// A level stored locally that the server does not know about yet.
+/// A score the server has not accepted yet, identified by its level.
 typedef LearnUnsyncedRef = ({String stageKey, int levelIndex});
 
 /// The outcome of posting one score.
@@ -135,14 +135,21 @@ enum _PushResult() {
   /// A transient failure. The row stays dirty and is retried.
   retry,
 
-  /// The server refused this payload for good, so it must not be posted again.
+  /// The server refused the payload itself, so posting it again cannot succeed.
   rejected,
 }
 
-/// The storage key of an account, or the anonymous bucket when logged out.
+/// Whether a status code means the score payload is wrong, rather than the request being
+/// temporarily unacceptable.
+///
+/// 401 is excluded because `LichessClient` treats it as an expired token and retries, 403 because
+/// the scope can be re-granted, and 408/429 because they are throttling and timeouts.
+bool _isPermanentRejection(int statusCode) =>
+    statusCode == 400 || statusCode == 404 || statusCode == 422;
+
 String _accountKey(UserId? userId) => userId?.value ?? kStorageAnonId;
 
-/// Local storage of the learn scores, scoped to one account.
+/// The learn scores held locally, scoped to one account.
 ///
 /// Only improvements are saved: a lower score never overwrites a higher one.
 class const LearnProgressStorage(final Database _db) {
@@ -222,7 +229,7 @@ class const LearnProgressStorage(final Database _db) {
     );
   }
 
-  /// The levels stored locally that the server does not know about yet.
+  /// The scores the server has not accepted yet.
   ///
   /// Only the keys: the score must be read again right before the POST, see [fetchScore].
   Future<IList<LearnUnsyncedRef>> fetchUnsynced(UserId? userId) async {
@@ -295,9 +302,8 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
 
   /// Serializes the operations that touch the account, the progress and the server.
   ///
-  /// Everything that reads state, writes a row, or POSTs runs inside `_serialize`, so no two of
-  /// them interleave across an `await`. Without it a merge already in flight re-inserts the rows
-  /// a reset just deleted, and a score saved during a merge is POSTed over a better server one.
+  /// Without it, a merge in flight re-inserts the rows a reset just deleted, and a score saved
+  /// during a merge is posted over a better server one.
   Future<void> _queue = Future.value();
 
   Future<T> _serialize<T>(Future<T> Function() action) {
@@ -308,14 +314,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
 
   /// Bumped by [build] and [reset], and carried by every operation it starts.
   ///
-  /// This notifier is not `autoDispose`, so Riverpod reuses one instance across rebuilds and
-  /// `invalidate` cancels nothing: a captured account field would simply be overwritten by the
-  /// next `build`, and a guard comparing it with the live account would compare the live value
-  /// with itself. A generation cannot be overwritten, so an operation started by an earlier
-  /// build can still tell that it is stale.
+  /// The notifier is not `autoDispose`, so one instance is reused across rebuilds: a captured
+  /// account field would be overwritten by the next `build`, and a guard comparing it with the
+  /// live account would compare the live value with itself. A generation cannot be overwritten,
+  /// so an operation from an earlier build can still tell that it is stale.
   int _generation = 0;
 
-  /// The account the user is signed in to right now, or null.
   UserId? get _signedIn => ref.read(authControllerProvider)?.user.id;
 
   @override
@@ -352,9 +356,9 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
       final generation = _generation;
       final userId = _signedIn;
       final storage = await ref.read(learnProgressStorageProvider.future);
-      // The row and the state are written together, both for the account that is signed in now.
-      // Neither is written once the generation moved on, so a completion during an account
-      // change cannot be credited to the account that replaced it.
+      // The row and the state are both written for the account signed in now, and neither is
+      // written once the generation moved on, so a completion during an account change is never
+      // credited to the account that replaced it.
       if (generation != _generation) return;
       state = AsyncData(current.withScore(stage, levelIndex, score));
       await storage.saveScore(
@@ -412,14 +416,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     });
   }
 
-  /// Pushes a score just saved in this session.
   /// Pushes a score just saved in this session, once the sync queue is free.
   ///
-  /// Queued behind the merge on purpose. The server overwrites unconditionally, so posting a
-  /// score before the merge has folded in the server copy would destroy a better server one.
+  /// Queued behind the merge on purpose: the server overwrites unconditionally, so posting before
+  /// the merge has folded in the server copy would destroy a better server one.
   ///
-  /// Anonymous users have no server progress, and a failure leaves the row dirty for the next
-  /// flush.
+  /// A failure leaves the row dirty for the next flush.
   Future<void> _syncScore(UserId? userId, String stageKey, int levelIndex, int generation) {
     if (userId == null) return Future.value();
     return _serialize(() async {
@@ -463,13 +465,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
           );
           if (generation != _generation) return;
           if (server.isEmpty) {
-            // Deliberately nothing here. An empty payload cannot be told apart from a payload
-            // this build cannot make sense of, because _validServerScores drops both. Deleting
-            // on it meant a lila stage rename, or a captive portal answering 200 with an empty
-            // object, wiped every synced row while the server still held the data and nothing
-            // could restore it. A reset done on the web therefore never reaches the app: a late
-            // update is better than an unrecoverable deletion, and clearing it needs a server
-            // signal that distinguishes "no progress" from "progress I do not understand".
+            // Nothing is deleted here, and it cannot be: _validServerScores empties the map both
+            // when the server has no progress and when this build cannot read the payload it
+            // sent, and the two are indistinguishable here. Deleting would destroy the local copy
+            // on a lila stage rename, or on any proxy answering 200 with an empty object. So a
+            // reset done on the web does not reach the app; clearing it needs the server to
+            // report a reset explicitly rather than by omission.
             _logger.info('Server reported no learn progress, keeping the local copy');
           } else {
             for (final stageEntry in server.entries) {
@@ -581,9 +582,9 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
                 .saveScore(stageKey: stageKey, levelId: levelIndex + 1, score: score),
       );
     } on ServerException catch (e) {
-      // A 4xx means the server has rejected this payload for good, so retrying is pointless.
-      // Anything else, including a network failure or a 5xx, is transient.
-      return e.statusCode >= 400 && e.statusCode < 500 ? _PushResult.rejected : _PushResult.retry;
+      // Only a code that means the payload itself is wrong is permanent. 401 is a token problem
+      // the client already retried, and 403/408/429 are recoverable, so those keep the row dirty.
+      return _isPermanentRejection(e.statusCode) ? _PushResult.rejected : _PushResult.retry;
     } catch (_) {
       return _PushResult.retry;
     }
