@@ -40,7 +40,7 @@ class ServerAnalysisRequestException(
   /// [ServerAnalysisService.classifyRequestAnalysisError].
   final ServerAnalysisRequestError error,
 
-  /// The raw failure, as reported by the server.
+  /// The server's refusal text, shown to the user.
   final String message,
 ) {
   @override
@@ -55,14 +55,14 @@ class ServerAnalysisRequestException(
 /// [isBenign] marks the single case where evals for *this* game are still expected on the socket.
 /// Every other value means the server queued nothing for this game, so listening would burn
 /// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
-enum ServerAnalysisRequestError({final bool isBenign = false, required final String message}) {
-  alreadyAnalysed(isBenign: true, message: 'This game has already been analysed'),
-  concurrentAnalysis(message: 'Another analysis is already in progress'),
-  weeklyLimitReached(message: 'Weekly analysis limit reached'),
-  dailyLimitReached(message: 'Daily analysis limit reached'),
-  dailyIpLimitReached(message: 'Daily analysis limit reached for this IP address'),
-  notAnalysable(message: 'This game cannot be analysed'),
-  unknown(message: 'The analysis could not be started'),
+enum ServerAnalysisRequestError({final bool isBenign = false}) {
+  alreadyAnalysed(isBenign: true),
+  concurrentAnalysis,
+  weeklyLimitReached,
+  dailyLimitReached,
+  dailyIpLimitReached,
+  notAnalysable,
+  unknown,
 }
 
 /// The exact error strings [lila.fishnet.Analyser.Result] sends, keyed by the resulting error.
@@ -170,7 +170,7 @@ class ServerAnalysisService(final Ref ref) {
             // Wrap it so the view can report the reason instead of a bare failure.
             _logger.warning('Server refused to analyse game $gameId: $error', e, st);
             _cancelAnalysis();
-            throw ServerAnalysisRequestException(error, e.message);
+            throw ServerAnalysisRequestException(error, requestAnalysisRefusalMessage(e));
           } else {
             _logger.severe('ServerException requesting server analysis', e, st);
             _cancelAnalysis();
@@ -215,6 +215,17 @@ class ServerAnalysisService(final Ref ref) {
       }
     }
     return ServerAnalysisRequestError.unknown;
+  }
+
+  /// The server's refusal text to show the user: the plain-text body it sends alongside the
+  /// 400, falling back to the full failure for bodies this list does not cover.
+  static String requestAnalysisRefusalMessage(ServerException e) {
+    for (final MapEntry(key: body, value: _) in _kServerAnalysisRequestErrors.entries) {
+      if (e.message.endsWith(body)) {
+        return body;
+      }
+    }
+    return e.message;
   }
 
   /// Cancel the ongoing server analysis, if any.

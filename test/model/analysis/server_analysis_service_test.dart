@@ -125,6 +125,22 @@ void main() {
     });
   });
 
+  group('ServerAnalysisService.requestAnalysisRefusalMessage', () {
+    test('returns the server body verbatim for a known refusal', () {
+      expect(
+        ServerAnalysisService.requestAnalysisRefusalMessage(
+          _badRequest('You have reached the weekly analysis limit'),
+        ),
+        'You have reached the weekly analysis limit',
+      );
+    });
+
+    test('falls back to the full failure for an unrecognised body', () {
+      final e = _badRequest('Something new');
+      expect(ServerAnalysisService.requestAnalysisRefusalMessage(e), e.message);
+    });
+  });
+
   group('ServerAnalysisService.mergeOngoingAnalysis', () {
     test('merges analysis using UCI instead of id field', () {
       // Create a simple game tree: e2e4

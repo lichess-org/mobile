@@ -55,7 +55,7 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  refusal.error.message,
+                  refusal.message,
                   style: Styles.sectionTitle,
                   textAlign: TextAlign.center,
                 ),
