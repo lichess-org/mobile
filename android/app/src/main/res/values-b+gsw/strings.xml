@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Täglichi Ufgab</string>
+    <string name="widget_community_title">G\'meinschaft</string>
+    <string name="widget_broadcast_title">Überträgige</string>
+</resources>

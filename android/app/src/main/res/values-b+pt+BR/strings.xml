@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Problema diário</string>
+    <string name="widget_community_title">Comunidade</string>
+    <string name="widget_broadcast_title">Transmissões</string>
+</resources>

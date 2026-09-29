@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">일일 퍼즐</string>
+    <string name="widget_community_title">커뮤니티</string>
+    <string name="widget_broadcast_title">방송</string>
+</resources>
