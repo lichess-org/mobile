@@ -37,12 +37,38 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
         actions: const [ToggleSoundButton()],
       ),
       // The controller reads the saved progress to pick the level to start with.
-      body: switch (ref.watch(learnProgressProvider)) {
-        AsyncData() => _Body(stage: stage),
-        AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
+      body: _ProgressGate(stage: stage),
     );
+  }
+}
+
+/// Keeps the level in progress mounted while the progress reloads.
+///
+/// Unmounting the body disposes the stage controller, which cancels its pending opponent moves
+/// and restarts the level from its initial position. A reload is not rare: it happens on every
+/// account change, and a background request that finds an expired session invalidates the auth
+/// state too. So the body is mounted from the first successful load onwards, and only an error
+/// before any load replaces it.
+class const _ProgressGate({required final LearnStage stage}) extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<_ProgressGate> createState() => _ProgressGateState();
+}
+
+class _ProgressGateState() extends ConsumerState<_ProgressGate> {
+  bool hasLoaded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = ref.watch(learnProgressProvider);
+    if (progress.hasValue) {
+      hasLoaded = true;
+    } else if (!hasLoaded) {
+      if (progress.hasError) {
+        return Center(child: Text('Could not load progress: ${progress.error}'));
+      }
+      return const Center(child: CircularProgressIndicator.adaptive());
+    }
+    return _Body(stage: widget.stage);
   }
 }
 
