@@ -38,9 +38,12 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Varyasiyaları göstər</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Xəta baş verdi.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistem rəngləri</string>
-  <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="theme" comment="Graphic theme section in the global app settings.">Mövzu</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Alətlər</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s variantı bu versiyada dəstəklənmir.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Rəqibin qoşulması gözlənilir...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">İzlə</string>
+  <string name="displayModeDetailed" comment="">Ətraflı</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antichess</string>
 </resources>

@@ -17,7 +17,7 @@ void main() {
   });
 
   testWidgets('Engine starts immediately after the request eval delay', (tester) async {
-    // loads a finished game, disable cloud eval because it is ususally not availabe in mid/end game
+    // loads a finished game, disable cloud eval because it is usually not available in mid/end game
     await makeEngineTestApp(tester, isCloudEvalEnabled: false, gameId: const GameId('xze7RH66'));
 
     expect(find.byType(CircularProgressIndicator), findsOne);

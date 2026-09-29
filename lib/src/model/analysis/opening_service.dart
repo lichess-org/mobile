@@ -16,11 +16,7 @@ final openingServiceProvider = Provider<OpeningService>((Ref ref) {
   return OpeningService(ref);
 }, name: 'OpeningServiceProvider');
 
-class OpeningService {
-  OpeningService(this._ref);
-
-  final Ref _ref;
-
+class OpeningService(final Ref _ref) {
   Future<Database> get _db => _ref.read(openingsDatabaseProvider.future);
 
   Future<FullOpening?> fetchFromFen(String fen) async {

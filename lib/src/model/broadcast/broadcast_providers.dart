@@ -12,7 +12,7 @@ final broadcastsPaginatorProvider =
       name: 'BroadcastsPaginatorProvider',
     );
 
-class BroadcastsPaginator extends AsyncNotifier<BroadcastList> {
+class BroadcastsPaginator() extends AsyncNotifier<BroadcastList> {
   @override
   Future<BroadcastList> build() {
     return ref.read(broadcastRepositoryProvider).getBroadcasts();
@@ -44,11 +44,8 @@ final broadcastsSearchPaginatorProvider = AsyncNotifierProvider.autoDispose
       name: 'BroadcastsSearchPaginatorProvider',
     );
 
-class BroadcastsSearchPaginator extends AsyncNotifier<BroadcastSearchList> {
-  BroadcastsSearchPaginator(this.searchTerm);
-
-  final String searchTerm;
-
+class BroadcastsSearchPaginator(final String searchTerm)
+    extends AsyncNotifier<BroadcastSearchList> {
   @override
   Future<BroadcastSearchList> build() {
     return ref.read(broadcastRepositoryProvider).searchBroadcasts(searchTerm: searchTerm);

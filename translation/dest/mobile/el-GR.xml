@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Είστε σίγουρος/η;</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Ρυθμίσεις σκακιέρας</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ακύρωση προσφοράς ανάκλησης κίνησης</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Σκακιστική Μηχανή</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Εκκαθάριση</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Εκκαθάριση αποθηκευμένης κίνησης</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Συμμετοχή σε παρτίδα</string>

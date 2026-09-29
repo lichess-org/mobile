@@ -51,17 +51,15 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
     if (serverAnalysisSource != null) {
       await ref.read(serverAnalysisServiceProvider).requestAnalysis(serverAnalysisSource, side);
     } else {
-      return Future.error('Cannot request server analysis');
+      return await Future.error('Cannot request server analysis');
     }
   }
 
   Future<void> onServerAnalysisEvent(ServerEvalEvent event);
 
   Future<void> _onServerAnalysisEvent() async {
-    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value case (
-      final source,
-      final event,
-    ) when source == state.value?.serverAnalysisSource) {
+    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value
+        case (final source, final event) when source == state.value?.serverAnalysisSource) {
       ServerAnalysisService.mergeOngoingAnalysis(positionTree, event.tree);
       await onServerAnalysisEvent(event);
     }

@@ -56,7 +56,7 @@ mixin EvaluationMixinState<State extends EvaluationMixinState<State>> {
   /// Whether to always request a cloud evaluation, regardless of the current ply.
   bool get alwaysRequestCloudEval;
 
-  /// Whether the engine is in threat mode, i.e. pretending it's the the opposite side's turn.
+  /// Whether the engine is in threat mode, i.e. pretending it's the opposite side's turn.
   bool get engineInThreatMode;
 
   /// Whether the "show threat" feature can be used in the current position.
@@ -114,6 +114,14 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   StreamSubscription<SocketEvent>? _socketSubscription;
 
+  /// Subscription to the eval stream of the latest eval request.
+  ///
+  /// Kept so it can be cancelled when the request is replaced or the notifier is disposed: the
+  /// stream is a view of the evaluator's broadcast controller, which is closed only when the
+  /// evaluator itself is disposed, so an uncancelled subscription would be dispatched on every
+  /// emission (and retain the captured state) until then.
+  StreamSubscription<EvalResult>? _engineEvalSubscription;
+
   /// Called when a received evaluation is for the current path.
   ///
   /// If the evaluation string is the same for both the received and the current evaluation, the
@@ -126,6 +134,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
     ref.onDispose(() {
       _evalRequestDebounce.cancel();
       _localEngineAfterDelayDebounce.cancel();
+      _engineEvalSubscription?.cancel();
       _socketSubscription?.cancel();
       // Letting go of the evaluator disposes it, which releases the engine; the grace window is
       // what makes navigating to another analysis screen free.
@@ -343,7 +352,19 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
-    _evaluator.evaluate(work, goDeeper: goDeeper)?.forEach((event) {
+    if (!work.threatMode) {
+      // If we have an already good enough eval in cache, skip the evaluation
+      switch (work.evalCache) {
+        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
+        case CloudEval _ when goDeeper == false:
+          return;
+        case _:
+          break;
+      }
+    }
+
+    _engineEvalSubscription?.cancel();
+    _engineEvalSubscription = _evaluator.evaluate(work).listen((event) {
       if (curState.engineInThreatMode) {
         return;
       }

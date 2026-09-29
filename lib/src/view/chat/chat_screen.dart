@@ -18,12 +18,11 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ChatBottomBarButton extends ConsumerWidget {
-  const ChatBottomBarButton({required this.options, this.showLabel = false, super.key});
-
-  final ChatOptions options;
-  final bool showLabel;
-
+class const ChatBottomBarButton({
+  required final ChatOptions options,
+  final bool showLabel = false,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatUnread = ref.watch(chatUnreadProvider(options));
@@ -46,11 +45,7 @@ class ChatBottomBarButton extends ConsumerWidget {
   }
 }
 
-class ChatScreen extends ConsumerStatefulWidget {
-  final ChatOptions options;
-
-  const ChatScreen({required this.options});
-
+class const ChatScreen({required final ChatOptions options}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({required ChatOptions options}) {
     return buildScreenRoute(screen: ChatScreen(options: options));
   }
@@ -59,7 +54,7 @@ class ChatScreen extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
+class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -167,19 +162,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> with RouteAware {
   }
 }
 
-class _MessageBubble extends ConsumerWidget {
-  const _MessageBubble({
-    required this.options,
-    required this.you,
-    required this.message,
-    this.showUsername = false,
-  });
-
-  final bool you;
-  final ChatOptions options;
-  final ChatMessage message;
-  final bool showUsername;
-
+class const _MessageBubble({
+  required final ChatOptions options,
+  required final bool you,
+  required final ChatMessage message,
+  final bool showUsername = false,
+}) extends ConsumerWidget {
   Color _bubbleColor(BuildContext context) =>
       you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
 
@@ -252,11 +240,7 @@ class _MessageBubble extends ConsumerWidget {
   }
 }
 
-class _MessageAction extends StatelessWidget {
-  final String message;
-
-  const _MessageAction({required this.message});
-
+class const _MessageAction({required final String message}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
@@ -275,15 +259,12 @@ class _MessageAction extends StatelessWidget {
   }
 }
 
-class _ChatBottomBar extends ConsumerStatefulWidget {
-  final ChatOptions options;
-  const _ChatBottomBar({required this.options});
-
+class const _ChatBottomBar({required final ChatOptions options}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
 }
 
-class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
+class _ChatBottomBarState() extends ConsumerState<_ChatBottomBar> {
   final _textController = TextEditingController();
 
   @override

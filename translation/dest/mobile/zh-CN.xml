@@ -7,6 +7,7 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您确定吗？</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">棋盘设置</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋请求</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">国际象棋引擎</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">清空</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">清除已保存的着法</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">加入对局</string>
@@ -45,6 +46,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">拖动棋子落点标记</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">圆形</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">方形</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">绘制图形颜色</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">该颜色将用于通过双指绘制的图形。</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">首页小组件</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">在对局时隐藏系统界面。如果屏幕边缘的系统导航手势打扰到您，则可使用此选项。适用于对局和谜题界面。</string>

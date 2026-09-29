@@ -27,10 +27,7 @@ final quickActionServiceProvider = Provider<QuickActionService>((Ref ref) {
   return service;
 });
 
-class QuickActionService {
-  QuickActionService(this.ref);
-
-  final Ref ref;
+class QuickActionService(final Ref ref) {
   AppLocalizations get l10n => ref.read(localizationsProvider).strings;
 
   final QuickActions quickActions = const QuickActions();

@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,31 +13,31 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
-import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
-import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/offline_computer/computer_analysis.dart';
+import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
-import 'package:lichess_mobile/src/model/offline_computer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
@@ -60,6 +59,9 @@ const _kOpeningPlyThreshold = 30;
 const _kPreMoveEvalWait = Duration(seconds: 4);
 
 /// How long the hints wait to become available before the spinner gives up.
+///
+/// The search's own [kPracticeMaxSearchTime] is what ends it; starting the engine is not in it, as
+/// the wait only begins once the engine is searching.
 final _kHintWait = kPracticeMaxSearchTime + const Duration(seconds: 1);
 
 /// Max search time for a move evaluation in practice mode when the move is not in the pre-move PVs.
@@ -87,7 +89,14 @@ final offlineComputerGameControllerProvider =
       name: 'OfflineComputerGameControllerProvider',
     );
 
-class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
+class OfflineComputerGameController() extends Notifier<OfflineComputerGameState> {
+  /// The engine the hints and the move feedback run on, whatever the user's preference.
+  static const _analysisEnginePref = ChessEnginePref.sfLight;
+
+  /// The analysis socket, held open for as long as the game is.
+  ///
+  /// Nothing here reads from it: the cloud evals go over the same pooled connection from
+  /// [PracticeAnalyser], and this is what has it connected before the first one is asked for.
   late SocketClient socketClient;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
@@ -111,6 +120,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   /// How this device's engines share it.
   EngineBudget get _budget => ref.read(engineBudgetProvider);
 
+  /// The clock of the game, which only runs when the game is played with a time control.
+  LocalGameClock get _clock => ref.read(offlineComputerClockProvider.notifier);
+
   /// Whether the evaluator and the opponent are the same engine, and so must be asked for the
   /// same options.
   ///
@@ -121,7 +133,13 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   bool get _sharesOneEngine {
     if (!state.game.casual && !state.game.practiceMode) return false;
     final variant = state.game.meta.variant;
-    return state.game.opponentSpec.engineSpec.slot == evaluatorEngineSlotFor(ref, variant);
+    return state.game.opponentSpec.engineSpec.slot ==
+        evaluatorEngineSlotFor(
+          ref,
+          variant,
+          state.game.initialPosition,
+          enginePref: _analysisEnginePref,
+        );
   }
 
   /// The cores the evaluator asks for. The table it gets is the engine's own, settled when the
@@ -130,33 +148,37 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   /// The analysis that runs on the position the game is at, for hints and move feedback.
   late final PracticeAnalyser _analyser = PracticeAnalyser(
+    ref: ref,
     evaluator: () => _evaluator,
+    // A game leaves the book behind, and past that point nobody has ever reached the position for
+    // the server to have an evaluation of it.
+    alwaysRequestCloudEvals: false,
     onEval: _onAnalysisEval,
   );
 
-  /// Stops the analysis while the game is out of sight.
-  ///
-  /// The search now runs for as long as the player thinks, so it would otherwise go on burning the
-  /// battery under another screen or with the app in the background — which the old one-burst-per-
-  /// move model never could. The opponent's search is left alone: it is bounded, and the move it
-  /// is about to play is still wanted.
   void suspendAnalysis() {
-    // Called from a widget that may be on its way out, and whose provider may already be gone.
     if (!ref.mounted) return;
     _analyser.yieldEngine();
   }
 
-  /// Starts analysing again when the game comes back into view.
-  ///
-  /// Deliberately not "restart what was suspended": the game may have moved on while the screen was
-  /// away, and what is worth analysing is the position it is at now — which [_analyseCurrentPosition]
-  /// works out, and which is nothing at all when it is the opponent's turn.
   void resumeAnalysis() {
     if (!ref.mounted) return;
     _analyseCurrentPosition();
   }
 
-  /// Stores an evaluation the analysis has just improved on the step it belongs to.
+  void suspendClock() {
+    if (!ref.mounted) return;
+    _clock.pause();
+  }
+
+  void resumeClock() {
+    if (!ref.mounted) return;
+    final clock = ref.read(offlineComputerClockProvider);
+    if (clock.timeIncrement.isInfinite || clock.flagSide != null) return;
+    if (!state.game.playable || state.game.steps.length <= 1) return;
+    _clock.resume(state.turn);
+  }
+
   void _onAnalysisEval(Position position, ClientEval eval) {
     if (!ref.mounted) return;
     final index = state.game.steps.lastIndexWhere((step) => step.position == position);
@@ -169,6 +191,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     id: state.game.id,
     variant: state.game.meta.variant,
     initialPosition: state.game.initialPosition,
+    enginePref: _analysisEnginePref,
   );
 
   PositionEvaluator get _evaluator {
@@ -176,7 +199,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     if (_evaluatorContext != context) {
       _evaluatorSubscription?.close();
       _evaluatorContext = context;
-      _evaluatorSubscription = ref.listen(positionEvaluatorProvider(context), (_, _) {});
+      // The analysis needs to hear when the engine stops searching: it may have run out of its
+      // search time before saying anything usable about the position
+      _evaluatorSubscription = ref.listen(
+        positionEvaluatorProvider(context),
+        _analyser.onEvaluatorStateChanged,
+      );
     }
     return ref.read(positionEvaluatorProvider(context).notifier);
   }
@@ -196,6 +224,14 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
+    // Listened to rather than watched: this both keeps the clock alive for as long as the game is,
+    // and is how a game ends on time — the clock is the only thing that knows.
+    ref.listen<Side?>(offlineComputerClockProvider.select((clock) => clock.flagSide), (
+      previous,
+      flagSide,
+    ) {
+      if (previous == null && flagSide != null) _onFlag(flagSide);
+    });
     ref.onDispose(() {
       _socketSubscription?.cancel();
       _analyser.dispose();
@@ -215,8 +251,12 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     required bool practiceMode,
     Variant variant = Variant.standard,
     String? initialFen,
+    TimeIncrement timeIncrement = const TimeIncrement.infinite(),
   }) {
     _analyser.clear();
+    // Practice mode has no clock: thinking about the feedback it gives is the point of it, and a
+    // move there waits on an evaluation the player did not ask for.
+    final effectiveTimeIncrement = practiceMode ? const TimeIncrement.infinite() : timeIncrement;
     state = OfflineComputerGameState.initial(
       opponentSpec: opponentSpec,
       playerSide: playerSide,
@@ -224,7 +264,9 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       practiceMode: practiceMode,
       variant: variant,
       initialFen: initialFen,
+      timeIncrement: effectiveTimeIncrement,
     );
+    _clock.setupClock(effectiveTimeIncrement);
 
     if (state.turn != playerSide) {
       _playEngineMove();
@@ -238,6 +280,11 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     _analyser.clear();
     final game = savedGame.game;
     state = OfflineComputerGameState(game: game, stepCursor: game.steps.length - 1);
+    _clock.setupClock(
+      savedGame.timeIncrement,
+      whiteTimeLeft: savedGame.whiteTimeLeft,
+      blackTimeLeft: savedGame.blackTimeLeft,
+    );
 
     if (game.playable && state.turn == game.playerSide && (game.casual || game.practiceMode)) {
       _analyseCurrentPosition();
@@ -262,10 +309,17 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   SanMove _applyMove(Move move) {
     final (newPos, newSan) = state.currentPosition.makeSan(Move.parse(move.uci)!);
     final sanMove = SanMove(newSan, move);
+    final movedSide = state.currentPosition.turn;
+
+    // The clock changes hands before the step is built, so that the step records the time the
+    // mover is left with once their increment has been added — the same reading lichess stores.
+    _clock.onMove(newSideToMove: newPos.turn);
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
       diff: MaterialDiff.fromPosition(newPos),
+      clock: ref.read(offlineComputerClockProvider).timeLeft(movedSide),
     );
 
     state = state.copyWith(
@@ -298,6 +352,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.stalemate));
     } else if (state.currentPosition.isInsufficientMaterial) {
       state = state.copyWith(game: state.game.copyWith(status: GameStatus.draw));
+    }
+
+    if (!state.game.playable) {
+      _clock.pause();
     }
 
     _moveFeedback(sanMove);
@@ -402,7 +460,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       // tablebase lookup — asked for the position the move led to. [PracticeAnalyser.analyse]
       // takes the engine over from whatever it was searching, so no hand-off is needed here.
       _analyser.analyse(workAfter);
-      _raceTheSearch(workAfter);
 
       final evalAfter = await _analyser.usableEval(
         positionAfterMove,
@@ -461,55 +518,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void _handleSocketEvent(SocketEvent event) {
     // not handling any events for now, but we keep the connection open
     _logger.finer('Received socket event: ${event.topic}');
-  }
-
-  Future<CloudEval?> _getCloudEval(EvalWork work, {required int numEvalLines}) async {
-    CloudEval? eval;
-    try {
-      final uciPath = UciPath.fromUciMoves(
-        work.steps.map((s) => s.sanMove.normalizeUci(state.game.meta.variant)),
-      );
-
-      _logger.fine(
-        'Requesting cloud eval for ply ${work.position.ply} and fen ${work.position.fen}',
-      );
-
-      socketClient.send('evalGet', {
-        'fen': work.position.fen,
-        'path': uciPath.value,
-        if (work.position.rule != Rule.chess) 'variant': Variant.fromRule(work.position.rule).name,
-        'mpv': numEvalLines,
-      });
-      await for (final event
-          in socketClient.stream
-              .where((e) => e.topic == 'evalHit')
-              .timeout(const Duration(seconds: 2))) {
-        final path = pick(event.data, 'path').asStringOrThrow();
-        if (path != uciPath.value) {
-          continue;
-        }
-        final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
-        final depth = pick(event.data, 'depth').asIntOrThrow();
-        final pvs = pick(event.data, 'pvs')
-            .asListOrThrow(
-              (pv) => PvData(
-                moves: pv('moves').asStringOrThrow().split(' ').toIList(),
-                cp: pv('cp').asIntOrNull(),
-                mate: pv('mate').asIntOrNull(),
-              ),
-            )
-            .toIList();
-
-        _logger.fine('Got a cloud eval at ply ${work.position.ply} with depth $depth');
-
-        eval = CloudEval(depth: depth, nodes: nodes, pvs: pvs, position: work.position);
-        break;
-      }
-    } catch (e, st) {
-      _logger.fine('Could not get cloud eval:', e, st);
-    }
-
-    return eval;
   }
 
   /// Creates a practice comment based on pre-move PV data and the post-move eval.
@@ -620,21 +628,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     }
   }
 
-  /// Fetches the tablebase eval for the given position.
-  ///
-  /// Returns null if the network request fails or the entry is not conclusive.
-  Future<ClientEval?> _fetchTablebaseEval(Position position) async {
-    try {
-      final entry = await ref
-          .read(tablebaseRepositoryProvider)
-          .getTablebaseEntry(position.fen, Variant.fromRule(position.rule));
-      return tablebaseEntryToCloudEval(entry, position);
-    } catch (e, st) {
-      _logger.fine('Could not get tablebase eval:', e, st);
-      return null;
-    }
-  }
-
   Future<void> _playEngineMove() async {
     if (!state.game.playable) return;
 
@@ -697,8 +690,20 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 
   void resign() {
     if (!state.game.resignable) return;
+    _clock.pause();
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.resign, winner: state.game.playerSide.opposite),
+      isEngineThinking: false,
+    );
+  }
+
+  /// Ends the game on time, [side] having run out of it.
+  void _onFlag(Side side) {
+    if (!state.game.playable) return;
+    _stopThinking();
+    _clock.pause();
+    state = state.copyWith(
+      game: state.game.copyWith(status: GameStatus.outoftime, winner: side.opposite),
       isEngineThinking: false,
     );
   }
@@ -707,6 +712,7 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
   void claimThreefoldDraw() {
     if (!state.game.playable || state.game.isThreefoldRepetition != true) return;
     _stopThinking();
+    _clock.pause();
     state = state.copyWith(
       game: state.game.copyWith(status: GameStatus.draw, isThreefoldRepetition: false),
       isEngineThinking: false,
@@ -736,6 +742,10 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
       hintMove: null,
       showingSuggestedMove: null,
     );
+
+    if (ref.read(offlineComputerClockProvider).active) {
+      _clock.switchSide(newSideToMove: state.turn, addIncrement: false);
+    }
 
     if (state.turn != state.game.playerSide && state.game.playable) {
       _playEngineMove();
@@ -817,30 +827,6 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
     );
 
     _analyser.analyse(work);
-    _raceTheSearch(work);
-  }
-
-  /// Asks the network for the evaluations that would beat the search: a cloud eval in the opening,
-  /// a tablebase lookup in an endgame. Whatever comes back is offered to the analysis.
-  void _raceTheSearch(EvalWork work) {
-    final position = work.position;
-
-    // Nothing to beat: this position has already been analysed as deeply as it is going to be.
-    if (_analyser.evalFor(position) case final known? when known.depth >= kPracticeTargetDepth) {
-      return;
-    }
-
-    if (state.game.meta.variant == Variant.standard && position.ply < _kOpeningPlyThreshold) {
-      _getCloudEval(work, numEvalLines: work.multiPv).then((cloudEval) {
-        if (ref.mounted && cloudEval != null) _analyser.offer(position, cloudEval);
-      });
-    }
-
-    if (isTablebaseRelevant(position)) {
-      _fetchTablebaseEval(position).then((tablebaseEval) {
-        if (ref.mounted && tablebaseEval != null) _analyser.offer(position, tablebaseEval);
-      });
-    }
   }
 
   /// Toggle showing a suggested move on the board.
@@ -885,10 +871,8 @@ class OfflineComputerGameController extends Notifier<OfflineComputerGameState> {
 }
 
 @freezed
-sealed class OfflineComputerGameState with _$OfflineComputerGameState {
-  const OfflineComputerGameState._();
-
-  const factory OfflineComputerGameState({
+sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState {
+  const factory({
     required OfflineComputerGame game,
     @Default(0) int stepCursor,
     @Default(false) bool isEngineThinking,
@@ -904,13 +888,14 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     @Default(null) NormalMove? showingSuggestedMove,
   }) = _OfflineComputerGameState;
 
-  factory OfflineComputerGameState.initial({
+  factory initial({
     required OpponentSpec opponentSpec,
     required Side playerSide,
     Variant variant = Variant.standard,
     bool casual = true,
     bool practiceMode = false,
     String? initialFen,
+    TimeIncrement timeIncrement = const TimeIncrement.infinite(),
   }) {
     final Position position;
     final Variant effectiveVariant;
@@ -931,6 +916,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
     }
 
     final sessionId = StringId('ocg_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
+    final speed = timeIncrement.isInfinite
+        ? Speed.classical
+        : Speed.fromTimeIncrement(timeIncrement);
     return OfflineComputerGameState(
       game: OfflineComputerGame(
         id: sessionId,
@@ -941,8 +929,9 @@ sealed class OfflineComputerGameState with _$OfflineComputerGameState {
           createdAt: DateTime.now(),
           rated: false,
           variant: effectiveVariant,
-          speed: Speed.classical,
-          perf: Perf.fromVariantAndSpeed(effectiveVariant, Speed.classical),
+          speed: speed,
+          perf: Perf.fromVariantAndSpeed(effectiveVariant, speed),
+          clock: clockMetaOf(timeIncrement),
         ),
         playerSide: playerSide,
         opponentSpec: opponentSpec,

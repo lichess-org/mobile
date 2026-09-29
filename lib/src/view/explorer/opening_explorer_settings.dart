@@ -5,14 +5,13 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OpeningExplorerSettings extends ConsumerWidget {
-  const OpeningExplorerSettings();
-
+class const OpeningExplorerSettings() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);

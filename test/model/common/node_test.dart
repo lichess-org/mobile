@@ -536,6 +536,119 @@ void main() {
         expect(root.mainline.last.sanMove.move, move);
       });
     });
+
+    group('makeLinePgn', () {
+      const pgn = '1. e4 e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3 Nc6 (2... d6) 3. Bb5';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+
+      test('main line, without the sidelines branching off it', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'e7e5']),
+            variant: Variant.standard,
+            includeVariations: false,
+          ),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *\n',
+        );
+      });
+
+      test('variation, with the sidelines after the end of the path', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'c7c5']),
+            variant: Variant.standard,
+            includeVariations: true,
+          ),
+          '1. e4 c5 2. Nf3 ( 2. c3 ) *\n',
+        );
+      });
+
+      test('nested variation drops earlier siblings and annotations', () {
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn(
+            r'{root} 1. e4 $1 {comment} e5 (1... c5 2. Nf3 (2. c3 d5 (2... Nf6) 3. exd5)) 2. Nf3',
+          ),
+        );
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'c7c5', 'c2c3']),
+            variant: .standard,
+            includeVariations: true,
+          ),
+          '1. e4 c5 2. c3 d5 ( 2... Nf6 ) 3. exd5 *\n',
+        );
+      });
+
+      test('from the root', () {
+        expect(
+          root.makeLinePgn(UciPath.empty, variant: Variant.standard, includeVariations: false),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *\n',
+        );
+      });
+
+      test('adds the tags needed to replay a non standard game', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n3. Bb5 a6'));
+        expect(
+          root.makeLinePgn(
+            root.mainlinePath,
+            variant: Variant.fromPosition,
+            includeVariations: false,
+          ),
+          '[Variant "From Position"]\n[FEN "$fen"]\n\n3. Bb5 a6 *\n',
+        );
+      });
+
+      test('preserves move numbering and position when black moves first', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n3... a6 4. Bc4'));
+        final pgn = root.makeLinePgn(
+          root.mainlinePath,
+          variant: .standard,
+          includeVariations: false,
+        );
+        expect(pgn, '[FEN "$fen"]\n\n3... a6 4. Bc4 *\n');
+        final replay = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        expect(replay.mainline.last.position.fen, root.mainline.last.position.fen);
+      });
+
+      test('preserves the starting position and variant for Chess960', () {
+        const fen = 'rkrbbnnq/pppppppp/8/8/8/8/PPPPPPPP/RKRBBNNQ w CAca - 0 1';
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn('[Variant "Chess960"]\n[FEN "$fen"]\n\n1. d4 d5 2. c4'),
+        );
+        final pgn = root.makeLinePgn(
+          root.mainlinePath,
+          variant: .chess960,
+          includeVariations: false,
+        );
+        final game = PgnGame.parsePgn(pgn);
+        expect(game.headers['Variant'], 'Chess960');
+        expect(game.headers['FEN'], root.position.fen);
+        final replay = Root.fromPgnGame(game);
+        expect(replay.mainline.length, 3);
+        expect(replay.mainline.last.position.fen, root.mainline.last.position.fen);
+      });
+
+      test('adds no FEN tag for a variant starting from its own initial position', () {
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn('[Variant "Crazyhouse"]\n\n1. e4 e5 2. Nf3 Nc6'),
+        );
+        expect(
+          root.makeLinePgn(root.mainlinePath, variant: .crazyhouse, includeVariations: false),
+          '[Variant "Crazyhouse"]\n\n1. e4 e5 2. Nf3 Nc6 *\n',
+        );
+      });
+
+      test('is empty when there is no move to copy', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n*'));
+        expect(
+          root.makeLinePgn(UciPath.empty, variant: .fromPosition, includeVariations: false),
+          '',
+        );
+      });
+    });
   });
 
   group('addMoveAt isUserAdded', () {

@@ -3,18 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A wrapper widget over RefreshIndicator to provide haptic feedback on iOS
-class HapticRefreshIndicator extends StatelessWidget {
-  final Widget child;
-  final double edgeOffset;
-  final RefreshCallback onRefresh;
-
-  const HapticRefreshIndicator({
-    super.key,
-    required this.child,
-    this.edgeOffset = 0.0,
-    required this.onRefresh,
-  });
-
+class const HapticRefreshIndicator({
+  super.key,
+  required final Widget child,
+  final double edgeOffset = 0.0,
+  required final RefreshCallback onRefresh,
+}) extends StatelessWidget {
   Future<void> _onRefreshWithHaptics() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       HapticFeedback.lightImpact();

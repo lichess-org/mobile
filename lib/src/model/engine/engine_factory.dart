@@ -31,34 +31,23 @@ typedef EngineConnector = Future<EngineTransport> Function(EngineSpec spec);
 /// wrong, or that someone got hold of an engine without going through the factory. Nothing can
 /// sensibly catch it — killing the incumbent would hide the bug and take away an engine somebody
 /// else is using.
-class EngineSlotConflict extends Error {
-  EngineSlotConflict(this.requested, this.live);
-
-  final EngineSpec requested;
-  final EngineSpec live;
-
+class EngineSlotConflict(final EngineSpec requested, final EngineSpec live) extends Error {
   @override
   String toString() =>
       'EngineSlotConflict: cannot create $requested, $live is still live on ${requested.slot.name}';
 }
 
 /// Thrown by [EngineFactory.create] when the engine could not be started.
-class EngineCreationException implements Exception {
-  const EngineCreationException(this.failure);
-
+class const EngineCreationException(
   /// Everything known about why the engine did not start.
-  final EngineFailure failure;
-
+  final EngineFailure failure,
+) implements Exception {
   @override
   String toString() => 'EngineCreationException: $failure';
 }
 
 /// Thrown by a create whose caller has already given up, on the create's own future.
-class EngineCreationAbandoned implements Exception {
-  const EngineCreationAbandoned(this.spec);
-
-  final EngineSpec spec;
-
+class const EngineCreationAbandoned(final EngineSpec spec) implements Exception {
   @override
   String toString() =>
       'EngineCreationAbandoned: the $spec that arrived after its create had given up was disposed';
@@ -69,10 +58,8 @@ class EngineCreationAbandoned implements Exception {
 /// This is the only place that knows a native engine takes a moment to let go of its slot: a
 /// create that follows a dispose waits for the previous engine to finish exiting, so callers never
 /// see the plugin refuse an engine as a result of ordinary provider churn.
-class EngineFactory {
-  EngineFactory({EngineConnector? connect}) : _connect = connect ?? _connectToPlugin;
-
-  final EngineConnector _connect;
+class EngineFactory({EngineConnector? connect}) {
+  final EngineConnector _connect = connect ?? _connectToPlugin;
 
   /// The engine holding each slot, until it reports that it is gone.
   final Map<EngineSlot, Engine> _live = {};
@@ -198,7 +185,7 @@ class EngineFactory {
 }
 
 /// One call to [EngineFactory.create], as the create running underneath it sees it.
-class _Attempt {
+class _Attempt() {
   /// Whether the caller has given up. An engine that arrives after this is disposed rather than
   /// handed over.
   bool abandoned = false;

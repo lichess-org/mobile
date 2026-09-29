@@ -52,7 +52,7 @@ final accountPreferencesProvider = AsyncNotifierProvider<AccountPreferences, Acc
 ///
 /// If the user is authenticated, the preferences are fetched from the server. If the user is not authenticated, the preferences are fetched from local storage.
 /// See also [AccountPrefState] for more details.
-class AccountPreferences extends AsyncNotifier<AccountPrefState> {
+class AccountPreferences() extends AsyncNotifier<AccountPrefState> {
   @override
   Future<AccountPrefState> build() async {
     final authUser = ref.watch(authControllerProvider);

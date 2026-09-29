@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -32,10 +33,8 @@ final challengeServiceProvider = Provider<ChallengeService>((Ref ref) {
 }, name: 'ChallengeServiceProvider');
 
 /// A service that listens to challenge events and shows notifications.
-class ChallengeService {
-  ChallengeService(this.ref);
-
-  final Ref ref;
+class ChallengeService(final Ref ref) {
+  static final _logger = Logger('ChallengeService');
 
   ChallengesList? _current;
   ChallengesList? _previous;
@@ -177,7 +176,9 @@ class ChallengeService {
     // while accepting a challenge.
     try {
       await ref.read(createGameServiceProvider).cancelSeek();
-    } catch (_) {}
+    } catch (e, st) {
+      _logger.warning('Failed to cancel pending seek before accepting challenge:', e, st);
+    }
 
     final challengeRepo = ref.read(challengeRepositoryProvider);
     await challengeRepo.accept(id);

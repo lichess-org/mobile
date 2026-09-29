@@ -38,7 +38,7 @@ void main() {
         if (request.url.path == '/api/puzzle/batch/mix') {
           // the rating probe made on controller build asks for nb=0
           if (request.url.queryParameters['nb'] == '0') {
-            return mockResponse(_emptyBatch, 200);
+            return await mockResponse(_emptyBatch, 200);
           }
           nbBatchReq++;
           inFlight++;
@@ -47,9 +47,9 @@ void main() {
           // start before the response is stored
           await Future<void>.delayed(const Duration(milliseconds: 20));
           inFlight--;
-          return mockResponse(_batchOf2, 200);
+          return await mockResponse(_batchOf2, 200);
         }
-        return mockResponse('', 404);
+        return await mockResponse('', 404);
       });
 
       final container = await makeContainer(

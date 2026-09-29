@@ -12,7 +12,8 @@ final clockToolPreferencesProvider = NotifierProvider<ClockToolPreferences, Cloc
   name: 'ClockToolPreferencesProvider',
 );
 
-class ClockToolPreferences extends Notifier<ClockToolPrefs>
+class ClockToolPreferences()
+    extends Notifier<ClockToolPrefs>
     with SessionPreferencesStorage<ClockToolPrefs> {
   @override
   @protected
@@ -51,10 +52,8 @@ class ClockToolPreferences extends Notifier<ClockToolPrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class ClockToolPrefs with _$ClockToolPrefs implements Serializable {
-  const ClockToolPrefs._();
-
-  const factory ClockToolPrefs({
+sealed class const ClockToolPrefs._() with _$ClockToolPrefs implements Serializable {
+  const factory({
     /// The last time increment chosen from the global settings modal (which sets
     /// both clocks at once). Used to seed that modal's sliders, so that editing a
     /// single clock does not change what the global modal shows.
@@ -69,7 +68,7 @@ sealed class ClockToolPrefs with _$ClockToolPrefs implements Serializable {
     bottomTimeIncrement: TimeIncrement(600, 0),
   );
 
-  factory ClockToolPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$ClockToolPrefsFromJson(json);
     } catch (_) {

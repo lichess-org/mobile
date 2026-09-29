@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
-import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -30,7 +25,6 @@ import '../../mock_server_responses.dart';
 import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
-import '../../model/engine/fake_stockfish_nnue_service.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
 import '../../test_helpers.dart';
@@ -502,92 +496,8 @@ void main() {
         expect(find.text(customizeTip), findsNothing);
       });
     });
-
-    group('NNUE files missing tip', () {
-      const nnueFilesMissingTip =
-          'New Stockfish version available! Go to the settings to download the updated NNUE files.';
-      testWidgets('Shown if engine pref is latest sf and NNUE files are missing', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
-              FakeStockfishNnueServiceUnavailable(),
-            ),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sfLatest)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsOneWidget);
-      });
-
-      testWidgets('Not shown if nnue files are available', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
-              FakeStockfishNnueService(),
-            ),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sfLatest)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsNothing);
-      });
-
-      testWidgets('Not shown if engine pref is sf16', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            stockfishNnueServiceProvider: stockfishNnueServiceProvider.overrideWithValue(
-              FakeStockfishNnueServiceUnavailable(),
-            ),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sf16)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsNothing);
-      });
-    });
   });
+
   group('Server offline', () {
     testWidgets('offline-capable widgets are kept, server-backed ones are replaced', (
       tester,

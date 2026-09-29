@@ -9,6 +9,9 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Accept draw?';
+
+  @override
   String get mobileAccount => 'Účet';
 
   @override
@@ -18,36 +21,113 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Tieto preferencie sa použijú na Vaše konto Lichess a budú sa používať vo všetkých zariadeniach.';
 
   @override
+  String get mobileAddToStudy => 'Add to study';
+
+  @override
   String get mobileAllGames => 'Všetky partie';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Ste si istý?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Predvoľby šachovnice';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override
+  String get mobileChallengeCreated => 'Výzva vytvorená: Budete upozornení po začatí partie.\nPrístup k nej nájdete na domovskej karte.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
+
+  @override
   String get mobileClearButton => 'Odstrániť';
+
+  @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Vymazať uložený ťah';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Pripojiť sa k partii';
+  String get mobileCustomizeButton => 'Prispôsobiť';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Tip: Na domovskú obrazovku môžete pridať ďalšie widgety alebo odstrániť tie, ktoré nepotrebujete!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Zrušiť';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompaktný';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detailný';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
 
   @override
   String get mobileFeedbackButton => 'Spätná väzba';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Dobrý večer, $param';
-  }
+  String get mobileFilters => 'Filters';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Dobrý večer';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -58,13 +138,41 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Dobrý deň';
 
   @override
-  String get mobileHideVariation => 'Skryť varianty';
+  String mobileGoodEvening(String param) {
+    return 'Dobrý večer, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Dobrý večer';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Dobrý ťah, ale existuje aj lepší';
+
+  @override
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Domov';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+
+  @override
   String get mobileLiveStreamers => 'Vysielajúci strímeri';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Local database size';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Na zobrazenie tejto stránky musíte byť prihlásený.';
@@ -76,10 +184,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileNewGame => 'Nová hra';
 
   @override
-  String get mobileNoSearchResults => 'Nič sa nenašlo';
+  String get mobileNextMistake => 'Next mistake';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Upozorňujeme, že v súčasnosti nie sú k dispozícii všetky funkcie zo starej aplikácie alebo webstránky. Funkcie však neustále pridávame.';
+  String get mobileNoSearchResults => 'Nič sa nenašlo';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nesledujete žiadnych užívateľov.';
@@ -88,7 +196,67 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Prieskumník otvorení nie je k dispozícii v režime offline.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Alebo nahrajte súbor PGN';
+
+  @override
   String get mobileOverTheBoard => 'Hrať offline, na jednom zariadení';
+
+  @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -102,7 +270,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobilePositionRight => 'Vpravo';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Zväčšiť uchopenú figúrku';
+
+  @override
+  String get mobilePreviousPage => 'Predchádzajúca';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Chcete ukončiť tento pokus?';
@@ -117,19 +291,25 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Vyriešte čo najviac úloh za 3 minúty.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Stratíte svoju aktuálnu sériu a vaše skóre sa uloží.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Riešte úlohy zo svojich obľúbených otvorení alebo si vyberte tému.';
 
   @override
   String get mobilePuzzlesTab => 'Úlohy';
 
   @override
+  String get mobileRateThisApp => 'Rate this app';
+
+  @override
   String get mobileRecentSearches => 'Posledné vyhľadávania';
 
   @override
   String get mobileRemoveBookmark => 'Odstrániť záložku';
+
+  @override
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
 
   @override
   String get mobileServerAnalysis => 'Analýza na serveri';
@@ -150,6 +330,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Štvorec';
 
   @override
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
   String get mobileSettingsHomeWidgets => 'Widgety na domovskej stránke';
 
   @override
@@ -165,10 +351,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Vybrať obrázok';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Vlastné pozadie funguje len v tmavom režime. Odporúča sa tmavý obrázok.';
+  String get mobileSettingsPickAnImageBlur => 'Rozmazať obrázok';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Rozmazať obrázok';
+  String get mobileSettingsPickAnImageHelp => 'Vlastné pozadie funguje len v tmavom režime. Odporúča sa tmavý obrázok.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Skryť šachovnicu';
@@ -186,6 +372,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Ťuknúť na dve políčka';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Kreslenie šípok/kruhov';
 
   @override
@@ -201,13 +390,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Keď je táto funkcia zapnutá, zariadenie pri presunutí alebo braní figúrky krátko zavibruje.';
 
   @override
-  String get mobileSettingsTab => 'Nastavenia';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'Zdieľať PGN';
 
   @override
   String get mobileShareGameURL => 'Zdieľať URL partie';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Zdieľať pozíciu vo formáte FEN';
@@ -219,51 +411,46 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileShowComments => 'Zobraziť komentáre';
 
   @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+
+  @override
   String get mobileShowResult => 'Zobraziť výsledok';
 
   @override
-  String get mobileShowVariations => 'Zobraziť varianty';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Sign in with an email';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Small board';
 
   @override
   String get mobileSomethingWentWrong => 'Došlo k chybe.';
 
   @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Zrušiť zobrazovanie hrozieb';
+
+  @override
   String get mobileSystemColors => 'Farby operačného systému';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Vzhľad';
 
   @override
-  String get mobileToolsTab => 'Nástroje';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'Variant $param nie je podporovaný v tejto verzií.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Čaká sa na pripojenie súpera...';
-
-  @override
-  String get mobileWatchTab => 'Sledovať';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Vitajte v Lichess aplikácii!';
-
-  @override
-  String get mobileViewGame => 'Zobraziť hru';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Tip: Na domovskú obrazovku môžete pridať ďalšie widgety alebo odstrániť tie, ktoré nepotrebujete!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Zrušiť';
-
-  @override
-  String get mobileCustomizeButton => 'Prispôsobiť';
-
-  @override
-  String get mobileStopShowingThreat => 'Zrušiť zobrazovanie hrozieb';
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
   String get mobileTournamentCompleted => 'Ukončený';
@@ -272,133 +459,30 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Prejsť na moju stránku';
 
   @override
-  String get mobileDisplayModeCompact => 'Kompaktný';
+  String mobileUnsupportedVariant(String param) {
+    return 'Variant $param nie je podporovaný v tejto verzií.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Detailný';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Prieskumník otvorení nie je k dispozícii v režime offline.';
+  String get mobileViewGame => 'Zobraziť hru';
 
   @override
-  String get mobileChallengeCreated => 'Výzva vytvorená: Budete upozornení po začatí partie.\nPrístup k nej nájdete na domovskej karte.';
+  String get mobileViewLicenses => 'View licences';
 
   @override
-  String get mobilePreviousPage => 'Predchádzajúca';
+  String get mobileWaitingForOpponentToJoin => 'Čaká sa na pripojenie súpera...';
 
   @override
-  String get mobileOrImportPgnFile => 'Alebo nahrajte súbor PGN';
+  String get mobileWatchTab => 'Sledovať';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Dobrý ťah, ale existuje aj lepší';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Rapid';
-
-  @override
-  String get mobilePerfShortClassical => 'Classical';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antichess';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3check';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomic';
-
-  @override
-  String get mobilePerfShortHorde => 'Horde';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Racing';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
-
-  @override
-  String get variantStandard => 'Štandard';
-
-  @override
-  String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
-
-  @override
-  String get variantChess960 => 'Šach960';
-
-  @override
-  String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
-
-  @override
-  String get variantKingOfTheHill => 'Kráľ kopca';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
-
-  @override
-  String get variantThreeCheck => 'Tri šachy';
-
-  @override
-  String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
-
-  @override
-  String get variantAntichess => 'Antišach';
-
-  @override
-  String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
-
-  @override
-  String get variantAtomic => 'Atomik';
-
-  @override
-  String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
-
-  @override
-  String get variantHorde => 'Horda';
-
-  @override
-  String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
-
-  @override
-  String get variantRacingKings => 'Pretekajúci sa králi';
-
-  @override
-  String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
-
-  @override
-  String get variantCrazyhouse => 'Šialený dom';
-
-  @override
-  String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
-
-  @override
-  String get variantFromPosition => 'Z pozície';
-
-  @override
-  String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -688,7 +772,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Hráč, ktorý má po uplynutí časového limitu turnaja najvyšší počet bodov sa stane víťazom.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Ako funguje párovanie hráčov?';
+  String get arenaHowArePlayersPaired => 'How are players paired?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Na začiatku turnaja sa hráči spárujú na základe ich ratingu.\nAkonáhle ukončíte partiu, vráťte sa do turnajovej miestnosti: budete spárovaný so súperom, ktorý má podobný rating ako Vy. Takýto postup Vám zabezpečí minimum čakacieho času, avšak môže sa stať, že nebudete hrať so všetkými hráčmi v turnaji.\nHrajte rýchlo a vráťte sa vždy čo najrýchlejšie do turnajovej miestnosti aby ste stihli odohrať viac partií a získať tak viac bodov.';
@@ -776,7 +860,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get arenaEditTeamBattle => 'Editovať turnaj tímov';
 
   @override
-  String get arenaDefender => 'Obhajca';
+  String get arenaDefenderLabel => 'Defender:';
 
   @override
   String get arenaPickYourTeam => 'Zvoľte si tím';
@@ -798,9 +882,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => 'Turnajové štatistiky';
-
-  @override
-  String get arenaRankAvgHelp => 'Priemerná pozícia je percentuálny podiel vášho hodnotenia. Nižšia hodnota je lepšia.\n\nNapríklad 3. miesto v turnaji so 100 hráčmi = 3 %. Byť na 10. mieste v turnaji s 1000 hráčmi = 1 %.';
 
   @override
   String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
@@ -842,6 +923,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Miera besnenia';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -952,7 +1036,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastDeleteRound => 'Vymazať toto kolo';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitívne vymazať kolo a partie tohto kola.';
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Vymazať všetky partie tohto kola. K opätovnému vytvoreniu partií bude potrebné aby bol zdroj aktívny.';
@@ -962,9 +1046,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => 'Vymazať tento turnaj';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitívne odstrániť celý turnaj so všetkými kolami a všetkými partiami.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
@@ -1022,6 +1103,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'Zatiaľ žiadne šachovnice. Objavia sa po nahratí partií.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1192,6 +1276,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Play-off';
+
+  @override
+  String get broadcastPinPlayer => 'Pin player';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1378,6 +1465,530 @@ class AppLocalizationsSk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vybrať konkrétne stĺpce a rady';
 
   @override
+  String get learnLearnChess => 'Naučte sa šach';
+
+  @override
+  String get learnByPlaying => 'hrou!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Priebeh: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Vynulovať môj progres';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Stratíte celý váš progres!';
+
+  @override
+  String get learnPlay => 'hrať!';
+
+  @override
+  String get learnChessPieces => 'Šachové figúrky';
+
+  @override
+  String get learnTheRook => 'Veža';
+
+  @override
+  String get learnItMovesInStraightLines => 'Pohybuje sa vodorovne a zvislo';
+
+  @override
+  String get learnRookIntro => 'Veža je mocná figúrka. Ovládnete ju?';
+
+  @override
+  String get learnRookGoal => 'Kliknite a presuňte vež na hviezdu!';
+
+  @override
+  String get learnGrabAllTheStars => 'Zoberte všetky hviezdy!';
+
+  @override
+  String get learnTheFewerMoves => 'Čím menej ťahov urobíte, tým viac bodov získate!';
+
+  @override
+  String get learnUseTwoRooks => 'Urýchlite zbieranie pomocou dvoch veží!';
+
+  @override
+  String get learnRookComplete => 'Gratulujeme! Ťahy vežou máte úspešne zvládnuté.';
+
+  @override
+  String get learnTheBishop => 'Strelec';
+
+  @override
+  String get learnItMovesDiagonally => 'Pohybuje sa diagonálne';
+
+  @override
+  String get learnBishopIntro => 'Ďalej sa naučíte ako manévrovať so strelcom!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Jeden bielopoľný strelec,\njeden čiernopoľný strelec.\nPotrebujete ich oboch!';
+
+  @override
+  String get learnBishopComplete => 'Gratulujeme! Dokážete ovládať strelca.';
+
+  @override
+  String get learnTheQueen => 'Dáma';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Dáma = Veža + Strelec';
+
+  @override
+  String get learnQueenIntro => 'Prichádza najsilnejšia figúrka na šachovnici. Áno, reč je o dáme!';
+
+  @override
+  String get learnQueenComplete => 'Gratulujeme! Dámy už pred Vami neukrývajú žiadne tajomstvá.';
+
+  @override
+  String get learnTheKing => 'Kráľ';
+
+  @override
+  String get learnTheMostImportantPiece => 'Najdôležitejšia figúrka';
+
+  @override
+  String get learnKingIntro => 'Vy ste kráľom. Ak v bitke padnete, partia je prehraná.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kráľ je pomalý.';
+
+  @override
+  String get learnLastOne => 'A naposledy!';
+
+  @override
+  String get learnKingComplete => 'Gratulujeme! Teraz dokážete veliť veliteľovi!';
+
+  @override
+  String get learnTheKnight => 'Jazdec';
+
+  @override
+  String get learnItMovesInAnLShape => 'Pohybuje sa do \"L\"';
+
+  @override
+  String get learnKnightIntro => 'Máme pre Vás výzvu. Jazdec je... prešibaná figúrka.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Jazdci skáču naozaj nevyspytateľne!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Jazdci dokážu skákať cez prekážky!\nUniknite z obkľúčenia a premôžte hviezdy!';
+
+  @override
+  String get learnKnightComplete => 'Gratulujeme! Zvládli ste ťahy jazdcom.';
+
+  @override
+  String get learnThePawn => 'Pešiak';
+
+  @override
+  String get learnItMovesForwardOnly => 'Pohybuje sa výlučne vpred';
+
+  @override
+  String get learnPawnIntro => 'Pešiaci sú slabí, ale majú v sebe veľký potenciál.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Pešiaci sa pohybujú iba o jedno políčko vpred. Keď však dôjdu na koniec šachovnice, stane sa z nich silnejšia figúrka!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Väčšinou je najlepšie premeniť pešiaka na dámu.\nNiekedy sa však môže hodiť aj jazdec!';
+
+  @override
+  String get learnPawnsMoveForward => 'Pešiaci sa pohybujú vpred,\nale berú diagonálne!';
+
+  @override
+  String get learnCaptureThenPromote => 'Zbierajte, premente a opäť zbierajte!';
+
+  @override
+  String get learnUseAllThePawns => 'Použite všetkých pešiakov!\nPremieňať nepotrebujete.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Keď je pešiak v základnej pozícii, môže sa pohnúť o 2 políčka naraz!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Vyzbierajte všetky hviezdy!\nPremieňať nepotrebujete.';
+
+  @override
+  String get learnPawnComplete => 'Gratulujeme! Pešiakov zvládate ľavou zadnou.';
+
+  @override
+  String get learnPawnPromotion => 'Premena pešiaka';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Váš pešiak došiel na koniec šachovnice!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Teraz sa premení na silnejšiu figúrku.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Zvoľte figúrku, ktorú si prajete!';
+
+  @override
+  String get learnFundamentals => 'Základy';
+
+  @override
+  String get learnCapture => 'Branie';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Branie súperových figúrok';
+
+  @override
+  String get learnCaptureIntro => 'Rozpoznajte súperove nechránené figúrky a vezmite ich!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Vyhoďte čierne figúrky!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Vezmite súperove figúrky!\nA nepríďte o vlastné!';
+
+  @override
+  String get learnCaptureComplete => 'Gratulujeme! Teraz viete ako bojovať so šachovými figúrkami!';
+
+  @override
+  String get learnProtection => 'Ochrana';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Držte svoje figúrky v bezpečí';
+
+  @override
+  String get learnProtectionIntro => 'Rozpoznajte figúrky, ktoré Vám súper napadá a ochráňte ich!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulujeme! Figúrka, ktorú nestratíte je figúrka, ktorú získate!';
+
+  @override
+  String get learnEscape => 'Ste napadnutí!\nUniknite ohrozeniu!';
+
+  @override
+  String get learnNoEscape => 'Nedá sa utiecť,\nale môžete sa brániť!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Nenechajte si vziať žiadne nechránené figúrky!';
+
+  @override
+  String get learnCombat => 'Súboj';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Branie a chránenie figúrok';
+
+  @override
+  String get learnCombatIntro => 'Dobrý bojovník vie aj útočiť aj sa brániť!';
+
+  @override
+  String get learnCombatComplete => 'Gratulujeme! Teraz viete ako so šachovými figúrkami bojovať!';
+
+  @override
+  String get learnCheckInOne => 'Šach 1. ťahom';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Útočenie na súperovho kráľa';
+
+  @override
+  String get learnCheckInOneIntro => 'Ak chcete dať súperovi šach, zaútočte na jeho kráľa! On ho bude musieť brániť!';
+
+  @override
+  String get learnCheckInOneGoal => 'Namierte si to na súperovho kráľa jedným ťahom!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulujeme! Šachom ste súpera prinútili k obrane svojho kráľa!';
+
+  @override
+  String get learnOutOfCheck => 'Únik zo šachu';
+
+  @override
+  String get learnDefendYourKing => 'Chránenie vlastného kráľa';
+
+  @override
+  String get learnOutOfCheckIntro => 'Ste v šachu! Musíte uniknúť alebo zablokovať útok.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Ustúpte kráľom!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kráľ nemôže ustúpiť, ale napadnutie môžete predkryť!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Môžete sa dostať zo šachu tým, že vezmete šachujúcu figúrku.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Tento jazdec Vás šachuje aj cez Vašu obranu!';
+
+  @override
+  String get learnEscapeOrBlock => 'Ustúpte kráľom alebo napadnutie predkryte!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulujeme! Na Vášho kráľa si len tak niekto nepríde! Vždy sa uistite, že sa proti šachu dokážete brániť!';
+
+  @override
+  String get learnMateInOne => 'Mat 1. ťahom';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Porazenie súperovho kráľa';
+
+  @override
+  String get learnMateInOneIntro => 'Vyhráte vtedy, keď sa Váš súper nedokáže brániť proti šachu.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Napadnite súperovho kráľa spôsobom, ktorému sa nedokáže brániť!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulujeme! Presne takto sa vyhrávajú šachové partie!';
+
+  @override
+  String get learnIntermediate => 'Rozšírenie';
+
+  @override
+  String get learnBoardSetup => 'Základné postavenie';
+
+  @override
+  String get learnHowTheGameStarts => 'Ako rozostaviť figúrky';
+
+  @override
+  String get learnBoardSetupIntro => 'Dve armády stoja zoči voči, pripravené na bitku.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'Toto je počiatočná pozícia každej šachovej partie. Pre pokračovanie urobte ľubovoľný ťah!';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Najprv umiestnite veže! Patria do rohov šachovnice.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Potom umiestnite jazdcov! Ich miesto je vedľa veží.';
+
+  @override
+  String get learnPlaceTheBishops => 'Teraz umiestnite strelcov! Tí budú stáť vedľa jazdcov.';
+
+  @override
+  String get learnPlaceTheQueen => 'Prišiel čas na dámu! Patrí na pole vlastnej farby.';
+
+  @override
+  String get learnPlaceTheKing => 'A napokon kráľ! Kde inde ako po boku svojej dámy.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Pešiaci tvoria prvú líniu. Pre pokračovanie urobte ľubovoľný ťah.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulujeme! Dokážete rozložiť figúrky do základného postavenia.';
+
+  @override
+  String get learnCastling => 'Rošáda';
+
+  @override
+  String get learnEnPassant => 'Branie mimochodom';
+
+  @override
+  String get learnTheSpecialKingMove => 'Osobitý ťah kráľom';
+
+  @override
+  String get learnCastlingIntro => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku!';
+
+  @override
+  String get learnCastleKingSide => 'Potiahnite kráľom o dve polia a urobte malú rošádu!';
+
+  @override
+  String get learnCastleQueenSide => 'Potiahnite kráľom o dve polia a urobte veľkú rošádu!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Jazdec stojí v ceste. Pohnite ním a potom urobte malú rošádu!';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Vykonajte malú rošádu! Najprv si však potrebujete vyvinúť zopár figúrok.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Vykonajte veľkú rošádu! Najprv je ale potrebné vyvinúť zopár figúrok.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nie je možné vykonať rošádu pokiaľ sa s kráľom alebo vežou už hýbalo.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nemôžete robiť rošádu ak je kráľ na ceste pohybu napadnutý. Zablokujte šach a urobte rošádu!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Nájdite spôsob ako urobiť malú rošádu!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Nájdite spôsob ako urobiť veľkú rošádu!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulujeme! Rošádu by ste v mali urobiť takmer v každej partii.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Osobitý ťah pešiakom';
+
+  @override
+  String get learnEnPassantIntro => 'Keď súper potiahne pešiakom o dve políčka, môžete ho vziať akoby potiahol len o jedno.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Čierny práve potiahol pešiakom o dve políčka. Vezmite ho mimochodom!';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Branie mimochodom je možné vykonať iba bezprostredne po ťahu súperovho pešiaka.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Branie mimochodom je možné vykonať iba pokiaľ je Váš pešiak na piatom rade.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Vezmite všetkých pešiakov mimochodom!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulujeme! Teraz už dokážete brať mimochodom.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Partia končí remízou';
+
+  @override
+  String get learnStalemateIntro => 'Keď hráč, ktorý je na ťahu nemôže potiahnuť žiadnou figúrkou a jeho kráľ nie je v šachu, je to pat. Partia končí remízou: nikto nevyhrá ani neprehrá.';
+
+  @override
+  String get learnStalemateGoal => 'Dostaňte čierneho do patu:\n- Nemôže vykonať žiadny ťah\n- Jeho kráľ nie je v šachu.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulujeme! Lepší pat, než dostať mat!';
+
+  @override
+  String get learnAdvanced => 'Nadstavba';
+
+  @override
+  String get learnPieceValue => 'Hodnota figúr';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Ohodnotenie sily figúrok';
+
+  @override
+  String get learnPieceValueIntro => 'Figúrky s vyššou pohyblivosťou majú vyššiu hodnotu!\nDáma = 9\nVeža = 5\nStrelec = 3\nJazdec = 3\nPešiak = 1\nKráľ má nevyčísliteľnú hodnotu! Jeho strata znamená prehru partie.';
+
+  @override
+  String get learnQueenOverBishop => 'Vezmite figúrku s najvyššou hodnotou!\nDáma > Strelec';
+
+  @override
+  String get learnPieceValueExchange => 'Vezmite figúrku s najvyššou hodnotou!\nNevymieňajte\ncennejšiu figúrku za figúrku s nižšou hodnotou.';
+
+  @override
+  String get learnPieceValueLegal => 'Vezmite figúrku\ns najvyššou hodnotou!\nUistite sa, že je váš ťah podľa pravidiel!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Vezmite figúrku s najvyššou hodnotou!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulujeme! Poznáte hodnotu šachového materiálu!\nDáma = 9\nVeža = 5\nStrelec = 3\nJazdec = 3\nPešiak = 1';
+
+  @override
+  String get learnCheckInTwo => 'Šach 2. ťahom';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Šach na dva ťahy';
+
+  @override
+  String get learnCheckInTwoIntro => 'Nájdite správnu kombináciu dvoch ťahov aby ste dali súperovmu kráľovi šach!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ohrozte súperovho kráľa do dvoch ťahov!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulujeme! Šachom ste súpera prinútili k obrane svojho kráľa!';
+
+  @override
+  String get learnWhatNext => 'Čo ďalej?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Gratulujeme! Viete hrať šach! Chcete sa stať silnejším hráčom?';
+
+  @override
+  String get learnRegister => 'Registrácia';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Získajte zdarma účet na Lichess';
+
+  @override
+  String get learnPractice => 'Tréning';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Spoznajte typické šachové pozície';
+
+  @override
+  String get learnPuzzles => 'Úlohy';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Precvičte si taktické schopnosti';
+
+  @override
+  String get learnVideos => 'Videá';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Sledujte náučné šachové videá';
+
+  @override
+  String get learnPlayPeople => 'Partie s ľuďmi';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Hrajte so súpermi z celého sveta';
+
+  @override
+  String get learnPlayMachine => 'Partie s počítačom';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Skúste čo dokážete proti počítaču';
+
+  @override
+  String get learnLetsGo => 'Poďme na to!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Stupeň $param';
+  }
+
+  @override
+  String get learnAwesome => 'Úžasné!';
+
+  @override
+  String get learnExcellent => 'Znamenité!';
+
+  @override
+  String get learnGreatJob => 'Skvelá práca!';
+
+  @override
+  String get learnPerfect => 'Výborne!';
+
+  @override
+  String get learnOutstanding => 'Vynikajúce!';
+
+  @override
+  String get learnWayToGo => 'To je ono!';
+
+  @override
+  String get learnYesYesYes => 'Áno, áno, áno!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Ide Vám to!';
+
+  @override
+  String get learnNailedIt => 'Zásah do čierneho!';
+
+  @override
+  String get learnRightOn => 'To je presne ono!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Stupeň $param dokončený';
+  }
+
+  @override
+  String get learnNext => 'Ďalej';
+
+  @override
+  String learnNextX(String param) {
+    return 'Nasleduje: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Návrat do menu';
+
+  @override
+  String get learnPuzzleFailed => 'Nesprávne riešenie!';
+
+  @override
+  String get learnRetry => 'Skúsiť znova';
+
+  @override
   String get patronDonate => 'Prispieť';
 
   @override
@@ -1490,6 +2101,207 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get perfStatNow => 'teraz';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Checkmates';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'The Skewer';
+
+  @override
+  String get practiceStNamTheFork => 'The Fork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Double Check';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interference';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => 'Deflection';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Underpromotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Nastavenia';
@@ -1615,6 +2427,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potvrdenie ťahu';
 
   @override
+  String get preferencesMultipleChoices => 'Multiple choices. ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dá sa zrušiť počas partie cez \"hamburgerové menu\" pri šachovnici';
 
   @override
@@ -1660,19 +2475,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Streamer začal vysielať';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nová správa';
-
-  @override
   String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'V komentári na fóre sa o Vás píše';
-
-  @override
   String get preferencesNotifyForumMentions => 'Forum mentions';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Pozvánka do štúdie';
 
   @override
   String get preferencesNotifyStudyInvites => 'Study invites';
@@ -1682,9 +2488,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => 'Výzvy';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Onedlho začínajúci turnaj';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
@@ -1769,6 +2572,24 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
+  String get preferencesNetwork => 'Network';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'You are currently using Content Delivery Network (CDN) routing.';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => 'If you have frequent disconnects, try changing the routing.';
+
+  @override
+  String get preferencesUseDirectRouting => 'Use direct routing';
+
+  @override
+  String get preferencesUseCdnRouting => 'Use CDN routing';
 
   @override
   String get puzzlePuzzles => 'Šachové úlohy';
@@ -2135,6 +2956,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCastling => 'Rošáda';
 
   @override
+  String get puzzleThemeEnPassant => 'Branie mimochodom';
+
+  @override
   String get puzzleThemeCastlingDescription => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku.';
 
   @override
@@ -2153,7 +2977,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Rohový mat';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Zatlačte kráľa do rohu pomocou veže a jazdca alebo dámy a jazdca, aby ste dosiahli mat.';
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
 
   @override
   String get puzzleThemeCrushing => 'Rozdrvenie';
@@ -2228,9 +3052,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktika počas posledného úseku hry.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktika spojená s pravidlom brania mimochodom, kedy pešiak môže vziať súperovho pešiaka, ktorý sa pohol zo základného postavenia o dve polia a tým sa dostal na jeho úroveň.';
-
-  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
 
   @override
@@ -2249,9 +3070,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeFork => 'Vidlička';
 
   @override
-  String get puzzleThemeForkDescription => 'Ťah, pri ktorom figúra útočí na dve nepriateľské figúry naraz.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
 
   @override
@@ -2262,9 +3080,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => 'Hákový mat';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mat vežou, jazdcom alebo pešiakom spolu s jedným súperovým pešiakom, ktorý obmedzuje pohyb kráľa.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
@@ -2291,13 +3106,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsburyho mat';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'Veža dáva kráľovi mat, zatiaľ čo strelec obmedzuje jeho pohyb.';
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphyho mat';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Strelec dáva kráľovi mat, zatiaľ čo veža obmedzuje jeho pohyb.';
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Mat lastovičí chvost';
@@ -2417,7 +3232,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemePromotion => 'Premena';
 
   @override
-  String get puzzleThemePromotionDescription => 'Premena pešiaka alebo hrozba premeny pešiaka je kľúčom k tejto taktike.';
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dámska koncovka';
@@ -2527,6 +3342,14 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'Čomu si sa venoval tento rok?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Vaše zhrnutie $param je pripravené!';
+  }
+
+  @override
   String get searchSearch => 'Hľadať';
 
   @override
@@ -2549,6 +3372,32 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get settingsThisAccountIsClosed => 'Účet zrušený.';
+
+  @override
+  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+
+  @override
+  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+
+  @override
+  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+
+  @override
+  String get settingsDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return 'Would you like to $param instead?';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'close your account';
+
+  @override
+  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
   String get gameSetup => 'Nastavenie partie';
@@ -2994,6 +3843,18 @@ class AppLocalizationsSk extends AppLocalizations {
   String get flipBoard => 'Otočiť šachovnicu';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Trojnásobné opakovanie';
 
   @override
@@ -3136,6 +3997,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get password => 'Heslo';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Zmeniť heslo';
 
   @override
@@ -3205,9 +4069,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Počkajte 5 minút a obnovte si emailovú schránku!';
 
   @override
-  String get checkSpamFolder => 'Skontrolujte si aj priečinok s nevyžiadanou poštou, je možné, že sa dostal tam. Ak sa tak stalo, zrušte označenie emailu ako nevyžiadanej pošty.';
-
-  @override
   String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
 
   @override
@@ -3256,10 +4117,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get cancel => 'Zrušiť';
 
   @override
-  String get whiteTimeOut => 'Bielemu došiel čas';
+  String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Čiernemu došiel čas';
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Ponuka remízy odoslaná';
@@ -3468,7 +4329,7 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtre hodnotenia sú uzamknuté, pretože Vaše hodnotenie nie je stabilné. Hranie hodnotených partií zvýši jeho stabilitu.';
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3551,7 +4412,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get leaderboard => 'Rebríček';
 
   @override
-  String get screenshotCurrentPosition => 'Odfotiť aktuálnu pozíciu';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Uložiť ako GIF';
@@ -3648,6 +4509,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String xStartedFollowingY(String param1, String param2) {
     return '$param1 začal sledovať $param2';
   }
+
+  @override
+  String get less => 'Less';
 
   @override
   String get more => 'Viac';
@@ -3857,7 +4721,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get makeAStudy => 'Pre bezpečné uchovanie a zdieľanie pouvažujte nad vytvorením štúdie.';
 
   @override
-  String get clearSavedMoves => 'Zrušiť dočasné ťahy';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Bolo na Lichess TV';
@@ -3885,6 +4749,21 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get onlineBots => 'Online boti';
+
+  @override
+  String get aboutBotsOnLichess => 'About bots on Lichess';
+
+  @override
+  String get featuredBots => 'Featured bots';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+
+  @override
+  String get communityBots => 'Community bots';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
 
   @override
   String get name => 'Meno';
@@ -3980,9 +4859,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get reportUsernameHelp => 'Vysvetlite, čo je na tomto používateľskom mene urážlivé. Nehovorte len „je to urážlivé/nevhodné“, ale povedzte nám, ako ste k tomuto záveru dospeli, najmä ak je urážka významovo zahmlená, nie je v angličtine, je v slangu alebo odkazuje na niečo z historie/kultúry.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Vaša správa bude spracovaná rýchlejšie, ak bude napísaná v angličtine.';
-
-  @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
@@ -4033,6 +4909,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get logInByEmail => 'Prihlásiť sa pomocou e-mailu';
+
+  @override
+  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
 
   @override
   String get emailMeALink => 'Pošlite link emailom';
@@ -4105,6 +4984,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get never => 'Nikdy';
+
+  @override
+  String get defeatOnly => 'Defeat only';
+
+  @override
+  String get drawAndDefeat => 'Draw and defeat';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4289,7 +5174,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get really => 'naozaj';
 
   @override
+  String get lichessUpdates => 'Lichess updates';
+
+  @override
   String get contribute => 'Prispieť';
+
+  @override
+  String get changelog => 'Changelog';
 
   @override
   String get termsOfService => 'Podmienky služby';
@@ -4299,6 +5190,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get sourceCode => 'Zdrojový kód';
+
+  @override
+  String get blockAds => 'Block ads';
 
   @override
   String get simultaneousExhibitions => 'Simultánne exhibície';
@@ -4351,9 +5245,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get create => 'Vytvoriť';
 
   @override
-  String get whenCreateSimul => 'Po vytvorení simultánky, môžete hrať s niekoľkými hráčmi naraz.';
-
-  @override
   String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
 
   @override
@@ -4366,7 +5257,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get simulAddExtraTime => 'Môžete si pridať dodatočný čas k vašim hodinám pre zlepšenie behu simultánky.';
 
   @override
-  String get simulHostExtraTime => 'Dotatočný čas pre hostiteľa.';
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Za každého hráča, ktorý sa pripojí k simultánke, navýšiť čas na Vašich hodinách o počiatočný čas partie.';
@@ -4399,10 +5290,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get keyGoToStartOrEnd => 'ísť na začiatok/koniec';
 
   @override
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
   String get keyCycleSelectedVariation => 'Vybrať variant';
 
   @override
   String get keyShowOrHideComments => 'zobraziť/skryť komentáre';
+
+  @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
 
   @override
   String get keyEnterOrExitVariation => 'zvoliť/opustiť variant';
@@ -4678,9 +5575,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get dark => 'Tmavé';
 
   @override
-  String get transparent => 'Priehľadné';
-
-  @override
   String get picture => 'Picture';
 
   @override
@@ -4690,7 +5584,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get roundness => 'Roundness';
 
   @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'URL obrázka na pozadí:';
+
+  @override
+  String get imageOpacity => 'Image opacity';
 
   @override
   String get board => 'Šachovnica';
@@ -4761,8 +5661,8 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String perfRatingX(String param) {
-    return 'Rating: $param';
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
@@ -4916,7 +5816,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get showUnreadLichessMessage => 'Obdržali ste súkromnú správu od Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Kliknutím sem si ju môžete prečítať';
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Prepáčte :(';
@@ -5198,11 +6098,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get simulDescriptionHelp => 'Chcete účastníkom niečo povedať?';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param je k dispozícii na formátovanie.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return 'You can format text using $param.';
   }
@@ -5224,9 +6119,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => 'Iba členovia tímu';
-
-  @override
-  String get navigateMoveTree => 'Navigovať na všetky ťahy vo forme stromu';
 
   @override
   String get moveListNavigation => 'Move list navigation';
@@ -5356,6 +6248,21 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settings => 'Nastavenia';
 
   @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
+
+  @override
+  String get write => 'Write';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5382,19 +6289,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count hrubých chýb',
-      many: '$count hrubých chýb',
-      few: '$count hrubé chyby',
-      one: '$count hrubá chyba',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5408,19 +6302,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count chýb',
-      many: '$count chýb',
-      few: '$count chyby',
-      one: '$count chyba',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5429,19 +6310,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count Chýb',
       few: '$count Chyby',
       one: '$count Chyba',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count nepresností',
-      many: '$count nepresností',
-      few: '$count nepresnosti',
-      one: '$count nepresnosť',
     );
     return '$_temp0';
   }
@@ -5889,19 +6757,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonymní ($count)',
-      many: 'Anonymní ($count)',
-      few: 'Anonymní ($count)',
-      one: 'Anonym',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6290,7 +7145,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL aktuálnej kapitoly';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Vložte pre zobrazenie vo fóre';
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Začať zo základného postavenia';
@@ -6662,10 +7517,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyCustomPositionText => 'Nastavte si šachovnicu podľa seba.<br>Vhodné na štúdium koncoviek.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Nehrať existujúcu lichess partiu';
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Vložte URL adresu lichess partie<br>(napríklad lichess.org/7fHIU0XI)<br>na načítanie ťahov partie v kapitole.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Z reťazca FEN';
@@ -6753,6 +7608,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get teamTeam => 'Družstvo';
 
   @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Nesprávny vstupný kód.';
 
   @override
@@ -6780,6 +7638,9 @@ class AppLocalizationsSk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Dvojstupňové overenie';
 
   @override
   String get timeagoJustNow => 'práve teraz';
@@ -6986,13 +7847,70 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Dvojstupňové overenie';
-
-  @override
   String get ublogCommunity => 'Komunita';
 
   @override
   String ublogXBlog(String param) {
     return 'Blog užívateľa $param';
   }
+
+  @override
+  String get variantStandard => 'Štandard';
+
+  @override
+  String get variantStandardTitle => 'Štandardné pravidlá šachu (FIDE)';
+
+  @override
+  String get variantChess960 => 'Šach960';
+
+  @override
+  String get variantChess960Title => 'Počiatočná pozícia figúrok v prvom rade je náhodná.';
+
+  @override
+  String get variantKingOfTheHill => 'Kráľ kopca';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Pre výhru partie priveďte svojho kráľa do stredu šachovnice.';
+
+  @override
+  String get variantThreeCheck => 'Tri šachy';
+
+  @override
+  String get variantThreeCheckTitle => 'Pre výhru partie dajte svojmu súperovi 3-krát šach.';
+
+  @override
+  String get variantAntichess => 'Antišach';
+
+  @override
+  String get variantAntichessTitle => 'Ak chcete vyhrať partiu, musíte prísť o všetky svoje figúrky (alebo dosiahnuť pat).';
+
+  @override
+  String get variantAtomic => 'Atomik';
+
+  @override
+  String get variantAtomicTitle => 'Pre výhru nechajte súperovho kráľa vybuchnúť.';
+
+  @override
+  String get variantHorde => 'Horda';
+
+  @override
+  String get variantHordeTitle => 'Jedna strana má veľký počet pešiakov, druhá má klasickú sadu figúrok.';
+
+  @override
+  String get variantRacingKings => 'Pretekajúci sa králi';
+
+  @override
+  String get variantRacingKingsTitle => 'Pre výhru sa so svojim kráľom dostaňte na druhú stranu šachovnice ako prvý.';
+
+  @override
+  String get variantCrazyhouse => 'Šialený dom';
+
+  @override
+  String get variantCrazyhouseTitle => 'Namiesto ťahu Vašou figúrkou môžete figúrku, ktorú ste vzali súperovi použiť ako vlastnú a vrátiť ju späť do hry.';
+
+  @override
+  String get variantFromPosition => 'Z pozície';
+
+  @override
+  String get variantFromPositionTitle => 'Štandardný šach z vlastnej pozície';
 }

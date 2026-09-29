@@ -30,13 +30,11 @@ typedef ClockData = ({Duration initial, Duration increment});
 ///
 /// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExportedGame
+sealed class const ExportedGame._()
     with BaseGame, _$ExportedGame, ServerGame, IndexableSteps
     implements ServerGame {
-  const ExportedGame._();
-
   @Assert('steps.isNotEmpty')
-  factory ExportedGame({
+  factory({
     required GameId id,
     required GameMeta meta,
     // TODO refactor to not include this field
@@ -61,12 +59,12 @@ sealed class ExportedGame
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
-  factory ExportedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+  factory fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an exported game from a local storage JSON.
-  factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 
 /// A [LightExportedGame] associated with a point of view of a player.
@@ -79,10 +77,8 @@ typedef LightExportedGameWithPov = ({LightExportedGame game, Side pov});
 /// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
-sealed class LightExportedGame with _$LightExportedGame {
-  const LightExportedGame._();
-
-  const factory LightExportedGame({
+sealed class const LightExportedGame._() with _$LightExportedGame {
+  const factory({
     required GameId id,
 
     /// If the full game id is available, it means this is a game owned by the
@@ -115,7 +111,7 @@ sealed class LightExportedGame with _$LightExportedGame {
     String? arenaTournamentName,
   }) = _ExportedGameData;
 
-  factory LightExportedGame.fromServerJson(
+  factory fromServerJson(
     Map<String, dynamic> json, {
 
     /// Whether to ask the server if the game is bookmarked
@@ -131,11 +127,7 @@ sealed class LightExportedGame with _$LightExportedGame {
     );
   }
 
-  factory LightExportedGame.fromPick(
-    RequiredPick pick, {
-    bool withBookmarked = false,
-    bool isBookmarked = false,
-  }) {
+  factory fromPick(RequiredPick pick, {bool withBookmarked = false, bool isBookmarked = false}) {
     return _lightExportedGameFromPick(
       pick,
       withBookmarked: withBookmarked,
@@ -143,8 +135,7 @@ sealed class LightExportedGame with _$LightExportedGame {
     );
   }
 
-  factory LightExportedGame.fromJson(Map<String, dynamic> json) =>
-      _$LightExportedGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$LightExportedGameFromJson(json);
 
   bool get isBookmarked => bookmarked == true;
 
@@ -176,9 +167,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
 
 ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
   final data = _lightExportedGameFromPick(pick, withBookmarked: withBookmarked);
-  final clocks = pick(
-    'clocks',
-  ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
+  final clocks = pick('clocks')
+      .asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
@@ -202,9 +192,8 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       opening: data.opening,
       division: division,
     ),
-    source: pick(
-      'source',
-    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -255,9 +244,8 @@ LightExportedGame _lightExportedGameFromPick(
   return LightExportedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
-    source: pick(
-      'source',
-    ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     importDate: pick('import', 'date').asStringOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),

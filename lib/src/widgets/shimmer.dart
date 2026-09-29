@@ -3,20 +3,16 @@ import 'dart:math' show max;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
-class Shimmer extends StatefulWidget {
+class const Shimmer({super.key, final Widget? child}) extends StatefulWidget {
   static ShimmerState? of(BuildContext context) {
     return context.findAncestorStateOfType<ShimmerState>();
   }
-
-  const Shimmer({super.key, this.child});
-
-  final Widget? child;
 
   @override
   ShimmerState createState() => ShimmerState();
 }
 
-class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
+class ShimmerState() extends State<Shimmer> with SingleTickerProviderStateMixin {
   late AnimationController _shimmerController;
 
   LinearGradient get _defaultGradient {
@@ -96,17 +92,13 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   }
 }
 
-class ShimmerLoading extends StatefulWidget {
-  const ShimmerLoading({super.key, required this.isLoading, required this.child});
-
-  final bool isLoading;
-  final Widget child;
-
+class const ShimmerLoading({super.key, required final bool isLoading, required final Widget child})
+    extends StatefulWidget {
   @override
   State<ShimmerLoading> createState() => _ShimmerLoadingState();
 }
 
-class _ShimmerLoadingState extends State<ShimmerLoading> {
+class _ShimmerLoadingState() extends State<ShimmerLoading> {
   Listenable? _shimmerChanges;
 
   @override
@@ -172,11 +164,8 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
   }
 }
 
-class _SlidingGradientTransform extends GradientTransform {
-  const _SlidingGradientTransform({required this.slidePercent});
-
-  final double slidePercent;
-
+class const _SlidingGradientTransform({required final double slidePercent})
+    extends GradientTransform {
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
     return Matrix4.translationValues(bounds.width * slidePercent, 0.0, 0.0);

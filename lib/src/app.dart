@@ -22,11 +22,11 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/message/message_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/recap/recap_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/quick_actions.dart';
 import 'package:lichess_mobile/src/shared_pgn_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -43,9 +43,7 @@ const List<String> _kIosBlogWidgetKinds = [
 ];
 
 /// Application initialization and main entry point.
-class AppInitializationScreen extends ConsumerWidget {
-  const AppInitializationScreen({super.key});
-
+class const AppInitializationScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
@@ -71,14 +69,12 @@ class AppInitializationScreen extends ConsumerWidget {
 ///
 /// This widget is the root of the application and is responsible for setting up
 /// the theme, locale, and other global settings.
-class Application extends ConsumerStatefulWidget {
-  const Application({super.key});
-
+class const Application({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<Application> createState() => _AppState();
 }
 
-class _AppState extends ConsumerState<Application> {
+class _AppState() extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -148,6 +144,7 @@ class _AppState extends ConsumerState<Application> {
     ref.read(appLinksServiceProvider).start();
     ref.read(sharedPgnServiceProvider).start();
     ref.read(broadcastServiceProvider).start();
+    ref.read(recapServiceProvider).start();
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
@@ -178,9 +175,13 @@ class _AppState extends ConsumerState<Application> {
       }, fireImmediately: true);
     }
 
-    // Listen for connectivity changes and perform actions accordingly.
+    // Listening to the settled status rather than to [isDeviceOnlineProvider]: both actions are
+    // network calls, which must not be made on the optimistic assumption that a device whose
+    // status is not known yet is online.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
-      final prevWasOffline = prev?.value?.isOnline == false;
+      // The previous state is read with [isDeviceOnlineIn], so that coming back from a check that
+      // failed — offline as far as the app is concerned — is an edge like any other.
+      final prevWasOffline = prev != null && !isDeviceOnlineIn(prev);
       final currentIsOnline = current.value?.isOnline == true;
 
       // Play registered moves whenever the app comes back online.
@@ -192,18 +193,9 @@ class _AppState extends ConsumerState<Application> {
       }
 
       // Perform actions once when the app comes online.
-      if (current.value?.isOnline == true && !_firstTimeOnlineCheck) {
+      if (currentIsOnline && !_firstTimeOnlineCheck) {
         _firstTimeOnlineCheck = true;
         ref.read(correspondenceServiceProvider).syncGames();
-      }
-
-      final socketClient = ref.read(socketPoolProvider).currentClient;
-      if (current.value?.isOnline == true &&
-          current.value?.appState == AppLifecycleState.resumed &&
-          !socketClient.isActive) {
-        socketClient.connect();
-      } else if (current.value?.isOnline == false) {
-        socketClient.close();
       }
     });
 
@@ -235,9 +227,8 @@ class _AppState extends ConsumerState<Application> {
       theme: theme.copyWith(
         navigationBarTheme: isIOS
             ? null
-            : NavigationBarTheme.of(
-                context,
-              ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
+            : NavigationBarTheme.of(context)
+                  .copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],

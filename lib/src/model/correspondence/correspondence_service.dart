@@ -33,20 +33,15 @@ final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) 
 }, name: 'CorrespondenceServiceProvider');
 
 /// Service that manages correspondence games.
-class CorrespondenceService {
-  CorrespondenceService(this._log, {required this.ref});
-
-  final Ref ref;
-  final Logger _log;
-
+class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
   StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
 
   void start() {
     _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, fromBackground: fromBackground) = data;
+      final (message: fcmMessage, :fromBackground) = data;
       switch (fcmMessage) {
-        case CorresGameUpdateFcmMessage(fullId: final fullId, game: final game):
+        case CorresGameUpdateFcmMessage(:final fullId, :final game):
           if (game != null) {
             _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
           }
@@ -197,9 +192,8 @@ class CorrespondenceService {
 
           await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
 
-          (await ref.read(
-            correspondenceGameStorageProvider.future,
-          )).save(gameToSync.copyWith(registeredMoveAtPgn: null));
+          (await ref.read(correspondenceGameStorageProvider.future))
+              .save(gameToSync.copyWith(registeredMoveAtPgn: null));
         } else {
           _log.info('Cannot play game ${gameToSync.id} move because its state has changed');
           updateStoredGame(gameToSync.fullId, playableGame);
@@ -226,7 +220,7 @@ class CorrespondenceService {
 
   /// Updates a stored correspondence game.
   Future<void> updateStoredGame(GameFullId fullId, PlayableGame game) async {
-    return (await ref.read(correspondenceGameStorageProvider.future)).save(
+    return await (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(
         id: game.id,
         fullId: fullId,

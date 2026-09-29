@@ -21,11 +21,9 @@ FakeWebSocketChannel createDefaultFakeWebSocketChannel(Uri socketRoute) {
 }
 
 /// A [WebSocketChannelFactory] that creates fake WebSocket channels and exposes a stream of outgoing messages (except ping).
-class ListenableFakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  ListenableFakeWebSocketChannelFactory(this.createFunction);
-
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class ListenableFakeWebSocketChannelFactory(
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   Stream<dynamic> outgoingMessages(Uri socketRoute) {
     return _outcomingController.stream
         .where((message) => message.$1 == socketRoute)
@@ -62,11 +60,9 @@ class ListenableFakeWebSocketChannelFactory implements WebSocketChannelFactory {
 }
 
 /// A [WebSocketChannelFactory] that creates fake WebSocket channels.
-class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  const FakeWebSocketChannelFactory(this.createFunction);
-
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class const FakeWebSocketChannelFactory(
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   @override
   Future<WebSocketChannel> create(
     String url, {
@@ -80,12 +76,10 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
 /// A [WebSocketChannelFactory] that resolves the channel creation after a delay.
 ///
 /// Useful to simulate a connection attempt that is still in flight while the client state changes.
-class DelayedFakeWebSocketChannelFactory implements WebSocketChannelFactory {
-  const DelayedFakeWebSocketChannelFactory(this.delay, this.createFunction);
-
-  final Duration delay;
-  final FakeWebSocketChannel Function(Uri socketRoute) createFunction;
-
+class const DelayedFakeWebSocketChannelFactory(
+  final Duration delay,
+  final FakeWebSocketChannel Function(Uri socketRoute) createFunction,
+) implements WebSocketChannelFactory {
   @override
   Future<WebSocketChannel> create(
     String url, {
@@ -126,25 +120,58 @@ typedef FakeSocketServerHandlers =
 ///
 /// The [sentMessages] and [sentMessagesExceptPing] streams can be used to
 /// verify that the client sends the expected messages.
-class FakeWebSocketChannel implements WebSocketChannel {
-  FakeWebSocketChannel(
-    Uri socketRoute, {
-    this.connectionLag = kFakeWebSocketConnectionLag,
-    this.serverHandlers = const {},
-  }) : route = Uri(path: socketRoute.path),
-       assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
-       assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
+class FakeWebSocketChannel(
+  Uri socketRoute, {
+
+  /// The lag of the connection (duration before pong response) in milliseconds.
+  var Duration connectionLag = kFakeWebSocketConnectionLag,
+  final FakeSocketServerHandlers serverHandlers = const {},
+}) implements WebSocketChannel {
+  this
+    : assert(socketRoute.path.isNotEmpty, 'Route path must not be empty'),
+      assert(connectionLag > Duration.zero, 'Connection lag must be greater than 0') {
     _sink = _FakeWebSocketSink(this, serverHandlers);
   }
 
-  final Uri route;
-
-  final FakeSocketServerHandlers serverHandlers;
+  final Uri route = Uri(path: socketRoute.path);
 
   late final _FakeWebSocketSink _sink;
 
   Future<void> _close() {
+    if (!_streamController.isClosed) {
+      _streamController.close();
+    }
     return _outcomingController.close();
+  }
+
+  /// The stream the client listens to, fed by the global incoming controller.
+  ///
+  /// It is per channel so that a single connection can be dropped, as [closeFromServer] does.
+  late final StreamController<dynamic> _streamController = StreamController<dynamic>.broadcast(
+    onListen: () {
+      _incomingSubscription = _incomingController.stream
+          .where((event) => event.$1 == route)
+          .map((event) => event.$2)
+          .listen(_streamController.add);
+    },
+    onCancel: () {
+      _incomingSubscription?.cancel();
+      _incomingSubscription = null;
+    },
+  );
+
+  StreamSubscription<dynamic>? _incomingSubscription;
+
+  /// Drops the connection the way a network going away under an open socket does.
+  ///
+  /// With [error], the stream errors out before it closes; without, it merely closes, as a peer
+  /// hanging up would.
+  void closeFromServer([Object? error]) {
+    if (_streamController.isClosed) return;
+    if (error != null) {
+      _streamController.addError(error);
+    }
+    _streamController.close();
   }
 
   int _pongCount = 0;
@@ -166,13 +193,23 @@ class FakeWebSocketChannel implements WebSocketChannel {
   /// The controller for outgoing (to server) messages.
   final _outcomingController = StreamController<dynamic>.broadcast();
 
-  /// The lag of the connection (duration before pong response) in milliseconds.
-  Duration connectionLag;
-
   /// Whether the server should send a pong response to a ping request.
   ///
   /// Can be used to simulate a faulty connection.
   bool shouldSendPong = true;
+
+  /// Makes a write to the sink throw whenever this returns true, as one whose peer is already
+  /// gone does.
+  ///
+  /// The data written is passed in, so that a test can break on one particular message and let
+  /// everything else through — including a write the client should not have made.
+  bool Function(dynamic data)? failWriteWhen;
+
+  /// How long the channel takes to finish closing.
+  ///
+  /// A real one is not closed the moment it is asked to be: the client can well be connected again
+  /// by the time the old sink is done.
+  Duration closeDelay = Duration.zero;
 
   /// Number of pong response received
   int get pongCount => _pongCount;
@@ -200,8 +237,7 @@ class FakeWebSocketChannel implements WebSocketChannel {
   WebSocketSink get sink => _sink;
 
   @override
-  Stream<dynamic> get stream =>
-      _incomingController.stream.where((event) => event.$1 == route).map((event) => event.$2);
+  Stream<dynamic> get stream => _streamController.stream;
 
   @override
   void pipe(StreamChannel<dynamic> other) {}
@@ -243,17 +279,18 @@ class FakeWebSocketChannel implements WebSocketChannel {
   }
 }
 
-class _FakeWebSocketSink implements WebSocketSink {
-  _FakeWebSocketSink(this._channel, this._serverHandlers);
-
-  final FakeWebSocketChannel _channel;
-  final FakeSocketServerHandlers _serverHandlers;
-
+class _FakeWebSocketSink(
+  final FakeWebSocketChannel _channel,
+  final FakeSocketServerHandlers _serverHandlers,
+) implements WebSocketSink {
   Timer? _pingTimer;
   final Map<String, Timer?> _serverHandlersTimers = {};
 
   @override
   void add(dynamic data) {
+    if (_channel.failWriteWhen?.call(data) == true) {
+      throw StateError('Cannot add to a closed sink');
+    }
     _channel._outcomingController.add(data);
 
     // Simulates pong response if connection is not closed
@@ -306,7 +343,8 @@ class _FakeWebSocketSink implements WebSocketSink {
     _serverHandlersTimers.forEach((_, timer) {
       timer?.cancel();
     });
-    return _channel._close();
+    final delay = _channel.closeDelay;
+    return delay > Duration.zero ? Future<void>.delayed(delay, _channel._close) : _channel._close();
   }
 
   @override

@@ -8,7 +8,7 @@ part 'blog.freezed.dart';
 
 @freezed
 sealed class BlogPost with _$BlogPost {
-  const factory BlogPost({
+  const factory({
     required StringId id,
     required String title,
     required String slug,
@@ -18,7 +18,7 @@ sealed class BlogPost with _$BlogPost {
     Uri? imageUrl,
   }) = _BlogPost;
 
-  factory BlogPost.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return _blogPostFromPick(pick(json).required());
   }
 }
