@@ -205,8 +205,8 @@ class _AppState() extends ConsumerState<Application> {
   @override
   Widget build(BuildContext context) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final theme = makeAppTheme(context, generalPrefs, boardPrefs);
+    final boardTheme = ref.watch(boardPreferencesProvider.select((prefs) => prefs.boardTheme));
+    final theme = makeAppTheme(context, generalPrefs, boardTheme);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 

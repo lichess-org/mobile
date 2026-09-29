@@ -11,7 +11,7 @@ const kSliderTheme = SliderThemeData(
   year2023: false,
 );
 
-ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
+ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardTheme boardTheme) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   final brightness = generalPrefs.isForcedDarkMode
       ? Brightness.dark
@@ -22,7 +22,7 @@ ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPre
         };
 
   if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
-    return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
+    return _makeDefaultTheme(brightness, generalPrefs, boardTheme, isIOS);
   } else {
     return _makeBackgroundImageTheme(
       baseTheme:
@@ -74,10 +74,9 @@ extension CustomThemeBuildContext on BuildContext {
 ThemeData _makeDefaultTheme(
   Brightness brightness,
   GeneralPrefs generalPrefs,
-  BoardPrefs boardPrefs,
+  BoardTheme boardTheme,
   bool isIOS,
 ) {
-  final boardTheme = boardPrefs.boardTheme;
   final dynamicColorSchemes = getDynamicColorSchemes();
   final systemScheme = switch (brightness) {
     Brightness.light => dynamicColorSchemes?.light,
