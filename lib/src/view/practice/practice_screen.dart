@@ -102,7 +102,7 @@ class const _Body({
               ListTile(
                 leading: PracticeStudyIcon(study: study),
                 title: Text(context.l10n.resumePractice),
-                subtitle: Text(study.name),
+                subtitle: Text(study.l10nName(context.l10n)),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -114,7 +114,7 @@ class const _Body({
           ),
         for (final section in structure.sections)
           ListSection(
-            header: Text(section.name),
+            header: Text(section.l10nName(context.l10n)),
             hasLeading: true,
             children: [
               for (final study in section.studies) _StudyTile(study: study, progress: progress),
@@ -134,8 +134,8 @@ class const _StudyTile({
     final done = progress.countDone(study);
     return ListTile(
       leading: PracticeStudyIcon(study: study),
-      title: Text(study.name),
-      subtitle: switch (study.description) {
+      title: Text(study.l10nName(context.l10n)),
+      subtitle: switch (study.l10nDescription(context.l10n)) {
         final description? => Text(description),
         null => null,
       },

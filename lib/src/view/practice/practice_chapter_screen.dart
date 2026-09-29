@@ -76,7 +76,7 @@ class const _ChaptersSheet({required final PracticeChapter current}) extends Con
       children: [
         ListTile(
           leading: PracticeStudyIcon(study: study, size: 40.0),
-          title: Text(study.name, style: Styles.title),
+          title: Text(study.l10nName(context.l10n), style: Styles.title),
         ),
         for (final chapter in study.chapters)
           ListTile(
