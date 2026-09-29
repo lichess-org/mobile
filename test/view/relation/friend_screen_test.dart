@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../model/auth/fake_auth_storage.dart';
@@ -242,6 +243,76 @@ void main() {
       expect(find.text('Alice'), findsNothing);
       expect(find.text('1 following'), findsOneWidget);
       expect(find.text('Bob'), findsOneWidget);
+    });
+
+    testWidgets('friend list sort types rearrange the list as expected', (tester) async {
+      const followingBody =
+          '{"id":"andy","username":"andy","createdAt":1290415680000,"seenAt":1290415680000,"perfs":{"bullet": {"games": 10, "rating":2100, "rd": 45, "prog": -10}}}\n'
+          '{"id":"bobby","username":"bobby","createdAt":1290156480000,"seenAt":1290156480000,"perfs":{"bullet": {"games": 10, "rating":2900, "rd": 45, "prog": -10}}}\n'
+          '{"id":"candy","username":"candy","createdAt":1281430080000,"seenAt":1281430080000,"perfs":{"bullet": {"games": 10, "rating":2000, "rd": 45, "prog": -10}}}\n'
+          '{"id":"danny","username":"danny","createdAt":1299440080000,"seenAt":1299440080000,"perfs":{"bullet": {"games": 10, "rating":1800, "rd": 45, "prog": -10}}}\n';
+      final alphabetical = ['andy', 'bobby', 'candy', 'danny'];
+      final ratingAsc = ['danny', 'candy', 'andy', 'bobby'];
+      final ratingDesc = ['bobby', 'andy', 'candy', 'danny'];
+      final lastSeen = ['danny', 'andy', 'bobby', 'candy'];
+
+      void verifySortOrder(List<String> expected) {
+        final items = tester
+            .widgetList<UserListTile>(find.byType(UserListTile))
+            .map((e) => e.username)
+            .toList();
+        expect(items, expected);
+      }
+
+      final mockClient = MockClient((req) {
+        if (req.url.path == '/api/rel/following') {
+          return mockResponse(followingBody, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const FriendScreen(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+          onlineFriendsProvider: onlineFriendsProvider.overrideWith(
+            () => _MockOnlineFriends(const IList.empty()),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      // switch to following tab and open sort sheet
+      await tester.tap(find.text('4 following'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Sort friends'));
+      await tester.pumpAndSettle();
+
+      // test alphabetical
+      await tester.tap(find.text('Alphabetical'));
+      await tester.pumpAndSettle();
+      verifySortOrder(alphabetical);
+
+      // test ratingAsc
+      await tester.tap(find.text('Rating Ascending'));
+      await tester.pumpAndSettle();
+      verifySortOrder(ratingAsc);
+
+      // test ratingDesc
+      await tester.tap(find.text('Rating Descending'));
+      await tester.pumpAndSettle();
+      verifySortOrder(ratingDesc);
+
+      // test lastSeen
+      await tester.tap(find.text('Last Seen'));
+      await tester.pumpAndSettle();
+      verifySortOrder(lastSeen);
     });
   });
 }

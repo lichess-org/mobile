@@ -511,7 +511,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.copyright_outlined),
-                title: const Text('View licences'),
+                title: Text(context.l10n.mobileViewLicenses),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
