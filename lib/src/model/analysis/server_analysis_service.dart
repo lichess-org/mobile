@@ -34,8 +34,7 @@ const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
 /// Raised when the server refused to start an analysis, carrying the reason.
 ///
-/// Distinct from a load failure so a view can tell the two apart: a game that failed to load is
-/// worth retrying, a refusal is not, and the reason is worth showing to the user.
+/// Distinct from a load failure: the view shows the reason instead of a retry screen.
 class ServerAnalysisRequestException(
   /// The reason the server refused, as classified by
   /// [ServerAnalysisService.classifyRequestAnalysisError].
@@ -56,35 +55,13 @@ class ServerAnalysisRequestException(
 /// [isBenign] marks the single case where evals for *this* game are still expected on the socket.
 /// Every other value means the server queued nothing for this game, so listening would burn
 /// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
-enum ServerAnalysisRequestError({
-  final bool isBenign = false,
-  
-  required final String message,
-}) {
-  /// The game has already been analysed. The evals exist, so the socket is the right thing to read.
+enum ServerAnalysisRequestError({final bool isBenign = false, required final String message}) {
   alreadyAnalysed(isBenign: true, message: 'This game has already been analysed'),
-
-  /// The user or their IP already has an analysis queued.
-  ///
-  /// Deliberately not benign: [FishnetLimiter.concurrentCheck] matches on `sender.ip` and
-  /// `sender.userId` only, never on the game id, so the queued analysis may belong to a different
-  /// game entirely. Nothing will arrive for this one.
   concurrentAnalysis(message: 'Another analysis is already in progress'),
-
-  /// The user has run out of analyses this week.
   weeklyLimitReached(message: 'Weekly analysis limit reached'),
-
-  /// The user has run out of analyses today.
   dailyLimitReached(message: 'Daily analysis limit reached'),
-
-  /// The user's IP has run out of analyses today.
   dailyIpLimitReached(message: 'Daily analysis limit reached for this IP address'),
-
-  /// The game cannot be analysed at all.
   notAnalysable(message: 'This game cannot be analysed'),
-
-  /// A 400 this list does not cover. Treated as a failure, so the app never waits on a socket for
-  /// an analysis the server is not going to send.
   unknown(message: 'The analysis could not be started'),
 }
 
