@@ -1,7 +1,10 @@
+import 'dart:math';
+
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
@@ -186,8 +189,6 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
     ];
 
     return BottomSheetScrollableContainer(
-      // Grow the sheet above the keyboard so that the date inputs stay visible.
-      padding: EdgeInsets.only(top: 16.0, bottom: 16.0 + MediaQuery.viewInsetsOf(context).bottom),
       children: [
         ListTile(
           title: Text(context.l10n.database),
@@ -228,14 +229,11 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
   }
 }
 
-final _yearRegExp = RegExp(r'^(\d{4})$');
-final _monthRegExp = RegExp(r'^(\d{4})[-/](0[1-9]|1[0-2])$');
-
 /// Since and until inputs bounding the date range of the explorer games.
 ///
-/// Dates are typed in the `YYYY` format when [yearOnly] is true, and in the `YYYY-MM` format
-/// otherwise, like on the website. A date is saved as soon as it is valid, and clearing an input
-/// removes that bound.
+/// Each input opens a picker of months, or of years when [yearOnly] is true. The pickers are bounded
+/// by [earliest], the current date and the other input, so the range is always valid. Clearing an
+/// input removes that bound.
 class const _DateRangeInputs({
   required final DateTime? since,
   required final DateTime? until,
@@ -243,110 +241,324 @@ class const _DateRangeInputs({
   required final void Function(DateTime? since, DateTime? until) onChanged,
   final bool yearOnly = false,
   super.key,
-}) extends StatefulWidget {
-  @override
-  State<_DateRangeInputs> createState() => _DateRangeInputsState();
-}
+}) extends StatelessWidget {
+  String _format(DateTime date) =>
+      yearOnly ? '${date.year}' : '${date.year}-${date.month.toString().padLeft(2, '0')}';
 
-class _DateRangeInputsState() extends State<_DateRangeInputs> {
-  late final _sinceController = TextEditingController(text: _format(widget.since));
-  late final _untilController = TextEditingController(text: _format(widget.until));
-
-  @override
-  void dispose() {
-    _sinceController.dispose();
-    _untilController.dispose();
-    super.dispose();
+  Future<void> _pickSince(BuildContext context) async {
+    final date = await _pickDate(
+      context,
+      title: context.l10n.since,
+      selected: since,
+      first: earliest,
+      last: until,
+    );
+    if (date != null) onChanged(date, until);
   }
 
-  String _format(DateTime? date) => date == null
-      ? ''
-      : widget.yearOnly
-      ? '${date.year}'
-      : '${date.year}-${date.month.toString().padLeft(2, '0')}';
+  Future<void> _pickUntil(BuildContext context) async {
+    final date = await _pickDate(
+      context,
+      title: context.l10n.until,
+      selected: until,
+      first: since ?? earliest,
+    );
+    if (date != null) onChanged(since, date);
+  }
 
-  DateTime? _parse(String text) {
-    if (widget.yearOnly) {
-      final match = _yearRegExp.firstMatch(text.trim());
-      return match != null ? DateTime.utc(int.parse(match[1]!)) : null;
+  /// Shows a picker of the months (or years) between [first] and [last], [last] defaulting to the
+  /// current one.
+  ///
+  /// The picker starts at [selected] if set, or else at the last month (or year). Returns the first
+  /// day of the picked month (or year) in UTC, or null if the picker was dismissed.
+  Future<DateTime?> _pickDate(
+    BuildContext context, {
+    required String title,
+    required DateTime? selected,
+    required DateTime first,
+    DateTime? last,
+  }) async {
+    // The pickers work with local dates, bounded by the first day of the first month (or year) and
+    // the last day of the last one, but never after today.
+    final today = DateUtils.dateOnly(DateTime.now());
+    final firstDate = DateTime(first.year, yearOnly ? 1 : first.month);
+    final lastDayOfLast = last != null
+        ? DateTime(last.year, yearOnly ? 13 : last.month + 1, 0)
+        : today;
+    final lastDate = lastDayOfLast.isAfter(today) ? today : lastDayOfLast;
+    final initial = selected ?? lastDate;
+    final initialMonth = DateTime(initial.year, initial.month);
+    final initialDate = initialMonth.isBefore(firstDate)
+        ? firstDate
+        : initialMonth.isAfter(lastDate)
+        ? lastDate
+        : initialMonth;
+
+    final DateTime? picked;
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      picked = await _showCupertinoPicker(
+        context,
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
+      );
+    } else {
+      picked = await showDialog<DateTime>(
+        context: context,
+        builder: (_) => _MonthYearPickerDialog(
+          title: title,
+          selected: selected != null ? initialDate : null,
+          firstDate: firstDate,
+          lastDate: lastDate,
+          yearOnly: yearOnly,
+        ),
+      );
     }
-    final match = _monthRegExp.firstMatch(text.trim());
-    return match != null ? DateTime.utc(int.parse(match[1]!), int.parse(match[2]!)) : null;
+    if (picked == null) return null;
+    return yearOnly ? DateTime.utc(picked.year) : DateTime.utc(picked.year, picked.month);
   }
 
-  DateTime get _latest {
-    final now = DateTime.now();
-    return widget.yearOnly ? DateTime.utc(now.year) : DateTime.utc(now.year, now.month);
-  }
-
-  /// Returns an error message for [text], or null if it is empty or a valid date not before
-  /// [after].
-  String? _validate(String text, {DateTime? after}) {
-    if (text.trim().isEmpty) return null;
-    final date = _parse(text);
-    if (date == null) return widget.yearOnly ? 'Use the YYYY format' : 'Use the YYYY-MM format';
-    if (date.isBefore(widget.earliest) || date.isAfter(_latest)) {
-      return 'Between ${_format(widget.earliest)} and ${_format(_latest)}';
-    }
-    if (after != null && date.isBefore(after)) return 'Invalid date range';
-    return null;
-  }
-
-  /// Saves the valid dates typed in the inputs, keeping the saved date of an invalid input.
-  void _onChanged(String _) {
-    setState(() {});
-    final sinceText = _sinceController.text;
-    final untilText = _untilController.text;
-    final since = _validate(sinceText) == null ? _parse(sinceText) : widget.since;
-    final until = _validate(untilText, after: since) == null ? _parse(untilText) : widget.until;
-    if (since != widget.since || until != widget.until) widget.onChanged(since, until);
+  Future<DateTime?> _showCupertinoPicker(
+    BuildContext context, {
+    required DateTime initialDate,
+    required DateTime firstDate,
+    required DateTime lastDate,
+  }) {
+    var selected = initialDate;
+    return showCupertinoModalPopup<DateTime>(
+      context: context,
+      builder: (context) => Container(
+        height: 260,
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: .spaceBetween,
+                children: [
+                  CupertinoButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(context.l10n.cancel),
+                  ),
+                  CupertinoButton(
+                    onPressed: () => Navigator.of(context).pop(selected),
+                    child: Text(MaterialLocalizations.of(context).okButtonLabel),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: yearOnly
+                    ? CupertinoPicker(
+                        itemExtent: 32.0,
+                        scrollController: FixedExtentScrollController(
+                          initialItem: initialDate.year - firstDate.year,
+                        ),
+                        onSelectedItemChanged: (index) =>
+                            selected = DateTime(firstDate.year + index),
+                        children: [
+                          for (var year = firstDate.year; year <= lastDate.year; year++)
+                            Center(child: Text('$year')),
+                        ],
+                      )
+                    : CupertinoDatePicker(
+                        mode: .monthYear,
+                        initialDateTime: initialDate,
+                        minimumDate: firstDate,
+                        maximumDate: lastDate,
+                        onDateTimeChanged: (date) => selected = date,
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final hintText = widget.yearOnly ? 'YYYY' : 'YYYY-MM';
-    final keyboardType = widget.yearOnly ? TextInputType.number : TextInputType.datetime;
-    final inputFormatters = [
-      FilteringTextInputFormatter.allow(RegExp(r'[0-9\-/]')),
-      LengthLimitingTextInputFormatter(hintText.length),
-    ];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
-        crossAxisAlignment: .start,
         children: [
           Expanded(
-            child: TextField(
-              controller: _sinceController,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
-              decoration: InputDecoration(
-                labelText: context.l10n.since,
-                hintText: hintText,
-                errorText: _validate(_sinceController.text),
-                errorMaxLines: 2,
-              ),
-              onChanged: _onChanged,
+            child: _DateField(
+              label: context.l10n.since,
+              value: since != null ? _format(since!) : null,
+              onTap: () => _pickSince(context),
+              onClear: () => onChanged(null, until),
             ),
           ),
           const SizedBox(width: 16.0),
           Expanded(
-            child: TextField(
-              controller: _untilController,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
-              decoration: InputDecoration(
-                labelText: context.l10n.until,
-                hintText: hintText,
-                errorText: _validate(_untilController.text, after: widget.since),
-                errorMaxLines: 2,
-              ),
-              onChanged: _onChanged,
+            child: _DateField(
+              label: context.l10n.until,
+              value: until != null ? _format(until!) : null,
+              onTap: () => _pickUntil(context),
+              onClear: () => onChanged(since, null),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A tappable field showing a date [value], with a button to clear it.
+class const _DateField({
+  required final String label,
+  required final String? value,
+  required final VoidCallback onTap,
+  required final VoidCallback onClear,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: InputDecorator(
+        isEmpty: value == null,
+        decoration: InputDecoration(
+          labelText: label,
+          suffixIcon: value != null
+              ? IconButton(
+                  icon: const Icon(Icons.clear),
+                  tooltip: MaterialLocalizations.of(context).deleteButtonTooltip,
+                  onPressed: onClear,
+                )
+              : null,
+        ),
+        child: Text(value ?? ''),
+      ),
+    );
+  }
+}
+
+const _kPickerColumns = 3;
+const _kPickerRowHeight = 52.0;
+
+/// A Material dialog picking a year, then a month of that year unless [yearOnly] is true.
+///
+/// Unlike [showDatePicker], only the [selected] date is highlighted, and no day has to be picked.
+/// Returns the first day of the picked month (or year), or null if the dialog was dismissed.
+class const _MonthYearPickerDialog({
+  required final String title,
+  required final DateTime? selected,
+  required final DateTime firstDate,
+  required final DateTime lastDate,
+  required final bool yearOnly,
+}) extends StatefulWidget {
+  @override
+  State<_MonthYearPickerDialog> createState() => _MonthYearPickerDialogState();
+}
+
+class _MonthYearPickerDialogState() extends State<_MonthYearPickerDialog> {
+  /// The year whose months are shown, or null while the years are shown.
+  int? _year;
+
+  // Scrolls the years so that the selected one, or else the last one, is visible.
+  late final _scrollController = ScrollController(
+    initialScrollOffset:
+        max(
+          0,
+          ((widget.selected ?? widget.lastDate).year - widget.firstDate.year) ~/ _kPickerColumns -
+              2,
+        ) *
+        _kPickerRowHeight,
+  );
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final localizations = MaterialLocalizations.of(context);
+    final year = _year;
+    const gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: _kPickerColumns,
+      mainAxisExtent: _kPickerRowHeight,
+    );
+
+    return AlertDialog(
+      title: Text(widget.title),
+      content: SizedBox(
+        width: 300,
+        height: 300,
+        child: year == null
+            ? GridView.builder(
+                controller: _scrollController,
+                gridDelegate: gridDelegate,
+                itemCount: widget.lastDate.year - widget.firstDate.year + 1,
+                itemBuilder: (context, index) {
+                  final year = widget.firstDate.year + index;
+                  return _PickerCell(
+                    label: '$year',
+                    isSelected: year == widget.selected?.year,
+                    onPressed: () => widget.yearOnly
+                        ? Navigator.of(context).pop(DateTime(year))
+                        : setState(() => _year = year),
+                  );
+                },
+              )
+            : Column(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        tooltip: localizations.backButtonTooltip,
+                        onPressed: () => setState(() => _year = null),
+                      ),
+                      Text('$year', style: Theme.of(context).textTheme.titleMedium),
+                    ],
+                  ),
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate: gridDelegate,
+                      itemCount: DateTime.monthsPerYear,
+                      itemBuilder: (context, index) {
+                        final month = DateTime(year, index + 1);
+                        final isEnabled =
+                            !month.isBefore(widget.firstDate) && !month.isAfter(widget.lastDate);
+                        return _PickerCell(
+                          label: DateFormat.MMM().format(month),
+                          isSelected:
+                              widget.selected?.year == year &&
+                              widget.selected?.month == month.month,
+                          onPressed: isEnabled ? () => Navigator.of(context).pop(month) : null,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(localizations.cancelButtonLabel),
+        ),
+      ],
+    );
+  }
+}
+
+/// A year or month of [_MonthYearPickerDialog], filled when [isSelected] and disabled when
+/// [onPressed] is null.
+class const _PickerCell({
+  required final String label,
+  required final bool isSelected,
+  required final VoidCallback? onPressed,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: isSelected
+          ? FilledButton(onPressed: onPressed, child: Text(label))
+          : TextButton(onPressed: onPressed, child: Text(label)),
     );
   }
 }
