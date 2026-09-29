@@ -76,6 +76,25 @@ class const LearnProgress(final IMap<String, IMap<int, int>> _scores) {
     final stageScores = _scores[stage.key] ?? const IMapConst({});
     return LearnProgress(_scores.add(stage.key, stageScores.add(levelIndex, score)));
   }
+
+  /// Returns a copy where each level holds the best score of this progress and the [server]
+  /// scores, keyed by stage key and level index.
+  ///
+  /// Scores of a stage this app version does not know, or of a level beyond the stage's length,
+  /// are ignored: they cannot be shown and must not resurrect a stage.
+  LearnProgress mergedWithServer(IMap<String, IMap<int, int>> server) {
+    var merged = this;
+    for (final stageEntry in server.entries) {
+      final stage = learnStageByKey(stageEntry.key);
+      if (stage == null) continue;
+      for (final levelEntry in stageEntry.value.entries) {
+        if (levelEntry.key < stage.levels.length) {
+          merged = merged.withScore(stage, levelEntry.key, levelEntry.value);
+        }
+      }
+    }
+    return merged;
+  }
 }
 
 /// A provider for [LearnProgressStorage].
