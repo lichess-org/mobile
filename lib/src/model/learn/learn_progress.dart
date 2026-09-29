@@ -179,7 +179,9 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   @override
   Future<LearnProgress> build() async {
     final storage = await ref.watch(learnProgressStorageProvider.future);
-    return await storage.fetch();
+    final progress = await storage.fetch();
+    unawaited(_flushUnsynced(storage));
+    return progress;
   }
 
   /// Saves [score] for the level at [levelIndex] of [stage], if it improves on the saved one.
@@ -206,21 +208,46 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     unawaited(_syncReset());
   }
 
-  /// Pushes one score to the server, stamping the row when it succeeds.
+  /// Pushes a score just saved in this session.
   ///
-  /// Anonymous users have no server progress, and any failure simply leaves the row dirty.
+  /// Anonymous users have no server progress, and a failure leaves the row dirty for the next
+  /// flush.
   Future<void> _syncScore(String stageKey, int levelIndex, int score) async {
     if (ref.read(authControllerProvider) == null) return;
+    final storage = await ref.read(learnProgressStorageProvider.future);
+    await _pushScore(storage, stageKey, levelIndex, score);
+  }
+
+  /// Uploads the scores saved while offline, one row at a time.
+  ///
+  /// A row the server rejects does not stop the others, so a stage that lila no longer knows
+  /// cannot stall the flush.
+  Future<void> _flushUnsynced(LearnProgressStorage storage) async {
+    if (ref.read(authControllerProvider) == null) return;
+    for (final unsynced in await storage.fetchUnsynced()) {
+      await _pushScore(storage, unsynced.stageKey, unsynced.levelIndex, unsynced.score);
+    }
+  }
+
+  /// Posts one score and stamps the row when the server accepted it.
+  ///
+  /// Returns false on failure, leaving the row dirty for the next flush.
+  Future<bool> _pushScore(
+    LearnProgressStorage storage,
+    String stageKey,
+    int levelIndex,
+    int score,
+  ) async {
     try {
       await ref.withClient(
         (client) =>
             LearnRepository(client)
                 .saveScore(stageKey: stageKey, levelId: levelIndex + 1, score: score),
       );
-      final storage = await ref.read(learnProgressStorageProvider.future);
       await storage.markSynced(stageKey: stageKey, levelIndex: levelIndex, score: score);
+      return true;
     } catch (_) {
-      // Stays dirty (syncedAt null); a later flush uploads it.
+      return false;
     }
   }
 
