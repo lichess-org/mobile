@@ -173,6 +173,30 @@ class StockfishNnueService(final Ref _ref) {
         } else {
           final confirm = ConfirmActionEvent(
             'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
+          final context = _ref.read(currentNavigatorKeyProvider).currentContext;
+          if (context == null || !context.mounted) return false;
+          final isOk = await showAdaptiveDialog<bool>(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) {
+              return AlertDialog.adaptive(
+                content: Text(context.l10n.mobileAreYouSureDownloadNnue(nnueDownloadSizeMB)),
+                actions: [
+                  PlatformDialogAction(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                  PlatformDialogAction(
+                    child: Text(context.l10n.cancel),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                ],
+              );
+            },
           );
           // No listener means no widget tree to ask, so decline like the old null-context check.
           if (!_ref.emitUiEvent(confirm)) return false;

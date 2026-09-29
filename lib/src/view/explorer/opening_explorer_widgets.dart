@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -301,7 +302,6 @@ class _IndexingIndicatorState() extends State<IndexingIndicator> with TickerProv
       child: CircularProgressIndicator(
         strokeWidth: 1.5,
         value: controller.value,
-        // TODO: l10n
         semanticsLabel: 'Indexing',
       ),
     );

@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/log/http_log_paginator.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
@@ -62,8 +63,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              // TODO localize
-              tooltip: 'Clear all logs',
+              tooltip: context.l10n.mobileClearButton,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
@@ -82,7 +82,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: _searchController,
-              hintText: 'Search logs...',
+              hintText: context.l10n.searchSearch,
               onChanged: (value) => setState(() {
                 _searchQuery = value.isEmpty ? null : value;
               }),
@@ -122,7 +122,7 @@ class _HttpLogListState() extends ConsumerState<_HttpLogList> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('No logs to show'),
+            Text(context.l10n.nothingToSeeHere),
             TextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
           ],
         ),

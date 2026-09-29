@@ -134,10 +134,12 @@ void main() {
   });
 
   group('AuthRepository.requestEmailLoginCode', () {
-    test('posts the email as a query parameter', () async {
+    test('posts the email and username in the body', () async {
       Uri? requestedUrl;
+      Map<String, String>? requestedBody;
       final container = await emailLoginContainer((request) {
         requestedUrl = request.url;
+        requestedBody = request.bodyFields;
         return mockResponse('', 204);
       });
 
@@ -146,10 +148,8 @@ void main() {
           .requestEmailLoginCode(username: 'johndoe', email: 'johndoe@lichess.org');
 
       expect(requestedUrl?.path, '/auth/mobile-code/email');
-      expect(requestedUrl?.queryParameters, {
-        'email': 'johndoe@lichess.org',
-        'username': 'johndoe',
-      });
+      expect(requestedUrl?.hasQuery, isFalse);
+      expect(requestedBody, {'email': 'johndoe@lichess.org', 'username': 'johndoe'});
     });
 
     test('throws EmailLoginRateLimitException on 429', () async {
@@ -178,10 +178,12 @@ void main() {
   group('AuthRepository.signInWithEmailCode', () {
     test('exchanges the code for a token and returns the authenticated user', () async {
       Uri? requestedUrl;
+      Map<String, String>? requestedBody;
       final container = await emailLoginContainer((request) {
         switch (request.url.path) {
           case '/auth/mobile-code/bearer':
             requestedUrl = request.url;
+            requestedBody = request.bodyFields;
             return mockResponse('lio_token', 200);
           case '/api/account':
             return mockResponse(_accountResponse, 200);
@@ -194,7 +196,8 @@ void main() {
           .read(authRepositoryProvider)
           .signInWithEmailCode(username: 'johndoe', email: 'johndoe@lichess.org', code: 'xxxxxx');
 
-      expect(requestedUrl?.queryParameters, {
+      expect(requestedUrl?.hasQuery, isFalse);
+      expect(requestedBody, {
         'email': 'johndoe@lichess.org',
         'username': 'johndoe',
         'code': 'xxxxxx',

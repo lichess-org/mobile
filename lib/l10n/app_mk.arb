@@ -236,6 +236,7 @@
   "learnPawnsFormTheFrontLine": "Пешаците го формираат ударниот фронт.\nНаправи потег за да продолжиш.",
   "learnBoardSetupComplete": "Честитки! Сега знаеш како се поставува шаховската табла.",
   "learnCastling": "Рокада",
+  "learnEnPassant": "Ан Пасан",
   "learnTheSpecialKingMove": "Специјалниот потег на кралот",
   "learnCastlingIntro": "Заштити си го кралот и намести го топот за напад!",
   "learnCastleKingSide": "Помести го кралот две полиња за да \nнаправиш мала рокада на страната на кралот!",
@@ -446,6 +447,7 @@
   "puzzleNbToReplay": "{count, plural, =1{{count} прегледај} other{{count} прегледај}}",
   "puzzleThemeAdvantage": "Предност",
   "puzzleThemeAdvantageDescription": "Искористете ја шансата да добиете одлучувачка предност. (200cp ≤ eval ≤ 600cp)",
+  "puzzleThemeEnPassant": "Ан Пасан",
   "puzzleThemeSmotheredMate": "Задушен мат",
   "puzzleThemeSmotheredMateDescription": "Мат зададен од коњ при кој кралот не може да се движи бидејќи го опкружуваат (односно задушуваат) сопствените фигури.",
   "searchSearch": "Пребарај",
@@ -1225,6 +1227,7 @@
   "studyMistake": "Грешка",
   "studyBlunder": "Глупа грешка",
   "teamTeam": "Тим",
+  "tfaTwoFactorAuth": "Двофакторна автентикација",
   "timeagoJustNow": "тукушто",
   "timeagoRightNow": "Тукушто",
   "timeagoCompleted": "завршено",
@@ -1242,6 +1245,5 @@
   "timeagoNbMonthsAgo": "{count, plural, =1{Пред {count} месец} other{Пред {count} месеци}}",
   "timeagoNbYearsAgo": "{count, plural, =1{Пред {count} година} other{Пред {count} години}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{преостанува {count} минута} other{преостануваат {count} минути}}",
-  "timeagoNbHoursRemaining": "{count, plural, =1{преостанува {count} час} other{преостануваат {count} часови}}",
-  "tfaTwoFactorAuth": "Двофакторна автентикација"
+  "timeagoNbHoursRemaining": "{count, plural, =1{преостанува {count} час} other{преостануваат {count} часови}}"
 }

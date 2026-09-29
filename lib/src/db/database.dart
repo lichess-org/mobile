@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 7,
+      version: 8,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -95,6 +95,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createHttpLogTableV4(batch);
         _createAppLogTableV5(batch);
         _createLearnProgressTableV7(batch);
+        _createPracticeProgressTableV8(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -116,6 +117,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 7) {
           _createLearnProgressTableV7(batch);
+        }
+        if (oldVersion < 8) {
+          _createPracticeProgressTableV8(batch);
         }
         await batch.commit();
       },
@@ -256,6 +260,18 @@ void _createLearnProgressTableV7(Batch batch) {
     lastModified TEXT NOT NULL,
     syncedAt TEXT,
     PRIMARY KEY (stageKey, levelId)
+  )
+    ''');
+}
+
+void _createPracticeProgressTableV8(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS practice_progress');
+  batch.execute('''
+    CREATE TABLE practice_progress(
+    chapterId TEXT NOT NULL PRIMARY KEY,
+    nbMoves INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT
   )
     ''');
 }

@@ -163,6 +163,9 @@
   </plurals>
   <string name="moveTimes">चालीसाठी लागलेला वेळ</string>
   <string name="flipBoard">पटाला पलटा</string>
+  <string name="toggleLocalEngine">स्थानिक यंत्र बदला</string>
+  <string name="engineSettings">यंत्राची मांडणी</string>
+  <string name="illegalPosition">बेकायदेशीर स्थिती</string>
   <string name="threefoldRepetition">तीनदा पुनरावृत्ती</string>
   <string name="claimADraw">बरोबरीत सोडवण्याचा दावा करा</string>
   <string name="drawClaimed">बरोबरी स्वीकार केली आहे</string>
@@ -237,6 +240,7 @@
   <string name="signupUsernameHint">तुमचं वापरकर्तानाव छोट्या मुलांसाठी अनुकूल असलेलं पाहिजे. तुम्ही ते नंतर बदलू शकत नाही, आणि अयोग्य वापरकर्तानाव बंद होतील!</string>
   <string name="signupEmailPromise">आम्ही तुम्हाला फक्त तुमच्या खात्याबद्दल ई-मेल तुम्हाला पाठवणार व तुमचा ई-मेल कधीही प्रसारित करणार नाही.</string>
   <string name="password">परवलीचा शब्द</string>
+  <string name="showPassword">परवलीचा शब्द दाखवा</string>
   <string name="changePassword">परवलीचा शब्द बदला</string>
   <string name="changeEmail">ई-मेल बदला</string>
   <string name="email">ई-मेल</string>
@@ -422,6 +426,7 @@
   <string name="apply">लागू करा</string>
   <string name="save">जतन करा</string>
   <string name="leaderboard">आघाडीचे खेळाडू</string>
+  <string name="positionAsImage" comment="screenshotCurrentPosition&#10;&#10;Screenshot is used as a verb here.&#10;Download/share a picture of the current position.">चित्र म्हणून स्थिती</string>
   <string name="gameAsGIF">GIF म्हणून खेळ</string>
   <string name="playerNames">खेळाडूंची नावे</string>
   <string name="moveAnnotations">डावांचे भाष्ये</string>
@@ -534,6 +539,7 @@
   <string name="oneUrlPerLine">एक ओळीत एक URL.</string>
   <string name="inlineNotation">ओळीत स्वरलिपी</string>
   <string name="makeAStudy">सुरक्षित ठेवण्यासाठी आणि लोकांना पाठवण्यासाठी एक  अभ्यासिका बनवा.</string>
+  <string name="clearLocalData">स्थानिक माहिती साफ करा</string>
   <string name="previouslyOnLichessTV">यापूर्वी Lichess दूरदर्शनवर</string>
   <string name="onlinePlayers">उपलब्ध खेळाडू</string>
   <string name="activePlayers">सक्रिय बुद्धिबळपटू</string>
@@ -547,6 +553,10 @@
   <string name="autoSwitch">आपोआप बदला</string>
   <string name="puzzles">कोडी</string>
   <string name="onlineBots">ऑनलाइन सांगकामे</string>
+  <string name="aboutBotsOnLichess">Lichess वरच्या संगणकांबद्दल</string>
+  <string name="featuredBots">विशेष संगणक</string>
+  <string name="tryPlayingTheseInnovativeChessEngines">हे नाविन्यपूर्ण बुद्धिबळ यंत्र वापरून पहा! हे आमचे आवडते आहेत.</string>
+  <string name="communityBots">समुदाय संगणक</string>
   <string name="name">नाव</string>
   <string name="description">माहिती</string>
   <string name="descPrivate">खाजगी वर्णन</string>
@@ -682,9 +692,11 @@
   <string name="xIsAFreeYLibreOpenSourceChessServer">%1$s एक विनामूल्य (%2$s), नि: शुल्क, जाहिराती नसलेले, मुक्त स्रोत बुद्धिबळ सर्व्हर आहे.</string>
   <string name="really">खरंच</string>
   <string name="contribute">हातभार लावा</string>
+  <string name="changelog">बदल-नोंद</string>
   <string name="termsOfService">सेवा अटी</string>
   <string name="titleVerification">शीर्षकाचे पडताळणी</string>
   <string name="sourceCode">स्रोत आज्ञावली</string>
+  <string name="blockAds">जाहिराती अवरोधित करा</string>
   <string name="simultaneousExhibitions">अनेकांविरूद्ध प्रदर्शने</string>
   <string name="host">यजमान</string>
   <string name="hostColorX">यजमानाचा रंग: %s</string>
@@ -809,6 +821,7 @@
   <string name="deviceTheme">उपकरणानुसार</string>
   <string name="roundness">वर्तुळाकारता</string>
   <string name="backgroundImageUrl">पार्श्वभूमी चित्रासाठी URL:</string>
+  <string name="imageOpacity">चित्राची अपारदर्शकता</string>
   <string name="board">पट</string>
   <string name="size">आकार</string>
   <string name="opacity">अपारदर्शकता</string>
@@ -831,6 +844,7 @@
   <string name="custom">इतर</string>
   <string name="notifications">सूचना</string>
   <string name="notificationsX">%1$s सूचना</string>
+  <string name="perfRatingLabel">मानांकन : %s.</string>
   <string name="yourRatingIsX">तुमचे मानांकन आहे %s</string>
   <plurals name="nbSecondsToPlayTheFirstMove">
     <item quantity="one">पहिली चाल खेळण्यासाठी %s सेकंद आहेत</item>
@@ -889,6 +903,7 @@
     <item quantity="other">आणि %s पूर्वचाली संपादित करा</item>
   </plurals>
   <string name="showUnreadLichessMessage">तुम्हाला Lichess कडून एक गुप्त संदेश आला आहे.</string>
+  <string name="readTheMessage" comment="'It' refers to a private message. This text follows after a different string which advises players they have received a private message from Lichess. For users, this is appears as a regular private message from the Lichess account: https://lichess.org/@/Lichess">संदेश वाचा</string>
   <string name="sorry">माफ करा :(</string>
   <string name="weHadToTimeYouOutForAWhile">आम्हाला आपल्याला काही वेळ खेळू देता येणार नाही.</string>
   <string name="why">का?</string>
@@ -1021,4 +1036,8 @@
   <string name="tags">टॅंग्स</string>
   <string name="enPassant">उत्तीर्ण मध्येचे अधिकार</string>
   <string name="settings">प्राधान्ये</string>
+  <string name="chessOpenings">बुद्धिबळ प्रारंभ</string>
+  <string name="boards">पट</string>
+  <string name="write">लिहा</string>
+  <string name="preview">पूर्वावलोकन</string>
 </resources>
