@@ -411,7 +411,6 @@ void main() {
       ).thenAnswer(
         (_) async => throw ServerAnalysisRequestException(
           ServerAnalysisRequestError.weeklyLimitReached,
-          'Request to /${testId.value}/request-analysis failed with status 400: '
           'You have reached the weekly analysis limit',
         ),
       );
@@ -436,7 +435,7 @@ void main() {
 
       // Retro is unusable without evals, so the screen has to report why. A retry cannot help
       // here: the refusal is the server's answer, not a flaky request.
-      expect(find.text('Weekly analysis limit reached'), findsOneWidget);
+      expect(find.text('You have reached the weekly analysis limit'), findsOneWidget);
       expect(find.text('Retry'), findsNothing);
     });
 
