@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -52,18 +53,47 @@ void main() {
       );
 
       final storage = await container.read(learnProgressStorageProvider.future);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 0, score: 550);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 0, score: 300);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 1, score: 400);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 0, score: 550);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 0, score: 300);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 1, score: 400);
 
-      final progress = await storage.fetch();
+      final progress = await storage.fetch(null);
       expect(progress.stageScores(rook), [550, 400, 0, 0, 0, 0]);
 
       final rows = await db.query('learn_progress', orderBy: 'levelId');
       expect(rows.map((r) => r['levelId']), [1, 2], reason: 'level ids start at 1');
 
-      await storage.reset();
-      expect((await storage.fetch()).stageScores(rook), [0, 0, 0, 0, 0, 0]);
+      await storage.reset(null);
+      expect((await storage.fetch(null)).stageScores(rook), [0, 0, 0, 0, 0, 0]);
+    });
+
+    test('keeps each account separate', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+      const bob = UserId('bob');
+
+      await storage.saveScore(userId: alice, stageKey: 'rook', levelIndex: 0, score: 700);
+      await storage.saveScore(userId: bob, stageKey: 'rook', levelIndex: 0, score: 200);
+
+      expect((await storage.fetch(alice)).levelScore(rook, 0), 700);
+      expect((await storage.fetch(bob)).levelScore(rook, 0), 200);
+      // The anonymous bucket is its own account, not a fallback for signed-in users.
+      expect((await storage.fetch(null)).levelScore(rook, 0), 0);
+
+      // Alice's reset must not touch Bob's rows.
+      await storage.reset(alice);
+      expect((await storage.fetch(alice)).levelScore(rook, 0), 0);
+      expect((await storage.fetch(bob)).levelScore(rook, 0), 200);
     });
 
     test('the notifier updates its state', () async {
