@@ -120,7 +120,7 @@ void main() {
       expect(await storage.isResetPending(alice), isFalse);
     });
 
-    test('drops a row for a level this version cannot represent', () async {
+    test('quarantines a level the server refused, keeping the score', () async {
       final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
       final container = await makeContainer(
         overrides: {
@@ -134,16 +134,20 @@ void main() {
       final storage = await container.read(learnProgressStorageProvider.future);
       const alice = UserId('alice');
 
-      expect(isStorableLevel('rook', 0), isTrue);
-      expect(isStorableLevel('rook', rook.levels.length), isFalse);
-      expect(isStorableLevel('rook', -1), isFalse);
-      expect(isStorableLevel('not-a-stage', 0), isFalse);
-
+      // A stage lila knows but this build does not: the level was really completed, so the score
+      // has to survive the refusal to upload it.
       await storage.saveScore(userId: alice, stageKey: 'pins', levelIndex: 0, score: 500);
       expect(await storage.fetchUnsynced(alice), hasLength(1));
 
-      await storage.drop(userId: alice, stageKey: 'pins', levelIndex: 0);
+      await storage.quarantine(userId: alice, stageKey: 'pins', levelIndex: 0);
+      // Not posted again...
       expect(await storage.fetchUnsynced(alice), isEmpty);
+      // ...but the row and the score are still there. It stays in the database rather than being
+      // deleted, so a build that does know the stage can still show and upload it.
+      final rows = await db.query('learn_progress');
+      expect(rows, hasLength(1));
+      expect(rows.single['score'], 500);
+      expect(rows.single['stageKey'], 'pins');
     });
 
     test('the notifier updates its state', () async {
