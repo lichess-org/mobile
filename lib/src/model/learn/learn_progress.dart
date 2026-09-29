@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
+import 'package:lichess_mobile/src/model/learn/learn_repository.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -124,6 +129,23 @@ class const LearnProgressStorage(final Database _db) {
   Future<void> reset() async {
     await _db.delete(_tableName);
   }
+
+  /// Marks the row as synced, but only if it still holds [score].
+  ///
+  /// A newer, better score saved while the POST was in flight must stay dirty so that a later
+  /// flush uploads it.
+  Future<void> markSynced({
+    required String stageKey,
+    required int levelIndex,
+    required int score,
+  }) async {
+    await _db.update(
+      _tableName,
+      {'syncedAt': DateTime.now().toIso8601String()},
+      where: 'stageKey = ? AND levelId = ? AND score = ?',
+      whereArgs: [stageKey, levelIndex + 1, score],
+    );
+  }
 }
 
 /// The learn progress, loaded from local storage.
@@ -140,16 +162,53 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   }
 
   /// Saves [score] for the level at [levelIndex] of [stage], if it improves on the saved one.
+  ///
+  /// Improvements by logged-in users are also pushed to the server in the background. The local
+  /// save is the source of truth: sync failures leave the row dirty for a later flush and never
+  /// affect level completion.
   Future<void> saveScore(LearnStage stage, int levelIndex, int score) async {
     final current = await future;
-    state = AsyncData(current.withScore(stage, levelIndex, score));
+    final next = current.withScore(stage, levelIndex, score);
+    // Not an improvement: nothing to save, and never POST, since the server keeps whatever it
+    // receives and would overwrite a better score with this one.
+    if (identical(next, current)) return;
+    state = AsyncData(next);
     final storage = await ref.read(learnProgressStorageProvider.future);
     await storage.saveScore(stageKey: stage.key, levelIndex: levelIndex, score: score);
+    unawaited(_syncScore(stage.key, levelIndex, score));
   }
 
   Future<void> reset() async {
     final storage = await ref.read(learnProgressStorageProvider.future);
     await storage.reset();
     state = const AsyncData(LearnProgress.empty);
+    unawaited(_syncReset());
+  }
+
+  /// Pushes one score to the server, stamping the row when it succeeds.
+  ///
+  /// Anonymous users have no server progress, and any failure simply leaves the row dirty.
+  Future<void> _syncScore(String stageKey, int levelIndex, int score) async {
+    if (ref.read(authControllerProvider) == null) return;
+    try {
+      await ref.withClient(
+        (client) =>
+            LearnRepository(client)
+                .saveScore(stageKey: stageKey, levelId: levelIndex + 1, score: score),
+      );
+      final storage = await ref.read(learnProgressStorageProvider.future);
+      await storage.markSynced(stageKey: stageKey, levelIndex: levelIndex, score: score);
+    } catch (_) {
+      // Stays dirty (syncedAt null); a later flush uploads it.
+    }
+  }
+
+  Future<void> _syncReset() async {
+    if (ref.read(authControllerProvider) == null) return;
+    try {
+      await ref.withClient((client) => LearnRepository(client).reset());
+    } catch (_) {
+      // Local progress is already reset; the server copy converges on the next score upload.
+    }
   }
 }
