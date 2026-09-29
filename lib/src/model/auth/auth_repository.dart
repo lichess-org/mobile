@@ -94,9 +94,6 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
   /// Throws an [EmailLoginRateLimitException] if the request is rate-limited.
   Future<void> requestEmailLoginCode({required String username, required String email}) async {
     final url = lichessUri('/auth/mobile-code/email');
-    // Like the code exchange below, the account identifiers go in the body: query params end up
-    // verbatim in proxy access logs and in the app's own http_log table. Requires the server to
-    // read the form body (with query fallback for older app versions).
     // The default client is used on purpose: this endpoint is unauthenticated, and its 429 responses
     // are deliberate rate limiting that must not be retried like [lichessClientProvider] does.
     final response = await _ref
@@ -127,9 +124,6 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
     required String code,
   }) async {
     final url = lichessUri('/auth/mobile-code/bearer');
-    // The credentials go in the body, never the query string: query params end up verbatim in
-    // proxy access logs and in the app's own http_log table. Requires the server to read the
-    // form body (with query fallback for older app versions).
     final response = await _ref
         .read(defaultClientProvider)
         .post(url, body: {'email': email, 'username': username, 'code': code});
