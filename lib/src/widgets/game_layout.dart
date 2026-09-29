@@ -449,7 +449,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
         );
 
         if (orientation == Orientation.landscape) {
-          final boardSize = boardSizeConstraints(constraints);
+          final boardSize = landscapeBoardSizeConstraints(constraints);
 
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
