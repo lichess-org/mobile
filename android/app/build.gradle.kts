@@ -1,4 +1,4 @@
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
+import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import java.util.Properties
 import java.io.FileInputStream
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -104,13 +104,15 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
+project.ext.set("force-version-code-ignoring-abi", "true")
 val abiCodes = mapOf("x86_64" to 1, "armeabi-v7a" to 2, "arm64-v8a" to 3)
-android.applicationVariants.configureEach {
-    outputs.forEach { output ->
-        val abi = output.filters.find { it.filterType == "ABI" }?.identifier
-        val baseVersionCode = abiCodes[abi]
-        if (baseVersionCode != null) {
-            (output as ApkVariantOutputImpl).versionCodeOverride = versionCode * 100 + baseVersionCode
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            val abi = output.filters.find { it.filterType == ABI }?.identifier
+            abiCodes[abi]?.let { abiCode ->
+                output.versionCode.set(output.versionCode.get() * 100 + abiCode)
+            }
         }
     }
 }
