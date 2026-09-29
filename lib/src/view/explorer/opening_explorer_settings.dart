@@ -230,10 +230,6 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
 }
 
 /// Since and until inputs bounding the date range of the explorer games.
-///
-/// Each input opens a picker of months, or of years when [yearOnly] is true. The pickers are bounded
-/// by [earliest], the current date and the other input, so the range is always valid. Clearing an
-/// input removes that bound.
 class const _DateRangeInputs({
   required final DateTime? since,
   required final DateTime? until,
@@ -266,11 +262,6 @@ class const _DateRangeInputs({
     if (date != null) onChanged(since, date);
   }
 
-  /// Shows a picker of the months (or years) between [first] and [last], [last] defaulting to the
-  /// current one.
-  ///
-  /// The picker starts at [selected] if set, or else at the last month (or year). Returns the first
-  /// day of the picked month (or year) in UTC, or null if the picker was dismissed.
   Future<DateTime?> _pickDate(
     BuildContext context, {
     required String title,
@@ -278,8 +269,6 @@ class const _DateRangeInputs({
     required DateTime first,
     DateTime? last,
   }) async {
-    // The pickers work with local dates, bounded by the first day of the first month (or year) and
-    // the last day of the last one, but never after today.
     final today = DateUtils.dateOnly(DateTime.now());
     final firstDate = DateTime(first.year, yearOnly ? 1 : first.month);
     final lastDayOfLast = last != null
@@ -438,9 +427,6 @@ const _kPickerColumns = 3;
 const _kPickerRowHeight = 52.0;
 
 /// A Material dialog picking a year, then a month of that year unless [yearOnly] is true.
-///
-/// Unlike [showDatePicker], only the [selected] date is highlighted, and no day has to be picked.
-/// Returns the first day of the picked month (or year), or null if the dialog was dismissed.
 class const _MonthYearPickerDialog({
   required final String title,
   required final DateTime? selected,
@@ -453,7 +439,6 @@ class const _MonthYearPickerDialog({
 }
 
 class _MonthYearPickerDialogState() extends State<_MonthYearPickerDialog> {
-  /// The year whose months are shown, or null while the years are shown.
   int? _year;
 
   // Scrolls the years so that the selected one, or else the last one, is visible.
