@@ -49,8 +49,6 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
         return Scaffold(
           appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
           body: switch (error) {
-            // The game loaded; the server just declined to analyse it. Retrying would not change
-            // that answer, so show why instead.
             final ServerAnalysisRequestException refusal => Center(
               child: Padding(
                 padding: const EdgeInsets.all(16),

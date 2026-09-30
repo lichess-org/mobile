@@ -140,10 +140,7 @@ class RetroController(final RetroOptions options)
 
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
         requestServerAnalysis().catchError((Object e, StackTrace st) {
-          // Retro needs evals, so report the failure. A refusal shows its reason; only a load
-          // error gets the retry screen.
           _logger.warning('Failed to request server analysis', e, st);
-          // The error is already reported, so the timeout has nothing left to add.
           _serverAnalysisTimeout?.cancel();
           state = AsyncError(e, st);
         });

@@ -33,11 +33,8 @@ sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
 
 /// Raised when the server refused to start an analysis, carrying the reason.
-///
-/// Distinct from a load failure: the view shows the reason instead of a retry screen.
 class ServerAnalysisRequestException(
-  /// The reason the server refused, as classified by
-  /// [ServerAnalysisService.classifyRequestAnalysisError].
+  /// The reason the server refused.
   final ServerAnalysisRequestError error,
 
   /// The server's refusal text, shown to the user.
@@ -48,15 +45,8 @@ class ServerAnalysisRequestException(
 }
 
 /// Why the server refused to start an analysis for a game.
-///
-/// [Analyse.requestAnalysis] answers 400 with the analyser's error string as a plain-text body, so
-/// the status alone cannot tell a refusal we can live with from one that leaves nothing running.
-///
-/// [isBenign] marks the single case where evals for *this* game are still expected on the socket.
-/// Every other value means the server queued nothing for this game, so listening would burn
-/// [kMaxWaitForServerAnalysis] and then time out having reported nothing.
-enum ServerAnalysisRequestError({final bool isBenign = false}) {
-  alreadyAnalysed(isBenign: true),
+enum ServerAnalysisRequestError() {
+  alreadyAnalysed,
   concurrentAnalysis,
   weeklyLimitReached,
   dailyLimitReached,
@@ -65,7 +55,7 @@ enum ServerAnalysisRequestError({final bool isBenign = false}) {
   unknown,
 }
 
-/// The exact error strings [lila.fishnet.Analyser.Result] sends, keyed by the resulting error.
+/// The exact error strings `lila.fishnet.Analyser.Result` sends, keyed by the resulting error.
 const _kServerAnalysisRequestErrors = {
   'This game is already analysed': ServerAnalysisRequestError.alreadyAnalysed,
   'You already have an ongoing requested analysis': ServerAnalysisRequestError.concurrentAnalysis,
@@ -101,8 +91,8 @@ class ServerAnalysisService(final Ref ref) {
 
   /// Request server analysis for a game.
   ///
-  /// This will return a future that completes when the server analysis is
-  /// launched (but not when it is finished).
+  /// This will return a future that completes when the server analysis is launched (but not when
+  /// it is finished).
   Future<void> requestAnalysis(ServerAnalysisSource source, [Side? side]) async {
     // If we are already listening for analysis updates of this exact game/study,
     // don't tear everything down and reconnect.
@@ -157,24 +147,23 @@ class ServerAnalysisService(final Ref ref) {
           await ref.read(gameRepositoryProvider).requestServerAnalysis(gameId);
           _currentAnalysis.value = source;
         } on ServerException catch (e, st) {
-          // A 400 does not by itself mean the analysis is under way: several distinct refusals
-          // share that status. Classify the body, and only keep listening when evals for *this*
-          // game are still expected.
-          final error = classifyRequestAnalysisError(e);
-          if (error.isBenign) {
-            // Already analysed: the evals exist, so keep reading them off the socket.
-            _logger.info('Game $gameId is already analysed, reading it from the socket');
-            _currentAnalysis.value = source;
-          } else if (e.statusCode == 400) {
-            // A refusal the server explained: the user hit a limit, or their queue is busy.
-            // Wrap it so the view can report the reason instead of a bare failure.
-            _logger.warning('Server refused to analyse game $gameId: $error', e, st);
-            _cancelAnalysis();
-            throw ServerAnalysisRequestException(error, requestAnalysisRefusalMessage(e));
-          } else {
-            _logger.severe('ServerException requesting server analysis', e, st);
-            _cancelAnalysis();
-            rethrow;
+          final error = _classifyRequestAnalysisError(e);
+          switch (error) {
+            case ServerAnalysisRequestError.alreadyAnalysed:
+              _logger.fine('Game $gameId is already analysed, reading it from the socket');
+              _currentAnalysis.value = source;
+            case ServerAnalysisRequestError.concurrentAnalysis:
+            case ServerAnalysisRequestError.weeklyLimitReached:
+            case ServerAnalysisRequestError.dailyLimitReached:
+            case ServerAnalysisRequestError.dailyIpLimitReached:
+            case ServerAnalysisRequestError.notAnalysable:
+              _logger.warning('Server refused to analyse game $gameId: $error', e, st);
+              _cancelAnalysis();
+              throw ServerAnalysisRequestException(error, e.message);
+            case ServerAnalysisRequestError.unknown:
+              _logger.severe('ServerException requesting server analysis', e, st);
+              _cancelAnalysis();
+              rethrow;
           }
         } catch (e, st) {
           _logger.severe('Error requesting server analysis', e, st);
@@ -202,30 +191,16 @@ class ServerAnalysisService(final Ref ref) {
 
   /// Work out why the server refused to start an analysis, from the plain-text body it sends
   /// alongside the 400.
-  static ServerAnalysisRequestError classifyRequestAnalysisError(ServerException e) {
+  static ServerAnalysisRequestError _classifyRequestAnalysisError(ServerException e) {
     if (e.statusCode != 400) {
       return ServerAnalysisRequestError.unknown;
     }
-    // The body is appended to the message by the http client, so match on the tail. That is what
-    // keeps the two daily limits apart: the account one is a prefix of the IP one, so `contains`
-    // would report every IP-limited request as a plain daily limit.
     for (final MapEntry(key: body, value: error) in _kServerAnalysisRequestErrors.entries) {
       if (e.message.endsWith(body)) {
         return error;
       }
     }
     return ServerAnalysisRequestError.unknown;
-  }
-
-  /// The server's refusal text to show the user: the plain-text body it sends alongside the
-  /// 400, falling back to the full failure for bodies this list does not cover.
-  static String requestAnalysisRefusalMessage(ServerException e) {
-    for (final MapEntry(key: body, value: _) in _kServerAnalysisRequestErrors.entries) {
-      if (e.message.endsWith(body)) {
-        return body;
-      }
-    }
-    return e.message;
   }
 
   /// Cancel the ongoing server analysis, if any.

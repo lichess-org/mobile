@@ -1,144 +1,97 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
-const _gameId = GameId('H9fIRZUk');
+import '../../test_container.dart';
 
-/// The URL [GameRepository.requestServerAnalysis] posts to.
-final _requestUri = Uri(path: '/$_gameId/request-analysis');
+const _source = ServerAnalysisSource.game(gameId: GameId('H9fIRZUk'));
 
-/// A 400 exactly as the server sends it. [Analyse.requestAnalysis] forwards the analyser's error
-/// string verbatim, so the body is plain text rather than JSON.
-ServerException _badRequest(String body) => ServerException(
-  400,
-  'Request to $_requestUri failed with status 400: $body',
-  _requestUri,
-  null,
-);
+/// A [ServerAnalysisService] whose analysis request is answered with [statusCode] and [body].
+///
+/// [Analyse.requestAnalysis] forwards the analyser's error string verbatim, so a refusal body is
+/// plain text rather than JSON.
+Future<ServerAnalysisService> _makeService(int statusCode, String body) async {
+  final container = await lichessClientContainer(
+    MockClient((request) async {
+      if (request.url.path == '/H9fIRZUk/request-analysis') {
+        return http.Response(body, statusCode);
+      }
+      return http.Response('', 404);
+    }),
+  );
+  final ServerAnalysisService service = container.read(serverAnalysisServiceProvider);
+  return service;
+}
 
 void main() {
-  group('ServerAnalysisService.classifyRequestAnalysisError', () {
-    test('an already analysed game still has evals coming', () {
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('This game is already analysed'),
-        ),
-        ServerAnalysisRequestError.alreadyAnalysed,
-      );
+  group('ServerAnalysisService.requestAnalysis', () {
+    test('starts listening when the server accepts the request', () async {
+      final service = await _makeService(200, '');
+
+      await service.requestAnalysis(_source);
+
+      expect(service.currentAnalysis.value, _source);
     });
 
-    test('an ongoing request for another game means nothing will arrive here', () {
-      // FishnetLimiter.concurrentCheck only looks at sender.ip / sender.userId, never the game id:
-      //   analysisColl.exists(or(bdoc("sender.ip" -> ip), bdoc("sender.userId" -> userId))).not
-      // So this refusal may be about a *different* game, or another user behind the same NAT. The
-      // socket for this game would then never emit, so listening would burn a full minute and
-      // report nothing. It must not be treated as benign.
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('You already have an ongoing requested analysis'),
-        ),
+    test('keeps listening when the game is already analysed', () async {
+      final service = await _makeService(400, 'This game is already analysed');
+
+      await service.requestAnalysis(_source);
+
+      expect(service.currentAnalysis.value, _source);
+    });
+
+    // The account daily limit message is a prefix of the IP one, so both are needed to check that
+    // they are told apart.
+    for (final (body, error) in const [
+      (
+        'You already have an ongoing requested analysis',
         ServerAnalysisRequestError.concurrentAnalysis,
-      );
-    });
-
-    test('the weekly limit means nothing is running', () {
-      // Treating this as "already requested" is the bug: the socket would be listened to for
-      // a minute and then time out, with no evals ever arriving.
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('You have reached the weekly analysis limit'),
-        ),
-        ServerAnalysisRequestError.weeklyLimitReached,
-      );
-    });
-
-    test('the daily limit means nothing is running', () {
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('You have reached the daily analysis limit'),
-        ),
-        ServerAnalysisRequestError.dailyLimitReached,
-      );
-    });
-
-    test('the daily IP limit is distinct from the account daily limit', () {
-      // The account message is a prefix of the IP one, so a naive `contains` scan in declaration
-      // order would report every IP-limited request as a plain daily limit.
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('You have reached the daily analysis limit on this IP'),
-        ),
+      ),
+      ('You have reached the weekly analysis limit', ServerAnalysisRequestError.weeklyLimitReached),
+      ('You have reached the daily analysis limit', ServerAnalysisRequestError.dailyLimitReached),
+      (
+        'You have reached the daily analysis limit on this IP',
         ServerAnalysisRequestError.dailyIpLimitReached,
-      );
-    });
+      ),
+      ('This game is not analysable', ServerAnalysisRequestError.notAnalysable),
+    ]) {
+      test('stops and reports ${error.name} when the server answers "$body"', () async {
+        final service = await _makeService(400, body);
 
-    test('a game that cannot be analysed reports why', () {
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(
-          _badRequest('This game is not analysable'),
-        ),
-        ServerAnalysisRequestError.notAnalysable,
-      );
-    });
-
-    test('an unrecognised 400 is reported rather than assumed harmless', () {
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(_badRequest('Something new')),
-        ServerAnalysisRequestError.unknown,
-      );
-    });
-
-    test('a 400 with an empty body is unknown', () {
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(_badRequest('')),
-        ServerAnalysisRequestError.unknown,
-      );
-    });
-
-    test('a non-400 is not one of these analysis errors', () {
-      final e = ServerException(
-        500,
-        'Request to $_requestUri failed with status 500: This game is already analysed',
-        _requestUri,
-        null,
-      );
-      expect(
-        ServerAnalysisService.classifyRequestAnalysisError(e),
-        ServerAnalysisRequestError.unknown,
-      );
-    });
-
-    test('only alreadyAnalysed may be treated as success', () {
-      // The whole point of the enum: a request that the server did not accept for *this* game
-      // must stop the analysis instead of waiting for evals that will never come.
-      for (final error in ServerAnalysisRequestError.values) {
-        expect(
-          error.isBenign,
-          error == ServerAnalysisRequestError.alreadyAnalysed,
-          reason: '$error',
+        await expectLater(
+          service.requestAnalysis(_source),
+          throwsA(
+            isA<ServerAnalysisRequestException>()
+                .having((e) => e.error, 'error', error)
+                .having((e) => e.message, 'message', endsWith(body)),
+          ),
         );
-      }
-    });
-  });
+        expect(service.currentAnalysis.value, isNull);
+      });
+    }
 
-  group('ServerAnalysisService.requestAnalysisRefusalMessage', () {
-    test('returns the server body verbatim for a known refusal', () {
-      expect(
-        ServerAnalysisService.requestAnalysisRefusalMessage(
-          _badRequest('You have reached the weekly analysis limit'),
-        ),
-        'You have reached the weekly analysis limit',
-      );
-    });
+    for (final (description, statusCode, body) in const [
+      ('an unrecognised 400', 400, 'Something new'),
+      ('a 400 with an empty body', 400, ''),
+      ('a non-400', 500, 'Something went wrong'),
+    ]) {
+      test('stops and rethrows the ServerException on $description', () async {
+        final service = await _makeService(statusCode, body);
 
-    test('falls back to the full failure for an unrecognised body', () {
-      final e = _badRequest('Something new');
-      expect(ServerAnalysisService.requestAnalysisRefusalMessage(e), e.message);
-    });
+        await expectLater(
+          service.requestAnalysis(_source),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', statusCode)),
+        );
+        expect(service.currentAnalysis.value, isNull);
+      });
+    }
   });
 
   group('ServerAnalysisService.mergeOngoingAnalysis', () {
