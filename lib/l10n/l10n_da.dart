@@ -2383,7 +2383,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Bekræft træk';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Flere valg. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan deaktiveres i løbet af et parti med brætmenuen';
@@ -2530,7 +2530,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
 
   @override
-  String get preferencesNetwork => 'Network';
+  String get preferencesNetwork => 'Netværk';
 
   @override
   String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
@@ -5448,6 +5448,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get security => 'Sikkerhed';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Dette er en liste over enheder og applikationer, der er logget ind på din konto. Hvis du bemærker mistænkelig aktivitet, skal du sørge for at <a href=\'$param1\'>tjekke din e-mailadresse til gendannelse</a> and <a href=\'$param2\'>ændre din adgangskode</a>.';
+  }
+
+  @override
   String get sessions => 'Sessioner';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get noChallenges => 'Ingen udfordringer.';
+
+  @override
+  String get browserNotificationsDenied => 'Notifikationspop-vinduer deaktiveret af browserindstilling';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preview => 'Forhåndsvisning';
+
+  @override
+  String get done => 'Færdig';
 
   @override
   String opponentLeftCounter(int count) {

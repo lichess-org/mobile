@@ -1400,7 +1400,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get coordinatesGoAsLongAsYouWant => 'Speel zolang als je wilt, er is geen tijdslimiet!';
 
   @override
-  String get coordinatesShowCoordinates => 'Coördinaten tonen';
+  String get coordinatesShowCoordinates => 'Coördinaten weergeven';
 
   @override
   String get coordinatesShowCoordsOnAllSquares => 'Coördinaten op elk veld';
@@ -4199,7 +4199,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get exportGames => 'Partijen exporteren';
 
   @override
-  String get ratingFilter => 'Filter van rating';
+  String get ratingFilter => 'Ratingfilter';
 
   @override
   String get thisAccountViolatedTos => 'Dit account heeft de Lichess Servicevoorwaarden geschonden';
@@ -5448,6 +5448,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get security => 'Beveiliging';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Sessies';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get noChallenges => 'Geen uitdagingen.';
+
+  @override
+  String get browserNotificationsDenied => 'Meldingsvenster uitgeschakeld door browserinstelling';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preview => 'Voorvertoning';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

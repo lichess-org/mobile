@@ -5448,6 +5448,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get security => 'Sécurité';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Voici la liste des appareils et des applications connectés à votre compte. Si vous remarquez une activité suspecte, assurez-vous de <a href=\'$param1\'>vérifier votre adresse courriel de récupération</a> et <a href=\'$param2\'>de changer votre mot de passe</a>.';
+  }
+
+  @override
   String get sessions => 'Sessions';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get noChallenges => 'Pas de défis.';
+
+  @override
+  String get browserNotificationsDenied => 'Notifications désactivées dans les paramètres du navigateur';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get preview => 'Aperçu';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

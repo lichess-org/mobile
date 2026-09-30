@@ -5448,6 +5448,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get security => 'Segurança';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Sessões';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get noChallenges => 'Sem desafios.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {
@@ -9786,6 +9797,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get perfStatNow => 'agora';
 
   @override
+  String get practiceMakesPerfect => 'leva seu xadrez à perfeição';
+
+  @override
   String get practiceSignUpToSaveYourProgress => 'Cadastre-se para salvar seu progresso';
 
   @override
@@ -9804,6 +9818,45 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get practiceSecHeadRookEndgames => 'Finais de Torres';
 
   @override
+  String get practiceStNamPieceCheckmatesI => 'Xeque-mates com peças I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Padrões de xeque-mate I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Padrões de xeque-mate II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Padrões de xeque-mate III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Padrões de xeque-mate IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Xeque-mates com peças II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Mate de Cavalo & Bispo';
+
+  @override
+  String get practiceStNamThePin => 'A Cravada';
+
+  @override
+  String get practiceStNamTheSkewer => 'O Espeto';
+
+  @override
+  String get practiceStNamTheFork => 'O Garfo';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Ataques Descobertos';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Xeque Duplo';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Peças Sobrecarregadas';
+
+  @override
   String get practiceStNamZwischenzug => 'Zwischenzug';
 
   @override
@@ -9819,13 +9872,40 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get practiceStNamGreekGift => 'Presente Grego';
 
   @override
+  String get practiceStNamDeflection => 'Desvio';
+
+  @override
   String get practiceStNamAttraction => 'Atração';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Subpromoção';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Contraxeque';
+
+  @override
+  String get practiceStNamUndermining => 'Eliminação do Defensor';
+
+  @override
+  String get practiceStNamClearance => 'Sacrifício de Desobstrução';
+
+  @override
+  String get practiceStNamKeySquares => 'Casas-chave';
 
   @override
   String get practiceStNamOpposition => 'Oposição';
 
   @override
+  String get practiceStNam7thRankRookPawn => 'Peão da Torre na 7ª Fileira';
+
+  @override
   String get practiceStNamBasicRookEndgames => 'Finais Básicos de Torre';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Finais de Torre Intermediários';
 
   @override
   String get practiceStNamPracticalRookEndings => 'Finais Práticos de Torre';
@@ -9841,6 +9921,81 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get practiceStDesInteractiveLesson => 'Lição interativa';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Cravou, ganhou';
+
+  @override
+  String get practiceStDesYumSkewers => 'Hum... espetinhos!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Que o garfo esteja com você';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Incluindo xeques descobertos';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'Uma tática muito poderosa';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'Elas têm trabalho demais';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'Lances intermediários';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Atacando através de uma peça adversária';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Sendo forçado a mover';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interponha uma peça de forma decisiva';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Estude o sacrifício do presente grego';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distraindo um defensor';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Atraia uma peça para uma casa ruim';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promova, mas não para dama!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Uma peça está perdida, mas ainda pode ajudar';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Responda ao xeque com um xeque';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remova a peça defensora';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Saia do caminho!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Alcance uma casa-chave';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Tome a oposição';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Contra uma Dama';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'E Torre Passiva vs Torre';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena e Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Amplie seus conhecimentos';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Finais de torre com vários peões';
 
   @override
   String get preferencesPreferences => 'Preferências';
@@ -13031,6 +13186,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get security => 'Segurança';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Esta é uma lista de dispositivos e aplicativos conectados à sua conta. Se você notar alguma atividade suspeita, não deixe de <a href=\'$param1\'>conferir seu endereço de e-mail de recuperação</a> e <a href=\'$param2\'>alterar sua senha</a>.';
+  }
+
+  @override
   String get sessions => 'Sessões';
 
   @override
@@ -13047,6 +13207,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get noChallenges => 'Sem desafios.';
+
+  @override
+  String get browserNotificationsDenied => 'Pop-ups de notificação desativados pelas configurações do navegador';
 
   @override
   String xHostsY(String param1, String param2) {

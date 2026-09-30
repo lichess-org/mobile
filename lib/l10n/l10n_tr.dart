@@ -2080,7 +2080,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceSecHeadRookEndgames => 'Kale Oyun Sonları';
 
   @override
-  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+  String get practiceStNamPieceCheckmatesI => 'Taş Şah Matları I';
 
   @override
   String get practiceStNamCheckmatePatternsI => 'Şah Mat Desenleri I';
@@ -2095,13 +2095,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStNamCheckmatePatternsIV => 'Şah Mat Desenleri IV';
 
   @override
-  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+  String get practiceStNamPieceCheckmatesII => 'Taş Şah Matları II';
 
   @override
   String get practiceStNamKnightAndBishopMate => 'At & Fil Matı';
 
   @override
-  String get practiceStNamThePin => 'The Pin';
+  String get practiceStNamThePin => 'Açmaz';
 
   @override
   String get practiceStNamTheSkewer => 'Şiş';
@@ -2140,25 +2140,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStNamAttraction => 'Cezbetme';
 
   @override
-  String get practiceStNamUnderpromotion => 'Düşük terfi';
+  String get practiceStNamUnderpromotion => 'Düşük Terfi';
 
   @override
   String get practiceStNamDesperado => 'Desperado';
 
   @override
-  String get practiceStNamCounterCheck => 'Counter Check';
+  String get practiceStNamCounterCheck => 'Karşı Şah';
 
   @override
-  String get practiceStNamUndermining => 'Undermining';
+  String get practiceStNamUndermining => 'Altını Oyma';
 
   @override
-  String get practiceStNamClearance => 'Clearance';
+  String get practiceStNamClearance => 'Boşaltma';
 
   @override
   String get practiceStNamKeySquares => 'Anahtar Kareler';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => 'Opozisyon';
 
   @override
   String get practiceStNam7thRankRookPawn => '7. Sıra Kale Piyonu';
@@ -2185,79 +2185,79 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStDesInteractiveLesson => 'Etkileşimli ders';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+  String get practiceStDesPinItToWinIt => 'Kazanmak için açmaza alın';
 
   @override
-  String get practiceStDesYumSkewers => 'Nefis - şişler!';
+  String get practiceStDesYumSkewers => 'Nefis şişler!';
 
   @override
   String get practiceStDesUseTheForkLuke => 'Çatalı kullan Luke';
 
   @override
-  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+  String get practiceStDesIncludingDiscoveredChecks => 'Açarak şahlar dahil';
 
   @override
   String get practiceStDesAVeryPowerfulTactic => 'Çok güçlü bir taktik';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => 'Çok fazla işleri var';
 
   @override
-  String get practiceStDesInBetweenMoves => 'In-between moves';
+  String get practiceStDesInBetweenMoves => 'Ara hamleler';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Rakip taşın üzerinden saldırmak';
 
   @override
   String get practiceStDesBeingForcedToMove => 'Hareket etmeye zorlanmak';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Çok etkili bir şekilde araya taş sokmak';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Yunan hediyesi fedasını çalışın';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => 'Savunmacının dikkatini dağıtmak';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => 'Bir taşı kötü bir kareye çekin';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => 'Terfi ettirin ama vezire değil!';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Taş kaybedildi, ama hala yardım edebilir';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => 'Şaha, şahla karşılık verin';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => 'Savunma yapan taşı ortadan kaldır';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => 'Çekilin yoldan!';
 
   @override
-  String get practiceStDesReachAKeySquare => 'Reach a key square';
+  String get practiceStDesReachAKeySquare => 'Anahtar kareye ulaşın';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => 'Opozisyonu alın';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => 'Bir vezire karşı';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => 'Ve Pasif Kale vs Kale';
 
   @override
-  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+  String get practiceStDesLucenaAndPhilidor => 'Lucena ve Philidor';
 
   @override
-  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+  String get practiceStDesBroadenYourKnowledge => 'Bilginizi genişletin';
 
   @override
-  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Birkaç piyonla kale sonları';
 
   @override
   String get preferencesPreferences => 'Tercihler';
@@ -5448,6 +5448,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get security => 'Güvenlik';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Hesabınıza giriş yapmış cihaz ve uygulamaların listesidir. Eğer şüpheli bir hareket fark ederseniz <a href=\'$param1\'>kurtarma e-postanızı kontrol edin</a> ve <a href=\'$param2\'>şifrenizi değiştirin</a>.';
+  }
+
+  @override
   String get sessions => 'Oturumlar';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noChallenges => 'Meydan okuma yok.';
+
+  @override
+  String get browserNotificationsDenied => 'Bildirim açılır pencereleri, tarayıcı tarafından devre dışı bırakıldı';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preview => 'Önizleme';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {
