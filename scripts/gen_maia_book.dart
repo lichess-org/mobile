@@ -240,21 +240,17 @@ Future<_Crawl> _crawl(
   return _Crawl(entries: entries, positionsPerPly: positionsPerPly);
 }
 
-class _Node {
-  const _Node(this.position, this.share);
-
-  final Position position;
+class const _Node(
+  final Position position,
 
   /// Fraction of the games played at the initial position that reached here.
-  final double share;
-}
+  final double share,
+);
 
-class _Crawl {
-  const _Crawl({required this.entries, required this.positionsPerPly});
-
-  final List<_Entry> entries;
-  final List<int> positionsPerPly;
-
+class const _Crawl({
+  required final List<_Entry> entries,
+  required final List<int> positionsPerPly,
+}) {
   int get positions => positionsPerPly.fold(0, (sum, count) => sum + count);
 }
 
@@ -262,13 +258,7 @@ class _Crawl {
 // Polyglot
 // ---------------------------------------------------------------------------------------------
 
-class _Entry {
-  const _Entry({required this.key, required this.move, required this.weight});
-
-  final int key;
-  final int move;
-  final int weight;
-}
+class const _Entry({required final int key, required final int move, required final int weight});
 
 /// Serializes [entries] as a Polyglot book: 16 bytes each, sorted by key.
 Uint8List _makePolyglot(List<_Entry> entries) {
@@ -322,19 +312,12 @@ int _polyglotMove(Position position, String uci) {
 // ---------------------------------------------------------------------------------------------
 
 /// The Lichess opening explorer, rate limited and cached on disk.
-class _Explorer {
-  _Explorer({
-    required this.token,
-    required this.cacheDir,
-    required this.speeds,
-    required this.minInterval,
-  });
-
-  final String token;
-  final Directory cacheDir;
-  final List<String> speeds;
-  final Duration minInterval;
-
+class _Explorer({
+  required final String token,
+  required final Directory cacheDir,
+  required final List<String> speeds,
+  required final Duration minInterval,
+}) {
   final _client = HttpClient();
   DateTime _lastRequest = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -439,22 +422,32 @@ String _percent(double value, [int decimals = 1]) => '${(value * 100).toStringAs
 // Options
 // ---------------------------------------------------------------------------------------------
 
-class _Options {
-  const _Options({
-    required this.dryRun,
-    required this.out,
-    required this.cacheDir,
-    required this.ratings,
-    required this.speeds,
-    required this.shareThreshold,
-    required this.maxPly,
-    required this.dryRunMaxPly,
-    required this.moveCutoff,
-    required this.maxMoves,
-    required this.rps,
-  });
+class const _Options({
+  required final bool dryRun,
+  required final String out,
+  required final String cacheDir,
 
-  factory _Options.parse(List<String> args) {
+  /// Explorer rating buckets, aggregated by the explorer in one response.
+  required final List<int> ratings,
+  required final List<String> speeds,
+
+  /// Least share of the games played at the initial position a position must hold to be expanded.
+  required final double shareThreshold,
+
+  /// Hard cap on the depth of the book, in half-moves, so it stays an opening book.
+  required final int maxPly,
+
+  /// Depth the `--dry-run` probe walks before extrapolating.
+  required final int dryRunMaxPly,
+
+  /// Least share of the games played in a position a move must hold to be kept.
+  required final double moveCutoff,
+  required final int maxMoves,
+
+  /// Explorer requests per second. The explorer starts returning 429 above ~1/s.
+  required final double rps,
+}) {
+  factory parse(List<String> args) {
     final values = <String, String>{};
     var dryRun = false;
     for (final arg in args) {
@@ -483,30 +476,6 @@ class _Options {
       rps: double.parse(values['rps'] ?? '1'),
     );
   }
-
-  final bool dryRun;
-  final String out;
-  final String cacheDir;
-
-  /// Explorer rating buckets, aggregated by the explorer in one response.
-  final List<int> ratings;
-  final List<String> speeds;
-
-  /// Least share of the games played at the initial position a position must hold to be expanded.
-  final double shareThreshold;
-
-  /// Hard cap on the depth of the book, in half-moves, so it stays an opening book.
-  final int maxPly;
-
-  /// Depth the `--dry-run` probe walks before extrapolating.
-  final int dryRunMaxPly;
-
-  /// Least share of the games played in a position a move must hold to be kept.
-  final double moveCutoff;
-  final int maxMoves;
-
-  /// Explorer requests per second. The explorer starts returning 429 above ~1/s.
-  final double rps;
 
   _Options copyWith({int? maxPly}) => _Options(
     dryRun: dryRun,

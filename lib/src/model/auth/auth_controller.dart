@@ -9,7 +9,10 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 
 export 'auth_user.dart';
 
-enum AuthEvent { signIn, signOut }
+enum AuthEvent() {
+  signIn,
+  signOut,
+}
 
 final _authEventsController = StreamController<AuthEvent>.broadcast();
 
@@ -35,7 +38,7 @@ final emailLoginCodeRequestMutation = Mutation<void>();
 /// Mutation for exchanging the login code for a session.
 final emailLoginCodeSignInMutation = Mutation<void>();
 
-class AuthController extends Notifier<AuthUser?> {
+class AuthController() extends Notifier<AuthUser?> {
   @override
   AuthUser? build() {
     return ref.read(preloadedDataProvider).requireValue.authUser;

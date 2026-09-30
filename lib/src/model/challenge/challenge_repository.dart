@@ -18,12 +18,7 @@ final challengeRepositoryProvider = Provider<ChallengeRepository>((Ref ref) {
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
 
-class ChallengeRepository {
-  const ChallengeRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class const ChallengeRepository(final LichessClient client, final Aggregator aggregator) {
   Future<ChallengesList> list() {
     final uri = Uri(path: '/api/challenge');
     return aggregator.readJson(

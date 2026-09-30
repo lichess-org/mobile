@@ -7,16 +7,13 @@ import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GifExport extends ConsumerStatefulWidget {
-  const GifExport({super.key, required this.gameId, required this.orientation});
-
-  final GameId gameId;
-  final Side orientation;
-
+class const GifExport({super.key, required final GameId gameId, required final Side orientation})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({required GameId gameId, required Side orientation}) {
     return buildScreenRoute(
       screen: GifExport(gameId: gameId, orientation: orientation),
@@ -27,7 +24,7 @@ class GifExport extends ConsumerStatefulWidget {
   ConsumerState<GifExport> createState() => _GifExportState();
 }
 
-class _GifExportState extends ConsumerState<GifExport> {
+class _GifExportState() extends ConsumerState<GifExport> {
   bool playerNames = true;
   bool showPlayerRatings = true;
   bool moveAnnotations = false;
@@ -74,11 +71,9 @@ class _GifExportState extends ConsumerState<GifExport> {
           chessClock: chessClock,
         ),
       );
-    } catch (e) {
+    } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Failed to export GIF: $e')));
+        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
       }
     } finally {
       _clearTimers();
@@ -105,11 +100,11 @@ class _GifExportState extends ConsumerState<GifExport> {
       padding: const EdgeInsets.only(bottom: 16),
       children: [
         ListSection(
-          header: const Text('GIF Export Options'),
+          header: Text(context.l10n.gameAsGIF),
           materialFilledCard: true,
           children: [
             SwitchSettingTile(
-              title: const Text('Player names'),
+              title: Text(context.l10n.playerNames),
               value: playerNames,
               onChanged: (bool value) {
                 setState(() {
@@ -127,7 +122,7 @@ class _GifExportState extends ConsumerState<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Move annotations'),
+              title: Text(context.l10n.moveAnnotations),
               value: moveAnnotations,
               onChanged: (bool value) {
                 setState(() {
@@ -136,7 +131,7 @@ class _GifExportState extends ConsumerState<GifExport> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Chess clock'),
+              title: Text(context.l10n.clock),
               value: chessClock,
               onChanged: (bool value) {
                 setState(() {

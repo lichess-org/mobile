@@ -9,7 +9,10 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 
 part 'coordinate_training_controller.freezed.dart';
 
-enum Guess { correct, incorrect }
+enum Guess() {
+  correct,
+  incorrect,
+}
 
 final coordinateTrainingControllerProvider =
     NotifierProvider.autoDispose<CoordinateTrainingController, CoordinateTrainingState>(
@@ -17,7 +20,7 @@ final coordinateTrainingControllerProvider =
       name: 'CoordinateTrainingControllerProvider',
     );
 
-class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
+class CoordinateTrainingController() extends Notifier<CoordinateTrainingState> {
   final _random = Random(DateTime.now().millisecondsSinceEpoch);
 
   final _stopwatch = Stopwatch();
@@ -113,10 +116,8 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
 }
 
 @freezed
-sealed class CoordinateTrainingState with _$CoordinateTrainingState {
-  const CoordinateTrainingState._();
-
-  const factory CoordinateTrainingState({
+sealed class const CoordinateTrainingState._() with _$CoordinateTrainingState {
+  const factory({
     @Default(null) Square? currentCoord,
     @Default(null) Square? nextCoord,
     @Default(0) int score,

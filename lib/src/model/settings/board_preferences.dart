@@ -19,7 +19,7 @@ final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   name: 'BoardPreferencesProvider',
 );
 
-class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
+class BoardPreferences() extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.board;
@@ -132,11 +132,9 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BoardPrefs with _$BoardPrefs implements Serializable {
-  const BoardPrefs._();
-
+sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
-  const factory BoardPrefs({
+  const factory({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
@@ -237,7 +235,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     );
   }
 
-  factory BoardPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$BoardPrefsFromJson(json);
   }
 
@@ -246,7 +244,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
-enum ShapeColor {
+enum ShapeColor() {
   green,
   red,
   blue,
@@ -261,7 +259,7 @@ enum ShapeColor {
 }
 
 /// The chessboard theme.
-enum BoardTheme {
+enum BoardTheme(final String label, final String gifApiName) {
   system('System', 'system'),
   brown('Brown', 'brown'),
   wood('Wood', 'wood'),
@@ -288,11 +286,6 @@ enum BoardTheme {
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
   horsey('Horsey', 'horsey');
-
-  final String label;
-  final String gifApiName;
-
-  const BoardTheme(this.label, this.gifApiName);
 
   ChessboardColorScheme get colors {
     switch (this) {
@@ -388,7 +381,7 @@ enum BoardTheme {
   };
 }
 
-enum MaterialDifferenceFormat {
+enum MaterialDifferenceFormat() {
   materialDifference,
   capturedPieces,
   hidden;
@@ -402,7 +395,7 @@ enum MaterialDifferenceFormat {
   };
 }
 
-enum ClockPosition {
+enum ClockPosition() {
   left,
   right;
 
@@ -412,7 +405,7 @@ enum ClockPosition {
   };
 }
 
-enum LandscapeBoardPosition {
+enum LandscapeBoardPosition() {
   left,
   right;
 
@@ -422,7 +415,7 @@ enum LandscapeBoardPosition {
   };
 }
 
-enum CastlingMethod {
+enum CastlingMethod() {
   /// Allow castling by moving either the king over the rook or two squares (to match lichess website).
   kingOverRook,
 

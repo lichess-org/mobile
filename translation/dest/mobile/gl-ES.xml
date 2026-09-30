@@ -1,111 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Aceptar as táboas?</string>
   <string name="account" comment="The account screen title.">Conta</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Preferencias da conta</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Estas preferencias aplicaranse á túa conta de Lichess e serán empregadas en todos os teus dispositivos.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Engadir ó estudo</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todas as partidas</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Permitir rectificar xogadas e pistas</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Negro AMOLED</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Estás seguro?</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Estás seguro de que queres descargar o arquivo NNUE (%s)?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Posición do taboleiro en modo apaisado</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Preferencias de taboleiro</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Modo Bronstein</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar a proposta de retroceso de xogada</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Borrar</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Desafío creado: serás notificado cando comece a partida.\nPodes acceder ó reto dende a pantalla de Inicio.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Desafiar a partir da posición</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Nome do capítulo</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Motor de xadrez</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Elixir un fondo personalizado</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Borrar</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">O código caduca ós 5 minutos e só se pode empregar unha vez.</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Código</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">O código ten unha lonxitude de %s caracteres.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Copiada.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Borrar a xogada gardada</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Unirse a unha partida</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Personalizar</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Consello: podes engadir máis trebellos na Pantalla de Inicio ou eliminar os que non precisas!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Descartar</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Zona de perigo</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Eliminar a túa conta</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compacto</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detallado</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Aceptas o desafío?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Descargar as miñas partidas</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Comentarios</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Saúdos, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Saúdos</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtros</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Xirar o reloxo</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Xirar as pezas e a información do opoñente despois de mover</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Obtén comentarios sobre os teus movementos</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bos días, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bos días</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Ocultar variantes</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Saúdos, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Saúdos</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Boa xogada, pero hai unha mellor</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Ola</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Se unha conta coincide con %1$s, envióuselle un código de caracteres de %2$s. Consulta a túa caixa de entrada e introduce o código a continuación.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">O código é inválido ou caducou.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en directo</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño da Base de Datos local</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mover ao soltar</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Ao mover unha peza tocando, o movemento realízase ao levantar o dedo, o que permite deslizar para cambiar a casa de destino.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Debes iniciar sesión para ver esta páxina.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Crebacabezas sen conexión</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nova partida</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Novo erro</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sen resultados</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ten en conta que neste intre non están dispoñibles todas as funcións da aplicación vella ou do sitio web; porén, seguimos a engadilas día a día.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Non estás a seguir a ningún usuario.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">O Explorador de Aperturas non está dispoñible sen conexión.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ou importa un arquivo PGN</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Xogar nun taboleiro virtual</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Pegar dende o portapapeis</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antixadrez</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atómico</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Lóstrego</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bala</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Clásicas</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Corresp.</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">CasLoucos</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Dende pos.</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Horda</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rei Cuíña</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crebacab</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">R.a Correr</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rápidas</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3-Xaques</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN copiado.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">O nome de usuario contén \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Esquerda</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Dereita</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Modo de práctica</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Ampliar a peza arrastrada</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Queres rematar esta quenda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Non aparece nada. Por favor, cambia os filtros</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Non aparece nada. Primeiro xoga algunha quenda de Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Resolve tantos crebacabezas como sexa posible en 3 minutos.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Perderás a túa secuencia actual e o teu resultado gardarase.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Resolve crebacabezas das túas aperturas favoritas ou elixe un tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Problemas</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Valorar esta app</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Procuras recentes</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eliminar marcador</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eliminar marcador</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Selecciona un estudo</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Envíame un código</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Análise no servidor</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posición do reloxo</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Predeterminados</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Destino da peza arrastrada</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Círculo</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Cadrado</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Cor das figuras</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Cor elixida para as figuras debuxadas a man usando dous dedos.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Trebellos da páxina de inicio</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Pantalla completa</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oculta a Interface de Usuario. Úsao se che amolan as iconas de navegación do sistema nos bordos da pantalla durante as partidas e os crebacabezas.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Pezas capturadas</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Selecciona unha imaxe</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">O fondo personalizado só funciona no modo escuro. Recoméndase usar unha imaxe escura.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Selecciona unha imaxe</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Esfumar a imaxe</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">O fondo personalizado só funciona no modo escuro. Recoméndase usar unha imaxe escura.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Agochar o taboleiro</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Amosar o taboleiro</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Arrastrar para amosar outros fondos</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tocar ou arrastrar</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tocar dúas casas</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">As túas preferencias foron gardadas na túa conta de Lichess. Sincronizaranse en tódolos teus dispositivos.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Debuxo de figuras</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Debuxar figuras usando dous dedos: poñer un dedo sobre unha casa baleira e arrastrar o outro dedo pra debuxar unha figura.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Amosar o bordo</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Resposta táctil</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Se está activada, o dispositivo vibrará ó moveres ou capturares unha peza.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Axustes</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Partillar URL de desafío</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Partillar análise local PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartir a posición coma FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este crebacabezas</string>
   <string name="showComments" comment="Shown in the analysis screen.">Amosar os comentarios</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Ver liñas do motor</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Ver indicador de avaliación</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Amosar o resultado</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Amosar as variantes</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Iniciar sesión co navegador</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Iniciar sesión cun correo electrónico</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Retardo simple</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Taboleiro pequeno</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo foi mal.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Ordear amigos/as</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Non amosar a ameaza</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Cores do sistema</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase non está dispoñible sen conexión.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Ferrament.</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Demasiados intentos. Proba máis tarde.</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Completados</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Ir á miña páxina</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">A variante %s non é compatíbel con esta versión.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Usa pezas simétricas</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Ver a partida</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Ver licencias</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Agardando un rival...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ver</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Benvido á aplicación de Lichess!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Ver a partida</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Consello: podes engadir máis trebellos na Pantalla de Inicio ou eliminar os que non precisas!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Descartar</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Personalizar</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Non amosar a ameaza</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Completados</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Ir á miña páxina</string>
-  <string name="displayModeCompact" comment="">Compacto</string>
-  <string name="displayModeDetailed" comment="">Detallado</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">O Explorador de Aperturas non está dispoñible sen conexión.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Desafío creado: serás notificado cando comece a partida.\nPodes acceder ó reto dende a pantalla de Inicio.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ou importa un arquivo PGN</string>
-  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Boa xogada, pero hai unha mellor</string>
-  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
-  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bala</string>
-  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Lóstrego</string>
-  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rápidas</string>
-  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Clásicas</string>
-  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Corresp.</string>
-  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Dende pos.</string>
-  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
-  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antixadrez</string>
-  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rei Cuíña</string>
-  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3-Xaques</string>
-  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atómico</string>
-  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Horda</string>
-  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">R.a Correr</string>
-  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">CasLoucos</string>
-  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crebacab</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Enviarémosche por correo electrónico un código para iniciar sesión.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Non podes desafiarte a ti mesmo/a</string>
 </resources>

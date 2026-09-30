@@ -17,9 +17,7 @@ part 'eval.g.dart';
 final _logger = Logger('Eval');
 
 /// Base class for evals.
-sealed class Eval {
-  const Eval();
-
+sealed class const Eval() {
   /// The centipawn score.
   int? get cp;
 
@@ -44,26 +42,19 @@ sealed class Eval {
 }
 
 /// The eval from the client side, either from the cloud or the local engine.
-sealed class ClientEval extends Eval {
-  const ClientEval({
-    required this.position,
-    required this.depth,
-    required this.nodes,
-    required this.pvs,
-  });
-
+sealed class const ClientEval({
   /// The position for which the eval was computed.
-  final Position position;
+  required final Position position,
 
   /// The depth of the search.
-  final int depth;
+  required final int depth,
 
   /// The number of nodes searched.
-  final int nodes;
+  required final int nodes,
 
   /// The principal variations.
-  final IList<PvData> pvs;
-
+  required final IList<PvData> pvs,
+}) extends Eval {
   /// The best move.
   Move? get bestMove {
     final uci = pvs.firstOrNull?.moves.firstOrNull;
@@ -83,15 +74,13 @@ sealed class ClientEval extends Eval {
 /// The eval coming from other Lichess clients, served from the network.
 @freezed
 // ignore: freezed_missing_private_empty_constructor
-sealed class CloudEval extends ClientEval with _$CloudEval {
-  const CloudEval._({
-    required super.position,
-    required super.depth,
-    required super.nodes,
-    required super.pvs,
-  });
-
-  const factory CloudEval({
+sealed class const CloudEval._({
+  required super.position,
+  required super.depth,
+  required super.nodes,
+  required super.pvs,
+}) extends ClientEval with _$CloudEval {
+  const factory({
     required Position position,
     required int depth,
     required int nodes,
@@ -108,15 +97,13 @@ sealed class CloudEval extends ClientEval with _$CloudEval {
 /// The eval from the local engine.
 @freezed
 // ignore: freezed_missing_private_empty_constructor
-sealed class LocalEval extends ClientEval with _$LocalEval {
-  const LocalEval._({
-    required super.position,
-    required super.depth,
-    required super.nodes,
-    required super.pvs,
-  });
-
-  const factory LocalEval({
+sealed class const LocalEval._({
+  required super.position,
+  required super.depth,
+  required super.nodes,
+  required super.pvs,
+}) extends ClientEval with _$LocalEval {
+  const factory({
     required Position position,
     required int depth,
     required int nodes,
@@ -136,10 +123,8 @@ sealed class LocalEval extends ClientEval with _$LocalEval {
 
 /// The eval from an external engine, typically Lichess server side Stockfish.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExternalEval extends Eval with _$ExternalEval {
-  const ExternalEval._();
-
-  const factory ExternalEval({
+sealed class const ExternalEval._() extends Eval with _$ExternalEval {
+  const factory({
     required int? cp,
     required int? mate,
     int? depth,
@@ -153,7 +138,7 @@ sealed class ExternalEval extends Eval with _$ExternalEval {
   /// While the server analysis is still pending, the eval may be null.
   bool get hasEval => cp != null || mate != null;
 
-  factory ExternalEval.fromPgnEval(PgnEvaluation eval) {
+  factory fromPgnEval(PgnEvaluation eval) {
     return ExternalEval(
       cp: eval.pawns != null ? cpFromPawns(eval.pawns!) : null,
       mate: eval.mate,
@@ -161,13 +146,12 @@ sealed class ExternalEval extends Eval with _$ExternalEval {
     );
   }
 
-  factory ExternalEval.fromJson(Map<String, dynamic> json) => _$ExternalEvalFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ExternalEvalFromJson(json);
 }
 
 @freezed
-sealed class PvData with _$PvData {
-  const PvData._();
-  const factory PvData({required IList<UCIMove> moves, int? mate, int? cp}) = _PvData;
+sealed class const PvData._() with _$PvData {
+  const factory({required IList<UCIMove> moves, int? mate, int? cp}) = _PvData;
 
   String get evalString => _evalString(cp, mate);
 

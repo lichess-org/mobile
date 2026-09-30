@@ -7,11 +7,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BoardEditorFilters extends ConsumerWidget {
-  const BoardEditorFilters({required this.params, super.key});
-
-  final BoardEditorControllerParams? params;
-
+class const BoardEditorFilters({required final BoardEditorControllerParams? params, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorController = boardEditorControllerProvider(params);
@@ -80,9 +77,9 @@ class BoardEditorFilters extends ConsumerWidget {
           }),
         ],
         if (editorState.variant.hasEnPassant && editorState.enPassantOptions.isNotEmpty) ...[
-          const Padding(
+          Padding(
             padding: Styles.bodySectionPadding,
-            child: Text('En passant', style: Styles.subtitle),
+            child: Text(context.l10n.enPassant, style: Styles.subtitle),
           ),
           Padding(
             padding: Styles.horizontalBodyPadding,

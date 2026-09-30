@@ -20,30 +20,8 @@ double getEvalGaugeFontSize(BuildContext context) {
   return isTabletOrLarger(context) ? _kEvalGaugeFontSize : _kEvalGaugeFontSize - 2.0;
 }
 
-typedef EngineGaugeParams = ({
-  bool isLocalEngineAvailable,
-
-  /// Orientation of the board.
-  Side orientation,
-
-  /// Position to evaluate.
-  Position position,
-
-  /// Cached evaluation to display when the current evaluation is not available.
-  ClientEval? savedEval,
-
-  /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
-  ExternalEval? serverEval,
-
-  /// Filters to identify the correct engine evaluation provider instance.
-  EngineEvaluationFilters filters,
-});
-
-class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.params, super.key});
-
-  final EngineGaugeParams params;
-
+class const EngineGauge({required final EngineGaugeParams params, super.key})
+    extends ConsumerWidget {
   static Color backgroundColor(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark
       ? lighten(ColorScheme.of(context).surface, .07)
@@ -74,13 +52,11 @@ class EngineGauge extends ConsumerWidget {
   }
 }
 
-class _EvalGauge extends StatefulWidget {
-  const _EvalGauge({required this.position, required this.orientation, this.eval});
-
-  final Position position;
-  final Eval? eval;
-  final Side orientation;
-
+class const _EvalGauge({
+  required final Position position,
+  required final Side orientation,
+  final Eval? eval,
+}) extends StatefulWidget {
   double? get whiteWinningChances => eval?.winningChances(Side.white);
   double? get animationValue => position.outcome != null
       ? position.outcome!.winner == null
@@ -96,7 +72,7 @@ class _EvalGauge extends StatefulWidget {
   State<_EvalGauge> createState() => _EvalGaugeState();
 }
 
-class _EvalGaugeState extends State<_EvalGauge> {
+class _EvalGaugeState() extends State<_EvalGauge> {
   double fromValue = 0.5;
 
   Eval? oldEval;
@@ -184,19 +160,12 @@ class _EvalGaugeState extends State<_EvalGauge> {
   }
 }
 
-class _EvalGaugeVerticalPainter extends CustomPainter {
-  const _EvalGaugeVerticalPainter({
-    required this.backgroundColor,
-    required this.valueColor,
-    required this.value,
-    required this.orientation,
-  });
-
-  final Color backgroundColor;
-  final Color valueColor;
-  final double value;
-  final Side orientation;
-
+class const _EvalGaugeVerticalPainter({
+  required final Color backgroundColor,
+  required final Color valueColor,
+  required final double value,
+  required final Side orientation,
+}) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()

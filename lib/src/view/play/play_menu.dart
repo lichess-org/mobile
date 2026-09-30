@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
@@ -12,9 +13,7 @@ import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PlayMenu extends ConsumerWidget {
-  const PlayMenu();
-
+class const PlayMenu() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionStatus = ref.watch(lichessConnectionStatusProvider);
@@ -96,11 +95,7 @@ class PlayMenu extends ConsumerWidget {
   }
 }
 
-class _Section extends StatelessWidget {
-  const _Section({required this.children});
-
-  final List<Widget> children;
-
+class const _Section({required final List<Widget> children}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListSection(hasLeading: true, materialFilledCard: true, children: children);

@@ -28,7 +28,7 @@ final overTheBoardGameControllerProvider =
       name: 'OverTheBoardGameControllerProvider',
     );
 
-class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
+class OverTheBoardGameController() extends Notifier<OverTheBoardGameState> {
   /// The clock of the game, which only runs when the game is played with a time control.
   LocalGameClock get _clock => ref.read(overTheBoardClockProvider.notifier);
 
@@ -167,19 +167,11 @@ class OverTheBoardGameController extends Notifier<OverTheBoardGameState> {
 }
 
 @freezed
-sealed class OverTheBoardGameState with _$OverTheBoardGameState {
-  const OverTheBoardGameState._();
+sealed class const OverTheBoardGameState._() with _$OverTheBoardGameState {
+  const factory({required OverTheBoardGame game, @Default(0) int stepCursor}) =
+      _OverTheBoardGameState;
 
-  const factory OverTheBoardGameState({
-    required OverTheBoardGame game,
-    @Default(0) int stepCursor,
-  }) = _OverTheBoardGameState;
-
-  factory OverTheBoardGameState.fromVariant(
-    Variant variant,
-    TimeIncrement timeIncrement, {
-    String? initialFen,
-  }) {
+  factory fromVariant(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
     final Position position;
     final Variant effectiveVariant;
     if (initialFen != null) {

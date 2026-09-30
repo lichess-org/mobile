@@ -14,12 +14,11 @@ import 'package:url_launcher/url_launcher.dart';
 final _dateFormatter = DateFormat.MMMd();
 
 /// A tab that displays the overview of a broadcast.
-class BroadcastOverviewTab extends ConsumerWidget {
-  const BroadcastOverviewTab({required this.broadcast, required this.tournamentId, super.key});
-
-  final Broadcast broadcast;
-  final BroadcastTournamentId tournamentId;
-
+class const BroadcastOverviewTab({
+  required final Broadcast broadcast,
+  required final BroadcastTournamentId tournamentId,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
@@ -94,13 +93,8 @@ class BroadcastOverviewTab extends ConsumerWidget {
   }
 }
 
-class _BroadcastOverviewCard extends StatelessWidget {
-  const _BroadcastOverviewCard(this.iconData, this.text, [this.website]);
-
-  final IconData iconData;
-  final String text;
-  final Uri? website;
-
+class const _BroadcastOverviewCard(final IconData iconData, final String text, [final Uri? website])
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(

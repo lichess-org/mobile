@@ -16,10 +16,9 @@ const _kHandsetThumbnailSize = 80.0;
 const _kTabletThumbnailSize = 250.0;
 
 class BroadcastListTile extends StatelessWidget {
-  const BroadcastListTile({required this.broadcast, this.maxSubtitleLines = 4})
-    : _isLoading = false;
+  const new({required this.broadcast, this.maxSubtitleLines = 4}) : _isLoading = false;
 
-  const BroadcastListTile.loading({this.maxSubtitleLines = 4})
+  const new loading({this.maxSubtitleLines = 4})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -212,16 +211,13 @@ class BroadcastListTile extends StatelessWidget {
   }
 }
 
-class BroadcastNextPageTile extends StatefulWidget {
-  const BroadcastNextPageTile(this.nextPageFunction);
-
-  final Future<void> Function() nextPageFunction;
-
+class const BroadcastNextPageTile(final Future<void> Function() nextPageFunction)
+    extends StatefulWidget {
   @override
   State<BroadcastNextPageTile> createState() => _BroadcastNextPageTileState();
 }
 
-class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
+class _BroadcastNextPageTileState() extends State<BroadcastNextPageTile> {
   late Future<void> nextPageFuture;
 
   @override

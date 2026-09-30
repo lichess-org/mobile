@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -17,12 +18,10 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A list tile that shows more detailed game info than [GameListTile].
-class GameListDetailTile extends ConsumerWidget {
-  const GameListDetailTile({required this.item, this.onPressedBookmark});
-
-  final LightExportedGameWithPov item;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameListDetailTile({
+  required final LightExportedGameWithPov item,
+  final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   Side get mySide => item.pov;
 
   @override

@@ -4,14 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 
-class BadgeService {
+class const BadgeService._(final Logger _log) {
   static const _channel = MethodChannel('mobile.lichess.org/badge');
 
-  const BadgeService._(this._log);
-
   static final instance = BadgeService._(Logger('BadgeService'));
-
-  final Logger _log;
 
   Future<void> setBadge(int value) async {
     if (defaultTargetPlatform != TargetPlatform.iOS) {

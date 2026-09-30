@@ -8,13 +8,15 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
 
-enum OpeningDatabase { master, lichess, player }
+enum OpeningDatabase() {
+  master,
+  lichess,
+  player,
+}
 
 @Freezed(fromJson: true)
-sealed class OpeningExplorerEntry with _$OpeningExplorerEntry {
-  const OpeningExplorerEntry._();
-
-  const factory OpeningExplorerEntry({
+sealed class const OpeningExplorerEntry._() with _$OpeningExplorerEntry {
+  const factory({
     required int white,
     required int draws,
     required int black,
@@ -25,18 +27,14 @@ sealed class OpeningExplorerEntry with _$OpeningExplorerEntry {
     int? queuePosition,
   }) = _OpeningExplorerEntry;
 
-  factory OpeningExplorerEntry.empty() =>
-      const OpeningExplorerEntry(white: 0, draws: 0, black: 0, moves: IList.empty());
+  factory empty() => const OpeningExplorerEntry(white: 0, draws: 0, black: 0, moves: IList.empty());
 
-  factory OpeningExplorerEntry.fromJson(Map<String, Object?> json) =>
-      _$OpeningExplorerEntryFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$OpeningExplorerEntryFromJson(json);
 }
 
 @Freezed(fromJson: true)
-sealed class OpeningMove with _$OpeningMove {
-  const OpeningMove._();
-
-  const factory OpeningMove({
+sealed class const OpeningMove._() with _$OpeningMove {
+  const factory({
     required String uci,
     required String san,
     required int white,
@@ -48,7 +46,7 @@ sealed class OpeningMove with _$OpeningMove {
     OpeningExplorerGame? game,
   }) = _OpeningMove;
 
-  factory OpeningMove.fromJson(Map<String, Object?> json) => _$OpeningMoveFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$OpeningMoveFromJson(json);
 
   int get games {
     return white + draws + black;
@@ -57,7 +55,7 @@ sealed class OpeningMove with _$OpeningMove {
 
 @Freezed(fromJson: true)
 sealed class OpeningExplorerGame with _$OpeningExplorerGame {
-  factory OpeningExplorerGame({
+  factory({
     required GameId id,
     required ({String name, int rating}) white,
     required ({String name, int rating}) black,
@@ -69,10 +67,10 @@ sealed class OpeningExplorerGame with _$OpeningExplorerGame {
     String? month,
   }) = _OpeningExplorerGame;
 
-  factory OpeningExplorerGame.fromJson(Map<String, Object?> json) =>
+  factory fromJson(Map<String, Object?> json) =>
       OpeningExplorerGame.fromPick(pick(json).required());
 
-  factory OpeningExplorerGame.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return OpeningExplorerGame(
       id: pick('id').asGameIdOrThrow(),
       white: pick('white').letOrThrow(
@@ -95,4 +93,7 @@ sealed class OpeningExplorerGame with _$OpeningExplorerGame {
   }
 }
 
-enum GameMode { casual, rated }
+enum GameMode() {
+  casual,
+  rated,
+}

@@ -3,7 +3,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:material_ui/material_ui.dart';
 
 // ignore: avoid_classes_with_only_static_members
-abstract class Styles {
+abstract class Styles() {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
   static const title = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
@@ -59,25 +59,15 @@ Color lighten(Color c, [double amount = .1]) {
 }
 
 @immutable
-class LichessCustomColors extends ThemeExtension<LichessCustomColors> {
-  const LichessCustomColors({
-    required this.cyan,
-    required this.brag,
-    required this.good,
-    required this.error,
-    required this.fancy,
-    required this.purple,
-    required this.primary,
-  });
-
-  final Color cyan;
-  final Color brag;
-  final Color good;
-  final Color error;
-  final Color fancy;
-  final Color purple;
-  final Color primary;
-
+class const LichessCustomColors({
+  required final Color cyan,
+  required final Color brag,
+  required final Color good,
+  required final Color error,
+  required final Color fancy,
+  required final Color purple,
+  required final Color primary,
+}) extends ThemeExtension<LichessCustomColors> {
   @override
   LichessCustomColors copyWith({
     Color? cyan,
