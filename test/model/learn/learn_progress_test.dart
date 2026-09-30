@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
+import '../auth/fake_auth_storage.dart';
 
 void main() {
   final rook = learnStageByKey('rook')!;
@@ -167,6 +174,59 @@ void main() {
 
       await container.read(learnProgressProvider.notifier).reset();
       expect(container.read(learnProgressProvider).value!.levelScore(rook, 3), 0);
+    });
+
+    test('a flush does not upload a score the server already beats', () async {
+      final posted = <String>[];
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/learn/progress') {
+          return http.Response(
+            jsonEncode({
+              'stages': {
+                'rook': [900, 0, 0, 0, 0, 0],
+              },
+            }),
+            200,
+          );
+        }
+        if (request.url.path == '/learn/reset') {
+          // The reset never lands, so the merge is held back and the flush runs on its own.
+          return http.Response('', 500);
+        }
+        if (request.url.path == '/learn/score') {
+          posted.add(request.body);
+          return http.Response('', 200);
+        }
+        return http.Response('', 404);
+      });
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        authUser: fakeAuthUser,
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+      const userId = UserId('testuser');
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      // A row left dirty by an earlier session, holding less than the level was scored on the
+      // web since. The server overwrites unconditionally, so uploading it would lower the best.
+      await storage.saveScore(userId: userId, stageKey: 'rook', levelIndex: 0, score: 100);
+      await storage.setResetPending(userId, pending: true);
+
+      await container.read(learnProgressProvider.future);
+      await pumpEventQueue();
+
+      expect(posted, isEmpty, reason: 'the server already holds 900 for that level');
+      // Stamped rather than left dirty, or the same row would be offered again on every start.
+      expect(await storage.fetchUnsynced(userId), isEmpty);
+      expect((await storage.fetch(userId)).levelScore(rook, 0), 100);
     });
   });
 }

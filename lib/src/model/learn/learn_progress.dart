@@ -430,7 +430,12 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
       if (generation != _generation) return;
       try {
         final storage = await ref.read(learnProgressStorageProvider.future);
-        await _pushScore(storage, userId, stageKey, levelIndex, generation);
+        // Read here too, not only in the merge: the level may have been completed on the web
+        // since the last merge, and posting blindly would lower that better score.
+        final serverBest = _validServerScores(
+          await ref.withClient((client) => LearnRepository(client).fetchProgress()),
+        );
+        await _pushScore(storage, userId, stageKey, levelIndex, generation, serverBest);
       } catch (e, st) {
         // Reached from an unawaited call, so a throw here would surface as an unhandled zone
         // error. The row stays dirty and the next flush picks it up.
@@ -448,67 +453,74 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     return _serialize(() async {
       if (userId == null || generation != _generation) return;
       var merge = true;
+      if (await storage.isResetPending(userId)) {
+        // A previous reset never reached the server. Clear it there before reading progress
+        // back, otherwise the merge would restore exactly what the user asked to erase.
+        if (!await _resetOnServer(storage, userId, generation)) {
+          // The reset is still not on the server, so merging now would put the old progress
+          // straight back into the local rows and keep resetting on every start. Wait for the
+          // network instead. The flush still runs, so scores completed after the reset are not
+          // held back by it.
+          _logger.warning('Learn reset still pending, not merging the server progress yet');
+          merge = false;
+        }
+      }
+      if (generation != _generation) return;
+
+      // Read once and used for both the merge and the upload guard below. When it cannot be
+      // read the flush is skipped as well: posting blind is what lowers a server-side best.
+      final IMap<String, IMap<int, int>> server;
       try {
-        if (await storage.isResetPending(userId)) {
-          // A previous reset never reached the server. Clear it there before reading progress
-          // back, otherwise the merge would restore exactly what the user asked to erase.
-          if (!await _resetOnServer(storage, userId, generation)) {
-            // The reset is still not on the server, so merging now would put the old progress
-            // straight back into the local rows and keep resetting on every start. Wait for the
-            // network instead. The flush still runs, so scores completed after the reset are not
-            // held back by it.
-            _logger.warning('Learn reset still pending, not merging the server progress yet');
-            merge = false;
-          }
-        }
-        if (merge && generation == _generation) {
-          final server = _validServerScores(
-            await ref.withClient((client) => LearnRepository(client).fetchProgress()),
-          );
-          if (generation != _generation) return;
-          if (server.isEmpty) {
-            // Nothing is deleted here, and it cannot be: _validServerScores empties the map both
-            // when the server has no progress and when this build cannot read the payload it
-            // sent, and the two are indistinguishable here. Deleting would destroy the local copy
-            // on a lila stage rename, or on any proxy answering 200 with an empty object. So a
-            // reset done on the web does not reach the app; clearing it needs the server to
-            // report a reset explicitly rather than by omission.
-            _logger.info('Server reported no learn progress, keeping the local copy');
-          } else {
-            for (final stageEntry in server.entries) {
-              for (final levelEntry in stageEntry.value.entries) {
-                if (generation != _generation) return;
-                // The keep-max guard in saveScore leaves the local score alone when the server
-                // is behind, and markSynced below is what keeps such a row dirty for the flush.
-                await storage.saveScore(
-                  userId: userId,
-                  stageKey: stageEntry.key,
-                  levelIndex: levelEntry.key,
-                  score: levelEntry.value,
-                );
-                await storage.markSynced(
-                  userId: userId,
-                  stageKey: stageEntry.key,
-                  levelIndex: levelEntry.key,
-                  score: levelEntry.value,
-                );
-              }
-            }
-            if (generation != _generation) return;
-            final current = state.value;
-            if (current != null) {
-              final merged = current.mergedWithServer(server);
-              if (!identical(merged, current)) state = AsyncData(merged);
-            }
-          }
-        }
+        server = _validServerScores(
+          await ref.withClient((client) => LearnRepository(client).fetchProgress()),
+        );
       } catch (e, st) {
-        // Offline or errored: the local progress stands, and the flush still gets its chance.
+        // Offline or errored: the local progress stands, and so do the rows waiting to be sent.
         _logger.warning('Could not read the server learn progress', e, st);
+        return;
+      }
+      if (generation != _generation) return;
+
+      if (merge) {
+        if (server.isEmpty) {
+          // Nothing is deleted here, and it cannot be: _validServerScores empties the map both
+          // when the server has no progress and when this build cannot read the payload it
+          // sent, and the two are indistinguishable here. Deleting would destroy the local copy
+          // on a lila stage rename, or on any proxy answering 200 with an empty object. So a
+          // reset done on the web does not reach the app; clearing it needs the server to
+          // report a reset explicitly rather than by omission.
+          _logger.info('Server reported no learn progress, keeping the local copy');
+        } else {
+          for (final stageEntry in server.entries) {
+            for (final levelEntry in stageEntry.value.entries) {
+              if (generation != _generation) return;
+              // The keep-max guard in saveScore leaves the local score alone when the server
+              // is behind, and markSynced below is what keeps such a row dirty for the flush.
+              await storage.saveScore(
+                userId: userId,
+                stageKey: stageEntry.key,
+                levelIndex: levelEntry.key,
+                score: levelEntry.value,
+              );
+              await storage.markSynced(
+                userId: userId,
+                stageKey: stageEntry.key,
+                levelIndex: levelEntry.key,
+                score: levelEntry.value,
+              );
+            }
+          }
+          if (generation != _generation) return;
+          final current = state.value;
+          if (current != null) {
+            final merged = current.mergedWithServer(server);
+            if (!identical(merged, current)) state = AsyncData(merged);
+          }
+        }
       }
       if (generation != _generation) return;
       try {
-        await _flushUnsynced(storage, userId, generation);
+        await _flushUnsynced(storage, userId, generation, server);
       } catch (e, st) {
         _logger.warning('Could not flush the unsynced learn scores', e, st);
       }
@@ -517,8 +529,16 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
 
   /// Uploads the scores saved while offline, one row at a time.
   ///
+  /// [serverBest] is what the server already holds, so a row it beats is stamped clean instead of
+  /// posted: the endpoint overwrites unconditionally, and posting would lower its best.
+  ///
   /// A row the server rejects does not stop the others, so one bad row cannot stall the flush.
-  Future<void> _flushUnsynced(LearnProgressStorage storage, UserId? userId, int generation) async {
+  Future<void> _flushUnsynced(
+    LearnProgressStorage storage,
+    UserId? userId,
+    int generation,
+    IMap<String, IMap<int, int>> serverBest,
+  ) async {
     if (userId == null) return;
     var failed = 0;
     for (final unsynced in await storage.fetchUnsynced(userId)) {
@@ -529,6 +549,7 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
         unsynced.stageKey,
         unsynced.levelIndex,
         generation,
+        serverBest,
       );
       switch (result) {
         case _PushResult.ok:
@@ -562,12 +583,16 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   /// a better score saved in between must be the one uploaded, because the server overwrites
   /// unconditionally and would otherwise keep the older, lower value while the local row stays
   /// marked clean.
+  ///
+  /// [serverBest] is what the server already holds. A row the server does not beat is stamped
+  /// clean rather than posted, since posting it would lower the server-side best.
   Future<_PushResult> _pushScore(
     LearnProgressStorage storage,
     UserId userId,
     String stageKey,
     int levelIndex,
     int generation,
+    IMap<String, IMap<int, int>> serverBest,
   ) async {
     if (generation != _generation) return _PushResult.retry;
     final score = await storage.fetchScore(
@@ -577,6 +602,17 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     );
     // The row disappeared (a reset) between the listing and now: nothing to upload.
     if (score == null) return _PushResult.ok;
+    if (score <= (serverBest[stageKey]?[levelIndex] ?? 0)) {
+      // The server is already at least this good, so there is nothing to send and nothing to
+      // keep retrying. Stamped, not left dirty, or the flush would offer it again every start.
+      await storage.markSynced(
+        userId: userId,
+        stageKey: stageKey,
+        levelIndex: levelIndex,
+        score: score,
+      );
+      return _PushResult.ok;
+    }
     try {
       await ref.withClient(
         (client) =>
