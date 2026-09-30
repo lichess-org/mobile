@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -121,13 +122,22 @@ class const _Body() extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Symbols.menu_book),
+                  leading: const Icon(Symbols.chess_pawn),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
-                  title: Text(context.l10n.learnLearnChess, style: Styles.callout),
+                  title: Text(context.l10n.chessBasics, style: Styles.callout),
                   onTap: () =>
                       Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.exercise),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.practice, style: Styles.callout),
+                  onTap: () =>
+                      Navigator.of(context, rootNavigator: true).push(PracticeScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.where_to_vote),
@@ -142,8 +152,8 @@ class const _Body() extends ConsumerWidget {
                 ),
               ],
             ),
-            // Learn and coordinate training work offline, so only the studies are replaced by the
-            // outage message.
+            // Learn, practice and coordinate training work offline, so only the studies are
+            // replaced by the outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
             if (connectionStatus == LichessConnectionStatus.online) ...[
               ListSection(

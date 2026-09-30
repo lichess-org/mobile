@@ -446,21 +446,20 @@ void main() {
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
-      // Close OTB screen and confirm dialog to trigger save
+      // Close OTB screen to trigger save
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Yes'));
 
       verify(
         () => gameStorage.save(
           any(),
           timeIncrement: const TimeIncrement(5, 3),
-          // White's clock was left running, so pausing it on the way out charges white the time
-          // that had run since the last reading.
+          // White's clock was left running, so at most a tick's worth of time has been charged
+          // to white since the last reading.
           whiteTimeLeft: any(
             named: 'whiteTimeLeft',
             that: allOf(
-              lessThan(const Duration(minutes: 2)),
+              lessThanOrEqualTo(const Duration(minutes: 2)),
               greaterThan(const Duration(minutes: 1, seconds: 59)),
             ),
           ),

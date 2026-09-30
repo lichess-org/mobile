@@ -202,7 +202,7 @@ class RetroController(final RetroOptions options)
           try {
             final entry = await ref
                 .read(openingExplorerRepositoryProvider)
-                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
+                .getMasterDatabase(branch.position.fen, since: MasterDb.earliestDate);
 
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
