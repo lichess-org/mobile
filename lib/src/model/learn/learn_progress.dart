@@ -291,7 +291,7 @@ class const LearnProgressStorage(final Database _db) {
   }
 }
 
-/// The learn progress, loaded from local storage.
+/// The learn progress, merged from local storage and the server.
 final learnProgressProvider = AsyncNotifierProvider<LearnProgressNotifier, LearnProgress>(
   LearnProgressNotifier.new,
   name: 'LearnProgressProvider',

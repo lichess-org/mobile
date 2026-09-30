@@ -5,12 +5,12 @@ import 'package:lichess_mobile/src/network/http.dart';
 ///
 /// Only for logged-in users: lila rejects both endpoints otherwise. Callers check the auth state
 /// and swallow network errors, so syncing never breaks completing a level while offline.
+///
+/// Every method throws a [ServerException] when the response is not a success.
 class LearnRepository(final LichessClient _client) {
   /// Saves [score] for the 1-based level [levelId] of [stageKey].
   ///
   /// The server overwrites unconditionally, so only send an improvement.
-  ///
-  /// Throws a [ServerException] if the response is not a success.
   Future<void> saveScore({required String stageKey, required int levelId, required int score}) {
     return _client.postRead(
       Uri(path: '/learn/score'),
@@ -19,8 +19,6 @@ class LearnRepository(final LichessClient _client) {
   }
 
   /// Wipes the server-side learn progress.
-  ///
-  /// Throws a [ServerException] if the response is not a success.
   Future<void> reset() {
     return _client.postRead(Uri(path: '/learn/reset'));
   }
@@ -29,8 +27,6 @@ class LearnRepository(final LichessClient _client) {
   ///
   /// A stage's list is indexed by level and can be shorter than its number of levels, so an
   /// absent index means no score yet.
-  ///
-  /// Throws a [ServerException] if the response is not a success.
   Future<IMap<String, IMap<int, int>>> fetchProgress() {
     return _client.readJson(
       Uri(path: '/api/learn/progress'),

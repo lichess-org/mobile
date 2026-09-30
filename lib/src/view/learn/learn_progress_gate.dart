@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Builds a subtree from the resolved [LearnProgress].
 typedef LearnProgressBuilder = Widget Function(BuildContext context, LearnProgress progress);
 
 /// Resolves the learn progress for a subtree, without tearing it down on every reload.
@@ -15,14 +14,8 @@ typedef LearnProgressBuilder = Widget Function(BuildContext context, LearnProgre
 /// The error is not latched behind "has loaded once": that makes it unreachable for the rest of
 /// the screen's life, leaving the subtree on empty progress and inviting a replay of finished
 /// levels.
-// A declaring parameter cannot hold a function type, so the field is declared explicitly.
-class const LearnProgressGate({
-  // ignore: use_declaring_parameters
-  required this.builder,
-  super.key,
-}) extends ConsumerStatefulWidget {
-  final LearnProgressBuilder builder;
-
+class const LearnProgressGate({required final LearnProgressBuilder builder, super.key})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<LearnProgressGate> createState() => _LearnProgressGateState();
 }
