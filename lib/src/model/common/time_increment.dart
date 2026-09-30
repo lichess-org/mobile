@@ -5,14 +5,14 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 /// A pair of time and increment in seconds used as game clock
 @immutable
 class TimeIncrement implements Comparable<TimeIncrement> {
-  const TimeIncrement(this.time, this.increment) : assert(time >= 0 && increment >= 0);
+  const new(this.time, this.increment) : assert(time >= 0 && increment >= 0);
 
-  TimeIncrement.fromDurations(Duration time, Duration increment)
+  new fromDurations(Duration time, Duration increment)
     : time = time.inSeconds,
       increment = increment.inSeconds,
       assert(time >= Duration.zero && increment >= Duration.zero);
 
-  const TimeIncrement.infinite() : time = 0, increment = 0;
+  const new infinite() : time = 0, increment = 0;
 
   /// Clock initial time in seconds
   final int time;
@@ -20,7 +20,7 @@ class TimeIncrement implements Comparable<TimeIncrement> {
   /// Clock increment in seconds
   final int increment;
 
-  TimeIncrement.fromJson(Map<String, dynamic> json)
+  new fromJson(Map<String, dynamic> json)
     : time = json['time'] as int,
       increment = json['increment'] as int;
 

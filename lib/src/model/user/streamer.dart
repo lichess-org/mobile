@@ -7,7 +7,7 @@ part 'streamer.freezed.dart';
 
 @freezed
 sealed class Streamer with _$Streamer {
-  const factory Streamer({
+  const factory({
     required UserId id,
     required String username,
     required String status,
@@ -22,7 +22,7 @@ sealed class Streamer with _$Streamer {
     String? youTube,
   }) = _Streamer;
 
-  factory Streamer.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return _streamersFromJson(json);
   }
 }

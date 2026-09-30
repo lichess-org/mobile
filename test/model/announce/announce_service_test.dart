@@ -13,7 +13,7 @@ import '../../network/fake_websocket_channel.dart';
 import '../../network/socket_test.dart';
 import '../../test_container.dart';
 
-class _NotificationDisplayMock extends Mock implements FlutterLocalNotificationsPlugin {}
+class _NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,9 +31,8 @@ void main() {
       ),
     ).thenAnswer((_) => Future.value());
 
-    when(
-      () => notificationDisplayMock.cancel(id: any(named: 'id')),
-    ).thenAnswer((_) => Future.value());
+    when(() => notificationDisplayMock.cancel(id: any(named: 'id')))
+        .thenAnswer((_) => Future.value());
   });
 
   tearDown(() {
@@ -117,9 +116,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();
@@ -166,9 +164,8 @@ void main() {
       async.elapse(const Duration(minutes: 5, seconds: 1));
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();
@@ -362,9 +359,8 @@ void main() {
 
       async.flushMicrotasks();
 
-      verify(
-        () => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId),
-      ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: AnnounceNotification.notificationId))
+          .called(1);
 
       socketClient.close();
       async.flushTimers();

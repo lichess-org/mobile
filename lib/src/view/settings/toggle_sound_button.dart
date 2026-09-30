@@ -6,9 +6,7 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A button that toggles the sound on and off.
-class ToggleSoundButton extends ConsumerWidget {
-  const ToggleSoundButton({super.key});
-
+class const ToggleSoundButton({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSoundEnabled = ref.watch(
@@ -25,12 +23,11 @@ class ToggleSoundButton extends ConsumerWidget {
 }
 
 /// A menu item button that toggles the sound on and off.
-class ToggleSoundContextMenuAction extends StatelessWidget {
-  const ToggleSoundContextMenuAction({required this.isEnabled, required this.onPressed, super.key});
-
-  final bool isEnabled;
-  final VoidCallback onPressed;
-
+class const ToggleSoundContextMenuAction({
+  required final bool isEnabled,
+  required final VoidCallback onPressed,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContextMenuAction(

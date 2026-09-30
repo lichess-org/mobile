@@ -24,11 +24,7 @@ final _logger = Logger('EngineProvider');
 const kEngineDisposeDelay = Duration(seconds: 2);
 
 /// Thrown by [EngineHolder.build] when the last watcher leaves while the engine is starting.
-class EngineNoLongerWatched implements Exception {
-  const EngineNoLongerWatched(this.spec);
-
-  final EngineSpec spec;
-
+class const EngineNoLongerWatched(final EngineSpec spec) implements Exception {
   @override
   String toString() =>
       'EngineNoLongerWatched: the last watcher of $spec left while the engine was starting';
@@ -50,11 +46,7 @@ final engineProvider = AsyncNotifierProvider.autoDispose.family<EngineHolder, En
   retry: (_, _) => null,
 );
 
-class EngineHolder extends AsyncNotifier<Engine> {
-  EngineHolder(this.spec);
-
-  final EngineSpec spec;
-
+class EngineHolder(final EngineSpec spec) extends AsyncNotifier<Engine> {
   @override
   Future<Engine> build() async {
     // The table is settled here and never again: it belongs to the engine, not to any search that

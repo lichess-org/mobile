@@ -15,7 +15,7 @@ final onlineFriendsProvider = AsyncNotifierProvider.autoDispose<OnlineFriends, I
   name: 'OnlineFriendsProvider',
 );
 
-class OnlineFriends extends AsyncNotifier<IList<OnlineFriend>> {
+class OnlineFriends() extends AsyncNotifier<IList<OnlineFriend>> {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
 

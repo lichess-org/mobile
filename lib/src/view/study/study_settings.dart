@@ -9,11 +9,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StudySettingsScreen extends ConsumerWidget {
-  const StudySettingsScreen(this.options);
-
-  final StudyOptions options;
-
+class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudySettingsScreen(options));
   }
@@ -41,14 +37,13 @@ class StudySettingsScreen extends ConsumerWidget {
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show engine lines'),
+                title: Text(context.l10n.mobileShowEngineLines),
                 value: studyPrefs.showEngineLines,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines(),
               ),
               SwitchSettingTile(
-                title: const Text('Small board'), // TODO l10n
+                title: Text(context.l10n.mobileSmallBoard),
                 value: studyPrefs.smallBoard,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),

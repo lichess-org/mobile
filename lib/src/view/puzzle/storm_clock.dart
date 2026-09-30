@@ -8,16 +8,12 @@ import 'package:material_ui/material_ui.dart';
 
 const _kClockFontSize = 26.0;
 
-class StormClockWidget extends StatefulWidget {
-  const StormClockWidget({required this.clock});
-
-  final StormClock clock;
-
+class const StormClockWidget({required final StormClock clock}) extends StatefulWidget {
   @override
   _ClockState createState() => _ClockState();
 }
 
-class _ClockState extends State<StormClockWidget> with SingleTickerProviderStateMixin {
+class _ClockState() extends State<StormClockWidget> with SingleTickerProviderStateMixin {
   // ignore: avoid-late-keyword
   late AnimationController _controller;
 

@@ -63,12 +63,14 @@ final offlineClient = MockClient((request) {
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
+/// The [surfaceSize] parameter can be used to simulate a device with a specific screen size.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   Map<ProviderOrFamily, Override>? overrides,
   AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
+  Size surfaceSize = kTestSurfaceSize,
 }) {
   return makeTestProviderScope(
     tester,
@@ -76,19 +78,16 @@ Future<Widget> makeTestProviderScopeApp(
     overrides: overrides,
     authUser: authUser,
     defaultPreferences: defaultPreferences,
+    surfaceSize: surfaceSize,
   );
 }
 
-class _FakeApp extends ConsumerStatefulWidget {
-  const _FakeApp({required this.home});
-
-  final Widget home;
-
+class const _FakeApp({required final Widget home}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_FakeApp> createState() => _FakeAppState();
 }
 
-class _FakeAppState extends ConsumerState<_FakeApp> {
+class _FakeAppState() extends ConsumerState<_FakeApp> {
   @override
   void initState() {
     final socketClient = ref.read(socketPoolProvider).currentClient;

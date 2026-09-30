@@ -29,11 +29,11 @@ Future<Database> _openDb(String path) async {
     } catch (_) {}
 
     // Delete existing previous if any
-    directory.list().forEach((file) {
-      if (file.path.startsWith('chess_openings')) {
-        deleteDatabase(file.path);
+    await for (final file in directory.list()) {
+      if (p.basename(file.path).startsWith('chess_openings')) {
+        await deleteDatabase(file.path);
       }
-    });
+    }
 
     // Copy from asset
     final ByteData data = await rootBundle.load(p.url.join('assets', 'chess_openings.db'));

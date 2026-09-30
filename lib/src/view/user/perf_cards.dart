@@ -1,6 +1,7 @@
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -11,15 +12,12 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays the performance cards of a user.
-class PerfCards extends StatelessWidget {
-  const PerfCards({required this.user, required this.isMe, this.padding, super.key});
-
-  final User user;
-
-  final bool isMe;
-
-  final EdgeInsetsGeometry? padding;
-
+class const PerfCards({
+  required final User user,
+  required final bool isMe,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override

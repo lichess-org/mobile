@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -10,9 +11,7 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
-  const OfflineCorrespondenceGamesScreen({super.key});
-
+class const OfflineCorrespondenceGamesScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OfflineCorrespondenceGamesScreen());
   }
@@ -32,8 +31,7 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
@@ -51,14 +49,11 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class OfflineCorrespondenceGamePreview extends ConsumerWidget {
-  const OfflineCorrespondenceGamePreview({
-    required this.game,
-    required this.lastModified,
-    super.key,
-  });
-  final DateTime lastModified;
-  final OfflineCorrespondenceGame game;
+class const OfflineCorrespondenceGamePreview({
+  required final OfflineCorrespondenceGame game,
+  required final DateTime lastModified,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(

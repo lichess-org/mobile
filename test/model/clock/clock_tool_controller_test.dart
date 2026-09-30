@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 
 import '../common/service/fake_sound_service.dart';
 
-class FakeClockToolPreferences extends ClockToolPreferences {
+class FakeClockToolPreferences() extends ClockToolPreferences {
   @override
   ClockToolPrefs build() => ClockToolPrefs.defaults;
 

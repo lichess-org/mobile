@@ -5,11 +5,7 @@ import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StudyGamebook extends StatelessWidget {
-  const StudyGamebook(this.options);
-
-  final StudyOptions options;
-
+class const StudyGamebook(final StudyOptions options) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,15 +21,12 @@ class StudyGamebook extends StatelessWidget {
   }
 }
 
-class _Comment extends ConsumerStatefulWidget {
-  const _Comment({required this.options});
-  final StudyOptions options;
-
+class const _Comment({required final StudyOptions options}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Comment> createState() => _CommentState();
 }
 
-class _CommentState extends ConsumerState<_Comment> {
+class _CommentState() extends ConsumerState<_Comment> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -77,16 +70,12 @@ class _CommentState extends ConsumerState<_Comment> {
   }
 }
 
-class _Hint extends ConsumerStatefulWidget {
-  const _Hint({required this.options});
-
-  final StudyOptions options;
-
+class const _Hint({required final StudyOptions options}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Hint> createState() => _HintState();
 }
 
-class _HintState extends ConsumerState<_Hint> {
+class _HintState() extends ConsumerState<_Hint> {
   bool showHint = false;
 
   void _hideHint() {

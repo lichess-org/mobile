@@ -5,12 +5,11 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A simple widget that builds different things on different platforms.
-class PlatformWidget extends StatelessWidget {
-  const PlatformWidget({super.key, required this.androidBuilder, required this.iosBuilder});
-
-  final WidgetBuilder androidBuilder;
-  final WidgetBuilder iosBuilder;
-
+class const PlatformWidget({
+  super.key,
+  required final WidgetBuilder androidBuilder,
+  required final WidgetBuilder iosBuilder,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -21,9 +20,7 @@ class PlatformWidget extends StatelessWidget {
   }
 }
 
-class PlatformShareIcon extends StatelessWidget {
-  const PlatformShareIcon({super.key});
-
+class const PlatformShareIcon({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
@@ -34,9 +31,7 @@ class PlatformShareIcon extends StatelessWidget {
 }
 
 /// A platform-aware circular loading indicator to be used in [AppBar.actions].
-class PlatformAppBarLoadingIndicator extends StatelessWidget {
-  const PlatformAppBarLoadingIndicator({super.key});
-
+class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
@@ -55,28 +50,17 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
 ///
 /// Limitations:
 /// - It does not work with a [CustomScrollView] and [SliverAppBar] as the body.
-class PlatformScaffold extends StatelessWidget {
-  const PlatformScaffold({
-    super.key,
-    this.body,
-    this.appBar,
-    this.floatingActionButton,
-    this.persistentFooterButtons,
-    this.drawer,
-    this.bottomSheet,
-    this.bottomNavigationBar,
-    this.extendBody,
-  });
-
-  final PlatformAppBar? appBar;
-  final Widget? body;
-  final Widget? floatingActionButton;
-  final List<Widget>? persistentFooterButtons;
-  final Widget? drawer;
-  final Widget? bottomSheet;
-  final Widget? bottomNavigationBar;
-  final bool? extendBody;
-
+class const PlatformScaffold({
+  super.key,
+  final Widget? body,
+  final PlatformAppBar? appBar,
+  final Widget? floatingActionButton,
+  final List<Widget>? persistentFooterButtons,
+  final Widget? drawer,
+  final Widget? bottomSheet,
+  final Widget? bottomNavigationBar,
+  final bool? extendBody,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Check if a parent Scaffold has extendBody set to true.
@@ -106,30 +90,19 @@ class PlatformScaffold extends StatelessWidget {
   }
 }
 
-class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
-  PlatformAppBar({
-    super.key,
-    this.leading,
-    this.title,
-    this.titleSpacing,
-    this.titleTextStyle,
-    this.actions,
-    this.bottom,
-    this.centerTitle,
-    this.automaticallyImplyLeading = true,
-  }) : preferredSize = _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
-
-  final Widget? leading;
-  final Widget? title;
-  final double? titleSpacing;
-  final TextStyle? titleTextStyle;
-  final List<Widget>? actions;
-  final PreferredSizeWidget? bottom;
-  final bool? centerTitle;
-  final bool automaticallyImplyLeading;
-
+class const PlatformAppBar({
+  super.key,
+  final Widget? leading,
+  final Widget? title,
+  final double? titleSpacing,
+  final TextStyle? titleTextStyle,
+  final List<Widget>? actions,
+  final PreferredSizeWidget? bottom,
+  final bool? centerTitle,
+  final bool automaticallyImplyLeading = true,
+}) extends StatelessWidget implements PreferredSizeWidget {
   @override
-  final Size preferredSize;
+  Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
   @override
   Widget build(BuildContext context) {
@@ -160,10 +133,7 @@ class PlatformAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _PreferredAppBarSize extends Size {
-  const _PreferredAppBarSize(this.toolbarHeight, this.bottomHeight)
-    : super.fromHeight((toolbarHeight ?? kToolbarHeight) + (bottomHeight ?? 0));
-
-  final double? toolbarHeight;
-  final double? bottomHeight;
+class const _PreferredAppBarSize(final double? toolbarHeight, final double? bottomHeight)
+    extends Size {
+  this : super.fromHeight((toolbarHeight ?? kToolbarHeight) + (bottomHeight ?? 0));
 }

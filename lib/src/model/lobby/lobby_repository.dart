@@ -10,11 +10,7 @@ final correspondenceSeeksProvider = FutureProvider.autoDispose<IList<Corresponde
   return ref.withClient((client) => LobbyRepository(client).getCorrespondenceSeeks());
 }, name: 'CorrespondenceSeeksProvider');
 
-class LobbyRepository {
-  LobbyRepository(this.client);
-
-  final LichessClient client;
-
+class LobbyRepository(final LichessClient client) {
   Future<void> createSeek(GameSeek seek, {required String sri}) async {
     final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});
     await client.postRead(uri, body: seek.requestBody);

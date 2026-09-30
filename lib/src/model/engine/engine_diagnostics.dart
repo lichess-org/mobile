@@ -9,7 +9,7 @@ import 'package:multistockfish/multistockfish.dart';
 /// alone only says *that* it failed. This is that snapshot with the plugin's
 /// types flattened out, so an [EngineFailure] can describe either engine.
 class EngineDiagnostics {
-  const EngineDiagnostics({
+  const new({
     required this.phase,
     required this.step,
     required this.elapsed,
@@ -17,14 +17,14 @@ class EngineDiagnostics {
     this.lastError,
   });
 
-  EngineDiagnostics.stockfish(StockfishDiagnostics diagnostics)
+  new stockfish(StockfishDiagnostics diagnostics)
     : phase = diagnostics.phase.name,
       step = diagnostics.step,
       elapsed = diagnostics.elapsed,
       looksStuck = diagnostics.looksStuck,
       lastError = diagnostics.lastError;
 
-  EngineDiagnostics.lc0(Lc0Diagnostics diagnostics)
+  new lc0(Lc0Diagnostics diagnostics)
     : phase = diagnostics.phase.name,
       step = diagnostics.step,
       elapsed = diagnostics.elapsed,

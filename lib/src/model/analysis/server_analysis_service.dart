@@ -23,30 +23,56 @@ part 'server_analysis_service.freezed.dart';
 final _logger = Logger('ServerAnalysisService');
 
 @freezed
-sealed class ServerAnalysisSource with _$ServerAnalysisSource {
-  const ServerAnalysisSource._();
+sealed class const ServerAnalysisSource._() with _$ServerAnalysisSource {
+  const factory game({required GameId gameId}) = _GameServerAnalysisSource;
 
-  const factory ServerAnalysisSource.game({required GameId gameId}) = _GameServerAnalysisSource;
-
-  const factory ServerAnalysisSource.studyChapter({
-    required StudyId studyId,
-    required StudyChapterId chapterId,
-  }) = _StudyChapterServerAnalysisSource;
+  const factory studyChapter({required StudyId studyId, required StudyChapterId chapterId}) =
+      _StudyChapterServerAnalysisSource;
 }
 
 const Duration kMaxWaitForServerAnalysis = Duration(minutes: 1);
+
+/// Raised when the server refused to start an analysis, carrying the reason.
+class ServerAnalysisRequestException(
+  /// The reason the server refused.
+  final ServerAnalysisRequestError error,
+
+  /// The server's refusal text, shown to the user.
+  final String message,
+) {
+  @override
+  String toString() => 'ServerAnalysisRequestException: $error ($message)';
+}
+
+/// Why the server refused to start an analysis for a game.
+enum ServerAnalysisRequestError() {
+  alreadyAnalysed,
+  concurrentAnalysis,
+  weeklyLimitReached,
+  dailyLimitReached,
+  dailyIpLimitReached,
+  notAnalysable,
+  unknown,
+}
+
+/// The exact error strings `lila.fishnet.Analyser.Result` sends, keyed by the resulting error.
+const _kServerAnalysisRequestErrors = {
+  'This game is already analysed': ServerAnalysisRequestError.alreadyAnalysed,
+  'You already have an ongoing requested analysis': ServerAnalysisRequestError.concurrentAnalysis,
+  'You have reached the weekly analysis limit': ServerAnalysisRequestError.weeklyLimitReached,
+  'You have reached the daily analysis limit': ServerAnalysisRequestError.dailyLimitReached,
+  'You have reached the daily analysis limit on this IP':
+      ServerAnalysisRequestError.dailyIpLimitReached,
+  'This game is not analysable': ServerAnalysisRequestError.notAnalysable,
+};
 
 /// A provider for [ServerAnalysisService].
 final serverAnalysisServiceProvider = Provider<ServerAnalysisService>((Ref ref) {
   return ServerAnalysisService(ref);
 }, name: 'ServerAnalysisServiceProvider');
 
-class ServerAnalysisService {
-  ServerAnalysisService(this.ref);
-
+class ServerAnalysisService(final Ref ref) {
   StreamSubscription<SocketEvent>? _socketSubscription;
-
-  final Ref ref;
 
   final _currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
 
@@ -65,8 +91,8 @@ class ServerAnalysisService {
 
   /// Request server analysis for a game.
   ///
-  /// This will return a future that completes when the server analysis is
-  /// launched (but not when it is finished).
+  /// This will return a future that completes when the server analysis is launched (but not when
+  /// it is finished).
   Future<void> requestAnalysis(ServerAnalysisSource source, [Side? side]) async {
     // If we are already listening for analysis updates of this exact game/study,
     // don't tear everything down and reconnect.
@@ -121,17 +147,23 @@ class ServerAnalysisService {
           await ref.read(gameRepositoryProvider).requestServerAnalysis(gameId);
           _currentAnalysis.value = source;
         } on ServerException catch (e, st) {
-          // 400 means analysis already requested (most likely) so we'll still try to listen to the socket
-          // for updates.
-          // TODO: should disambiguate this better. Server will also return an error when max number
-          // of analyses is reached.
-          if (e.statusCode == 400) {
-            _logger.info('Analysis already requested for game $gameId');
-            _currentAnalysis.value = source;
-          } else {
-            _logger.severe('ServerException requesting server analysis', e, st);
-            _cancelAnalysis();
-            rethrow;
+          final error = _classifyRequestAnalysisError(e);
+          switch (error) {
+            case ServerAnalysisRequestError.alreadyAnalysed:
+              _logger.fine('Game $gameId is already analysed, reading it from the socket');
+              _currentAnalysis.value = source;
+            case ServerAnalysisRequestError.concurrentAnalysis:
+            case ServerAnalysisRequestError.weeklyLimitReached:
+            case ServerAnalysisRequestError.dailyLimitReached:
+            case ServerAnalysisRequestError.dailyIpLimitReached:
+            case ServerAnalysisRequestError.notAnalysable:
+              _logger.warning('Server refused to analyse game $gameId: $error', e, st);
+              _cancelAnalysis();
+              throw ServerAnalysisRequestException(error, e.message);
+            case ServerAnalysisRequestError.unknown:
+              _logger.severe('ServerException requesting server analysis', e, st);
+              _cancelAnalysis();
+              rethrow;
           }
         } catch (e, st) {
           _logger.severe('Error requesting server analysis', e, st);
@@ -155,6 +187,20 @@ class ServerAnalysisService {
     _analysisCompleter?.future.timeout(kMaxWaitForServerAnalysis).whenComplete(() {
       _cancelAnalysis();
     });
+  }
+
+  /// Work out why the server refused to start an analysis, from the plain-text body it sends
+  /// alongside the 400.
+  static ServerAnalysisRequestError _classifyRequestAnalysisError(ServerException e) {
+    if (e.statusCode != 400) {
+      return ServerAnalysisRequestError.unknown;
+    }
+    for (final MapEntry(key: body, value: error) in _kServerAnalysisRequestErrors.entries) {
+      if (e.message.endsWith(body)) {
+        return error;
+      }
+    }
+    return ServerAnalysisRequestError.unknown;
   }
 
   /// Cancel the ongoing server analysis, if any.
@@ -226,7 +272,7 @@ final currentAnalysisProvider =
       name: 'CurrentAnalysisProvider',
     );
 
-class CurrentAnalysis extends Notifier<ServerAnalysisSource?> {
+class CurrentAnalysis() extends Notifier<ServerAnalysisSource?> {
   @override
   ServerAnalysisSource? build() {
     final listenable = ref.watch(serverAnalysisServiceProvider).currentAnalysis;

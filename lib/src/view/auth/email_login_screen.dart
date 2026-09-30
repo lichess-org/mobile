@@ -22,12 +22,13 @@ final _emailRegExp = RegExp(
 );
 
 /// The two steps of the email login flow.
-enum _EmailLoginStep { email, code }
+enum _EmailLoginStep() {
+  email,
+  code,
+}
 
 /// Screen that signs the user in with a login code emailed to them.
-class EmailLoginScreen extends StatefulWidget {
-  const EmailLoginScreen({super.key});
-
+class const EmailLoginScreen({super.key}) extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EmailLoginScreen());
   }
@@ -36,7 +37,7 @@ class EmailLoginScreen extends StatefulWidget {
   State<EmailLoginScreen> createState() => _EmailLoginScreenState();
 }
 
-class _EmailLoginScreenState extends State<EmailLoginScreen> {
+class _EmailLoginScreenState() extends State<EmailLoginScreen> {
   _EmailLoginStep step = _EmailLoginStep.email;
 
   /// The account the code was requested for. Only set once the first step succeeded.
@@ -63,7 +64,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('Sign in with an email'),
+        title: Text(context.l10n.mobileSignInWithEmail),
         leading: step == _EmailLoginStep.code
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -93,22 +94,16 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 }
 
 /// First step: asks for the account name and email address, and requests a login code for them.
-class _EmailForm extends ConsumerStatefulWidget {
-  const _EmailForm({
-    required this.initialUsername,
-    required this.initialEmail,
-    required this.onCodeSent,
-  });
-
-  final String? initialUsername;
-  final String? initialEmail;
-  final void Function({required String username, required String email}) onCodeSent;
-
+class const _EmailForm({
+  required final String? initialUsername,
+  required final String? initialEmail,
+  required final void Function({required String username, required String email}) onCodeSent,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_EmailForm> createState() => _EmailFormState();
 }
 
-class _EmailFormState extends ConsumerState<_EmailForm> {
+class _EmailFormState() extends ConsumerState<_EmailForm> {
   final formKey = GlobalKey<FormState>();
   late final usernameController = TextEditingController(text: widget.initialUsername);
   late final emailController = TextEditingController(text: widget.initialEmail);
@@ -172,7 +167,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
       child: ListView(
         padding: Styles.bodySectionPadding,
         children: [
-          const Text('We will email you a code to sign in with.'),
+          Text(context.l10n.mobileWeWillEmailYouCode),
           const SizedBox(height: 24.0),
           TextFormField(
             controller: usernameController,
@@ -213,7 +208,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
             validator: (value) {
               final email = value?.trim() ?? '';
               if (!_emailRegExp.hasMatch(email)) {
-                return 'Please enter a valid email address.';
+                return context.l10n.error_email;
               }
               return null;
             },
@@ -225,7 +220,7 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
               MutationPending() => null,
               _ => submit,
             },
-            child: const Text('Send me a code'),
+            child: Text(context.l10n.mobileSendMeACode),
           ),
         ],
       ),
@@ -234,17 +229,13 @@ class _EmailFormState extends ConsumerState<_EmailForm> {
 }
 
 /// Second step: asks for the code that was emailed, and exchanges it for a session.
-class _CodeForm extends ConsumerStatefulWidget {
-  const _CodeForm({required this.username, required this.email});
-
-  final String username;
-  final String email;
-
+class const _CodeForm({required final String username, required final String email})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_CodeForm> createState() => _CodeFormState();
 }
 
-class _CodeFormState extends ConsumerState<_CodeForm> {
+class _CodeFormState() extends ConsumerState<_CodeForm> {
   final formKey = GlobalKey<FormState>();
   final controller = TextEditingController();
 
@@ -293,10 +284,7 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
       child: ListView(
         padding: Styles.bodySectionPadding,
         children: [
-          Text(
-            'If an account matches ${widget.email}, a $_kLoginCodeLength character code was sent '
-            'to it. Check your inbox and enter the code below.',
-          ),
+          Text(context.l10n.mobileIfAccountMatchesCodeSent(widget.email, '$_kLoginCodeLength')),
           const SizedBox(height: 24.0),
           TextFormField(
             controller: controller,
@@ -310,10 +298,13 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
               FilteringTextInputFormatter.deny(RegExp(r'\s')),
               LengthLimitingTextInputFormatter(_kLoginCodeLength),
             ],
-            decoration: const InputDecoration(labelText: 'Code', border: OutlineInputBorder()),
+            decoration: InputDecoration(
+              labelText: context.l10n.mobileCodeFieldLabel,
+              border: const OutlineInputBorder(),
+            ),
             validator: (value) {
               if ((value?.trim() ?? '').length != _kLoginCodeLength) {
-                return 'The code is $_kLoginCodeLength characters long.';
+                return context.l10n.mobileCodeLengthMessage('$_kLoginCodeLength');
               }
               return null;
             },
@@ -328,10 +319,7 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
             child: Text(context.l10n.signIn),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            'The code expires after 5 minutes and can only be used once.',
-            style: TextTheme.of(context).bodySmall,
-          ),
+          Text(context.l10n.mobileCodeExpiresMessage, style: TextTheme.of(context).bodySmall),
         ],
       ),
     );
@@ -342,8 +330,8 @@ class _CodeFormState extends ConsumerState<_CodeForm> {
 void showEmailLoginError(BuildContext context, MutationState<void> state) {
   if (state case MutationError(:final error)) {
     showSnackBar(context, switch (error) {
-      EmailLoginRateLimitException() => 'Too many attempts. Please try again later.',
-      InvalidEmailLoginCodeException() => 'This code is invalid or has expired.',
+      EmailLoginRateLimitException() => context.l10n.mobileTooManyLoginAttempts,
+      InvalidEmailLoginCodeException() => context.l10n.mobileInvalidOrExpiredLoginCode,
       _ => context.l10n.mobileSomethingWentWrong,
     }, type: SnackBarType.error);
   }

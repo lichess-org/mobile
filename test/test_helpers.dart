@@ -38,12 +38,8 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 /// Mocks a surface with a given size.
-class TestSurface extends StatelessWidget {
-  const TestSurface({required this.child, required this.size, super.key});
-
-  final Size size;
-  final Widget child;
-
+class const TestSurface({required final Widget child, required final Size size, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -107,6 +103,11 @@ bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
 /// Returns the valid moves set currently highlighted on the interactive chessboard.
 Set<Square> getBoardValidMoves(WidgetTester tester) {
   return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
+}
+
+/// Returns the square of the currently selected piece, or null if no piece is selected.
+Square? getBoardSelectedSquare(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.selected;
 }
 
 /// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.

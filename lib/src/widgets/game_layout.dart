@@ -47,7 +47,7 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Exactly one of [boardParams] (the screen lets [GameLayout] own the board
   /// controller) or [controllerParams] (the screen owns the controller, for the
   /// high-performance path) must be provided.
-  const GameLayout({
+  const new({
     required this.orientation,
     this.boardParams,
     this.controllerParams,
@@ -78,7 +78,7 @@ class GameLayout extends ConsumerStatefulWidget {
        );
 
   /// Creates an empty game layout (useful for loading).
-  const GameLayout.empty({this.moves, this.errorMessage})
+  const new empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
       controllerParams = null,
@@ -189,7 +189,7 @@ class GameLayout extends ConsumerStatefulWidget {
   ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
-class _GameLayoutState extends ConsumerState<GameLayout> {
+class _GameLayoutState() extends ConsumerState<GameLayout> {
   /// The controller created and owned by this state, used only in the
   /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
   ChessboardController? _ownController;
@@ -574,27 +574,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   }
 }
 
-class BoardSettingsOverrides {
-  const BoardSettingsOverrides({
-    this.animationDuration,
-    this.autoQueenPromotion,
-    this.autoQueenPromotionOnPremove,
-    this.blindfoldMode,
-    this.drawShape,
-    this.pieceOrientationBehavior,
-    this.pieceAssets,
-    this.enablePremoves,
-  });
-
-  final Duration? animationDuration;
-  final bool? autoQueenPromotion;
-  final bool? autoQueenPromotionOnPremove;
-  final bool? blindfoldMode;
-  final DrawShapeOptions? drawShape;
-  final PieceOrientationBehavior? pieceOrientationBehavior;
-  final PieceAssets? pieceAssets;
-  final bool? enablePremoves;
-
+class const BoardSettingsOverrides({
+  final Duration? animationDuration,
+  final bool? autoQueenPromotion,
+  final bool? autoQueenPromotionOnPremove,
+  final bool? blindfoldMode,
+  final DrawShapeOptions? drawShape,
+  final PieceOrientationBehavior? pieceOrientationBehavior,
+  final PieceAssets? pieceAssets,
+  final bool? enablePremoves,
+}) {
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
       animationDuration: animationDuration,
