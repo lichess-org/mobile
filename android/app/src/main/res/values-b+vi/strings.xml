@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Câu đố Hàng ngày</string>
+    <string name="widget_community_title">Cộng đồng</string>
+    <string name="widget_broadcast_title">Các phát sóng</string>
+</resources>
