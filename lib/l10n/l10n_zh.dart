@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => '接受和棋？';
 
   @override
   String get mobileAccount => '账户';
@@ -21,33 +21,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAccountPreferencesHelp => '这些设置将应用于您的 Lichess 账户，并在所有设备上生效。';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => '添加到研习';
 
   @override
   String get mobileAllGames => '所有对局';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => '允许悔棋和提示';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'Amoled 纯黑';
 
   @override
   String get mobileAreYouSure => '您确定吗？';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return '您确定要下载 NNUE 文件 ($param) 吗？';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => '横屏模式下的棋盘位置';
 
   @override
   String get mobileBoardSettings => '棋盘设置';
 
   @override
-  String get mobileBronsteinDelay => 'Bronstein delay';
+  String get mobileBronsteinDelay => 'Bronstein 延时';
 
   @override
   String get mobileCancelTakebackOffer => '取消悔棋请求';
@@ -56,33 +56,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
-  String get mobileChallengeFromPosition => 'Challenge from position';
+  String get mobileChallengeFromPosition => '从局面发起挑战';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => '章节名称';
 
   @override
   String get mobileChessEngine => '国际象棋引擎';
 
   @override
-  String get mobileChooseCustomBackground => 'Choose a custom background';
+  String get mobileChooseCustomBackground => '选择自定义背景';
 
   @override
   String get mobileClearButton => '清空';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeExpiresMessage => '验证码 5 分钟后过期，且只能使用一次。';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => '验证码';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return '验证码长度为 $param 个字符。';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => '复制成功！';
 
   @override
   String get mobileCorrespondenceClearSavedMove => '清除已保存的着法';
@@ -97,10 +97,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '取消';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => '危险操作';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => '删除您的账户';
 
   @override
   String get mobileDisplayModeCompact => '简洁模式';
@@ -109,25 +109,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileDisplayModeDetailed => '详细模式';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => '您接受挑战吗？';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => '下载我的对局';
 
   @override
   String get mobileFeedbackButton => '问题反馈';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => '筛选';
 
   @override
-  String get mobileFlipClock => 'Flip clock';
+  String get mobileFlipClock => '翻转计时器';
 
   @override
-  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+  String get mobileFlipPiecesAfterMove => '走棋后翻转棋子和对手信息';
 
   @override
-  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+  String get mobileGetFeedbackOnMoves => '获取着法反馈';
 
   @override
   String mobileGoodDay(String param) {
@@ -149,30 +149,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => '好着，但有更好的着法';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => '您好';
 
   @override
   String get mobileHomeTab => '首页';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+    return '如果账户与 $param1 匹配，系统已向该账户发送了一个 $param2 位验证码。请检查您的收件箱并在下方输入验证码。';
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+  String get mobileInvalidOrExpiredLoginCode => '验证码无效或已过期！';
 
   @override
   String get mobileLiveStreamers => '主播';
 
   @override
-  String get mobileLocalDatabaseSize => 'Local database size';
+  String get mobileLocalDatabaseSize => '本地数据库大小';
 
   @override
-  String get mobileMoveOnRelease => 'Move on release';
+  String get mobileMoveOnRelease => '松开时走棋';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+  String get mobileMoveOnReleaseSubtitle => '通过点击移动棋子时，抬起手指即完成走棋，您可以滑动以更改目标棋格。';
 
   @override
   String get mobileMustBeLoggedIn => '您需要登录才能浏览此页面';
@@ -184,7 +184,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNewGame => '新的对局';
 
   @override
-  String get mobileNextMistake => 'Next mistake';
+  String get mobileNextMistake => '下一个错着';
 
   @override
   String get mobileNoSearchResults => '无结果';
@@ -205,7 +205,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileOverTheBoard => '离线棋盘';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => '从剪贴板粘贴';
 
   @override
   String get mobilePerfShortAntichess => '弃子棋';
@@ -256,7 +256,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePerfShortUltraBullet => '超子弹棋';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'PGN 复制成功！';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -270,7 +270,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePositionRight => '右侧';
 
   @override
-  String get mobilePracticeMode => 'Practice mode';
+  String get mobilePracticeMode => '练习模式';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '放大拖动的棋子';
@@ -297,7 +297,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePuzzlesTab => '谜题';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => '为此应用评分';
 
   @override
   String get mobileRecentSearches => '最近搜索';
@@ -306,10 +306,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => '移除书签';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => '选择研习';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => '向我发送验证码';
 
   @override
   String get mobileServerAnalysis => '服务器分析';
@@ -372,7 +372,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => '点击两个棋格';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => '您的偏好设置已保存到您的 Lichess 账户中，它们将在您的所有设备上同步。';
 
   @override
   String get mobileSettingsShapeDrawing => '棋盘标记';
@@ -390,7 +390,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '启用后，移动或吃子时设备将短暂振动。';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShareChallengeUrl => '分享挑战链接';
 
   @override
   String get mobileShareGamePGN => '分享 PGN';
@@ -399,7 +399,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileShareGameURL => '分享对局链接';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
+  String get mobileShareLocalAnalysisPgn => '分享本地分析 PGN';
 
   @override
   String get mobileSharePositionAsFEN => '分享 FEN 对局代码';
@@ -411,31 +411,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileShowComments => '显示评论';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => '显示引擎线路';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => '显示局面评估';
 
   @override
   String get mobileShowResult => '显示结果';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => '使用浏览器登录';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => '使用邮箱登录';
 
   @override
-  String get mobileSimpleDelay => 'Simple delay';
+  String get mobileSimpleDelay => '简单延时';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => '小棋盘';
 
   @override
   String get mobileSomethingWentWrong => '出现错误';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => '好友排序';
 
   @override
   String get mobileStopShowingThreat => '停止显示威胁';
@@ -444,13 +444,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSystemColors => '跟随系统';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+  String get mobileTablebaseOffline => '残局库在离线状态下不可用！';
 
   @override
   String get mobileTheme => '主题';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileTooManyLoginAttempts => '尝试次数过多，请稍后重试。';
 
   @override
   String get mobileTournamentCompleted => '已完成';
@@ -464,13 +464,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => '使用对称的棋子';
 
   @override
   String get mobileViewGame => '查看对局';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => '查看许可';
 
   @override
   String get mobileWaitingForOpponentToJoin => '等待对手加入...';
@@ -479,10 +479,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileWatchTab => '观看';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => '我们将通过邮件向您发送用于登录的验证码。';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => '您无法向自己发起挑战';
 
   @override
   String get activityActivity => '动态';
@@ -2037,7 +2037,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get perfStatNow => '现在';
 
   @override
-  String get practiceMakesPerfect => 'makes your chess perfect';
+  String get practiceMakesPerfect => '让棋艺臻于完美';
 
   @override
   String get practiceSignUpToSaveYourProgress => '注册以保存您的进度';
@@ -2100,7 +2100,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get practiceStNamZwischenzug => '过渡着';
 
   @override
-  String get practiceStNamXRay => 'X-Ray';
+  String get practiceStNamXRay => '透视';
 
   @override
   String get practiceStNamZugzwang => '楚茨文格';
@@ -2109,7 +2109,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get practiceStNamInterference => '拦截';
 
   @override
-  String get practiceStNamGreekGift => 'Greek Gift';
+  String get practiceStNamGreekGift => '希腊礼物';
 
   @override
   String get practiceStNamDeflection => '引离';
@@ -2121,121 +2121,121 @@ class AppLocalizationsZh extends AppLocalizations {
   String get practiceStNamUnderpromotion => '低升变';
 
   @override
-  String get practiceStNamDesperado => 'Desperado';
+  String get practiceStNamDesperado => '亡命着法';
 
   @override
-  String get practiceStNamCounterCheck => 'Counter Check';
+  String get practiceStNamCounterCheck => '反将';
 
   @override
-  String get practiceStNamUndermining => 'Undermining';
+  String get practiceStNamUndermining => '削弱';
 
   @override
   String get practiceStNamClearance => '腾挪';
 
   @override
-  String get practiceStNamKeySquares => 'Key Squares';
+  String get practiceStNamKeySquares => '关键格';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => '对王';
 
   @override
-  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+  String get practiceStNam7thRankRookPawn => '车占七线';
 
   @override
-  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+  String get practiceStNamBasicRookEndgames => '基础车残局';
 
   @override
-  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+  String get practiceStNamIntermediateRookEndings => '进阶车残局';
 
   @override
-  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+  String get practiceStNamPracticalRookEndings => '实战车残局';
 
   @override
-  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+  String get practiceStDesBasicCheckmates => '基础将杀';
 
   @override
-  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+  String get practiceStDesRecognizeThePatterns => '识别模式';
 
   @override
-  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+  String get practiceStDesChallengingCheckmates => '高难将杀';
 
   @override
-  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+  String get practiceStDesInteractiveLesson => '互动课程';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+  String get practiceStDesPinItToWinIt => '牵制制胜';
 
   @override
-  String get practiceStDesYumSkewers => 'Yum - skewers!';
+  String get practiceStDesYumSkewers => '美味 - 串击！';
 
   @override
-  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+  String get practiceStDesUseTheForkLuke => '用叉子（捉双）吧，卢克';
 
   @override
-  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+  String get practiceStDesIncludingDiscoveredChecks => '包括闪将';
 
   @override
-  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+  String get practiceStDesAVeryPowerfulTactic => '非常强大的战术';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => '棋子负担过重';
 
   @override
-  String get practiceStDesInBetweenMoves => 'In-between moves';
+  String get practiceStDesInBetweenMoves => '中间着';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => '穿透敌方棋子发动攻击';
 
   @override
-  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+  String get practiceStDesBeingForcedToMove => '被迫行棋';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => '有效拦截';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => '研究希腊礼物弃子（古典弃象）';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => '引离防守子力';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => '引诱棋子至劣格';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => '升变 - 但不要升为后！';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => '棋子虽失，仍能发挥作用';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => '以将军回应将军';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => '消除防守子力';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => '让开道路！';
 
   @override
-  String get practiceStDesReachAKeySquare => 'Reach a key square';
+  String get practiceStDesReachAKeySquare => '抵达关键格';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => '夺取对王';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => '对抗王后';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => '消极车对车';
 
   @override
-  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+  String get practiceStDesLucenaAndPhilidor => '卢塞纳与菲利多尔局面';
 
   @override
-  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+  String get practiceStDesBroadenYourKnowledge => '拓展您的知识';
 
   @override
-  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
+  String get practiceStDesRookEndingsWithSeveralPawns => '多兵车残局';
 
   @override
   String get preferencesPreferences => '偏好设置';
@@ -5420,6 +5420,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get security => '安全';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return '这是已登录到您账户的设备和应用列表。如果您发现任何可疑活动，请务必<a href=\'$param1\'>检查您的备用邮箱地址</a>并<a href=\'$param2\'>更改密码</a>。';
+  }
+
+  @override
   String get sessions => '登录会话';
 
   @override
@@ -5436,6 +5441,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noChallenges => '暂无挑战';
+
+  @override
+  String get browserNotificationsDenied => '浏览器设置已禁用通知弹窗';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6177,6 +6185,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preview => '预览';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

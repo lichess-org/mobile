@@ -7,22 +7,25 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">دڵنیایت؟</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ڕێکخستنەکانی تەختە</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">داخوازیی گەڕاندنەوە ھەڵوەشێنەرەوە</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">سڕینه‌وه‌</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">سڕینه‌وه‌</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">جووڵەی پاشەکەوتکراو بسڕەوە</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">بەشداریی یارییەک بکە</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">بۆچوونەکانت</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ئێوارەت باش، %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ئێوارەت باش</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ڕۆژ باش، %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ڕۆژ باش</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">زنجیرە جووڵە پێشنیارکراوەکان بشارەوە</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ئێوارەت باش، %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ئێوارەت باش</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەرەتا</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">پەخشکەرە ڕاستەوخۆکان</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">بۆ بینینی ئەم لاپەڕەیە پێویستە بچیتە ژوورەوە.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">یاریی نوێ</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ھیچ ئەنجامێک نەدۆزرایەوە</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشە</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">باشە</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Over the board</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ئەتۆمی</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">٩٦٠</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ماڵی شێت
+</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">مەتەڵ</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">یاریزانان بە «%s»</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">چەپ</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ڕاست</string>
@@ -31,11 +34,10 @@
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ھیچ ئەنجامێک نەدۆزرایەوە، تکایە پاڵێوەرەکانت بگۆڕە</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">هیچ شتێک نییە بۆ ئەوەی نیشان بدرێت. هەندێک مەتەڵ شیکار بکە.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">زۆرترین مەتەڵ لە ماوەی ٣ خولەکدا شیکار بکە.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">زنجیرەی ئێستات لەدەست دەدەیت و نمرەکەت پاشەکەوت دەکرێت.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">مەتەڵەکان شیکار بکە کە پەیوەندییان بە دەستپێکە دڵخوازەکانتەوە ھەیە، یان شێوازێک ھەڵبژێرە.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">مەتەڵەکان</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">دوایین گەڕانەکان</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">جێنیشانکەر بسڕەوە</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">جێنیشانکەر بسڕەوە</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">شوێنی کاتژمێر</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">زووتردانانەکان</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">ئامانجی داشی ڕاکێشراو</string>
@@ -45,9 +47,9 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">دۆخی پڕاوپڕی شاشە</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">شاردنەوەی ڕووکاری سیستەم لەکاتی یاریکردندا. ئەمە بەکاربھێنە ئەگەر ئاماژەکانی ڕێدۆزیی سیستەمەکە لە لێواری شاشەکە بێزارت دەکەن. ئەمە شاشەکانی یاری و مەتەڵ دەگرێتەوە.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">داشە گیراوەکان</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">وێنەیەک ھەڵبژێرە</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">پاشبنەمای خوازراو تەنیا لە دۆخی تاریکدا کار دەکات. وێنەی تاریک پێشنیارکراوە.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">وێنەیەک ھەڵبژێرە</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">وێنەکە تەڵخ بکە</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">پاشبنەمای خوازراو تەنیا لە دۆخی تاریکدا کار دەکات. وێنەی تاریک پێشنیارکراوە.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">تەختەکە بشارەوە</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">تەختەکە پیشان بدە</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">پەنجەت ڕابکێشە بۆ بینینی پاشبنەماکانی ترە</string>
@@ -58,25 +60,16 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">چوارچێوە پیشان بدە</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">پێڕاگەیاندنەوەی دەستلێدان</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">کە کارا بوو، ئامێرەکە بەکورتی دەلەرزێت کاتێک دەجووڵێیت یان داشێک دەگریت.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ڕێکخسنەکان</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">ھاوبەشکردنی PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ھاوبەشکردنی بەستەری یاری</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">شوێنەکە وەک FEN ھاوبەشی پێبکە</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">ئەم مەتەڵە ھاوبەشی پێبکە</string>
   <string name="showComments" comment="Shown in the analysis screen.">لێدوانەکان پیشان بدە</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ئەنجام پیشان بدە</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">زنجیرە جووڵە پێشنیارکراوەکان پیشان بدە</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">ھەڵەیەک ڕوویدا.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ڕەنگەکانی سیستەم</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ڕووکار</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ئامرازەکان</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">شێوەی %s لەم وەشانەدا پشتگیریی ناکرێت.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">چاوەڕێی بەشداریکردنی ڕکابەر...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">سەیرکردن</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">بەخێربێیت بۆ بەرنامەی لیچێس!</string>
-  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">٩٦٠</string>
-  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ئەتۆمی</string>
-  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">ماڵی شێت
-</string>
-  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">مەتەڵ</string>
 </resources>

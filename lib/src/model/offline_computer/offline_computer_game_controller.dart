@@ -620,7 +620,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     try {
       final repository = ref.read(openingExplorerRepositoryProvider);
       return await repository
-          .getMasterDatabase(fen, since: MasterDb.kEarliestYear)
+          .getMasterDatabase(fen, since: MasterDb.earliestDate)
           .timeout(const Duration(seconds: 2));
     } catch (e, st) {
       _logger.fine('Failed to fetch master database:', e, st);

@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.28.4+002804 # See README.md for details about versioning
+version: 0.29.0+002900 # See README.md for details about versioning
 
 environment:
   sdk: ^3.13.0
@@ -21,7 +21,7 @@ dependencies:
   cronet_http: ^1.9.0
   crypto: ^3.0.7
   cupertino_http: ^3.0.2
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
   cupertino_ui: ^1.0.0
   dartchess: ^0.14.0
   deep_pick: ^1.1.0
@@ -51,7 +51,7 @@ dependencies:
   flutter_slidable: ^4.0.3
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
-  home_widget: ^0.9.3
+  home_widget: ^0.10.0
   http: ^1.6.0
   image_picker: ^1.2.3
   intl: ^0.20.3

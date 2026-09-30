@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Beraberlik teklifi kabul edilsin mi?';
 
   @override
   String get mobileAccount => 'Hesap';
@@ -21,33 +21,33 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Bu tercihler Lichess hesabınıza uygulanacak ve cihazlarınız arasında senkronize edilecektir.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Çalışmaya ekle';
 
   @override
   String get mobileAllGames => 'Tüm oyunlar';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Hamleyi geri almaya ve ipuçlarına izin verir';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'Amoled siyah';
 
   @override
   String get mobileAreYouSure => 'Emin misiniz?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'NNUE dosyasını ($param) indirmek istediğinizden emin misiniz?';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => 'Manzara modundaki tahta konumu';
 
   @override
   String get mobileBoardSettings => 'Tahta seçenekleri';
 
   @override
-  String get mobileBronsteinDelay => 'Bronstein delay';
+  String get mobileBronsteinDelay => 'Bronstein gecikmesi';
 
   @override
   String get mobileCancelTakebackOffer => 'Geri alma teklifini iptal et';
@@ -56,33 +56,33 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileChallengeCreated => 'Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.';
 
   @override
-  String get mobileChallengeFromPosition => 'Challenge from position';
+  String get mobileChallengeFromPosition => 'Pozisyondan meydan oku';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => 'Bölüm Adı';
 
   @override
   String get mobileChessEngine => 'Satranç motoru';
 
   @override
-  String get mobileChooseCustomBackground => 'Choose a custom background';
+  String get mobileChooseCustomBackground => 'Özel bir arkaplan seçin';
 
   @override
   String get mobileClearButton => 'Temizle';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeExpiresMessage => 'Kodun geçerlilik süresi 5 dakikadır ve yalnızca bir kez kullanılabilir.';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'Kod';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'Kod $param karakter uzunluğundadır.';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'Kopyalandı.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Kayıtlı hamleyi sil';
@@ -97,10 +97,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Gizle';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => 'Tehlikeli bölge';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Hesabınızı silin';
 
   @override
   String get mobileDisplayModeCompact => 'Küçük';
@@ -109,25 +109,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Ayrıntılı';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Meydan okumayı kabul ediyor musun?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Oyunlarımı indir';
 
   @override
   String get mobileFeedbackButton => 'Geri bildirimde bulun';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'Filtreler';
 
   @override
-  String get mobileFlipClock => 'Flip clock';
+  String get mobileFlipClock => 'Saati döndür';
 
   @override
-  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+  String get mobileFlipPiecesAfterMove => 'Hamle yaptıktan sonra taşları ve rakip bilgilerini döndür';
 
   @override
-  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+  String get mobileGetFeedbackOnMoves => 'Hamleleriniz hakkında geri bildirim alın';
 
   @override
   String mobileGoodDay(String param) {
@@ -149,30 +149,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'İyi hamle ama daha iyisi var';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Merhaba';
 
   @override
   String get mobileHomeTab => 'Ana sayfa';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+    return 'Eğer bir hesap $param1 ile eşleşirse, o hesaba $param2 karakter uzunluğunda bir kod gönderilecektir. Gelen kutunuzu kontrol edin ve aşağıya kodu girin.';
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+  String get mobileInvalidOrExpiredLoginCode => 'Bu kod geçersiz veya süresi dolmuş.';
 
   @override
   String get mobileLiveStreamers => 'Canlı yayıncılar';
 
   @override
-  String get mobileLocalDatabaseSize => 'Local database size';
+  String get mobileLocalDatabaseSize => 'Yerel veritabanı boyutu';
 
   @override
-  String get mobileMoveOnRelease => 'Move on release';
+  String get mobileMoveOnRelease => 'Bırakınca hamle yap';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+  String get mobileMoveOnReleaseSubtitle => 'Bir taşı dokunarak hareket ettirirken, parmağınızı kaldırdığınızda hamle gerçekleştirilir; böylece parmağınızı kaydırarak hedef kareyi değiştirebilirsiniz.';
 
   @override
   String get mobileMustBeLoggedIn => 'Bu sayfayı görüntülemek için giriş yapmalısınız.';
@@ -184,7 +184,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileNewGame => 'Yeni oyun';
 
   @override
-  String get mobileNextMistake => 'Next mistake';
+  String get mobileNextMistake => 'Sonraki hata';
 
   @override
   String get mobileNoSearchResults => 'Sonuç bulunamadı';
@@ -205,7 +205,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileOverTheBoard => 'Tahta üzerinde çevrimdışı oyna';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => 'Panodan yapıştır';
 
   @override
   String get mobilePerfShortAntichess => 'Anti';
@@ -256,7 +256,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'PGN kopyalandı.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -270,7 +270,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePositionRight => 'Sağ';
 
   @override
-  String get mobilePracticeMode => 'Practice mode';
+  String get mobilePracticeMode => 'Alıştırma modu';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Sürüklenen taşı büyüt';
@@ -297,7 +297,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePuzzlesTab => 'Bulmacalar';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'Uygulamayı puanla';
 
   @override
   String get mobileRecentSearches => 'Son aramalar';
@@ -306,10 +306,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Bir çalışma seçin';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'Bana bir kod gönder';
 
   @override
   String get mobileServerAnalysis => 'Sunucu analizi';
@@ -372,7 +372,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'İki kareye dokun';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => 'Tercihleriniz Lichess hesabınıza kaydedildi. Bu tercihler tüm cihazlarınız arasında senkronize edilecektir.';
 
   @override
   String get mobileSettingsShapeDrawing => 'Şekil çizimi';
@@ -384,13 +384,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsShowBorder => 'Kenarları göster';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Dokunuş geribildirimi';
+  String get mobileSettingsTouchFeedback => 'Dokunma geri bildirimi';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShareChallengeUrl => 'Meydan okuma bağlantısını paylaşın';
 
   @override
   String get mobileShareGamePGN => 'PGN\'yi paylaş';
@@ -399,7 +399,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileShareGameURL => 'Oyun linkini paylaş';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
+  String get mobileShareLocalAnalysisPgn => 'Yerel analiz PGN\'sini paylaşın';
 
   @override
   String get mobileSharePositionAsFEN => 'Konumu FEN olarak paylaş';
@@ -411,31 +411,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileShowComments => 'Yorumları göster';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'Motor satırlarını göster';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => 'Değerlendirme çubuğunu göster';
 
   @override
   String get mobileShowResult => 'Sonucu göster';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'Tarayıcıyla giriş yap';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'E-posta ile giriş yap';
 
   @override
-  String get mobileSimpleDelay => 'Simple delay';
+  String get mobileSimpleDelay => 'Basit gecikme';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => 'Küçük tahta';
 
   @override
   String get mobileSomethingWentWrong => 'Birşeyler ters gitti.';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => 'Arkadaşları sıralayın';
 
   @override
   String get mobileStopShowingThreat => 'Tehtidi göstermeyi durdur';
@@ -444,13 +444,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSystemColors => 'Sistem renkleri';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+  String get mobileTablebaseOffline => 'Tablebase, çevrimdışı kullanım için mevcut değil.';
 
   @override
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileTooManyLoginAttempts => 'Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.';
 
   @override
   String get mobileTournamentCompleted => 'Tamamlanan';
@@ -464,13 +464,13 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => 'Simetrik taşlar kullan';
 
   @override
   String get mobileViewGame => 'Oyunu Gör';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'Lisansları görüntüle';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Rakip bekleniyor...';
@@ -479,10 +479,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileWatchTab => 'İzle';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'Giriş yapmanız için size e-posta ile bir kod göndereceğiz.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Kendinize meydan okuyamazsınız';
 
   @override
   String get activityActivity => 'Son Etkinlikler';
@@ -2080,7 +2080,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceSecHeadRookEndgames => 'Kale Oyun Sonları';
 
   @override
-  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+  String get practiceStNamPieceCheckmatesI => 'Taş Şah Matları I';
 
   @override
   String get practiceStNamCheckmatePatternsI => 'Şah Mat Desenleri I';
@@ -2095,13 +2095,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStNamCheckmatePatternsIV => 'Şah Mat Desenleri IV';
 
   @override
-  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+  String get practiceStNamPieceCheckmatesII => 'Taş Şah Matları II';
 
   @override
   String get practiceStNamKnightAndBishopMate => 'At & Fil Matı';
 
   @override
-  String get practiceStNamThePin => 'The Pin';
+  String get practiceStNamThePin => 'Açmaz';
 
   @override
   String get practiceStNamTheSkewer => 'Şiş';
@@ -2140,25 +2140,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStNamAttraction => 'Cezbetme';
 
   @override
-  String get practiceStNamUnderpromotion => 'Düşük terfi';
+  String get practiceStNamUnderpromotion => 'Düşük Terfi';
 
   @override
   String get practiceStNamDesperado => 'Desperado';
 
   @override
-  String get practiceStNamCounterCheck => 'Counter Check';
+  String get practiceStNamCounterCheck => 'Karşı Şah';
 
   @override
-  String get practiceStNamUndermining => 'Undermining';
+  String get practiceStNamUndermining => 'Altını Oyma';
 
   @override
-  String get practiceStNamClearance => 'Clearance';
+  String get practiceStNamClearance => 'Boşaltma';
 
   @override
   String get practiceStNamKeySquares => 'Anahtar Kareler';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => 'Opozisyon';
 
   @override
   String get practiceStNam7thRankRookPawn => '7. Sıra Kale Piyonu';
@@ -2185,79 +2185,79 @@ class AppLocalizationsTr extends AppLocalizations {
   String get practiceStDesInteractiveLesson => 'Etkileşimli ders';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+  String get practiceStDesPinItToWinIt => 'Kazanmak için açmaza alın';
 
   @override
-  String get practiceStDesYumSkewers => 'Nefis - şişler!';
+  String get practiceStDesYumSkewers => 'Nefis şişler!';
 
   @override
   String get practiceStDesUseTheForkLuke => 'Çatalı kullan Luke';
 
   @override
-  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+  String get practiceStDesIncludingDiscoveredChecks => 'Açarak şahlar dahil';
 
   @override
   String get practiceStDesAVeryPowerfulTactic => 'Çok güçlü bir taktik';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => 'Çok fazla işleri var';
 
   @override
-  String get practiceStDesInBetweenMoves => 'In-between moves';
+  String get practiceStDesInBetweenMoves => 'Ara hamleler';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Rakip taşın üzerinden saldırmak';
 
   @override
   String get practiceStDesBeingForcedToMove => 'Hareket etmeye zorlanmak';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Çok etkili bir şekilde araya taş sokmak';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Yunan hediyesi fedasını çalışın';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => 'Savunmacının dikkatini dağıtmak';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => 'Bir taşı kötü bir kareye çekin';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => 'Terfi ettirin ama vezire değil!';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Taş kaybedildi, ama hala yardım edebilir';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => 'Şaha, şahla karşılık verin';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => 'Savunma yapan taşı ortadan kaldır';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => 'Çekilin yoldan!';
 
   @override
-  String get practiceStDesReachAKeySquare => 'Reach a key square';
+  String get practiceStDesReachAKeySquare => 'Anahtar kareye ulaşın';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => 'Opozisyonu alın';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => 'Bir vezire karşı';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => 'Ve Pasif Kale vs Kale';
 
   @override
-  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+  String get practiceStDesLucenaAndPhilidor => 'Lucena ve Philidor';
 
   @override
-  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+  String get practiceStDesBroadenYourKnowledge => 'Bilginizi genişletin';
 
   @override
-  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Birkaç piyonla kale sonları';
 
   @override
   String get preferencesPreferences => 'Tercihler';
@@ -5448,6 +5448,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get security => 'Güvenlik';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Hesabınıza giriş yapmış cihaz ve uygulamaların listesidir. Eğer şüpheli bir hareket fark ederseniz <a href=\'$param1\'>kurtarma e-postanızı kontrol edin</a> ve <a href=\'$param2\'>şifrenizi değiştirin</a>.';
+  }
+
+  @override
   String get sessions => 'Oturumlar';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noChallenges => 'Meydan okuma yok.';
+
+  @override
+  String get browserNotificationsDenied => 'Bildirim açılır pencereleri, tarayıcı tarafından devre dışı bırakıldı';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get preview => 'Önizleme';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

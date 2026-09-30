@@ -2810,12 +2810,24 @@
   "enableKidMode": "Enable Kid mode",
   "disableKidMode": "Disable Kid mode",
   "security": "Security",
+  "activeSessionsDescription": "This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href='{param1}'>check your recovery email address</a> and <a href='{param2}'>change your password</a>.",
+  "@activeSessionsDescription": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
   "sessions": "Sessions",
   "revokeAllSessions": "revoke all sessions",
   "playChessEverywhere": "Play chess everywhere",
   "everybodyGetsAllFeaturesForFree": "Everybody gets all features for free",
   "viewTheSolution": "View the solution",
   "noChallenges": "No challenges.",
+  "browserNotificationsDenied": "Notification popups disabled by browser setting",
   "xHostsY": "{param1} hosts {param2}",
   "@xHostsY": {
     "placeholders": {
@@ -3293,6 +3305,7 @@
   "boards": "Boards",
   "write": "Write",
   "preview": "Preview",
+  "done": "Done",
   "opponentLeftCounter": "{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}",
   "@opponentLeftCounter": {
     "placeholders": {
