@@ -9,7 +9,7 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'ドローに応じますか？';
 
   @override
   String get mobileAccount => 'アカウント';
@@ -21,33 +21,33 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'これらの設定は、あなたの Lichess アカウントを使用しているすべての端末で有効になります。';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => '研究に追加';
 
   @override
   String get mobileAllGames => 'すべて';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'AMOLED用ブラック';
 
   @override
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'ほんとうにNNUEファイル($param)をダウンロードしますか？';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => '横置きモードでのボードの位置';
 
   @override
   String get mobileBoardSettings => '盤面の設定';
 
   @override
-  String get mobileBronsteinDelay => 'Bronstein delay';
+  String get mobileBronsteinDelay => 'ブロンシュテイン・ディレイ';
 
   @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
@@ -56,33 +56,33 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
 
   @override
-  String get mobileChallengeFromPosition => 'Challenge from position';
+  String get mobileChallengeFromPosition => 'この局面でチャレンジ';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => '章名';
 
   @override
   String get mobileChessEngine => 'チェスエンジン';
 
   @override
-  String get mobileChooseCustomBackground => 'Choose a custom background';
+  String get mobileChooseCustomBackground => 'カスタム背景を選択';
 
   @override
   String get mobileClearButton => 'クリア';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeExpiresMessage => 'コードは 5 分後に期限切れになり、使えるのは一度だけです。';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'コード';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'コードは $param 文字です。';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'コピーしました。';
 
   @override
   String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
@@ -97,10 +97,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '使わない';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => '要注意の操作';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'アカウントを削除';
 
   @override
   String get mobileDisplayModeCompact => 'コンパクト';
@@ -109,25 +109,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileDisplayModeDetailed => '詳細';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'チャレンジを承認しますか？';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => '自分のゲームをダウンロード';
 
   @override
   String get mobileFeedbackButton => 'フィードバック';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'フィルター';
 
   @override
-  String get mobileFlipClock => 'Flip clock';
+  String get mobileFlipClock => '時計の上下反転';
 
   @override
-  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+  String get mobileFlipPiecesAfterMove => '1 手ごとに駒と情報を上下反転';
 
   @override
-  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+  String get mobileGetFeedbackOnMoves => '指し手についてフィードバックをもらう';
 
   @override
   String mobileGoodDay(String param) {
@@ -149,27 +149,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'いい手ですがもっといい手があります';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'ハロー';
 
   @override
   String get mobileHomeTab => 'ホーム';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+    return 'アカウントが $param1 と一致していれば $param2 文字のコードが送られています。受信箱を確認し、以下にコードを入力してください。';
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+  String get mobileInvalidOrExpiredLoginCode => 'コードが無効か期限切れです。';
 
   @override
   String get mobileLiveStreamers => 'ライブ配信者';
 
   @override
-  String get mobileLocalDatabaseSize => 'Local database size';
+  String get mobileLocalDatabaseSize => 'ローカルデータベース容量';
 
   @override
-  String get mobileMoveOnRelease => 'Move on release';
+  String get mobileMoveOnRelease => '指を離すと手が確定';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
@@ -184,7 +184,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileNewGame => '新しい対局';
 
   @override
-  String get mobileNextMistake => 'Next mistake';
+  String get mobileNextMistake => '次の悪手';
 
   @override
   String get mobileNoSearchResults => '検索結果なし';
@@ -205,7 +205,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOverTheBoard => 'オフライン（2人対戦）';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => 'クリップボードからペースト';
 
   @override
   String get mobilePerfShortAntichess => 'アンチ';
@@ -256,7 +256,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'ウルトラ';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'PGNをコピーしました。';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -270,7 +270,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePositionRight => '右';
 
   @override
-  String get mobilePracticeMode => 'Practice mode';
+  String get mobilePracticeMode => '練習モード';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
@@ -297,7 +297,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePuzzlesTab => '問題';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'このアプリを評価';
 
   @override
   String get mobileRecentSearches => '最近の検索';
@@ -306,10 +306,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRemoveBookmark => 'ブックマークから削除';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => '研究を選択';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'コードを送ってもらう';
 
   @override
   String get mobileServerAnalysis => 'サーバ解析';
@@ -372,7 +372,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => '2つのマスをタップ';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => '設定はあなたの Lichess アカウントに保存されました。すべてのデバイスで有効になります。';
 
   @override
   String get mobileSettingsShapeDrawing => '図形の描画';
@@ -390,7 +390,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '有効にすると、着手・捕獲したときに端末が少し震えます。';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShareChallengeUrl => 'チャレンジ URL をシェア';
 
   @override
   String get mobileShareGamePGN => 'PGN を共有';
@@ -399,7 +399,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileShareGameURL => 'ゲーム URLを共有';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
+  String get mobileShareLocalAnalysisPgn => 'ローカル解析 PGN をシェア';
 
   @override
   String get mobileSharePositionAsFEN => '局面を FEN で共有';
@@ -411,31 +411,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileShowComments => 'コメントを表示';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'エンジンの手順を表示';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => '評価値ゲージを表示';
 
   @override
   String get mobileShowResult => '結果を表示';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'ブラウザでサインイン';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'メールアドレスでサインイン';
 
   @override
-  String get mobileSimpleDelay => 'Simple delay';
+  String get mobileSimpleDelay => '単純なディレイ';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => '小さなボード';
 
   @override
   String get mobileSomethingWentWrong => '問題が発生しました。';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => '友達をソート';
 
   @override
   String get mobileStopShowingThreat => '狙いの表示をやめる';
@@ -444,13 +444,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+  String get mobileTablebaseOffline => 'テーブルベースはオフラインでは利用できません。';
 
   @override
   String get mobileTheme => 'テーマ';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileTooManyLoginAttempts => '試行回数が多すぎます。また後でどうぞ。';
 
   @override
   String get mobileTournamentCompleted => '終了';
@@ -464,13 +464,13 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => '上下対称デザインの駒';
 
   @override
   String get mobileViewGame => '元のゲームを見る';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'ライセンスを表示';
 
   @override
   String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
@@ -479,10 +479,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileWatchTab => '見る';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'サインインのためのコードをメールで送ります。';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => '自分にはチャレンジできません';
 
   @override
   String get activityActivity => '活動';

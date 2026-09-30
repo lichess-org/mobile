@@ -9,7 +9,7 @@ class AppLocalizationsNl extends AppLocalizations {
   AppLocalizationsNl([String locale = 'nl']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Remise accepteren?';
 
   @override
   String get mobileAccount => 'Account';
@@ -21,33 +21,33 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Deze voorkeuren worden toegepast op je Lichess account en worden op alle apparaten gebruikt.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Toevoegen aan studie';
 
   @override
   String get mobileAllGames => 'Alle partijen';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Terugnames en hints toestaan';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'Amoled zwart';
 
   @override
   String get mobileAreYouSure => 'Weet je het zeker?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Weet je zeker dat je het NNUE-bestand ($param) wilt downloaden?';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => 'Bordpositie in landschapsmodus';
 
   @override
   String get mobileBoardSettings => 'Bordinstellingen';
 
   @override
-  String get mobileBronsteinDelay => 'Bronstein delay';
+  String get mobileBronsteinDelay => 'Bronsteinvertraging';
 
   @override
   String get mobileCancelTakebackOffer => 'Terugnameaanbod annuleren';
@@ -56,33 +56,33 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileChallengeCreated => 'Uitdaging gemaakt: je krijgt bericht wanneer de partij begint.\nJe kunt de partij vanaf je home-tabblad openen.';
 
   @override
-  String get mobileChallengeFromPosition => 'Challenge from position';
+  String get mobileChallengeFromPosition => 'Uitdagen vanaf stelling';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => 'Naam';
 
   @override
   String get mobileChessEngine => 'Schaakcomputer';
 
   @override
-  String get mobileChooseCustomBackground => 'Choose a custom background';
+  String get mobileChooseCustomBackground => 'Aangepaste achtergrond kiezen';
 
   @override
   String get mobileClearButton => 'Wissen';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeExpiresMessage => 'De code verloopt na 5 minuten en kan slechts één keer gebruikt worden.';
 
   @override
   String get mobileCodeFieldLabel => 'Code';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'De code is $param tekens lang.';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'Gekopieerd.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Opgeslagen zet wissen';
@@ -97,10 +97,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => 'Gevarenzone';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Verwijder je account';
 
   @override
   String get mobileDisplayModeCompact => 'Compact';
@@ -109,10 +109,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Gedetailleerd';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Accepteer je de uitdaging?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Mijn partijen downloaden';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
@@ -121,13 +121,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileFilters => 'Filters';
 
   @override
-  String get mobileFlipClock => 'Flip clock';
+  String get mobileFlipClock => 'Klok omdraaien';
 
   @override
-  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+  String get mobileFlipPiecesAfterMove => 'Omdraaien na elke zet';
 
   @override
-  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+  String get mobileGetFeedbackOnMoves => 'Krijg feedback op je zetten';
 
   @override
   String mobileGoodDay(String param) {
@@ -149,7 +149,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Goede zet, maar er is een betere';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Hallo';
 
   @override
   String get mobileHomeTab => 'Startscherm';
@@ -160,16 +160,16 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+  String get mobileInvalidOrExpiredLoginCode => 'Deze code is ongeldig of is verlopen.';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
-  String get mobileLocalDatabaseSize => 'Local database size';
+  String get mobileLocalDatabaseSize => 'Grootte van lokale databank';
 
   @override
-  String get mobileMoveOnRelease => 'Move on release';
+  String get mobileMoveOnRelease => 'Zetten bij loslaten';
 
   @override
   String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
@@ -184,7 +184,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileNewGame => 'Nieuwe partij';
 
   @override
-  String get mobileNextMistake => 'Next mistake';
+  String get mobileNextMistake => 'Volgende fout';
 
   @override
   String get mobileNoSearchResults => 'Geen resultaten';
@@ -205,7 +205,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOverTheBoard => 'Op virtueel bord';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => 'Plak vanaf klembord';
 
   @override
   String get mobilePerfShortAntichess => 'Weggeef';
@@ -256,7 +256,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'PGN gekopieerd.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -270,7 +270,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePositionRight => 'Rechts';
 
   @override
-  String get mobilePracticeMode => 'Practice mode';
+  String get mobilePracticeMode => 'Oefenmodus';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Versleept stuk vergroot weergeven';
@@ -297,7 +297,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePuzzlesTab => 'Puzzels';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'Beoordeel deze app';
 
   @override
   String get mobileRecentSearches => 'Recente zoekopdrachten';
@@ -306,10 +306,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bladwijzer verwijderen';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Selecteer een studie';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'Stuur me een code';
 
   @override
   String get mobileServerAnalysis => 'Server analyse';
@@ -372,7 +372,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tik twee vakjes';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => 'Je voorkeuren zijn opgeslagen in je Lichess account. Deze worden op al je apparaten gesynchroniseerd.';
 
   @override
   String get mobileSettingsShapeDrawing => 'Vormen tekenen';
@@ -390,7 +390,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShareChallengeUrl => 'Uitdagingslink delen';
 
   @override
   String get mobileShareGamePGN => 'PGN delen';
@@ -399,7 +399,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileShareGameURL => 'Partij URL delen';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
+  String get mobileShareLocalAnalysisPgn => 'Lokale analyse-PGN delen';
 
   @override
   String get mobileSharePositionAsFEN => 'Stelling delen als FEN';
@@ -411,31 +411,31 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileShowComments => 'Opmerkingen weergeven';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'Computerzetten weergeven';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => 'Evaluatiebalk weergeven';
 
   @override
   String get mobileShowResult => 'Toon resultaat';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'Log in met de browser';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'Log in met een e-mailadres';
 
   @override
-  String get mobileSimpleDelay => 'Simple delay';
+  String get mobileSimpleDelay => 'Gewone vertraging';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => 'Klein bord';
 
   @override
   String get mobileSomethingWentWrong => 'Er is iets fout gegaan.';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => 'Sorteer vrienden';
 
   @override
   String get mobileStopShowingThreat => 'Verberg dreiging';
@@ -444,13 +444,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSystemColors => 'Systeemkleuren';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+  String get mobileTablebaseOffline => 'Tablebase is niet offline beschikbaar.';
 
   @override
   String get mobileTheme => 'Thema';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileTooManyLoginAttempts => 'Teveel pogingen. Probeer het later nog eens.';
 
   @override
   String get mobileTournamentCompleted => 'Afgelopen';
@@ -464,13 +464,13 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => 'Symmetrische stukken';
 
   @override
   String get mobileViewGame => 'Partij bekijken';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'Licenties bekijken';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Wachten op een tegenstander...';
@@ -479,10 +479,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileWatchTab => 'Kijken';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'We sturen je een e-mail met een code om in te loggen.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Je kunt jezelf niet uitdagen';
 
   @override
   String get activityActivity => 'Activiteit';

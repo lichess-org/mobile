@@ -9,7 +9,7 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Погодитися на нічию?';
 
   @override
   String get mobileAccount => 'Обліковий запис';
@@ -21,16 +21,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Ці налаштування застосовуються до вашого облікового запису Lichess і будуть використовуватися на всіх пристроях.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Додати до дослідження';
 
   @override
   String get mobileAllGames => 'Усі ігри';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'Темна AMOLED';
 
   @override
   String get mobileAreYouSure => 'Ви впевнені?';
@@ -306,7 +306,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Видалити закладку';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Вибір дослідження';
 
   @override
   String get mobileSendMeACode => 'Send me a code';
@@ -482,7 +482,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Не можна кидати виклик собі';
 
   @override
   String get activityActivity => 'Активність';

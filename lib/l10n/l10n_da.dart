@@ -37,7 +37,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Er du sikker på du vil downloade NNUE filen ($param)?';
   }
 
   @override
@@ -109,7 +109,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detaljeret';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Accepterer du udfordringen?';
 
   @override
   String get mobileDownloadMyGames => 'Download my games';
@@ -149,7 +149,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Hej';
 
   @override
   String get mobileHomeTab => 'Hjem';
@@ -482,7 +482,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Du kan ikke udfordre dig selv';
 
   @override
   String get activityActivity => 'Aktivitet';
