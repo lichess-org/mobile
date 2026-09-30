@@ -345,6 +345,10 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
   }
 
   Future<void> _saveScore(LearnStage stage, int levelIndex, int score) {
+    // Read before the first await, not after: the score belongs to whoever was signed in when the
+    // level was completed, so an account change while it waits in the queue must not redirect it
+    // to the account that replaced that one.
+    final userId = _signedIn;
     return _serialize(() async {
       // Read after the queue is ours, not before: a snapshot taken up front is stale the moment
       // another operation lands, and would drop the score it wrote.
@@ -354,11 +358,9 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
       // rely on withScore returning an identical instance, that is an implementation detail.
       if (current.levelScore(stage, levelIndex) >= score) return;
       final generation = _generation;
-      final userId = _signedIn;
       final storage = await ref.read(learnProgressStorageProvider.future);
-      // The row and the state are both written for the account signed in now, and neither is
-      // written once the generation moved on, so a completion during an account change is never
-      // credited to the account that replaced it.
+      // A reset bumps the generation from inside this queue, so this only rejects a write that
+      // would resurrect the rows a reset deleted.
       if (generation != _generation) return;
       state = AsyncData(current.withScore(stage, levelIndex, score));
       await storage.saveScore(
@@ -588,9 +590,15 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     } catch (_) {
       return _PushResult.retry;
     }
-    // Re-checked after the await: the account or the generation may have moved on, and stamping
-    // then would mark a score as clean that was never uploaded under this generation.
-    if (generation != _generation) return _PushResult.retry;
+    // The POST succeeded, so the server holds this score. The row is stamped even when the
+    // generation moved on, because markSynced only touches a row still holding this exact score:
+    // a reset deleted it, or a better score replaced it, and both leave the update matching
+    // nothing. A row that still matches is one this account still owes nothing for.
+    // After an account change the POST credited whichever token was live, so that row keeps its
+    // own pending push.
+    if (generation != _generation && userId != ref.read(authControllerProvider)?.user.id) {
+      return _PushResult.retry;
+    }
     await storage.markSynced(
       userId: userId,
       stageKey: stageKey,
@@ -607,9 +615,11 @@ class LearnProgressNotifier() extends AsyncNotifier<LearnProgress> {
     if (generation != _generation) return false;
     try {
       await ref.withClient((client) => LearnRepository(client).reset());
-      if (generation != _generation) return false;
+      // Cleared before the staleness check, not after: the POST has landed, so the reset reached
+      // the server whatever happened to this operation since. Bailing out first would leave the
+      // flag set for good, and every later start would wipe whatever the user earned on the web.
       await storage.setResetPending(userId, pending: false);
-      return true;
+      return generation == _generation;
     } on ServerException catch (e) {
       _logger.warning('Server refused the learn reset (${e.statusCode})', e);
       return false;
