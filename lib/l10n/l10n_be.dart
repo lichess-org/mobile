@@ -5500,6 +5500,11 @@ class AppLocalizationsBe extends AppLocalizations {
   String get security => 'Бяспека';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Сэсіі';
 
   @override
@@ -5516,6 +5521,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get noChallenges => 'Няма выклікаў.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6257,6 +6265,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

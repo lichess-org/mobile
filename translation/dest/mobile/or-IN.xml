@@ -6,7 +6,6 @@
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ଡାହାଣ</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ପ୍ରହେଳିକା</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ଘଣ୍ଟା ଅବସ୍ଥାନ</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ସେଟିଂ</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN ଅଂଶୀଦାର କରନ୍ତୁ</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">ଖେଳ URL ଅଂଶୀଦାର କରନ୍ତୁ</string>
 </resources>

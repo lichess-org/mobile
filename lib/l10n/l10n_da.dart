@@ -37,7 +37,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Er du sikker på du vil downloade NNUE filen ($param)?';
   }
 
   @override
@@ -109,7 +109,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detaljeret';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Accepterer du udfordringen?';
 
   @override
   String get mobileDownloadMyGames => 'Download my games';
@@ -149,7 +149,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Hej';
 
   @override
   String get mobileHomeTab => 'Hjem';
@@ -482,7 +482,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Du kan ikke udfordre dig selv';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -2383,7 +2383,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Bekræft træk';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Flere valg. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan deaktiveres i løbet af et parti med brætmenuen';
@@ -2530,7 +2530,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
 
   @override
-  String get preferencesNetwork => 'Network';
+  String get preferencesNetwork => 'Netværk';
 
   @override
   String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
@@ -5448,6 +5448,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get security => 'Sikkerhed';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Dette er en liste over enheder og applikationer, der er logget ind på din konto. Hvis du bemærker mistænkelig aktivitet, skal du sørge for at <a href=\'$param1\'>tjekke din e-mailadresse til gendannelse</a> and <a href=\'$param2\'>ændre din adgangskode</a>.';
+  }
+
+  @override
   String get sessions => 'Sessioner';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get noChallenges => 'Ingen udfordringer.';
+
+  @override
+  String get browserNotificationsDenied => 'Notifikationspop-vinduer deaktiveret af browserindstilling';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preview => 'Forhåndsvisning';
+
+  @override
+  String get done => 'Færdig';
 
   @override
   String opponentLeftCounter(int count) {

@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -137,15 +138,20 @@ class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends Consum
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
-    return account.when(
-      data: (user) {
-        if (user != null) {
-          return PerfCards(user: user, isMe: true, padding: padding);
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-      loading: () => Shimmer(
+    // [PerfCards] shows nothing until the ratings preference is known, so the skeleton is kept until
+    // then rather than collapsing the section in between. Watching it here also starts that request
+    // alongside the account one, instead of once the account has loaded.
+    final showRatings = ref.watch(showRatingsPrefProvider);
+    return switch ((account, showRatings)) {
+      (AsyncData(value: final user?), AsyncData()) => PerfCards(
+        user: user,
+        isMe: true,
+        padding: padding,
+      ),
+      (AsyncData(value: null), _) ||
+      (AsyncError(), _) ||
+      (_, AsyncError()) => const SizedBox.shrink(),
+      _ => Shimmer(
         child: Padding(
           padding: padding ?? Styles.bodySectionPadding,
           child: SizedBox(
@@ -170,7 +176,6 @@ class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends Consum
           ),
         ),
       ),
-      error: (error, stack) => const SizedBox.shrink(),
-    );
+    };
   }
 }

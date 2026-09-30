@@ -9,7 +9,7 @@ class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Погодитися на нічию?';
 
   @override
   String get mobileAccount => 'Обліковий запис';
@@ -21,16 +21,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Ці налаштування застосовуються до вашого облікового запису Lichess і будуть використовуватися на всіх пристроях.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Додати до дослідження';
 
   @override
   String get mobileAllGames => 'Усі ігри';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'Темна AMOLED';
 
   @override
   String get mobileAreYouSure => 'Ви впевнені?';
@@ -306,7 +306,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Видалити закладку';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Вибір дослідження';
 
   @override
   String get mobileSendMeACode => 'Send me a code';
@@ -482,7 +482,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Не можна кидати виклик собі';
 
   @override
   String get activityActivity => 'Активність';
@@ -925,7 +925,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get arenaBerserkRate => 'Ігор з берсерком';
 
   @override
-  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+  String get arenaLeaguesAndStreamerBattles => 'Ліги й битви стримерів';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1036,7 +1036,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastDeleteRound => 'Видалити цей раунд';
 
   @override
-  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+  String get broadcastPermanentlyDeleteRound => 'Остаточно видалити цей раунд та всі його ігри?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Видалити всі ігри цього раунду. Джерело має бути активним для того, щоб повторно відтворити його.';
@@ -1278,7 +1278,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastKnockouts => 'Нокаути';
 
   @override
-  String get broadcastPinPlayer => 'Pin player';
+  String get broadcastPinPlayer => 'Закріпити гравця';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -2481,7 +2481,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesNotifyForumMentions => 'Згадки в форумі';
 
   @override
-  String get preferencesNotifyStudyInvites => 'Запрошення до навчання';
+  String get preferencesNotifyStudyInvites => 'Запрошення до дослідження';
 
   @override
   String get preferencesNotifyGameEvent => 'Оновлення заочних партій';
@@ -4890,7 +4890,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get writeAPrivateNoteAboutThisUser => 'Напишіть приватну нотатку про цього користувача';
 
   @override
-  String get noNoteYet => 'Нотаток поки нема';
+  String get noNoteYet => 'Поки немає нотаток';
 
   @override
   String get invalidUsernameOrPassword => 'Недійсне ім\'я користувача або пароль';
@@ -5504,6 +5504,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get security => 'Безпека';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Ось список пристроїв та застосунків, які здійснили вхід в обліковий запис. Якщо ви помітили підозрілу активність, <a href=\'$param1\'>перевірте свою резервну електронну пошту</a> та <a href=\'$param2\'>змініть пароль</a>.';
+  }
+
+  @override
   String get sessions => 'Сесії';
 
   @override
@@ -5520,6 +5525,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get noChallenges => 'Немає викликів.';
+
+  @override
+  String get browserNotificationsDenied => 'Спливні сповіщення вимкнено браузером';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -5584,7 +5592,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get roundness => 'Округлість';
 
   @override
-  String get backgroundImage => 'Background image';
+  String get backgroundImage => 'Фонове зображення';
 
   @override
   String get backgroundImageUrl => 'Посилання фонового зображення:';
@@ -6248,7 +6256,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settings => 'Налаштування';
 
   @override
-  String get verifyingYourDevice => 'Verifying your device...';
+  String get verifyingYourDevice => 'Перевірка пристрою…';
 
   @override
   String get chessOpenings => 'Шахові дебюти';
@@ -6257,10 +6265,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get boards => 'Дошки';
 
   @override
-  String get write => 'Write';
+  String get write => 'Написати';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Перегляд';
+
+  @override
+  String get done => 'Готово';
 
   @override
   String opponentLeftCounter(int count) {
