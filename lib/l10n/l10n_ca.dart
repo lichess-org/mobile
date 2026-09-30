@@ -3646,7 +3646,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String masterDbExplanation(String param1, String param2, String param3) {
-    return 'Dos milions de partides OTB de jugadors amb ELO FIDE +$param1 des de $param2 fins a $param3';
+    return 'Dos milions de partides OTB de jugadors amb Elo FIDE +$param1 des de $param2 fins a $param3';
   }
 
   @override
@@ -5448,6 +5448,11 @@ class AppLocalizationsCa extends AppLocalizations {
   String get security => 'Seguretat';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Aquesta és una llista dels dispositius i aplicacions que estan autentificades al vostre compte. Si detecteu alguna activitat sospitosa, assegureu-vos de <a href=\'$param1\'>comprovar el vostre correu de recuperació</a> i <a href=\'$param2\'>canviar la vostra contrasenya</a>.';
+  }
+
+  @override
   String get sessions => 'Sessions';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get noChallenges => 'Sense desafiaments.';
+
+  @override
+  String get browserNotificationsDenied => 'Les notificacions han estat desactivades per la configuració del navegador';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get preview => 'Previsualització';
+
+  @override
+  String get done => 'Fet';
 
   @override
   String opponentLeftCounter(int count) {

@@ -5420,6 +5420,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get security => '보안';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return '귀하의 계정에 로그인되어 있는 디바이스와 애플리케이션의 목록입니다. 의심스러운 활동이 확인된다면, 반드시 <a href=\'$param1\'>복구 이메일 주소를 확인</a>하고 <a href=\'$param2\'>비밀번호를 변경</a>하십시오.';
+  }
+
+  @override
   String get sessions => '세션';
 
   @override
@@ -5436,6 +5441,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noChallenges => '도전 없음.';
+
+  @override
+  String get browserNotificationsDenied => '브라우저 설정에 의해 알림 팝업이 비활성화됨';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6177,6 +6185,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preview => '미리보기';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

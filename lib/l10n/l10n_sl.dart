@@ -5504,6 +5504,11 @@ class AppLocalizationsSl extends AppLocalizations {
   String get security => 'Varnost';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'To je seznam naprav in aplikacij, ki so prijavljene v vaš račun. Če opazite kakršno koli sumljivo dejavnost, <a href=\'$param1\'>preverite svoj e-poštni naslov za obnovitev</a> in <a href=\'$param2\'>spremenite geslo</a>.';
+  }
+
+  @override
   String get sessions => 'Seje';
 
   @override
@@ -5520,6 +5525,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get noChallenges => 'Ni izzivov.';
+
+  @override
+  String get browserNotificationsDenied => 'Pojavna okna z obvestili so onemogočena zaradi nastavitve brskalnika';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6261,6 +6269,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

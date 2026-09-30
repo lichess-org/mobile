@@ -5286,7 +5286,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutSimul => 'التزامنيات هي لاعب واحد يواجه عدة خصوم في وقت واحد.';
 
   @override
-  String get aboutSimulImage => 'مع 50 خصماً, فاز فيشر بـ 47 مباراة, تعادل في اثنتين, وخسر واحدة.';
+  String get aboutSimulImage => 'من أصل 50 خصمًا، فاز فيشر بـ47 مباراة، وتعادل في مباراتين، وخسر مباراة واحدة.';
 
   @override
   String get aboutSimulRealLife => 'تم أخذ مفهوم التزامنيات من أحداث الحياة الواقعية. حيث ينتقل المضيف من طاولة لأخرى للعب.';
@@ -5307,7 +5307,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get simulVariantsHint => 'إذا اخترت عدة أنواع, كل لاعب يمكنه اختيار النوع الذي يريد.';
 
   @override
-  String get simulClockHint => 'ضبط توقيت بالزيادة . كلما زاد عدد اللاعبين كلما احتجت لوقت أطول.';
+  String get simulClockHint => 'كلما زاد عدد اللاعبين الذين تواجههم، قد تحتاج إلى وقت أطول.';
 
   @override
   String get simulAddExtraTime => 'يمكنك زيادة الوقت لساعتك للمساعدة في التزامنية.';
@@ -5560,6 +5560,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get security => 'الأمان';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'هذه قائمة بالأجهزة والتطبيقات التي سجّلت الدخول إلى حسابك. إذا لاحظت أي نشاط مريب، فتحقق من <a href=\'$param1\'> التحقق من بريدك الإلكتروني للاسترداد </a><a href=\'$param2\'> و <a href=\'$param2\'>تغيير كلمة مرورك </a>.';
+  }
+
+  @override
   String get sessions => 'جلسات';
 
   @override
@@ -5576,6 +5581,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noChallenges => 'لا توجد تحديات.';
+
+  @override
+  String get browserNotificationsDenied => 'النوافذ المنبثقة للإشعارات معطّلة في إعدادات المتصفح';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6317,6 +6325,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preview => 'معاينة';
+
+  @override
+  String get done => 'تم';
 
   @override
   String opponentLeftCounter(int count) {
