@@ -7,37 +7,43 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jeni i sigurt?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Rregullime fushe</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulojeni ofertën për prapakthim</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Spastroje</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Spastroje</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Spastroje lëvizjen e ruajtur</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Merrni pjesë në një lojë</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Përshtateni</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Hidhe tej</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompakte</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">E hollësishme</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Përshtypje</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëdita, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëdita</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Fshihe variantin</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Lëvizje e mirë, por ka edhe më mirë</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kreu</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmetues drejtpërsëdrejti</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Lojë e re</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nuk ka rezultate</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Ju lutemi, kini parasysh se jo krejt veçoritë nga aplikacioni apo sajti i vjetër janë të përdorshëm aktualisht, por gjithë kohës po shtojmë veçori.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">S’ndiqni ndonjë përdorues.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Hapja e Explorer-it s’bëhet dot jashtë linje.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ose importoni një kartelë PNG</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Mbi tabelën</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Lojtarët me \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Majtas</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Djathtas</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Zmadho gurin e tërhequr</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">E mëparshmja</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Doni të përfundohen ku raund?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nuk ka asgjë për të treguar, ju lutemi ndryshoni filtrat</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Asgjë për të treguar. Luaj disa vrapime të stuhisë së enigmës.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Zgjidhni sa më shumë enigmë të mundeni brenda 3 minutash.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Ju do të humbni brezin tuaj aktual dhe rezultati juaj do të ruhet.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Luani enigmë nga hapjet tuaja të parapëlqyera, ose zgjidhni një temë.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ushtrime</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kërkime së fundi</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Hiqe faqerojtësin</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Hiqe faqerojtësin</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Analizë shërbyesi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Pozicion sahati</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Paracaktime</string>
@@ -48,9 +54,9 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modaliteti zhytës</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fshihe UI-n e sistemit kur luhet. Përdoreni këtë nëse ju bezdisin gjestet e sistemit për lëvizje në skaje të ekranit. Vlen për skena lojërash dhe puzzle-sh.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Gurë të fituar</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Zgjidhni një figurë</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Sfondet e përshtatur funksionojnë vetëm nën mënyrën e errët. Rekomandohet një figurë e errët.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Zgjidhni një figurë</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Turbulloje pamjen</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Sfondet e përshtatur funksionojnë vetëm nën mënyrën e errët. Rekomandohet një figurë e errët.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Fshihe fushën</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Shfaqe fushën</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Që të shfaqen sfonde të tjerë, fërkojeni</string>
@@ -61,34 +67,20 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Shfa anë</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Reagim me prekje</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kur është i aktivizuar, pajisja do të dridhet për pak, kur lëvizni apo fitoni një gur.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Rregullime</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ndani PGN me të tjerë</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ndani URL loje me të tjerë</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Tregojuni të tjerëve pozicionin si FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ndajeni këtë ushtrim me të tjerët</string>
   <string name="showComments" comment="Shown in the analysis screen.">Shfaq komente</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Shfaq përfundimin</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Shfaq variante</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Diç shkoi ters.</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Resht së shfaquri kërcënimin</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Ngjyra sistemi</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Temë</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Mjete</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Të plotësuar</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Kalo te faqja ime</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianti %s nuk mbulohet në këtë version.</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Shihni Lojën</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Po pritet që të vijë kundërshtari...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Shiheni</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Mirë se vini te aplikacioni Lichess!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Shihni Lojën</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Ndihmëz: Mundeni të shtoni më tepër widget-e te Skena e Kreut, ose të hiqni ata që s’ju duhen!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Hidhe tej</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Përshtateni</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Resht së shfaquri kërcënimin</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Të plotësuar</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Kalo te faqja ime</string>
-  <string name="displayModeCompact" comment="">Kompakte</string>
-  <string name="displayModeDetailed" comment="">E hollësishme</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">Hapja e Explorer-it s’bëhet dot jashtë linje.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">E mëparshmja</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ose importoni një kartelë PNG</string>
-  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Lëvizje e mirë, por ka edhe më mirë</string>
 </resources>
