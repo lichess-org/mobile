@@ -9,22 +9,16 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CustomClockSettings extends StatefulWidget {
-  const CustomClockSettings({
-    required this.clockType,
-    required this.clock,
-    required this.onTimeSelected,
-  });
-
-  final ClockTimeControlType clockType;
-  final TimeIncrement clock;
-  final ValueSetter<TimeIncrement> onTimeSelected;
-
+class const CustomClockSettings({
+  required final ClockTimeControlType clockType,
+  required final TimeIncrement clock,
+  required final ValueSetter<TimeIncrement> onTimeSelected,
+}) extends StatefulWidget {
   @override
   State<CustomClockSettings> createState() => _CustomClockSettingsState();
 }
 
-class _CustomClockSettingsState extends State<CustomClockSettings> {
+class _CustomClockSettingsState() extends State<CustomClockSettings> {
   late TimeIncrement _clock;
 
   @override

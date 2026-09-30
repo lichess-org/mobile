@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -20,9 +21,7 @@ final Logger _logger = Logger('AppLogSettingsScreen');
 
 final _logDateFormatter = DateFormat.yMd().add_Hms();
 
-class AppLogSettingsScreen extends ConsumerStatefulWidget {
-  const AppLogSettingsScreen({super.key});
-
+class const AppLogSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const AppLogSettingsScreen());
   }
@@ -31,7 +30,7 @@ class AppLogSettingsScreen extends ConsumerStatefulWidget {
   ConsumerState<AppLogSettingsScreen> createState() => _AppLogSettingsScreenState();
 }
 
-class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
+class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   String? _searchQuery;
@@ -76,7 +75,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
         actions: [
           if (logs.isNotEmpty)
             IconButton(
-              tooltip: 'Export',
+              tooltip: context.l10n.studyShareAndExport,
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,
@@ -108,7 +107,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
-                    hintText: 'Search logs...',
+                    hintText: context.l10n.searchSearch,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;
                     }),
@@ -143,7 +142,7 @@ class _AppLogSettingsScreenState extends ConsumerState<AppLogSettingsScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('No logs to show'),
+              Text(context.l10n.nothingToSeeHere),
               TextButton(onPressed: _onRefresh, child: const Text('Tap to refresh')),
             ],
           ),
@@ -184,11 +183,7 @@ String _formatLogEntry(AppLogEntry entry) {
   return buffer.toString();
 }
 
-class _LogTile extends StatelessWidget {
-  const _LogTile({required this.entry});
-
-  final AppLogEntry entry;
-
+class const _LogTile({required final AppLogEntry entry}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const titleStyle = TextStyle(fontSize: 14, letterSpacing: -0.15);

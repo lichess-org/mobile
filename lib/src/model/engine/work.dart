@@ -13,10 +13,8 @@ typedef EvalResult = (EvalWork, LocalEval);
 
 /// A position to evaluate, and the settings to evaluate it with.
 @freezed
-sealed class EvalWork with _$EvalWork {
-  const EvalWork._();
-
-  const factory EvalWork({
+sealed class const EvalWork._() with _$EvalWork {
+  const factory({
     /// Identifier to associate this work with a game, puzzle, etc.
     required StringId id,
 
@@ -48,13 +46,10 @@ sealed class EvalWork with _$EvalWork {
 }
 
 @freezed
-sealed class Step with _$Step {
-  const Step._();
+sealed class const Step._() with _$Step {
+  const factory({required Position position, required SanMove sanMove, ClientEval? eval}) = _Step;
 
-  const factory Step({required Position position, required SanMove sanMove, ClientEval? eval}) =
-      _Step;
-
-  factory Step.fromNode(Branch node) {
+  factory fromNode(Branch node) {
     return Step(position: node.position, sanMove: node.sanMove, eval: node.eval);
   }
 }

@@ -10,12 +10,7 @@ final moveFeedbackServiceProvider = Provider<MoveFeedbackService>((Ref ref) {
   return MoveFeedbackService(soundService, ref);
 }, name: 'MoveFeedbackServiceProvider');
 
-class MoveFeedbackService {
-  MoveFeedbackService(this._soundService, this._ref);
-
-  final SoundService _soundService;
-  final Ref _ref;
-
+class MoveFeedbackService(final SoundService _soundService, final Ref _ref) {
   void moveFeedback({bool check = false}) {
     _soundService.play(Sound.move);
 
@@ -25,6 +20,17 @@ class MoveFeedbackService {
       } else {
         HapticFeedback.lightImpact();
       }
+    }
+  }
+
+  /// The feedback for a standard chess move written as [san]: a capture or a move, with or without
+  /// a check.
+  void playedMove(String san) {
+    final check = san.contains('+') || san.contains('#');
+    if (san.contains('x')) {
+      captureFeedback(Variant.standard, check: check);
+    } else {
+      moveFeedback(check: check);
     }
   }
 

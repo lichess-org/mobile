@@ -25,15 +25,13 @@ part 'game_seek.g.dart';
 /// See corresponding API docs:
 /// https://lichess.org/api#tag/Board/operation/apiBoardSeek
 @Freezed(fromJson: true, toJson: true)
-sealed class GameSeek with _$GameSeek {
-  const GameSeek._();
-
+sealed class const GameSeek._() with _$GameSeek {
   @Assert(
     'ratingDelta == null || ratingRange == null',
     'Rating delta and rating range cannot be used together',
   )
   @Assert('clock != null || days != null', 'Either clock or days must be set')
-  const factory GameSeek({
+  const factory({
     (Duration time, Duration increment)? clock,
     int? days,
     required bool rated,
@@ -47,7 +45,7 @@ sealed class GameSeek with _$GameSeek {
   }) = _GameSeek;
 
   /// Construct a fast pairing game seek from a predefined time control.
-  factory GameSeek.fastPairing(TimeIncrement setup, AuthUser? authUser) {
+  factory fastPairing(TimeIncrement setup, AuthUser? authUser) {
     return GameSeek(
       clock: (Duration(seconds: setup.time), Duration(seconds: setup.increment)),
       rated: authUser != null,
@@ -55,7 +53,7 @@ sealed class GameSeek with _$GameSeek {
   }
 
   /// Construct a game seek from saved [GameSetupPrefs], using all the custom params.
-  factory GameSeek.custom(GameSetupPrefs setup, User? account) {
+  factory custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
         Duration(seconds: setup.timeIncrement.time),
@@ -68,7 +66,7 @@ sealed class GameSeek with _$GameSeek {
   }
 
   /// Construct a correspondence seek from saved [GameSetupPrefs].
-  factory GameSeek.correspondence(GameSetupPrefs setup, User? account) {
+  factory correspondence(GameSetupPrefs setup, User? account) {
     return GameSeek(
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customVariant == Variant.standard && setup.customRated,
@@ -79,7 +77,7 @@ sealed class GameSeek with _$GameSeek {
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
+  factory newOpponentFromGame(PlayableGame game, GameSetupPrefs setup) {
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)
@@ -120,34 +118,31 @@ sealed class GameSeek with _$GameSeek {
     if (ratingRange != null) 'ratingRange': '${ratingRange!.$1}-${ratingRange!.$2}',
   };
 
-  factory GameSeek.fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$GameSeekFromJson(json);
 }
 
 /// The response to a game seek request.
 ///
 /// It can be either a [GameSeekCreated] or a [GameSeekCancelled].
-sealed class GameSeekResponse {}
+sealed class GameSeekResponse();
 
 /// A game has been created from the seek.
 @freezed
 sealed class GameSeekCreated with _$GameSeekCreated implements GameSeekResponse {
-  const factory GameSeekCreated({required GameFullId fullId}) = _GameSeekCreated;
+  const factory({required GameFullId fullId}) = _GameSeekCreated;
 }
 
 /// A game seek has been cancelled.
 @freezed
 sealed class GameSeekCancelled with _$GameSeekCancelled implements GameSeekResponse {
-  const factory GameSeekCancelled() = _GameSeekCancelled;
+  const factory() = _GameSeekCancelled;
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class RecentGameSeekPrefs with _$RecentGameSeekPrefs implements Serializable {
-  const RecentGameSeekPrefs._();
+sealed class const RecentGameSeekPrefs._() with _$RecentGameSeekPrefs implements Serializable {
+  const factory({required IList<GameSeek> seeks}) = _RecentGameSeekPrefs;
 
-  const factory RecentGameSeekPrefs({required IList<GameSeek> seeks}) = _RecentGameSeekPrefs;
-
-  factory RecentGameSeekPrefs.fromJson(Map<String, dynamic> json) =>
-      _$RecentGameSeekPrefsFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$RecentGameSeekPrefsFromJson(json);
 
   static const empty = RecentGameSeekPrefs(seeks: IListConst([]));
 
@@ -163,7 +158,8 @@ final recentGameSeekProvider = NotifierProvider<RecentGameSeek, RecentGameSeekPr
   name: 'RecentGameSeekProvider',
 );
 
-class RecentGameSeek extends Notifier<RecentGameSeekPrefs>
+class RecentGameSeek()
+    extends Notifier<RecentGameSeekPrefs>
     with PreferencesStorage<RecentGameSeekPrefs> {
   @override
   @protected

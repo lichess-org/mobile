@@ -18,9 +18,7 @@ import 'package:result_extensions/result_extensions.dart';
 
 final _countries = countries.values.toList();
 
-class EditProfileScreen extends ConsumerStatefulWidget {
-  const EditProfileScreen({super.key});
-
+class const EditProfileScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EditProfileScreen());
   }
@@ -29,7 +27,7 @@ class EditProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+class _EditProfileScreenState() extends ConsumerState<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _formData = <String, dynamic>{
     'flag': null,
@@ -139,18 +137,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 }
 
-class _EditProfileForm extends ConsumerStatefulWidget {
-  const _EditProfileForm(this.user, this.formKey, this.formData);
-
-  final User user;
-  final Map<String, dynamic> formData;
-  final GlobalKey<FormState> formKey;
-
+class const _EditProfileForm(
+  final User user,
+  final GlobalKey<FormState> formKey,
+  final Map<String, dynamic> formData,
+) extends ConsumerStatefulWidget {
   @override
   _EditProfileFormState createState() => _EditProfileFormState();
 }
 
-class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
+class _EditProfileFormState() extends ConsumerState<_EditProfileForm> {
   Future<void>? _pendingSaveProfile;
 
   @override
@@ -509,25 +505,18 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   }
 }
 
-class _NumericField extends StatefulWidget {
-  final String label;
-  final int? initialValue;
-  final String formKey;
-  final String? Function(int?)? validator;
-  final Map<String, dynamic> formData;
-  const _NumericField({
-    required this.label,
-    required this.initialValue,
-    required this.formKey,
-    required this.validator,
-    required this.formData,
-  });
-
+class const _NumericField({
+  required final String label,
+  required final int? initialValue,
+  required final String formKey,
+  required final String? Function(int?)? validator,
+  required final Map<String, dynamic> formData,
+}) extends StatefulWidget {
   @override
   State<_NumericField> createState() => __NumericFieldState();
 }
 
-class __NumericFieldState extends State<_NumericField> {
+class __NumericFieldState() extends State<_NumericField> {
   final _controller = TextEditingController();
   @override
   void initState() {
@@ -573,32 +562,21 @@ class __NumericFieldState extends State<_NumericField> {
   }
 }
 
-class _TextField extends StatefulWidget {
-  const _TextField({
-    required this.label,
-    required this.initialValue,
-    required this.formKey,
-    required this.formData,
-    this.description,
-    this.maxLength,
-    this.maxLines,
-    this.textInputAction = TextInputAction.next,
-  });
-
-  final String label;
-  final String? initialValue;
-  final String formKey;
-  final String? description;
-  final int? maxLength;
-  final int? maxLines;
-  final Map<String, dynamic> formData;
-  final TextInputAction textInputAction;
-
+class const _TextField({
+  required final String label,
+  required final String? initialValue,
+  required final String formKey,
+  required final Map<String, dynamic> formData,
+  final String? description,
+  final int? maxLength,
+  final int? maxLines,
+  final TextInputAction textInputAction = TextInputAction.next,
+}) extends StatefulWidget {
   @override
   State<_TextField> createState() => __TextFieldState();
 }
 
-class __TextFieldState extends State<_TextField> {
+class __TextFieldState() extends State<_TextField> {
   final _controller = TextEditingController();
   @override
   void initState() {

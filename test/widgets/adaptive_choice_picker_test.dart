@@ -6,9 +6,25 @@ import 'package:material_ui/material_ui.dart';
 
 import '../test_helpers.dart';
 
-enum TestEnumLarge { one, two, three, four, five, six, seven, eight, nine, ten, eleven }
+enum TestEnumLarge() {
+  one,
+  two,
+  three,
+  four,
+  five,
+  six,
+  seven,
+  eight,
+  nine,
+  ten,
+  eleven,
+}
 
-enum TestEnumSmall { one, two, three }
+enum TestEnumSmall() {
+  one,
+  two,
+  three,
+}
 
 void main() {
   testWidgets('showChoicePicker call onSelectedItemChanged (large choices)', (
@@ -104,5 +120,47 @@ void main() {
     // With small choices, on iOS the picker is an action sheet
     await tester.tap(find.text('three'));
     expect(selectedItems, [TestEnumSmall.three]);
+  }, variant: kPlatformVariant);
+
+  testWidgets('showChoicePicker supports nullable choices (including null)', (
+    WidgetTester tester,
+  ) async {
+    final List<TestEnumSmall?> selectedItems = <TestEnumSmall?>[];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return Center(
+                child: ElevatedButton(
+                  child: const Text('Show picker'),
+                  onPressed: () {
+                    showChoicePicker<TestEnumSmall?>(
+                      context,
+                      choices: const [...TestEnumSmall.values, null],
+                      selectedItem: TestEnumSmall.one,
+                      labelBuilder: (choice) => Text(choice?.name ?? 'custom'),
+                      onSelectedItemChanged: (choice) {
+                        selectedItems.add(choice);
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Show picker'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('custom'));
+    await tester.pumpAndSettle();
+
+    expect(selectedItems, [null]);
   }, variant: kPlatformVariant);
 }

@@ -29,11 +29,7 @@ final stockfishNnueServiceProvider = Provider<StockfishNnueService>((Ref ref) {
 ///
 /// This service handles downloading, checking, and deleting the NNUE file.
 /// It can be overridden in tests to avoid file system access.
-class StockfishNnueService {
-  StockfishNnueService(this._ref);
-
-  final Ref _ref;
-
+class StockfishNnueService(final Ref _ref) {
   final ValueNotifier<double> _nnueDownloadProgress = ValueNotifier(0.0);
   bool _nnueOperationInProgress = false;
 
@@ -185,9 +181,7 @@ class StockfishNnueService {
             barrierDismissible: true,
             builder: (context) {
               return AlertDialog.adaptive(
-                content: const Text(
-                  'Are you sure you want to download the NNUE file ($nnueDownloadSizeMB)?',
-                ),
+                content: Text(context.l10n.mobileAreYouSureDownloadNnue(nnueDownloadSizeMB)),
                 actions: [
                   PlatformDialogAction(
                     child: const Text('OK'),
@@ -253,11 +247,7 @@ final maiaWeightsServiceProvider = Provider<MaiaWeightsService>((Ref ref) {
 /// there is always a Maia to play against. LC0 reads its network from a path rather than from
 /// bytes, so even the bundled one is written out to the app support directory the first time it is
 /// asked for.
-class MaiaWeightsService {
-  MaiaWeightsService(this._ref);
-
-  final Ref _ref;
-
+class MaiaWeightsService(final Ref _ref) {
   /// The download in progress, by rating, so that two callers asking at once share one download
   /// rather than writing over each other's file.
   final Map<MaiaRating, Future<String?>> _inFlight = {};
@@ -388,19 +378,20 @@ class MaiaWeightsService {
   }
 
   Future<List<File>> _unusableFiles() async {
-    final claimed = <String>{};
+    // Compared as URIs: path separators differ between constructed and listed files on Windows.
+    final claimed = <Uri>{};
     for (final rating in MaiaRating.values) {
       // A bundled rating always claims its file, whether or not it has been written out yet.
       // An in-flight download also claims its file so it is not reported as unusable while downloading.
       if (rating.isBundled || _inFlight.containsKey(rating) || await isAvailable(rating)) {
-        claimed.add(weightsFile(rating).path);
+        claimed.add(weightsFile(rating).uri);
       }
     }
 
     // Listed after the checks above, which delete the corrupted files they find: what is left is
     // only what nothing claims.
     final files = await _filesOnDisk();
-    return files.where((file) => !claimed.contains(file.path)).toList();
+    return files.where((file) => !claimed.contains(file.uri)).toList();
   }
 
   Future<void> _deleteFiles(Iterable<File> files) async {

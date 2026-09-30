@@ -195,9 +195,9 @@ final puzzleThemesProvider = FutureProvider.autoDispose<IMap<PuzzleThemeKey, Puz
 final puzzleOpeningsProvider = FutureProvider.autoDispose
     .family<IList<PuzzleOpeningFamily>, PuzzleOpeningSort>((Ref ref, PuzzleOpeningSort sort) {
       return ref.withClientCacheFor(
-        (client) => PuzzleRepository(
-          client,
-        ).puzzleOpenings(alphabetical: sort == PuzzleOpeningSort.alphabetical),
+        (client) =>
+            PuzzleRepository(client)
+                .puzzleOpenings(alphabetical: sort == PuzzleOpeningSort.alphabetical),
         const Duration(days: 1),
       );
     }, name: 'PuzzleOpeningsProvider');

@@ -33,9 +33,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StormScreen extends ConsumerStatefulWidget {
-  const StormScreen({super.key});
-
+class const StormScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const StormScreen());
   }
@@ -44,7 +42,7 @@ class StormScreen extends ConsumerStatefulWidget {
   ConsumerState<StormScreen> createState() => _StormScreenState();
 }
 
-class _StormScreenState extends ConsumerState<StormScreen> {
+class _StormScreenState() extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
@@ -56,9 +54,7 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   }
 }
 
-class _Load extends ConsumerWidget {
-  const _Load();
-
+class const _Load() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
@@ -75,16 +71,12 @@ class _Load extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.data});
-
-  final PuzzleStormResponse data;
-
+class const _Body({required final PuzzleStormResponse data}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
   late final ChessboardController _controller;
 
@@ -405,8 +397,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
               children: [
                 TextSpan(text: '\n'),
                 TextSpan(
-                  text:
-                      'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+                  text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
                 ),
                 TextSpan(text: '\n\n'),
                 TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
@@ -418,8 +409,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
-                      text:
-                          ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                      text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
                     ),
                   ],
                 ),
@@ -432,8 +422,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
                 TextSpan(text: '• Then +10s every 10 other moves.\n'),
                 TextSpan(text: '\n'),
                 TextSpan(
-                  text:
-                      'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+                  text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
                 ),
               ],
             ),
@@ -454,11 +443,7 @@ void _showStats(BuildContext context, StormRunStats stats) {
   Navigator.of(context, rootNavigator: true).push(_RunStats.buildRoute(stats));
 }
 
-class _TopTable extends ConsumerWidget {
-  const _TopTable(this.data);
-
-  final PuzzleStormResponse data;
-
+class const _TopTable(final PuzzleStormResponse data) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stormState = ref.watch(stormControllerProvider((data.puzzles, data.timestamp)));
@@ -524,16 +509,12 @@ class _TopTable extends ConsumerWidget {
   }
 }
 
-class _Combo extends ConsumerStatefulWidget {
-  const _Combo(this.combo);
-
-  final StormCombo combo;
-
+class const _Combo(final StormCombo combo) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Combo> createState() => _ComboState();
 }
 
-class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMixin {
+class _ComboState() extends ConsumerState<_Combo> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -689,11 +670,7 @@ class _ComboState extends ConsumerState<_Combo> with SingleTickerProviderStateMi
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar(this.data);
-
-  final PuzzleStormResponse data;
-
+class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrl = stormControllerProvider((data.puzzles, data.timestamp));
@@ -749,10 +726,7 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _RunStats extends StatelessWidget {
-  const _RunStats(this.stats);
-  final StormRunStats stats;
-
+class const _RunStats(final StormRunStats stats) extends StatelessWidget {
   static Route<dynamic> buildRoute(StormRunStats stats) {
     return buildScreenRoute(screen: _RunStats(stats), fullscreenDialog: true);
   }
@@ -772,16 +746,12 @@ class _RunStats extends StatelessWidget {
   }
 }
 
-class _RunStatsPopup extends ConsumerStatefulWidget {
-  const _RunStatsPopup(this.stats);
-
-  final StormRunStats stats;
-
+class const _RunStatsPopup(final StormRunStats stats) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_RunStatsPopup> createState() => _RunStatsPopupState();
 }
 
-class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
+class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
   StormFilter filter = const StormFilter(slow: false, failed: false);
   @override
   Widget build(BuildContext context) {
@@ -912,12 +882,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
   }
 }
 
-class _StatsRow extends StatelessWidget {
-  final String label;
-  final String? value;
-
-  const _StatsRow(this.label, this.value);
-
+class const _StatsRow(final String label, final String? value) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

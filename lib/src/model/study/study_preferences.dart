@@ -12,7 +12,7 @@ final studyPreferencesProvider = NotifierProvider<StudyPreferencesNotifier, Stud
   name: 'StudyPreferencesProvider',
 );
 
-class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStorage<StudyPrefs> {
+class StudyPreferencesNotifier() extends Notifier<StudyPrefs> with PreferencesStorage<StudyPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.study;
@@ -67,10 +67,8 @@ class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStor
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysisPrefs {
-  const StudyPrefs._();
-
-  const factory StudyPrefs({
+sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, CommonAnalysisPrefs {
+  const factory({
     required bool showVariationArrows,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
@@ -94,7 +92,7 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     listOrder: StudyListOrder.hot,
   );
 
-  factory StudyPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$StudyPrefsFromJson(json);
   }
 }

@@ -21,9 +21,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
-  const CorrespondenceChallengesScreen({super.key});
-
+class const CorrespondenceChallengesScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const CorrespondenceChallengesScreen());
   }
@@ -32,7 +30,7 @@ class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   ConsumerState<CorrespondenceChallengesScreen> createState() => _ChallengesBodyState();
 }
 
-class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen> {
+class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScreen> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();

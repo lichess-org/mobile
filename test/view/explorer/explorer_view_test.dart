@@ -175,9 +175,9 @@ void main() {
             PrefCategory.openingExplorer.storageKey,
             authUser,
           ): jsonEncode(
-            OpeningExplorerPrefs.defaults(
-              user: user,
-            ).copyWith(db: OpeningDatabase.lichess).toJson(),
+            OpeningExplorerPrefs.defaults(user: user)
+                .copyWith(db: OpeningDatabase.lichess)
+                .toJson(),
           ),
         },
       );

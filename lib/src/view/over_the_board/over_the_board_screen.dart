@@ -33,15 +33,14 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OverTheBoardScreen extends StatelessWidget {
-  const OverTheBoardScreen({this.initialFen, this.initialVariant, super.key});
-
+class const OverTheBoardScreen({
   /// Optional initial FEN to start the game from a custom position.
-  final String? initialFen;
+  final String? initialFen,
 
   /// Initial variant to be preselected in the "New Game" dialog.
-  final Variant? initialVariant;
-
+  final Variant? initialVariant,
+  super.key,
+}) extends StatelessWidget {
   static Route<void> buildRoute({Variant? initialVariant, String? initialFen}) {
     return buildScreenRoute(
       screen: OverTheBoardScreen(initialVariant: initialVariant, initialFen: initialFen),
@@ -66,18 +65,13 @@ class OverTheBoardScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.initialVariant, this.initialFen});
-
-  final Variant initialVariant;
-
-  final String? initialFen;
-
+class const _Body({required final Variant initialVariant, final String? initialFen})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOverTheBoardScreen');
 
   Side orientation = Side.white;
@@ -119,11 +113,12 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
-  void _saveGameState() {
+  Future<void> _saveGameState() async {
     if (!context.mounted) return;
+    ref.read(overTheBoardClockProvider.notifier).pause();
     final clockState = ref.read(overTheBoardClockProvider);
     final gameState = ref.read(overTheBoardGameControllerProvider);
-    ref
+    await ref
         .read(overTheBoardGameStorageProvider)
         .save(
           gameState.game,
@@ -177,7 +172,7 @@ class _BodyState extends ConsumerState<_Body> {
               context: context,
               builder: (context) => YesNoDialog(
                 title: Text(context.l10n.threefoldRepetition),
-                content: const Text('Accept draw?'),
+                content: Text(context.l10n.mobileAcceptDraw),
                 onYes: () {
                   Navigator.pop(context);
                   ref.read(overTheBoardGameControllerProvider.notifier).draw();
@@ -197,41 +192,8 @@ class _BodyState extends ConsumerState<_Body> {
 
     return WakelockWidget(
       child: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) async {
-          if (didPop) {
-            return;
-          }
-
-          final navigator = Navigator.of(context);
-          final game = gameState.game;
-          if (game.abortable || game.finished) {
-            return navigator.pop();
-          }
-
-          if (game.playable) {
-            ref.read(overTheBoardClockProvider.notifier).pause();
-          }
-
-          final shouldPop = await showAdaptiveDialog<bool>(
-            context: context,
-            builder: (context) {
-              return YesNoDialog(
-                title: Text(context.l10n.mobileAreYouSure),
-                content: const Text('No worries, your game will be saved.'),
-                onNo: () => Navigator.of(context).pop(false),
-                onYes: () {
-                  _saveGameState();
-                  Navigator.of(context).pop(true);
-                },
-              );
-            },
-          );
-          if (shouldPop == true) {
-            navigator.pop();
-          } else if (game.playable) {
-            ref.read(overTheBoardClockProvider.notifier).resume(gameState.turn);
-          }
+        onPopInvokedWithResult: (_, _) async {
+          await _saveGameState();
         },
         child: FocusDetector(
           onForegroundLost: _saveGameState,
@@ -304,11 +266,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({required this.onFlipBoard});
-
-  final VoidCallback onFlipBoard;
-
+class const _BottomBar({required final VoidCallback onFlipBoard}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
@@ -458,12 +416,8 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _Player extends ConsumerWidget {
-  const _Player({required this.clockKey, required this.side});
-
-  final Side side;
-  final Key clockKey;
-
+class const _Player({required final Key clockKey, required final Side side})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
