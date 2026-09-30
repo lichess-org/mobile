@@ -266,10 +266,7 @@ class const _MaterialTabView({
 }
 
 class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
-  // ignore: avoid-late-keyword
   late HeroController _heroController;
-
-  // ignore: avoid-late-keyword
   late List<NavigatorObserver> _navigatorObservers;
 
   @override
