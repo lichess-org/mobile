@@ -206,11 +206,15 @@ class _AppState() extends ConsumerState<Application> {
   Widget build(BuildContext context) {
     final themeConfig = ref.watch(
       generalPreferencesProvider.select(
-        (prefs) =>
-            (prefs.themeMode, prefs.backgroundColor, prefs.backgroundImage, prefs.systemColors),
+        (prefs) => (
+          prefs.themeMode,
+          prefs.backgroundColor,
+          prefs.backgroundImage,
+          prefs.systemColors,
+          prefs.locale,
+        ),
       ),
     );
-    final locale = ref.watch(generalPreferencesProvider.select((prefs) => prefs.locale));
     final boardTheme = ref.watch(boardPreferencesProvider.select((prefs) => prefs.boardTheme));
     final theme = makeAppTheme(
       context,
@@ -236,7 +240,7 @@ class _AppState() extends ConsumerState<Application> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'lichess.org',
-      locale: locale,
+      locale: themeConfig.$5,
       theme: theme.copyWith(
         navigationBarTheme: isIOS
             ? null
