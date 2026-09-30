@@ -176,8 +176,7 @@ class _AppState extends ConsumerState<Application> {
             HomeWidget.updateWidget(
               iOSName: 'DailyPuzzleLargeWidget',
               androidName: 'org.lichess.mobileV2.widgets.DailyPuzzleWidgetProvider',
-              );
-           
+            );
           });
         }
       }, fireImmediately: true);
