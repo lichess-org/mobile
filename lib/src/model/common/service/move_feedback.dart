@@ -23,6 +23,17 @@ class MoveFeedbackService(final SoundService _soundService, final Ref _ref) {
     }
   }
 
+  /// The feedback for a standard chess move written as [san]: a capture or a move, with or without
+  /// a check.
+  void playedMove(String san) {
+    final check = san.contains('+') || san.contains('#');
+    if (san.contains('x')) {
+      captureFeedback(Variant.standard, check: check);
+    } else {
+      moveFeedback(check: check);
+    }
+  }
+
   void captureFeedback(Variant variant, {bool check = false}) {
     _soundService.playCaptureSound(variant);
 

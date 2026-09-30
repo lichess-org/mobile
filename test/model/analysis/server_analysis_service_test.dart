@@ -1,10 +1,99 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+
+import '../../test_container.dart';
+
+const _source = ServerAnalysisSource.game(gameId: GameId('H9fIRZUk'));
+
+/// A [ServerAnalysisService] whose analysis request is answered with [statusCode] and [body].
+///
+/// [Analyse.requestAnalysis] forwards the analyser's error string verbatim, so a refusal body is
+/// plain text rather than JSON.
+Future<ServerAnalysisService> _makeService(int statusCode, String body) async {
+  final container = await lichessClientContainer(
+    MockClient((request) async {
+      if (request.url.path == '/H9fIRZUk/request-analysis') {
+        return http.Response(body, statusCode);
+      }
+      return http.Response('', 404);
+    }),
+  );
+  final ServerAnalysisService service = container.read(serverAnalysisServiceProvider);
+  return service;
+}
 
 void main() {
+  group('ServerAnalysisService.requestAnalysis', () {
+    test('starts listening when the server accepts the request', () async {
+      final service = await _makeService(200, '');
+
+      await service.requestAnalysis(_source);
+
+      expect(service.currentAnalysis.value, _source);
+    });
+
+    test('keeps listening when the game is already analysed', () async {
+      final service = await _makeService(400, 'This game is already analysed');
+
+      await service.requestAnalysis(_source);
+
+      expect(service.currentAnalysis.value, _source);
+    });
+
+    // The account daily limit message is a prefix of the IP one, so both are needed to check that
+    // they are told apart.
+    for (final (body, error) in const [
+      (
+        'You already have an ongoing requested analysis',
+        ServerAnalysisRequestError.concurrentAnalysis,
+      ),
+      ('You have reached the weekly analysis limit', ServerAnalysisRequestError.weeklyLimitReached),
+      ('You have reached the daily analysis limit', ServerAnalysisRequestError.dailyLimitReached),
+      (
+        'You have reached the daily analysis limit on this IP',
+        ServerAnalysisRequestError.dailyIpLimitReached,
+      ),
+      ('This game is not analysable', ServerAnalysisRequestError.notAnalysable),
+    ]) {
+      test('stops and reports ${error.name} when the server answers "$body"', () async {
+        final service = await _makeService(400, body);
+
+        await expectLater(
+          service.requestAnalysis(_source),
+          throwsA(
+            isA<ServerAnalysisRequestException>()
+                .having((e) => e.error, 'error', error)
+                .having((e) => e.message, 'message', endsWith(body)),
+          ),
+        );
+        expect(service.currentAnalysis.value, isNull);
+      });
+    }
+
+    for (final (description, statusCode, body) in const [
+      ('an unrecognised 400', 400, 'Something new'),
+      ('a 400 with an empty body', 400, ''),
+      ('a non-400', 500, 'Something went wrong'),
+    ]) {
+      test('stops and rethrows the ServerException on $description', () async {
+        final service = await _makeService(statusCode, body);
+
+        await expectLater(
+          service.requestAnalysis(_source),
+          throwsA(isA<ServerException>().having((e) => e.statusCode, 'statusCode', statusCode)),
+        );
+        expect(service.currentAnalysis.value, isNull);
+      });
+    }
+  });
+
   group('ServerAnalysisService.mergeOngoingAnalysis', () {
     test('merges analysis using UCI instead of id field', () {
       // Create a simple game tree: e2e4
