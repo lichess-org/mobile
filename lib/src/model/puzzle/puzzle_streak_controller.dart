@@ -17,7 +17,7 @@ final puzzleStreakControllerProvider =
       name: 'PuzzleStreakControllerProvider',
     );
 
-class PuzzleStreakController extends AsyncNotifier<StreakState> {
+class PuzzleStreakController() extends AsyncNotifier<StreakState> {
   @override
   Future<StreakState> build() async {
     final authUser = ref.watch(authControllerProvider);

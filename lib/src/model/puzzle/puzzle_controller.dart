@@ -21,8 +21,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
 
 part 'puzzle_controller.freezed.dart';
+
+final _logger = Logger('PuzzleController');
 
 final puzzleControllerProvider = NotifierProvider.autoDispose
     .family<PuzzleController, PuzzleState, PuzzleContext>(
@@ -30,11 +33,7 @@ final puzzleControllerProvider = NotifierProvider.autoDispose
       name: 'PuzzleControllerProvider',
     );
 
-class PuzzleController extends Notifier<PuzzleState> {
-  PuzzleController(this.initialContext);
-
-  final PuzzleContext initialContext;
-
+class PuzzleController(final PuzzleContext initialContext) extends Notifier<PuzzleState> {
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   late Branch _gameTree;
@@ -76,7 +75,9 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (glicko != null) {
         state = state.copyWith(glicko: glicko);
       }
-    } catch (_) {}
+    } catch (e, st) {
+      _logger.warning('Failed to update user rating:', e, st);
+    }
   }
 
   PuzzleState _loadNewContext(PuzzleContext context) {
@@ -288,10 +289,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     } else {
       ref
           .read(
-            puzzleSessionProvider((
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-            )).notifier,
+            puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                .notifier,
           )
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
@@ -342,10 +341,8 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (rounds != null) {
         ref
             .read(
-              puzzleSessionProvider((
-                userId: initialContext.userId,
-                angle: initialContext.angle,
-              )).notifier,
+              puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                  .notifier,
             )
             .setRatingDiffs(rounds);
       }
@@ -437,17 +434,25 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 }
 
-enum PuzzleMode { load, play, view }
+enum PuzzleMode() {
+  load,
+  play,
+  view,
+}
 
-enum PuzzleResult { win, lose }
+enum PuzzleResult() {
+  win,
+  lose,
+}
 
-enum PuzzleFeedback { good, bad }
+enum PuzzleFeedback() {
+  good,
+  bad,
+}
 
 @freezed
-sealed class PuzzleState with _$PuzzleState {
-  const PuzzleState._();
-
-  const factory PuzzleState({
+sealed class const PuzzleState._() with _$PuzzleState {
+  const factory({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,

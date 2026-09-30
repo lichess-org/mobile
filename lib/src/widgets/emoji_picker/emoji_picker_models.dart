@@ -5,44 +5,40 @@ part 'emoji_picker_models.g.dart';
 
 @Freezed(toJson: true, fromJson: true)
 sealed class Category with _$Category {
-  const factory Category({
+  const factory({
     required String id,
     required String name,
     @JsonKey(name: 'emojis') required List<String> emojiIds,
   }) = _Category;
 
-  factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
+  factory fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
 }
 
 @Freezed(toJson: true, fromJson: true)
 sealed class Skin with _$Skin {
-  const factory Skin({required String src}) = _Skin;
+  const factory({required String src}) = _Skin;
 
-  factory Skin.fromJson(Map<String, dynamic> json) => _$SkinFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SkinFromJson(json);
 }
 
 @Freezed(toJson: true, fromJson: true)
 sealed class Emoji with _$Emoji {
-  const factory Emoji({
+  const factory({
     required String id,
     required String name,
     required Set<String> keywords,
     required List<Skin> skins,
   }) = _Emoji;
 
-  factory Emoji.fromJson(Map<String, dynamic> json) => _$EmojiFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$EmojiFromJson(json);
 }
 
 @Freezed(toJson: true, fromJson: true)
-sealed class EmojiData with _$EmojiData {
-  const EmojiData._(); // Added constructor
+sealed class const EmojiData._() with _$EmojiData {
+  const factory({required List<Category> categories, required Map<String, Emoji> emojis}) =
+      _EmojiData;
 
-  const factory EmojiData({
-    required List<Category> categories,
-    required Map<String, Emoji> emojis,
-  }) = _EmojiData;
-
-  factory EmojiData.fromJson(Map<String, dynamic> json) => _$EmojiDataFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$EmojiDataFromJson(json);
 
   String getEmojiById(String id) {
     final emoji = emojis[id];

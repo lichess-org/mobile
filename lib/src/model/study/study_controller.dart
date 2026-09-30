@@ -24,14 +24,13 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'study_controller.freezed.dart';
 
@@ -43,19 +42,21 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'StudyControllerProvider',
     );
 
-enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
+enum ChapterServerAnalysisStatus() {
+  canRequest,
+  notEnoughMoves,
+  notWriteable,
+  available,
+}
 
-class StudyController extends AsyncNotifier<StudyState>
+class StudyController(final StudyOptions options)
+    extends AsyncNotifier<StudyState>
     with
         EngineEvaluationMixin,
         ServerAnalysisMixin,
         ChatMixin<StudyState>,
         OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
-  StudyController(this.options);
-
-  final StudyOptions options;
-
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
@@ -626,10 +627,16 @@ class StudyController extends AsyncNotifier<StudyState>
   }
 }
 
-enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
+enum GamebookState() {
+  startLesson,
+  findTheMove,
+  correctMove,
+  incorrectMove,
+  lessonComplete,
+}
 
 @freezed
-sealed class StudyState
+sealed class const StudyState._()
     with
         _$StudyState,
         AnalysisExplosionMixin,
@@ -638,8 +645,6 @@ sealed class StudyState
         ServerAnalysisMixinState,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const StudyState._();
-
   @override
   ViewRoot? get analysisRoot => root;
 
@@ -647,7 +652,7 @@ sealed class StudyState
   StudyState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory StudyState({
+  const factory({
     UserId? myId,
     bool? isAdmin,
     required Study study,
@@ -830,10 +835,10 @@ sealed class StudyState
 }
 
 @freezed
-sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrentNodeInterface {
-  const StudyCurrentNode._();
-
-  const factory StudyCurrentNode({
+sealed class const StudyCurrentNode._()
+    with _$StudyCurrentNode
+    implements AnalysisCurrentNodeInterface {
+  const factory({
     // Null if the chapter's starting position is illegal.
     required Position? position,
     required List<Move> children,
@@ -846,11 +851,11 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
     ClientEval? eval,
   }) = _StudyCurrentNode;
 
-  factory StudyCurrentNode.illegalPosition() {
+  factory illegalPosition() {
     return const StudyCurrentNode(position: null, children: [], isRoot: true);
   }
 
-  factory StudyCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     final children = node.children.map((n) => n.sanMove.move).toList();
     if (node is Branch) {
       return StudyCurrentNode(

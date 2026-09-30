@@ -15,7 +15,7 @@ typedef BroadcastList = ({IList<Broadcast> active, IList<Broadcast> past, int? n
 
 typedef BroadcastSearchList = ({IList<Broadcast> broadcasts, int? nextPage});
 
-enum BroadcastResult {
+enum BroadcastResult() {
   whiteWins,
   blackWins,
   draw,
@@ -66,10 +66,8 @@ enum BroadcastResult {
 }
 
 @freezed
-sealed class Broadcast with _$Broadcast {
-  const Broadcast._();
-
-  const factory Broadcast({
+sealed class const Broadcast._() with _$Broadcast {
+  const factory({
     required BroadcastTournamentData tour,
     required BroadcastRound round,
     required String? group,
@@ -87,7 +85,7 @@ sealed class Broadcast with _$Broadcast {
 
 @freezed
 sealed class BroadcastTournament with _$BroadcastTournament {
-  const factory BroadcastTournament({
+  const factory({
     required BroadcastTournamentData data,
     required IList<BroadcastRound> rounds,
     required BroadcastRoundId defaultRoundId,
@@ -98,7 +96,7 @@ sealed class BroadcastTournament with _$BroadcastTournament {
 
 @freezed
 sealed class BroadcastTournamentData with _$BroadcastTournamentData {
-  const factory BroadcastTournamentData({
+  const factory({
     required BroadcastTournamentId id,
     required String name,
     required String slug,
@@ -156,7 +154,7 @@ String resultString(BroadcastCustomScoring? customScoring, Side side, BroadcastR
 
 @freezed
 sealed class BroadcastRound with _$BroadcastRound {
-  const factory BroadcastRound({
+  const factory({
     required BroadcastRoundId id,
     required String name,
     required String slug,
@@ -190,10 +188,8 @@ typedef BroadcastRoundResponse = ({
 typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-sealed class BroadcastGame with _$BroadcastGame {
-  const BroadcastGame._();
-
-  const factory BroadcastGame({
+sealed class const BroadcastGame._() with _$BroadcastGame {
+  const factory({
     required BroadcastGameId id,
     required IMap<Side, BroadcastPlayerWithClock> players,
     required String fen,
@@ -215,10 +211,8 @@ sealed class BroadcastGame with _$BroadcastGame {
 typedef BroadcastGamePgnWithAnalysisSummary = ({String pgn, AnalysisSummary? analysisSummary});
 
 @freezed
-sealed class BroadcastPlayer with _$BroadcastPlayer {
-  const BroadcastPlayer._();
-
-  const factory BroadcastPlayer({
+sealed class const BroadcastPlayer._() with _$BroadcastPlayer {
+  const factory({
     required String? name,
     required String? title,
     required int? rating,
@@ -234,15 +228,13 @@ sealed class BroadcastPlayer with _$BroadcastPlayer {
 
 @freezed
 sealed class BroadcastPlayerWithClock with _$BroadcastPlayerWithClock {
-  const factory BroadcastPlayerWithClock({
-    required BroadcastPlayer player,
-    required Duration? clock,
-  }) = _BroadcastPlayerWithClock;
+  const factory({required BroadcastPlayer player, required Duration? clock}) =
+      _BroadcastPlayerWithClock;
 }
 
 @freezed
 sealed class BroadcastPlayerWithOverallResult with _$BroadcastPlayerWithOverallResult {
-  const factory BroadcastPlayerWithOverallResult({
+  const factory({
     required BroadcastPlayer player,
     required int played,
     required double? score,
@@ -259,7 +251,7 @@ typedef BroadcastTieBreakDetail = ({String extendedCode, String description, dou
 
 typedef StatByFideTC = IMap<BroadcastFideTC, int>;
 
-enum BroadcastFideTC {
+enum BroadcastFideTC() {
   standard,
   rapid,
   blitz;
@@ -290,7 +282,7 @@ typedef BroadcastPlayerWithGameResults = ({
   bool? isFollowing,
 });
 
-enum BroadcastPoints {
+enum BroadcastPoints() {
   one,
   half,
   zero;
@@ -312,7 +304,7 @@ enum BroadcastPoints {
 
 @freezed
 sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
-  const factory BroadcastPlayerGameResult({
+  const factory({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
     required Side color,
@@ -325,22 +317,25 @@ sealed class BroadcastPlayerGameResult with _$BroadcastPlayerGameResult {
   }) = _BroadcastPlayerGameResult;
 }
 
-enum RoundStatus { live, finished, upcoming }
+enum RoundStatus() {
+  live,
+  finished,
+  upcoming,
+}
 
 @freezed
 sealed class BroadcastTeam with _$BroadcastTeam {
-  const factory BroadcastTeam({required String name, required double points}) = _BroadcastTeam;
+  const factory({required String name, required double points}) = _BroadcastTeam;
 }
 
 @freezed
 sealed class BroadcastTeamGame with _$BroadcastTeamGame {
-  const factory BroadcastTeamGame({required BroadcastGameId id, required Side pov}) =
-      _BroadcastTeamGame;
+  const factory({required BroadcastGameId id, required Side pov}) = _BroadcastTeamGame;
 }
 
 @freezed
 sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
-  const factory BroadcastTeamMatch({
+  const factory({
     required BroadcastTeam team1,
     required BroadcastTeam team2,
     required IList<BroadcastTeamGame> games,
@@ -349,7 +344,7 @@ sealed class BroadcastTeamMatch with _$BroadcastTeamMatch {
 
 @freezed
 sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
-  const factory BroadcastTeamStandingMatch({
+  const factory({
     required BroadcastRoundId roundId,
     required String opponent,
     required String? points,
@@ -360,7 +355,7 @@ sealed class BroadcastTeamStandingMatch with _$BroadcastTeamStandingMatch {
 
 @freezed
 sealed class BroadcastTeamStanding with _$BroadcastTeamStanding {
-  const factory BroadcastTeamStanding({
+  const factory({
     required String name,
     required double mp,
     required double gp,

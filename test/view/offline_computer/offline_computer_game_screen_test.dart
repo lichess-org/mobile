@@ -14,6 +14,8 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
@@ -24,8 +26,6 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_analyser.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -44,7 +44,7 @@ import '../../model/engine/fake_weights_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-class MockOfflineComputerGameStorage extends Mock implements OfflineComputerGameStorage {}
+class MockOfflineComputerGameStorage() extends Mock implements OfflineComputerGameStorage;
 
 void main() {
   TestLichessBinding.ensureInitialized();
@@ -768,9 +768,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -880,9 +880,9 @@ void main() {
             appBar: AppBar(title: const Text('Test Screen')),
             body: FilledButton(
               child: const Text('Go to game'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OfflineComputerGameScreen())),
             ),
           ),
         ),
@@ -1333,7 +1333,7 @@ void main() {
 
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
 
-      expect(find.text('White time out'), findsOneWidget);
+      expect(find.text('White ran out of time'), findsOneWidget);
       expect(activeClock(tester), null);
     });
 
@@ -2155,19 +2155,15 @@ void main() {
 }
 
 /// A fake controller that returns a preset state, used to inject specific practice comments.
-class _FakePracticeController extends OfflineComputerGameController {
-  _FakePracticeController(this._initialState);
-  final OfflineComputerGameState _initialState;
-
+class _FakePracticeController(final OfflineComputerGameState _initialState)
+    extends OfflineComputerGameController {
   @override
   OfflineComputerGameState build() => _initialState;
 }
 
 /// A fake preferences notifier that returns a preset [OfflineComputerGamePrefs].
-class _FakeGamePreferences extends OfflineComputerGamePreferences {
-  _FakeGamePreferences(this._prefs);
-  final OfflineComputerGamePrefs _prefs;
-
+class _FakeGamePreferences(final OfflineComputerGamePrefs _prefs)
+    extends OfflineComputerGamePreferences {
   @override
   OfflineComputerGamePrefs build() => _prefs;
 }

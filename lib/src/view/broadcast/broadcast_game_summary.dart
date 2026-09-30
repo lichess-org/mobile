@@ -7,12 +7,11 @@ import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastGameSummary extends ConsumerWidget {
-  const BroadcastGameSummary({required this.roundId, required this.gameId, super.key});
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastGameSummary({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
@@ -32,12 +31,10 @@ class BroadcastGameSummary extends ConsumerWidget {
   }
 }
 
-class _BroadcastAcplChart extends ConsumerWidget {
-  const _BroadcastAcplChart({required this.roundId, required this.gameId});
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _BroadcastAcplChart({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -63,12 +60,10 @@ class _BroadcastAcplChart extends ConsumerWidget {
   }
 }
 
-class _GameSummaryTable extends ConsumerWidget {
-  const _GameSummaryTable({required this.roundId, required this.gameId});
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _GameSummaryTable({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));

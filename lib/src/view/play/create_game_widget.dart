@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -17,9 +18,7 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CreateGameWidget extends ConsumerWidget {
-  const CreateGameWidget();
-
+class const CreateGameWidget() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
@@ -28,9 +27,8 @@ class CreateGameWidget extends ConsumerWidget {
     final userPerf = account?.perfs[playPrefs.realTimePerf];
     final canUseRatingRange = userPerf != null && userPerf.provisional != true;
 
-    final labelStyle = Theme.of(
-      context,
-    ).textTheme.labelMedium?.copyWith(color: textShade(context, 0.5), height: 1.0);
+    final labelStyle = Theme.of(context).textTheme.labelMedium
+        ?.copyWith(color: textShade(context, 0.5), height: 1.0);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -277,7 +275,7 @@ class CreateGameWidget extends ConsumerWidget {
     showAdaptiveDialog<void>(
       context: context,
       builder: (context) => AlertDialog.adaptive(
-        content: Text(context.l10n.ratingRangeIsDisabledBecauseYourRatingIsProvisional),
+        content: Text(context.l10n.cannotFilterByUnstableRating),
         actions: [
           PlatformDialogAction(
             onPressed: () => Navigator.of(context).pop(),

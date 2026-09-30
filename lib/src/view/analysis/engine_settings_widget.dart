@@ -6,20 +6,13 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class EngineSettingsWidget extends ConsumerWidget {
-  const EngineSettingsWidget({
-    this.onToggleLocalEvaluation,
-    required this.onSetEngineSearchTime,
-    this.onSetNumEvalLines,
-    required this.onSetEngineCores,
-    super.key,
-  });
-
-  final VoidCallback? onToggleLocalEvaluation;
-  final void Function(Duration) onSetEngineSearchTime;
-  final void Function(int)? onSetNumEvalLines;
-  final void Function(int) onSetEngineCores;
-
+class const EngineSettingsWidget({
+  final VoidCallback? onToggleLocalEvaluation,
+  required final void Function(Duration) onSetEngineSearchTime,
+  final void Function(int)? onSetNumEvalLines,
+  required final void Function(int) onSetEngineCores,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
@@ -40,10 +33,11 @@ class EngineSettingsWidget extends ConsumerWidget {
             ],
           ),
         ListSection(
-          header: const SettingsSectionTitle('Stockfish'),
+          header: SettingsSectionTitle(context.l10n.engineSettings),
           children: [
             SliderSettingsTile(
-              title: const Text('Search time'),
+              title: Text(context.l10n.searchTime),
+              explanation: context.l10n.searchTimeDescription,
               value: prefs.engineSearchTime.inSeconds.toDouble(),
               values: kAvailableEngineSearchTimes.map((e) => e.inSeconds.toDouble()).toList(),
               labelBuilder: (value) =>
@@ -62,7 +56,8 @@ class EngineSettingsWidget extends ConsumerWidget {
               ),
             if (maxEngineCores > 1)
               SliderSettingsTile(
-                title: Text(context.l10n.cpus),
+                title: Text(context.l10n.threads),
+                explanation: context.l10n.threadsDescriptionMobile,
                 value: prefs.numEngineCores.toDouble(),
                 values: List.generate(
                   maxEngineCores,

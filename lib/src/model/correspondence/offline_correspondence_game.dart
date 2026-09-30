@@ -18,13 +18,11 @@ part 'offline_correspondence_game.g.dart';
 /// This is always a game of the current user, so [youAre], [me] and [opponent]
 /// are always guaranteed to be non-null.
 @Freezed(fromJson: true, toJson: true)
-sealed class OfflineCorrespondenceGame
+sealed class const OfflineCorrespondenceGame._()
     with BaseGame, _$OfflineCorrespondenceGame, ServerGame, IndexableSteps
     implements ServerGame {
-  const OfflineCorrespondenceGame._();
-
   @Assert('steps.isNotEmpty')
-  factory OfflineCorrespondenceGame({
+  factory({
     required GameId id,
     required GameFullId fullId,
     required GameMeta meta,
@@ -45,8 +43,7 @@ sealed class OfflineCorrespondenceGame
     @MoveConverter() (String, Move)? registeredMoveAtPgn,
   }) = _CorrespondenceGame;
 
-  factory OfflineCorrespondenceGame.fromJson(Map<String, dynamic> json) =>
-      _$OfflineCorrespondenceGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$OfflineCorrespondenceGameFromJson(json);
 
   Side get orientation => youAre!;
 

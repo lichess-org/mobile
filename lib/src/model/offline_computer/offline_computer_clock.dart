@@ -9,7 +9,7 @@ final offlineComputerClockProvider =
       name: 'OfflineComputerClockProvider',
     );
 
-class OfflineComputerClock extends LocalGameClock {
+class OfflineComputerClock() extends LocalGameClock {
   @override
   TimeIncrement get defaultTimeIncrement => OfflineComputerGamePrefs.defaults.timeIncrement;
 }

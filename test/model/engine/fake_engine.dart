@@ -50,37 +50,26 @@ const kMinEngineDepth = 6;
 /// Subclass it and override [onGo] / [onStop] to control what the engine answers; the lifecycle
 /// oddities a test might want (a start that throws, one that never returns, a write that kills the
 /// session) are constructor flags rather than subclasses.
-class FakeEngine {
-  FakeEngine({
-    this.engineName,
-    this.startDelay = Duration.zero,
-    this.quitDelay = Duration.zero,
-    this.startThrows = false,
-    this.startReportsError = false,
-    this.hangsFromStart,
-    this.failWrite,
-  });
-
+class FakeEngine({
   /// Overrides the name the engine reports, which is otherwise taken from the spec's flavour.
-  final String? engineName;
-
-  final Duration startDelay;
-  final Duration quitDelay;
+  final String? engineName,
+  final Duration startDelay = Duration.zero,
+  final Duration quitDelay = Duration.zero,
 
   /// Whether starting throws, the way the plugin does when the native library will not run.
-  final bool startThrows;
+  final bool startThrows = false,
 
   /// Whether starting reports a failed engine instead of a ready one — the plugin's other way of
   /// refusing, by state rather than by throwing.
-  final bool startReportsError;
+  final bool startReportsError = false,
 
   /// The first start that never completes, if any. `1` wedges the engine from the outset; `2`
   /// lets it run once and wedges the engine that replaces it.
-  final int? hangsFromStart;
+  final int? hangsFromStart,
 
   /// Which commands the native side fails to deliver. A failed write leaves the session unusable.
-  final bool Function(String command)? failWrite;
-
+  final bool Function(String command)? failWrite,
+}) {
   /// How many times the engine was started, and quit.
   int startCount = 0;
   int quitCount = 0;
@@ -278,8 +267,9 @@ class FakeEngine {
 }
 
 /// One live engine: what a single [Stockfish.create] hands back.
-class FakeEngineSession implements EngineTransport {
-  FakeEngineSession(this._engine, this.spec) {
+class FakeEngineSession(final FakeEngine _engine, @override final EngineSpec spec)
+    implements EngineTransport {
+  this {
     _pending.addAll(_engine.handshakeLines(spec));
     _controller.onListen = () {
       if (_replayed) return;
@@ -290,11 +280,6 @@ class FakeEngineSession implements EngineTransport {
       _pending.clear();
     };
   }
-
-  final FakeEngine _engine;
-
-  @override
-  final EngineSpec spec;
 
   final _controller = StreamController<String>.broadcast();
   final _death = Completer<EngineFailure?>();
@@ -364,8 +349,8 @@ class FakeEngineSession implements EngineTransport {
 /// A fake Fairy-Stockfish for crazyhouse that answers with a drop move in its principal variation.
 ///
 /// Used to check that engine lines handle drop moves.
-class CrazyhouseDropMoveEngine extends FakeEngine {
-  CrazyhouseDropMoveEngine() : super(engineName: 'Fairy-Stockfish');
+class CrazyhouseDropMoveEngine() extends FakeEngine {
+  this : super(engineName: 'Fairy-Stockfish');
 
   @override
   void onGo(FakeEngineSession session, List<String> parts) {
@@ -384,12 +369,10 @@ class CrazyhouseDropMoveEngine extends FakeEngine {
 /// A fake engine that says nothing until the test tells it to, for throttle tests.
 /// A fake engine that takes its time answering, so that a test can tell a search that ran from a
 /// wait that was imposed on top of one.
-class SlowEngine extends FakeEngine {
-  SlowEngine(this.searchDuration);
-
+class SlowEngine(
   /// How long the engine takes to reach its `bestmove`.
-  final Duration searchDuration;
-
+  final Duration searchDuration,
+) extends FakeEngine {
   @override
   void onGo(FakeEngineSession session, List<String> parts) {
     Future<void>.delayed(searchDuration, () {
@@ -399,12 +382,10 @@ class SlowEngine extends FakeEngine {
   }
 }
 
-class ThrottleTestEngine extends FakeEngine {
-  ThrottleTestEngine({this.evalEventCount = 5});
-
+class ThrottleTestEngine({
   /// How many info lines [emitEvalEvents] writes.
-  final int evalEventCount;
-
+  final int evalEventCount = 5,
+}) extends FakeEngine {
   /// How many info lines have been written so far.
   int emittedEvalCount = 0;
 
@@ -436,7 +417,7 @@ class ThrottleTestEngine extends FakeEngine {
 ///
 /// Deepens on demand, gives every position a different but deterministic eval, and records the
 /// positions it was asked about so a test can check what was and was not debounced away.
-class AnalysisTestEngine extends FakeEngine {
+class AnalysisTestEngine() extends FakeEngine {
   /// The positions the engine was asked to search, in order.
   final List<String> requestedPositions = [];
 
@@ -500,7 +481,7 @@ class AnalysisTestEngine extends FakeEngine {
 }
 
 /// A fake engine that plays the first legal move it finds.
-class LegalMoveEngine extends FakeEngine {
+class LegalMoveEngine() extends FakeEngine {
   @override
   void onGo(FakeEngineSession session, List<String> parts) {
     final current = session.position;
@@ -517,7 +498,7 @@ class LegalMoveEngine extends FakeEngine {
 }
 
 /// A fake engine that answers with several principal variations, for hint tests.
-class MultiPvEngine extends FakeEngine {
+class MultiPvEngine() extends FakeEngine {
   @override
   void onGo(FakeEngineSession session, List<String> parts) {
     final current = session.position;
@@ -543,7 +524,7 @@ class MultiPvEngine extends FakeEngine {
 /// The shallow pair it answers with is close enough that both moves are offered as hints; the
 /// deeper pair, emitted on demand, leaves the second one far enough behind that the hint filter
 /// drops it — which is what a hint the player is looking at has to survive.
-class NarrowingHintEngine extends FakeEngine {
+class NarrowingHintEngine() extends FakeEngine {
   @override
   void onGo(FakeEngineSession session, List<String> parts) =>
       _emitPair(session, depth: 15, secondCp: 180);
@@ -581,15 +562,13 @@ class NarrowingHintEngine extends FakeEngine {
 
 /// A fake engine for practice mode, whose eval can be made to drop by a set amount after the
 /// player's move so that a test can produce any move quality it wants.
-class PracticeModeEngine extends FakeEngine {
-  PracticeModeEngine({this.initialEvalCp = 30, this.evalShiftCp = 0});
-
+class PracticeModeEngine({
   /// The evaluation before the player's move.
-  final int initialEvalCp;
+  final int initialEvalCp = 30,
 
   /// How much the evaluation moves after it: negative means the position got worse.
-  final int evalShiftCp;
-
+  final int evalShiftCp = 0,
+}) extends FakeEngine {
   int _goCount = 0;
   List<NormalMove>? _lastMoves;
 
@@ -658,24 +637,24 @@ String _ponder(Position position) {
 ///
 /// The plugin has two ways of refusing: throwing, and moving the engine's state. This is the
 /// second, which the transport turns into a failed connect.
-class ErrorEngine extends FakeEngine {
-  ErrorEngine() : super(startReportsError: true);
+class ErrorEngine() extends FakeEngine {
+  this : super(startReportsError: true);
 }
 
 /// An engine whose start throws, the way the plugin does when the native library will not run.
-class ThrowingStartEngine extends FakeEngine {
-  ThrowingStartEngine() : super(startThrows: true);
+class ThrowingStartEngine() extends FakeEngine {
+  this : super(startThrows: true);
 }
 
 /// An engine that never finishes starting: wedged somewhere no timeout of the plugin's covers.
-class StuckEngine extends FakeEngine {
-  StuckEngine() : super(hangsFromStart: 1);
+class StuckEngine() extends FakeEngine {
+  this : super(hangsFromStart: 1);
 }
 
 /// An engine that starts once and then wedges, so that the engine replacing a healthy one is the
 /// one that never becomes ready.
-class WedgesOnRestartEngine extends FakeEngine {
-  WedgesOnRestartEngine() : super(hangsFromStart: 2);
+class WedgesOnRestartEngine() extends FakeEngine {
+  this : super(hangsFromStart: 2);
 }
 
 /// An engine that starts normally and then breaks the command stream.
@@ -688,7 +667,6 @@ class WedgesOnRestartEngine extends FakeEngine {
 /// By default the very first write fails. Pass [fails] to break the engine part-way through an
 /// exchange instead: a session that answers `isready` and then chokes on `go` is what a real
 /// engine looks like when it dies under load.
-class FatalWriteEngine extends FakeEngine {
-  FatalWriteEngine({bool Function(String command)? fails})
-    : super(failWrite: fails ?? ((_) => true));
+class FatalWriteEngine({bool Function(String command)? fails}) extends FakeEngine {
+  this : super(failWrite: fails ?? ((_) => true));
 }
