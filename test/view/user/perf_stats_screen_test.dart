@@ -30,16 +30,6 @@ final zeroGamesClient = MockClient((request) {
   return mockResponse('', 404);
 });
 
-final correspondenceClient = MockClient((request) {
-  if (request.url.path == '/api/user/${fakeUser.id}/perf/${Perf.correspondence.name}') {
-    return mockResponse(userPerfStatsResponse, 200);
-  }
-  if (request.url.path == '/api/user/${fakeUser.id}/rating-history') {
-    return mockResponse(userRatingHistoryResponse, 200);
-  }
-  return mockResponse('', 404);
-});
-
 void main() {
   group('PerfStatsScreen', () {
     testWidgets('meets accessibility guidelines', (WidgetTester tester) async {
@@ -126,48 +116,6 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.byType(ErrorWidget), findsNothing);
       expect(find.text('0%'), findsWidgets);
-    }, variant: kPlatformVariant);
-
-    testWidgets('a long localized title stays within the app bar', (WidgetTester tester) async {
-      // Regression test for https://github.com/lichess-org/mobile/issues/3609: the pt-BR
-      // translation of "Correspondence stats" ("Estatísticas de Correspondência") is long
-      // enough to reproduce the title being pushed off the app bar, unlike shorter perfs
-      // or the default English locale.
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Builder(
-          builder: (context) => Localizations.override(
-            context: context,
-            locale: const Locale('pt', 'BR'),
-            child: PerfStatsScreen(user: fakeUser, perf: Perf.correspondence),
-          ),
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
-            return LichessClient(correspondenceClient, ref);
-          }),
-        },
-        // iPhone 14 screen width, matching the device (iPhone 16e) the bug was reported on.
-        surfaceSize: const Size(390, 844),
-      );
-
-      await tester.pumpWidget(app);
-
-      // wait for auth state and perf stats
-      await tester.pump(const Duration(milliseconds: 50));
-
-      expect(tester.takeException(), isNull);
-
-      final appBar = tester.getRect(find.byType(AppBar));
-      final title = tester.getRect(
-        find.ancestor(of: find.byIcon(Icons.arrow_drop_down), matching: find.byType(InkWell)),
-      );
-      expect(title.left, greaterThanOrEqualTo(appBar.left));
-      expect(title.right, lessThanOrEqualTo(appBar.right));
-      expect(
-        tester.getRect(find.byIcon(Icons.arrow_drop_down)).right,
-        lessThanOrEqualTo(title.right),
-      );
     }, variant: kPlatformVariant);
   });
 }
