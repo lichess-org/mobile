@@ -18,8 +18,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/puzzle/daily_puzzle.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -372,87 +372,6 @@ class const PuzzleHistoryWidget({final bool showHeader = true}) extends Consumer
           child: ListSection.loading(itemsNumber: 5, header: true),
         ),
       ),
-    );
-  }
-}
-
-TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
-  return TextStyle(
-    fontSize: 14.0,
-    color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
-  );
-}
-
-/// A widget that displays the daily puzzle.
-class const DailyPuzzle({super.key}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(isDeviceOnlineProvider);
-    final puzzle = ref.watch(dailyPuzzleProvider);
-
-    return puzzle.when(
-      data: (data) {
-        final preview = PuzzlePreview.fromPuzzle(data);
-        return SmallBoardPreview(
-          orientation: preview.orientation,
-          fen: preview.initialFen,
-          lastMove: preview.initialMove,
-          description: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(context.l10n.puzzlePuzzleOfTheDay, style: Styles.boardPreviewTitle),
-                  Text(
-                    context.l10n.puzzlePlayedXTimes(data.puzzle.plays).localizeNumbers(),
-                    style: _puzzlePreviewSubtitleStyle(context),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.today,
-                    size: 32,
-                    color: context.lichessColors.brag.withValues(alpha: 0.7),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      data.puzzle.sideToMove == Side.white
-                          ? context.l10n.whitePlays
-                          : context.l10n.blackPlays,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: textShade(context, 0.8)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          onTap: () {
-            if (!context.mounted) return;
-            Navigator.of(context, rootNavigator: true).push(
-              PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzle: data),
-            );
-          },
-        );
-      },
-      loading: () => isOnline
-          ? const Shimmer(
-              child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
-            )
-          : const SizedBox.shrink(),
-      error: (error, _) {
-        return isOnline
-            ? const Padding(
-                padding: Styles.bodySectionPadding,
-                child: Text('Could not load the daily puzzle.'),
-              )
-            : const SizedBox.shrink();
-      },
     );
   }
 }
