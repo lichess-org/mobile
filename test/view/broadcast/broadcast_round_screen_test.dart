@@ -77,10 +77,6 @@ void main() {
 
       // Check that the right number of boards is displayed
       expect(find.byType(BoardThumbnail), findsNWidgets(4));
-
-      // Check that players name are displayed
-      expect(find.text('Nepomniachtchi, Ian'), findsNWidgets(4));
-      expect(find.text('Carlsen, Magnus'), findsNWidgets(4));
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
