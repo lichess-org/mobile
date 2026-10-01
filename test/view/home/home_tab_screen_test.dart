@@ -298,7 +298,31 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.byType(FeaturedTournamentsWidget), findsOneWidget);
-        expect(find.text('Open tournaments'), findsOneWidget);
+        // Once from the row label, once from the widget's own header.
+        expect(find.text('Open tournaments'), findsNWidgets(2));
+      });
+
+      testWidgets('empty widgets still show their label in edit mode', (tester) async {
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          defaultPreferences: {kWelcomeMessageShownKey: true},
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.text('Performance Cards'), findsOneWidget);
+        // Last row of a lazily built list, so scroll it into view first.
+        await tester.scrollUntilVisible(find.text('Recent games'), 500.0);
+        expect(find.text('Recent games'), findsOneWidget);
       });
     });
   });
