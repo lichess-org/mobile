@@ -9,6 +9,7 @@ enum HomeEditableWidget(
   perfCards(false),
   friends(false),
   ongoingGames(true),
+  puzzles(false),
   blogCarousel(false),
   quickPairing(false),
   featuredTournaments(false),
@@ -21,6 +22,7 @@ enum HomeEditableWidget(
     // not shown in the UI, so no need to localize
     HomeEditableWidget.perfCards => 'Performance Cards',
     HomeEditableWidget.friends => l10n.friends,
+    HomeEditableWidget.puzzles => l10n.puzzlePuzzles,
     HomeEditableWidget.quickPairing => l10n.quickPairing,
     HomeEditableWidget.featuredTournaments => l10n.openTournaments,
     HomeEditableWidget.recentGames => l10n.recentGames,

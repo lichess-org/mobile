@@ -49,6 +49,7 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/puzzle/daily_puzzle.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -317,6 +318,11 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SizedBox(height: 8.0),
+                          _EditableWidget(
+                            widget: HomeEditableWidget.puzzles,
+                            shouldShow: hasServerContent,
+                            child: const _PuzzlesWidget(),
+                          ),
                           FeaturedTournamentsWidget(featured: featuredTournaments),
                           if (_worker != null && !isKidMode)
                             _EditableWidget(
@@ -381,6 +387,11 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   child: hasServerContent
                       ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                       : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
+                ),
+                _EditableWidget(
+                  widget: HomeEditableWidget.puzzles,
+                  shouldShow: hasServerContent,
+                  child: const _PuzzlesWidget(),
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.featuredTournaments,
@@ -646,6 +657,30 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   _IsDayTimeNotifier.new,
   name: '_isDayTimeProvider',
 );
+
+class const _PuzzlesWidget() extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    void switchToPuzzlesTab() => ref.read(currentBottomTabProvider.notifier).state = .puzzles;
+
+    return Padding(
+      padding: Styles.verticalBodyPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: ListSectionHeader(
+              title: Text(context.l10n.puzzlePuzzles),
+              onTap: switchToPuzzlesTab,
+            ),
+          ),
+          DailyPuzzle(onBeforeOpen: switchToPuzzlesTab),
+        ],
+      ),
+    );
+  }
+}
 
 class const _GreetingWidget() extends ConsumerWidget {
   @override

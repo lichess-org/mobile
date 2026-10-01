@@ -2,19 +2,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
+import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/puzzle/daily_puzzle.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:material_ui/material_ui.dart';
@@ -25,6 +30,7 @@ import '../../mock_server_responses.dart';
 import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
+import '../../model/puzzle/mock_server_responses.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
 import '../../test_helpers.dart';
@@ -301,6 +307,78 @@ void main() {
         expect(find.text('Open tournaments'), findsOneWidget);
       });
     });
+    group('puzzles widget', () {
+      Future<void> pumpHome(WidgetTester tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/puzzle/daily') {
+            return mockResponse(mockDailyPuzzleResponse, 200);
+          }
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('{"featured":[]}', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+      }
+
+      testWidgets('is shown by default', (tester) async {
+        await pumpHome(tester);
+
+        expect(find.widgetWithText(ListSectionHeader, 'Puzzles'), findsOneWidget);
+        expect(find.byType(DailyPuzzle), findsOneWidget);
+        expect(find.text('Puzzle of the day'), findsOneWidget);
+      });
+
+      testWidgets('is hidden once disabled', (tester) async {
+        await pumpHome(tester);
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
+        await container.read(homePreferencesProvider.notifier).toggleWidget(.puzzles);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(DailyPuzzle), findsNothing);
+        expect(find.widgetWithText(ListSectionHeader, 'Puzzles'), findsNothing);
+      });
+
+      testWidgets('header switches to the puzzles tab', (tester) async {
+        await pumpHome(tester);
+
+        final header = find.widgetWithText(ListSectionHeader, 'Puzzles');
+        await tester.ensureVisible(header);
+        await tester.tap(header);
+        await tester.pump();
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
+        expect(container.read(currentBottomTabProvider), BottomTab.puzzles);
+        expect(find.byType(PuzzleScreen), findsNothing);
+      });
+
+      testWidgets('tapping it switches to the puzzles tab and opens the puzzle', (tester) async {
+        await pumpHome(tester);
+
+        await tester.ensureVisible(find.byType(DailyPuzzle));
+        await tester.tap(find.byType(DailyPuzzle));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 500));
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
+        expect(container.read(currentBottomTabProvider), BottomTab.puzzles);
+        expect(find.byType(PuzzleScreen), findsOneWidget);
+      });
+    });
   });
 
   group('Home offline', () {
@@ -313,6 +391,21 @@ void main() {
       await tester.pump();
 
       expect(find.byType(OfflineBanner), findsOneWidget);
+    });
+
+    testWidgets('does not show the daily puzzle', (tester) async {
+      final app = await makeOfflineTestProviderScope(
+        tester,
+        child: const Application(),
+        authUser: fakeAuthUser,
+      );
+
+      await tester.pumpWidget(app);
+      // wait for connectivity
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DailyPuzzle), findsNothing);
     });
 
     testWidgets('shows Play button', (tester) async {
