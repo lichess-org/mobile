@@ -25,9 +25,6 @@ concurrency:
 jobs:
   fastlane-deploy:
     runs-on: ubuntu-latest
-    # Required reviewers on this environment gate the production lane; internal
-    # and alpha can still be dispatched without waiting.
-    environment: play-store
     # Signing and uploading to both stores is slow; 90 minutes is generous.
     timeout-minutes: 90
     steps:
