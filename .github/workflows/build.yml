@@ -8,6 +8,8 @@ jobs:
   build:
     name: Build ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
+    # A native build that hangs should fail fast rather than hold a runner.
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:

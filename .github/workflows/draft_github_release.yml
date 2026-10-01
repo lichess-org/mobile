@@ -17,6 +17,7 @@ jobs:
   draft-release:
     name: Draft Github release
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Draft release with release notes
         id: create_release
