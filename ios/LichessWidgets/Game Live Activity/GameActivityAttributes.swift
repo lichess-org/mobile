@@ -50,7 +50,7 @@ struct GameActivityAttributes: ActivityAttributes {
         /// A pending offer from the opponent.
         let offer: Offer?
         let status: Status
-        /// "1-0", "0-1" or "½-½" once the game is over.
+        /// "1-0", "0-1", "½-½" or "Aborted" once the game is over.
         let result: String?
         /// Whether lila's claim-victory rule can apply if the player leaves the game.
         let claimable: Bool

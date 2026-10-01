@@ -3,8 +3,13 @@ import 'dart:async';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:logging/logging.dart';
 
 part 'game_live_activity.freezed.dart';
@@ -13,6 +18,12 @@ part 'game_live_activity.freezed.dart';
 @freezed
 sealed class const GameLiveActivityPlayer._() with _$GameLiveActivityPlayer {
   const factory({required String name, String? title, int? rating}) = _GameLiveActivityPlayer;
+
+  factory fromPlayer(Player player, {required bool showRatings}) => GameLiveActivityPlayer(
+    name: player.user?.name ?? player.name ?? 'Anonymous',
+    title: player.user?.title,
+    rating: showRatings ? player.rating : null,
+  );
 
   Map<String, Object?> toJson() => {'name': name, 'title': title, 'rating': rating};
 }
@@ -28,6 +39,26 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
     required GameLiveActivityPlayer white,
     required GameLiveActivityPlayer black,
   }) = _GameLiveActivityAttributes;
+
+  /// Whether [game] gets a Live Activity: a real-time game, with a clock, that the user plays
+  /// against a human.
+  static bool isEligible(PlayableGame game) =>
+      game.youAre != null &&
+      game.playable &&
+      game.clock != null &&
+      game.meta.speed != Speed.correspondence &&
+      !game.hasAI;
+
+  /// The attributes of [game], which must be [isEligible].
+  factory fromGame(GameFullId gameFullId, PlayableGame game) {
+    final showRatings = game.prefs?.showRatings ?? true;
+    return GameLiveActivityAttributes(
+      gameFullId: gameFullId,
+      myColor: game.youAre!,
+      white: .fromPlayer(game.white, showRatings: showRatings),
+      black: .fromPlayer(game.black, showRatings: showRatings),
+    );
+  }
 
   Map<String, Object?> toJson() => {
     'gameFullId': gameFullId.value,
@@ -65,12 +96,64 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     GameLiveActivityOffer? offer,
     required bool isOver,
 
-    /// "1-0", "0-1" or "½-½" once the game is over.
+    /// "1-0", "0-1", "½-½" or "Aborted" once the game is over.
     String? result,
 
     /// Whether lila's claim-victory rule can apply if the player leaves the game.
     required bool claimable,
   }) = _GameLiveActivityState;
+
+  /// The state of [game], with the clock times read from the game's live clock at [now].
+  factory fromGame(
+    PlayableGame game, {
+    required Duration whiteClock,
+    required Duration blackClock,
+    required DateTime now,
+  }) {
+    final lastPosition = game.lastPosition;
+    final opponent = game.youAre == null ? null : game.playerOf(game.youAre!.opposite);
+    return GameLiveActivityState(
+      fen: boardFen(lastPosition),
+      lastMove: game.lastMove?.uci,
+      lastSan: game.steps.last.sanMove?.san,
+      turn: lastPosition.turn,
+      whiteClock: whiteClock,
+      blackClock: blackClock,
+      clockAt: now,
+      // Same rule as the game clock: it starts once both players have moved.
+      clockRunning: game.playable && game.clock != null && lastPosition.fullmoves > 1,
+      offer: !game.playable
+          ? null
+          : opponent?.offeringDraw == true
+          ? GameLiveActivityOffer.draw
+          : opponent?.proposingTakeback == true
+          ? GameLiveActivityOffer.takeback
+          : null,
+      isOver: !game.playable,
+      result: game.playable
+          ? null
+          : game.aborted
+          ? 'Aborted'
+          : switch (game.winner) {
+              Side.white => '1-0',
+              Side.black => '0-1',
+              null => '½-½',
+            },
+      claimable: isClaimable(game),
+    );
+  }
+
+  /// Whether lila would let the opponent claim victory if the user left [game] now.
+  ///
+  /// Mirrors lila's `Game.forceResignableNow`: a clock game against a human, both players have
+  /// moved, not in a Swiss tournament, and no `noClaimWin` rule.
+  static bool isClaimable(PlayableGame game) =>
+      game.playable &&
+      game.clock != null &&
+      !game.hasAI &&
+      game.steps.length > 2 &&
+      game.source != GameSource.swiss &&
+      !(game.meta.rules?.contains(GameRule.noClaimWin) ?? false);
 
   /// The board part of [position]'s FEN, without crazyhouse pockets or promoted-piece markers,
   /// which the widget's board view doesn't parse.
@@ -100,6 +183,12 @@ enum LiveActivityState() {
   stale,
   unknown,
 }
+
+/// The channel driving the game Live Activity, as a provider so tests can replace it.
+final gameLiveActivityChannelProvider = Provider<GameLiveActivityChannel>(
+  (ref) => GameLiveActivityChannel.instance,
+  name: 'GameLiveActivityChannelProvider',
+);
 
 /// Drives the iOS game Live Activity through the `mobile.lichess.org/live_activity` channel.
 ///

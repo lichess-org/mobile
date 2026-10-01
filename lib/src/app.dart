@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
@@ -151,6 +152,9 @@ class _AppState() extends ConsumerState<Application> {
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+      // No game screen is open at launch, so any game Live Activity is a leftover from a previous
+      // run (e.g. the app was killed during a game).
+      ref.read(gameLiveActivityChannelProvider).endAll();
     }
     HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
 

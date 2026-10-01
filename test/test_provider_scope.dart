@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
@@ -37,6 +38,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import 'binding.dart';
 import 'model/engine/fake_engine.dart';
+import 'model/game/fake_game_live_activity_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -254,6 +256,9 @@ Future<Widget> makeTestProviderScope(
     thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
+    gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+      FakeGameLiveActivityChannel(),
+    ),
     openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),
     preloadedDataProvider: preloadedDataProvider.overrideWith((ref) {
       return (
