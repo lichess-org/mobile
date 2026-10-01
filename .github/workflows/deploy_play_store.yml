@@ -16,9 +16,18 @@ on:
 # Declare default permissions as read only.
 permissions: read-all
 
+# Only one deploy at a time: two runs racing on the same upload can leave the Play Store
+# and Crashlytics symbols out of sync with the commit each was built from.
+concurrency:
+  group: deploy-play-store
+  cancel-in-progress: false
+
 jobs:
   fastlane-deploy:
     runs-on: ubuntu-latest
+    # Required reviewers on this environment gate the production lane; internal
+    # and alpha can still be dispatched without waiting.
+    environment: play-store
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v6.0.1
