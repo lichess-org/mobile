@@ -102,7 +102,7 @@ class const _Body({
             children: [
               ListTile(
                 leading: PracticeStudyIcon(study: study),
-                title: Text(context.l10n.resumePractice),
+                title: Text(context.l10n.resumeLearning),
                 subtitle: Text(study.l10nName(context.l10n)),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
