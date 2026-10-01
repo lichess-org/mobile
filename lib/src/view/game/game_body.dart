@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -95,6 +96,9 @@ class const GameBody({
       ctrlProvider,
       (prev, state) => _stateListener(prev, state, context: context, ref: ref),
     );
+
+    // Keeps the game's iOS Live Activity in sync while the game screen is open.
+    ref.watch(gameLiveActivityControllerProvider(gameId));
 
     // Only watch the coarse async phase here so a move (which changes the
     // GameState value but not the phase) does NOT rebuild the whole body. The

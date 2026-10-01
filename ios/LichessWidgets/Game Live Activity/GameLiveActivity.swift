@@ -25,7 +25,7 @@ struct GameLiveActivity: Widget {
                 if context.isStale {
                     LeftGameIcon()
                 } else {
-                    TurnDisc(side: context.state.turn)
+                    TurnPawn(side: context.state.turn)
                 }
             } compactTrailing: {
                 CompactTrailingView(context: context)
@@ -33,7 +33,7 @@ struct GameLiveActivity: Widget {
                 if context.isStale {
                     LeftGameIcon()
                 } else {
-                    TurnDisc(side: context.state.turn)
+                    TurnPawn(side: context.state.turn)
                 }
             }
             .keylineTint(context.isStale ? .red : nil)
@@ -48,7 +48,7 @@ private enum GameActivityLayout {
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
-    static let discSize: CGFloat = 12
+    static let pawnSize: CGFloat = 20
     static let compactClockWidth: CGFloat = 52
 }
 
@@ -102,7 +102,6 @@ private struct PlayerRow: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            TurnDisc(side: side)
             Group {
                 if let title = player.title {
                     Text("\(Text(title).bold().foregroundStyle(.orange)) \(player.name)")
@@ -207,14 +206,25 @@ private struct LeftGameIcon: View {
 
 // MARK: - Shared pieces
 
-private struct TurnDisc: View {
+/// A pawn of the side to move, in the user's piece set.
+///
+/// The Dynamic Island is always black, so the black pawn gets a light halo to stay visible.
+private struct TurnPawn: View {
     let side: GameActivityAttributes.Side
 
+    private var assetName: String {
+        let color = side == .white ? "w" : "b"
+        let name = "piece_\(ChessboardTheme.fromAppGroup().pieceSet)_\(color)P"
+        if UIImage(named: name, in: ChessgroundAssets.bundle, compatibleWith: nil) != nil { return name }
+        return "piece_\(ChessboardTheme.defaultPieceSet)_\(color)P"
+    }
+
     var body: some View {
-        Circle()
-            .fill(side == .white ? Color.white : Color.black)
-            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-            .frame(width: GameActivityLayout.discSize, height: GameActivityLayout.discSize)
+        Image(assetName, bundle: ChessgroundAssets.bundle)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: GameActivityLayout.pawnSize, height: GameActivityLayout.pawnSize)
+            .shadow(color: side == .black ? .white.opacity(0.9) : .clear, radius: 1)
     }
 }
 
