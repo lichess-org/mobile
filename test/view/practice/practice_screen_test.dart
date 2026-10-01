@@ -137,7 +137,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Nothing started yet: nothing to resume.
-    expect(find.text(l10n.resumePractice), findsNothing);
+    expect(find.text(l10n.resumeLearning), findsNothing);
 
     final container = _container(tester, PracticeScreen);
     await container
@@ -145,10 +145,10 @@ void main() {
         .complete(const StudyChapterId('gamebk01'), 1);
     await tester.pumpAndSettle();
 
-    expect(find.text(l10n.resumePractice), findsOneWidget);
+    expect(find.text(l10n.resumeLearning), findsOneWidget);
 
     // It opens the next chapter of the study in progress.
-    await tester.tap(find.text(l10n.resumePractice));
+    await tester.tap(find.text(l10n.resumeLearning));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(PracticeChapterScreen, 'A short game'), findsOneWidget);
   });
