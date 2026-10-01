@@ -18,6 +18,7 @@ jobs:
     name: Draft Github release
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # needs: create-build
     steps:
       - name: Draft release with release notes
         id: create_release
@@ -29,3 +30,47 @@ jobs:
           generate_release_notes: true
           # files: lichess-mobile.apk
 
+  # create-build:
+  #   name: Create android build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up JDK 17
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: 17
+  #         distribution: temurin
+
+  #     - name: Install Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #     - run: flutter doctor -v
+
+  #     - name: Checkout mobile code
+  #       uses: actions/checkout@v4
+
+  #     - name: Install dependencies
+  #       run: flutter pub get
+
+  #     - name: Code generation
+  #       run: dart run build_runner build
+
+  #     - name: Configure Keystore
+  #       run: |
+  #         echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+  #         echo "storeFile=upload-keystore.jks" >> key.properties
+  #         echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+  #         echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> key.properties
+  #         echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+  #       env:
+  #         PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+  #         KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+  #         KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+  #         KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
+  #       working-directory: android
+
+  #     - run: flutter build -v apk --release
+
+  #     - name: Rename build
+  #       run: mv app-release.apk $GITHUB_WORKSPACE/lichess-mobile.apk
+  #       working-directory: build/app/outputs/flutter-apk
