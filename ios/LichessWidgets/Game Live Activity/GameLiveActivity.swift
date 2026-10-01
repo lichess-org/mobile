@@ -49,6 +49,7 @@ private enum GameActivityLayout {
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
     static let pawnSize: CGFloat = 20
+    static let pawnOutlineWidth: CGFloat = 1.5
     static let compactClockWidth: CGFloat = 52
 }
 
@@ -208,7 +209,8 @@ private struct LeftGameIcon: View {
 
 /// A pawn of the side to move, in the user's piece set.
 ///
-/// The Dynamic Island is always black, so the black pawn gets a light halo to stay visible.
+/// The Dynamic Island is always black, so the black pawn gets a white outline to stay visible: a
+/// white silhouette of the pawn drawn underneath, shifted in eight directions.
 private struct TurnPawn: View {
     let side: GameActivityAttributes.Side
 
@@ -219,12 +221,31 @@ private struct TurnPawn: View {
         return "piece_\(ChessboardTheme.defaultPieceSet)_\(color)P"
     }
 
+    private static let outlineOffsets: [CGSize] = (0..<8).map { i in
+        let angle = Double(i) * .pi / 4
+        return CGSize(
+            width: cos(angle) * GameActivityLayout.pawnOutlineWidth,
+            height: sin(angle) * GameActivityLayout.pawnOutlineWidth
+        )
+    }
+
     var body: some View {
-        Image(assetName, bundle: ChessgroundAssets.bundle)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: GameActivityLayout.pawnSize, height: GameActivityLayout.pawnSize)
-            .shadow(color: side == .black ? .white.opacity(0.9) : .clear, radius: 1)
+        ZStack {
+            if side == .black {
+                ForEach(Self.outlineOffsets.indices, id: \.self) { i in
+                    Image(assetName, bundle: ChessgroundAssets.bundle)
+                        .renderingMode(.template)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .foregroundStyle(.white)
+                        .offset(Self.outlineOffsets[i])
+                }
+            }
+            Image(assetName, bundle: ChessgroundAssets.bundle)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }
+        .frame(width: GameActivityLayout.pawnSize, height: GameActivityLayout.pawnSize)
     }
 }
 
@@ -236,8 +257,12 @@ private struct GameClockText: View {
 
     var body: some View {
         if state.isClockRunning(for: side) {
+            // The system countdown rounds the remaining seconds up (it shows 0:01 during the last
+            // second), while lichess clocks round down. Ending it one second early makes it show
+            // the same value as the lichess clock, and the non-running format below.
             let start = state.clockAtDate
-            Text(timerInterval: start...max(start, state.flagDate(of: side)), countsDown: true)
+            let end = state.flagDate(of: side).addingTimeInterval(-1)
+            Text(timerInterval: start...max(start, end), countsDown: true)
                 .multilineTextAlignment(.trailing)
         } else {
             Text(Self.format(milliseconds: state.clock(of: side)))
