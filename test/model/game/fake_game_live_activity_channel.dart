@@ -16,6 +16,9 @@ class FakeGameLiveActivityChannel({final bool supported = true})
     implements GameLiveActivityChannel {
   final calls = <LiveActivityCall>[];
 
+  /// The values passed to [setConnected], in order.
+  final connectedCalls = <bool>[];
+
   final _stateChanges = StreamController<({String id, LiveActivityState state})>.broadcast();
 
   int _nextId = 0;
@@ -44,6 +47,11 @@ class FakeGameLiveActivityChannel({final bool supported = true})
   @override
   Future<void> end(String id, {GameLiveActivityState? state, Duration? dismissAfter}) async {
     calls.add((method: 'end', id: id, attributes: null, state: state, dismissAfter: dismissAfter));
+  }
+
+  @override
+  Future<void> setConnected(bool connected) async {
+    connectedCalls.add(connected);
   }
 
   @override

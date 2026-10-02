@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 
 /// How long a finished game stays on the Lock Screen.
 const _kDismissAfterGameOver = Duration(minutes: 15);
@@ -36,7 +37,9 @@ typedef _SyncKey = ({
 /// Lives as long as the game screen watches it. Starts the activity once the game is loaded, if it
 /// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves, clock changes and
 /// offers, and ends it when the game is over (left on the Lock Screen for a while with the result)
-/// or when the game screen is left (removed at once).
+/// or when the game screen is left (removed at once). Also reports the game socket's connection
+/// state, which the native side uses to show "You left the game" while the app is in the
+/// background.
 class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<void> {
   late GameLiveActivityChannel _channel;
   StreamSubscription<({String id, LiveActivityState state})>? _stateSubscription;
@@ -46,6 +49,12 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
   /// Set once there is nothing more to do: the activity ended or was dismissed, or could not be
   /// started (ineligible game, Live Activities unsupported or disabled).
   bool _done = false;
+
+  /// The game's socket client, watched for its connection state.
+  SocketClient? _socketClient;
+
+  /// The connection state last sent with [GameLiveActivityChannel.setConnected].
+  bool? _sentConnected;
 
   bool _syncing = false;
   bool _needsSync = false;
@@ -70,6 +79,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
     );
 
     ref.onDispose(() {
+      _socketClient?.averageLag.removeListener(_syncConnected);
       _stateSubscription?.cancel();
       final id = _activityId;
       _activityId = null;
@@ -91,6 +101,32 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
       whiteProposesTakeback: game.white.proposingTakeback,
       blackProposesTakeback: game.black.proposingTakeback,
     );
+  }
+
+  /// Watches the game's socket client, the pool's current one once the game is loaded.
+  ///
+  /// Checked on every sync, as the pool replaces the client if it was disposed meanwhile. The
+  /// client is watched rather than the pool's lag, which only mirrors a client's lag once it
+  /// changes, and so can miss the first change after switching route.
+  void _watchSocket() {
+    final client = ref.read(socketPoolProvider).currentClient;
+    if (client == _socketClient || client.route != GameController.socketUri(gameFullId)) return;
+    _socketClient?.averageLag.removeListener(_syncConnected);
+    _socketClient = client;
+    client.averageLag.addListener(_syncConnected);
+  }
+
+  /// Sends the game socket's connection state to the activity when it changes.
+  void _syncConnected() {
+    if (_activityId == null || !ref.mounted) return;
+    final client = _socketClient;
+    final connected =
+        client != null &&
+        client == ref.read(socketPoolProvider).currentClient &&
+        client.isConnected;
+    if (connected == _sentConnected) return;
+    _sentConnected = connected;
+    _channel.setConnected(connected);
   }
 
   /// Sends the current game state to the activity, one call at a time: a change arriving while a
@@ -116,6 +152,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
     final gameState = ref.read(gameControllerProvider(gameFullId)).value;
     if (gameState == null) return;
     final game = gameState.game;
+    _watchSocket();
 
     final content = GameLiveActivityState.fromGame(
       game,
@@ -142,6 +179,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
         _channel.end(newId, dismissAfter: Duration.zero);
       } else {
         _activityId = newId;
+        _syncConnected();
       }
     } else if (content.isOver) {
       _activityId = null;

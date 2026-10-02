@@ -262,6 +262,17 @@ class GameLiveActivityChannel._() {
     }
   }
 
+  /// Tells whether the game socket is connected: losing it while the app is in the background
+  /// shows "You left the game" at once.
+  Future<void> setConnected(bool connected) async {
+    if (!_isIOS) return;
+    try {
+      await _channel.invokeMethod<void>('setConnected', {'connected': connected});
+    } on PlatformException catch (e, st) {
+      _log.severe('setConnected failed', e, st);
+    }
+  }
+
   /// Ends all game activities immediately.
   Future<void> endAll() async {
     if (!_isIOS) return;
