@@ -181,17 +181,19 @@ class NotificationService(final Ref _ref) {
   /// Shows a notification.
   Future<int> show(LocalNotification notification) async {
     final id = notification.id;
+    final title = notification.title(_l10n);
+    final body = notification.body(_l10n);
     final payload = jsonEncode(notification.payload);
 
     await _notificationDisplay.show(
       id: id,
-      title: notification.title(_l10n),
-      body: notification.body(_l10n),
+      title: title,
+      body: body,
       notificationDetails: notification.details(_l10n),
       payload: payload,
     );
     _logger.info(
-      'Show local notification: ($id | ${notification.title}) ${notification.body} (Payload: ${notification.payload})',
+      'Show local notification: ($id | $title) $body (Payload: ${notification.payload})',
     );
 
     return id;
