@@ -422,6 +422,24 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
             filter = filter.copyWith(side: selected ? value : null);
           }),
         ),
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        filterGroupSpace,
+        Filter<GameAnalysisFilter>(
+          // TODO: use a l10n key once lila has a 'property' filter label
+          filterName: 'Property',
+          filterType: FilterType.singleChoice,
+          choices: GameAnalysisFilter.values,
+          choiceSelected: (choice) => filter.analysis == choice,
+          // TODO: use l10n keys once decided, same as the result filter labels
+          choiceLabel: (t) => switch (t) {
+            GameAnalysisFilter.analysed => const Text('Analysed'),
+            GameAnalysisFilter.notAnalysed => const Text('Not analysed'),
+          },
+          onSelected: (value, selected) => setState(() {
+            filter = filter.copyWith(analysis: selected ? value : null);
+          }),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
