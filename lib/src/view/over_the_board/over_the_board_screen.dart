@@ -422,8 +422,6 @@ class const _Player({required final Key clockKey, required final Side side})
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    // Only the time control, which is fixed for the length of a game. Watching the clock itself
-    // would rebuild the whole player table on every tick of the running clock.
     final timeIncrement = ref.watch(overTheBoardClockProvider.select((c) => c.timeIncrement));
 
     return GamePlayer(
@@ -434,11 +432,7 @@ class const _Player({required final Key clockKey, required final Side side})
           : null,
       materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
       shouldLinkToUserProfile: false,
-      // GamePlayer leaves out the clock's Flexible entirely when there is none, so whether to
-      // show one has to be decided here rather than inside [_OtbPlayerClock].
-      clock: timeIncrement.isInfinite
-          ? null
-          : _OtbPlayerClock(side: side, clockKey: clockKey),
+      clock: timeIncrement.isInfinite ? null : _OtbPlayerClock(side: side, clockKey: clockKey),
     );
   }
 }
