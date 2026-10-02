@@ -145,7 +145,7 @@ class const _Body({required final LightUser user}) extends ConsumerWidget {
                               ),
                               Text(
                                 textAlign: TextAlign.center,
-                                '${data.dayHighscores[entryIndex].time}s',
+                                '${data.dayHighscores[entryIndex].time} s',
                               ),
                               Text(
                                 textAlign: TextAlign.center,
