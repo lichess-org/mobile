@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -874,6 +875,10 @@ class GameController(final GameFullId gameFullId)
             black: curState.game.black.copyWith(ratingDiff: endData.ratingDiff?.black),
           ),
         );
+
+        if (curState.game.meta.rated) {
+          ref.invalidate(accountProvider);
+        }
 
         if (endData.clock != null) {
           newState = newState.copyWith.game.clock!(
