@@ -161,7 +161,7 @@ class _BroadcastRoundScreenState()
     if (_tabController.indexIsChanging) {
       final currentRoundId = _selectedRoundId ?? widget.broadcast.roundToLinkId;
 
-      ref.read(broadcastRoundControllerProvider(currentRoundId).notifier).clearObservedGames();
+      ref.read(observedGamesControllerProvider(currentRoundId).notifier).clear();
     }
   }
 
@@ -253,7 +253,12 @@ class _BroadcastRoundScreenState()
                   icon: Icons.filter_list,
                   label: context.l10n.filterGames,
                   onPressed: () {
-                    final games = asyncRound.value.games.values;
+                    final currentRoundId =
+                        _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                    final gamesMap = currentRoundId != null
+                        ? ref.read(broadcastRoundControllerProvider(currentRoundId)).value?.games
+                        : null;
+                    final games = gamesMap?.values ?? const [];
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
                     final uniqueTeams = games
@@ -351,25 +356,34 @@ class _BroadcastRoundScreenState()
 
     switch (asyncTour) {
       case AsyncData(value: final tournament):
-        // Eagerly initalize the round controller so it stays alive when switching tabs
-        // and to know if the round has games to show
-        final roundState = ref.watch(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-        );
+        final roundId = _selectedRoundId ?? tournament.defaultRoundId;
 
         ref.listen(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-          (_, round) {
-            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
+          broadcastRoundControllerProvider(roundId)
+              .select((state) => state.value?.games.isNotEmpty ?? false),
+          (_, hasGamesNow) {
+            if (widget.initialTab == null && hasGamesNow && !roundLoaded) {
               roundLoaded = true;
-              if (round.value!.games.isNotEmpty) {
-                _tabController.index = 1;
-              }
+              _tabController.index = 1;
             }
           },
         );
 
-        return _buildContent(context, asyncTour, roundState);
+        final roundMetadata = ref.watch(
+          broadcastRoundControllerProvider(roundId).select((state) {
+            if (state.value == null) return loadingRound;
+            return AsyncData(
+              BroadcastRoundState(
+                round: state.value!.round,
+                games: const IMapConst({}),
+                isTeamTournament: state.value!.isTeamTournament,
+                isSubscribed: state.value!.isSubscribed,
+              ),
+            );
+          }),
+        );
+
+        return _buildContent(context, asyncTour, roundMetadata);
       case _:
         return _buildContent(context, asyncTour, loadingRound);
     }
