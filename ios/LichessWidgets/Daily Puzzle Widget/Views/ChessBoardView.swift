@@ -48,7 +48,7 @@ struct ChessBoardView: View {
         }
     }
 
-    private var highlightedSquares: Set<String> {
+    private var highlightedSquares: Set<String>
         guard let lm = lastMove, lm.count >= 4 else { return [] }
         return [String(lm.prefix(2)), String(lm.dropFirst(2).prefix(2))]
     }
