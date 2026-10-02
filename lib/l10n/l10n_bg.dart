@@ -3297,6 +3297,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get searchSearch => 'Търсене';
 
   @override
+  String get searchResult => 'Резултат';
+
+  @override
   String get settingsSettings => 'Настройки';
 
   @override

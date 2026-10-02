@@ -916,6 +916,7 @@
   "recapAwaitQuestion": "Que has estat fent aquest any?",
   "recapRecapReady": "El teu resum del {param} esta disponible!",
   "searchSearch": "Cerca",
+  "searchResult": "Resultat",
   "settingsSettings": "Configuració",
   "settingsCloseAccount": "Donar-se de baixa",
   "settingsManagedAccountCannotBeClosed": "El vostre compte és gestionat i no es pot tancar.",

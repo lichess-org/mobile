@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -44,6 +45,128 @@ void main() {
       final page2 = await storage.page(userId: userId, max: 10, until: page1.last.lastModified);
       expect(page2.length, 10);
       expect(page2.last.game.id, const GameId('game0080'));
+    });
+
+    test('page filters out games not won by the player', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      final wonGame = game.copyWith(id: const GameId('won00001'), winner: Side.white);
+      final lostGame = game.copyWith(id: const GameId('lost0001'), winner: Side.black);
+      final drawGame = game.copyWith(id: const GameId('draw0001'));
+
+      for (final g in [wonGame, lostGame, drawGame]) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+
+      final all = await storage.page(userId: userId);
+      expect(all.length, 3);
+
+      final won = await storage.page(
+        userId: userId,
+        filter: const GameFilterState(result: GameResultFilter.won),
+      );
+      expect(won.length, 1);
+      expect(won.first.game.id, const GameId('won00001'));
+    });
+
+    test('page combines the result filter with the side filter', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      // whiteId plays both colours, so its games are stored under both sides
+      const asBlack = Player(
+        user: LightUser(id: UserId('whiteId'), name: 'White'),
+        rating: 1500,
+      );
+
+      final seeds = [
+        game.copyWith(id: const GameId('wonwhite'), winner: Side.white),
+        game.copyWith(id: const GameId('lostwhit'), winner: Side.black),
+        game.copyWith(
+          id: const GameId('lostblck'),
+          youAre: Side.black,
+          black: asBlack,
+          winner: Side.white,
+        ),
+        game.copyWith(
+          id: const GameId('wonblack'),
+          youAre: Side.black,
+          black: asBlack,
+          winner: Side.black,
+        ),
+      ];
+
+      for (final g in seeds) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+
+      final all = await storage.page(userId: userId);
+      expect(all.length, 4);
+
+      final filtered = await storage.page(
+        userId: userId,
+        filter: const GameFilterState(side: Side.white, result: GameResultFilter.won),
+      );
+      expect(filtered.map((e) => e.game.id), [const GameId('wonwhite')]);
+    });
+
+    test('page fills up to max even when the result filter drops rows', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      // one win every three games, spread over the whole storage
+      final seeds = List.generate(30, (index) {
+        return game.copyWith(
+          id: GameId('won${index.toString().padLeft(5, '0')}'),
+          winner: index % 3 == 0 ? Side.white : Side.black,
+        );
+      });
+
+      for (final g in seeds) {
+        await storage.save(g);
+        await Future<void>.delayed(const Duration(milliseconds: 1));
+      }
+
+      const userId = UserId('whiteId');
+      const filter = GameFilterState(result: GameResultFilter.won);
+
+      final page1 = await storage.page(userId: userId, max: 10, filter: filter);
+      expect(page1.length, 10);
+      expect(page1.every((e) => e.game.isWonByMe), isTrue);
+
+      final page2 = await storage.page(
+        userId: userId,
+        max: 10,
+        until: page1.last.lastModified,
+        filter: filter,
+      );
+      expect(page2.length, 0);
+    });
+
+    test('page excludes games the player only watched from the won filter', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      await storage.save(
+        game.copyWith(id: const GameId('watched1'), youAre: null, winner: Side.white),
+      );
+
+      expect((await storage.page()).length, 1);
+      expect(
+        (await storage.page(filter: const GameFilterState(result: GameResultFilter.won))).length,
+        0,
+      );
     });
   });
 }

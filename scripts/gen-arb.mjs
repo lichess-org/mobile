@@ -53,7 +53,7 @@ const whiteLists = {
   'patron': ['donate', 'lichessPatron', 'becomePatron'],
   'contact': ['contact', 'contactLichess'],
   'recap': ['recapReady', 'awaitQuestion'],
-  'search': ['search'],
+  'search': ['search', 'result'],
   'streamer': ['lichessStreamers'],
   'team': ['nbLeadersPerTeam', 'battleOfNbTeams', 'incorrectEntryCode', 'team', 'teamUpdates'],
   'tfa': ['twoFactorAuth'],

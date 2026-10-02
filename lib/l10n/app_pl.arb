@@ -943,6 +943,7 @@
   "recapAwaitQuestion": "Co robiłeś w tym roku?",
   "recapRecapReady": "Twoje podsumowanie roku {param} jest gotowe!",
   "searchSearch": "Szukaj",
+  "searchResult": "Wynik",
   "settingsSettings": "Ustawienia",
   "settingsCloseAccount": "Zamknij konto",
   "settingsManagedAccountCannotBeClosed": "Twoim kontem zarządza nauczyciel, nie możesz go zamknąć.",

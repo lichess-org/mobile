@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,6 +11,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -17,6 +21,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
+import '../mock_server_responses.dart';
 import '../test_container.dart';
 import '../test_helpers.dart';
 import 'fake_http_client_factory.dart';
@@ -259,6 +264,205 @@ void main() {
       expect(challenges, isA<ChallengesList>());
       expect(tournaments, isA<IList<LightTournament>>());
       expect(inbox, isA<UnreadMessages>());
+    });
+
+    test(
+      'does not serve a won-filtered games request from an unfiltered aggregated response',
+      () async {
+        final homeJson = jsonDecode(homeEndpointResponse) as Map<String, dynamic>;
+        homeJson['recentGames'] = [
+          for (final line in mockUserRecentGameResponse('testUser').split('\n'))
+            if (line.isNotEmpty) jsonDecode(line),
+        ];
+        final homeBody = jsonEncode(homeJson);
+
+        final requestedGameUrls = <Uri>[];
+
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/mobile/home') {
+            return mockResponse(homeBody, 200);
+          }
+          if (request.url.path == '/api/user/testuser') {
+            return mockResponse('{}', 200);
+          }
+          if (request.url.path == '/api/games/user/testuser') {
+            requestedGameUrls.add(request.url);
+            final wonBy = request.url.queryParameters['wonBy'];
+            if (wonBy == null) return mockResponse(mockUserRecentGameResponse('testUser'), 200);
+            // emulate the server rule: only the games the profile won
+            final wonLines = mockUserRecentGameResponse('testUser')
+                .split('\n')
+                .where((line) => line.isNotEmpty)
+                .where((line) {
+                  final game = jsonDecode(line) as Map<String, dynamic>;
+                  final players = game['players'] as Map<String, dynamic>;
+                  final white = (players['white'] as Map<String, dynamic>)['user'];
+                  final profileSide =
+                      white != null && (white as Map<String, dynamic>)['id'] == wonBy
+                      ? 'white'
+                      : 'black';
+                  return game['winner'] == profileSide;
+                })
+                .toList();
+            return mockResponse(wonLines.join('\n'), 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final aggregator = await mockClientAggregator(mockClient);
+
+        // the home screen aggregates its usual group of requests
+        final accountUri = Uri(path: '/api/account', queryParameters: {'playban': '1'});
+        final recentGamesUri = Uri(path: '/api/games/user/testuser');
+        final challengesUri = Uri(path: '/api/challenge');
+        final tournamentsUri = Uri(path: '/tournament/featured');
+
+        await Future.wait([
+          aggregator.readJson(
+            accountUri,
+            atomicMapper: User.fromServerJson,
+            aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
+          ),
+          aggregator.readNdJsonList(recentGamesUri, mapper: LightExportedGame.fromServerJson),
+          aggregator.readJson(
+            challengesUri,
+            atomicMapper: (json) {
+              final listPick = pick(json).required();
+              final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+              final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+
+              return (inward: inward.lock, outward: outward.lock);
+            },
+          ),
+          aggregator.readJson(
+            tournamentsUri,
+            atomicMapper: (Map<String, dynamic> json) =>
+                pick(json, 'featured').asTournamentListOrThrow(),
+          ),
+        ]);
+
+        // within the aggregation cache window, ask for the same path with the won filter,
+        // concurrently with the games count request the profile screen also makes
+        final results = await Future.wait([
+          aggregator.readJson(Uri(path: '/api/user/testuser'), atomicMapper: (json) => json),
+          aggregator.readNdJsonList(
+            Uri(path: '/api/games/user/testuser', queryParameters: {'wonBy': 'testuser'}),
+            mapper: LightExportedGame.fromServerJson,
+          ),
+        ]);
+        final filtered = results[1] as IList<LightExportedGame>;
+
+        // the filtered request must reach the network with its query parameters
+        expect(requestedGameUrls.any((url) => url.queryParameters['wonBy'] == 'testuser'), isTrue);
+        // and only return games the profile won (testuser plays black in these games)
+        expect(filtered, isNotEmpty);
+        expect(filtered.any((game) => game.id == const GameId('9WLmxmiB')), isFalse);
+        expect(filtered.every((game) => game.winner == Side.black), isTrue);
+      },
+    );
+
+    test('won_filtered_request_joins_home_group_and_returns_unfiltered_games', () async {
+      final homeJson = jsonDecode(homeEndpointResponse) as Map<String, dynamic>;
+      homeJson['recentGames'] = [
+        for (final line in mockUserRecentGameResponse('testUser').split('\n'))
+          if (line.isNotEmpty) jsonDecode(line),
+      ];
+      final homeBody = jsonEncode(homeJson);
+
+      final requestedGameUrls = <Uri>[];
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/mobile/home') {
+          return mockResponse(homeBody, 200);
+        }
+        if (request.url.path == '/api/account') {
+          return mockResponse(mockApiAccountResponse('testUser'), 200);
+        }
+        if (request.url.path == '/api/account/playing') {
+          return mockResponse(mockAccountOngoingGamesResponse(), 200);
+        }
+        if (request.url.path == '/api/challenge') {
+          return mockResponse('{"in":[],"out":[]}', 200);
+        }
+        if (request.url.path == '/tournament/featured') {
+          return mockResponse(mockFeaturedTournamentsResponse, 200);
+        }
+        if (request.url.path == '/inbox/unread-count') {
+          return mockResponse('{"unread":0,"lichess":false}', 200);
+        }
+        if (request.url.path == '/api/games/user/testuser') {
+          requestedGameUrls.add(request.url);
+          final wonBy = request.url.queryParameters['wonBy'];
+          if (wonBy == null) return mockResponse(mockUserRecentGameResponse('testUser'), 200);
+          // emulate the lila `wonBy` rule: only the games the profile actually won
+          final wonLines = mockUserRecentGameResponse('testUser')
+              .split('\n')
+              .where((line) => line.isNotEmpty)
+              .where((line) {
+                final game = jsonDecode(line) as Map<String, dynamic>;
+                final players = game['players'] as Map<String, dynamic>;
+                final white = (players['white'] as Map<String, dynamic>)['user'];
+                final profileSide = white != null && (white as Map<String, dynamic>)['id'] == wonBy
+                    ? 'white'
+                    : 'black';
+                return game['winner'] == profileSide;
+              })
+              .toList();
+          return mockResponse(wonLines.join('\n'), 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final aggregator = await mockClientAggregator(mockClient);
+
+      // The game history screen with the Won filter applied issues its request in the
+      // same aggregation window as the home screen's usual group of requests.
+      final results = await Future.wait([
+        aggregator.readJson(
+          Uri(path: '/api/account', queryParameters: {'playban': '1'}),
+          atomicMapper: User.fromServerJson,
+          aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
+        ),
+        aggregator.readJson(
+          Uri(path: '/api/account/playing'),
+          atomicMapper: ongoingGamesFromServerJson,
+          aggregatedMapper: (json) => (json as List<dynamic>)
+              .map((e) => OngoingGame.fromServerJson(e as Map<String, dynamic>))
+              .where((e) => e.variant.isPlaySupported)
+              .toIList(),
+        ),
+        // the won-filtered request: testuser plays black and won 9WLmxmiB? no - it lost
+        // 9WLmxmiB (winner: white). It must never show up under the Won filter.
+        aggregator.readNdJsonList(
+          Uri(path: '/api/games/user/testuser', queryParameters: {'wonBy': 'testuser'}),
+          mapper: LightExportedGame.fromServerJson,
+        ),
+        aggregator.readJson(
+          Uri(path: '/api/challenge'),
+          atomicMapper: (json) {
+            final inward = pick(json).required()('in').asListOrEmpty(Challenge.fromPick);
+            final outward = pick(json).required()('out').asListOrEmpty(Challenge.fromPick);
+            return (inward: inward.lock, outward: outward.lock);
+          },
+        ),
+        aggregator.readJson(
+          Uri(path: '/tournament/featured'),
+          atomicMapper: (Map<String, dynamic> json) =>
+              pick(json, 'featured').asTournamentListOrThrow(),
+        ),
+        aggregator.readJson(
+          Uri(path: '/inbox/unread-count'),
+          atomicMapper: (Map<String, dynamic> json) =>
+              (unread: json['unread'] as int, lichess: json['lichess'] as bool? ?? false),
+        ),
+      ]);
+
+      final filtered = results[2] as IList<LightExportedGame>;
+
+      // the won-filtered request must reach the network with its query parameters
+      expect(requestedGameUrls.any((url) => url.queryParameters['wonBy'] == 'testuser'), isTrue);
+      // and must not contain a game the profile lost
+      expect(filtered.any((game) => game.id == const GameId('9WLmxmiB')), isFalse);
     });
   });
 }

@@ -985,6 +985,7 @@
   "recapAwaitQuestion": "ماذا كنت حتى تفعل في هذا العام؟",
   "recapRecapReady": "موجز {param} الخاص بك مُعَدّ!",
   "searchSearch": "بحث",
+  "searchResult": "النتيجة",
   "settingsSettings": "الإعدادات",
   "settingsCloseAccount": "إغلاق الحساب",
   "settingsManagedAccountCannotBeClosed": "حسابك يتم إدارته، ولا يمكن إغلاقه.",

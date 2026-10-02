@@ -3409,6 +3409,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get searchSearch => 'بحث';
 
   @override
+  String get searchResult => 'النتيجة';
+
+  @override
   String get settingsSettings => 'الإعدادات';
 
   @override

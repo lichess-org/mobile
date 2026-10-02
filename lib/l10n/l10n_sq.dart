@@ -3297,6 +3297,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get searchSearch => 'Kërko';
 
   @override
+  String get searchResult => 'Përfundim';
+
+  @override
   String get settingsSettings => 'Rregullime';
 
   @override

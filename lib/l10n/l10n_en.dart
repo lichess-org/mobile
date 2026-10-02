@@ -3295,6 +3295,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchSearch => 'Search';
 
   @override
+  String get searchResult => 'Result';
+
+  @override
   String get settingsSettings => 'Settings';
 
   @override
@@ -10647,6 +10650,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get searchSearch => 'Search';
+
+  @override
+  String get searchResult => 'Result';
 
   @override
   String get settingsSettings => 'Settings';

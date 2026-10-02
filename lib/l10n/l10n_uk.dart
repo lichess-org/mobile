@@ -3353,6 +3353,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get searchSearch => 'Пошук';
 
   @override
+  String get searchResult => 'Результат';
+
+  @override
   String get settingsSettings => 'Налаштування';
 
   @override

@@ -3297,6 +3297,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get searchSearch => 'Ara';
 
   @override
+  String get searchResult => 'Sonuç';
+
+  @override
   String get settingsSettings => 'Ayarlar';
 
   @override

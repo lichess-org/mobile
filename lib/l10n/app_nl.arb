@@ -983,6 +983,7 @@
   "recapAwaitQuestion": "Wat heb je dit jaar gedaan?",
   "recapRecapReady": "Je samenvatting van {param} is klaar!",
   "searchSearch": "Zoek",
+  "searchResult": "Uitslag",
   "settingsSettings": "Instellingen",
   "settingsCloseAccount": "Verwijder account",
   "settingsManagedAccountCannotBeClosed": "Je account wordt beheerd, en kan niet verwijderd worden.",

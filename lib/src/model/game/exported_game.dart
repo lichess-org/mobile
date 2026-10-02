@@ -65,6 +65,13 @@ sealed class const ExportedGame._()
 
   /// Create an exported game from a local storage JSON.
   factory fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
+
+  /// Whether the player this game is viewed from ([youAre]) is the [winner].
+  ///
+  /// False for draws, unfinished games and games that were only watched. This is the local
+  /// counterpart of the server's `wonBy` query parameter, which applies the same rule when
+  /// filtering the game history of a user (see `GameRepository.getUserGames`).
+  bool get isWonByMe => winner != null && winner == youAre;
 }
 
 /// A [LightExportedGame] associated with a point of view of a player.

@@ -3297,6 +3297,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get searchSearch => 'Keresés';
 
   @override
+  String get searchResult => 'Eredmény';
+
+  @override
   String get settingsSettings => 'Beállítások';
 
   @override

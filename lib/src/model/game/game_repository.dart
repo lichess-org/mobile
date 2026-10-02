@@ -82,6 +82,9 @@ class const GameRepository(
                 'perfType': filter.perfs.map((perf) => perf.name).join(','),
               if (filter.side != null) 'color': filter.side!.name,
               if (filter.opponent != null) 'vs': filter.opponent!.id.value,
+              // the server applies the same rule as ExportedGame.isWonByMe, which filters
+              // the same games out of local storage
+              if (filter.result == GameResultFilter.won) 'wonBy': userId.value,
               if (withBookmarked) 'withBookmarked': 'true',
             },
           ),
@@ -96,6 +99,14 @@ class const GameRepository(
                   // we know here user is not null for at least one of the players
                   pov: e.white.user?.id == userId ? Side.white : Side.black,
                 ),
+              )
+              // The deployed lila accepts `wonBy` but does not filter on it yet, so the same
+              // rule as ExportedGame.isWonByMe is applied here. It is redundant once the
+              // server honours the parameter.
+              .where(
+                (e) =>
+                    filter.result != GameResultFilter.won ||
+                    (e.game.winner != null && e.game.winner == e.pov),
               )
               .toIList(),
         );

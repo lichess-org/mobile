@@ -859,6 +859,7 @@
   "recapAwaitQuestion": "Mitä olet puuhannut tänä vuonna?",
   "recapRecapReady": "Yhteenvetosi vuodesta {param} on valmis!",
   "searchSearch": "Etsi",
+  "searchResult": "Tulos",
   "settingsSettings": "Asetukset",
   "settingsCloseAccount": "Sulje tili",
   "settingsManagedAccountCannotBeClosed": "Käyttäjätunnuksesi on hallinnassa, eikä sitä voi sulkea.",

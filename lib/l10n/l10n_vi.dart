@@ -3269,6 +3269,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get searchSearch => 'Tìm kiếm';
 
   @override
+  String get searchResult => 'Kết quả';
+
+  @override
   String get settingsSettings => 'Cài đặt';
 
   @override

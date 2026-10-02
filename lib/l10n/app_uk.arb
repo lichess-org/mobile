@@ -889,6 +889,7 @@
   "recapAwaitQuestion": "Чим ви займалися цього року?",
   "recapRecapReady": "Ваш підсумок {param}-го готовий!",
   "searchSearch": "Пошук",
+  "searchResult": "Результат",
   "settingsSettings": "Налаштування",
   "settingsCloseAccount": "Видалити обліковий запис",
   "settingsManagedAccountCannotBeClosed": "Вашим обліковим записом керує інший користувач, тож його не можна видалити.",

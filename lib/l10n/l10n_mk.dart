@@ -3297,6 +3297,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String get searchSearch => 'Пребарај';
 
   @override
+  String get searchResult => 'Резултат';
+
+  @override
   String get settingsSettings => 'Поставки';
 
   @override

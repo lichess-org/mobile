@@ -608,6 +608,7 @@
   "puzzleThemePlayerGamesDescription": "Потражи проблеме створене на основу твојих партија или партија других грача.",
   "puzzleThemePuzzleDownloadInformation": "Ови проблеми су у јавном власништву и могуће их је презузети са {param}.",
   "searchSearch": "Претражи",
+  "searchResult": "Резултат",
   "settingsSettings": "Подешавања",
   "settingsCloseAccount": "Затвори налог",
   "settingsCantOpenSimilarAccount": "Корисничко име НЕЋЕ бити опет доступно за регистрацију.",

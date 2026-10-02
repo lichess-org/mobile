@@ -855,6 +855,7 @@
   "recapAwaitQuestion": "O que tem feito neste ano?",
   "recapRecapReady": "O teu resumo de {param} está pronto!",
   "searchSearch": "Procurar",
+  "searchResult": "Resultado",
   "settingsSettings": "Configurações",
   "settingsCloseAccount": "Encerrar a conta",
   "settingsManagedAccountCannotBeClosed": "A sua conta é gerida e não pode ser encerrada.",

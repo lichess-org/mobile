@@ -3297,6 +3297,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get searchSearch => 'Etsi';
 
   @override
+  String get searchResult => 'Tulos';
+
+  @override
   String get settingsSettings => 'Asetukset';
 
   @override

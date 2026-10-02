@@ -787,6 +787,7 @@
   "recapAwaitQuestion": "Me se jeni marrë këtë vit?",
   "recapRecapReady": "Përmbledhja juaj për {param} është gati!",
   "searchSearch": "Kërko",
+  "searchResult": "Përfundim",
   "settingsSettings": "Rregullime",
   "settingsCloseAccount": "Mbyll llogarinë",
   "settingsManagedAccountCannotBeClosed": "Llogaria juaj administrohet dhe nuk mund të mbyllet.",

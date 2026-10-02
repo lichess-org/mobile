@@ -28,36 +28,54 @@ class const GameStorage(final Database _db) {
     return Sqflite.firstIntValue(result) ?? 0;
   }
 
+  /// Returns up to [max] games of [userId], newest first, that match [filter].
+  ///
+  /// The filter is applied in memory, so a batch of [max] rows can yield fewer results than
+  /// requested: older rows are then fetched until the page is full or the storage is
+  /// exhausted. That way callers can keep paginating with the last game of the page for as
+  /// long as this returns a full page.
   Future<IList<StoredGame>> page({
     UserId? userId,
     DateTime? until,
     int max = 20,
     GameFilterState filter = const GameFilterState(),
   }) async {
-    final list = await _db.query(
-      kGameStorageTable,
-      where: ['userId = ?', if (until != null) 'lastModified < ?'].join(' AND '),
-      whereArgs: [userId ?? kStorageAnonId, if (until != null) until.toIso8601String()],
-      orderBy: 'lastModified DESC',
-      limit: max,
-    );
+    final results = <StoredGame>[];
+    var cursor = until;
+    while (results.length < max) {
+      final rows = await _db.query(
+        kGameStorageTable,
+        where: ['userId = ?', if (cursor != null) 'lastModified < ?'].join(' AND '),
+        whereArgs: [userId ?? kStorageAnonId, if (cursor != null) cursor.toIso8601String()],
+        orderBy: 'lastModified DESC',
+        limit: max,
+      );
+      if (rows.isEmpty) break;
 
-    return list
-        .map((e) {
-          final raw = e['data']! as String;
-          final json = jsonDecode(raw);
-          if (json is! Map<String, dynamic>) {
-            throw const FormatException('[GameStorage] cannot fetch game: expected an object');
-          }
-          return (
-            userId: UserId(e['userId']! as String),
-            lastModified: DateTime.parse(e['lastModified']! as String),
-            game: ExportedGame.fromJson(json),
-          );
-        })
-        .where((e) => filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf))
-        .where((e) => filter.side == null || filter.side == e.game.youAre)
-        .toIList();
+      results.addAll(
+        rows
+            .map((e) {
+              final raw = e['data']! as String;
+              final json = jsonDecode(raw);
+              if (json is! Map<String, dynamic>) {
+                throw const FormatException('[GameStorage] cannot fetch game: expected an object');
+              }
+              return (
+                userId: UserId(e['userId']! as String),
+                lastModified: DateTime.parse(e['lastModified']! as String),
+                game: ExportedGame.fromJson(json),
+              );
+            })
+            .where((e) => filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf))
+            .where((e) => filter.side == null || filter.side == e.game.youAre)
+            .where((e) => filter.result != GameResultFilter.won || e.game.isWonByMe),
+      );
+
+      if (rows.length < max) break;
+      cursor = DateTime.parse(rows.last['lastModified']! as String);
+    }
+
+    return results.take(max).toIList();
   }
 
   Future<ExportedGame?> fetch({required GameId gameId}) {

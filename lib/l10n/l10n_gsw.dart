@@ -3297,6 +3297,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get searchSearch => 'Suechi';
 
   @override
+  String get searchResult => 'Ergäbnis';
+
+  @override
   String get settingsSettings => 'Ischtellige';
 
   @override

@@ -784,6 +784,7 @@
   "recapAwaitQuestion": "Mit csináltál idén?",
   "recapRecapReady": "Elkészült az éves összefoglalód: {param}!",
   "searchSearch": "Keresés",
+  "searchResult": "Eredmény",
   "settingsSettings": "Beállítások",
   "settingsCloseAccount": "Fiók zárolása",
   "settingsManagedAccountCannotBeClosed": "A felhasználói fiókod felügyelet alatt áll, ezért nem zárolható.",

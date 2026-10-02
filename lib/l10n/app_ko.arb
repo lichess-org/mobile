@@ -985,6 +985,7 @@
   "recapAwaitQuestion": "올해는 어떻게 지내셨나요?",
   "recapRecapReady": "당신의 {param}년 요약이 준비되었습니다!",
   "searchSearch": "검색",
+  "searchResult": "결과",
   "settingsSettings": "설정",
   "settingsCloseAccount": "계정 폐쇄",
   "settingsManagedAccountCannotBeClosed": "당신의 계정은 관리되고 있으며, 폐쇄될 수 없습니다.",

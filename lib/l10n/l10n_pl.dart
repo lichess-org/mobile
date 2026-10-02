@@ -3353,6 +3353,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get searchSearch => 'Szukaj';
 
   @override
+  String get searchResult => 'Wynik';
+
+  @override
   String get settingsSettings => 'Ustawienia';
 
   @override

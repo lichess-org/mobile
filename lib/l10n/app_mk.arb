@@ -448,6 +448,7 @@
   "puzzleThemeSmotheredMate": "Задушен мат",
   "puzzleThemeSmotheredMateDescription": "Мат зададен од коњ при кој кралот не може да се движи бидејќи го опкружуваат (односно задушуваат) сопствените фигури.",
   "searchSearch": "Пребарај",
+  "searchResult": "Резултат",
   "settingsSettings": "Поставки",
   "settingsCloseAccount": "Затвори го профилот",
   "settingsCantOpenSimilarAccount": "Нема да ви биде дозволено да отворите нова сметка со истото име, дури и со различна големина на буквите.",

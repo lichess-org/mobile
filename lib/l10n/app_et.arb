@@ -624,6 +624,7 @@
   "puzzleThemeMix": "Tervislik segu",
   "puzzleThemeMixDescription": "Natuke kõike. Kunagi ei tea mida oodata ehk ole valmis kõigeks! Täpselt nagu päris mängudes.",
   "searchSearch": "Otsi",
+  "searchResult": "Tulemus",
   "settingsSettings": "Seaded",
   "settingsCloseAccount": "Sulge konto",
   "settingsManagedAccountCannotBeClosed": "Sinu konto on valve all ja seda ei saa sulgeda.",

@@ -3297,6 +3297,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get searchSearch => 'অনুসন্ধান';
 
   @override
+  String get searchResult => 'Result';
+
+  @override
   String get settingsSettings => 'সেটিংস';
 
   @override

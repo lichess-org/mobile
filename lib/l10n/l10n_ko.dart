@@ -3269,6 +3269,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get searchSearch => '검색';
 
   @override
+  String get searchResult => '결과';
+
+  @override
   String get settingsSettings => '설정';
 
   @override

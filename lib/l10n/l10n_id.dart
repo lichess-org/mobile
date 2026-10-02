@@ -3273,6 +3273,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get searchSearch => 'Cari';
 
   @override
+  String get searchResult => 'Hasil';
+
+  @override
   String get settingsSettings => 'Pengaturan';
 
   @override

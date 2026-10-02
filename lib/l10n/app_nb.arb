@@ -856,6 +856,7 @@
   "recapAwaitQuestion": "Hva har du holdt på med i år?",
   "recapRecapReady": "Oppsummeringen din for {param} er klar!",
   "searchSearch": "Søk",
+  "searchResult": "Resultat",
   "settingsSettings": "Innstillinger",
   "settingsCloseAccount": "Avslutt konto",
   "settingsManagedAccountCannotBeClosed": "Kontoen din er forvaltet og kan ikke avsluttes.",

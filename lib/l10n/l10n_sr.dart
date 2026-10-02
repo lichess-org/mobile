@@ -3318,6 +3318,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get searchSearch => 'Претражи';
 
   @override
+  String get searchResult => 'Резултат';
+
+  @override
   String get settingsSettings => 'Подешавања';
 
   @override

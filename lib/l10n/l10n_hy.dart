@@ -3297,6 +3297,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get searchSearch => 'Փնտրել';
 
   @override
+  String get searchResult => 'Արդյունք';
+
+  @override
   String get settingsSettings => 'Կարգավորումներ';
 
   @override

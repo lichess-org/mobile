@@ -1600,6 +1600,7 @@
     }
   },
   "searchSearch": "Search",
+  "searchResult": "Result",
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",
   "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",

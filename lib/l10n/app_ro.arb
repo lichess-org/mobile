@@ -985,6 +985,7 @@
   "recapAwaitQuestion": "Cu ce te-ai ocupat anul acesta?",
   "recapRecapReady": "Recapitularea ta pentru {param} este gata!",
   "searchSearch": "Căutare",
+  "searchResult": "Rezultat",
   "settingsSettings": "Setări",
   "settingsCloseAccount": "Închide contul",
   "settingsManagedAccountCannotBeClosed": "Contul tău este gestionat și nu poate fi închis.",

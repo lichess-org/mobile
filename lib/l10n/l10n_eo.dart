@@ -3297,6 +3297,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get searchSearch => 'Serĉi';
 
   @override
+  String get searchResult => 'Rezulto';
+
+  @override
   String get settingsSettings => 'Agordoj';
 
   @override

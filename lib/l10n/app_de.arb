@@ -985,6 +985,7 @@
   "recapAwaitQuestion": "Was hast du dieses Jahr alles gemacht?",
   "recapRecapReady": "Deine {param} Zusammenfassung ist da!",
   "searchSearch": "Suche",
+  "searchResult": "Ergebnis",
   "settingsSettings": "Einstellungen",
   "settingsCloseAccount": "Benutzerkonto schließen",
   "settingsManagedAccountCannotBeClosed": "Dein Konto wird verwaltet und kann nicht geschlossen werden.",

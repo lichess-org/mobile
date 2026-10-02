@@ -859,6 +859,7 @@
   "recapAwaitQuestion": "What have you been up to this year?",
   "recapRecapReady": "Your {param} recap is ready!",
   "searchSearch": "Search",
+  "searchResult": "Result",
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",
   "settingsManagedAccountCannotBeClosed": "Your account is managed and cannot be closed.",

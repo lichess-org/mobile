@@ -3349,6 +3349,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get searchSearch => 'Пошук';
 
   @override
+  String get searchResult => 'Вынік';
+
+  @override
   String get settingsSettings => 'Налады';
 
   @override

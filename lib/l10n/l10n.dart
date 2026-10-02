@@ -6112,6 +6112,12 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get searchSearch;
 
+  /// No description provided for @searchResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get searchResult;
+
   /// No description provided for @settingsSettings.
   ///
   /// In en, this message translates to:

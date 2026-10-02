@@ -863,6 +863,7 @@
   "recapAwaitQuestion": "Hvordan har dit år været?",
   "recapRecapReady": "Dit {param} resumé er klar!",
   "searchSearch": "Søg",
+  "searchResult": "Resultat",
   "settingsSettings": "Indstillinger",
   "settingsCloseAccount": "Luk konto",
   "settingsManagedAccountCannotBeClosed": "Din konto er under administration og kan ikke lukkes.",

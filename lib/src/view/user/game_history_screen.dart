@@ -422,6 +422,20 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
             filter = filter.copyWith(side: selected ? value : null);
           }),
         ),
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        filterGroupSpace,
+        Filter<GameResultFilter>(
+          filterName: context.l10n.searchResult,
+          filterType: FilterType.singleChoice,
+          choices: const [GameResultFilter.won],
+          choiceSelected: (choice) => filter.result == choice,
+          // TODO: use a l10n key once lila has a 'won' translation
+          choiceLabel: (_) => const Text('Won'),
+          onSelected: (value, selected) => setState(() {
+            filter = filter.copyWith(result: selected ? value : null);
+          }),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,

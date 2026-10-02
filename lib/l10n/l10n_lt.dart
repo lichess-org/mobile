@@ -3351,6 +3351,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get searchSearch => 'Ieškoti';
 
   @override
+  String get searchResult => 'Rezultatas';
+
+  @override
   String get settingsSettings => 'Nuostatos';
 
   @override

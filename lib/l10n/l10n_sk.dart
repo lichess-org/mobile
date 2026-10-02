@@ -3353,6 +3353,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get searchSearch => 'Hľadať';
 
   @override
+  String get searchResult => 'Výsledok';
+
+  @override
   String get settingsSettings => 'Nastavenia';
 
   @override

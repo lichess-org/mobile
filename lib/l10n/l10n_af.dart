@@ -3297,6 +3297,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get searchSearch => 'Soek';
 
   @override
+  String get searchResult => 'Uitslag';
+
+  @override
   String get settingsSettings => 'Instellings';
 
   @override

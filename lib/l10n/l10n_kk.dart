@@ -3297,6 +3297,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get searchSearch => 'Іздеу';
 
   @override
+  String get searchResult => 'Нәтиже';
+
+  @override
   String get settingsSettings => 'Баптаулар';
 
   @override

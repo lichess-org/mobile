@@ -3321,6 +3321,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get searchSearch => 'Meklēt';
 
   @override
+  String get searchResult => 'Rezultāts';
+
+  @override
   String get settingsSettings => 'Iestatījumi';
 
   @override
