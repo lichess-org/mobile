@@ -18,11 +18,43 @@ import UIKit
 ///
 /// Calls back to Dart with `onActivityState {id, state}` when an activity's state changes, e.g.
 /// `dismissed` when the user removes it from the Lock Screen.
+///
+/// "You left the game" is handled here, not in Dart. When the scene enters the background while a
+/// game is ongoing, the plugin begins a background task, which keeps the app (and its socket)
+/// running for `backgroundTimeRemaining`, and sets the activities' `staleDate` to just before the
+/// app is suspended. The system flips `isStale` at that time with no app code running, and the
+/// extension shows the warning. Back in the foreground the task ends and the `staleDate` is
+/// cleared. Every activity update re-applies the current `staleDate`, so Dart only sends content.
 public final class LiveActivityPlugin: NSObject, FlutterPlugin {
+  /// How long before the predicted suspension the activity turns stale.
+  private static let staleMargin: TimeInterval = 3
+  /// Upper bound of the background window: what iOS grants a background task today. With a
+  /// debugger attached `backgroundTimeRemaining` can be much larger and the app isn't suspended,
+  /// which would delay the warning past the point where lila marks the player offline (once
+  /// `SocketPool` closes the socket after a minute in the background).
+  private static let maxBackgroundTime: TimeInterval = 30
+
   private let channel: FlutterMethodChannel
+
+  /// Last content state sent by Dart, by activity id, for the activities this run started and
+  /// hasn't ended. Lets the plugin re-apply the content with a new `staleDate`. Values are
+  /// `ContentState`, typed `Any` because a stored property can't be limited to iOS 16.2.
+  private var contents: [String: Any] = [:]
+  private var staleDate: Date?
+  private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
+  /// Tail of the chain of activity updates. ActivityKit calls are async, so they are chained to
+  /// apply in the order they were made (Dart updates interleave with lifecycle ones).
+  private var lastActivityTask: Task<Void, Never>?
 
   private init(channel: FlutterMethodChannel) {
     self.channel = channel
+    super.init()
+    NotificationCenter.default.addObserver(
+      self, selector: #selector(didEnterBackground),
+      name: UIScene.didEnterBackgroundNotification, object: nil)
+    NotificationCenter.default.addObserver(
+      self, selector: #selector(willEnterForeground),
+      name: UIScene.willEnterForegroundNotification, object: nil)
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -53,7 +85,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     case "end":
       end(args: args, result: result)
     case "endAll":
-      Task {
+      contents.removeAll()
+      endBackgroundTaskIfIdle()
+      enqueue {
         for activity in Activity<GameActivityAttributes>.activities {
           await activity.end(nil, dismissalPolicy: .immediate)
         }
@@ -73,9 +107,10 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
       let state: GameActivityAttributes.ContentState = try decode(args["state"])
       let activity = try Activity.request(
         attributes: attributes,
-        content: ActivityContent(state: state, staleDate: nil),
+        content: ActivityContent(state: state, staleDate: staleDate),
         pushType: nil
       )
+      contents[activity.id] = state
       observe(activity)
       result(activity.id)
     } catch {
@@ -88,8 +123,10 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     do {
       let activity = try find(args["id"])
       let state: GameActivityAttributes.ContentState = try decode(args["state"])
-      Task {
-        await activity.update(ActivityContent(state: state, staleDate: nil))
+      contents[activity.id] = state
+      let content = ActivityContent(state: state, staleDate: staleDate)
+      enqueue {
+        await activity.update(content)
         result(nil)
       }
     } catch {
@@ -108,7 +145,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
       let dismissalPolicy: ActivityUIDismissalPolicy =
         (args["dismissAfterSeconds"] as? Double).map { .after(Date().addingTimeInterval($0)) }
         ?? .default
-      Task {
+      contents[activity.id] = nil
+      endBackgroundTaskIfIdle()
+      enqueue {
         await activity.end(content, dismissalPolicy: dismissalPolicy)
         result(nil)
       }
@@ -117,13 +156,99 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  // MARK: - Background
+
+  @objc private func didEnterBackground() {
+    guard #available(iOS 16.2, *), hasOngoingGame else { return }
+    endBackgroundTask()
+
+    let application = UIApplication.shared
+    backgroundTask = application.beginBackgroundTask(withName: "LiveActivityGame") { [weak self] in
+      // The system cut the time short, or the margin was too small: make sure the activity is
+      // stale before the app is suspended. Best effort, as the update may not finish in time.
+      guard let self else { return }
+      if #available(iOS 16.2, *) {
+        self.setStaleDate(Date())
+      }
+      self.endBackgroundTask()
+    }
+
+    if backgroundTask == .invalid {
+      setStaleDate(Date())
+    } else {
+      let remaining = application.backgroundTimeRemaining
+      #if DEBUG
+        NSLog("LiveActivityPlugin: background time remaining %.1f s", remaining)
+      #endif
+      let window = remaining.isFinite ? min(remaining, Self.maxBackgroundTime) : 0
+      setStaleDate(Date().addingTimeInterval(max(0, window - Self.staleMargin)))
+    }
+  }
+
+  @objc private func willEnterForeground() {
+    endBackgroundTask()
+    guard #available(iOS 16.2, *), staleDate != nil else { return }
+    setStaleDate(nil)
+  }
+
+  /// Whether one of the activities started by this run shows a game in progress.
+  @available(iOS 16.2, *)
+  private var hasOngoingGame: Bool {
+    contents.values.contains { ($0 as? GameActivityAttributes.ContentState)?.status == .started }
+  }
+
+  /// Sets the `staleDate` of every activity started by this run, keeping its last content.
+  @available(iOS 16.2, *)
+  private func setStaleDate(_ date: Date?) {
+    staleDate = date
+    let updates = contents.compactMap { id, state -> (String, ActivityContent<GameActivityAttributes.ContentState>)? in
+      guard let state = state as? GameActivityAttributes.ContentState else { return nil }
+      return (id, ActivityContent(state: state, staleDate: date))
+    }
+    enqueue {
+      for (id, content) in updates {
+        guard
+          let activity = Activity<GameActivityAttributes>.activities.first(where: { $0.id == id }),
+          activity.activityState == .active || activity.activityState == .stale
+        else { continue }
+        await activity.update(content)
+      }
+    }
+  }
+
+  /// Ends the background task once no game is ongoing any more: nothing left to keep running for.
+  private func endBackgroundTaskIfIdle() {
+    guard backgroundTask != .invalid else { return }
+    if #available(iOS 16.2, *), hasOngoingGame { return }
+    endBackgroundTask()
+  }
+
+  private func endBackgroundTask() {
+    guard backgroundTask != .invalid else { return }
+    UIApplication.shared.endBackgroundTask(backgroundTask)
+    backgroundTask = .invalid
+  }
+
   // MARK: - Helpers
+
+  /// Runs `operation` after every activity operation enqueued before it.
+  private func enqueue(_ operation: @escaping () async -> Void) {
+    let previous = lastActivityTask
+    lastActivityTask = Task {
+      await previous?.value
+      await operation()
+    }
+  }
 
   @available(iOS 16.2, *)
   private func observe(_ activity: Activity<GameActivityAttributes>) {
     Task { [weak self] in
       for await state in activity.activityStateUpdates {
         await MainActor.run {
+          if state == .dismissed || state == .ended {
+            self?.contents[activity.id] = nil
+            self?.endBackgroundTaskIfIdle()
+          }
           self?.channel.invokeMethod(
             "onActivityState", arguments: ["id": activity.id, "state": Self.name(of: state)])
         }
