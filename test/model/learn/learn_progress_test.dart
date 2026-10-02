@@ -1,10 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
+import '../auth/fake_auth_storage.dart';
 
 void main() {
   final rook = learnStageByKey('rook')!;
@@ -52,18 +60,101 @@ void main() {
       );
 
       final storage = await container.read(learnProgressStorageProvider.future);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 0, score: 550);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 0, score: 300);
-      await storage.saveScore(stageKey: 'rook', levelIndex: 1, score: 400);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 0, score: 550);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 0, score: 300);
+      await storage.saveScore(userId: null, stageKey: 'rook', levelIndex: 1, score: 400);
 
-      final progress = await storage.fetch();
+      final progress = await storage.fetch(null);
       expect(progress.stageScores(rook), [550, 400, 0, 0, 0, 0]);
 
       final rows = await db.query('learn_progress', orderBy: 'levelId');
       expect(rows.map((r) => r['levelId']), [1, 2], reason: 'level ids start at 1');
 
-      await storage.reset();
-      expect((await storage.fetch()).stageScores(rook), [0, 0, 0, 0, 0, 0]);
+      await storage.reset(null);
+      expect((await storage.fetch(null)).stageScores(rook), [0, 0, 0, 0, 0, 0]);
+    });
+
+    test('keeps each account separate', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+      const bob = UserId('bob');
+
+      await storage.saveScore(userId: alice, stageKey: 'rook', levelIndex: 0, score: 700);
+      await storage.saveScore(userId: bob, stageKey: 'rook', levelIndex: 0, score: 200);
+
+      expect((await storage.fetch(alice)).levelScore(rook, 0), 700);
+      expect((await storage.fetch(bob)).levelScore(rook, 0), 200);
+      // The anonymous bucket is its own account, not a fallback for signed-in users.
+      expect((await storage.fetch(null)).levelScore(rook, 0), 0);
+
+      // Alice's reset must not touch Bob's rows.
+      await storage.reset(alice);
+      expect((await storage.fetch(alice)).levelScore(rook, 0), 0);
+      expect((await storage.fetch(bob)).levelScore(rook, 0), 200);
+    });
+
+    test('tracks a reset waiting to reach the server', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+      const bob = UserId('bob');
+
+      expect(await storage.isResetPending(alice), isFalse);
+      await storage.setResetPending(alice, pending: true);
+      expect(await storage.isResetPending(alice), isTrue);
+      // Per account: Bob's reset state is untouched by Alice's.
+      expect(await storage.isResetPending(bob), isFalse);
+      await storage.setResetPending(alice, pending: false);
+      expect(await storage.isResetPending(alice), isFalse);
+    });
+
+    test('quarantines a level the server refused, keeping the score', () async {
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+        },
+      );
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      const alice = UserId('alice');
+
+      // A stage lila knows but this build does not: the level was really completed, so the score
+      // has to survive the refusal to upload it.
+      await storage.saveScore(userId: alice, stageKey: 'pins', levelIndex: 0, score: 500);
+      expect(await storage.fetchUnsynced(alice), hasLength(1));
+
+      await storage.quarantine(userId: alice, stageKey: 'pins', levelIndex: 0);
+      // Not posted again...
+      expect(await storage.fetchUnsynced(alice), isEmpty);
+      // ...but the row and the score are still there. It stays in the database rather than being
+      // deleted, so a build that does know the stage can still show and upload it.
+      final rows = await db.query('learn_progress');
+      expect(rows, hasLength(1));
+      expect(rows.single['score'], 500);
+      expect(rows.single['stageKey'], 'pins');
     });
 
     test('the notifier updates its state', () async {
@@ -83,6 +174,59 @@ void main() {
 
       await container.read(learnProgressProvider.notifier).reset();
       expect(container.read(learnProgressProvider).value!.levelScore(rook, 3), 0);
+    });
+
+    test('a flush does not upload a score the server already beats', () async {
+      final posted = <String>[];
+      final mockClient = MockClient((request) async {
+        if (request.url.path == '/api/learn/progress') {
+          return http.Response(
+            jsonEncode({
+              'stages': {
+                'rook': [900, 0, 0, 0, 0, 0],
+              },
+            }),
+            200,
+          );
+        }
+        if (request.url.path == '/learn/reset') {
+          // The reset never lands, so the merge is held back and the flush runs on its own.
+          return http.Response('', 500);
+        }
+        if (request.url.path == '/learn/score') {
+          posted.add(request.body);
+          return http.Response('', 200);
+        }
+        return http.Response('', 404);
+      });
+      final db = await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+      final container = await makeContainer(
+        authUser: fakeAuthUser,
+        overrides: {
+          databaseProvider: databaseProvider.overrideWith((ref) {
+            ref.onDispose(db.close);
+            return db;
+          }),
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+      const userId = UserId('testuser');
+
+      final storage = await container.read(learnProgressStorageProvider.future);
+      // A row left dirty by an earlier session, holding less than the level was scored on the
+      // web since. The server overwrites unconditionally, so uploading it would lower the best.
+      await storage.saveScore(userId: userId, stageKey: 'rook', levelIndex: 0, score: 100);
+      await storage.setResetPending(userId, pending: true);
+
+      await container.read(learnProgressProvider.future);
+      await pumpEventQueue();
+
+      expect(posted, isEmpty, reason: 'the server already holds 900 for that level');
+      // Stamped rather than left dirty, or the same row would be offered again on every start.
+      expect(await storage.fetchUnsynced(userId), isEmpty);
+      expect((await storage.fetch(userId)).levelScore(rook, 0), 100);
     });
   });
 }
