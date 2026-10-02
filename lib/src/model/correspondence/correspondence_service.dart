@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -18,11 +17,9 @@ import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
 
 /// A provider for [CorrespondenceService].
@@ -55,7 +52,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
       final (_, notification) = data;
       switch (notification) {
         case CorresGameUpdateNotification(:final fullId):
-          _onNotificationResponse(fullId);
+          ref.emitUiEvent(OpenGameEvent(fullId));
         case _:
           break;
       }
@@ -65,22 +62,6 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   void dispose() {
     _fcmSubscription?.cancel();
     _notificationResponseSubscription?.cancel();
-  }
-
-  /// Handles a notification response that caused the app to open.
-  Future<void> _onNotificationResponse(GameFullId fullId) async {
-    final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
-
-    final rootNavState = Navigator.of(context, rootNavigator: true);
-    if (rootNavState.canPop()) {
-      rootNavState.popUntil((route) => route.isFirst);
-    }
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(GameScreen.buildRoute(source: ExistingGameSource(fullId)));
   }
 
   /// Syncs offline correspondence games with the server.

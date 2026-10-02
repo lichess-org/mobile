@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
@@ -179,4 +180,34 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
       ),
     );
   }
+}
+
+/// Asks the user to confirm the NNUE download described by [message].
+///
+/// Returns `true` when the user agrees, `false` when they decline or dismiss the dialog.
+Future<bool> showNnueDownloadConfirmDialog(BuildContext context, String message) async {
+  return await showAdaptiveDialog<bool>(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog.adaptive(
+            content: Text(message),
+            actions: [
+              PlatformDialogAction(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+              PlatformDialogAction(
+                child: Text(context.l10n.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+            ],
+          );
+        },
+      ) ??
+      false;
 }

@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 
 /// A provider for [MessageService].
 final messageServiceProvider = Provider<MessageService>((Ref ref) {
@@ -53,18 +51,7 @@ class MessageService(final Ref ref) {
       return;
     }
 
-    final context = ref.read(currentNavigatorKeyProvider).currentContext;
-    if (context == null || !context.mounted) return;
-
-    final rootNavState = Navigator.of(context, rootNavigator: true);
-    if (rootNavState.canPop()) {
-      rootNavState.popUntil((route) => route.isFirst);
-    }
-
-    Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(ConversationScreen.buildRoute(user: user.lightUser));
+    ref.emitUiEvent(OpenConversationEvent(user.lightUser));
   }
 
   void dispose() {

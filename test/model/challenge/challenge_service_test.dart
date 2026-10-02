@@ -15,7 +15,9 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_action_sheets.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -54,6 +56,14 @@ class const _ShowDeclineDialogWidget({required final ChallengeId challengeId})
       child: const Text('Open Dialog'),
     );
   }
+}
+
+/// Mirror production (`_AppState.initState`): the coordinator must listen before services emit.
+void startUiEventCoordinator(WidgetTester tester) {
+  ProviderScope.containerOf(
+    tester.element(find.byType(ElevatedButton)),
+    listen: false,
+  ).read(uiEventCoordinatorProvider).start();
 }
 
 void main() {
@@ -586,6 +596,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      startUiEventCoordinator(tester);
       await tester.tap(find.text('Accept'));
       await tester.pumpAndSettle();
 
@@ -635,6 +646,7 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+      startUiEventCoordinator(tester);
       await tester.tap(find.text('Accept'));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 50));

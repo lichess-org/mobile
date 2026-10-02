@@ -32,6 +32,7 @@ import 'package:lichess_mobile/src/shared_pgn_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -132,7 +133,9 @@ class _AppState() extends ConsumerState<Application> {
   void initState() {
     _screenSizeBasedInitialization(ref);
 
-    // Start services
+    // Start services. The UI event coordinator comes first: it must be listening on the event bus
+    // before any service has a chance to emit.
+    ref.read(uiEventCoordinatorProvider).start();
     ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();
