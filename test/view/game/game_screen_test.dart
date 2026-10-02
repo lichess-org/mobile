@@ -1636,6 +1636,37 @@ void main() {
       expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
     });
 
+    testWidgets('reports the game socket connection state', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      FakeWebSocketChannel? gameSocket;
+      final socketFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final socket = createDefaultFakeWebSocketChannel(route);
+        if (route == testGameSocketUri) gameSocket = socket;
+        return socket;
+      });
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        socketFactory: socketFactory,
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      // the first pong
+      await tester.pump(kFakeWebSocketConnectionLag);
+      expect(channel.connectedCalls.last, isTrue);
+
+      gameSocket!.closeFromServer();
+      await tester.pump();
+      expect(channel.connectedCalls.last, isFalse);
+
+      // the socket reconnects after its backoff
+      await tester.pump(const Duration(seconds: 10));
+      expect(channel.connectedCalls.last, isTrue);
+    });
+
     testWidgets('shows the opponent offers', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(

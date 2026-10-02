@@ -15,6 +15,7 @@ import UIKit
 ///  - `update {id, state}`.
 ///  - `end {id, state?, dismissAfterSeconds?}`: without a dismissal delay the system default applies.
 ///  - `endAll`: ends every game activity, e.g. leftovers from a previous run.
+///  - `setConnected {connected}`: whether the game socket is connected.
 ///
 /// Calls back to Dart with `onActivityState {id, state}` when an activity's state changes, e.g.
 /// `dismissed` when the user removes it from the Lock Screen.
@@ -25,6 +26,15 @@ import UIKit
 /// app is suspended. The system flips `isStale` at that time with no app code running, and the
 /// extension shows the warning. Back in the foreground the task ends and the `staleDate` is
 /// cleared. Every activity update re-applies the current `staleDate`, so Dart only sends content.
+///
+/// The app still runs at the `staleDate`, so a timer also turns the activity stale then, this time
+/// with a "You left the game" alert. Losing the socket in the background does the same at once,
+/// since lila then counts the player as gone; getting it back within the background window
+/// restores the predicted `staleDate`. The alert goes off once per stay in the background.
+///
+/// While the app is in the background, an update that makes it the user's turn comes with an alert
+/// too, since the user isn't looking at the game. Alerts play a sound and expand the Dynamic Island
+/// (a banner on devices without one).
 public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// How long before the predicted suspension the activity turns stale.
   private static let staleMargin: TimeInterval = 3
@@ -41,6 +51,16 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// `ContentState`, typed `Any` because a stored property can't be limited to iOS 16.2.
   private var contents: [String: Any] = [:]
   private var staleDate: Date?
+  private var isInBackground = false
+  /// When the app is predicted to be suspended, during a stay in the background with a running
+  /// background task.
+  private var predictedSuspension: Date?
+  /// Fires at `predictedSuspension` to turn the activity stale with an alert.
+  private var leftTimer: Timer?
+  /// Whether the "You left the game" alert went off during this stay in the background.
+  private var hasAlertedLeft = false
+  /// Whether the game socket is connected, as reported by Dart.
+  private var isSocketConnected = true
   private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
   /// Tail of the chain of activity updates. ActivityKit calls are async, so they are chained to
   /// apply in the order they were made (Dart updates interleave with lifecycle ones).
@@ -84,6 +104,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
       update(args: args, result: result)
     case "end":
       end(args: args, result: result)
+    case "setConnected":
+      setConnected(args["connected"] as? Bool ?? true)
+      result(nil)
     case "endAll":
       contents.removeAll()
       endBackgroundTaskIfIdle()
@@ -123,10 +146,14 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     do {
       let activity = try find(args["id"])
       let state: GameActivityAttributes.ContentState = try decode(args["state"])
+      let previous = contents[activity.id] as? GameActivityAttributes.ContentState
       contents[activity.id] = state
       let content = ActivityContent(state: state, staleDate: staleDate)
+      let alert = isInBackground
+        ? Self.turnAlert(myColor: activity.attributes.myColor, previous: previous, state: state)
+        : nil
       enqueue {
-        await activity.update(content)
+        await activity.update(content, alertConfiguration: alert)
         result(nil)
       }
     } catch {
@@ -159,36 +186,84 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   // MARK: - Background
 
   @objc private func didEnterBackground() {
+    isInBackground = true
     guard #available(iOS 16.2, *), hasOngoingGame else { return }
     endBackgroundTask()
 
     let application = UIApplication.shared
     backgroundTask = application.beginBackgroundTask(withName: "LiveActivityGame") { [weak self] in
-      // The system cut the time short, or the margin was too small: make sure the activity is
-      // stale before the app is suspended. Best effort, as the update may not finish in time.
+      // The system cut the time short: make sure the activity is stale before the app is
+      // suspended. Best effort, as the update may not finish in time.
       guard let self else { return }
       if #available(iOS 16.2, *) {
-        self.setStaleDate(Date())
+        self.markLeft()
       }
       self.endBackgroundTask()
     }
 
-    if backgroundTask == .invalid {
-      setStaleDate(Date())
-    } else {
-      let remaining = application.backgroundTimeRemaining
-      #if DEBUG
-        NSLog("LiveActivityPlugin: background time remaining %.1f s", remaining)
-      #endif
-      let window = remaining.isFinite ? min(remaining, Self.maxBackgroundTime) : 0
-      setStaleDate(Date().addingTimeInterval(max(0, window - Self.staleMargin)))
+    guard backgroundTask != .invalid, isSocketConnected else {
+      markLeft()
+      return
     }
+    let remaining = application.backgroundTimeRemaining
+    #if DEBUG
+      NSLog("LiveActivityPlugin: background time remaining %.1f s", remaining)
+    #endif
+    let window = remaining.isFinite ? min(remaining, Self.maxBackgroundTime) : 0
+    let suspension = Date().addingTimeInterval(max(0, window - Self.staleMargin))
+    predictedSuspension = suspension
+    setStaleDate(suspension)
+    scheduleLeftTimer(at: suspension)
   }
 
   @objc private func willEnterForeground() {
+    isInBackground = false
+    hasAlertedLeft = false
+    predictedSuspension = nil
+    cancelLeftTimer()
     endBackgroundTask()
     guard #available(iOS 16.2, *), staleDate != nil else { return }
     setStaleDate(nil)
+  }
+
+  @available(iOS 16.2, *)
+  private func setConnected(_ connected: Bool) {
+    guard connected != isSocketConnected else { return }
+    isSocketConnected = connected
+    guard isInBackground else { return }
+    if !connected {
+      markLeft()
+    } else if let suspension = predictedSuspension, suspension > Date() {
+      // Back within the background window: lila no longer counts the player as gone.
+      setStaleDate(suspension)
+      scheduleLeftTimer(at: suspension)
+    }
+  }
+
+  /// Turns the activities stale now, with a "You left the game" alert unless one already went off
+  /// during this stay in the background.
+  @available(iOS 16.2, *)
+  private func markLeft() {
+    guard isInBackground, hasOngoingGame else { return }
+    cancelLeftTimer()
+    let alerts = !hasAlertedLeft
+    hasAlertedLeft = true
+    setStaleDate(Date(), withLeftAlert: alerts)
+  }
+
+  private func scheduleLeftTimer(at date: Date) {
+    cancelLeftTimer()
+    leftTimer = Timer.scheduledTimer(
+      withTimeInterval: max(0, date.timeIntervalSinceNow), repeats: false
+    ) { [weak self] _ in
+      guard let self, #available(iOS 16.2, *) else { return }
+      self.markLeft()
+    }
+  }
+
+  private func cancelLeftTimer() {
+    leftTimer?.invalidate()
+    leftTimer = nil
   }
 
   /// Whether one of the activities started by this run shows a game in progress.
@@ -199,27 +274,31 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
 
   /// Sets the `staleDate` of every activity started by this run, keeping its last content.
   @available(iOS 16.2, *)
-  private func setStaleDate(_ date: Date?) {
+  private func setStaleDate(_ date: Date?, withLeftAlert: Bool = false) {
     staleDate = date
-    let updates = contents.compactMap { id, state -> (String, ActivityContent<GameActivityAttributes.ContentState>)? in
-      guard let state = state as? GameActivityAttributes.ContentState else { return nil }
-      return (id, ActivityContent(state: state, staleDate: date))
+    let updates = contents.compactMap {
+      id, value -> (String, ActivityContent<GameActivityAttributes.ContentState>, AlertConfiguration?)? in
+      guard let state = value as? GameActivityAttributes.ContentState else { return nil }
+      return (
+        id, ActivityContent(state: state, staleDate: date), withLeftAlert ? Self.leftAlert(state) : nil
+      )
     }
     enqueue {
-      for (id, content) in updates {
+      for (id, content, alert) in updates {
         guard
           let activity = Activity<GameActivityAttributes>.activities.first(where: { $0.id == id }),
           activity.activityState == .active || activity.activityState == .stale
         else { continue }
-        await activity.update(content)
+        await activity.update(content, alertConfiguration: alert)
       }
     }
   }
 
-  /// Ends the background task once no game is ongoing any more: nothing left to keep running for.
+  /// Ends the background task and the left timer once no game is ongoing any more: nothing left to
+  /// keep running for or warn about.
   private func endBackgroundTaskIfIdle() {
-    guard backgroundTask != .invalid else { return }
     if #available(iOS 16.2, *), hasOngoingGame { return }
+    cancelLeftTimer()
     endBackgroundTask()
   }
 
@@ -230,6 +309,30 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   }
 
   // MARK: - Helpers
+
+  @available(iOS 16.2, *)
+  private static func leftAlert(_ state: GameActivityAttributes.ContentState) -> AlertConfiguration {
+    AlertConfiguration(
+      title: "You left the game",
+      body: state.claimable
+        ? "Return or your opponent can claim victory soon." : "Return to the game.",
+      sound: .default
+    )
+  }
+
+  /// An alert for when the opponent's move makes it the user's turn.
+  @available(iOS 16.2, *)
+  private static func turnAlert(
+    myColor: GameActivityAttributes.Side,
+    previous: GameActivityAttributes.ContentState?,
+    state: GameActivityAttributes.ContentState
+  ) -> AlertConfiguration? {
+    guard let previous, previous.turn != myColor, state.turn == myColor, state.status == .started
+    else { return nil }
+    let body: LocalizedStringResource =
+      state.lastSan.map { "Your opponent played \($0)" } ?? "Your opponent moved"
+    return AlertConfiguration(title: "Your turn", body: body, sound: .default)
+  }
 
   /// Runs `operation` after every activity operation enqueued before it.
   private func enqueue(_ operation: @escaping () async -> Void) {
