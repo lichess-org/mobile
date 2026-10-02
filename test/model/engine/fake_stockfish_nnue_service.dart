@@ -17,9 +17,6 @@ class FakeStockfishNnueService() implements StockfishNnueService {
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
 
   @override
-  bool get isDownloadingNNUEFile => false;
-
-  @override
   File get nnueFile {
     // Return a dummy file path - it won't be accessed by FakeStockfish
     return File('/tmp/fake_net.nnue');
@@ -61,9 +58,6 @@ class FakeStockfishNnueServiceUnavailable() implements StockfishNnueService {
 
   @override
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
-
-  @override
-  bool get isDownloadingNNUEFile => false;
 
   @override
   File get nnueFile {

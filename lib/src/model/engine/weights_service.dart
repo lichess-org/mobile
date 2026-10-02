@@ -38,9 +38,6 @@ class StockfishNnueService(final Ref _ref) {
 
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
 
-  bool get isDownloadingNNUEFile =>
-      nnueDownloadProgress.value > 0.0 && nnueDownloadProgress.value < 1.0;
-
   /// Get the NNUE file path.
   ///
   /// Throws an exception if the app support directory is not available.
