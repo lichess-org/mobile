@@ -25,11 +25,12 @@ const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings
 // Map each widget UI string to its ARB key and English fallback.
 // Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
-  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle' },
-  'Community': { arbKey: 'ublogCommunity', fallback: 'Community' },
+  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'widget_daily_puzzle_title' },
+  'Community': { arbKey: 'ublogCommunity', fallback: 'Community', androidName: 'widget_community_title' },
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
-  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts' },
+  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'widget_broadcast_title' },
+  
 };
 
 // ARB locale codes use '_', iOS uses '-' for subtags.
@@ -79,3 +80,45 @@ fs.writeFileSync(OUT_FILE, JSON.stringify(catalog, null, 2) + '\n');
 console.log(`Written: ${path.relative(ROOT, OUT_FILE)}`);
 console.log(`  Strings: ${Object.keys(strings).length}`);
 console.log(`  Locales: ${arbFiles.length}`);
+
+const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');
+
+function xmlEscape(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, "\\'");
+}
+
+function arbToAndroidValue(value, param) {
+  return param ? value.replace(/\{param\}/g, '%1$s') : value;
+}
+
+const androidLocaleGroups = new Map(); 
+
+for (const { file, locale: arbLocaleRaw } of arbFiles) {
+  const arbLocale = file.replace(/^app_/, '').replace(/\.arb$/, '');
+    if (arbLocale === 'en') continue; 
+    const qualifier = `b+${arbLocale.replace(/_/g, '+')}`; 
+    const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));
+
+   for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
+      if (!androidName) continue;
+      const raw = arb[arbKey];
+      if (raw == null || raw === fallback) continue; 
+      const value = arbToAndroidValue(raw, param);
+      if (!androidLocaleGroups.has(qualifier)) androidLocaleGroups.set(qualifier, {});
+      androidLocaleGroups.get(qualifier)[androidName] = value;
+     }
+   }
+
+for (const [qualifier, entries] of androidLocaleGroups) {
+      const dir = path.join(ANDROID_RES_DIR, `values-${qualifier}`);
+      fs.mkdirSync(dir, { recursive: true });
+      const body = Object.entries(entries)
+        .map(([name, value]) => `    <string name="${name}">${xmlEscape(value)}</string>`)
+        .join('\n');
+      fs.writeFileSync(
+        path.join(dir, 'strings.xml'),
+        `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n${body}\n</resources>\n`
+      );}
+
+console.log(`  Android locales: ${androidLocaleGroups.size}`);
