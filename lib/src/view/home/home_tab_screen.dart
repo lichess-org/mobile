@@ -608,7 +608,17 @@ class const _EditableWidget({
                 ),
               ),
               Expanded(
-                child: IgnorePointer(ignoring: isEditing, child: child),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                      child: Text(widget.label(context.l10n)),
+                    ),
+                    IgnorePointer(ignoring: isEditing, child: child),
+                  ],
+                ),
               ),
               if (widget == HomeEditableWidget.quickPairing)
                 IconButton(
