@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -23,7 +22,6 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
     extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authSession = ref.watch(authControllerProvider);
     final userFullName = user.profile?.realName != null
         ? Text(user.profile!.realName!, style: _userNameStyle)
         : null;
@@ -35,7 +33,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user.tosViolation == true && authSession?.user.id != user.id)
+            if (user.tosViolation == true)
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
