@@ -35,7 +35,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (user.tosViolation == true && authSession?.user.id != user.id)
+            if (user.tosViolation == true)
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
