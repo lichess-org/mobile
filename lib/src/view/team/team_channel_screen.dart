@@ -1,5 +1,6 @@
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/team/team.dart';
 import 'package:lichess_mobile/src/model/team/team_providers.dart';
@@ -12,10 +13,10 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/team.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class const TeamChannelScreen({
   super.key,
@@ -219,7 +220,7 @@ class const _TeamUpdateCard({required final TeamUpdateItem item}) extends Consum
               softLineBreak: true,
               onTapLink: (text, url, title) {
                 if (url == null) return;
-                launchUrl(Uri.https('lichess.org').resolve(url));
+                ref.read(appLinksServiceProvider).onLinkifyOpen(context, UrlElement(url));
               },
             ),
           ],

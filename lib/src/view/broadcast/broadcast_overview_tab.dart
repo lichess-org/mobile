@@ -2,12 +2,14 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -78,7 +80,7 @@ class const BroadcastOverviewTab({
                 data: description,
                 onTapLink: (text, url, title) {
                   if (url == null) return;
-                  launchUrl(Uri.https('lichess.org').resolve(url));
+                  ref.read(appLinksServiceProvider).onLinkifyOpen(context, UrlElement(url));
                 },
                 softLineBreak: true,
               ),
