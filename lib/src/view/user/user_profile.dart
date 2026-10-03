@@ -23,7 +23,6 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
     extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authSession = ref.watch(authControllerProvider);
     final userFullName = user.profile?.realName != null
         ? Text(user.profile!.realName!, style: _userNameStyle)
         : null;
