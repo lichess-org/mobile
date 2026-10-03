@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -13,7 +14,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
+import 'package:lichess_mobile/src/view/study/add_pgn_to_study_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
@@ -26,7 +29,7 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
     return buildScreenRoute(screen: const ImportPgnScreen());
   }
 
-  static void handlePgnText(BuildContext context, String text) {
+  static void handlePgnText(BuildContext context, String text, {required bool isLoggedIn}) {
     try {
       final games = PgnGame.parseMultiGameLazy(text);
 
@@ -35,25 +38,52 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
         return;
       }
 
-      if (games.length == 1) {
-        final game = games.first;
-        final rule = Rule.fromPgn(game.headers['Variant']);
-
-        Navigator.of(context, rootNavigator: true).push(
-          AnalysisScreen.buildRoute(
-            AnalysisOptions.pgn(
-              id: const StringId('pgn_import_single_game'),
-              orientation: .white,
-              pgn: text,
-              isComputerAnalysisAllowed: true,
-              initialMoveCursor: 1,
-              variant: rule != null ? Variant.fromRule(rule) : .standard,
-            ),
-          ),
-        );
-      } else {
-        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
+      if (!isLoggedIn) {
+        _openInAnalysisBoard(context, games.lock);
+        return;
       }
+
+      showDialog<String>(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('Select import mode'), // TODO l10n
+            children: [
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (!context.mounted) return;
+                  _openInAnalysisBoard(context, games.lock);
+                },
+                child: const ListTile(
+                  leading: Icon(Icons.biotech),
+                  // TODO l10n
+                  title: Text('Local Analysis'),
+                  subtitle: Text(
+                    'Analyze the imported game in a temporary analysis board. You can use the local engine, but server analysis is not available in this mode.',
+                  ),
+                ),
+              ),
+              SimpleDialogOption(
+                child: ListTile(
+                  leading: const Icon(Symbols.school_rounded),
+                  title: Text(context.l10n.mobileAddToStudy),
+                  // TODO l10n
+                  subtitle: const Text(
+                    'Add the PGN(s) to a newly created study or an existing one. Use this if you want to run server analysis of the game(s).',
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (!context.mounted) return;
+                  Navigator.of(context).push(AddPgnToStudyScreen.buildRoute(pgn: text));
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return;
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);
     }
@@ -65,6 +95,28 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
       appBar: AppBar(title: Text(context.l10n.importPgn)),
       body: const _Body(),
     );
+  }
+
+  static void _openInAnalysisBoard(BuildContext context, IList<PgnLazyGame> games) {
+    if (games.length == 1) {
+      final game = games.first;
+      final rule = Rule.fromPgn(game.headers['Variant']);
+
+      Navigator.of(context, rootNavigator: true).push(
+        AnalysisScreen.buildRoute(
+          AnalysisOptions.pgn(
+            id: const StringId('pgn_import_single_game'),
+            orientation: .white,
+            pgn: game.rawPgn,
+            isComputerAnalysisAllowed: true,
+            initialMoveCursor: 1,
+            variant: rule != null ? Variant.fromRule(rule) : .standard,
+          ),
+        ),
+      );
+    } else {
+      Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games));
+    }
   }
 }
 
@@ -119,7 +171,7 @@ class _BodyState() extends ConsumerState<_Body> {
     final text = data!.text!.trim();
     if (text.isEmpty) return;
 
-    ImportPgnScreen.handlePgnText(context, text);
+    ImportPgnScreen.handlePgnText(context, text, isLoggedIn: ref.read(isLoggedInProvider));
   }
 
   Future<void> _pickPgnFile() async {
@@ -131,7 +183,7 @@ class _BodyState() extends ConsumerState<_Body> {
             .bind(file.readAsByteStream())
             .join();
         if (mounted) {
-          ImportPgnScreen.handlePgnText(context, content);
+          ImportPgnScreen.handlePgnText(context, content, isLoggedIn: ref.read(isLoggedInProvider));
         }
       }
     } catch (e) {
