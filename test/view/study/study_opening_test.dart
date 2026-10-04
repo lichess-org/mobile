@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../model/analysis/fake_opening_service.dart';
+import '../../service/fake_opening_service.dart';
 import '../../test_provider_scope.dart';
 
 class MockStudyRepository() extends Mock implements StudyRepository;

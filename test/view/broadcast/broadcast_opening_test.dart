@@ -10,8 +10,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 
-import '../../model/analysis/fake_opening_service.dart';
 import '../../model/broadcast/example_data.dart';
+import '../../service/fake_opening_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 

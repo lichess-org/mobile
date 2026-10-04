@@ -36,13 +36,13 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'binding.dart';
-import 'model/analysis/fake_opening_service.dart';
-import 'model/common/service/fake_sound_service.dart';
 import 'model/engine/fake_engine.dart';
-import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
+import 'service/fake_opening_service.dart';
+import 'service/fake_sound_service.dart';
+import 'service/fake_weights_service.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
 

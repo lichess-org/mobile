@@ -17,9 +17,9 @@ import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/view/engine/position_evaluator.dart';
 
 import '../../binding.dart';
+import '../../model/engine/fake_engine.dart';
+import '../../service/fake_stockfish_nnue_service.dart';
 import '../../test_container.dart';
-import 'fake_engine.dart';
-import 'fake_stockfish_nnue_service.dart';
 
 /// The engine's lifecycle, as these tests read it off [EngineEvaluationState].
 ///

@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 
-import '../common/service/fake_sound_service.dart';
+import '../../service/fake_sound_service.dart';
 
 class FakeClockToolPreferences() extends ClockToolPreferences {
   @override

@@ -7,15 +7,14 @@ import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/engine_opponent.dart';
 import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
-
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 
+import '../../service/fake_weights_service.dart';
 import '../../test_container.dart';
 import 'fake_engine.dart';
 import 'fake_maia_book_service.dart';
 import 'fake_maia_online_book.dart';
-import 'fake_weights_service.dart';
 import 'polyglot_fixture.dart';
 
 /// The game every test that is not about game identity plays.

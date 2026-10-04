@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
-import '../../model/engine/fake_weights_service.dart';
+import '../../service/fake_weights_service.dart';
 import '../../test_provider_scope.dart';
 
 /// A screen whose only job is to open the picker and remember what it returned.

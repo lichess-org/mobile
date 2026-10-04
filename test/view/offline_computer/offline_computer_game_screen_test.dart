@@ -40,7 +40,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
 import '../../model/engine/fake_engine.dart';
-import '../../model/engine/fake_weights_service.dart';
+import '../../service/fake_weights_service.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
