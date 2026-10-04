@@ -30,7 +30,6 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -43,7 +42,15 @@ class const StreakScreen({super.key}) extends StatelessWidget {
   Widget build(BuildContext context) {
     return WakelockWidget(
       child: Scaffold(
-        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Streak')),
+        appBar: AppBar(
+          leading: BackButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          actions: const [ToggleSoundButton()],
+          title: const Text('Puzzle Streak'),
+        ),
         body: const _Load(),
       ),
     );
@@ -188,24 +195,6 @@ class _BodyState() extends ConsumerState<_Body> {
 
     final content = PopScope(
       canPop: widget.streak.index == 0 || widget.streak.finished,
-      onPopInvokedWithResult: (bool didPop, _) async {
-        if (didPop) {
-          return;
-        }
-        final NavigatorState navigator = Navigator.of(context);
-        final shouldPop = await showAdaptiveDialog<bool>(
-          context: context,
-          builder: (context) => YesNoDialog(
-            title: Text(context.l10n.mobileAreYouSure),
-            content: const Text('No worries, your score will be saved locally.'),
-            onYes: () => Navigator.of(context).pop(true),
-            onNo: () => Navigator.of(context).pop(false),
-          ),
-        );
-        if (shouldPop ?? false) {
-          navigator.pop();
-        }
-      },
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.

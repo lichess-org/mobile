@@ -38,10 +38,14 @@ Future<Widget> makeTestApp(
   Iterable<ExternalEval>? evals,
   IMap<String, OpeningExplorerEntry> openingExplorerEntries = const IMap.empty(),
   bool alreadyHasServerAnalysis = true,
+  bool gameLoadFails = false,
   Map<ProviderOrFamily, Override> overrides = const {},
 }) async {
   final mockClient = MockClient((request) {
     if (request.url.path == '/game/export/$testId') {
+      if (gameLoadFails) {
+        return mockResponse('game unavailable', 500);
+      }
       return mockResponse('''
 {
   "id": "${testId.value}",
@@ -392,6 +396,58 @@ void main() {
       verifyNever(
         () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
       );
+    });
+
+    testWidgets('A refused analysis request shows the reason, not the retry screen', (
+      WidgetTester tester,
+    ) async {
+      final mockAnalysisService = MockServerAnalysisService();
+      final currentAnalysis = ValueNotifier<ServerAnalysisSource?>(null);
+      final evalEvents = ValueNotifier<(ServerAnalysisSource, ServerEvalEvent)?>(null);
+      when(() => mockAnalysisService.currentAnalysis).thenReturn(currentAnalysis);
+      when(() => mockAnalysisService.lastAnalysisEvent).thenReturn(evalEvents);
+      when(
+        () => mockAnalysisService.requestAnalysis(const ServerAnalysisSource.game(gameId: testId)),
+      ).thenAnswer(
+        (_) async => throw ServerAnalysisRequestException(
+          ServerAnalysisRequestError.weeklyLimitReached,
+          'You have reached the weekly analysis limit',
+        ),
+      );
+
+      await tester.pumpWidget(
+        await makeTestApp(
+          tester,
+          moves: 'e4 e5',
+          alreadyHasServerAnalysis: false,
+          overrides: {
+            serverAnalysisServiceProvider: serverAnalysisServiceProvider.overrideWithValue(
+              mockAnalysisService,
+            ),
+          },
+        ),
+      );
+
+      // Let the refused request reject.
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      // Retro is unusable without evals, so the screen has to report why. A retry cannot help
+      // here: the refusal is the server's answer, not a flaky request.
+      expect(find.text('You have reached the weekly analysis limit'), findsOneWidget);
+      expect(find.text('Retry'), findsNothing);
+    });
+
+    testWidgets('A failed game load still offers a retry', (WidgetTester tester) async {
+      await tester.pumpWidget(await makeTestApp(tester, moves: 'e4 e5', gameLoadFails: true));
+
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      // The game failing to load is worth retrying, so the retry screen stays.
+      expect(find.text('Retry'), findsOneWidget);
     });
 
     testWidgets('Controller entry points are no-ops while state has no value', (

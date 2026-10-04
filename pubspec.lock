@@ -253,10 +253,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "9da9860b409d71e4b8259e3dee631176d499dee23e7cd45a3024ebd5181997d8"
+      sha256: d8aa6c72b4a3b6c9b299a53f0c4e10cfc87961b2c7496e6c9a7216157f9c529c
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.10.0"
   cross_file:
     dependency: transitive
     description:
@@ -293,10 +293,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: "41e005c33bd814be4d3096aff55b1908d419fde52ca656c8c47719ec745873cd"
+      sha256: b7cc2390aac296c083bea762859413eb1cf5b630c70e0c7e4d831018f762a8b2
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "2.0.0"
   cupertino_ui:
     dependency: "direct main"
     description:
@@ -794,10 +794,10 @@ packages:
     dependency: "direct main"
     description:
       name: home_widget
-      sha256: b8d377e6a5aacc65193170addf252cce7868fa621b740cdd7b517a233871c185
+      sha256: "1dbfdfbb3b47de24639adfba352050d85d66af112b9cc3ec5bf7627a7813abcb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4"
+    version: "0.10.0"
   hooks:
     dependency: transitive
     description:
@@ -1106,10 +1106,10 @@ packages:
     dependency: "direct main"
     description:
       name: multistockfish
-      sha256: e8047ef53eaa9f9bce5b4b0516038c67d407db6e4372d000b4e838bbae96f990
+      sha256: dbb484cf11c98e88fcbe4ee60373c885dc9cf5e66f81b50b601af31d98d0b7a5
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.0"
+    version: "0.6.1"
   multistockfish_chess:
     dependency: transitive
     description:

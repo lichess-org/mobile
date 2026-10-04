@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_engine_chapter.dart';
@@ -33,32 +34,34 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
       practiceStructureProvider.select((s) => s.value?.studyOf(chapter.id)?.chapters.length ?? 0),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(chapter.name),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.list),
-            tooltip: context.l10n.studyNbChapters(nbChapters),
-            onPressed: () => showModalBottomSheet<void>(
-              context: context,
-              // Sized to its content, up to most of the screen: a long study scrolls, and the
-              // barrier left above it and the handle still close it.
-              isScrollControlled: true,
-              useSafeArea: true,
-              showDragHandle: true,
-              constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-              builder: (_) => _ChaptersSheet(current: chapter),
+    return WakelockWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(chapter.name),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.list),
+              tooltip: context.l10n.studyNbChapters(nbChapters),
+              onPressed: () => showModalBottomSheet<void>(
+                context: context,
+                // Sized to its content, up to most of the screen: a long study scrolls, and the
+                // barrier left above it and the handle still close it.
+                isScrollControlled: true,
+                useSafeArea: true,
+                showDragHandle: true,
+                constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
+                builder: (_) => _ChaptersSheet(current: chapter),
+              ),
             ),
-          ),
-          const ToggleSoundButton(),
-        ],
+            const ToggleSoundButton(),
+          ],
+        ),
+        body: switch (chapter) {
+          final PracticeEngineChapter chapter => PracticeEngineChapterBody(chapter: chapter),
+          final PracticeGamebookChapter chapter => PracticeGamebookChapterBody(chapter: chapter),
+          final PracticeLessonChapter chapter => PracticeLessonChapterBody(chapter: chapter),
+        },
       ),
-      body: switch (chapter) {
-        final PracticeEngineChapter chapter => PracticeEngineChapterBody(chapter: chapter),
-        final PracticeGamebookChapter chapter => PracticeGamebookChapterBody(chapter: chapter),
-        final PracticeLessonChapter chapter => PracticeLessonChapterBody(chapter: chapter),
-      },
     );
   }
 }

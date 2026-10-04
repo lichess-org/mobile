@@ -734,6 +734,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   late bool _practiceMode;
   late TimeControlType _timeControlType;
   late TimeIncrement _timeIncrement;
+  late TimeIncrement _prevIncrement;
   String? _fromPositionFen;
   final _fenController = TextEditingController();
 
@@ -767,6 +768,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     // Practice mode is played without a clock, so a game that starts in it starts untimed whatever
     // the last one was played with.
     _timeIncrement = _practiceMode ? const TimeIncrement.infinite() : prefs.timeIncrement;
+    _prevIncrement = _timeIncrement;
     _timeControlType = _timeIncrement.isInfinite
         ? TimeControlType.unlimited
         : TimeControlType.clock;
@@ -796,16 +798,18 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   }
 
   void _setTimeControlType(TimeControlType type) {
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(type);
     setState(() {
       _timeControlType = type;
       if (type == TimeControlType.unlimited) {
+        _prevIncrement = _timeIncrement;
         _timeIncrement = const TimeIncrement.infinite();
       } else if (_timeIncrement.isInfinite) {
-        _timeIncrement = OfflineComputerGamePrefs.defaultClockTimeIncrement;
+        _timeIncrement = _prevIncrement;
       }
     });
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(_timeIncrement);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(type).then((_) {
+      ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(_timeIncrement);
+    });
   }
 
   void _setTotalTime(num seconds) {
@@ -823,8 +827,13 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
           ? TimeControlType.unlimited
           : TimeControlType.clock;
     });
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(newIncrement);
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(_timeControlType);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(newIncrement).then((
+      _,
+    ) {
+      ref
+          .read(offlineComputerGamePreferencesProvider.notifier)
+          .setTimeControlType(_timeControlType);
+    });
   }
 
   /// Turning practice mode on takes the clock away: the feedback it gives is meant to be thought
@@ -916,44 +925,86 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
               child: hasClock
                   ? Column(
                       children: [
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.minutesPerSide}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: clockLabelInMinutes(_timeIncrement.time),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: _timeIncrement.time,
-                            values: kAvailableTimesInSeconds,
-                            labelBuilder: clockLabelInMinutes,
-                            onChange: _setTotalTime,
-                            onChangeEnd: _setTotalTime,
-                          ),
+                        Builder(
+                          builder: (ctx) {
+                            int seconds = _timeIncrement.time;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.minutesPerSide}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: clockLabelInMinutes(seconds),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: seconds,
+                                    values: kAvailableTimesInSeconds,
+                                    labelBuilder: clockLabelInMinutes,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                      _setTotalTime(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.incrementInSeconds}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: _timeIncrement.increment.toString(),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: _timeIncrement.increment,
-                            values: kAvailableIncrementsInSeconds,
-                            onChange: _setIncrement,
-                            onChangeEnd: _setIncrement,
-                          ),
+                        Builder(
+                          builder: (ctx) {
+                            int incrementSeconds = _timeIncrement.increment;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.incrementInSeconds}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: incrementSeconds.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: incrementSeconds,
+                                    values: kAvailableIncrementsInSeconds,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                      _setIncrement(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ],
                     )

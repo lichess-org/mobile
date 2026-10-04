@@ -153,6 +153,7 @@ abstract class AnalysisBoardState<
     final newFen = computeFen(next);
     final prevFen = prev != null ? computeFen(prev) : null;
     if (prevFen != newFen) {
+      controller.pendingPromotion = null;
       controller.updatePosition(gameData, resetPremove: true);
       final explosionSquares = next.explosionSquares;
       if (explosionSquares != null) {

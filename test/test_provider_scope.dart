@@ -63,12 +63,14 @@ final offlineClient = MockClient((request) {
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [authUser] parameter can be used to set the initial user authUser state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
+/// The [surfaceSize] parameter can be used to simulate a device with a specific screen size.
 Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   Map<ProviderOrFamily, Override>? overrides,
   AuthUser? authUser,
   Map<String, Object>? defaultPreferences,
+  Size surfaceSize = kTestSurfaceSize,
 }) {
   return makeTestProviderScope(
     tester,
@@ -76,6 +78,7 @@ Future<Widget> makeTestProviderScopeApp(
     overrides: overrides,
     authUser: authUser,
     defaultPreferences: defaultPreferences,
+    surfaceSize: surfaceSize,
   );
 }
 

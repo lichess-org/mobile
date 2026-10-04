@@ -88,6 +88,8 @@ class RetroController(final RetroOptions options)
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
+  Timer? _serverAnalysisTimeout;
+
   Timer? _incorrectMoveTimer;
 
   @override
@@ -102,6 +104,7 @@ class RetroController(final RetroOptions options)
   Future<RetroState> build() async {
     ref.onDispose(() {
       _incorrectMoveTimer?.cancel();
+      _serverAnalysisTimeout?.cancel();
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -138,24 +141,20 @@ class RetroController(final RetroOptions options)
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
         requestServerAnalysis().catchError((Object e, StackTrace st) {
           _logger.warning('Failed to request server analysis', e, st);
+          _serverAnalysisTimeout?.cancel();
           state = AsyncError(e, st);
         });
       }
 
-      unawaited(
-        _serverAnalysisCompleter.future.timeout(
-          kMaxWaitForServerAnalysis,
-          onTimeout: () {
-            _logger.warning(
-              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-            );
-            state = AsyncError(
-              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-              StackTrace.current,
-            );
-          },
-        ),
-      );
+      _serverAnalysisTimeout = Timer(kMaxWaitForServerAnalysis, () {
+        _logger.warning(
+          'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+        );
+        state = AsyncError(
+          Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+          StackTrace.current,
+        );
+      });
 
       return state.requireValue;
     }
@@ -200,7 +199,7 @@ class RetroController(final RetroOptions options)
           try {
             final entry = await ref
                 .read(openingExplorerRepositoryProvider)
-                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
+                .getMasterDatabase(branch.position.fen, since: MasterDb.earliestDate);
 
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
@@ -472,6 +471,7 @@ class RetroController(final RetroOptions options)
     state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
     if (event.isAnalysisComplete) {
+      _serverAnalysisTimeout?.cancel();
       if (_serverAnalysisCompleter.isCompleted == false) {
         _serverAnalysisCompleter.complete();
       }

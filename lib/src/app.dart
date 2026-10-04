@@ -204,9 +204,26 @@ class _AppState() extends ConsumerState<Application> {
 
   @override
   Widget build(BuildContext context) {
-    final generalPrefs = ref.watch(generalPreferencesProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final theme = makeAppTheme(context, generalPrefs, boardPrefs);
+    final themeConfig = ref.watch(
+      generalPreferencesProvider.select(
+        (prefs) => (
+          prefs.themeMode,
+          prefs.backgroundColor,
+          prefs.backgroundImage,
+          prefs.systemColors,
+          prefs.locale,
+        ),
+      ),
+    );
+    final boardTheme = ref.watch(boardPreferencesProvider.select((prefs) => prefs.boardTheme));
+    final theme = makeAppTheme(
+      context,
+      themeMode: themeConfig.$1,
+      backgroundColor: themeConfig.$2,
+      backgroundImage: themeConfig.$3,
+      systemColors: themeConfig.$4,
+      boardTheme: boardTheme,
+    );
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
@@ -223,7 +240,7 @@ class _AppState() extends ConsumerState<Application> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'lichess.org',
-      locale: generalPrefs.locale,
+      locale: themeConfig.$5,
       theme: theme.copyWith(
         navigationBarTheme: isIOS
             ? null

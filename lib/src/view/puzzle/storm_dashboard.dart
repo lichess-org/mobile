@@ -192,7 +192,6 @@ class const _Loading() extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -205,7 +204,6 @@ class const _Loading() extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -222,7 +220,6 @@ class const _Loading() extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -235,7 +232,6 @@ class const _Loading() extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    // ignore: avoid-wrapping-in-padding
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(

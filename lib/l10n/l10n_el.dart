@@ -2074,10 +2074,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
 
   @override
-  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+  String get practiceSecHeadPawnEndgames => 'Φινάλε Πιονιών';
 
   @override
-  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+  String get practiceSecHeadRookEndgames => 'Φινάλε Πύργων';
 
   @override
   String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
@@ -2101,43 +2101,43 @@ class AppLocalizationsEl extends AppLocalizations {
   String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
 
   @override
-  String get practiceStNamThePin => 'The Pin';
+  String get practiceStNamThePin => 'Το Κάρφωμα';
 
   @override
-  String get practiceStNamTheSkewer => 'The Skewer';
+  String get practiceStNamTheSkewer => 'Το Σούβλισμα';
 
   @override
-  String get practiceStNamTheFork => 'The Fork';
+  String get practiceStNamTheFork => 'Το Πιρούνι';
 
   @override
-  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+  String get practiceStNamDiscoveredAttacks => 'Επιθέσεις από Αποκάλυψη';
 
   @override
-  String get practiceStNamDoubleCheck => 'Double Check';
+  String get practiceStNamDoubleCheck => 'Διπλό Σαχ';
 
   @override
   String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
 
   @override
-  String get practiceStNamZwischenzug => 'Zwischenzug';
+  String get practiceStNamZwischenzug => 'Ενδιάμεση Κίνηση';
 
   @override
   String get practiceStNamXRay => 'X-Ray';
 
   @override
-  String get practiceStNamZugzwang => 'Zugzwang';
+  String get practiceStNamZugzwang => 'Τσούγκσβανγκ';
 
   @override
   String get practiceStNamInterference => 'Interference';
 
   @override
-  String get practiceStNamGreekGift => 'Greek Gift';
+  String get practiceStNamGreekGift => 'Ελληνικό Δώρο';
 
   @override
-  String get practiceStNamDeflection => 'Deflection';
+  String get practiceStNamDeflection => 'Αντιπερισπασμός';
 
   @override
-  String get practiceStNamAttraction => 'Attraction';
+  String get practiceStNamAttraction => 'Έλξη';
 
   @override
   String get practiceStNamUnderpromotion => 'Underpromotion';
@@ -2158,7 +2158,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get practiceStNamKeySquares => 'Key Squares';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => 'Αντιπαράθεση';
 
   @override
   String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
@@ -5448,6 +5448,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get security => 'Ασφάλεια';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Συνεδρίες';
 
   @override
@@ -5464,6 +5469,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get noChallenges => 'Δεν έχετε προκλήσεις.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6213,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {
