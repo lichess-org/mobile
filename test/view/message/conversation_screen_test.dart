@@ -46,7 +46,7 @@ List<(String, GestureRecognizer)> _linksUnder(InlineSpan span) {
 }
 
 /// The recognizer currently attached to the `example.com` link of the message bubble.
-GestureRecognizer linkRecognizer(WidgetTester tester) {
+GestureRecognizer exampleLinkRecognizer(WidgetTester tester) {
   final links = <(String, GestureRecognizer)>[];
   for (final richText in tester.widgetList<RichText>(find.byType(RichText))) {
     links.addAll(_linksUnder(richText.text));
@@ -90,16 +90,17 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
       await tester.pump(const Duration(milliseconds: 100));
 
-      final before = linkRecognizer(tester);
+      final before = exampleLinkRecognizer(tester);
 
-      // The typing indicator is unrelated to the message: the bubble should not be rebuilt.
+      // The bubble does rebuild: the typing indicator changes the conversation state the whole
+      // body watches. Only its text is unchanged, so the link must not be parsed again.
       sendServerSocketMessages(Uri(path: kDefaultSocketRoute), ['{"t":"msgType","d":"opponent"}']);
       await tester.pump();
       await tester.pump();
 
       // Guards that the rebuild this test relies on actually happened.
       expect(find.text('opponent is typing...'), findsOneWidget);
-      expect(linkRecognizer(tester), same(before));
+      expect(exampleLinkRecognizer(tester), same(before));
     });
   });
 }
