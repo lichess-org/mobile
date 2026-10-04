@@ -74,7 +74,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       if (isColdStart) {
         isColdStart = false;
         // The cold-start link can arrive before the first frame, so defer until
-        // the navigator is ready. Push without a transition ÔÇö the user launched
+        // the navigator is ready. Push without a transition — the user launched
         // the app via this link so the target screen should just be there.
         WidgetsBinding.instance.addPostFrameCallback((_) {
           unawaited(_handleUriLogged(uri, animated: false));
@@ -280,7 +280,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       if (puzzleId == null || dailyPuzzle.puzzle.id == PuzzleId(puzzleId)) {
         puzzle = dailyPuzzle;
       } else {
-        // Widget cached a different puzzle than today's daily ÔÇö fetch it, but don't mark as daily
+        // Widget cached a different puzzle than today's daily — fetch it, but don't mark as daily
         // to avoid confusing the user.
         try {
           puzzle = await ref.read(puzzleRepositoryProvider).fetch(PuzzleId(puzzleId));
@@ -408,7 +408,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   }
 
   /// Pushes [route] onto [navigator], replacing the top route instead of
-  /// stacking when the top is already the same screen type ÔÇö preventing
+  /// stacking when the top is already the same screen type — preventing
   /// duplicates when the user taps a deep link while already on that screen.
   /// Also applies [_withNoTransition] when [animated] is `false`.
   static Future<void> _pushDeepLinkRoute(
@@ -432,7 +432,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   }
 
   /// Returns a copy of [route] with [Duration.zero] transition so the screen
-  /// appears instantly ÔÇö used when the app is opened via a deep link and a
+  /// appears instantly — used when the app is opened via a deep link and a
   /// transition would be jarring.
   static Route<dynamic> _withNoTransition(Route<dynamic> route) {
     if (route is ScreenRoute) {
@@ -451,7 +451,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   static const kLichessLinkifiers = [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()];
 
   /// Whether [url] is an http(s) URL whose parsed authority is exactly
-  /// [kLichessHost] ÔÇö a prefix match would accept hosts like `lichess.dev.evil.com`.
+  /// [kLichessHost] — a prefix match would accept hosts like `lichess.dev.evil.com`.
   static bool _isFirstPartyUrl(String url) {
     final uri = Uri.tryParse(url);
     if (uri == null || (uri.scheme != 'http' && uri.scheme != 'https')) return false;

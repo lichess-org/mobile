@@ -14,8 +14,8 @@ const _loggersToShowInTerminal = {'HttpClient', 'Socket', 'PositionEvaluator', '
 
 /// Loggers whose severe records are worth a non-fatal Crashlytics report on their own.
 ///
-/// These are the engine plugins: they log the native diagnostics they can see ÔÇö the lifecycle
-/// phase a start stalled in, the reason a write to the engine failed ÔÇö and none of that reaches
+/// These are the engine plugins: they log the native diagnostics they can see — the lifecycle
+/// phase a start stalled in, the reason a write to the engine failed — and none of that reaches
 /// the app any other way. The app's own engine layer is deliberately absent: it reports its
 /// failures through `reportEngineFailure`, with the backend, variant and diagnostics attached as
 /// custom keys.
