@@ -182,6 +182,7 @@ class ChallengeService(final Ref ref) {
 
     final challengeRepo = ref.read(challengeRepositoryProvider);
     await challengeRepo.accept(id);
+    await _cancelChallengeNotification(id);
     final fullId = await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
 
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -206,13 +207,18 @@ class ChallengeService(final Ref ref) {
               makeLabel: (context) => Text(reason.label(context.l10n)),
               leading: Icon(Icons.close, color: context.lichessColors.error),
               isDestructiveAction: true,
-              onPressed: () {
-                ref.read(challengeRepositoryProvider).decline(id, reason: reason);
+              onPressed: () async {
+                await ref.read(challengeRepositoryProvider).decline(id, reason: reason);
+                await _cancelChallengeNotification(id);
               },
             ),
           )
           .toList(),
     );
+  }
+
+  Future<void> _cancelChallengeNotification(ChallengeId id) {
+    return ref.read(notificationServiceProvider).cancel(id.value.hashCode);
   }
 
   void showConfirmDialog(
