@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -330,7 +331,7 @@ TextSpan buildTextSpan(
   TextStyle? style,
   TextStyle? linkStyle,
   LinkCallback? onOpen,
-  List<TapGestureRecognizer>? recognizers,
+  IList<TapGestureRecognizer>? recognizers,
 }) {
   final children = <InlineSpan>[];
   var recognizerIndex = 0;

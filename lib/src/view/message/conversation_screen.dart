@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -457,7 +458,7 @@ class _MessageContentState() extends State<_MessageContent> {
       style: TextStyle(color: widget.textColor),
       linkStyle: Styles.linkStyle,
       onOpen: widget.onLinkOpen,
-      recognizers: _recognizers,
+      recognizers: _recognizers.toIList(),
     );
 
     return Stack(
