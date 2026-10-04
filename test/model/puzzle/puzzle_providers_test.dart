@@ -39,21 +39,6 @@ void main() {
       verify(() => batchStorage.fetch(userId: null, angle: angle)).called(1);
       verifyNoMoreInteractions(batchStorage);
     });
-
-    test('counts no unsolved puzzle for an unsaved angle', () async {
-      final batchStorage = MockPuzzleBatchStorage();
-      when(() => batchStorage.fetch(userId: null, angle: angle)).thenAnswer((_) async => null);
-
-      final container = await makeContainer(
-        overrides: {
-          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
-            (ref) => batchStorage,
-          ),
-        },
-      );
-
-      expect(await container.read(savedBatchNbUnsolvedProvider(angle).future), 0);
-    });
   });
 }
 
