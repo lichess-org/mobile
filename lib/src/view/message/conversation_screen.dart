@@ -1,5 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
@@ -388,58 +386,10 @@ class const _MessageContent({
   required final String time,
   required final Color textColor,
   required final LinkCallback onLinkOpen,
-}) extends StatefulWidget {
-  @override
-  State<_MessageContent> createState() => _MessageContentState();
-}
-
-class _MessageContentState() extends State<_MessageContent> {
-  late List<LinkifyElement> _elements;
-  final List<TapGestureRecognizer> _recognizers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _relink();
-  }
-
-  @override
-  void didUpdateWidget(_MessageContent oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.text != widget.text) {
-      _relink();
-    }
-  }
-
-  @override
-  void dispose() {
-    _disposeRecognizers();
-    super.dispose();
-  }
-
-  // Relinking runs three backtracking regexes over the whole message, so it is done when the text
-  // changes rather than on every rebuild: the conversation state re-emits while the contact types,
-  // which rebuilds every visible bubble without changing any of their text.
-  void _relink() {
-    _disposeRecognizers();
-    _elements = linkify(widget.text, linkifiers: AppLinksService.kLichessLinkifiers);
-    for (final element in _elements) {
-      if (element is LinkableElement) {
-        _recognizers.add(TapGestureRecognizer()..onTap = () => widget.onLinkOpen(element));
-      }
-    }
-  }
-
-  void _disposeRecognizers() {
-    for (final recognizer in _recognizers) {
-      recognizer.dispose();
-    }
-    _recognizers.clear();
-  }
-
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final timeStyle = TextStyle(fontSize: 11, color: widget.textColor.withValues(alpha: 0.6));
+    final timeStyle = TextStyle(fontSize: 11, color: textColor.withValues(alpha: 0.6));
     // workaround to prevent the message text from overlapping with the timestamp
     final spacer = WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
@@ -448,23 +398,22 @@ class _MessageContentState() extends State<_MessageContent> {
         opacity: 0,
         child: Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: Text(widget.time, style: timeStyle),
+          child: Text(time, style: timeStyle),
         ),
       ),
     );
 
-    final linkSpan = buildTextSpan(
-      _elements,
-      style: TextStyle(color: widget.textColor),
-      linkStyle: Styles.linkStyle,
-      onOpen: widget.onLinkOpen,
-      recognizers: _recognizers.toIList(),
-    );
-
     return Stack(
       children: [
-        Text.rich(TextSpan(children: [linkSpan, spacer])),
-        Positioned(right: 0, bottom: 0, child: Text(widget.time, style: timeStyle)),
+        RichLinkText(
+          text: text,
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          style: TextStyle(color: textColor),
+          linkStyle: Styles.linkStyle,
+          onOpen: onLinkOpen,
+          trailing: spacer,
+        ),
+        Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
   }

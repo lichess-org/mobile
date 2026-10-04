@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +17,10 @@ class const RichLinkText({
   final int? maxLines,
   final TextOverflow overflow = TextOverflow.clip,
   final TextScaler? textScaler,
+
+  /// Appended after the text, inside the same paragraph. For a caller that overlays something on
+  /// the last line, such as a timestamp, and needs to reserve room for it.
+  final InlineSpan? trailing,
 }) extends StatefulWidget {
   @override
   State<RichLinkText> createState() => _RichLinkTextState();
@@ -37,9 +40,10 @@ class _RichLinkTextState() extends State<RichLinkText> {
   @override
   void didUpdateWidget(RichLinkText oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.text != widget.text ||
-        oldWidget.linkifiers != widget.linkifiers ||
-        oldWidget.onOpen != widget.onOpen) {
+    // Not on onOpen: a recognizer's onTap reads widget.onOpen when tapped, so a new callback does
+    // not need a new recognizer. Every caller passes an inline closure, so including it here would
+    // relink the text on every parent rebuild.
+    if (oldWidget.text != widget.text || oldWidget.linkifiers != widget.linkifiers) {
       _disposeRecognizers();
       _elements = linkify(widget.text, linkifiers: widget.linkifiers);
       _createRecognizers();
@@ -93,8 +97,9 @@ class _RichLinkTextState() extends State<RichLinkText> {
       }
     }
 
+    final trailing = widget.trailing;
     return Text.rich(
-      TextSpan(children: children),
+      TextSpan(children: trailing == null ? children : [...children, trailing]),
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
       maxLines: widget.maxLines,
@@ -319,37 +324,4 @@ List<LinkifyElement> linkify(String text, {List<Linkifier> linkifiers = defaultL
   }
 
   return elements;
-}
-
-/// Builds a [TextSpan] laying out [elements].
-///
-/// [onOpen] makes every link tappable. Pass [recognizers] — one per linkable element, in the same
-/// order — when the caller outlives a single build and must dispose them itself; otherwise one
-/// recognizer is allocated per link and dropped without ever being disposed.
-TextSpan buildTextSpan(
-  List<LinkifyElement> elements, {
-  TextStyle? style,
-  TextStyle? linkStyle,
-  LinkCallback? onOpen,
-  IList<TapGestureRecognizer>? recognizers,
-}) {
-  final children = <InlineSpan>[];
-  var recognizerIndex = 0;
-
-  for (final element in elements) {
-    if (element is! LinkableElement) {
-      children.add(TextSpan(text: element.text, style: style));
-      continue;
-    }
-
-    GestureRecognizer? recognizer;
-    final open = onOpen;
-    if (open != null) {
-      recognizer = recognizers != null ? recognizers[recognizerIndex++] : TapGestureRecognizer()
-        ..onTap = () => open(element);
-    }
-    children.add(TextSpan(text: element.text, style: linkStyle, recognizer: recognizer));
-  }
-
-  return TextSpan(children: children);
 }
