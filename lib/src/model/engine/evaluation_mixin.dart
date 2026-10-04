@@ -16,10 +16,10 @@ import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:lichess_mobile/src/view/engine/position_evaluator.dart';
 
 export 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 

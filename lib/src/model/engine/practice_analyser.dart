@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_eval.dart';
 import 'package:lichess_mobile/src/model/explorer/tablebase_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/view/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/service/position_evaluator.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('PracticeAnalyser');

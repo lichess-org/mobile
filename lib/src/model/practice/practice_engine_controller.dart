@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
-import 'package:lichess_mobile/src/view/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/service/position_evaluator.dart';
 import 'package:logging/logging.dart';
 
 part 'practice_engine_controller.freezed.dart';

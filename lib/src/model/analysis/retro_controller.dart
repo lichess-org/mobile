@@ -23,9 +23,9 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/position_evaluator.dart';
 import 'package:lichess_mobile/src/service/server_analysis_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
-import 'package:lichess_mobile/src/view/engine/position_evaluator.dart';
 import 'package:logging/logging.dart';
 
 part 'retro_controller.freezed.dart';
