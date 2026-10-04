@@ -6,33 +6,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/announce/announce_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_service.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/log/app_log_service.dart';
-import 'package:lichess_mobile/src/model/message/message_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/recap/recap_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/quick_actions.dart';
-import 'package:lichess_mobile/src/shared_pgn_service.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
+import 'package:lichess_mobile/src/service/announce_service.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
+import 'package:lichess_mobile/src/service/app_log_service.dart';
+import 'package:lichess_mobile/src/service/broadcast_service.dart';
+import 'package:lichess_mobile/src/service/challenge_service.dart';
+import 'package:lichess_mobile/src/service/correspondence_service.dart';
+import 'package:lichess_mobile/src/service/message_service.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/quick_actions.dart';
+import 'package:lichess_mobile/src/service/recap_service.dart';
+import 'package:lichess_mobile/src/service/shared_pgn_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
-import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -133,9 +132,7 @@ class _AppState() extends ConsumerState<Application> {
   void initState() {
     _screenSizeBasedInitialization(ref);
 
-    // Start services. The UI event coordinator comes first: it must be listening on the event bus
-    // before any service has a chance to emit.
-    ref.read(uiEventCoordinatorProvider).start();
+    // Start services
     ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();

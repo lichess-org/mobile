@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 
 import '../../test_container.dart';
 import 'fake_engine.dart';
