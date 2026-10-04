@@ -20,11 +20,11 @@ final puzzleBatchProvider = FutureProvider.autoDispose.family<PuzzleBatch?, Puzz
   PuzzleAngle angle,
 ) async {
   final authUser = ref.watch(authControllerProvider);
-  // Watched, so that saving a batch (which invalidates the storage provider) refreshes the preview:
-  // the puzzle just solved must not stay on display.
+  // Watched, so that saving a batch (which invalidates the storage provider) refreshes its
+  // consumers: the puzzle just solved must not stay on display.
   final storage = await ref.watch(puzzleBatchStorageProvider.future);
-  // useful for the preview puzzle list in the puzzle tab (providers in a list can be invalidated
-  // multiple times when the user scrolls the list)
+  // useful for the preview and count lists (providers in a list can be disposed and recreated many
+  // times as the user scrolls)
   ref.cacheFor(const Duration(minutes: 1));
 
   return await storage.fetch(userId: authUser?.user.id, angle: angle);
