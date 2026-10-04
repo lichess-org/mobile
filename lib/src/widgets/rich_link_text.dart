@@ -320,28 +320,34 @@ List<LinkifyElement> linkify(String text, {List<Linkifier> linkifiers = defaultL
   return elements;
 }
 
+/// Builds a [TextSpan] laying out [elements].
+///
+/// [onOpen] makes every link tappable. Pass [recognizers] — one per linkable element, in the same
+/// order — when the caller outlives a single build and must dispose them itself; otherwise one
+/// recognizer is allocated per link and dropped without ever being disposed.
 TextSpan buildTextSpan(
   List<LinkifyElement> elements, {
   TextStyle? style,
   TextStyle? linkStyle,
   LinkCallback? onOpen,
+  List<TapGestureRecognizer>? recognizers,
 }) {
   final children = <InlineSpan>[];
+  var recognizerIndex = 0;
 
   for (final element in elements) {
-    if (element is LinkableElement) {
-      children.add(
-        TextSpan(
-          text: element.text,
-          style: linkStyle,
-          recognizer: onOpen != null
-              ? (TapGestureRecognizer()..onTap = () => onOpen(element))
-              : null,
-        ),
-      );
-    } else {
+    if (element is! LinkableElement) {
       children.add(TextSpan(text: element.text, style: style));
+      continue;
     }
+
+    GestureRecognizer? recognizer;
+    final open = onOpen;
+    if (open != null) {
+      recognizer = recognizers != null ? recognizers[recognizerIndex++] : TapGestureRecognizer()
+        ..onTap = () => open(element);
+    }
+    children.add(TextSpan(text: element.text, style: linkStyle, recognizer: recognizer));
   }
 
   return TextSpan(children: children);
