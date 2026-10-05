@@ -266,11 +266,10 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     leftTimer = nil
   }
 
-  /// Whether one of the activities started by this run shows a game in progress.
+  /// Whether one of the activities started by this run is still running: an activity is ended as
+  /// soon as its game is over.
   @available(iOS 16.2, *)
-  private var hasOngoingGame: Bool {
-    contents.values.contains { ($0 as? GameActivityAttributes.ContentState)?.status == .started }
-  }
+  private var hasOngoingGame: Bool { !contents.isEmpty }
 
   /// Sets the `staleDate` of every activity started by this run, keeping its last content.
   @available(iOS 16.2, *)
@@ -327,8 +326,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     previous: GameActivityAttributes.ContentState?,
     state: GameActivityAttributes.ContentState
   ) -> AlertConfiguration? {
-    guard let previous, previous.turn != myColor, state.turn == myColor, state.status == .started
-    else { return nil }
+    guard let previous, previous.turn != myColor, state.turn == myColor else { return nil }
     let body: LocalizedStringResource =
       state.lastSan.map { "Your opponent played \($0)" } ?? "Your opponent moved"
     return AlertConfiguration(title: "Your turn", body: body, sound: .default)

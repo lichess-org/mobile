@@ -23,11 +23,6 @@ struct GameActivityAttributes: ActivityAttributes {
         let rating: Int?
     }
 
-    enum Status: String, Codable, Hashable {
-        case started
-        case over
-    }
-
     enum Offer: String, Codable, Hashable {
         case draw
         case takeback
@@ -49,9 +44,6 @@ struct GameActivityAttributes: ActivityAttributes {
         let clockRunning: Bool
         /// A pending offer from the opponent.
         let offer: Offer?
-        let status: Status
-        /// "1-0", "0-1", "½-½" or "Aborted" once the game is over.
-        let result: String?
         /// Whether lila's claim-victory rule can apply if the player leaves the game.
         let claimable: Bool
     }
@@ -78,7 +70,7 @@ extension GameActivityAttributes.ContentState {
 
     /// Whether the clock of `side` is ticking.
     func isClockRunning(for side: GameActivityAttributes.Side) -> Bool {
-        status == .started && clockRunning && turn == side
+        clockRunning && turn == side
     }
 
     /// When the clock of `side` reaches zero, assuming it keeps running.

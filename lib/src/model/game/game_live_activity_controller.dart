@@ -8,9 +8,6 @@ import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 
-/// How long a finished game stays on the Lock Screen.
-const _kDismissAfterGameOver = Duration(minutes: 15);
-
 /// A provider for [GameLiveActivityController].
 final gameLiveActivityControllerProvider = NotifierProvider.autoDispose
     .family<GameLiveActivityController, void, GameFullId>(
@@ -36,10 +33,9 @@ typedef _SyncKey = ({
 ///
 /// Lives as long as the game screen watches it. Starts the activity once the game is loaded, if it
 /// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves, clock changes and
-/// offers, and ends it when the game is over (left on the Lock Screen for a while with the result)
-/// or when the game screen is left (removed at once). Also reports the game socket's connection
-/// state, which the native side uses to show "You left the game" while the app is in the
-/// background.
+/// offers, and removes it at once when the game is over or when the game screen is left: it is only
+/// useful while the game is being played. Also reports the game socket's connection state, which
+/// the native side uses to show "You left the game" while the app is in the background.
 class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<void> {
   late GameLiveActivityChannel _channel;
   StreamSubscription<({String id, LiveActivityState state})>? _stateSubscription;
@@ -154,6 +150,16 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
     final game = gameState.game;
     _watchSocket();
 
+    final id = _activityId;
+    if (!game.playable) {
+      _done = true;
+      if (id != null) {
+        _activityId = null;
+        await _channel.end(id, dismissAfter: Duration.zero);
+      }
+      return;
+    }
+
     final content = GameLiveActivityState.fromGame(
       game,
       whiteClock: gameState.liveClock?.white.value ?? game.clock?.white ?? Duration.zero,
@@ -161,7 +167,6 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
       now: DateTime.now(),
     );
 
-    final id = _activityId;
     if (id == null) {
       if (!GameLiveActivityAttributes.isEligible(game) || !await _channel.isSupported()) {
         _done = true;
@@ -181,10 +186,6 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
         _activityId = newId;
         _syncConnected();
       }
-    } else if (content.isOver) {
-      _activityId = null;
-      _done = true;
-      await _channel.end(id, state: content, dismissAfter: _kDismissAfterGameOver);
     } else {
       await _channel.update(id, content);
     }

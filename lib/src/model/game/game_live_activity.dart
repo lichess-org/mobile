@@ -94,16 +94,13 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     /// Whether the clock of [turn] is running.
     required bool clockRunning,
     GameLiveActivityOffer? offer,
-    required bool isOver,
-
-    /// "1-0", "0-1", "½-½" or "Aborted" once the game is over.
-    String? result,
 
     /// Whether lila's claim-victory rule can apply if the player leaves the game.
     required bool claimable,
   }) = _GameLiveActivityState;
 
-  /// The state of [game], with the clock times read from the game's live clock at [now].
+  /// The state of [game], which must be playable, with the clock times read from the game's live
+  /// clock at [now].
   factory fromGame(
     PlayableGame game, {
     required Duration whiteClock,
@@ -121,24 +118,12 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
       blackClock: blackClock,
       clockAt: now,
       // Same rule as the game clock: it starts once both players have moved.
-      clockRunning: game.playable && game.clock != null && lastPosition.fullmoves > 1,
-      offer: !game.playable
-          ? null
-          : opponent?.offeringDraw == true
+      clockRunning: game.clock != null && lastPosition.fullmoves > 1,
+      offer: opponent?.offeringDraw == true
           ? GameLiveActivityOffer.draw
           : opponent?.proposingTakeback == true
           ? GameLiveActivityOffer.takeback
           : null,
-      isOver: !game.playable,
-      result: game.playable
-          ? null
-          : game.aborted
-          ? 'Aborted'
-          : switch (game.winner) {
-              Side.white => '1-0',
-              Side.black => '0-1',
-              null => '½-½',
-            },
       claimable: isClaimable(game),
     );
   }
@@ -169,8 +154,6 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     'clockAt': clockAt.millisecondsSinceEpoch.toDouble(),
     'clockRunning': clockRunning,
     'offer': offer?.name,
-    'status': isOver ? 'over' : 'started',
-    'result': result,
     'claimable': claimable,
   };
 }

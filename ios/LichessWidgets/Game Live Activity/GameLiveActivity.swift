@@ -53,7 +53,7 @@ private let lichessOrange = Color(red: 0xD6 / 255, green: 0x4F / 255, blue: 0x00
 private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D / 255)
 
 private extension ActivityViewContext<GameActivityAttributes> {
-    var isMyTurn: Bool { state.status == .started && state.turn == attributes.myColor }
+    var isMyTurn: Bool { state.turn == attributes.myColor }
 }
 
 private enum GameActivityLayout {
@@ -188,10 +188,7 @@ private struct StatusLine: View {
     let isStale: Bool
 
     var body: some View {
-        if state.status == .over {
-            Text("Game over\(state.result.map { " · \($0)" } ?? "")")
-                .font(.subheadline.weight(.semibold))
-        } else if isStale {
+        if isStale {
             Label {
                 Text(
                     state.claimable
@@ -230,10 +227,7 @@ private struct CompactTrailingView: View {
     let context: ActivityViewContext<GameActivityAttributes>
 
     var body: some View {
-        if context.state.status == .over {
-            Text(context.state.result ?? "")
-                .font(.caption.weight(.semibold))
-        } else if context.isStale {
+        if context.isStale {
             Text("Return")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(lichessOrange)

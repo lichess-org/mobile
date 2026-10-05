@@ -1606,7 +1606,6 @@ void main() {
       expect(start.state!.turn, Side.white);
       expect(start.state!.lastMove, 'e7e5');
       expect(start.state!.lastSan, 'e5');
-      expect(start.state!.isOver, isFalse);
       expect(start.state!.claimable, isTrue);
       expect(start.state!.clockRunning, isTrue);
 
@@ -1695,7 +1694,7 @@ void main() {
       expect(lastCall(channel).state!.offer, GameLiveActivityOffer.takeback);
     });
 
-    testWidgets('ends with the result when the game is over', (tester) async {
+    testWidgets('ends at once when the game is over', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(
         tester,
@@ -1715,9 +1714,8 @@ void main() {
 
       final end = lastCall(channel);
       expect(end.method, 'end');
-      expect(end.state!.isOver, isTrue);
-      expect(end.state!.result, '1-0');
-      expect(end.dismissAfter, const Duration(minutes: 15));
+      expect(end.state, isNull);
+      expect(end.dismissAfter, Duration.zero);
 
       // let the game-over popup and the dong play
       await tester.pump(const Duration(seconds: 1));

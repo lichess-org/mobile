@@ -50,7 +50,7 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
     });
   }
 
-  GameLiveActivityState _state({bool isOver = false}) => GameLiveActivityState(
+  GameLiveActivityState _state() => GameLiveActivityState(
     fen: GameLiveActivityState.boardFen(_position),
     lastMove: _lastMove,
     lastSan: _lastSan,
@@ -58,10 +58,8 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
     whiteClock: _whiteClock,
     blackClock: _blackClock,
     clockAt: DateTime.now(),
-    clockRunning: _ply >= 2 && !isOver,
+    clockRunning: _ply >= 2,
     offer: _offer,
-    isOver: isOver,
-    result: isOver ? '1-0' : null,
     claimable: _ply >= 2,
   );
 
@@ -121,7 +119,7 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
   Future<void> _end() async {
     final id = _activityId;
     if (id == null) return;
-    await _channel.end(id, state: _state(isOver: true), dismissAfter: const Duration(minutes: 1));
+    await _channel.end(id, dismissAfter: Duration.zero);
     setState(() {
       _activityId = null;
       _position = Chess.initial;
