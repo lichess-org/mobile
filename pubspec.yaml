@@ -17,7 +17,7 @@ dependencies:
   chessground: ^10.3.0
   clock: ^1.1.2
   collection: ^1.19.1
-  connectivity_plus: ^7.3.1
+  connectivity_plus: ^7.3.2
   cronet_http: ^1.9.0
   crypto: ^3.0.7
   cupertino_http: ^3.0.2
@@ -38,7 +38,7 @@ dependencies:
   flutter_appauth: ^12.0.2
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
-  flutter_local_notifications: ^22.3.0
+  flutter_local_notifications: ^23.0.0-dev.3
   flutter_localizations:
     sdk: flutter
   flutter_markdown_plus: 
@@ -81,7 +81,7 @@ dependencies:
   stream_transform: ^2.1.1
   url_launcher: ^6.3.2
   visibility_detector: ^0.4.0+2
-  wakelock_plus: ^1.7.0
+  wakelock_plus: ^1.8.1
   web_socket_channel: ^3.0.3
 
 dev_dependencies:
