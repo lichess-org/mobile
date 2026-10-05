@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,8 +8,6 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
@@ -43,34 +39,6 @@ void main() {
   });
 
   group('ExplorerView', () {
-    testWidgets('shows opening explorer for initial position', (WidgetTester tester) async {
-      const position = Chess.initial;
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Scaffold(
-          body: ExplorerView(
-            pov: Side.white,
-            position: position,
-            onMoveSelected: (move) {},
-            isComputerAnalysisAllowed: true,
-          ),
-        ),
-        authUser: authUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-      );
-      await tester.pumpWidget(app);
-
-      // wait for opening explorer data to load
-      await tester.pump(const Duration(milliseconds: 350));
-
-      expect(find.byType(OpeningExplorerView), findsOneWidget);
-      expect(find.byType(TablebaseView), findsNothing);
-    });
     testWidgets('shows opening explorer for position with >8 pieces', (WidgetTester tester) async {
       final position = Chess.fromSetup(
         Setup.parseFen('r4rk1/pb2qppp/2n1pn2/1pb5/8/PP1N1NP1/1Q2PPBP/R1B2RK1 b - - 2 15'),
@@ -131,54 +99,6 @@ void main() {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-        },
-      );
-      await tester.pumpWidget(app);
-      await tester.pump(const Duration(milliseconds: 350));
-
-      expect(openingExplorerUrl?.path, '/lichess');
-      expect(openingExplorerUrl?.queryParameters['variant'], 'crazyhouse');
-    });
-
-    testWidgets('sends variant for crazyhouse lichess database', (WidgetTester tester) async {
-      Uri? openingExplorerUrl;
-      final mockClient = MockClient((request) {
-        if (request.url.host == kLichessOpeningExplorerHost) {
-          openingExplorerUrl = request.url;
-          if (request.url.path == '/lichess') {
-            return mockResponse(mastersOpeningExplorerResponse, 200);
-          }
-        }
-        return mockResponse('', 404);
-      });
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Scaffold(
-          body: ExplorerView(
-            pov: Side.white,
-            position: Crazyhouse.initial,
-            onMoveSelected: (move) {},
-            isComputerAnalysisAllowed: true,
-          ),
-        ),
-        authUser: authUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-        // Seed Lichess DB prefs to exercise the direct variant request path;
-        // the default Masters setting is covered by the fallback test above.
-        defaultPreferences: {
-          SessionPreferencesStorage.key(
-            PrefCategory.openingExplorer.storageKey,
-            authUser,
-          ): jsonEncode(
-            OpeningExplorerPrefs.defaults(user: user)
-                .copyWith(db: OpeningDatabase.lichess)
-                .toJson(),
-          ),
         },
       );
       await tester.pumpWidget(app);

@@ -1,3 +1,10 @@
+import 'package:lichess_mobile/src/model/common/id.dart';
+
+extension FederationIdExtension on FederationId {
+  String get name => federationIdToName[value] ?? value;
+  String get flagAsset => 'assets/images/fide-fed/$value.webp';
+}
+
 const federationIdToName = {
   'AFG': 'Afghanistan',
   'AHO': 'Netherlands Antilles',
