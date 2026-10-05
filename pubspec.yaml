@@ -72,7 +72,7 @@ dependencies:
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
   result_extensions: ^0.2.0
-  share_plus: ^13.3.0
+  share_plus: ^13.3.1
   shared_preferences: ^2.5.5
   signal_strength_indicator: ^0.5.0
   sound_effect: ^0.2.0
