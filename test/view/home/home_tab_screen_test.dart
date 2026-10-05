@@ -248,7 +248,6 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => mockClient),
@@ -280,7 +279,6 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => mockClient),
@@ -390,11 +388,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via button', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -426,11 +420,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via going to settings', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 

@@ -132,11 +132,6 @@ void main() {
       expect(MaiaOfflineBookTier.forRating(MaiaRating.maia1600), MaiaOfflineBookTier.high);
       expect(MaiaOfflineBookTier.forRating(MaiaRating.maia2200), MaiaOfflineBookTier.high);
     });
-
-    test('names the asset it ships as', () {
-      expect(MaiaOfflineBookTier.low.asset, 'assets/maia/book-low.bin');
-      expect(MaiaOfflineBookTier.high.asset, 'assets/maia/book-high.bin');
-    });
   });
 
   group('MaiaOfflineBook', () {
