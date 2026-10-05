@@ -279,6 +279,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePreviousPage => 'Předchozí';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Chceš ukončit tento běh?';
 
   @override

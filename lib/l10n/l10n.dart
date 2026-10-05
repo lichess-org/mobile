@@ -712,6 +712,12 @@ abstract class AppLocalizations {
   /// **'Previous'**
   String get mobilePreviousPage;
 
+  /// No description provided for @mobilePuzzleHistorySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your past puzzle attempts.'**
+  String get mobilePuzzleHistorySubtitle;
+
   /// No description provided for @mobilePuzzleStormConfirmEndRun.
   ///
   /// In en, this message translates to:
