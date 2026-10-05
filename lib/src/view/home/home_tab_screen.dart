@@ -183,6 +183,10 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
               data: (following) => following.isNotEmpty,
               orElse: () => true,
             );
+            final hasRecentGames = recentGames.maybeWhen(
+              data: (games) => games.isNotEmpty,
+              orElse: () => true,
+            );
 
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -394,7 +398,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   ),
                 _EditableWidget(
                   widget: HomeEditableWidget.recentGames,
-                  shouldShow: true,
+                  shouldShow: hasRecentGames,
                   child: RecentGamesWidget(
                     recentGames: recentGames,
                     nbOfGames: nbOfGames,
@@ -607,17 +611,19 @@ class const _EditableWidget({
                 ),
               ),
               Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                      child: Text(widget.label(context.l10n)),
-                    ),
-                    IgnorePointer(ignoring: isEditing, child: child),
-                  ],
-                ),
+                child: widget.showsOwnTitle
+                    ? IgnorePointer(ignoring: isEditing, child: child)
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                            child: Text(widget.label(context.l10n)),
+                          ),
+                          IgnorePointer(ignoring: isEditing, child: child),
+                        ],
+                      ),
               ),
               if (widget == HomeEditableWidget.quickPairing)
                 IconButton(

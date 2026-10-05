@@ -296,16 +296,15 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.byType(FeaturedTournamentsWidget), findsOneWidget);
-        // Once from the row label, once from the widget's own header.
-        expect(find.text('Open tournaments'), findsNWidgets(2));
+        // The widget renders its own header, so the checkbox row must not repeat it.
+        expect(find.text('Open tournaments'), findsOneWidget);
       });
 
-      testWidgets('empty widgets still show their label in edit mode', (tester) async {
+      testWidgets('sections without their own title are labelled in edit mode', (tester) async {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
           authUser: fakeAuthUser,
-          defaultPreferences: {kWelcomeMessageShownKey: true},
         );
         await tester.pumpWidget(app);
 
@@ -317,10 +316,82 @@ void main() {
         await tester.pumpAndSettle(); // wait for settings screen to open
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
+      });
+
+      testWidgets('recent games section is shown in edit mode when there are games', (
+        tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/games/user/testuser') {
+            return mockResponse(mockUserRecentGameResponse('testUser'), 200);
+          }
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('{"featured":[]}', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         // Last row of a lazily built list, so scroll it into view first.
         await tester.scrollUntilVisible(find.text('Recent games'), 500.0);
         expect(find.text('Recent games'), findsOneWidget);
+      });
+
+      testWidgets('a section with nothing to show adds no checkbox in edit mode', (tester) async {
+        final mockClient = MockClient((request) {
+          switch (request.url.path) {
+            case '/tournament/featured':
+              return mockResponse('{"featured":[]}', 200);
+            case '/api/mobile/following':
+            case '/api/account/playing':
+            case '/api/games/user/testuser':
+              return mockResponse('', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        // Greeting, performance cards and quick pairing only. Recent games would
+        // add a fourth checkbox with nothing beside it.
+        expect(find.byType(Checkbox), findsNWidgets(3));
       });
     });
   });
