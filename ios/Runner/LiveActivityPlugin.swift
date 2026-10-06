@@ -23,25 +23,27 @@ import UserNotifications
 ///
 /// "You left the game" is handled here, not in Dart. When the scene enters the background while a
 /// game is ongoing, the plugin begins a background task, which keeps the app (and its socket)
-/// running for `backgroundTimeRemaining`, and predicts when the app will be suspended. From that it
-/// computes when to warn the user (`leftDate(for:)`): half-way through the grace period lila gives
-/// before the opponent can claim victory, or as soon as the app stops running when Dart sends no
-/// `leftWarningDelay` (bullet, or no claim possible). Losing the socket in the background moves
-/// the warning earlier, since lila counts a closed socket as gone at once; getting it back restores
-/// it.
+/// running for `backgroundTimeRemaining`, and predicts when the app will be suspended.
 ///
-/// The app is usually suspended by then, so the warning is handed to the system: as the
-/// activities' `staleDate`, which flips `isStale` with no app code running (the extension then
-/// shows the warning), and as a local notification at the same date, which alerts the user. Back
-/// in the foreground the task ends, the `staleDate` is cleared and the notification removed. Every
-/// activity update re-applies the current warning date, so Dart only sends content.
+/// The activities show the warning as soon as nothing updates them any more: just before the
+/// predicted suspension, or at once when the socket is lost (`staleDate`). They are handed that
+/// date as their `staleDate`, which flips `isStale` (the extension then shows the warning), and a
+/// timer also updates them at that date, as the app still runs then.
+///
+/// The user is alerted later, by a local notification (`leftDate(for:)`): half-way through the
+/// grace period lila gives before the opponent can claim victory, or along with the view when Dart
+/// sends no `leftWarningDelay` (bullet, or no claim possible). Losing the socket in the background
+/// moves it earlier, since lila counts a closed socket as gone at once; getting it back restores
+/// it. The app is usually suspended by then, so the notification is scheduled with the system.
+///
+/// Back in the foreground the task ends, the `staleDate` is cleared and the notification removed.
+/// Every activity update re-applies the current `staleDate`, so Dart only sends content.
 ///
 /// While the app is in the background, an update that makes it the user's turn comes with an
 /// activity alert, since the user isn't looking at the game: it plays a sound and expands the
 /// Dynamic Island (a banner on devices without one).
 public final class LiveActivityPlugin: NSObject, FlutterPlugin {
-  /// How long before the predicted suspension the user is warned, when warned as soon as the app
-  /// stops running.
+  /// How long before the predicted suspension the activities show the warning.
   private static let staleMargin: TimeInterval = 3
   /// Upper bound of the background window: what iOS grants a background task today. With a
   /// debugger attached `backgroundTimeRemaining` can be much larger and the app isn't suspended,
@@ -64,7 +66,12 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private var predictedSuspension: Date?
   /// When the game socket was lost, during a stay in the background.
   private var socketLostAt: Date?
-  /// The "You left the game" date applied to each activity, as `staleDate` and notification.
+  /// The `staleDate` applied to the activities.
+  private var appliedStaleDate: Date?
+  /// Fires at `staleDate` to update the activities, in case the system doesn't redraw them by
+  /// itself when their `staleDate` passes.
+  private var staleTimer: Timer?
+  /// The date of the "You left the game" notification scheduled for each activity.
   private var leftDates: [String: Date] = [:]
   /// The activities whose "You left the game" notification went off during this stay in the
   /// background: it goes off once per stay.
@@ -245,23 +252,31 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     applyLeftDates()
   }
 
-  /// When to warn that the user left the game shown by `state`, or nil while in the foreground.
-  ///
-  /// The warning comes `leftWarningDelay` after lila counts the player as gone: at once when the
-  /// socket was lost, 30 s after the suspension otherwise (the socket is then silent). Without a
-  /// delay, it comes as soon as the app stops running.
-  @available(iOS 16.2, *)
-  private func leftDate(for state: GameActivityAttributes.ContentState) -> Date? {
+  /// When the activities switch to the "You left the game" view, or nil while in the foreground:
+  /// as soon as nothing updates them any more, i.e. just before the app is suspended, or at once
+  /// when the socket is lost.
+  private var staleDate: Date? {
     guard isInBackground else { return nil }
-    let delay = state.leftWarningDelay.map { TimeInterval($0) / 1000 }
-    if let lost = socketLostAt { return lost.addingTimeInterval(delay ?? 0) }
-    guard let suspension = predictedSuspension else { return nil }
-    guard let delay else { return suspension.addingTimeInterval(-Self.staleMargin) }
-    return suspension.addingTimeInterval(Self.silentSocketTimeout + delay)
+    if let lost = socketLostAt { return lost }
+    return predictedSuspension?.addingTimeInterval(-Self.staleMargin)
   }
 
-  /// The content of an activity, with its "You left the game" date as `staleDate`. Schedules the
-  /// warning notification at that date when it changes.
+  /// When to notify that the user left the game shown by `state`, or nil while in the foreground.
+  ///
+  /// The notification comes `leftWarningDelay` after lila counts the player as gone: at once when
+  /// the socket was lost, 30 s after the suspension otherwise (the socket is then silent). Without
+  /// a delay, it comes along with the "You left the game" view.
+  @available(iOS 16.2, *)
+  private func leftDate(for state: GameActivityAttributes.ContentState) -> Date? {
+    guard let delay = state.leftWarningDelay.map({ TimeInterval($0) / 1000 }) else {
+      return staleDate
+    }
+    if let lost = socketLostAt { return lost.addingTimeInterval(delay) }
+    return predictedSuspension?.addingTimeInterval(Self.silentSocketTimeout + delay)
+  }
+
+  /// The content of an activity, with the current `staleDate`. Schedules the "You left the game"
+  /// notification when its date changes.
   @available(iOS 16.2, *)
   private func content(
     for id: String, state: GameActivityAttributes.ContentState
@@ -270,19 +285,35 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     if date != leftDates[id] {
       if let previous = leftDates[id], previous <= Date() { warnedLeft.insert(id) }
       leftDates[id] = date
+      #if DEBUG
+        NSLog("LiveActivityPlugin: %@ notification date %@", id, date.map { "\($0)" } ?? "nil")
+      #endif
       scheduleLeftNotification(id: id, state: state, at: date)
     }
-    return ActivityContent(state: state, staleDate: date)
+    return ActivityContent(state: state, staleDate: staleDate)
   }
 
-  /// Re-applies the "You left the game" date of every activity whose date changed, keeping its
-  /// last content.
+  /// Re-applies the `staleDate` and notification date of every activity whose dates changed,
+  /// keeping its last content, and schedules the update at the `staleDate`.
   @available(iOS 16.2, *)
   private func applyLeftDates() {
+    let staleDate = self.staleDate
+    let staleDateChanged = staleDate != appliedStaleDate
+    appliedStaleDate = staleDate
+    if staleDateChanged { scheduleStaleTimer(at: staleDate) }
+    updateActivities { id, state in
+      staleDateChanged || self.leftDate(for: state) != self.leftDates[id]
+    }
+  }
+
+  /// Updates the activities `isIncluded` selects with their last content.
+  @available(iOS 16.2, *)
+  private func updateActivities(
+    where isIncluded: (String, GameActivityAttributes.ContentState) -> Bool = { _, _ in true }
+  ) {
     let updates = contents.compactMap {
       id, value -> (String, ActivityContent<GameActivityAttributes.ContentState>)? in
-      guard let state = value as? GameActivityAttributes.ContentState,
-        leftDate(for: state) != leftDates[id]
+      guard let state = value as? GameActivityAttributes.ContentState, isIncluded(id, state)
       else { return nil }
       return (id, content(for: id, state: state))
     }
@@ -295,6 +326,21 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
         else { continue }
         await activity.update(content)
       }
+    }
+  }
+
+  /// Updates the activities at `date`, when it is ahead. The system may not redraw them by itself
+  /// when their `staleDate` passes, while an update with a past `staleDate` shows the "You left the
+  /// game" view.
+  @available(iOS 16.2, *)
+  private func scheduleStaleTimer(at date: Date?) {
+    staleTimer?.invalidate()
+    staleTimer = nil
+    guard let date, date > Date() else { return }
+    staleTimer = Timer.scheduledTimer(withTimeInterval: date.timeIntervalSinceNow, repeats: false) {
+      [weak self] _ in
+      self?.staleTimer = nil
+      self?.updateActivities()
     }
   }
 
@@ -394,6 +440,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     Task { [weak self] in
       for await state in activity.activityStateUpdates {
         await MainActor.run {
+          #if DEBUG
+            NSLog("LiveActivityPlugin: %@ state %@", activity.id, Self.name(of: state))
+          #endif
           if state == .dismissed || state == .ended {
             self?.forget(activity.id)
           }
