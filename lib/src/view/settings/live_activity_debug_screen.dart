@@ -75,7 +75,6 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
         myColor: Side.white,
         white: GameLiveActivityPlayer(name: 'veloce', rating: 1850),
         black: GameLiveActivityPlayer(name: 'Magnus', title: 'GM', rating: 2850),
-        initialClock: Duration(minutes: 10),
       ),
       _state(),
     );

@@ -55,8 +55,6 @@ struct GameActivityAttributes: ActivityAttributes {
     let myColor: Side
     let white: Player
     let black: Player
-    /// The clock time each player starts with, in milliseconds.
-    let initialClock: Int
 }
 
 @available(iOS 16.2, *)

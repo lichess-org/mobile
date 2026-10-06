@@ -34,18 +34,14 @@ struct GameLiveActivity: Widget {
                         .dynamicIsland(verticalPlacement: .belowIfTooWide)
                 }
             } compactLeading: {
-                if context.isStale {
-                    LeftGameIcon()
-                } else {
-                    MyClockGauge(context: context)
-                }
+                GameBoard(context: context, size: GameActivityLayout.compactBoardSize)
             } compactTrailing: {
                 CompactTrailingView(context: context)
             } minimal: {
                 if context.isStale {
                     LeftGameIcon()
                 } else {
-                    MyClockGauge(context: context)
+                    GameBoard(context: context, size: GameActivityLayout.compactBoardSize)
                 }
             }
             .keylineTint(context.isStale ? lichessOrange : nil)
@@ -72,12 +68,9 @@ private enum GameActivityLayout {
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
     static let compactClockWidth: CGFloat = 52
-    /// Fills the compact and minimal island: its height (about 37 pt) less the system margins around
+    /// In the compact and minimal island: its height (about 37 pt) less the system margins around
     /// the regions.
-    static let gaugeSize: CGFloat = 24
-    /// Matches the thickness of the system's circular `ProgressView`, for the paused ring.
-    static let gaugeLineWidth: CGFloat = 2
-    static let gaugeIconSize: CGFloat = 16
+    static let compactBoardSize: CGFloat = 22
 }
 
 // MARK: - Lock Screen / expanded
@@ -232,15 +225,14 @@ private struct StatusLine: View {
 
 // MARK: - Dynamic Island
 
-/// The user's clock: in green while it runs, greyed out while it waits for the opponent.
+/// The user's clock: in green while it runs, greyed out while it waits for the opponent. Once the
+/// user left the game, the warning icon instead.
 private struct CompactTrailingView: View {
     let context: ActivityViewContext<GameActivityAttributes>
 
     var body: some View {
         if context.isStale {
-            Text("Return")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(lichessOrange)
+            LeftGameIcon()
         } else {
             let side = context.attributes.myColor
             let isRunning = context.state.isClockRunning(for: side)
@@ -260,78 +252,6 @@ private struct LeftGameIcon: View {
 }
 
 // MARK: - Shared pieces
-
-/// The user's clock as a ring that empties as their time runs out, around a pawn: in green while it
-/// runs, greyed out while it waits for the opponent.
-///
-/// The ring spans the initial time, or the remaining time once increments have pushed the clock
-/// above it.
-private struct MyClockGauge: View {
-    let context: ActivityViewContext<GameActivityAttributes>
-
-    var body: some View {
-        let state = context.state
-        let side = context.attributes.myColor
-        let remaining = max(0, state.clock(of: side))
-        let total = max(context.attributes.initialClock, remaining, 1)
-        let isRunning = state.isClockRunning(for: side)
-        Group {
-            if isRunning {
-                // Animated by the system, so the ring keeps emptying with no updates from the app.
-                let end = state.flagDate(of: side)
-                ProgressView(
-                    timerInterval: end.addingTimeInterval(-Double(total) / 1000)...end,
-                    countsDown: true
-                ) {
-                    EmptyView()
-                } currentValueLabel: {
-                    GaugePawn()
-                }
-                .progressViewStyle(.circular)
-            } else {
-                // Drawn here rather than by a value-driven `ProgressView`, which renders with
-                // artifacts in the island.
-                PausedRing(fraction: Double(remaining) / Double(total))
-                    .overlay { GaugePawn() }
-            }
-        }
-        .frame(width: GameActivityLayout.gaugeSize, height: GameActivityLayout.gaugeSize)
-        .tint(isRunning ? lichessGreen : .secondary)
-        .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
-    }
-}
-
-/// A still ring, greyed out, filled clockwise from the top up to `fraction`, drawn to look like the
-/// system's circular `ProgressView`.
-private struct PausedRing: View {
-    let fraction: Double
-
-    var body: some View {
-        let lineWidth = GameActivityLayout.gaugeLineWidth
-        ZStack {
-            Circle()
-                .stroke(.quaternary, lineWidth: lineWidth)
-            Circle()
-                .trim(from: 0, to: fraction)
-                .stroke(.secondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-        }
-        // The stroke is centred on the circle: inset it to stay within the frame.
-        .padding(lineWidth / 2)
-    }
-}
-
-/// A plain pawn silhouette, in the foreground style: the cburnett pawn as a template image, whatever
-/// the user's piece set, so that it keeps the same simple shape.
-private struct GaugePawn: View {
-    var body: some View {
-        Image("piece_cburnett_wP", bundle: ChessgroundAssets.bundle)
-            .renderingMode(.template)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: GameActivityLayout.gaugeIconSize, height: GameActivityLayout.gaugeIconSize)
-    }
-}
 
 /// A clock that the system counts down by itself while it runs, so it keeps ticking with no
 /// updates from the app.
@@ -372,8 +292,7 @@ private extension GameActivityAttributes {
         gameFullId: "abcdefgh1234",
         myColor: .white,
         white: Player(name: "veloce", title: nil, rating: 1850),
-        black: Player(name: "DrNykterstein", title: "GM", rating: 2850),
-        initialClock: 300_000
+        black: Player(name: "DrNykterstein", title: "GM", rating: 2850)
     )
 }
 
