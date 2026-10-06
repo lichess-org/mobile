@@ -22,7 +22,9 @@ struct GameLiveActivity: Widget {
                 // gets all the width that is left (the trailing region has priority over the
                 // leading one), and moves below the camera, which it is too wide to sit beside.
                 DynamicIslandExpandedRegion(.leading) {
+                    // The leading region is wider than the board: the inset moves it towards its centre.
                     GameBoard(context: context, size: GameActivityLayout.boardSize)
+                        .padding(.leading, GameActivityLayout.expandedBoardLeadingInset)
                 }
                 DynamicIslandExpandedRegion(.trailing, priority: 1) {
                     // Trailing inset, so that the island's rounded corner doesn't cut into the clocks.
@@ -65,6 +67,7 @@ private enum GameActivityLayout {
     /// Both on the Lock Screen and in the expanded island (a larger board gets cut off there).
     static let boardSize: CGFloat = 100
     static let expandedTrailingInset: CGFloat = 8
+    static let expandedBoardLeadingInset: CGFloat = 8
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
