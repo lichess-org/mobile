@@ -517,6 +517,7 @@ void main() {
       final mockChallengeRepo = MockChallengeRepository();
       when(() => mockChallengeRepo.decline(any(), reason: any(named: 'reason')))
           .thenAnswer((_) async {});
+      when(() => notificationDisplayMock.cancel(id: any(named: 'id'))).thenAnswer((_) async {});
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -524,6 +525,9 @@ void main() {
         overrides: {
           challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
             (_) => mockChallengeRepo,
+          ),
+          notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+            notificationDisplayMock,
           ),
         },
       );
@@ -540,6 +544,8 @@ void main() {
           reason: ChallengeDeclineReason.generic,
         ),
       ).called(1);
+      verify(() => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode))
+          .called(1);
     }, variant: kPlatformVariant);
   });
 
@@ -548,6 +554,7 @@ void main() {
       final navigatorKey = GlobalKey<NavigatorState>();
       final mockChallengeRepo = MockChallengeRepository();
       when(() => mockChallengeRepo.accept(any())).thenAnswer((_) async {});
+      when(() => notificationDisplayMock.cancel(id: any(named: 'id'))).thenAnswer((_) async {});
       when(() => mockChallengeRepo.show(any())).thenAnswer(
         (_) async => const Challenge(
           id: ChallengeId('H9fIRZUk'),
@@ -581,6 +588,9 @@ void main() {
           challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
             (_) => mockChallengeRepo,
           ),
+          notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+            notificationDisplayMock,
+          ),
           currentNavigatorKeyProvider: currentNavigatorKeyProvider.overrideWithValue(navigatorKey),
         },
       );
@@ -590,12 +600,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Failed to accept challenge'), findsOneWidget);
+      verify(() => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode))
+          .called(1);
     }, variant: kPlatformVariant);
 
     testWidgets('redirects to GameScreen on successful accept', (tester) async {
       final navigatorKey = GlobalKey<NavigatorState>();
       final mockChallengeRepo = MockChallengeRepository();
       when(() => mockChallengeRepo.accept(any())).thenAnswer((_) async {});
+      when(() => notificationDisplayMock.cancel(id: any(named: 'id'))).thenAnswer((_) async {});
       when(() => mockChallengeRepo.show(any())).thenAnswer(
         (_) async => const Challenge(
           id: ChallengeId('H9fIRZUk'),
@@ -630,6 +643,9 @@ void main() {
           challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
             (_) => mockChallengeRepo,
           ),
+          notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(
+            notificationDisplayMock,
+          ),
           currentNavigatorKeyProvider: currentNavigatorKeyProvider.overrideWithValue(navigatorKey),
         },
       );
@@ -640,6 +656,8 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       expect(find.byType(GameScreen), findsOneWidget);
+      verify(() => notificationDisplayMock.cancel(id: const ChallengeId('H9fIRZUk').hashCode))
+          .called(1);
     }, variant: kPlatformVariant);
   });
 }
