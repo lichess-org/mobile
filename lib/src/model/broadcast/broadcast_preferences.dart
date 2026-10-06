@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 part 'broadcast_preferences.freezed.dart';
@@ -66,6 +67,14 @@ class BroadcastPreferences()
   Future<void> toggleSmallBoard() {
     return save(state.copyWith(smallBoard: !state.smallBoard));
   }
+
+  Future<void> setBroadcastFederation(FederationId? federationCode) {
+    return save(state.copyWith(broadcastFederationCode: federationCode));
+  }
+
+  Future<void> setDisplayFederationGamesFirst(bool value) {
+    return save(state.copyWith(displayFederationGamesFirst: value));
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -80,6 +89,8 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
     @JsonKey(defaultValue: false) required bool smallBoard,
+    FederationId? broadcastFederationCode,
+    @JsonKey(defaultValue: true) required bool displayFederationGamesFirst,
   }) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(
@@ -92,6 +103,8 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     showPgnComments: true,
     inlineNotation: false,
     smallBoard: false,
+    broadcastFederationCode: null,
+    displayFederationGamesFirst: true,
   );
 
   factory fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);

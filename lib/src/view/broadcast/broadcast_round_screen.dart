@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
+import 'package:lichess_mobile/src/view/settings/broadcast_federation_choice_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -573,9 +575,39 @@ class _BroadcastSettingsBottomSheetState() extends ConsumerState<_BroadcastSetti
   @override
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
+    final federation = broadcastPreferences.broadcastFederationCode;
+    final federationName = federation?.name ?? context.l10n.none;
 
     return BottomSheetScrollableContainer(
       children: [
+        ListSection(
+          header: const SettingsSectionTitle('Favorite federation'),
+          materialFilledCard: true,
+          children: [
+            SettingsListTile(
+              icon: federation != null
+                  ? Image.asset(federation.flagAsset, height: 16)
+                  : const Icon(Icons.public),
+              settingsLabel: Text(context.l10n.broadcastFederation),
+              settingsValue: federationName,
+              onTap: () {
+                Navigator.of(
+                  context,
+                  rootNavigator: true,
+                ).push(BroadcastFederationChoiceScreen.buildRoute());
+              },
+            ),
+            SwitchSettingTile(
+              title: const Text('Display games first'),
+              value: broadcastPreferences.displayFederationGamesFirst,
+              onChanged: federation != null
+                  ? (value) => ref
+                        .read(broadcastPreferencesProvider.notifier)
+                        .setDisplayFederationGamesFirst(value)
+                  : null,
+            ),
+          ],
+        ),
         ListSection(
           header: SettingsSectionTitle(context.l10n.preferencesDisplay),
           materialFilledCard: true,

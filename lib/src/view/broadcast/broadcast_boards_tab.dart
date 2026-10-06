@@ -39,10 +39,22 @@ class const BroadcastBoardsTab({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
+    final broadcastFederationCode = ref.watch(
+      broadcastPreferencesProvider.select((p) => p.broadcastFederationCode),
+    );
+    final displayFederationGamesFirst = ref.watch(
+      broadcastPreferencesProvider.select((p) => p.displayFederationGamesFirst),
+    );
 
     return switch (round) {
       AsyncData(:final value) => (() {
-        final filteredGames = _filteredGames(value.games, showOnlyOngoingGames, teamFilter);
+        final filteredGames = _filteredGames(
+          value.games,
+          showOnlyOngoingGames,
+          teamFilter,
+          broadcastFederationCode,
+          displayFederationGamesFirst,
+        );
         return value.games.isEmpty || filteredGames.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
@@ -82,15 +94,34 @@ class const BroadcastBoardsTab({
     IMap<BroadcastGameId, BroadcastGame> games,
     bool showOnlyOngoingGames,
     String? teamFilter,
+    FederationId? federationCode,
+    bool displayFederationGamesFirst,
   ) {
     final ongoingFiltered = showOnlyOngoingGames
         ? games.values.where((game) => game.isOngoing).toIList()
         : games.values.toIList();
-    return teamFilter == null
+    final teamFiltered = teamFilter == null
         ? ongoingFiltered
         : ongoingFiltered
               .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
               .toIList();
+
+    if (federationCode != null && displayFederationGamesFirst) {
+      bool matchesFederation(BroadcastGame game) =>
+          Side.values.any((s) => game.players[s]?.player.federation == federationCode);
+      final favoriteGames = <BroadcastGame>[];
+      final otherGames = <BroadcastGame>[];
+      for (final game in teamFiltered) {
+        if (matchesFederation(game)) {
+          favoriteGames.add(game);
+        } else {
+          otherGames.add(game);
+        }
+      }
+      return [...favoriteGames, ...otherGames].toIList();
+    }
+
+    return teamFiltered;
   }
 }
 
@@ -239,6 +270,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
               final playingSide = Setup.parseFen(game.fen).turn;
 
               return ObservedBoardThumbnail(
+                key: ValueKey(game.id),
                 roundId: widget.roundId,
                 game: game,
                 title: widget.title,
@@ -268,6 +300,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 }
 
 class const ObservedBoardThumbnail({
+  super.key,
   required final BroadcastRoundId roundId,
   required final BroadcastGame game,
   required final String title,

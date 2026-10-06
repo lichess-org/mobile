@@ -77,6 +77,7 @@ extension type const FideId(int value) implements IntId;
 
 extension type const FederationId(String value) implements StringId {
   new fromCode(String code) : this(code.toUpperCase());
+  new fromJson(dynamic json) : this((json as String).toUpperCase());
 }
 
 extension IDPick on Pick {
