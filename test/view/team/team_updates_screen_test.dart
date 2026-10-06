@@ -351,5 +351,46 @@ void main() {
         expect(find.byType(TeamUpdateNextPageTile), findsNothing);
       },
     );
+    testWidgets('shows empty state with translatable strings when no team updates', (
+      WidgetTester tester,
+    ) async {
+      const emptyJson = '''
+      {
+        "byTeam": [],
+        "updates": {
+          "currentPage": 1,
+          "maxPerPage": 6,
+          "nbPages": 1,
+          "nbResults": 0,
+          "nextPage": null,
+          "previousPage": null,
+          "currentPageResults": []
+        }
+      }
+      ''';
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/team/updates') {
+          return mockResponse(emptyJson, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TeamUpdatesScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Updates from teams you join will appear here.'), findsOneWidget);
+      expect(find.text('Join teams'), findsOneWidget);
+    });
   });
 }

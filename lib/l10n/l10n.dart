@@ -1120,6 +1120,18 @@ abstract class AppLocalizations {
   /// **'You cannot challenge yourself'**
   String get mobileYouCannotChallengeYourself;
 
+  /// No description provided for @mobileTeamUpdatesEmptyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates from teams you join will appear here.'**
+  String get mobileTeamUpdatesEmptyDescription;
+
+  /// No description provided for @mobileJoinTeams.
+  ///
+  /// In en, this message translates to:
+  /// **'Join teams'**
+  String get mobileJoinTeams;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:
