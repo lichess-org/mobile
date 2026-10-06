@@ -22,7 +22,7 @@ struct GameLiveActivity: Widget {
                 // gets all the width that is left (the trailing region has priority over the
                 // leading one), and moves below the camera, which it is too wide to sit beside.
                 DynamicIslandExpandedRegion(.leading) {
-                    GameBoard(context: context, size: GameActivityLayout.expandedBoardSize)
+                    GameBoard(context: context, size: GameActivityLayout.boardSize)
                 }
                 DynamicIslandExpandedRegion(.trailing, priority: 1) {
                     // Trailing inset, so that the island's rounded corner doesn't cut into the clocks.
@@ -62,8 +62,8 @@ private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D /
 
 private enum GameActivityLayout {
     static let lockScreenPadding: CGFloat = 14
-    static let lockScreenBoardSize: CGFloat = 100
-    static let expandedBoardSize: CGFloat = 120
+    /// Both on the Lock Screen and in the expanded island (a larger board gets cut off there).
+    static let boardSize: CGFloat = 100
     static let expandedTrailingInset: CGFloat = 8
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
@@ -85,10 +85,10 @@ private struct GameActivityLockScreenView: View {
 
     var body: some View {
         HStack(spacing: GameActivityLayout.columnSpacing) {
-            GameBoard(context: context, size: GameActivityLayout.lockScreenBoardSize)
+            GameBoard(context: context, size: GameActivityLayout.boardSize)
             GameInfoColumn(context: context)
         }
-        .frame(height: GameActivityLayout.lockScreenBoardSize)
+        .frame(height: GameActivityLayout.boardSize)
     }
 }
 
