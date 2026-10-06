@@ -3,10 +3,12 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
-import 'package:lichess_mobile/src/binding/crashlytics.dart';
+import 'package:lichess_mobile/src/binding/binding_fcm.dart';
+import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
+import 'package:lichess_mobile/src/model/crashlytics/crashlytics_firebase.dart';
 
 /// Concrete implementation of [LichessBinding] for the Play Store.
-class PlayLichessBinding() extends LichessBindingBase {
+class PlayLichessBinding() extends LichessBindingBase with FcmBinding {
   factory ensureInitialized() {
     return LichessBinding.ensureInitialized(() => PlayLichessBinding());
   }

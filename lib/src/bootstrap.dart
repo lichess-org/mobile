@@ -8,12 +8,16 @@ import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/service/app_log_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-Future<void> bootstrapApp(LichessBindingBase Function() initializeBinding) async {
+Future<void> bootstrapApp(
+  LichessBindingBase Function() initializeBinding, {
+  required NotificationService Function(Ref) notificationServiceFactory,
+}) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = initializeBinding();
 
@@ -49,6 +53,9 @@ Future<void> bootstrapApp(LichessBindingBase Function() initializeBinding) async
       child: ProviderScope(
         observers: [ProviderLogger()],
         retry: lichessProviderRetry,
+        overrides: [
+          notificationServiceFactoryProvider.overrideWithValue(notificationServiceFactory),
+        ],
         child: const AppInitializationScreen(),
       ),
     ),

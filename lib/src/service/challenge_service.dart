@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -78,7 +78,7 @@ class ChallengeService(final Ref ref) {
   }
 
   Future<void> _sendNotifications() async {
-    final notificationService = ref.read(notificationServiceProvider);
+    final notificationPresenter = ref.read(notificationPresenterProvider);
 
     final Iterable<ChallengeId> prevInwardIds =
         _previous?.inward.map((challenge) => challenge.id) ?? [];
@@ -89,7 +89,7 @@ class ChallengeService(final Ref ref) {
     await Future.wait(
       prevInwardIds
           .whereNot((challengeId) => currentInwardIds.contains(challengeId))
-          .map((id) async => await notificationService.cancel(id.value.hashCode)),
+          .map((id) async => await notificationPresenter.cancel(id.value.hashCode)),
     );
 
     // new incoming challenges
@@ -104,7 +104,7 @@ class ChallengeService(final Ref ref) {
         _current?.inward.whereNot((challenge) => prevInwardIds.contains(challenge.id)).map((
               challenge,
             ) async {
-              return await notificationService.show(ChallengeNotification(challenge));
+              return await notificationPresenter.show(ChallengeNotification(challenge));
             }) ??
             <Future<int>>[],
       );
