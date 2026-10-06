@@ -25,8 +25,10 @@ struct GameLiveActivity: Widget {
                     GameBoard(context: context, size: GameActivityLayout.expandedBoardSize)
                 }
                 DynamicIslandExpandedRegion(.trailing, priority: 1) {
+                    // Trailing inset, so that the island's rounded corner doesn't cut into the clocks.
                     GameInfoColumn(context: context)
                         .padding(.leading, GameActivityLayout.columnSpacing)
+                        .padding(.trailing, GameActivityLayout.expandedTrailingInset)
                         .dynamicIsland(verticalPlacement: .belowIfTooWide)
                 }
             } compactLeading: {
@@ -62,6 +64,7 @@ private enum GameActivityLayout {
     static let lockScreenPadding: CGFloat = 14
     static let lockScreenBoardSize: CGFloat = 100
     static let expandedBoardSize: CGFloat = 120
+    static let expandedTrailingInset: CGFloat = 8
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
@@ -69,7 +72,7 @@ private enum GameActivityLayout {
     /// Fills the compact and minimal island: its height (about 37 pt) less the system margins around
     /// the regions.
     static let gaugeSize: CGFloat = 24
-    static let gaugeIconSize: CGFloat = 11
+    static let gaugeIconSize: CGFloat = 16
 }
 
 // MARK: - Lock Screen / expanded
@@ -253,8 +256,8 @@ private struct LeftGameIcon: View {
 
 // MARK: - Shared pieces
 
-/// The user's clock as a ring that empties as their time runs out: empty and in green while it runs,
-/// around a pause sign and greyed out while it waits for the opponent.
+/// The user's clock as a ring that empties as their time runs out, around a pawn: in green while it
+/// runs, greyed out while it waits for the opponent.
 ///
 /// The ring spans the initial time, or the remaining time once increments have pushed the clock
 /// above it.
@@ -277,21 +280,32 @@ private struct MyClockGauge: View {
                 ) {
                     EmptyView()
                 } currentValueLabel: {
-                    EmptyView()
+                    GaugePawn()
                 }
             } else {
                 ProgressView(value: Double(remaining), total: Double(total)) {
                     EmptyView()
                 } currentValueLabel: {
-                    Image(systemName: "pause.fill")
+                    GaugePawn()
                 }
             }
         }
         .progressViewStyle(.circular)
-        .font(.system(size: GameActivityLayout.gaugeIconSize, weight: .bold))
         .frame(width: GameActivityLayout.gaugeSize, height: GameActivityLayout.gaugeSize)
         .tint(isRunning ? lichessGreen : .secondary)
         .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
+    }
+}
+
+/// A plain pawn silhouette, in the foreground style: the cburnett pawn as a template image, whatever
+/// the user's piece set, so that it keeps the same simple shape.
+private struct GaugePawn: View {
+    var body: some View {
+        Image("piece_cburnett_wP", bundle: ChessgroundAssets.bundle)
+            .renderingMode(.template)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: GameActivityLayout.gaugeIconSize, height: GameActivityLayout.gaugeIconSize)
     }
 }
 
