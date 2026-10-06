@@ -19,15 +19,16 @@ const modules = [
   // mobile is the only module managed by this project (of which we can edit the source)
   'mobile',
   // below are modules from lichess/lila
-  'variant',
   'activity',
   'arena',
   'broadcast',
   'challenge',
   'contact',
   'coordinates',
+  'learn',
   'patron',
   'perfStat',
+  'practice',
   'preferences',
   'puzzle',
   'puzzleTheme',
@@ -39,9 +40,10 @@ const modules = [
   'streamer',
   'study',
   'team',
-  'timeago',
   'tfa',
+  'timeago',
   'ublog',
+  'variant',
 ]
 
 // list of keys (per module) to include in the ARB file
@@ -53,7 +55,7 @@ const whiteLists = {
   'recap': ['recapReady', 'awaitQuestion'],
   'search': ['search'],
   'streamer': ['lichessStreamers'],
-  'team': ['nbLeadersPerTeam','battleOfNbTeams','incorrectEntryCode', 'team'],
+  'team': ['nbLeadersPerTeam', 'battleOfNbTeams', 'incorrectEntryCode', 'team', 'teamUpdates'],
   'tfa': ['twoFactorAuth'],
   'variant': [
     'standard',
@@ -77,6 +79,13 @@ const whiteLists = {
     'fromPosition',
     'fromPositionTitle',
   ],
+}
+
+// list of keys (per module) to exclude from the ARB file
+// Used when a module key would collide with an existing key once prefixed
+const blackLists = {
+  // `learn.menu` would become `learnMenu`, overwriting `site.learnMenu`
+  'learn': ['menu'],
 }
 
 // Order of locales with variants matters: the fallback must always be first
@@ -215,11 +224,11 @@ async function generateTemplateARB() {
 function loadTranslations(module, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
-      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
+      readFileSync(`${sourcePath}/${module}.xml`, 'utf8').replace(/\r\n/g, '\n').replace(/\r/g, '\n')
     )
   else
     return parseStringPromise(
-      readFileSync(`${translationPath}/${module}/${locale}.xml`,'utf8').replace(/\r\n/g,'\n').replace(/\r/g,'\n')
+      readFileSync(`${translationPath}/${module}/${locale}.xml`, 'utf8').replace(/\r\n/g, '\n').replace(/\r/g, '\n')
     )
 }
 
@@ -252,6 +261,12 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
 
     const pluralFiltered = data.resources.plurals?.filter((plural) => whiteList.includes(plural.$.name))
     data.resources.plurals = pluralFiltered
+  }
+
+  if (blackLists[module]) {
+    const blackList = blackLists[module]
+    data.resources.string = data.resources.string.filter((stringElement) => !blackList.includes(stringElement.$.name))
+    data.resources.plurals = data.resources.plurals?.filter((plural) => !blackList.includes(plural.$.name))
   }
 
   const transformed = {}
@@ -323,9 +338,9 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
         transformedString = string;
       }
       const quantity = child.$.quantity === 'zero' ? '=0' :
-      child.$.quantity === 'one' ? '=1' :
-      child.$.quantity === 'two' ? '=2' :
-      child.$.quantity
+        child.$.quantity === 'one' ? '=1' :
+          child.$.quantity === 'two' ? '=2' :
+            child.$.quantity
       pluralString += ` ${quantity}{${transformedString}}`
     })
     pluralString += '}'

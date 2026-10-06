@@ -146,7 +146,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.storage_outlined),
-                title: const Text('Local database size'),
+                title: Text(context.l10n.mobileLocalDatabaseSize),
                 trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
               ),
               ListTile(
@@ -169,7 +169,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.star_outline),
-                title: const Text('Rate this app'),
+                title: Text(context.l10n.mobileRateThisApp),
                 onTap: () async {
                   final isAndroid = Theme.of(context).platform == TargetPlatform.android;
                   final launched = await launchUrl(

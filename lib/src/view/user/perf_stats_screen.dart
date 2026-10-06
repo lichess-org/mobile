@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -80,9 +82,10 @@ class const _Title({required final User user, required final Perf perf}) extends
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(perf.icon),
-            Text(
-              ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
-              overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: AppBarTitleText(
+                ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
+              ),
             ),
             const Icon(Icons.arrow_drop_down),
           ],
@@ -800,7 +803,7 @@ class _EloChartState() extends State<_EloChart> {
                 .where((dateRange) => _dateIsInRange(dateRange))
                 .map(
                   (dateRange) => _RangeButton(
-                    text: dateRange.toString(),
+                    text: dateRange.label(context.l10n),
                     onPressed: () {
                       setState(() {
                         _selectedRange = dateRange;
@@ -940,8 +943,7 @@ enum DateRange() {
   oneYear,
   allTime;
 
-  @override
-  String toString() => switch (this) {
+  String label(AppLocalizations _) => switch (this) {
     DateRange.oneWeek => '1W',
     DateRange.oneMonth => '1M',
     DateRange.threeMonths => '3M',

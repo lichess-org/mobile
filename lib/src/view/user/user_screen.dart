@@ -256,9 +256,12 @@ class const _UserProfileListView(
                     title: Text(context.l10n.follow),
                     onTap: isLoading
                         ? null
-                        : () => userAction(
-                            () => ref.read(relationRepositoryProvider).follow(user.id),
-                          ),
+                        : () async {
+                            await userAction(
+                              () => ref.read(relationRepositoryProvider).follow(user.id),
+                            );
+                            ref.invalidate(followingProvider);
+                          },
                   )
                 else if (user.following == true)
                   ListTile(
@@ -266,9 +269,12 @@ class const _UserProfileListView(
                     title: Text(context.l10n.unfollow),
                     onTap: isLoading
                         ? null
-                        : () => userAction(
-                            () => ref.read(relationRepositoryProvider).unfollow(user.id),
-                          ),
+                        : () async {
+                            await userAction(
+                              () => ref.read(relationRepositoryProvider).unfollow(user.id),
+                            );
+                            ref.invalidate(followingProvider);
+                          },
                   ),
                 if (user.following != true && user.blocking != true)
                   ListTile(

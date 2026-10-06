@@ -1,112 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Beraberlik teklifi kabul edilsin mi?</string>
   <string name="account" comment="The account screen title.">Hesap</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Hesap tercihleri</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Bu tercihler Lichess hesabınıza uygulanacak ve cihazlarınız arasında senkronize edilecektir.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Çalışmaya ekle</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Tüm oyunlar</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Hamleyi geri almaya ve ipuçlarına izin verir</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled siyah</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Emin misiniz?</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">NNUE dosyasını (%s) indirmek istediğinizden emin misiniz?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Manzara modundaki tahta konumu</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Tahta seçenekleri</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Bronstein gecikmesi</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Geri alma teklifini iptal et</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Pozisyondan meydan oku</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Bölüm Adı</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Satranç motoru</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Temizle</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Özel bir arkaplan seçin</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Temizle</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Kodun geçerlilik süresi 5 dakikadır ve yalnızca bir kez kullanılabilir.</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kod</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Kod %s karakter uzunluğundadır.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopyalandı.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Kayıtlı hamleyi sil</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bir oyuna katıl</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Özelleştir</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">İpucu: Ana ekrana daha fazla widget ekleyebilir veya ihtiyacınız olmayanları kaldırabilirsiniz!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Gizle</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Tehlikeli bölge</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Hesabınızı silin</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Küçük</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Ayrıntılı</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Meydan okumayı kabul ediyor musun?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Oyunlarımı indir</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Geri bildirimde bulun</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtreler</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Saati döndür</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Hamle yaptıktan sonra taşları ve rakip bilgilerini döndür</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Hamleleriniz hakkında geri bildirim alın</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi günler, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi günler</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Varyasyonu gizle</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">İyi akşamlar</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">İyi hamle ama daha iyisi var</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Merhaba</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ana sayfa</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Eğer bir hesap %1$s ile eşleşirse, o hesaba %2$s karakter uzunluğunda bir kod gönderilecektir. Gelen kutunuzu kontrol edin ve aşağıya kodu girin.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Bu kod geçersiz veya süresi dolmuş.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Canlı yayıncılar</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Yerel veritabanı boyutu</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Bırakınca hamle yap</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Bir taşı dokunarak hareket ettirirken, parmağınızı kaldırdığınızda hamle gerçekleştirilir; böylece parmağınızı kaydırarak hedef kareyi değiştirebilirsiniz.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Bu sayfayı görüntülemek için giriş yapmalısınız.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Çevrimdışı bulmacalar</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Yeni oyun</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Sonraki hata</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sonuç bulunamadı</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Eski uygulamadaki veya web sitesindeki tüm özelliklerin şu anda mevcut olmadığını, ancak her zaman özellik eklediğimizi lütfen unutmayın.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Hiçbir kullanıcıyı takip etmiyorsunuz.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Tamam</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">Tamam</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Açılış Kaşifi çevrimdışı kullanılamaz.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Veya bir PGN dosyası aktar</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Tahta üzerinde çevrimdışı oyna</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Panodan yapıştır</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Anti</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomik</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yıldırım</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klasik</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yazışma</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Çılgın</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Konumdan</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Sürü</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">MŞ</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bulmaca</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yarışan</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hızlı</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3şah</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN kopyalandı.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ile başlayan oyuncularla</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Sol</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Sağ</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Alıştırma modu</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Sürüklenen taşı büyüt</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Önceki</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Bu oyunu bitirmek istiyor musun?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Gösterilecek bir şey yok, lütfen filtreleri değiştirin</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Gösterilecek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3 dakika içerisinde mümkün olduğunca çok bulmaca çözün.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">En sevdiğiniz açılışlardan bulmacalar oynayın veya bir tema seçin.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Bulmacalar</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Uygulamayı puanla</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Son aramalar</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Yer işaretini kaldır</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Yer işaretini kaldır</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Bir çalışma seçin</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Bana bir kod gönder</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Sunucu analizi</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Saat pozisyonu</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Hazırlar</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Sürüklenen taşın hedefi</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Daire</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Kare</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Çizilen şeklin rengi</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Bu renk, iki parmak kullanılarak elle çizilen şekiller için kullanılır.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Ana ekran kısayolları</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Sürükleyici mod</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oynarken sistem arayüzünü gizle. Sistemin, ekranın kenarlarındaki gezinme hareketlerinden rahatsızsan bunu kullan. Bu ayar oyun ve bulmaca ekranlarına uygulanır.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Ele geçirilen taşlar</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Bir resim seçin</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Bir resim seçin</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Resmi bulanıklaştır</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Özel arkaplan sadece karanlık modda çalışır. Karanlık bir resim tavsiye edilir.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Tahtayı gizle</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Tahtayı göster</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Diğer arkaplanlar için kaydır</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Dokun veya sürükle</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">İki kareye dokun</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Tercihleriniz Lichess hesabınıza kaydedildi. Bu tercihler tüm cihazlarınız arasında senkronize edilecektir.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Şekil çizimi</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">İki parmak kullanarak şekiller çizin: şekil çizmek için bir parmağı boş bir karede tutun ve başka bir parmağı sürükleyin.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Kenarları göster</string>
-  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Dokunuş geribildirimi</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Dokunma geri bildirimi</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ayarlar</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Meydan okuma bağlantısını paylaşın</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN\'yi paylaş</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oyun linkini paylaş</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Yerel analiz PGN\'sini paylaşın</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Konumu FEN olarak paylaş</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Bulmacayı paylaş</string>
   <string name="showComments" comment="Shown in the analysis screen.">Yorumları göster</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Motor satırlarını göster</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Değerlendirme çubuğunu göster</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Sonucu göster</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Varyasyonları göster</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Tarayıcıyla giriş yap</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">E-posta ile giriş yap</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Basit gecikme</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Küçük tahta</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Birşeyler ters gitti.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Arkadaşları sıralayın</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Tehtidi göstermeyi durdur</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistem renkleri</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase, çevrimdışı kullanım için mevcut değil.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Araçlar</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Tamamlanan</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Sayfama atla</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s varyantı bu versiyonda desteklenmiyor.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Simetrik taşlar kullan</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Oyunu Gör</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Lisansları görüntüle</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Rakip bekleniyor...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">İzle</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess uygulamasına hoşgeldiniz!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Oyunu Gör</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">İpucu: Ana ekrana daha fazla widget ekleyebilir veya ihtiyacınız olmayanları kaldırabilirsiniz!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Gizle</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Özelleştir</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Tehtidi göstermeyi durdur</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Tamamlanan</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Sayfama atla</string>
-  <string name="displayModeCompact" comment="">Küçük</string>
-  <string name="displayModeDetailed" comment="">Ayrıntılı</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">Açılış Kaşifi çevrimdışı kullanılamaz.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Meydan okuma oluşturuldu: Oyun başladığında size bildirim gönderilecektir.\nOyuna ana sekmeden erişebilirsiniz.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Önceki</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Veya bir PGN dosyası aktar</string>
-  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">İyi hamle ama daha iyisi var</string>
-  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
-  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
-  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yıldırım</string>
-  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hızlı</string>
-  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klasik</string>
-  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yazışma</string>
-  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Konumdan</string>
-  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
-  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antistranç</string>
-  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">MŞ</string>
-  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3şah</string>
-  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomik</string>
-  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Sürü</string>
-  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Yarışan</string>
-  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Çılgın</string>
-  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bulmaca</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Giriş yapmanız için size e-posta ile bir kod göndereceğiz.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Kendinize meydan okuyamazsınız</string>
 </resources>

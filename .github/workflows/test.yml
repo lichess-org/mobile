@@ -7,6 +7,10 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
   pull_request:
@@ -15,8 +19,18 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
+
+# Cancel superseded PR runs so only the latest pushed commit is actually tested.
+# Pushes to main are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Declare default permissions as read only.
 permissions: read-all

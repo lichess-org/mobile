@@ -20,25 +20,6 @@ double getEvalGaugeFontSize(BuildContext context) {
   return isTabletOrLarger(context) ? _kEvalGaugeFontSize : _kEvalGaugeFontSize - 2.0;
 }
 
-typedef EngineGaugeParams = ({
-  bool isLocalEngineAvailable,
-
-  /// Orientation of the board.
-  Side orientation,
-
-  /// Position to evaluate.
-  Position position,
-
-  /// Cached evaluation to display when the current evaluation is not available.
-  ClientEval? savedEval,
-
-  /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
-  ExternalEval? serverEval,
-
-  /// Filters to identify the correct engine evaluation provider instance.
-  EngineEvaluationFilters filters,
-});
-
 class const EngineGauge({required final EngineGaugeParams params, super.key})
     extends ConsumerWidget {
   static Color backgroundColor(BuildContext context) =>

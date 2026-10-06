@@ -108,8 +108,7 @@ class const ClockSettings({required final Orientation orientation, super.key})
             child: IconButton(
               padding: _kIconPadding,
               iconSize: _iconSize,
-              // TODO: translate
-              tooltip: 'Flip clock',
+              tooltip: context.l10n.mobileFlipClock,
               onPressed: buttonsEnabled
                   ? () => ref
                         .read(clockToolControllerProvider.notifier)

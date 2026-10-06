@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
@@ -19,7 +20,6 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_controller.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -149,6 +149,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
   Future<void> _saveGameState() async {
     if (!mounted) return;
+    ref.read(offlineComputerGameControllerProvider.notifier).suspendClock();
     final state = ref.read(offlineComputerGameControllerProvider);
     final clock = ref.read(offlineComputerClockProvider);
     await ref
@@ -733,6 +734,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   late bool _practiceMode;
   late TimeControlType _timeControlType;
   late TimeIncrement _timeIncrement;
+  late TimeIncrement _prevIncrement;
   String? _fromPositionFen;
   final _fenController = TextEditingController();
 
@@ -766,6 +768,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     // Practice mode is played without a clock, so a game that starts in it starts untimed whatever
     // the last one was played with.
     _timeIncrement = _practiceMode ? const TimeIncrement.infinite() : prefs.timeIncrement;
+    _prevIncrement = _timeIncrement;
     _timeControlType = _timeIncrement.isInfinite
         ? TimeControlType.unlimited
         : TimeControlType.clock;
@@ -795,16 +798,18 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   }
 
   void _setTimeControlType(TimeControlType type) {
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(type);
     setState(() {
       _timeControlType = type;
       if (type == TimeControlType.unlimited) {
+        _prevIncrement = _timeIncrement;
         _timeIncrement = const TimeIncrement.infinite();
       } else if (_timeIncrement.isInfinite) {
-        _timeIncrement = OfflineComputerGamePrefs.defaultClockTimeIncrement;
+        _timeIncrement = _prevIncrement;
       }
     });
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(_timeIncrement);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(type).then((_) {
+      ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(_timeIncrement);
+    });
   }
 
   void _setTotalTime(num seconds) {
@@ -822,8 +827,13 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
           ? TimeControlType.unlimited
           : TimeControlType.clock;
     });
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(newIncrement);
-    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeControlType(_timeControlType);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setTimeIncrement(newIncrement).then((
+      _,
+    ) {
+      ref
+          .read(offlineComputerGamePreferencesProvider.notifier)
+          .setTimeControlType(_timeControlType);
+    });
   }
 
   /// Turning practice mode on takes the clock away: the feedback it gives is meant to be thought
@@ -915,44 +925,86 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
               child: hasClock
                   ? Column(
                       children: [
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.minutesPerSide}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: clockLabelInMinutes(_timeIncrement.time),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: _timeIncrement.time,
-                            values: kAvailableTimesInSeconds,
-                            labelBuilder: clockLabelInMinutes,
-                            onChange: _setTotalTime,
-                            onChangeEnd: _setTotalTime,
-                          ),
+                        Builder(
+                          builder: (ctx) {
+                            int seconds = _timeIncrement.time;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.minutesPerSide}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: clockLabelInMinutes(seconds),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: seconds,
+                                    values: kAvailableTimesInSeconds,
+                                    labelBuilder: clockLabelInMinutes,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                      _setTotalTime(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.incrementInSeconds}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: _timeIncrement.increment.toString(),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: _timeIncrement.increment,
-                            values: kAvailableIncrementsInSeconds,
-                            onChange: _setIncrement,
-                            onChangeEnd: _setIncrement,
-                          ),
+                        Builder(
+                          builder: (ctx) {
+                            int incrementSeconds = _timeIncrement.increment;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.incrementInSeconds}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: incrementSeconds.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: incrementSeconds,
+                                    values: kAvailableIncrementsInSeconds,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                      _setIncrement(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ],
                     )
@@ -1026,14 +1078,14 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
               },
             ),
             SwitchSettingTile(
-              title: const Text('Practice mode'),
-              subtitle: const Text('Get feedback on your moves'),
+              title: Text(context.l10n.mobilePracticeMode),
+              subtitle: Text(context.l10n.mobileGetFeedbackOnMoves),
               value: _practiceMode,
               onChanged: _selectedVariant == Variant.crazyhouse ? null : _setPracticeMode,
             ),
             SwitchSettingTile(
               title: Text(context.l10n.casual),
-              subtitle: const Text('Allow takebacks and hints'),
+              subtitle: Text(context.l10n.mobileAllowTakebacksAndHints),
               value: _practiceMode || _casual,
               onChanged: _practiceMode
                   ? null

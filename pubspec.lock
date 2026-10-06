@@ -157,10 +157,10 @@ packages:
     dependency: transitive
     description:
       name: built_collection
-      sha256: "376e3dd27b51ea877c28d525560790aee2e6fbb5f20e2f85d5081027d94e2100"
+      sha256: "44922ecebd8e3d0cef743dadd3b54df4e87e2a4c52a29465a1872aa9e192caa8"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "5.1.2"
   built_value:
     dependency: transitive
     description:
@@ -189,10 +189,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: "1599bfd0a75a0ed1bdb401ad4399c3b185d17a6eb79236b2a5c504a1d8a4e660"
+      sha256: "26393bc24dcf1af2368b35a9d783142722b153d1ef9a1a348772f433168df01a"
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.1"
+    version: "10.3.0"
   clock:
     dependency: "direct main"
     description:
@@ -245,10 +245,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "9da9860b409d71e4b8259e3dee631176d499dee23e7cd45a3024ebd5181997d8"
+      sha256: d8aa6c72b4a3b6c9b299a53f0c4e10cfc87961b2c7496e6c9a7216157f9c529c
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.10.0"
   cross_file:
     dependency: transitive
     description:
@@ -285,18 +285,18 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_icons
-      sha256: "41e005c33bd814be4d3096aff55b1908d419fde52ca656c8c47719ec745873cd"
+      sha256: b7cc2390aac296c083bea762859413eb1cf5b630c70e0c7e4d831018f762a8b2
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.9"
+    version: "2.0.0"
   cupertino_ui:
     dependency: "direct main"
     description:
       name: cupertino_ui
-      sha256: c6747018d37d32feeeb858a1d7043831cb541460ebe1a890a995cdb8df8ea5a5
+      sha256: c23816577a1280cff409e989541767887011f8f1d8c1863a794ed308af46f2a9
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.0"
+    version: "1.1.1"
   dart_style:
     dependency: transitive
     description:
@@ -308,11 +308,10 @@ packages:
   dartchess:
     dependency: "direct main"
     description:
-      path: "."
-      ref: ed64d8a58ea16e3597f71a037ff0f50733b8604d
-      resolved-ref: ed64d8a58ea16e3597f71a037ff0f50733b8604d
-      url: "https://github.com/lichess-org/dartchess.git"
-    source: git
+      name: dartchess
+      sha256: "1c5392ff16ec038c66d10b63f09095ac050adcf2d8df368717fb80f785fe3352"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.14.0"
   dbus:
     dependency: transitive
@@ -414,10 +413,10 @@ packages:
     dependency: transitive
     description:
       name: file_picker_darwin
-      sha256: deb3ff69d58656b885c85bc1627f09ecb79860f272a5e7577149582ede4dce5d
+      sha256: "51aef9f4c80449c736e7cc02198675fda73689f0bd45a84da642cfeab0250d46"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.2"
   file_picker_linux:
     dependency: transitive
     description:
@@ -575,10 +574,11 @@ packages:
   flutter_markdown_plus:
     dependency: "direct main"
     description:
-      name: flutter_markdown_plus
-      sha256: fce641d6c2106cc495de1cd603f97a4f9d615a97a64011928ded380dbdade935
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "74dd63f3dc91bcf919a612a1816ca82df248472e"
+      resolved-ref: "74dd63f3dc91bcf919a612a1816ca82df248472e"
+      url: "https://github.com/HaonRekcef/flutter_markdown_plus.git"
+    source: git
     version: "1.0.12"
   flutter_native_splash:
     dependency: "direct main"
@@ -682,10 +682,10 @@ packages:
     dependency: "direct dev"
     description:
       name: freezed
-      sha256: "541a82723c84298f3ca46a6c2186935aa21ad529ad1f1423d67af18040494f51"
+      sha256: "3af98c92d7d4dd182ea1393193e69a840fcbaee1f66f1158bd20504e5f3f6f4f"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   freezed_annotation:
     dependency: "direct main"
     description:
@@ -722,10 +722,10 @@ packages:
     dependency: "direct main"
     description:
       name: home_widget
-      sha256: b8d377e6a5aacc65193170addf252cce7868fa621b740cdd7b517a233871c185
+      sha256: "1dbfdfbb3b47de24639adfba352050d85d66af112b9cc3ec5bf7627a7813abcb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.9.4"
+    version: "0.10.0"
   hooks:
     dependency: transitive
     description:
@@ -810,10 +810,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_ios
-      sha256: ee3885b6fcd71958fbc79770dd194c63371439d536d69c47b279171a486482ae
+      sha256: "852a7762962f3bb3ad54ef1d342669e41557f466033a676baa8876b367cf4050"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.13+7"
+    version: "0.8.13+8"
   image_picker_linux:
     dependency: transitive
     description:
@@ -913,11 +913,10 @@ packages:
   lc0:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "04284fa88176930a0e2ffd475979fa289710169e"
-      resolved-ref: "04284fa88176930a0e2ffd475979fa289710169e"
-      url: "https://github.com/lichess-org/dart-lc0.git"
-    source: git
+      name: lc0
+      sha256: ea2db73120ded5f829aabcbf7f0a6f26bfb9d957c4a2dc4be4b79e58b489347b
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   leak_tracker:
     dependency: transitive
@@ -1003,10 +1002,10 @@ packages:
     dependency: "direct main"
     description:
       name: material_ui
-      sha256: "6d056d60ce745335fcf1c726a4fc46a481a62229f202b65dbc2db5edbbabc7e2"
+      sha256: "32d98f11cf5942a095a8c3e01b03e4de3b17941437713dcf36b1088fb62e23d2"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.5.0"
   meta:
     dependency: "direct main"
     description:
@@ -1034,38 +1033,34 @@ packages:
   multistockfish:
     dependency: "direct main"
     description:
-      path: "pkgs/multistockfish"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
-    version: "0.6.0"
+      name: multistockfish
+      sha256: dbb484cf11c98e88fcbe4ee60373c885dc9cf5e66f81b50b601af31d98d0b7a5
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.1"
   multistockfish_chess:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_chess"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_chess
+      sha256: "72bfdc7011d42abd718b05a782d037d4a0ec1b79ff84c25dd11df59857a347eb"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.6.0"
   multistockfish_light:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_light"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_light
+      sha256: "5014bb65425eeb16025be556e850078d93bd89185690a7cee4be5e6c6cf2b84e"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.1.0"
   multistockfish_variant:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "pkgs/multistockfish_variant"
-      ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      resolved-ref: "896c3884921ae1d775fcd3088ddcd1559fb87308"
-      url: "https://github.com/lichess-org/dart-multistockfish.git"
-    source: git
+      name: multistockfish_variant
+      sha256: c3107c927355f295f9785318a9541e0307fd230e35836c2ba9931a629407ce42
+      url: "https://pub.dev"
+    source: hosted
     version: "0.4.0"
   native_toolchain_c:
     dependency: transitive
@@ -1175,10 +1170,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "91bd59303e9f769f108f8df05e371341b15d59e995e6806aefab827b58336675"
+      sha256: "2f1564aadb14215e478563b5406cb80729d022158c01dc50c96013c2f7eb4790"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.2"
+    version: "7.1.0"
   platform:
     dependency: transitive
     description:
@@ -1748,10 +1743,10 @@ packages:
     dependency: transitive
     description:
       name: vector_math
-      sha256: f36f9f3be64c6198714492bb455c11056e33e2f85d9a0b676a48301e44fdcf47
+      sha256: "92b9910f66ed1057fd4da7b040ae7c74cafacf885bdc81be496928d5049b032d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.4.3"
   visibility_detector:
     dependency: "direct main"
     description:
@@ -1876,10 +1871,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: "67f0aff7be013d107995e9b75bf4e7f2c3ef2dfdb2c8e68024bba0a7fd5756a4"
+      sha256: "0fe8cc98946def31cbcbc8734aa4067031e6f65ea3a78a508060bfed2200bfeb"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.1"
+    version: "7.1.0"
   yaml:
     dependency: transitive
     description:
@@ -1890,4 +1885,4 @@ packages:
     version: "3.1.4"
 sdks:
   dart: ">=3.13.0 <4.0.0"
-  flutter: "3.47.4"
+  flutter: "3.47.5"

@@ -41,6 +41,7 @@
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Krev remis automatisk ved trekkgjentaking</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Når attverande tid &lt; 30 sekundar</string>
   <string name="moveConfirmation">Trekkstadfesting</string>
+  <string name="multipleChoices">Fleire val. </string>
   <string name="explainCanThenBeTemporarilyDisabled">Kan under pågåande parti deaktiveras ved hjelp av brettmenyen</string>
   <string name="inCorrespondenceGames">I fjernsjakksparti</string>
   <string name="correspondenceAndUnlimited">Fjernsjakk og uavgrensa tid</string>
@@ -56,16 +57,12 @@
   <string name="scrollOnTheBoardToReplayMoves">Rull (\"scroll med musehjulet\") ned på brettet for å spela trekk omatt</string>
   <string name="correspondenceEmailNotification">Dagleg e-postmelding med ei liste av fjernsjakkpartia dine</string>
   <string name="notifyStreamStart">Strøyminga er i gang</string>
-  <string name="notifyInboxMsg">Ny melding i innboksen</string>
-  <string name="notifyDirectMessage" comment="notifyInboxMsg&#10;&#10;A notification setting - notifies players when they receive a new message in their Lichess inbox Replaces old string notifyInboxMsg">Ny direktemelding</string>
-  <string name="notifyForumMention">Du er nemnd i ein forumkommentar</string>
-  <string name="notifyForumMentions" comment="notifyForumMention&#10;&#10; A notification setting - notifies players when someone has @mentioned their name in the Lichess Forum (https://lichess.org/forum) Replaces old string notifyForumMention">Omtaler på forumet</string>
-  <string name="notifyInvitedStudy">Invitasjon til studie</string>
-  <string name="notifyStudyInvites" comment="notifyInvitedStudy&#10;&#10; A notification setting - notifies players about invites to studies (https://lichess.org/study/) Replaces old string notifyInvitedStudy">Invitasjonar til studie</string>
+  <string name="notifyDirectMessage" comment="notifyInboxMsg&#10;&#10;A notification setting - notifies players when they receive a new message in their Lichess inbox">Ny direktemelding</string>
+  <string name="notifyForumMentions" comment="notifyForumMention&#10;&#10; A notification setting - notifies players when someone has @mentioned their name in the Lichess Forum (https://lichess.org/forum)">Omtaler på forumet</string>
+  <string name="notifyStudyInvites" comment="notifyInvitedStudy&#10;&#10; A notification setting - notifies players about invites to studies (https://lichess.org/study/)">Invitasjonar til studie</string>
   <string name="notifyGameEvent">Oppdateringar for fjernsjakkparti</string>
   <string name="notifyChallenge">Utfordringar</string>
-  <string name="notifyTournamentSoon">Turneringa startar snart</string>
-  <string name="notifyTournamentStartReminders" comment="notifyTournamentSoon&#10;&#10;A notification setting - notifies players if a tournament is starting soon. Replaces old string notifyTournamentSoon">Påminningar om turneringsstart</string>
+  <string name="notifyTournamentStartReminders" comment="notifyTournamentSoon&#10;&#10;A notification setting - notifies players if a tournament is starting soon.">Påminningar om turneringsstart</string>
   <string name="notifyBroadcasts">Sendingar</string>
   <string name="notifyTimeAlarm">Fjernsjakkuret er i ferd med å løpa ut</string>
   <string name="notifyBell">Klokkemelding i Lichess</string>
@@ -93,4 +90,10 @@
   <string name="analysisSettings">Analyseinnstillingar</string>
   <string name="maneuverArrowsHelp">Sekvens av sjakkprogramtrekk for ei brikke</string>
   <string name="hoverOverSettingLabelsForHelp">Hald musepeikaren over innstillingsetiketten om du vil sjå hjelpeteksten</string>
+  <string name="network">Nettverk</string>
+  <string name="youAreCurrentlyUsingDirectRouting">Nett no brukar du direkte ruting.</string>
+  <string name="youAreCurrentlyUsingCdnRouting">Nett no brukar du ruting gjennom Content Delivery Network (CDN).</string>
+  <string name="frequentDisconnectsAdvice">Prøv å ende ruting dersom du ofte blir fråkopla.</string>
+  <string name="useDirectRouting">Bruk direkte ruting</string>
+  <string name="useCdnRouting">Bruk CDN-ruting</string>
 </resources>

@@ -32,6 +32,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2.23.0
         with:
+          cache: true
           channel: stable
           flutter-version-file: pubspec.yaml
       - run: flutter --version
@@ -43,7 +44,7 @@ jobs:
         run: dart run build_runner build
 
       - name: Setup Fastlane
-        uses: ruby/setup-ruby@v1.321.0
+        uses: ruby/setup-ruby@v1.327.0
         with:
           ruby-version: "3.4"
           bundler-cache: true

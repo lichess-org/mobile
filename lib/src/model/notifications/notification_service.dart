@@ -190,6 +190,51 @@ class NotificationService(final Ref _ref) {
     _responseStreamController.add((response, notification));
   }
 
+  /// Logs an FCM message that has no local notification representation.
+  ///
+  /// The switch is exhaustive on purpose: a new [FcmMessage] subtype must be assigned a
+  /// case here instead of silently falling through.
+  static void _logUnsupportedMessage(FcmMessage message) {
+    switch (message) {
+      // TODO: handle other notification types
+      case UnhandledFcmMessage(:final data):
+        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
+      case MalformedFcmMessage(:final data):
+        _logger.severe('Received malformed FCM message: $data');
+      // Types with a local notification representation are never logged here.
+      case NewMessageFcmMessage():
+      case CorresGameUpdateFcmMessage():
+      case ChallengeCreateFcmMessage():
+      case ChallengeAcceptFcmMessage():
+      case BroadcastRoundFcmMessage():
+      case BroadcastPlayerFollowFcmMessage():
+      case RecapFcmMessage():
+        break;
+    }
+  }
+
+  /// Whether a received message must be displayed as a local notification by the app.
+  ///
+  /// Messages received in background are displayed by the system, messages without a
+  /// platform notification have nothing to display, and a challenge creation received in
+  /// foreground is handled by the socket, which shows a [ChallengeNotification] with
+  /// accept/decline actions instead.
+  ///
+  /// A platform notification with no title or body is malformed and is flagged with a
+  /// severe log instead of being displayed as a blank notification.
+  static bool _shouldShow(FcmMessage message, {required bool fromBackground}) {
+    if (message is ChallengeCreateFcmMessage && !fromBackground) return false;
+    final notification = message.notification;
+    if (notification == null) return false;
+    if (notification.title == null || notification.body == null) {
+      _logger.severe(
+        'Received a platform notification with no title or body (${message.runtimeType}).',
+      );
+      return false;
+    }
+    return true;
+  }
+
   /// Process a message received from the Firebase Cloud Messaging service.
   ///
   /// If the message contains a [RemoteMessage.notification] field and if it is
@@ -217,63 +262,12 @@ class NotificationService(final Ref _ref) {
 
     _fcmMessageStreamController.add((message: parsedMessage, fromBackground: fromBackground));
 
-    switch (parsedMessage) {
-      case CorresGameUpdateFcmMessage(:final fullId, :final notification):
-        if (notification != null) {
-          await show(CorresGameUpdateNotification(fullId, notification.title!, notification.body!));
-        }
+    final localNotification = parsedMessage.toLocalNotification();
 
-      case NewMessageFcmMessage(conversationId: final userId, :final notification):
-        if (notification != null) {
-          await show(NewMessageNotification(userId, notification.title!, notification.body!));
-        }
-
-      case ChallengeCreateFcmMessage(:final id, :final notification):
-        // nothing to do here in foreground as it should be handled by the socket
-        if (fromBackground == true && notification != null) {
-          await show(ChallengeCreatedNotification(id, notification.title!, notification.body!));
-        }
-
-      case ChallengeAcceptFcmMessage(:final fullId, :final notification):
-        if (notification != null) {
-          await show(
-            ChallengeAcceptedNotification(fullId, notification.title!, notification.body!),
-          );
-        }
-
-      case BroadcastRoundFcmMessage(:final roundId, :final notification):
-        if (notification != null) {
-          await show(BroadcastRoundNotification(roundId, notification.title!, notification.body!));
-        }
-
-      case BroadcastPlayerFollowFcmMessage(
-        :final roundId,
-        :final gameId,
-        :final pov,
-        :final notification,
-      ):
-        if (notification != null) {
-          await show(
-            BroadcastPlayerFollowNotification(
-              roundId,
-              gameId,
-              pov,
-              notification.title!,
-              notification.body!,
-            ),
-          );
-        }
-
-      case RecapFcmMessage(:final year, :final notification):
-        if (notification != null) {
-          await show(RecapNotification(year));
-        }
-
-      case UnhandledFcmMessage(:final data):
-        _logger.warning('Received unhandled FCM notification type: ${data['lichess.type']}');
-
-      case MalformedFcmMessage(:final data):
-        _logger.severe('Received malformed FCM message: $data');
+    if (localNotification == null) {
+      _logUnsupportedMessage(parsedMessage);
+    } else if (_shouldShow(parsedMessage, fromBackground: fromBackground)) {
+      await show(localNotification);
     }
 
     // update badge

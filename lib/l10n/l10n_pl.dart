@@ -9,6 +9,9 @@ class AppLocalizationsPl extends AppLocalizations {
   AppLocalizationsPl([String locale = 'pl']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'Akceptujesz remis?';
+
+  @override
   String get mobileAccount => 'Konto';
 
   @override
@@ -18,39 +21,113 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Ustawienia te są przypisane do Twojego konta Lichess i będą używane na wszystkich urządzeniach.';
 
   @override
+  String get mobileAddToStudy => 'Dodaj do opracowania';
+
+  @override
   String get mobileAllGames => 'Wszystkie partie';
+
+  @override
+  String get mobileAllowTakebacksAndHints => 'Zezwalaj na cofanie ruchów i podpowiedzi';
+
+  @override
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
   String get mobileAreYouSure => 'Jesteś pewien?';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
   String get mobileBoardSettings => 'Ustawienia szachownicy';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
   String get mobileCancelTakebackOffer => 'Anuluj prośbę cofnięcia ruchu';
 
   @override
+  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Wyzwanie z pozycji';
+
+  @override
+  String get mobileChapterName => 'Nazwa rozdziału';
+
+  @override
   String get mobileChessEngine => 'Silnik szachowy';
+
+  @override
+  String get mobileChooseCustomBackground => 'Wybierz własne tło';
 
   @override
   String get mobileClearButton => 'Wyczyść';
 
   @override
+  String get mobileCodeExpiresMessage => 'Kod wygasa po 5 minutach i może być użyty tylko raz.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Kod';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'Kod ma $param znaków długości.';
+  }
+
+  @override
+  String get mobileCopied => 'Skopiowane.';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => 'Usuń zapisany ruch';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Dołącz do partii';
+  String get mobileCustomizeButton => 'Dostosuj';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Wskazówka: Możesz dodać więcej widżetów do ekranu głównego lub usunąć te, których nie potrzebujesz!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Usuń swoje konto';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompaktowy';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Szczegółowy';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Czy akceptujesz wyzwanie?';
+
+  @override
+  String get mobileDownloadMyGames => 'Pobierz moje partie';
 
   @override
   String get mobileFeedbackButton => 'Opinie';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'Dobry wieczór, $param';
-  }
+  String get mobileFilters => 'Filtry';
 
   @override
-  String get mobileGoodEveningWithoutName => 'Dobry wieczór';
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +138,41 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'Miłego dnia';
 
   @override
-  String get mobileHideVariation => 'Ukryj wariant';
+  String mobileGoodEvening(String param) {
+    return 'Dobry wieczór, $param';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'Dobry wieczór';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'Dobry ruch, ale jest lepszy';
+
+  @override
+  String get mobileHello => 'Cześć';
 
   @override
   String get mobileHomeTab => 'Start';
 
   @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'Ten kod jest nieprawidłowy lub wygasł.';
+
+  @override
   String get mobileLiveStreamers => 'Aktywni streamerzy';
+
+  @override
+  String get mobileLocalDatabaseSize => 'Rozmiar lokalnej bazy danych';
+
+  @override
+  String get mobileMoveOnRelease => 'Move on release';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
 
   @override
   String get mobileMustBeLoggedIn => 'Musisz być zalogowany, aby wyświetlić tę stronę.';
@@ -79,10 +184,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileNewGame => 'Nowa partia';
 
   @override
-  String get mobileNoSearchResults => 'Brak wyników';
+  String get mobileNextMistake => 'Następny błąd';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Uwaga: nie wszystkie funkcje znane ze starej aplikacji lub strony internetowej są obecnie dostępne, ale nieustannie nad nimi pracujemy.';
+  String get mobileNoSearchResults => 'Brak wyników';
 
   @override
   String get mobileNotFollowingAnyUser => 'Nie obserwujesz żadnego gracza.';
@@ -91,7 +196,67 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
+
+  @override
   String get mobileOverTheBoard => 'Ze znajomym';
+
+  @override
+  String get mobilePasteFromClipboard => 'Wklej ze schowka';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antyszachy';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomowe';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Klasyczne';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Korespond.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Szalone';
+
+  @override
+  String get mobilePerfShortFromPosition => 'Z pozycji.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horda';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Zadania';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Wyścig';
+
+  @override
+  String get mobilePerfShortRapid => 'Szybkie';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3 szachy';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'Skopiowano PGN.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +270,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePositionRight => 'Z prawej strony';
 
   @override
+  String get mobilePracticeMode => 'Tryb treningu';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Powiększ przeciąganą bierkę';
+
+  @override
+  String get mobilePreviousPage => 'Wróć';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';
@@ -120,19 +291,25 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => 'Rozwiąż jak najwięcej zadań w ciągu 3 minut.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Utracisz aktualną serię, ale Twój wynik zostanie zapisany.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Rozwiązuj zadania ze swoich ulubionych debiutów lub wybierz motyw.';
 
   @override
   String get mobilePuzzlesTab => 'Zadania';
 
   @override
+  String get mobileRateThisApp => 'Oceń aplikację';
+
+  @override
   String get mobileRecentSearches => 'Ostatnie wyszukiwania';
 
   @override
   String get mobileRemoveBookmark => 'Usuń zakładkę';
+
+  @override
+  String get mobileSelectAStudy => 'Wybierz opracowanie';
+
+  @override
+  String get mobileSendMeACode => 'Wyślij mi kod';
 
   @override
   String get mobileServerAnalysis => 'Analiza na serwerze';
@@ -174,10 +351,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsPickAnImage => 'Wybierz obraz';
 
   @override
-  String get mobileSettingsPickAnImageHelp => 'Własne tło działa tylko w trybie ciemnym. Zalecany jest ciemny obraz.';
+  String get mobileSettingsPickAnImageBlur => 'Rozmyj obraz';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Rozmyj obraz';
+  String get mobileSettingsPickAnImageHelp => 'Własne tło działa tylko w trybie ciemnym. Zalecany jest ciemny obraz.';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => 'Ukryj szachownicę';
@@ -195,6 +372,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Klikając dwa pola';
 
   @override
+  String get mobileSettingsPreferencesSaved => 'Twoje preferencje zostały zapisane na Twoim koncie Lichess. Zostaną one zsynchronizowane na wszystkich twoich urządzeniach.';
+
+  @override
   String get mobileSettingsShapeDrawing => 'Rysowanie po planszy';
 
   @override
@@ -210,13 +390,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Po włączeniu urządzenie delikatnie zawibruje, gdy wykonasz ruch lub zbijesz bierkę.';
 
   @override
-  String get mobileSettingsTab => 'Ustawienia';
+  String get mobileShareChallengeUrl => 'Udostępnij link do wyzwania';
 
   @override
   String get mobileShareGamePGN => 'Udostępnij PGN';
 
   @override
   String get mobileShareGameURL => 'Udostępnij adres URL partii';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
   String get mobileSharePositionAsFEN => 'Udostępnij pozycję jako FEN';
@@ -228,51 +411,46 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileShowComments => 'Pokaż komentarze';
 
   @override
+  String get mobileShowEngineLines => 'Pokaż linie silnika';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Pokaż pasek oceny';
+
+  @override
   String get mobileShowResult => 'Pokaż wynik';
 
   @override
-  String get mobileShowVariations => 'Pokaż warianty';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
+
+  @override
+  String get mobileSignInWithEmail => 'Zaloguj się za pomocą adresu e-mail';
+
+  @override
+  String get mobileSimpleDelay => 'Simple delay';
+
+  @override
+  String get mobileSmallBoard => 'Mała szachownica';
 
   @override
   String get mobileSomethingWentWrong => 'Ups! Coś poszło nie tak.';
 
   @override
+  String get mobileSortFriends => 'Sortuj znajomych';
+
+  @override
+  String get mobileStopShowingThreat => 'Przestań pokazywać zagrożenie';
+
+  @override
   String get mobileSystemColors => 'Kolory systemowe';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
 
   @override
   String get mobileTheme => 'Motyw';
 
   @override
-  String get mobileToolsTab => 'Narzędzia';
-
-  @override
-  String mobileUnsupportedVariant(String param) {
-    return 'Wariant $param nie jest obsługiwany w tej wersji.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => 'Oczekiwanie na dołączenie przeciwnika...';
-
-  @override
-  String get mobileWatchTab => 'Oglądaj';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Witaj w aplikacji Lichess!';
-
-  @override
-  String get mobileViewGame => 'Zobacz partię';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Wskazówka: Możesz dodać więcej widżetów do ekranu głównego lub usunąć te, których nie potrzebujesz!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
-
-  @override
-  String get mobileCustomizeButton => 'Dostosuj';
-
-  @override
-  String get mobileStopShowingThreat => 'Przestań pokazywać zagrożenie';
+  String get mobileTooManyLoginAttempts => 'Zbyt wiele prób. Spróbuj ponownie później.';
 
   @override
   String get mobileTournamentCompleted => 'Zakończone';
@@ -281,133 +459,30 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => 'Przejdź do mojej strony';
 
   @override
-  String get mobileDisplayModeCompact => 'Kompaktowy';
+  String mobileUnsupportedVariant(String param) {
+    return 'Wariant $param nie jest obsługiwany w tej wersji.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => 'Szczegółowy';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Biblioteka debiutów nie jest dostępna w trybie offline.';
+  String get mobileViewGame => 'Zobacz partię';
 
   @override
-  String get mobileChallengeCreated => 'Wyzwanie utworzone: otrzymasz powiadomienie, gdy partia się rozpocznie.\nMożesz zobaczyć je w głównej zakładce.';
+  String get mobileViewLicenses => 'Zobacz licencje';
 
   @override
-  String get mobilePreviousPage => 'Wróć';
+  String get mobileWaitingForOpponentToJoin => 'Oczekiwanie na dołączenie przeciwnika...';
 
   @override
-  String get mobileOrImportPgnFile => 'Lub zaimportuj plik PGN';
+  String get mobileWatchTab => 'Oglądaj';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Dobry ruch, ale jest lepszy';
+  String get mobileWeWillEmailYouCode => 'Wyślemy Ci kod do zalogowania.';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
-
-  @override
-  String get mobilePerfShortBullet => 'Bullet';
-
-  @override
-  String get mobilePerfShortBlitz => 'Blitz';
-
-  @override
-  String get mobilePerfShortRapid => 'Szybkie';
-
-  @override
-  String get mobilePerfShortClassical => 'Klasyczne';
-
-  @override
-  String get mobilePerfShortCorrespondence => 'Korespond.';
-
-  @override
-  String get mobilePerfShortFromPosition => 'Z pozycji.';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'Antyszachy';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3 szachy';
-
-  @override
-  String get mobilePerfShortAtomic => 'Atomowe';
-
-  @override
-  String get mobilePerfShortHorde => 'Horda';
-
-  @override
-  String get mobilePerfShortRacingKings => 'Wyścig';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'Szalone';
-
-  @override
-  String get mobilePerfShortPuzzle => 'Zadania';
-
-  @override
-  String get variantStandard => 'Standardowe';
-
-  @override
-  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
-
-  @override
-  String get variantChess960 => 'Szachy 960';
-
-  @override
-  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
-
-  @override
-  String get variantKingOfTheHill => 'Król wzgórza';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
-
-  @override
-  String get variantThreeCheck => 'Trzy szachy';
-
-  @override
-  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
-
-  @override
-  String get variantAntichess => 'Antyszachy';
-
-  @override
-  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
-
-  @override
-  String get variantAtomic => 'Atomowe';
-
-  @override
-  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
-
-  @override
-  String get variantHorde => 'Horda';
-
-  @override
-  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
-
-  @override
-  String get variantRacingKings => 'Wyścig królów';
-
-  @override
-  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
-
-  @override
-  String get variantFromPosition => 'Z zadanej pozycji';
-
-  @override
-  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
+  String get mobileYouCannotChallengeYourself => 'Nie możesz rzucić wyzwania samemu sobie';
 
   @override
   String get activityActivity => 'Aktywność';
@@ -697,9 +772,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Zwycięzcą turnieju zostaje gracz (lub gracze) który w momencie upłynięcia czasu przeznaczonego na turniej posiada największą liczbę punktów turniejowych.';
 
   @override
-  String get arenaHowDoesPairingWork => 'W jaki sposób dobierani są przeciwnicy?';
-
-  @override
   String get arenaHowArePlayersPaired => 'Jak są parowani gracze?';
 
   @override
@@ -788,9 +860,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaEditTeamBattle => 'Edytuj bitwę drużyn';
 
   @override
-  String get arenaDefender => 'Obrońca';
-
-  @override
   String get arenaDefenderLabel => 'Obrońca:';
 
   @override
@@ -813,9 +882,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => 'Statystyki turniejowe';
-
-  @override
-  String get arenaRankAvgHelp => 'Średnia ranga to procent twojego rankingu. Niższa jest lepsza.\n\nNa przykład, będąc 3 w rankingu turnieju liczącym 100 graczy = 3%. Będąc 10 w rankingu turnieju liczącym 1000 graczy = 1%.';
 
   @override
   String get arenaRankAverageHelp => 'Twój średni ranking reprezentuje Twoją typową końcową pozycję w stosunku do całkowitej liczby graczy w każdym turnieju.\nJest to miara miejsca w turnieju, a nie ocena ogólna.\n\nNa przykład średni ranking na poziomie 3% oznacza, że zazwyczaj kończysz w górnych 3% (przykładowo 30 z 1000 graczy).';
@@ -970,9 +1036,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastDeleteRound => 'Usuń tę rundę';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Ostatecznie usuń rundę i jej wszystkie partie.';
-
-  @override
   String get broadcastPermanentlyDeleteRound => 'Usunąć trwale tę rundę i wszystkie jej partie?';
 
   @override
@@ -983,9 +1046,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => 'Usuń ten turniej';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Ostatecznie usuń cały turniej, jego wszystkie rundy i partie.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'Nieodwracalnie usunąć ten turniej, w tym wszystkie rundy i partie?';
@@ -1218,6 +1278,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastKnockouts => 'Eliminacje';
 
   @override
+  String get broadcastPinPlayer => 'Przypnij odtwarzacz';
+
+  @override
   String broadcastUnderXAgeTournament(String param) {
     return 'U$param';
   }
@@ -1402,6 +1465,530 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny & rzędy';
 
   @override
+  String get learnLearnChess => 'Ucz się szachów';
+
+  @override
+  String get learnByPlaying => 'przez zabawę!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Postęp: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Zresetuj moje wyniki';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Stracisz cały swój postęp!';
+
+  @override
+  String get learnPlay => 'graj!';
+
+  @override
+  String get learnChessPieces => 'Bierki szachowe';
+
+  @override
+  String get learnTheRook => 'Wieża';
+
+  @override
+  String get learnItMovesInStraightLines => 'Porusza się po liniach prostych';
+
+  @override
+  String get learnRookIntro => 'Wieża to silna figura. Czy jesteś gotów aby nauczyć się nią poruszać?';
+
+  @override
+  String get learnRookGoal => 'Kliknij na wieży i przenieś ją na gwiazdkę!';
+
+  @override
+  String get learnGrabAllTheStars => 'Zbierz wszystkie gwiazdki!';
+
+  @override
+  String get learnTheFewerMoves => 'Czym mniej ruchów zrobisz tym więcej punktów zdobędziesz!';
+
+  @override
+  String get learnUseTwoRooks => 'Użyj dwóch wież aby zrobić to szybciej!';
+
+  @override
+  String get learnRookComplete => 'Gratulacje! Właśnie nauczyłeś się jak poruszać się wieżą.';
+
+  @override
+  String get learnTheBishop => 'Goniec';
+
+  @override
+  String get learnItMovesDiagonally => 'Porusza się po skosach';
+
+  @override
+  String get learnBishopIntro => 'Teraz dowiesz się jak manewrować gońcem!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Jeden białopolowy goniec,\njeden czarnopolowy goniec.\nPotrzebujesz ich obu!';
+
+  @override
+  String get learnBishopComplete => 'Gratulacje! Potrafisz poruszać się gońcem.';
+
+  @override
+  String get learnTheQueen => 'Hetman';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Hetman = wieża + goniec';
+
+  @override
+  String get learnQueenIntro => 'Czas na najpotężniejszą szachową figurę. Hetman!';
+
+  @override
+  String get learnQueenComplete => 'Gratulacje! Hetman nie ma dla Ciebie tajemnic.';
+
+  @override
+  String get learnTheKing => 'Król';
+
+  @override
+  String get learnTheMostImportantPiece => 'Najważniejsza figura';
+
+  @override
+  String get learnKingIntro => 'To Ty jesteś królem. Jeśli polegniesz w bitwie, przegrasz.';
+
+  @override
+  String get learnTheKingIsSlow => 'Król jest powolny.';
+
+  @override
+  String get learnLastOne => 'Ostatnie zadanie!';
+
+  @override
+  String get learnKingComplete => 'Możesz teraz rządzić królem!';
+
+  @override
+  String get learnTheKnight => 'Skoczek';
+
+  @override
+  String get learnItMovesInAnLShape => 'Porusza się \"po literze L\"';
+
+  @override
+  String get learnKnightIntro => 'Oto wyzwanie dla Ciebie. Skoczek jest... szczwaną figurą.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Skoczki mają nietypowy sposób poruszania się!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Skoczki mogą przeskakiwać przez przeszkody!\nSkacz i zbieraj gwiazdki!';
+
+  @override
+  String get learnKnightComplete => 'Gratulacje! Udało Ci się opanować skoczka.';
+
+  @override
+  String get learnThePawn => 'Pion';
+
+  @override
+  String get learnItMovesForwardOnly => 'Porusza się tylko do przodu';
+
+  @override
+  String get learnPawnIntro => 'Piony są słabe, ale mają w sobie duży potencjał.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Piony poruszają się tylko o jedno pole. \nAle jeśli dojdą do ostatniej linii mogą zamienić się w silniejszą figurę!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'W większości przypadków najlepiej promować piona na hetmana. \nJednak czasem bardziej przydatny może być skoczek!';
+
+  @override
+  String get learnPawnsMoveForward => 'Piony poruszają się do przodu, ale biją po przekątnej!';
+
+  @override
+  String get learnCaptureThenPromote => 'Zbijaj, a później promuj!';
+
+  @override
+  String get learnUseAllThePawns => 'Użyj wszystkich swoich pionów! Nie ma potrzeby promowania.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Pion będący w drugim rzędzie może poruszyć się o 2 pola do przodu!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Zbierz wszystkie gwiazdki! Nie ma potrzeby promowania.';
+
+  @override
+  String get learnPawnComplete => 'Gratulacje! Piony nie mają przed Tobą tajemnic.';
+
+  @override
+  String get learnPawnPromotion => 'Promocja piona';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Twój pion dotarł do ostatniej linii!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Teraz zostaje promowany na silniejszą bierkę.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Wybierz figurę, którą chcesz!';
+
+  @override
+  String get learnFundamentals => 'Podstawy';
+
+  @override
+  String get learnCapture => 'Bicie';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Zbij bierki przeciwnika';
+
+  @override
+  String get learnCaptureIntro => 'Znajdź niebronione bierki przeciwnika i zbij je!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Zbij czarne bierki!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Zbij czarne bierki! Nie strać swojej.';
+
+  @override
+  String get learnCaptureComplete => 'Gratulacje! Wiesz jak rozprawić się z figurami przeciwnika!';
+
+  @override
+  String get learnProtection => 'Obrona';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Zabezpiecz swoje figury';
+
+  @override
+  String get learnProtectionIntro => 'Znajdź figury które przeciwnik atakuje i obroń je!';
+
+  @override
+  String get learnProtectionComplete => 'Gratulacje! Figura niestracona to figura wygrana!';
+
+  @override
+  String get learnEscape => 'Jesteś atakowany! Uciekaj przed zagrożeniem!';
+
+  @override
+  String get learnNoEscape => 'Nie ma możliwości ucieczki ale można się obronić!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Nie pozwól, aby zbito niebronione figury!';
+
+  @override
+  String get learnCombat => 'Walka';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Bicie i obrona figur';
+
+  @override
+  String get learnCombatIntro => 'Dobry wojownik wie jak atakować i jak bronić!';
+
+  @override
+  String get learnCombatComplete => 'Gratulacje! Wiesz jak walczyć z figurami szachowymi!';
+
+  @override
+  String get learnCheckInOne => 'Szach w 1 ruchu';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Zaatakuj króla przeciwnika';
+
+  @override
+  String get learnCheckInOneIntro => 'Aby zaszachować swojego przeciwnika, zaatakuj jego króla. Będzie musiał go obronić!';
+
+  @override
+  String get learnCheckInOneGoal => 'Zaatakuj króla przeciwnika w jednym ruchu!';
+
+  @override
+  String get learnCheckInOneComplete => 'Gratulacje! Zaszachowałeś/aś przeciwnika, zmuszając go do obrony króla!';
+
+  @override
+  String get learnOutOfCheck => 'Obrona przed szachem';
+
+  @override
+  String get learnDefendYourKing => 'Chroń swojego króla';
+
+  @override
+  String get learnOutOfCheckIntro => 'Jesteś w szachu! Musisz uciec lub odeprzeć atak.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Uciekaj królem!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Król nie może uciec, ale możesz zablokować atak!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Możesz obronić się przed szachem zbijając bierkę atakującą króla.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ten skoczek szachuje króla poprzez Twoją obronę!';
+
+  @override
+  String get learnEscapeOrBlock => 'Ucieknij królem lub odeprzyj atak!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Gratulacje! Twojego króla nie można zbić, upewnij się, czy potrafisz bronić się przed szachem!';
+
+  @override
+  String get learnMateInOne => 'Mat w 1 ruchu';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Pokonaj króla przeciwnika';
+
+  @override
+  String get learnMateInOneIntro => 'Wygrasz kiedy Twój przeciwnik nie może obronić się przed szachem.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Zaatakuj króla przeciwnika w taki sposób aby nie mógł się obronić!';
+
+  @override
+  String get learnMateInOneComplete => 'Gratulacje! Tak wygrywa się w szachy!';
+
+  @override
+  String get learnIntermediate => 'Średnio zaawansowane';
+
+  @override
+  String get learnBoardSetup => 'Ustawienie początkowe';
+
+  @override
+  String get learnHowTheGameStarts => 'Od czego zacząć';
+
+  @override
+  String get learnBoardSetupIntro => 'Dwie armie stają naprzeciwko siebie, gotowe na bitwę.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'To jest początkowa pozycja każdej partii szachów! Zrób dowolny ruch aby kontynuować.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Najpierw ustaw wieże! Umieść je w rogach.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Następnie ustaw skoczki! Umieść je obok wież.';
+
+  @override
+  String get learnPlaceTheBishops => 'Ustaw gońce! Umieść je obok skoczków.';
+
+  @override
+  String get learnPlaceTheQueen => 'Ustaw hetmana! Umieść go na polu jego własnego koloru.';
+
+  @override
+  String get learnPlaceTheKing => 'Ustaw króla! Umieść go obok hetmana.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Piony tworzą linię frontu. Wykonaj dowolny ruch, aby kontynuować.';
+
+  @override
+  String get learnBoardSetupComplete => 'Gratulacje! Wiesz jak ustawiać figury na szachownicy.';
+
+  @override
+  String get learnCastling => 'Roszada';
+
+  @override
+  String get learnEnPassant => 'Bicie w przelocie';
+
+  @override
+  String get learnTheSpecialKingMove => 'Specjalny ruch króla';
+
+  @override
+  String get learnCastlingIntro => 'Zabezpiecz swojego króla i wprowadź do gry wieżę!';
+
+  @override
+  String get learnCastleKingSide => 'Przesuń króla o dwa pola aby wykonać krótką roszadę!';
+
+  @override
+  String get learnCastleQueenSide => 'Przesuń króla o dwa pola aby wykonać długą roszadę!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Skoczek przeszkadza w roszadzie! Rusz się nim, a następnie zrób roszadę.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Wykonaj krótką roszadę. Musisz najpierw odejść figurami.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Wykonaj długą roszadę. Musisz najpierw wyjść figurami.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Nie możesz roszować jeśli król lub wieża ruszyła się wcześniej.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Nie możesz roszować jeśli król jest szachowany. Najpierw zasłoń króla i wtedy zrób roszadę!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Znajdź sposób aby wykonać krótką roszadę!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Znajdź sposób aby wykonać długą roszadę!';
+
+  @override
+  String get learnCastlingComplete => 'Gratulacje! Roszada powinna być wykonana w prawie każdej partii.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Specjalny ruch piona';
+
+  @override
+  String get learnEnPassantIntro => 'Kiedy pion przeciwnika poruszył się o dwa pola do przodu, możesz zbić go tak, jak gdyby poruszył się tylko o jedno pole.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Czarne właśnie ruszyły się pionem o dwa pola do przodu! Zbij go w przelocie.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'Zbicie piona w przelocie jest możliwe wyłącznie bezpośrednio po jego ruchu o dwa pola.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'Bicie w przelocie jest możliwe tylko wtedy, gdy pion jest w 5. rzędzie.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Zbij w przelocie wszystkie piony!';
+
+  @override
+  String get learnEnPassantComplete => 'Gratulacje! Potrafisz teraz wykonać bicie w przelocie.';
+
+  @override
+  String get learnStalemate => 'Pat';
+
+  @override
+  String get learnTheGameIsADraw => 'Partia zakończona remisem';
+
+  @override
+  String get learnStalemateIntro => 'Kiedy gracz nie jest szachowany i nie może zrobić żadnego prawidłowego ruchu to jest to pat. Partia jest zakończona remisem: nikt nie wygrywa, nikt nie przegrywa.';
+
+  @override
+  String get learnStalemateGoal => 'Czarne zostały zapatowane, gdy:\n– nie będą mogły się ruszyć,\n– nie będą szachowane.';
+
+  @override
+  String get learnStalemateComplete => 'Gratulacje! Lepiej dostać pata niż mata!';
+
+  @override
+  String get learnAdvanced => 'Zaawansowane';
+
+  @override
+  String get learnPieceValue => 'Wartości bierek';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Oceń siłę bierek';
+
+  @override
+  String get learnPieceValueIntro => 'Bierki o wyższej mobilności są warte więcej!\nHetman – 9\nWieża – 5\nGoniec – 3\nSkoczek – 3\nPion – 1\nKról jest bezcenny! Tracąc go przegrywasz partię.';
+
+  @override
+  String get learnQueenOverBishop => 'Zbij figurę o największej wartości!\nhetman > goniec';
+
+  @override
+  String get learnPieceValueExchange => 'Zbij figurę o najwyższej wartości!\n Nie wymieniaj bardziej\n wartościowej figury na mniej wartościową.';
+
+  @override
+  String get learnPieceValueLegal => 'Zbij figurę o najwyższej wartości!\nUpewnij się, że Twój ruch jest legalny!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Zbij figurę o najwyższej wartości!';
+
+  @override
+  String get learnPieceValueComplete => 'Gratulacje! Znasz wartość materiału!\nHetman – 9\nWieża – 5\nGoniec – 3\nSkoczek – 3\nPionek – 1';
+
+  @override
+  String get learnCheckInTwo => 'Szach w 2 ruchach';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Dwa ruchy aby dać szacha';
+
+  @override
+  String get learnCheckInTwoIntro => 'Znajdź właściwą kombinację dwóch ruchów, tak aby zaszachować króla przeciwnika!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Zaatakuj króla przeciwnika w dwóch ruchach!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Gratulacje! Zaszachowałeś/aś przeciwnika zmuszając go do obrony króla!';
+
+  @override
+  String get learnWhatNext => 'Co dalej?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Gratulacje! Wiesz już jak grać w szachy. Czy chcesz stać się silniejszym graczem?';
+
+  @override
+  String get learnRegister => 'Rejestracja';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Załóż darmowe konto Lichess';
+
+  @override
+  String get learnPractice => 'Ćwiczenia';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Poznaj częste pozycje szachowe';
+
+  @override
+  String get learnPuzzles => 'Zadania szachowe';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Ćwicz umiejętności taktyczne';
+
+  @override
+  String get learnVideos => 'Filmy';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Oglądaj filmy instruktażowe';
+
+  @override
+  String get learnPlayPeople => 'Graj z innymi';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Przeciwnicy z całego świata';
+
+  @override
+  String get learnPlayMachine => 'Graj z maszyną';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Sprawdź się z komputerem';
+
+  @override
+  String get learnLetsGo => 'Zaczynajmy!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Etap $param';
+  }
+
+  @override
+  String get learnAwesome => 'Niesamowite!';
+
+  @override
+  String get learnExcellent => 'Doskonale!';
+
+  @override
+  String get learnGreatJob => 'Dobra robota!';
+
+  @override
+  String get learnPerfect => 'Perfekcyjnie!';
+
+  @override
+  String get learnOutstanding => 'Znakomicie!';
+
+  @override
+  String get learnWayToGo => 'Oby tak dalej!';
+
+  @override
+  String get learnYesYesYes => 'Tak, tak, tak!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Jesteś w tym dobry/a!';
+
+  @override
+  String get learnNailedIt => 'Brawo.';
+
+  @override
+  String get learnRightOn => 'Tak jest!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Etap $param zakończony';
+  }
+
+  @override
+  String get learnNext => 'Następne';
+
+  @override
+  String learnNextX(String param) {
+    return 'Następne: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Powrót do menu';
+
+  @override
+  String get learnPuzzleFailed => 'To zły ruch!';
+
+  @override
+  String get learnRetry => 'Spróbuj jeszcze raz';
+
+  @override
   String get patronDonate => 'Przekaż datek';
 
   @override
@@ -1514,6 +2101,207 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get perfStatNow => 'teraz';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Maty';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Podstawowe taktyki';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Zaawansowane taktyki';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Końcówka pionkowa';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Końcówka wieżowa';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Maty figurami I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Motywy matowe I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Motywy matowe II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Motywy matowe III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Motywy matowe IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Maty figurami II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Matowanie skoczkiem i gońcem';
+
+  @override
+  String get practiceStNamThePin => 'Związanie';
+
+  @override
+  String get practiceStNamTheSkewer => 'Szpila';
+
+  @override
+  String get practiceStNamTheFork => 'Widełki';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Atak z odsłony';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Podwójny szach';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Przeciążone bierki';
+
+  @override
+  String get practiceStNamZwischenzug => 'Wtrącony ruch';
+
+  @override
+  String get practiceStNamXRay => 'Rentgen';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Przesłona';
+
+  @override
+  String get practiceStNamGreekGift => 'Ofiara';
+
+  @override
+  String get practiceStNamDeflection => 'Odciągnięcie';
+
+  @override
+  String get practiceStNamAttraction => 'Przyciąganie';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Promocja na słabszą figurę';
+
+  @override
+  String get practiceStNamDesperado => 'Wściekła figura';
+
+  @override
+  String get practiceStNamCounterCheck => 'Szach z zasłony';
+
+  @override
+  String get practiceStNamUndermining => 'Podważanie';
+
+  @override
+  String get practiceStNamClearance => 'Oczyszczenie pola';
+
+  @override
+  String get practiceStNamKeySquares => 'Kluczowe pola';
+
+  @override
+  String get practiceStNamOpposition => 'Opozycja';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Podstawowe końcowki wieżowe';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Praktyczne końcówki wieżowe';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Podstawowe maty';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Rozpoznaj motywy';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interaktywna lekcja';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Odciąganie obrońcy';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promuj - ale nie do hetmana!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Figura stracona, ale nadal może być użyteczna';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Na szacha odpowiedz szachem';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Ustawienia';
@@ -1639,6 +2427,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
 
   @override
+  String get preferencesMultipleChoices => 'Możesz wybrać kilka. ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
 
   @override
@@ -1684,19 +2475,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Streamer jest na żywo';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Nowa wiadomość';
-
-  @override
   String get preferencesNotifyDirectMessage => 'Nowa wiadomość';
 
   @override
-  String get preferencesNotifyForumMention => 'Wspomniano o Tobie w komentarzu na forum';
-
-  @override
   String get preferencesNotifyForumMentions => 'Wzmianki o Tobie na forum';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Zaproszenie do wspólnego opracowania';
 
   @override
   String get preferencesNotifyStudyInvites => 'Zaproszenia do opracowania';
@@ -1706,9 +2488,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => 'Wyzwania';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turniej rozpocznie się wkrótce';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'Powiadomienia o rozpoczęciu turnieju';
@@ -1793,6 +2572,24 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Dymki pomocy nad ustawieniami';
+
+  @override
+  String get preferencesNetwork => 'Sieć';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'Obecnie używasz bezpośredniego routingu.';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'Aktualnie używasz routingu sieci dostarczania treści (CDN).';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => 'Jeśli często tracisz połączenie, spróbuj zmienić routing.';
+
+  @override
+  String get preferencesUseDirectRouting => 'Użyj bezpośredniego routingu';
+
+  @override
+  String get preferencesUseCdnRouting => 'Użyj routingu CDN';
 
   @override
   String get puzzlePuzzles => 'Zadania szachowe';
@@ -2159,6 +2956,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCastling => 'Roszada';
 
   @override
+  String get puzzleThemeEnPassant => 'Bicie w przelocie';
+
+  @override
   String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
 
   @override
@@ -2175,9 +2975,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeCornerMate => 'Mat w narożniku szachownicy';
-
-  @override
-  String get puzzleThemeCornerMateDescription => 'Zagoń króla przeciwnika do narożnika szachownicy przy pomocy wieży lub hetmana i zamatuj skoczkiem.';
 
   @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'Zagoń króla do rogu szachownicy za pomocą wieży lub hetmana, użyj skoczka do zamatowania go.';
@@ -2255,9 +3052,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktyka w ostatniej fazie gry.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.';
-
-  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.';
 
   @override
@@ -2276,9 +3070,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeFork => 'Widełki';
 
   @override
-  String get puzzleThemeForkDescription => 'Ruch, w którym poruszona bierka atakuje jednocześnie dwie bierki przeciwnika.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => 'Posunięcie, którym bierka atakuje równocześnie dwie lub więcej bierek przeciwnika.';
 
   @override
@@ -2289,9 +3080,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => 'Mat haka';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mat wieżą, skoczkiem i pionkiem z wrogim pionem blokującym ucieczkę króla.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'Mat za pomocą wieży, skoczka i piona, gdzie pion przeciwnika blokuje ucieczkę króla.';
@@ -2318,16 +3106,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Mat Pillsbury\'ego';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'Wieża daje mata, a goniec blokuje pola ucieczki.';
-
-  @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'Wieża matuje króla, podczas gdy goniec pomaga go ograniczyć.';
 
   @override
   String get puzzleThemeMorphysMate => 'Mat Morphy\'ego';
-
-  @override
-  String get puzzleThemeMorphysMateDescription => 'Goniec daje mata w narożniku, a wieża blokuje pola ucieczki w sąsiedniej kolumnie.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'Goniec matuje króla, podczas gdy wieża pomaga go ograniczyć.';
@@ -2448,9 +3230,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemePromotion => 'Przemiana piona';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Zaawansowany pion lub pion grożący przemianą jest kluczowy w tej taktyce.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promuj swojego piona do hetmana, wieży lub figury lekkiej.';
@@ -2593,6 +3372,32 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
+
+  @override
+  String get settingsWereSorryToSeeYouGo => '​​Przykro nam, że nas opuszczasz.';
+
+  @override
+  String get settingsCloseAccountForeverLabel => 'Zamknij na zawsze: uniemożliwiając ponowne otwarcie';
+
+  @override
+  String get settingsCloseAccountForeverWarning => 'Zablokuj możliwość ponownego otwarcia konta w przyszłości. Jeśli zaznaczysz to pole, nawet administratorzy nie będą mogli ponownie otworzyć Twojego konta na Twoje żądanie.';
+
+  @override
+  String get settingsDeleteYourAccount => 'Usuń swoje konto';
+
+  @override
+  String get settingsDeleteAccountWarning => 'Kiedy usuniesz swoje konto, zostanie ono usunięte z Lichessa i nasi administratorzy nie będą mogli go dla Ciebie przywrócić.';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return 'Czy chcesz zamiast tego $param?';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'zamknąć swoje konto';
+
+  @override
+  String get settingsDeleteAccountConfirmText => 'Rozumiem, że usunięte konta nie są możliwe do odzyskania';
 
   @override
   String get gameSetup => 'Ustawienia gry';
@@ -3264,9 +4069,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Poczekaj 5 minut i odśwież swoją skrzynkę pocztową.';
 
   @override
-  String get checkSpamFolder => 'Sprawdź również folder spamu, gdzie mógł trafić nasz e-mail. Jeśli tak, oznacz go jako nie spam.';
-
-  @override
   String get checkSpamOrJunkFolder => 'Jeśli nie otrzymasz wiadomości e-mail z potwierdzeniem, sprawdź folder Spam lub Śmieci. Upewnij się, że oznaczyłeś wiadomości z lichess.org jako bezpieczne i \"to nie spam\", dzięki czemu będziesz mógł otrzymywać ważne komunikaty.';
 
   @override
@@ -3315,13 +4117,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get cancel => 'Anuluj';
 
   @override
-  String get whiteTimeOut => 'Upłynął czas białych';
-
-  @override
   String get whiteRanOutOfTime => 'Upłynął czas białych';
-
-  @override
-  String get blackTimeOut => 'Upłynął czas czarnych';
 
   @override
   String get blackRanOutOfTime => 'Upłynął czas czarnych';
@@ -3531,9 +4327,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String yourPerfRatingIsProvisional(String param) {
     return 'Twój ranking ($param) jest prowizoryczny';
   }
-
-  @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Filtry rankingu są zablokowane, ponieważ Twój ranking nie jest stabilny. Rozegranie partii rankingowych zwiększy tę stabilność.';
 
   @override
   String get cannotFilterByUnstableRating => 'Nie można filtrować według rankingu, ponieważ Twój ranking nie jest stabilny.\nPartie rankingowe zwiększą stabilność rankingu.';
@@ -3958,6 +4751,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get onlineBots => 'Boty online';
 
   @override
+  String get aboutBotsOnLichess => 'O botach na Lichess';
+
+  @override
+  String get featuredBots => 'Polecane boty';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => 'Spróbuj zagrać przeciwko tym udoskonalonym silnikom szachowym! To są nasze ulubione.';
+
+  @override
+  String get communityBots => 'Boty społeczności';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Więcej silników szachowych stworzonych przez społeczność Lichess. Udostępniane są przez swoich twórców i mogą nie zawsze być online.';
+
+  @override
   String get name => 'Nazwa';
 
   @override
@@ -4051,9 +4859,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reportUsernameHelp => 'Wytłumacz, co w nazwie użytkownika jest obraźliwe. Nie pisz tylko \"nazwa jest obraźliwa\", lecz napisz jak doszedłeś/aś do tego wniosku, zwłaszcza jeśli jest mało znany, nie po angielsku, slangowy lub odniesieniem do kultury/historii.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Twoje zgłoszenie będzie sprawdzone szybciej, jeśli zostanie napisane po angielsku.';
-
-  @override
   String get processReportFasterInEnglish => 'Szybciej przetwarzymy Twoje zgłoszenie, jeśli napiszesz do nas po angielsku.';
 
   @override
@@ -4104,6 +4909,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get logInByEmail => 'Zaloguj się przez e-mail';
+
+  @override
+  String get emailLoginInstructions => 'Wyślemy Ci wiadomość e-mail zawierającą link do logowania.';
 
   @override
   String get emailMeALink => 'Wyślij mi link';
@@ -4176,6 +4984,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get never => 'Nigdy';
+
+  @override
+  String get defeatOnly => 'Tylko po porażce';
+
+  @override
+  String get drawAndDefeat => 'Po porażce lub remisie';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4360,7 +5174,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get really => 'naprawdę';
 
   @override
+  String get lichessUpdates => 'Aktualizacje Lichess';
+
+  @override
   String get contribute => 'Wsparcie';
+
+  @override
+  String get changelog => 'Dziennik zmian';
 
   @override
   String get termsOfService => 'Regulamin';
@@ -4370,6 +5190,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get sourceCode => 'Kod źródłowy';
+
+  @override
+  String get blockAds => 'Blokowanie reklam';
 
   @override
   String get simultaneousExhibitions => 'Symultany';
@@ -4422,9 +5245,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get create => 'Utwórz';
 
   @override
-  String get whenCreateSimul => 'W symultanie będziesz grał równocześnie z kilkoma przeciwnikami.';
-
-  @override
   String get creatingASimul => 'Utworzenie symultany pozwali Ci grać równocześnie przeciwko wielu przeciwnikom.';
 
   @override
@@ -4435,9 +5255,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get simulAddExtraTime => 'Aby ułatwić sobie rozegranie symultany możesz ustawić dodatkowy czas dla siebie.';
-
-  @override
-  String get simulHostExtraTime => 'Dodatkowy czas dla symultanisty';
 
   @override
   String get extraClockTimeForHost => 'Dodatkowy czas zegara dla prowadzącego symultanę:';
@@ -4687,6 +5504,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get security => 'Bezpieczeństwo';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Sesje';
 
   @override
@@ -4703,6 +5525,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get noChallenges => 'Brak wyzwań.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -4841,11 +5666,6 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String notificationsX(String param1) {
     return 'Powiadomienia: $param1';
-  }
-
-  @override
-  String perfRatingX(String param) {
-    return 'Ranking: $param';
   }
 
   @override
@@ -5002,9 +5822,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get showUnreadLichessMessage => 'Otrzymałeś prywatną wiadomość od Lichess.';
-
-  @override
-  String get clickHereToReadIt => 'Kliknij tutaj, aby ją odczytać';
 
   @override
   String get readTheMessage => 'Przeczytaj wiadomość';
@@ -5289,11 +6106,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get simulDescriptionHelp => 'Wiadomość do przekazania uczestnikom';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param jest dostępny do formatowania.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return 'Możesz sformatować tekst za pomocą $param.';
   }
@@ -5315,9 +6127,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => 'Tylko członkowie klubu';
-
-  @override
-  String get navigateMoveTree => 'Nawiguj drzewo ruchów';
 
   @override
   String get moveListNavigation => 'Nawigacja na liście posunięć';
@@ -5456,6 +6265,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get boards => 'Szachownice';
 
   @override
+  String get write => 'Napisz';
+
+  @override
+  String get preview => 'Podgląd';
+
+  @override
+  String get done => 'Done';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5482,19 +6300,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Błędów',
-      many: '$count Błędów',
-      few: '$count Błędy',
-      one: '$count błąd',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5508,19 +6313,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Pomyłek',
-      many: '$count Pomyłek',
-      few: '$count Pomyłki',
-      one: '$count pomyłka',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5529,19 +6321,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count pomyłek',
       few: '$count pomyłki',
       one: '$count pomyłka',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Niedokładności',
-      many: '$count Niedokładności',
-      few: '$count Niedokładności',
-      one: '$count niedokładność',
     );
     return '$_temp0';
   }
@@ -5989,19 +6768,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonimowy ($count)',
-      many: 'Anonimowy ($count)',
-      few: 'Anonimowy ($count)',
-      one: 'Anonimowy',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6390,9 +7156,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL bieżącego rozdziału';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Możesz wkleić to, aby osadzić na forum';
-
-  @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'Możesz wkleić to na forum lub na blogu Lichess, aby osadzić ten rozdział.';
 
   @override
@@ -6765,13 +7528,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyCustomPositionText => 'Ustaw szachownicę po swojemu.<br>Dobre do eksploracji końcówek.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Załaduj istniejącą partię lichess';
-
-  @override
   String get studyLoadGameFromTheWebTitle => 'Zaimportuj partię z sieci';
-
-  @override
-  String get studyLoadExistingLichessGameText => 'Wklej adres URL partii Lichess<br>(na przykład lichess.org/7fHIU0XI), <br>aby załadować ruchy do rozdziału.';
 
   @override
   String get studyLoadGameFromTheWebText => 'Wklej adres URL partii<br>(na przykład lichess.org/7fHIU0XI), <br>aby załadować posunięcia partii do rozdziału.';
@@ -6862,6 +7619,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get teamTeam => 'Klub';
 
   @override
+  String get teamTeamUpdates => 'Wiadomości klubowe';
+
+  @override
   String get teamIncorrectEntryCode => 'Niepoprawny kod dostępu.';
 
   @override
@@ -6889,6 +7649,9 @@ class AppLocalizationsPl extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
 
   @override
   String get timeagoJustNow => 'właśnie teraz';
@@ -7095,13 +7858,70 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
-
-  @override
   String get ublogCommunity => 'Społeczność';
 
   @override
   String ublogXBlog(String param) {
     return 'Blog gracza $param';
   }
+
+  @override
+  String get variantStandard => 'Standardowe';
+
+  @override
+  String get variantStandardTitle => 'Standardowe zasady szachów (FIDE)';
+
+  @override
+  String get variantChess960 => 'Szachy 960';
+
+  @override
+  String get variantChess960Title => 'Pozycja początkowa figur jest losowa.';
+
+  @override
+  String get variantKingOfTheHill => 'Król wzgórza';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Przeprowadź swojego króla na środek szachownicy, by wygrał partię.';
+
+  @override
+  String get variantThreeCheck => 'Trzy szachy';
+
+  @override
+  String get variantThreeCheckTitle => 'Zaszachuj swojego przeciwnika 3 razy, by wygrać partię.';
+
+  @override
+  String get variantAntichess => 'Antyszachy';
+
+  @override
+  String get variantAntichessTitle => 'Podstaw do bicia wszystkie swoje bierki (lub zmuś przeciwnika do pata), by wygrać partię.';
+
+  @override
+  String get variantAtomic => 'Atomowe';
+
+  @override
+  String get variantAtomicTitle => 'Wysadź króla przeciwnika, by wygrać partię.';
+
+  @override
+  String get variantHorde => 'Horda';
+
+  @override
+  String get variantHordeTitle => 'Jedna ze stron ma dużą liczbę pionów, druga ma standardowe bierki.';
+
+  @override
+  String get variantRacingKings => 'Wyścig królów';
+
+  @override
+  String get variantRacingKingsTitle => 'Poprowadź swojego króla na drugą stronę szachownicy, aby wygrać partię.';
+
+  @override
+  String get variantCrazyhouse => 'Crazyhouse';
+
+  @override
+  String get variantCrazyhouseTitle => 'Zbite przeciwnikowi bierki można z powrotem postawić na szachownicy zamiast swojego posunięcia.';
+
+  @override
+  String get variantFromPosition => 'Z zadanej pozycji';
+
+  @override
+  String get variantFromPositionTitle => 'Standardowa partia szachów startując z zadanej pozycji';
 }

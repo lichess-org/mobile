@@ -96,8 +96,9 @@ class StudyRepository(final Ref ref, final Client client) {
   /// Creates one or more (if the PGN contains multiple games) chapters in the study with the given [studyId].
   Future<IList<StudyChapterId>> createChapter(
     StudyId studyId,
-    CreateStudyChapterPayload chapter,
-  ) async {
+    CreateStudyChapterPayload chapter, {
+    bool initialChapter = false,
+  }) async {
     return await client.postReadJson<IList<StudyChapterId>>(
       Uri(path: '/api/study/$studyId/import-pgn'),
       body: {
@@ -105,11 +106,31 @@ class StudyRepository(final Ref ref, final Client client) {
         'name': chapter.name,
         'orientation': chapter.orientation.name,
         if (chapter.variant != null) 'variant': chapter.variant!.name,
+        'initial': initialChapter.toString(),
       },
       mapper: (json) => pick(
         json,
         'chapters',
       ).asListOrThrow((pick) => StudyChapterId(pick.required()('id').asStringOrThrow())).lock,
     );
+  }
+
+  Future<void> deleteChapter(StudyId studyId, StudyChapterId chapterId) async {
+    await client.deleteRead(Uri(path: '/api/study/$studyId/$chapterId'));
+  }
+
+  Future<(StudyId, IList<StudyChapterId>)> createStudy(
+    CreateStudyPayload study,
+    CreateStudyChapterPayload chapter,
+  ) async {
+    final studyId = await client.postReadJson<StudyId>(
+      Uri(path: '/api/study'),
+      body: study.toJson().map((key, value) => MapEntry(key, value.toString())),
+      mapper: (json) => StudyId(pick(json, 'id').asStringOrThrow()),
+    );
+
+    final createdChapters = await createChapter(studyId, chapter, initialChapter: true);
+
+    return (studyId, createdChapters);
   }
 }

@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/db/json_row.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
@@ -84,35 +85,24 @@ class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
     }
   }
 
-  Future<OfflineCorrespondenceGame?> fetch({required GameId gameId}) async {
-    final list = await _db.query(
-      kCorrespondenceStorageTable,
+  Future<OfflineCorrespondenceGame?> fetch({required GameId gameId}) {
+    return _db.fetchJsonRow(
+      table: kCorrespondenceStorageTable,
       where: 'gameId = ?',
       whereArgs: [gameId.toString()],
+      fromJson: OfflineCorrespondenceGame.fromJson,
+      errorMessage: '[CorrespondenceGameStorage] cannot fetch game: expected an object',
     );
-
-    final raw = list.firstOrNull?['data'] as String?;
-
-    if (raw != null) {
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[CorrespondenceGameStorage] cannot fetch game: expected an object',
-        );
-      }
-      return OfflineCorrespondenceGame.fromJson(json);
-    }
-    return null;
   }
 
   Future<void> save(OfflineCorrespondenceGame game) async {
     try {
-      await _db.insert(kCorrespondenceStorageTable, {
+      await _db.saveJsonRow(kCorrespondenceStorageTable, {
         'userId': game.me?.user?.id.toString() ?? kCorrespondenceStorageAnonId,
         'gameId': game.id.toString(),
         'lastModified': DateTime.now().toIso8601String(),
         'data': jsonEncode(game.toJson()),
-      }, conflictAlgorithm: ConflictAlgorithm.replace);
+      });
       ref.invalidate(offlineOngoingCorrespondenceGamesProvider);
     } catch (e) {
       debugPrint('[CorrespondenceGameStorage] failed to save game: $e');
@@ -120,7 +110,7 @@ class const CorrespondenceGameStorage(final Database _db, final Ref ref) {
   }
 
   Future<void> delete(GameId gameId) async {
-    await _db.delete(
+    await _db.deleteJsonRow(
       kCorrespondenceStorageTable,
       where: 'gameId = ?',
       whereArgs: [gameId.toString()],

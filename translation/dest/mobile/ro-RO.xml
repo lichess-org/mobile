@@ -1,111 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Acceptaţi remiza?</string>
   <string name="account" comment="The account screen title.">Cont</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Preferințe cont</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Aceste preferințe sunt aplicate contului dvs. Lichess și vor fi utilizate pe toate dispozitivele.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Adaugă la studiu</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Toate jocurile</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Permite datul înapoi și sugestii</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Negru Amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ești sigur?</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Sunteți sigur că doriți să descărcați fișierul NNUE (%s)?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Poziţia tablei în modul peisaj</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Preferințe tablă</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Întârziere Bronstein</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulați propunerea de revanșă</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Resetare</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Provocare creată: Vei fi notificat când începe jocul.\nO poți accesa din pagina principală.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Provocare din poziție</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Nume capitol</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Motor de șah</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Alege un fundal personalizat</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Resetare</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Codul expiră după 5 minute și poate fi folosit o singură dată.</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Cod</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Codul este lung de %s caractere.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Copiat.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Șterge mutarea salvată</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Alătură-te unui joc</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Personalizează</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Sfat: Puteți adăuga mai multe widget-uri în ecranul principal sau să le eliminați pe cele de care nu aveți nevoie!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Renunță</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Zona de pericol</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Ștergeți-vă contul</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compact</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detaliat</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Accepti provocarea?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Descarcă jocurile mele</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bună seara, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bună seara</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtre</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Rotește ceasul</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Întoarce piesele și informațiile despre oponent după fiecare mutare</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Obține feedback cu privire la mutările tale</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Salut, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Salut</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Ascunde variațiile</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bună seara, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Bună seara</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Mișcare bună, dar există una si mai bună</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Salut</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Acasă</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dacă un cont corespunde cu %1$s, i s-a trimis un cod de caractere %2$s. Verifică-ți inbox-ul și introdu codul de mai jos.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Codul este invalid sau a expirat.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Fluxuri live</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Dimensiunea bazei de date locale</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mută la eliberare</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Când mişcaţi o piesă prin apăsare, mutarea se face atunci când ridicaţi degetul, permițând glisarea pentru a selecta pătratul de destinaţie.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Trebuie să te autentifici pentru a accesa această pagină.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Puzzle-uri offline</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Joc nou</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Următoarea greșeală</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Niciun rezultat</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Te rugăm să reții că nu sunt disponibile toate funcțiile din vechea aplicație sau site web, dar adăugăm funcționalități tot timpul.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Nu urmărești niciun utilizator.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Exploratorul nu se poate deschide deconectat.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Sau încarcă un fișier PGN</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Deasupra tablei</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Lipește din clipboard</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antișah</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomic</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Clasic</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Coresp.</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crazy</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Din poz.</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hoardă</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rege deal</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Problemă</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Cursă</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3 șah</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN copiat.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Jucători cu \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Stânga</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Dreapta</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Mod antrenament</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Mărește piesa trasă</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Înapoi</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Vrei să termini acest run?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nimic de afișat, vă rugăm să schimbați filtrele</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nimic de arătat. Jucați câteva partide de Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Rezolvă cât mai multe puzzle-uri în 3 minute.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Îți vei pierde seria actuală și scorul va fi salvat.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Joacă puzzle-uri din deschiderile tale preferate sau alege o temă.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Puzzle-uri</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Evaluează această aplicație</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Căutări recente</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Șterge marcajul</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Șterge marcajul</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Selectează un studiu</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Trimite-mi un cod</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Analiză server</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Poziția ceasului</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Setări predefinite</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Destinația piesei trase</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Cerc</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Pătrat</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Culoare desenată</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Această culoare este utilizată pentru forme desenate cu două degete.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Widget-uri pagină principală</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Mod imersiv</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ascunde interfața de utilizator a sistemului în timpul jocului. Folosește această opțiune dacă ești deranjat de gesturile de navigare ale sistemului la marginile ecranului. Se aplică pentru ecranele de joc și probleme de șah.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Piese capturate</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Alege o imagine</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Fundalul personalizat funcționează numai în modul întunecat. Este recomandată o imagine întunecată.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Alege o imagine</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Estompare imagine</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Fundalul personalizat funcționează numai în modul întunecat. Este recomandată o imagine întunecată.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Ascunde tabla</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Afișează tabla</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Glisați pentru a afișa alte fundaluri</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Fie atingeți sau trageți</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Atinge două pătrate</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Preferințele dvs. au fost salvate în contul dvs. Lichess. Acestea vor fi sincronizate pe toate dispozitivele dvs.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Desenare forme</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Desenează forme folosind două degete: ține un deget pe un pătrat gol și trage cu un alt deget pentru a desena o formă.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Arată bordura</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Feedback tactil</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Când este activat, dispozitivul va vibra scurt când mutați sau capturați o piesă.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Setări</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Distribuie URL-ul provocării</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Distribuie PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Distribuie URL-ul jocului</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Distribuie analiza locală PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Distribuie poziția ca FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Distribuie acest puzzle</string>
   <string name="showComments" comment="Shown in the analysis screen.">Afișează comentarii</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Afișare linii motor</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Afișare indicator de evaluare</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Arată rezultatul</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Arată variațiile</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Autentificare cu browser-ul</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Autentificare prin e-mail</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Întârziere simplă</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Tablă mică</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Ceva nu a mers bine.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sortați prietenii</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Nu mai arăta amenințarea</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Culori sistem</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase nu este disponibilă offline.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Unelte</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Prea multe încercări. Te invităm să revii mai târziu.</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Terminate</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Sari la pagina mea</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianta %s nu este suportată în această versiune.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Folosește piese simetrice</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vezi joc</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Vezi licenţele</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">În așteptarea unui jucător...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Vizionează</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Bine ai venit în aplicația Lichess!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vezi joc</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Sfat: Puteți adăuga mai multe widget-uri în ecranul principal sau să le eliminați pe cele de care nu aveți nevoie!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Renunță</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Personalizează</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Nu mai arăta amenințarea</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Terminate</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Sari la pagina mea</string>
-  <string name="displayModeCompact" comment="">Compact</string>
-  <string name="displayModeDetailed" comment="">Detaliat</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">Exploratorul nu se poate deschide deconectat.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Provocare creată: Vei fi notificat când începe jocul.\nO poți accesa din pagina principală.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Înapoi</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Sau încarcă un fișier PGN</string>
-  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Mișcare bună, dar există una si mai bună</string>
-  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
-  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
-  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
-  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
-  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Clasic</string>
-  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Coresp.</string>
-  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Din poz.</string>
-  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
-  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antișah</string>
-  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rege deal</string>
-  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3 șah</string>
-  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomic</string>
-  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hoardă</string>
-  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Cursă</string>
-  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crazy</string>
-  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Problemă</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Vă vom trimite prin e-mail un cod cu care să vă autentificați.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Nu te poți provoca singur</string>
 </resources>

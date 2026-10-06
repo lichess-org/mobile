@@ -133,6 +133,24 @@ sealed class const FcmMessage() {
       }
     }
   }
+
+  /// The local notification corresponding to this message, if it has one.
+  ///
+  /// Returns `null` for [UnhandledFcmMessage] and [MalformedFcmMessage], the only types
+  /// without a local notification representation.
+  ///
+  /// Types that display a server-provided title and body fall back to empty strings when
+  /// the message carries no platform notification, instead of failing.
+  LocalNotification? toLocalNotification() => switch (this) {
+    final NewMessageFcmMessage m => NewMessageNotification.fromFcmMessage(m),
+    final CorresGameUpdateFcmMessage m => CorresGameUpdateNotification.fromFcmMessage(m),
+    final ChallengeCreateFcmMessage m => ChallengeCreatedNotification.fromFcmMessage(m),
+    final ChallengeAcceptFcmMessage m => ChallengeAcceptedNotification.fromFcmMessage(m),
+    final BroadcastRoundFcmMessage m => BroadcastRoundNotification.fromFcmMessage(m),
+    final BroadcastPlayerFollowFcmMessage m => BroadcastPlayerFollowNotification.fromFcmMessage(m),
+    final RecapFcmMessage m => RecapNotification.fromFcmMessage(m),
+    UnhandledFcmMessage() || MalformedFcmMessage() => null,
+  };
 }
 
 /// An [FcmMessage] that represents a new message in a private conversation.

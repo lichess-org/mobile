@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_service.d
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../binding.dart';
@@ -42,6 +43,38 @@ void main() {
     }
     return mockResponse('', 404);
   });
+
+  /// Starts the notification service with [notificationDisplayMock] as display, and stubs it
+  /// so that showing a notification always succeeds.
+  Future<void> startService() async {
+    final container = await makeContainer(
+      overrides: {
+        notificationDisplayProvider: notificationDisplayProvider.overrideWith(
+          (_) => notificationDisplayMock,
+        ),
+      },
+    );
+
+    when(
+      () => notificationDisplayMock.show(
+        id: any(named: 'id'),
+        title: any(named: 'title'),
+        body: any(named: 'body'),
+        notificationDetails: any(named: 'notificationDetails'),
+        payload: any(named: 'payload'),
+      ),
+    ).thenAnswer((_) => Future.value());
+
+    await container.read(notificationServiceProvider).start();
+  }
+
+  /// Collects the notification responses emitted from now on, until the test ends.
+  List<ParsedLocalNotification> collectResponses() {
+    final responses = <ParsedLocalNotification>[];
+    final subscription = NotificationService.responseStream.listen(responses.add);
+    addTearDown(subscription.cancel);
+    return responses;
+  }
 
   group('Start service:', () {
     test('enables firebase messaging auto-init', () async {
@@ -214,6 +247,96 @@ void main() {
               .having((d) => d.android?.priority, 'priority', Priority.defaultPriority),
         );
       });
+    });
+  });
+
+  group('FCM foreground display policy:', () {
+    void verifyNeverShown() {
+      verifyNever(
+        () => notificationDisplayMock.show(
+          id: any(named: 'id'),
+          title: any(named: 'title'),
+          body: any(named: 'body'),
+          notificationDetails: any(named: 'notificationDetails'),
+          payload: any(named: 'payload'),
+        ),
+      );
+    }
+
+    test('a message without a platform notification is not shown', () async {
+      await startService();
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'}),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verifyNeverShown();
+    });
+
+    test('a challenge creation is left to the socket', () async {
+      await startService();
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
+          notification: RemoteNotification(title: 'Challenge', body: 'Play me!'),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verifyNeverShown();
+    });
+
+    test('a platform notification without title or body is not shown', () async {
+      await startService();
+      final records = <LogRecord>[];
+      final subscription = Logger.root.onRecord.listen(records.add);
+      addTearDown(subscription.cancel);
+
+      testBinding.firebaseMessaging.onMessage.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'},
+          notification: RemoteNotification(),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      verifyNeverShown();
+      expect(records, anyElement(predicate((LogRecord r) => r.level == Level.SEVERE)));
+    });
+  });
+
+  group('FCM opened message handling:', () {
+    test('emits the local notification response of the opened message', () async {
+      await startService();
+      final responses = collectResponses();
+
+      testBinding.firebaseMessaging.onMessageOpenedApp.add(
+        const RemoteMessage(
+          data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
+          notification: RemoteNotification(title: 'Challenge', body: 'Play me!'),
+        ),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(responses, hasLength(1));
+      final (response, notification) = responses.single;
+      expect(notification, isA<ChallengeCreatedNotification>());
+      expect(response.id, notification.id);
+      expect(response.payload, jsonEncode(notification.payload));
+    });
+
+    test('emits nothing when an unhandled message is opened', () async {
+      await startService();
+      final responses = collectResponses();
+
+      testBinding.firebaseMessaging.onMessageOpenedApp.add(
+        const RemoteMessage(data: {'lichess.type': 'unknown'}),
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(responses, isEmpty);
     });
   });
 }

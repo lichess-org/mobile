@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -21,6 +22,7 @@ import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -217,6 +219,7 @@ class const _AccountSection() extends ConsumerWidget {
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final unreadTeamUpdates = ref.watch(unreadTeamUpdatesCountProvider).value ?? 0;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     final user = authUser?.user;
@@ -236,7 +239,7 @@ class const _AccountSection() extends ConsumerWidget {
               Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),
-          if (!kidMode)
+          if (!kidMode) ...[
             ListTile(
               leading: Badge.count(
                 isLabelVisible: unreadMessages > 0,
@@ -250,6 +253,20 @@ class const _AccountSection() extends ConsumerWidget {
                 Navigator.of(context).push(ContactsScreen.buildRoute());
               },
             ),
+            ListTile(
+              leading: Badge.count(
+                isLabelVisible: unreadTeamUpdates > 0,
+                count: unreadTeamUpdates,
+                child: const Icon(Icons.groups_outlined),
+              ),
+              title: Text(context.l10n.teamTeamUpdates),
+              trailing: isIOS ? const CupertinoListTileChevron() : null,
+              enabled: isOnline,
+              onTap: () {
+                Navigator.of(context).push(TeamUpdatesScreen.buildRoute());
+              },
+            ),
+          ],
         ],
         ListTile(
           leading: const Icon(Icons.settings_outlined),

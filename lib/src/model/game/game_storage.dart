@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/db/json_row.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -59,35 +60,30 @@ class const GameStorage(final Database _db) {
         .toIList();
   }
 
-  Future<ExportedGame?> fetch({required GameId gameId}) async {
-    final list = await _db.query(
-      kGameStorageTable,
+  Future<ExportedGame?> fetch({required GameId gameId}) {
+    return _db.fetchJsonRow(
+      table: kGameStorageTable,
       where: 'gameId = ?',
       whereArgs: [gameId.toString()],
+      fromJson: ExportedGame.fromJson,
+      errorMessage: '[GameStorage] cannot fetch game: expected an object',
     );
-
-    final raw = list.firstOrNull?['data'] as String?;
-
-    if (raw != null) {
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException('[GameStorage] cannot fetch game: expected an object');
-      }
-      return ExportedGame.fromJson(json);
-    }
-    return null;
   }
 
-  Future<void> save(ExportedGame game) async {
-    await _db.insert(kGameStorageTable, {
+  Future<void> save(ExportedGame game) {
+    return _db.saveJsonRow(kGameStorageTable, {
       'userId': game.me?.user?.id.toString() ?? kStorageAnonId,
       'gameId': game.id.toString(),
       'lastModified': DateTime.now().toIso8601String(),
       'data': jsonEncode(game.toJson()),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    });
   }
 
-  Future<void> delete(GameId gameId) async {
-    await _db.delete(kGameStorageTable, where: 'gameId = ?', whereArgs: [gameId.toString()]);
+  Future<void> delete(GameId gameId) {
+    return _db.deleteJsonRow(
+      kGameStorageTable,
+      where: 'gameId = ?',
+      whereArgs: [gameId.toString()],
+    );
   }
 }
