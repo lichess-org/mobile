@@ -46,6 +46,9 @@ struct GameActivityAttributes: ActivityAttributes {
         let offer: Offer?
         /// Whether lila's claim-victory rule can apply if the player leaves the game.
         let claimable: Bool
+        /// Milliseconds after lila counts the player as gone to warn them that they left the game,
+        /// or nil to warn as soon as the app stops running.
+        let leftWarningDelay: Int?
     }
 
     let gameFullId: String

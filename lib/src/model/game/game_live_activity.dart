@@ -97,6 +97,10 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
 
     /// Whether lila's claim-victory rule can apply if the player leaves the game.
     required bool claimable,
+
+    /// How long after lila counts the player as gone to warn them that they left the game, see
+    /// [leftWarningDelayOf].
+    Duration? leftWarningDelay,
   }) = _GameLiveActivityState;
 
   /// The state of [game], which must be playable, with the clock times read from the game's live
@@ -125,6 +129,7 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
           ? GameLiveActivityOffer.takeback
           : null,
       claimable: isClaimable(game),
+      leftWarningDelay: leftWarningDelayOf(game),
     );
   }
 
@@ -139,6 +144,66 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
       game.steps.length > 2 &&
       game.source != GameSource.swiss &&
       !(game.meta.rules?.contains(GameRule.noClaimWin) ?? false);
+
+  /// How long after lila counts the user as gone from [game] to warn them that they left it: half
+  /// the [claimGrace], so that the warning still comes before the claim if the grace is halved
+  /// meanwhile (e.g. the opponent captures a piece).
+  ///
+  /// Null to warn as soon as the app stops running: when no claim is possible, and in bullet, where
+  /// the grace is too short to wait for.
+  static Duration? leftWarningDelayOf(PlayableGame game) {
+    if (!isClaimable(game)) return null;
+    return switch (game.meta.speed) {
+      .blitz || .rapid || .classical => claimGrace(game) ~/ 2,
+      _ => null,
+    };
+  }
+
+  /// How long lila waits, once it counts the user as gone from [game], before letting the opponent
+  /// claim victory.
+  ///
+  /// Mirrors lila's `RoundSocket.povDisconnectTimeout`: 30 s times a speed factor, halved if the
+  /// user is down 4 points of material or more, halved again if they are anonymous, and at least
+  /// 10 s. lila also weighs it by a `goneWeight` that is lower for rage-sitters and isn't exposed.
+  static Duration claimGrace(PlayableGame game) {
+    final speedFactor = switch (game.meta.speed) {
+      .classical => 10,
+      .rapid => 4,
+      .blitz => 2,
+      _ => 1,
+    };
+    final imbalance = materialImbalance(game.lastPosition.board);
+    final isDownMaterial = switch (game.meta.variant) {
+      .antichess || .crazyhouse || .horde => false,
+      _ => game.youAre == Side.white ? imbalance <= -4 : imbalance >= 4,
+    };
+    final isAnonymous = game.me?.user == null;
+    final divisor = (isDownMaterial ? 2 : 1) * (isAnonymous ? 2 : 1);
+    final grace = const Duration(seconds: 30) * speedFactor ~/ divisor;
+    return grace < const Duration(seconds: 10) ? const Duration(seconds: 10) : grace;
+  }
+
+  /// White's material minus black's, in pawns, as lila counts it: pawn 1, knight and bishop 3, rook
+  /// 5, queen 9.
+  static int materialImbalance(Board board) {
+    int material(Side side) => board
+        .materialCount(side)
+        .entries
+        .fold(
+          0,
+          (sum, entry) =>
+              sum +
+              entry.value *
+                  switch (entry.key) {
+                    .pawn => 1,
+                    .knight || .bishop => 3,
+                    .rook => 5,
+                    .queen => 9,
+                    .king => 0,
+                  },
+        );
+    return material(.white) - material(.black);
+  }
 
   /// The board part of [position]'s FEN, without crazyhouse pockets or promoted-piece markers,
   /// which the widget's board view doesn't parse.
@@ -155,6 +220,7 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     'clockRunning': clockRunning,
     'offer': offer?.name,
     'claimable': claimable,
+    'leftWarningDelay': leftWarningDelay?.inMilliseconds,
   };
 }
 

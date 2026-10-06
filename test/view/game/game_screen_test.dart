@@ -1608,6 +1608,8 @@ void main() {
       expect(start.state!.lastSan, 'e5');
       expect(start.state!.claimable, isTrue);
       expect(start.state!.clockRunning, isTrue);
+      // half the 60 s grace of a blitz game
+      expect(start.state!.leftWarningDelay, const Duration(seconds: 30));
 
       // our move, played on the board
       await playMove(tester, 'd2', 'd4');
@@ -1664,6 +1666,48 @@ void main() {
       // the socket reconnects after its backoff
       await tester.pump(const Duration(seconds: 10));
       expect(channel.connectedCalls.last, isTrue);
+    });
+
+    testWidgets('warns sooner when the user is down material', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Qh5 Nc6 Qxf7+ Kxf7',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // down 8 points: lila halves the grace
+      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 15));
+    });
+
+    testWidgets('warns as soon as the app stops running in bullet', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(minutes: 1),
+          black: Duration(minutes: 1),
+          emerg: Duration(seconds: 10),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls.single.state!.claimable, isTrue);
+      expect(channel.calls.single.state!.leftWarningDelay, isNull);
     });
 
     testWidgets('shows the opponent offers', (tester) async {
