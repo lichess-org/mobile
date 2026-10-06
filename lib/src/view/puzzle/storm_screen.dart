@@ -637,7 +637,7 @@ class _ComboState() extends ConsumerState<_Combo> with SingleTickerProviderState
                                 )
                               : null,
                           child: Text(
-                            '${level}s',
+                            '$level s',
                             style: TextStyle(
                               color: isCurrentLevel ? ColorScheme.of(context).onSecondary : null,
                             ),
@@ -790,7 +790,7 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
         children: [
           ...?highScoreWidgets,
           ListSection(
-            header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
+            header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
             children: [
               _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
               _StatsRow(
@@ -800,10 +800,10 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
                 ),
               ),
               _StatsRow(context.l10n.stormCombo, widget.stats.comboBest.toString()),
-              _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds}s'),
+              _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds} s'),
               _StatsRow(
                 context.l10n.stormTimePerMove,
-                '${numberFormat.format(widget.stats.timePerMove)}s',
+                '${numberFormat.format(widget.stats.timePerMove)} s',
               ),
               _StatsRow(context.l10n.stormHighestSolved, widget.stats.highest.toString()),
             ],
