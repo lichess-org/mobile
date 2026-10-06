@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Teka-teki harian</string>
+    <string name="widget_broadcast_title">Siaran</string>
+</resources>
