@@ -18,16 +18,22 @@ struct GameLiveActivity: Widget {
                 .padding(GameActivityLayout.lockScreenPadding)
         } dynamicIsland: { context in
             DynamicIsland {
-                DynamicIslandExpandedRegion(.bottom) {
-                    // Inset, so that the island's rounded corners don't cut into the board.
-                    GameActivityLockScreenView(context: context, boardSize: GameActivityLayout.expandedBoardSize)
-                        .padding([.horizontal, .bottom], GameActivityLayout.expandedInset)
+                // The board takes the full height of the island, beside the camera. The info column
+                // gets all the width that is left (the trailing region has priority over the
+                // leading one), and moves below the camera, which it is too wide to sit beside.
+                DynamicIslandExpandedRegion(.leading) {
+                    GameBoard(context: context, size: GameActivityLayout.expandedBoardSize)
+                }
+                DynamicIslandExpandedRegion(.trailing, priority: 1) {
+                    GameInfoColumn(context: context)
+                        .padding(.leading, GameActivityLayout.columnSpacing)
+                        .dynamicIsland(verticalPlacement: .belowIfTooWide)
                 }
             } compactLeading: {
                 if context.isStale {
                     LeftGameIcon()
                 } else {
-                    TurnPawn(side: context.state.turn, isMyTurn: context.isMyTurn)
+                    MyClockGauge(context: context)
                 }
             } compactTrailing: {
                 CompactTrailingView(context: context)
@@ -35,7 +41,7 @@ struct GameLiveActivity: Widget {
                 if context.isStale {
                     LeftGameIcon()
                 } else {
-                    TurnPawn(side: context.state.turn, isMyTurn: context.isMyTurn)
+                    MyClockGauge(context: context)
                 }
             }
             .keylineTint(context.isStale ? lichessOrange : nil)
@@ -52,21 +58,18 @@ private let lichessOrange = Color(red: 0xD6 / 255, green: 0x4F / 255, blue: 0x00
 /// Lichess gold (`LichessColors.brag` in the app, `--c-brag` on the website), for titles.
 private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D / 255)
 
-private extension ActivityViewContext<GameActivityAttributes> {
-    var isMyTurn: Bool { state.turn == attributes.myColor }
-}
-
 private enum GameActivityLayout {
     static let lockScreenPadding: CGFloat = 14
     static let lockScreenBoardSize: CGFloat = 100
-    static let expandedBoardSize: CGFloat = 76
-    static let expandedInset: CGFloat = 12
+    static let expandedBoardSize: CGFloat = 120
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
-    static let pawnSize: CGFloat = 20
-    static let pawnOutlineWidth: CGFloat = 1.5
     static let compactClockWidth: CGFloat = 52
+    /// Fills the compact and minimal island: its height (about 37 pt) less the system margins around
+    /// the regions.
+    static let gaugeSize: CGFloat = 24
+    static let gaugeIconSize: CGFloat = 11
 }
 
 // MARK: - Lock Screen / expanded
@@ -74,14 +77,13 @@ private enum GameActivityLayout {
 /// The board and the info column next to it.
 private struct GameActivityLockScreenView: View {
     let context: ActivityViewContext<GameActivityAttributes>
-    var boardSize: CGFloat = GameActivityLayout.lockScreenBoardSize
 
     var body: some View {
         HStack(spacing: GameActivityLayout.columnSpacing) {
-            GameBoard(context: context, size: boardSize)
+            GameBoard(context: context, size: GameActivityLayout.lockScreenBoardSize)
             GameInfoColumn(context: context)
         }
-        .frame(height: boardSize)
+        .frame(height: GameActivityLayout.lockScreenBoardSize)
     }
 }
 
@@ -222,7 +224,7 @@ private struct StatusLine: View {
 
 // MARK: - Dynamic Island
 
-/// The clock of the side to move: in green on the user's turn, greyed out on the opponent's.
+/// The user's clock: in green while it runs, greyed out while it waits for the opponent.
 private struct CompactTrailingView: View {
     let context: ActivityViewContext<GameActivityAttributes>
 
@@ -232,9 +234,11 @@ private struct CompactTrailingView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(lichessOrange)
         } else {
-            GameClockText(state: context.state, side: context.state.turn, alignment: .trailing)
-                .font(.caption.monospacedDigit().weight(context.isMyTurn ? .bold : .semibold))
-                .foregroundStyle(context.isMyTurn ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
+            let side = context.attributes.myColor
+            let isRunning = context.state.isClockRunning(for: side)
+            GameClockText(state: context.state, side: side, alignment: .trailing)
+                .font(.caption.monospacedDigit().weight(isRunning ? .bold : .semibold))
+                .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
                 .frame(maxWidth: GameActivityLayout.compactClockWidth)
         }
     }
@@ -249,47 +253,45 @@ private struct LeftGameIcon: View {
 
 // MARK: - Shared pieces
 
-/// A pawn of the side to move, in the user's piece set, dimmed on the opponent's turn.
+/// The user's clock as a ring that empties as their time runs out: empty and in green while it runs,
+/// around a pause sign and greyed out while it waits for the opponent.
 ///
-/// The Dynamic Island is always black, so the black pawn gets a white outline to stay visible: a
-/// white silhouette of the pawn drawn underneath, shifted in eight directions.
-private struct TurnPawn: View {
-    let side: GameActivityAttributes.Side
-    let isMyTurn: Bool
-
-    private var assetName: String {
-        let color = side == .white ? "w" : "b"
-        let name = "piece_\(ChessboardTheme.fromAppGroup().pieceSet)_\(color)P"
-        if UIImage(named: name, in: ChessgroundAssets.bundle, compatibleWith: nil) != nil { return name }
-        return "piece_\(ChessboardTheme.defaultPieceSet)_\(color)P"
-    }
-
-    private static let outlineOffsets: [CGSize] = (0..<8).map { i in
-        let angle = Double(i) * .pi / 4
-        return CGSize(
-            width: cos(angle) * GameActivityLayout.pawnOutlineWidth,
-            height: sin(angle) * GameActivityLayout.pawnOutlineWidth
-        )
-    }
+/// The ring spans the initial time, or the remaining time once increments have pushed the clock
+/// above it.
+private struct MyClockGauge: View {
+    let context: ActivityViewContext<GameActivityAttributes>
 
     var body: some View {
-        ZStack {
-            if side == .black {
-                ForEach(Self.outlineOffsets.indices, id: \.self) { i in
-                    Image(assetName, bundle: ChessgroundAssets.bundle)
-                        .renderingMode(.template)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundStyle(.white)
-                        .offset(Self.outlineOffsets[i])
+        let state = context.state
+        let side = context.attributes.myColor
+        let remaining = max(0, state.clock(of: side))
+        let total = max(context.attributes.initialClock, remaining, 1)
+        let isRunning = state.isClockRunning(for: side)
+        Group {
+            if isRunning {
+                // Animated by the system, so the ring keeps emptying with no updates from the app.
+                let end = state.flagDate(of: side)
+                ProgressView(
+                    timerInterval: end.addingTimeInterval(-Double(total) / 1000)...end,
+                    countsDown: true
+                ) {
+                    EmptyView()
+                } currentValueLabel: {
+                    EmptyView()
+                }
+            } else {
+                ProgressView(value: Double(remaining), total: Double(total)) {
+                    EmptyView()
+                } currentValueLabel: {
+                    Image(systemName: "pause.fill")
                 }
             }
-            Image(assetName, bundle: ChessgroundAssets.bundle)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
         }
-        .frame(width: GameActivityLayout.pawnSize, height: GameActivityLayout.pawnSize)
-        .opacity(isMyTurn ? 1 : 0.5)
+        .progressViewStyle(.circular)
+        .font(.system(size: GameActivityLayout.gaugeIconSize, weight: .bold))
+        .frame(width: GameActivityLayout.gaugeSize, height: GameActivityLayout.gaugeSize)
+        .tint(isRunning ? lichessGreen : .secondary)
+        .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
     }
 }
 
@@ -323,4 +325,55 @@ private struct GameClockText: View {
             ? String(format: "%d:%02d:%02d", hours, minutes, seconds)
             : String(format: "%d:%02d", minutes, seconds)
     }
+}
+
+// MARK: - Previews
+
+private extension GameActivityAttributes {
+    static let preview = GameActivityAttributes(
+        gameFullId: "abcdefgh1234",
+        myColor: .white,
+        white: Player(name: "veloce", title: nil, rating: 1850),
+        black: Player(name: "DrNykterstein", title: "GM", rating: 2850),
+        initialClock: 300_000
+    )
+}
+
+private extension GameActivityAttributes.ContentState {
+    static func preview(turn: GameActivityAttributes.Side) -> Self {
+        Self(
+            fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
+            lastMove: "b8c6",
+            lastSan: "Nc6",
+            turn: turn,
+            whiteClock: 184_000,
+            blackClock: 251_000,
+            clockAt: Date.now.timeIntervalSince1970 * 1000,
+            clockRunning: true,
+            offer: nil,
+            claimable: true,
+            leftWarningDelay: 30_000
+        )
+    }
+}
+
+#Preview("Expanded", as: .dynamicIsland(.expanded), using: GameActivityAttributes.preview) {
+    GameLiveActivity()
+} contentStates: {
+    GameActivityAttributes.ContentState.preview(turn: .white)
+    GameActivityAttributes.ContentState.preview(turn: .black)
+}
+
+#Preview("Compact", as: .dynamicIsland(.compact), using: GameActivityAttributes.preview) {
+    GameLiveActivity()
+} contentStates: {
+    GameActivityAttributes.ContentState.preview(turn: .white)
+    GameActivityAttributes.ContentState.preview(turn: .black)
+}
+
+#Preview("Minimal", as: .dynamicIsland(.minimal), using: GameActivityAttributes.preview) {
+    GameLiveActivity()
+} contentStates: {
+    GameActivityAttributes.ContentState.preview(turn: .white)
+    GameActivityAttributes.ContentState.preview(turn: .black)
 }

@@ -38,6 +38,9 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
     required Side myColor,
     required GameLiveActivityPlayer white,
     required GameLiveActivityPlayer black,
+
+    /// The clock time each player starts with.
+    required Duration initialClock,
   }) = _GameLiveActivityAttributes;
 
   /// Whether [game] gets a Live Activity: a real-time game, with a clock, that the user plays
@@ -57,6 +60,7 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
       myColor: game.youAre!,
       white: .fromPlayer(game.white, showRatings: showRatings),
       black: .fromPlayer(game.black, showRatings: showRatings),
+      initialClock: game.meta.clock?.initial ?? Duration.zero,
     );
   }
 
@@ -65,6 +69,7 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
     'myColor': myColor.name,
     'white': white.toJson(),
     'black': black.toJson(),
+    'initialClock': initialClock.inMilliseconds,
   };
 }
 
