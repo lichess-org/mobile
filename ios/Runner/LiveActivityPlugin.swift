@@ -37,6 +37,8 @@ import UserNotifications
 /// it. The app is usually suspended by then, so the notification is scheduled with the system.
 ///
 /// Back in the foreground the task ends, the `staleDate` is cleared and the notification removed.
+/// The notification is also removed when the game ends or the user kills the app, as long as the
+/// app still runs then.
 /// Every activity update re-applies the current `staleDate`, so Dart only sends content.
 ///
 /// While the app is in the background, an update that makes it the user's turn comes with an
@@ -92,6 +94,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     NotificationCenter.default.addObserver(
       self, selector: #selector(willEnterForeground),
       name: UIScene.willEnterForegroundNotification, object: nil)
+    NotificationCenter.default.addObserver(
+      self, selector: #selector(willTerminate),
+      name: UIApplication.willTerminateNotification, object: nil)
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {
@@ -239,6 +244,13 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     applyLeftDates()
     UNUserNotificationCenter.current().removeDeliveredNotifications(
       withIdentifiers: contents.keys.map(Self.leftNotificationIdentifier))
+  }
+
+  /// The user killed the app while it was running (a suspended app is killed without notice): no
+  /// game screen will be left to return to, so the pending warnings go.
+  @objc private func willTerminate() {
+    UNUserNotificationCenter.current().removePendingNotificationRequests(
+      withIdentifiers: leftDates.keys.map(Self.leftNotificationIdentifier))
   }
 
   @available(iOS 16.2, *)
