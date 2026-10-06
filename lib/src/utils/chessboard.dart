@@ -31,3 +31,5 @@ Future<void> precachePieceImages(PieceSet pieceSet) async {
     debugPrint('Failed to preload piece images: $e');
   }
 }
+
+
