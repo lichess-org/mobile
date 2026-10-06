@@ -72,6 +72,8 @@ private enum GameActivityLayout {
     /// Fills the compact and minimal island: its height (about 37 pt) less the system margins around
     /// the regions.
     static let gaugeSize: CGFloat = 24
+    /// Matches the thickness of the system's circular `ProgressView`, for the paused ring.
+    static let gaugeLineWidth: CGFloat = 2
     static let gaugeIconSize: CGFloat = 16
 }
 
@@ -282,18 +284,37 @@ private struct MyClockGauge: View {
                 } currentValueLabel: {
                     GaugePawn()
                 }
+                .progressViewStyle(.circular)
             } else {
-                ProgressView(value: Double(remaining), total: Double(total)) {
-                    EmptyView()
-                } currentValueLabel: {
-                    GaugePawn()
-                }
+                // Drawn here rather than by a value-driven `ProgressView`, which renders with
+                // artifacts in the island.
+                PausedRing(fraction: Double(remaining) / Double(total))
+                    .overlay { GaugePawn() }
             }
         }
-        .progressViewStyle(.circular)
         .frame(width: GameActivityLayout.gaugeSize, height: GameActivityLayout.gaugeSize)
         .tint(isRunning ? lichessGreen : .secondary)
         .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
+    }
+}
+
+/// A still ring, greyed out, filled clockwise from the top up to `fraction`, drawn to look like the
+/// system's circular `ProgressView`.
+private struct PausedRing: View {
+    let fraction: Double
+
+    var body: some View {
+        let lineWidth = GameActivityLayout.gaugeLineWidth
+        ZStack {
+            Circle()
+                .stroke(.quaternary, lineWidth: lineWidth)
+            Circle()
+                .trim(from: 0, to: fraction)
+                .stroke(.secondary, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+        }
+        // The stroke is centred on the circle: inset it to stay within the frame.
+        .padding(lineWidth / 2)
     }
 }
 
