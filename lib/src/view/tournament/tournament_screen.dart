@@ -920,6 +920,30 @@ class const _FeaturedGame(final FeaturedGame featuredGame) extends ConsumerWidge
           header: _FeaturedGamePlayer(game: featuredGame, side: featuredGame.orientation.opposite),
           footer: _FeaturedGamePlayer(game: featuredGame, side: featuredGame.orientation),
           lastMove: featuredGame.lastMove,
+          onTap: () {
+            // If game is finished, go to analysis board
+            if (!featuredGame.active) {
+              Navigator.of(context, rootNavigator: true).push(
+                AnalysisScreen.buildRoute(
+                  AnalysisOptions.archivedGame(
+                    orientation: featuredGame.orientation,
+                    gameId: featuredGame.id,
+                  ),
+                ),
+              );
+            } else {
+              // If game is still in progress, go to TV view
+              Navigator.of(context, rootNavigator: true).push(
+                TvScreen.buildRoute(
+                  gameId: featuredGame.id,
+                  orientation: featuredGame.orientation,
+                  user: featuredGame.orientation == Side.white
+                      ? featuredGame.white.user
+                      : featuredGame.black.user,
+                ),
+              );
+            }
+          },
         );
       },
     );
