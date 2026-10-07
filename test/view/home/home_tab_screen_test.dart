@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
-import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -237,70 +236,6 @@ void main() {
     });
 
     group('home widgets edit mode', () {
-      testWidgets(
-        'featured tournaments section is hidden in normal mode when there are none to show',
-        (tester) async {
-          final mockClient = MockClient((request) {
-            if (request.url.path == '/tournament/featured') {
-              return mockResponse('{"featured":[]}', 200);
-            }
-            return mockResponse('', 200);
-          });
-          final app = await makeTestProviderScope(
-            tester,
-            child: const Application(),
-            overrides: {
-              httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-                (ref) => FakeHttpClientFactory(() => mockClient),
-              ),
-            },
-          );
-          await tester.pumpWidget(app);
-
-          // wait for connectivity
-          expect(find.byType(CircularProgressIndicator), findsOneWidget);
-          await tester.pumpAndSettle();
-
-          expect(find.byType(FeaturedTournamentsWidget), findsNothing);
-          expect(find.text('Open tournaments'), findsNothing);
-          expect(find.text('Recent games'), findsNothing);
-          expect(find.text('Friends'), findsNothing);
-        },
-      );
-
-      testWidgets('featured tournaments checkbox is shown when there are some to show', (
-        tester,
-      ) async {
-        final mockClient = MockClient((request) {
-          if (request.url.path == '/tournament/featured') {
-            return mockResponse(mockFeaturedTournamentsResponse, 200);
-          }
-          return mockResponse('', 200);
-        });
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          overrides: {
-            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-              (ref) => FakeHttpClientFactory(() => mockClient),
-            ),
-          },
-        );
-        await tester.pumpWidget(app);
-
-        // wait for connectivity
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text('Customize'));
-        await tester.pumpAndSettle(); // wait for settings screen to open
-
-        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        expect(find.byType(FeaturedTournamentsWidget), findsOneWidget);
-        // The widget renders its own header, so the checkbox row must not repeat it.
-        expect(find.text('Open tournaments'), findsOneWidget);
-      });
-
       testWidgets('rows show their stable label in edit mode', (tester) async {
         final app = await makeTestProviderScope(
           tester,

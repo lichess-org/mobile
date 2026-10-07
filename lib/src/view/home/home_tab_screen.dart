@@ -642,6 +642,10 @@ class const _EditableWidget({
     final isEditing = IsEditingHome.isEditing(context);
     final isEnabled = !disabledWidgets.contains(widget);
 
+    if (!shouldShow && !isEditing) {
+      return const SizedBox.shrink();
+    }
+
     if (isEditing) {
       final authUser = ref.watch(authControllerProvider);
       final showInEditMode =
@@ -688,10 +692,6 @@ class const _EditableWidget({
             const IconButton(icon: Icon(Icons.settings), onPressed: null),
         ],
       );
-    }
-
-    if (!shouldShow) {
-      return const SizedBox.shrink();
     }
 
     return widget.alwaysEnabled || isEnabled ? child : const SizedBox.shrink();
