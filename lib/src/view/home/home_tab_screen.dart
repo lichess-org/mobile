@@ -368,8 +368,8 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                     ),
                     Flexible(
                       child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: .max,
+                        mainAxisAlignment: .start,
                         children: [
                           const SizedBox(height: 8.0),
                           _EditableWidget(
