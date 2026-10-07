@@ -236,36 +236,36 @@ void main() {
     });
 
     group('home widgets edit mode', () {
-      testWidgets('featured tournaments checkbox is hidden when there are none to show', (
-        tester,
-      ) async {
-        final mockClient = MockClient((request) {
-          if (request.url.path == '/tournament/featured') {
-            return mockResponse('{"featured":[]}', 200);
-          }
-          return mockResponse('', 200);
-        });
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          overrides: {
-            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-              (ref) => FakeHttpClientFactory(() => mockClient),
-            ),
-          },
-        );
-        await tester.pumpWidget(app);
+      testWidgets(
+        'featured tournaments section is hidden in normal mode when there are none to show',
+        (tester) async {
+          final mockClient = MockClient((request) {
+            if (request.url.path == '/tournament/featured') {
+              return mockResponse('{"featured":[]}', 200);
+            }
+            return mockResponse('', 200);
+          });
+          final app = await makeTestProviderScope(
+            tester,
+            child: const Application(),
+            overrides: {
+              httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+                (ref) => FakeHttpClientFactory(() => mockClient),
+              ),
+            },
+          );
+          await tester.pumpWidget(app);
 
-        // wait for connectivity
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pumpAndSettle();
+          // wait for connectivity
+          expect(find.byType(CircularProgressIndicator), findsOneWidget);
+          await tester.pumpAndSettle();
 
-        await tester.tap(find.text('Customize'));
-        await tester.pumpAndSettle(); // wait for settings screen to open
-
-        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        expect(find.byType(FeaturedTournamentsWidget), findsNothing);
-      });
+          expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+          expect(find.text('Open tournaments'), findsNothing);
+          expect(find.text('Recent games'), findsNothing);
+          expect(find.text('Friends'), findsNothing);
+        },
+      );
 
       testWidgets('featured tournaments checkbox is shown when there are some to show', (
         tester,
@@ -300,7 +300,7 @@ void main() {
         expect(find.text('Open tournaments'), findsOneWidget);
       });
 
-      testWidgets('sections without their own title are labelled in edit mode', (tester) async {
+      testWidgets('rows show their stable label in edit mode', (tester) async {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
@@ -318,46 +318,10 @@ void main() {
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
+        expect(find.text('Friends'), findsOneWidget);
       });
 
-      testWidgets('recent games section is shown in edit mode when there are games', (
-        tester,
-      ) async {
-        final mockClient = MockClient((request) {
-          if (request.url.path == '/api/games/user/testuser') {
-            return mockResponse(mockUserRecentGameResponse('testUser'), 200);
-          }
-          if (request.url.path == '/tournament/featured') {
-            return mockResponse('{"featured":[]}', 200);
-          }
-          return mockResponse('', 200);
-        });
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          authUser: fakeAuthUser,
-          overrides: {
-            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
-              (ref) => FakeHttpClientFactory(() => mockClient),
-            ),
-          },
-        );
-        await tester.pumpWidget(app);
-
-        // wait for connectivity
-        expect(find.byType(CircularProgressIndicator), findsOneWidget);
-        await tester.pumpAndSettle();
-
-        await tester.tap(find.text('Customize'));
-        await tester.pumpAndSettle(); // wait for settings screen to open
-
-        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        // Last row of a lazily built list, so scroll it into view first.
-        await tester.scrollUntilVisible(find.text('Recent games'), 500.0);
-        expect(find.text('Recent games'), findsOneWidget);
-      });
-
-      testWidgets('a section with nothing to show adds no checkbox in edit mode', (tester) async {
+      testWidgets('empty sections keep their label in edit mode', (tester) async {
         final mockClient = MockClient((request) {
           switch (request.url.path) {
             case '/tournament/featured':
@@ -373,6 +337,9 @@ void main() {
           tester,
           child: const Application(),
           authUser: fakeAuthUser,
+          // Tall surface so the whole list is laid out and nothing is missed
+          // simply for being below the fold.
+          surfaceSize: const Size(390, 1600),
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => mockClient),
@@ -385,13 +352,105 @@ void main() {
         expect(find.byType(CircularProgressIndicator), findsOneWidget);
         await tester.pumpAndSettle();
 
+        // In normal mode the empty sections stay hidden.
+        expect(find.text('Friends'), findsNothing);
+        expect(find.text('Open tournaments'), findsNothing);
+        expect(find.text('Recent games'), findsNothing);
+
         await tester.tap(find.text('Customize'));
         await tester.pumpAndSettle(); // wait for settings screen to open
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        // Greeting, performance cards and quick pairing only. Recent games would
-        // add a fourth checkbox with nothing beside it.
-        expect(find.byType(Checkbox), findsNWidgets(3));
+        // Every row keeps its stable label, even with nothing to display.
+        expect(find.text('Hello'), findsOneWidget);
+        expect(find.text('Performance Cards'), findsOneWidget);
+        expect(find.text('Friends'), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
+        expect(find.text('Recent games'), findsOneWidget);
+        expect(find.text('Ongoing Games'), findsOneWidget);
+        // Greeting, performance cards, friends, quick pairing, ongoing games,
+        // featured tournaments and recent games.
+        expect(find.byType(Checkbox), findsNWidgets(7));
+      });
+
+      testWidgets('offline edit mode keeps labels for server-backed rows', (tester) async {
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          // Tall surface so the whole list is laid out and nothing is missed
+          // simply for being below the fold.
+          surfaceSize: const Size(390, 1600),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => serverDownClient()),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
+        final storage = await container.read(gameStorageProvider.future);
+        for (final game in generateExportedGames(count: 3, username: 'testUser')) {
+          await storage.save(game);
+        }
+
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.text('Hello'), findsOneWidget);
+        expect(find.text('Performance Cards'), findsOneWidget);
+        expect(find.text('Friends'), findsOneWidget);
+        expect(find.text('Recent games'), findsOneWidget);
+        // Greeting, performance cards, friends, quick pairing, ongoing games,
+        // featured tournaments and recent games.
+        expect(find.byType(Checkbox), findsNWidgets(7));
+      });
+
+      testWidgets('logged-out edit mode hides friends and performance cards only', (tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('{"featured":[]}', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          // Tall surface so the whole list is laid out and nothing is missed
+          // simply for being below the fold.
+          surfaceSize: const Size(390, 1600),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        final container = ProviderScope.containerOf(tester.element(find.byType(Application)));
+        final storage = await container.read(gameStorageProvider.future);
+        for (final game in generateExportedGames(count: 3)) {
+          await storage.save(game);
+        }
+
+        // wait for connectivity
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.text('Hello'), findsOneWidget);
+        expect(find.text('Recent games'), findsOneWidget);
+        expect(find.text('Friends'), findsNothing);
+        expect(find.text('Performance Cards'), findsNothing);
+        // Greeting, quick pairing, ongoing games, featured tournaments and
+        // recent games.
+        expect(find.byType(Checkbox), findsNWidgets(5));
       });
     });
   });

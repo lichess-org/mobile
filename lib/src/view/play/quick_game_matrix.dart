@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:material_ui/material_ui.dart';
@@ -50,8 +51,11 @@ class const QuickGameMatrix({super.key}) extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(context.l10n.quickPairing, style: Styles.sectionTitle),
-        const SizedBox(height: 6.0),
+        // In edit mode the row already shows the widget's stable label.
+        if (!IsEditingHome.isEditing(context)) ...[
+          Text(context.l10n.quickPairing, style: Styles.sectionTitle),
+          const SizedBox(height: 6.0),
+        ],
         Container(
           decoration: scaffoldOpacity != 0
               ? BoxDecoration(

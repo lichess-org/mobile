@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
@@ -44,6 +43,7 @@ import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen
 import 'package:lichess_mobile/src/view/home/blog_carousel.dart';
 import 'package:lichess_mobile/src/view/home/following_carousel.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
@@ -74,24 +74,6 @@ class const HomeTabScreen({super.key, final bool editModeEnabled = false})
 
   @override
   ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
-}
-
-class const _IsEditingHome({required super.child, required final bool isEditingWidgets})
-    extends InheritedWidget {
-  @override
-  bool updateShouldNotify(_IsEditingHome oldWidget) {
-    return isEditingWidgets != oldWidget.isEditingWidgets;
-  }
-
-  static _IsEditingHome? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<_IsEditingHome>();
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<bool>('isEditingWidgets', isEditingWidgets));
-  }
 }
 
 const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
@@ -252,20 +234,59 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                             ...welcomeWidgets,
                             const SizedBox(height: 32.0),
                             const _TabletCreateAGameSection(),
+                            _EditableWidget(
+                              widget: HomeEditableWidget.ongoingGames,
+                              // The preview itself renders nothing when empty.
+                              shouldShow: true,
+                              child: hasServerContent
+                                  ? _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
+                                  : _OfflineCorrespondencePreview(
+                                      offlineCorresGames,
+                                      maxGamesToShow: 5,
+                                    ),
+                            ),
                           ],
                         ),
                       ),
-                      Expanded(child: FeaturedTournamentsWidget(featured: featuredTournaments)),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            _EditableWidget(
+                              widget: HomeEditableWidget.featuredTournaments,
+                              shouldShow: hasServerContent && hasFeaturedTournaments,
+                              child: FeaturedTournamentsWidget(featured: featuredTournaments),
+                            ),
+                            _EditableWidget(
+                              widget: HomeEditableWidget.recentGames,
+                              // The widget itself renders nothing when empty.
+                              shouldShow: true,
+                              child: RecentGamesWidget(
+                                recentGames: recentGames,
+                                nbOfGames: nbOfGames,
+                                user: null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   )
                 else ...[
                   ...welcomeWidgets,
-                  if (hasServerContent)
+                  if (hasServerContent || widget.editModeEnabled)
                     const _EditableWidget(
                       widget: HomeEditableWidget.quickPairing,
                       shouldShow: true,
                       child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
                     ),
+                  _EditableWidget(
+                    widget: HomeEditableWidget.ongoingGames,
+                    // The carousel itself renders nothing when empty.
+                    shouldShow: true,
+                    child: hasServerContent
+                        ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+                        : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
+                  ),
                   _EditableWidget(
                     widget: HomeEditableWidget.featuredTournaments,
                     shouldShow: hasServerContent && hasFeaturedTournaments,
@@ -277,6 +298,16 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       shouldShow: hasServerContent,
                       child: _BlogCarouselWidget(blogPosts, _worker!),
                     ),
+                  _EditableWidget(
+                    widget: HomeEditableWidget.recentGames,
+                    // The widget itself renders nothing when empty.
+                    shouldShow: true,
+                    child: RecentGamesWidget(
+                      recentGames: recentGames,
+                      nbOfGames: nbOfGames,
+                      user: null,
+                    ),
+                  ),
                 ],
               ];
             } else if (isTablet) {
@@ -288,7 +319,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                 ),
                 if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
-                if (hasServerContent)
+                if (hasServerContent || widget.editModeEnabled)
                   _EditableWidget(
                     widget: HomeEditableWidget.perfCards,
                     shouldShow: authUser != null,
@@ -307,10 +338,17 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         children: [
                           const SizedBox(height: 8.0),
                           const _TabletCreateAGameSection(),
-                          if (hasServerContent)
-                            _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
-                          else
-                            _OfflineCorrespondencePreview(offlineCorresGames, maxGamesToShow: 5),
+                          _EditableWidget(
+                            widget: HomeEditableWidget.ongoingGames,
+                            // The preview itself renders nothing when empty.
+                            shouldShow: true,
+                            child: hasServerContent
+                                ? _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
+                                : _OfflineCorrespondencePreview(
+                                    offlineCorresGames,
+                                    maxGamesToShow: 5,
+                                  ),
+                          ),
                         ],
                       ),
                     ),
@@ -320,17 +358,27 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const SizedBox(height: 8.0),
-                          FeaturedTournamentsWidget(featured: featuredTournaments),
+                          _EditableWidget(
+                            widget: HomeEditableWidget.featuredTournaments,
+                            // The widget itself renders nothing when empty.
+                            shouldShow: true,
+                            child: FeaturedTournamentsWidget(featured: featuredTournaments),
+                          ),
                           if (_worker != null && !isKidMode)
                             _EditableWidget(
                               widget: HomeEditableWidget.blogCarousel,
                               shouldShow: hasServerContent,
                               child: _BlogCarouselWidget(blogPosts, _worker!),
                             ),
-                          RecentGamesWidget(
-                            recentGames: recentGames,
-                            nbOfGames: nbOfGames,
-                            user: null,
+                          _EditableWidget(
+                            widget: HomeEditableWidget.recentGames,
+                            // The widget itself renders nothing when empty.
+                            shouldShow: true,
+                            child: RecentGamesWidget(
+                              recentGames: recentGames,
+                              nbOfGames: nbOfGames,
+                              user: null,
+                            ),
                           ),
                         ],
                       ),
@@ -426,7 +474,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   _refreshData(isOnline: isOnline);
                 }
               },
-              child: _IsEditingHome(
+              child: IsEditingHome(
                 isEditingWidgets: widget.editModeEnabled,
                 child: PlatformScaffold(
                   appBar: widget.editModeEnabled
@@ -570,11 +618,14 @@ class const _SignInWidget() extends ConsumerWidget {
 ///
 /// * The [widget] parameter is the widget that can be enabled or disabled.
 ///
-/// * The [shouldShow] parameter is useful when the widget should be shown only
-///   when certain conditions are met. For example, we only want to show the quick
-///   pairing matrix when the user is online.
-///   This parameter is only active when the user is not in edit mode, as we
-///   always want to display the widget in edit mode.
+/// * The [shouldShow] parameter gates the widget in normal mode only. It is
+///   useful when the widget should be shown only when certain conditions are
+///   met. For example, we only want to show the quick pairing matrix when the
+///   user is online, or the friends carousel when the user follows someone.
+///   In edit mode [shouldShow] is ignored, so that every row keeps a stable
+///   label next to its checkbox even when empty or offline. The only rows
+///   hidden in edit mode are the ones requiring a logged-in account
+///   ([HomeEditableWidget.friends] and [HomeEditableWidget.perfCards]).
 class const _EditableWidget({
   required final Widget child,
   required final HomeEditableWidget widget,
@@ -583,58 +634,64 @@ class const _EditableWidget({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
-    final isEditing = _IsEditingHome.maybeOf(context)?.isEditingWidgets ?? false;
+    final isEditing = IsEditingHome.isEditing(context);
     final isEnabled = !disabledWidgets.contains(widget);
+
+    if (isEditing) {
+      final authUser = ref.watch(authControllerProvider);
+      final showInEditMode =
+          authUser != null ||
+          (widget != HomeEditableWidget.friends && widget != HomeEditableWidget.perfCards);
+      if (!showInEditMode) {
+        return const SizedBox.shrink();
+      }
+
+      return Row(
+        mainAxisSize: .max,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              mainAxisSize: .min,
+              children: [
+                Checkbox.adaptive(
+                  value: isEnabled,
+                  onChanged: widget.alwaysEnabled
+                      ? null
+                      : (_) {
+                          ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
+                        },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: .min,
+              crossAxisAlignment: .start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                  child: Text(widget.label(context.l10n)),
+                ),
+                IgnorePointer(ignoring: true, child: child),
+              ],
+            ),
+          ),
+          if (widget == HomeEditableWidget.quickPairing)
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => showTimeControlPicker(context, ref),
+            ),
+        ],
+      );
+    }
 
     if (!shouldShow) {
       return const SizedBox.shrink();
     }
 
-    return isEditing
-        ? Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Checkbox.adaptive(
-                      value: isEnabled,
-                      onChanged: widget.alwaysEnabled
-                          ? null
-                          : (_) {
-                              ref.read(homePreferencesProvider.notifier).toggleWidget(widget);
-                            },
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: widget.showsOwnTitle
-                    ? IgnorePointer(ignoring: isEditing, child: child)
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                            child: Text(widget.label(context.l10n)),
-                          ),
-                          IgnorePointer(ignoring: isEditing, child: child),
-                        ],
-                      ),
-              ),
-              if (widget == HomeEditableWidget.quickPairing)
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => showTimeControlPicker(context, ref),
-                ),
-            ],
-          )
-        : widget.alwaysEnabled || isEnabled
-        ? child
-        : const SizedBox.shrink();
+    return widget.alwaysEnabled || isEnabled ? child : const SizedBox.shrink();
   }
 }
 
@@ -738,15 +795,19 @@ class const _BlogCarouselWidget(
 ) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // In edit mode the row already shows the widget's stable label.
+    final isEditing = IsEditingHome.isEditing(context);
+
     return Padding(
       padding: Styles.verticalBodyPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: ListSectionHeader(title: Text(context.l10n.blog)),
-          ),
+          if (!isEditing)
+            Padding(
+              padding: Styles.horizontalBodyPadding,
+              child: ListSectionHeader(title: Text(context.l10n.blog)),
+            ),
           switch (posts) {
             AsyncData(:final value) => BlogCarousel(posts: value, worker: worker),
             AsyncError() => const Padding(
@@ -909,19 +970,23 @@ class const PreviewGameList<T>({
       return const SizedBox.shrink();
     }
 
+    // In edit mode the row already shows the widget's stable label.
+    final isEditing = IsEditingHome.isEditing(context);
+
     return Padding(
       padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListSectionHeader(
-            title: Text(context.l10n.nbGamesInPlay(list.length)),
-            onTap: list.length > maxGamesToShow
-                ? () {
-                    Navigator.of(context).push(moreScreenRouteBuilder(context));
-                  }
-                : null,
-          ),
+          if (!isEditing)
+            ListSectionHeader(
+              title: Text(context.l10n.nbGamesInPlay(list.length)),
+              onTap: list.length > maxGamesToShow
+                  ? () {
+                      Navigator.of(context).push(moreScreenRouteBuilder(context));
+                    }
+                  : null,
+            ),
           for (final data in list.take(maxGamesToShow)) builder(data),
         ],
       ),

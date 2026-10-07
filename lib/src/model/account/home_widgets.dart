@@ -4,19 +4,15 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 enum HomeEditableWidget(
   /// True if the widget should always be enabled and cannot be disabled.
   final bool alwaysEnabled,
-
-  /// True if the widget content renders its own section title, in which case the
-  /// edit mode row must not repeat it.
-  final bool showsOwnTitle,
 ) {
-  hello(false, false),
-  perfCards(false, false),
-  friends(false, true),
-  ongoingGames(true, true),
-  blogCarousel(false, true),
-  quickPairing(false, true),
-  featuredTournaments(false, true),
-  recentGames(false, true);
+  hello(false),
+  perfCards(false),
+  friends(false),
+  ongoingGames(true),
+  blogCarousel(false),
+  quickPairing(false),
+  featuredTournaments(false),
+  recentGames(false);
 
   String label(AppLocalizations l10n) => switch (this) {
     // not shown in the UI, so no need to localize
