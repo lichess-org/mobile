@@ -172,11 +172,11 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
             );
             final hasOngoingGames =
                 (hasServerContent &&
-                    ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => true)) ||
+                    ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
                 (!hasServerContent &&
                     offlineCorresGames.maybeWhen(
                       data: (data) => data.isNotEmpty,
-                      orElse: () => true,
+                      orElse: () => false,
                     ));
 
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
@@ -686,7 +686,8 @@ class const _EditableWidget({
           if (widget == HomeEditableWidget.quickPairing)
             IconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () => showTimeControlPicker(context, ref),
+              // The preview is frozen in edit mode.
+              onPressed: isEditing ? null : () => showTimeControlPicker(context, ref),
             ),
         ],
       );

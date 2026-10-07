@@ -39,12 +39,12 @@ class const RecentGamesWidget({
         return ListSection(
           header: isEditing ? null : Text(context.l10n.recentGames),
           hasLeading: true,
-          onHeaderTap: nbOfGames > list.length
-              ? () {
+          onHeaderTap: isEditing || nbOfGames <= list.length
+              ? null
+              : () {
                   Navigator.of(context)
                       .push(GameHistoryScreen.buildRoute(user: user, isOnline: isOnline));
-                }
-              : null,
+                },
           children: [for (final item in list) GameListTile(item: item)],
         );
       },

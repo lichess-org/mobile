@@ -132,9 +132,11 @@ class const FeaturedTournamentsWidget({
         return ListSection(
           hasLeading: true,
           header: isEditing ? null : Text(context.l10n.openTournaments),
-          onHeaderTap: () {
-            Navigator.of(context).push(TournamentListScreen.buildRoute());
-          },
+          onHeaderTap: isEditing
+              ? null
+              : () {
+                  Navigator.of(context).push(TournamentListScreen.buildRoute());
+                },
           children: [
             for (final tournament in value)
               if (tournament.isSupportedInApp) _TournamentListItem(tournament: tournament),

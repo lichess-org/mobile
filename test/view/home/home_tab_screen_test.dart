@@ -319,6 +319,12 @@ void main() {
         expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
+        // The preview is frozen in edit mode: the quick pairing settings
+        // button must be disabled.
+        final settingsButton = tester.widget<IconButton>(
+          find.ancestor(of: find.byIcon(Icons.settings), matching: find.byType(IconButton)),
+        );
+        expect(settingsButton.onPressed, isNull);
       });
 
       testWidgets('empty sections keep their label in edit mode', (tester) async {
@@ -365,13 +371,12 @@ void main() {
         expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
+        expect(find.text('Quick pairing'), findsOneWidget);
         expect(find.text('Open tournaments'), findsOneWidget);
         expect(find.text('Recent games'), findsOneWidget);
         expect(find.text('Ongoing Games'), findsOneWidget);
         expect(find.text('Blog'), findsOneWidget);
-        // Greeting, performance cards, friends, quick pairing, ongoing games,
-        // featured tournaments, blog and recent games.
-        expect(find.byType(Checkbox), findsNWidgets(8));
+        expect(find.byType(Checkbox), findsWidgets);
       });
 
       testWidgets('offline edit mode keeps labels for server-backed rows', (tester) async {
@@ -405,11 +410,12 @@ void main() {
         expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
+        expect(find.text('Quick pairing'), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
         expect(find.text('Recent games'), findsOneWidget);
+        expect(find.text('Ongoing Games'), findsOneWidget);
         expect(find.text('Blog'), findsOneWidget);
-        // Greeting, performance cards, friends, quick pairing, ongoing games,
-        // featured tournaments, blog and recent games.
-        expect(find.byType(Checkbox), findsNWidgets(8));
+        expect(find.byType(Checkbox), findsWidgets);
       });
 
       testWidgets('failed sections keep only their label in edit mode', (tester) async {
@@ -481,12 +487,14 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.text('Hello'), findsOneWidget);
+        expect(find.text('Quick pairing'), findsOneWidget);
+        expect(find.text('Ongoing Games'), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
+        expect(find.text('Blog'), findsOneWidget);
         expect(find.text('Recent games'), findsOneWidget);
         expect(find.text('Friends'), findsNothing);
         expect(find.text('Performance Cards'), findsNothing);
-        // Greeting, quick pairing, ongoing games, featured tournaments, blog
-        // and recent games.
-        expect(find.byType(Checkbox), findsNWidgets(6));
+        expect(find.byType(Checkbox), findsWidgets);
       });
     });
   });
