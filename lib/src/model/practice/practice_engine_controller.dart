@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
@@ -18,7 +19,6 @@ import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:logging/logging.dart';
 
 part 'practice_engine_controller.freezed.dart';
