@@ -368,9 +368,10 @@ void main() {
         expect(find.text('Open tournaments'), findsOneWidget);
         expect(find.text('Recent games'), findsOneWidget);
         expect(find.text('Ongoing Games'), findsOneWidget);
+        expect(find.text('Blog'), findsOneWidget);
         // Greeting, performance cards, friends, quick pairing, ongoing games,
-        // featured tournaments and recent games.
-        expect(find.byType(Checkbox), findsNWidgets(7));
+        // featured tournaments, blog and recent games.
+        expect(find.byType(Checkbox), findsNWidgets(8));
       });
 
       testWidgets('offline edit mode keeps labels for server-backed rows', (tester) async {
@@ -405,9 +406,44 @@ void main() {
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
         expect(find.text('Recent games'), findsOneWidget);
+        expect(find.text('Blog'), findsOneWidget);
         // Greeting, performance cards, friends, quick pairing, ongoing games,
-        // featured tournaments and recent games.
-        expect(find.byType(Checkbox), findsNWidgets(7));
+        // featured tournaments, blog and recent games.
+        expect(find.byType(Checkbox), findsNWidgets(8));
+      });
+
+      testWidgets('failed sections keep only their label in edit mode', (tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('', 500);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          // Tall surface so the whole list is laid out and nothing is missed
+          // simply for being below the fold.
+          surfaceSize: const Size(390, 1600),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
+        expect(find.text('Could not load featured tournaments'), findsNothing);
       });
 
       testWidgets('logged-out edit mode hides friends and performance cards only', (tester) async {
@@ -448,9 +484,9 @@ void main() {
         expect(find.text('Recent games'), findsOneWidget);
         expect(find.text('Friends'), findsNothing);
         expect(find.text('Performance Cards'), findsNothing);
-        // Greeting, quick pairing, ongoing games, featured tournaments and
-        // recent games.
-        expect(find.byType(Checkbox), findsNWidgets(5));
+        // Greeting, quick pairing, ongoing games, featured tournaments, blog
+        // and recent games.
+        expect(find.byType(Checkbox), findsNWidgets(6));
       });
     });
   });

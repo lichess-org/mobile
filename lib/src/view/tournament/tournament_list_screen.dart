@@ -143,6 +143,10 @@ class const FeaturedTournamentsWidget({
 
       case AsyncError(:final error):
         debugPrint('$error');
+        // In edit mode the row already shows the widget's stable label.
+        if (isEditing) {
+          return const SizedBox.shrink();
+        }
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load featured tournaments'),

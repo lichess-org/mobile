@@ -50,6 +50,10 @@ class const RecentGamesWidget({
       },
       error: (error, stackTrace) {
         debugPrint('SEVERE: [RecentGames] could not load recent games: $error\n$stackTrace');
+        // In edit mode the row already shows the widget's stable label.
+        if (isEditing) {
+          return const SizedBox.shrink();
+        }
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load recent games.'),

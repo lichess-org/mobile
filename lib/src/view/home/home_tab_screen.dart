@@ -172,11 +172,11 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
             );
             final hasOngoingGames =
                 (hasServerContent &&
-                    ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
+                    ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => true)) ||
                 (!hasServerContent &&
                     offlineCorresGames.maybeWhen(
                       data: (data) => data.isNotEmpty,
-                      orElse: () => false,
+                      orElse: () => true,
                     ));
 
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
@@ -264,6 +264,14 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                               shouldShow: hasServerContent && hasFeaturedTournaments,
                               child: FeaturedTournamentsWidget(featured: featuredTournaments),
                             ),
+                            if ((_worker != null && !isKidMode) || widget.editModeEnabled)
+                              _EditableWidget(
+                                widget: HomeEditableWidget.blogCarousel,
+                                shouldShow: hasServerContent,
+                                child: _worker != null
+                                    ? _BlogCarouselWidget(blogPosts, _worker!)
+                                    : const SizedBox.shrink(),
+                              ),
                             _EditableWidget(
                               widget: HomeEditableWidget.recentGames,
                               shouldShow: hasRecentGames,
@@ -298,11 +306,13 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                     shouldShow: hasServerContent && hasFeaturedTournaments,
                     child: FeaturedTournamentsWidget(featured: featuredTournaments),
                   ),
-                  if (_worker != null && !isKidMode)
+                  if ((_worker != null && !isKidMode) || widget.editModeEnabled)
                     _EditableWidget(
                       widget: HomeEditableWidget.blogCarousel,
                       shouldShow: hasServerContent,
-                      child: _BlogCarouselWidget(blogPosts, _worker!),
+                      child: _worker != null
+                          ? _BlogCarouselWidget(blogPosts, _worker!)
+                          : const SizedBox.shrink(),
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.recentGames,
@@ -367,11 +377,13 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                             shouldShow: hasServerContent && hasFeaturedTournaments,
                             child: FeaturedTournamentsWidget(featured: featuredTournaments),
                           ),
-                          if (_worker != null && !isKidMode)
+                          if ((_worker != null && !isKidMode) || widget.editModeEnabled)
                             _EditableWidget(
                               widget: HomeEditableWidget.blogCarousel,
                               shouldShow: hasServerContent,
-                              child: _BlogCarouselWidget(blogPosts, _worker!),
+                              child: _worker != null
+                                  ? _BlogCarouselWidget(blogPosts, _worker!)
+                                  : const SizedBox.shrink(),
                             ),
                           _EditableWidget(
                             widget: HomeEditableWidget.recentGames,
@@ -429,11 +441,13 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   shouldShow: hasServerContent && hasFeaturedTournaments,
                   child: FeaturedTournamentsWidget(featured: featuredTournaments),
                 ),
-                if (_worker != null && !isKidMode)
+                if ((_worker != null && !isKidMode) || widget.editModeEnabled)
                   _EditableWidget(
                     widget: HomeEditableWidget.blogCarousel,
                     shouldShow: hasServerContent,
-                    child: _BlogCarouselWidget(blogPosts, _worker!),
+                    child: _worker != null
+                        ? _BlogCarouselWidget(blogPosts, _worker!)
+                        : const SizedBox.shrink(),
                   ),
                 _EditableWidget(
                   widget: HomeEditableWidget.recentGames,
@@ -801,10 +815,14 @@ class const _BlogCarouselWidget(
             ),
           switch (posts) {
             AsyncData(:final value) => BlogCarousel(posts: value, worker: worker),
-            AsyncError() => const Padding(
-              padding: Styles.bodySectionPadding,
-              child: Text('Could not load blog posts.'),
-            ),
+            // In edit mode the row already shows the widget's stable label.
+            AsyncError() =>
+              isEditing
+                  ? const SizedBox.shrink()
+                  : const Padding(
+                      padding: Styles.bodySectionPadding,
+                      child: Text('Could not load blog posts.'),
+                    ),
             _ => Shimmer(
               child: ShimmerLoading(isLoading: true, child: BlogCarousel.loading(worker: worker)),
             ),
