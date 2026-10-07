@@ -11,6 +11,12 @@ part 'node.freezed.dart';
 
 final _logger = Logger('Node');
 
+final _lichessAuthorAnnotation = RegExp(r'\[%anno(?:\s+[^\]]*)?\]\s*');
+
+/// Removes Lichess author metadata from text shown to the user.
+String withoutLichessAuthorAnnotations(String text) =>
+    text.replaceAll(_lichessAuthorAnnotation, '');
+
 /// A node in a game tree.
 ///
 /// The tree is implemented with a linked list of nodes, using mutable [List] of
@@ -763,10 +769,11 @@ sealed class const ViewBranch._() extends ViewNode with _$ViewBranch {
 
   /// The text comments of this branch.
   Iterable<String> get textComments {
-    return [
-      ...lichessAnalysisComments ?? IList(const []),
-      ...comments ?? IList(const []),
-    ].where((t) => t.text?.isNotEmpty == true).map((c) => c.text!);
+    return [...lichessAnalysisComments ?? IList(const []), ...comments ?? IList(const [])]
+        .map((c) => c.text)
+        .nonNulls
+        .map((String text) => withoutLichessAuthorAnnotations(text))
+        .where((text) => text.isNotEmpty);
   }
 
   /// Has at least one non empty starting comment text.

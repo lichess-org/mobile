@@ -788,7 +788,10 @@ sealed class const StudyState._()
 
   String? get gamebookComment {
     final comment = (currentNode.isRoot ? pgnRootComments : currentNode.comments)
-        ?.map((comment) => comment.text)
+        ?.map((comment) {
+          final text = comment.text;
+          return text == null ? null : withoutLichessAuthorAnnotations(text);
+        })
         .nonNulls
         .join('\n');
     return comment?.isNotEmpty == true
