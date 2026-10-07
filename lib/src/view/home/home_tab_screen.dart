@@ -684,11 +684,8 @@ class const _EditableWidget({
             ),
           ),
           if (widget == HomeEditableWidget.quickPairing)
-            IconButton(
-              icon: const Icon(Icons.settings),
-              // The preview is frozen in edit mode.
-              onPressed: isEditing ? null : () => showTimeControlPicker(context, ref),
-            ),
+            // The preview is frozen in edit mode.
+            const IconButton(icon: Icon(Icons.settings), onPressed: null),
         ],
       );
     }
@@ -781,15 +778,17 @@ class const _GreetingWidget() extends ConsumerWidget {
 class const _TabletCreateAGameSection() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    // The menu preview is frozen in edit mode like every other preview.
+    final isEditing = IsEditingHome.isEditing(context);
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _EditableWidget(
+        const _EditableWidget(
           widget: HomeEditableWidget.quickPairing,
           shouldShow: true,
           child: Padding(padding: Styles.bodySectionPadding, child: QuickGameMatrix()),
         ),
-        PlayMenu(),
+        IgnorePointer(ignoring: isEditing, child: const PlayMenu()),
       ],
     );
   }

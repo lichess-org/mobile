@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/view/auth/email_login_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -450,6 +451,39 @@ void main() {
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.text('Open tournaments'), findsOneWidget);
         expect(find.text('Could not load featured tournaments'), findsNothing);
+      });
+
+      testWidgets('tablet edit mode freezes the play menu preview', (tester) async {
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          surfaceSize: const Size(1280, 800),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => MockClient((_) => mockResponse('', 200))),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.byType(PlayMenu), findsOneWidget);
+        // The menu preview must not accept taps while customizing.
+        expect(
+          find.ancestor(
+            of: find.byType(PlayMenu),
+            matching: find.byWidgetPredicate((w) => w is IgnorePointer && w.ignoring),
+          ),
+          findsOneWidget,
+        );
       });
 
       testWidgets('logged-out edit mode hides friends and performance cards only', (tester) async {
