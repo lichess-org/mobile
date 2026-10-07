@@ -10,14 +10,6 @@ import UserNotifications
 /// Dart sends the attributes and content state as JSON-compatible maps, decoded here with
 /// `JSONDecoder` into the shared Codable types.
 ///
-/// Methods:
-///  - `isSupported` → `Bool`: iOS 16.2+ and Live Activities allowed by the user.
-///  - `start {attributes, state}` → activity id.
-///  - `update {id, state}`.
-///  - `end {id}`: ends the activity and removes it at once.
-///  - `endAll`: ends every game activity, e.g. leftovers from a previous run.
-///  - `setConnected {connected}`: whether the game socket is connected.
-///
 /// Calls back to Dart with `onActivityState {id, state}` when an activity's state changes, e.g.
 /// `dismissed` when the user removes it from the Lock Screen.
 ///
@@ -60,8 +52,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private let channel: FlutterMethodChannel
 
   /// Last content state sent by Dart, by activity id, for the activities this run started and
-  /// hasn't ended. Lets the plugin re-apply the content with a new `staleDate`. Values are
-  /// `ContentState`, typed `Any` because a stored property can't be limited to iOS 16.2.
+  /// hasn't ended.
   private var contents: [String: Any] = [:]
   private var isInBackground = false
   /// When the app is predicted to be suspended, during a stay in the background.
