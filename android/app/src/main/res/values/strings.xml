@@ -7,5 +7,5 @@
     <string name="widget_daily_puzzle_title">Daily Puzzle</string>
     <string name="widget_daily_puzzle_description">Shows daily puzzle</string>
     <string name="widget_no_dailyPuzzle">No New Puzzles</string>
-  <string name="widget_daily_puzzle_error">Coudn\'t load puzzle</string>
+  <string name="widget_daily_puzzle_error">Couldn\'t load puzzle</string>
 </resources>
