@@ -14,7 +14,7 @@ import UserNotifications
 ///  - `isSupported` → `Bool`: iOS 16.2+ and Live Activities allowed by the user.
 ///  - `start {attributes, state}` → activity id.
 ///  - `update {id, state}`.
-///  - `end {id, state?, dismissAfterSeconds?}`: without a dismissal delay the system default applies.
+///  - `end {id}`: ends the activity and removes it at once.
 ///  - `endAll`: ends every game activity, e.g. leftovers from a previous run.
 ///  - `setConnected {connected}`: whether the game socket is connected.
 ///
@@ -188,16 +188,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private func end(args: [String: Any], result: @escaping FlutterResult) {
     do {
       let activity = try find(args["id"])
-      var content: ActivityContent<GameActivityAttributes.ContentState>?
-      if let state = args["state"], !(state is NSNull) {
-        content = ActivityContent(state: try decode(state), staleDate: nil)
-      }
-      let dismissalPolicy: ActivityUIDismissalPolicy =
-        (args["dismissAfterSeconds"] as? Double).map { .after(Date().addingTimeInterval($0)) }
-        ?? .default
       forget(activity.id)
       enqueue {
-        await activity.end(content, dismissalPolicy: dismissalPolicy)
+        await activity.end(nil, dismissalPolicy: .immediate)
         result(nil)
       }
     } catch {

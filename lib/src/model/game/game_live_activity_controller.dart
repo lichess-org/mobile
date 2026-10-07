@@ -23,18 +23,14 @@ typedef _SyncKey = ({
   Side? winner,
   Duration? whiteClock,
   Duration? blackClock,
-  bool? whiteOffersDraw,
-  bool? blackOffersDraw,
-  bool? whiteProposesTakeback,
-  bool? blackProposesTakeback,
 });
 
 /// Keeps the iOS Live Activity of a game in sync with its [GameController].
 ///
 /// Lives as long as the game screen watches it. Starts the activity once the game is loaded, if it
-/// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves, clock changes and
-/// offers, and removes it at once when the game is over or when the game screen is left: it is only
-/// useful while the game is being played. Also reports the game socket's connection state, which
+/// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves and clock changes,
+/// and removes it at once when the game is over or when the game screen is left: it is only useful
+/// while the game is being played. Also reports the game socket's connection state, which
 /// the native side uses to show "You left the game" while the app is in the background.
 class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<void> {
   late GameLiveActivityChannel _channel;
@@ -79,7 +75,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
       _stateSubscription?.cancel();
       final id = _activityId;
       _activityId = null;
-      if (id != null) _channel.end(id, dismissAfter: Duration.zero);
+      if (id != null) _channel.end(id);
     });
   }
 
@@ -92,10 +88,6 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
       winner: game.winner,
       whiteClock: game.clock?.white,
       blackClock: game.clock?.black,
-      whiteOffersDraw: game.white.offeringDraw,
-      blackOffersDraw: game.black.offeringDraw,
-      whiteProposesTakeback: game.white.proposingTakeback,
-      blackProposesTakeback: game.black.proposingTakeback,
     );
   }
 
@@ -155,7 +147,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
       _done = true;
       if (id != null) {
         _activityId = null;
-        await _channel.end(id, dismissAfter: Duration.zero);
+        await _channel.end(id);
       }
       return;
     }
@@ -181,7 +173,7 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
         _done = true;
       } else if (!ref.mounted) {
         // The game screen was left while the activity was starting.
-        _channel.end(newId, dismissAfter: Duration.zero);
+        _channel.end(newId);
       } else {
         _activityId = newId;
         _syncConnected();

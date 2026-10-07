@@ -68,12 +68,6 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
   };
 }
 
-/// A pending offer from the opponent.
-enum GameLiveActivityOffer() {
-  draw,
-  takeback,
-}
-
 /// The dynamic part of the game Live Activity.
 ///
 /// Must match `GameActivityAttributes.ContentState` in `ios/LichessWidgets/Game Live Activity/`.
@@ -93,7 +87,6 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
 
     /// Whether the clock of [turn] is running.
     required bool clockRunning,
-    GameLiveActivityOffer? offer,
 
     /// Whether lila's claim-victory rule can apply if the player leaves the game.
     required bool claimable,
@@ -112,7 +105,6 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     required DateTime now,
   }) {
     final lastPosition = game.lastPosition;
-    final opponent = game.youAre == null ? null : game.playerOf(game.youAre!.opposite);
     return GameLiveActivityState(
       fen: boardFen(lastPosition),
       lastMove: game.lastMove?.uci,
@@ -123,11 +115,6 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
       clockAt: now,
       // Same rule as the game clock: it starts once both players have moved.
       clockRunning: game.clock != null && lastPosition.fullmoves > 1,
-      offer: opponent?.offeringDraw == true
-          ? GameLiveActivityOffer.draw
-          : opponent?.proposingTakeback == true
-          ? GameLiveActivityOffer.takeback
-          : null,
       claimable: isClaimable(game),
       leftWarningDelay: leftWarningDelayOf(game),
     );
@@ -218,7 +205,6 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     'blackClock': blackClock.inMilliseconds,
     'clockAt': clockAt.millisecondsSinceEpoch.toDouble(),
     'clockRunning': clockRunning,
-    'offer': offer?.name,
     'claimable': claimable,
     'leftWarningDelay': leftWarningDelay?.inMilliseconds,
   };
@@ -296,16 +282,11 @@ class GameLiveActivityChannel._() {
     }
   }
 
-  /// Ends the activity, optionally with a final [state], keeping it on the Lock Screen for
-  /// [dismissAfter] (system default if null).
-  Future<void> end(String id, {GameLiveActivityState? state, Duration? dismissAfter}) async {
+  /// Ends the activity and removes it at once.
+  Future<void> end(String id) async {
     if (!_isIOS) return;
     try {
-      await _channel.invokeMethod<void>('end', {
-        'id': id,
-        'state': state?.toJson(),
-        'dismissAfterSeconds': dismissAfter == null ? null : dismissAfter.inMilliseconds / 1000,
-      });
+      await _channel.invokeMethod<void>('end', {'id': id});
     } on PlatformException catch (e, st) {
       _log.severe('end failed', e, st);
     }

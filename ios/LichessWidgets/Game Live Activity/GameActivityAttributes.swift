@@ -23,11 +23,6 @@ struct GameActivityAttributes: ActivityAttributes {
         let rating: Int?
     }
 
-    enum Offer: String, Codable, Hashable {
-        case draw
-        case takeback
-    }
-
     struct ContentState: Codable, Hashable {
         /// Board part of the FEN only (no pockets, no promoted-piece markers).
         let fen: String
@@ -42,8 +37,6 @@ struct GameActivityAttributes: ActivityAttributes {
         let clockAt: Double
         /// Whether the clock of `turn` is running.
         let clockRunning: Bool
-        /// A pending offer from the opponent.
-        let offer: Offer?
         /// Whether lila's claim-victory rule can apply if the player leaves the game.
         let claimable: Bool
         /// Milliseconds after lila counts the player as gone to warn them that they left the game,
@@ -59,7 +52,6 @@ struct GameActivityAttributes: ActivityAttributes {
 
 @available(iOS 16.2, *)
 extension GameActivityAttributes {
-    var me: Player { myColor == .white ? white : black }
     var opponent: Player { myColor == .white ? black : white }
 }
 

@@ -40,7 +40,6 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
   String? _lastSan;
   Duration _whiteClock = const Duration(minutes: 10);
   Duration _blackClock = const Duration(minutes: 10);
-  GameLiveActivityOffer? _offer;
 
   @override
   void initState() {
@@ -59,7 +58,6 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
     blackClock: _blackClock,
     clockAt: DateTime.now(),
     clockRunning: _ply >= 2,
-    offer: _offer,
     claimable: _ply >= 2,
   );
 
@@ -104,22 +102,14 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
       _lastMove = move.uci;
       _lastSan = san;
       _ply++;
-      _offer = null;
     });
-    await _channel.update(id, _state());
-  }
-
-  Future<void> _toggleOffer(GameLiveActivityOffer offer) async {
-    final id = _activityId;
-    if (id == null) return;
-    setState(() => _offer = _offer == offer ? null : offer);
     await _channel.update(id, _state());
   }
 
   Future<void> _end() async {
     final id = _activityId;
     if (id == null) return;
-    await _channel.end(id, dismissAfter: Duration.zero);
+    await _channel.end(id);
     setState(() {
       _activityId = null;
       _position = Chess.initial;
@@ -128,7 +118,6 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
       _lastSan = null;
       _whiteClock = const Duration(minutes: 10);
       _blackClock = const Duration(minutes: 10);
-      _offer = null;
       _log = 'Ended $id';
     });
   }
@@ -149,17 +138,7 @@ class _LiveActivityDebugScreenState() extends State<LiveActivityDebugScreen> {
                 enabled: hasActivity,
                 onTap: _playNextMove,
               ),
-              ListTile(
-                title: const Text('Toggle draw offer'),
-                enabled: hasActivity,
-                onTap: () => _toggleOffer(GameLiveActivityOffer.draw),
-              ),
-              ListTile(
-                title: const Text('Toggle takeback offer'),
-                enabled: hasActivity,
-                onTap: () => _toggleOffer(GameLiveActivityOffer.takeback),
-              ),
-              ListTile(title: const Text('End (1-0)'), enabled: hasActivity, onTap: _end),
+              ListTile(title: const Text('End'), enabled: hasActivity, onTap: _end),
               ListTile(
                 title: const Text('End all'),
                 onTap: () async {

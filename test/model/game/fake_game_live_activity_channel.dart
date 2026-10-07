@@ -8,7 +8,6 @@ typedef LiveActivityCall = ({
   String? id,
   GameLiveActivityAttributes? attributes,
   GameLiveActivityState? state,
-  Duration? dismissAfter,
 });
 
 /// Records the calls instead of driving a real Live Activity.
@@ -35,18 +34,18 @@ class FakeGameLiveActivityChannel({final bool supported = true})
   @override
   Future<String?> start(GameLiveActivityAttributes attributes, GameLiveActivityState state) async {
     final id = 'activity-${_nextId++}';
-    calls.add((method: 'start', id: id, attributes: attributes, state: state, dismissAfter: null));
+    calls.add((method: 'start', id: id, attributes: attributes, state: state));
     return id;
   }
 
   @override
   Future<void> update(String id, GameLiveActivityState state) async {
-    calls.add((method: 'update', id: id, attributes: null, state: state, dismissAfter: null));
+    calls.add((method: 'update', id: id, attributes: null, state: state));
   }
 
   @override
-  Future<void> end(String id, {GameLiveActivityState? state, Duration? dismissAfter}) async {
-    calls.add((method: 'end', id: id, attributes: null, state: state, dismissAfter: dismissAfter));
+  Future<void> end(String id) async {
+    calls.add((method: 'end', id: id, attributes: null, state: null));
   }
 
   @override
@@ -56,6 +55,6 @@ class FakeGameLiveActivityChannel({final bool supported = true})
 
   @override
   Future<void> endAll() async {
-    calls.add((method: 'endAll', id: null, attributes: null, state: null, dismissAfter: null));
+    calls.add((method: 'endAll', id: null, attributes: null, state: null));
   }
 }

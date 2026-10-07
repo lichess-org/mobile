@@ -1710,34 +1710,6 @@ void main() {
       expect(channel.calls.single.state!.leftWarningDelay, isNull);
     });
 
-    testWidgets('shows the opponent offers', (tester) async {
-      final channel = FakeGameLiveActivityChannel();
-      await createTestGame(
-        tester,
-        pgn: 'e4 e5 Nf3 Nc6',
-        overrides: {
-          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
-            channel,
-          ),
-        },
-      );
-      await tester.pump();
-
-      sendServerSocketMessages(testGameSocketUri, ['{"t":"drawOffer","v":1,"d":"black"}']);
-      await tester.pump();
-      expect(lastCall(channel).state!.offer, GameLiveActivityOffer.draw);
-
-      sendServerSocketMessages(testGameSocketUri, ['{"t":"drawOffer","v":2,"d":null}']);
-      await tester.pump();
-      expect(lastCall(channel).state!.offer, isNull);
-
-      sendServerSocketMessages(testGameSocketUri, [
-        '{"t":"takebackOffers","v":3,"d":{"black":true}}',
-      ]);
-      await tester.pump();
-      expect(lastCall(channel).state!.offer, GameLiveActivityOffer.takeback);
-    });
-
     testWidgets('ends at once when the game is over', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(
@@ -1758,8 +1730,6 @@ void main() {
 
       final end = lastCall(channel);
       expect(end.method, 'end');
-      expect(end.state, isNull);
-      expect(end.dismissAfter, Duration.zero);
 
       // let the game-over popup and the dong play
       await tester.pump(const Duration(seconds: 1));
@@ -1788,7 +1758,6 @@ void main() {
 
       expect(lastCall(channel).method, 'end');
       expect(lastCall(channel).id, id);
-      expect(lastCall(channel).dismissAfter, Duration.zero);
     });
 
     testWidgets('stops updating once the user dismisses it', (tester) async {

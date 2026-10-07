@@ -212,15 +212,9 @@ private struct StatusLine: View {
         }
     }
 
-    private var isMyTurn: Bool { state.offer == nil && state.turn == myColor }
+    private var isMyTurn: Bool { state.turn == myColor }
 
-    private var headline: String {
-        switch state.offer {
-        case .draw: return "Your opponent offers a draw"
-        case .takeback: return "Your opponent proposes a takeback"
-        case nil: return state.turn == myColor ? "Your turn" : "Waiting for opponent"
-        }
-    }
+    private var headline: String { isMyTurn ? "Your turn" : "Waiting for opponent" }
 }
 
 // MARK: - Dynamic Island
@@ -307,7 +301,6 @@ private extension GameActivityAttributes.ContentState {
             blackClock: 251_000,
             clockAt: Date.now.timeIntervalSince1970 * 1000,
             clockRunning: true,
-            offer: nil,
             claimable: true,
             leftWarningDelay: 30_000
         )
