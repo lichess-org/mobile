@@ -155,8 +155,9 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                 ? ref.watch(followingCarouselProvider)
                 : const AsyncValue.data(IListConst<FollowingUser>([]));
 
-            // Widgets whose content can be empty should not show a checkbox in
-            // edit mode when there is nothing to display next to it.
+            // In normal mode, widgets whose content is empty render nothing, so
+            // their checkbox row is hidden. In edit mode every eligible row
+            // keeps its stable label, even when empty.
             final hasFeaturedTournaments = featuredTournaments.maybeWhen(
               data: (tournaments) => tournaments.any((t) => t.isSupportedInApp),
               orElse: () => true,
@@ -169,6 +170,14 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
               data: (games) => games.isNotEmpty,
               orElse: () => true,
             );
+            final hasOngoingGames =
+                (hasServerContent &&
+                    ongoingGames.maybeWhen(data: (data) => data.isNotEmpty, orElse: () => false)) ||
+                (!hasServerContent &&
+                    offlineCorresGames.maybeWhen(
+                      data: (data) => data.isNotEmpty,
+                      orElse: () => false,
+                    ));
 
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
@@ -236,8 +245,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                             const _TabletCreateAGameSection(),
                             _EditableWidget(
                               widget: HomeEditableWidget.ongoingGames,
-                              // The preview itself renders nothing when empty.
-                              shouldShow: true,
+                              shouldShow: hasOngoingGames,
                               child: hasServerContent
                                   ? _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                                   : _OfflineCorrespondencePreview(
@@ -258,8 +266,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                             ),
                             _EditableWidget(
                               widget: HomeEditableWidget.recentGames,
-                              // The widget itself renders nothing when empty.
-                              shouldShow: true,
+                              shouldShow: hasRecentGames,
                               child: RecentGamesWidget(
                                 recentGames: recentGames,
                                 nbOfGames: nbOfGames,
@@ -281,8 +288,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.ongoingGames,
-                    // The carousel itself renders nothing when empty.
-                    shouldShow: true,
+                    shouldShow: hasOngoingGames,
                     child: hasServerContent
                         ? _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
                         : _OfflineCorrespondenceCarousel(offlineCorresGames, maxGamesToShow: 20),
@@ -300,8 +306,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.recentGames,
-                    // The widget itself renders nothing when empty.
-                    shouldShow: true,
+                    shouldShow: hasRecentGames,
                     child: RecentGamesWidget(
                       recentGames: recentGames,
                       nbOfGames: nbOfGames,
@@ -340,8 +345,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           const _TabletCreateAGameSection(),
                           _EditableWidget(
                             widget: HomeEditableWidget.ongoingGames,
-                            // The preview itself renders nothing when empty.
-                            shouldShow: true,
+                            shouldShow: hasOngoingGames,
                             child: hasServerContent
                                 ? _OngoingGamesPreview(ongoingGames, maxGamesToShow: 5)
                                 : _OfflineCorrespondencePreview(
@@ -360,8 +364,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           const SizedBox(height: 8.0),
                           _EditableWidget(
                             widget: HomeEditableWidget.featuredTournaments,
-                            // The widget itself renders nothing when empty.
-                            shouldShow: true,
+                            shouldShow: hasServerContent && hasFeaturedTournaments,
                             child: FeaturedTournamentsWidget(featured: featuredTournaments),
                           ),
                           if (_worker != null && !isKidMode)
@@ -372,8 +375,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                             ),
                           _EditableWidget(
                             widget: HomeEditableWidget.recentGames,
-                            // The widget itself renders nothing when empty.
-                            shouldShow: true,
+                            shouldShow: hasRecentGames,
                             child: RecentGamesWidget(
                               recentGames: recentGames,
                               nbOfGames: nbOfGames,
@@ -387,17 +389,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                 ),
               ];
             } else {
-              final hasOngoingGames =
-                  (hasServerContent &&
-                      ongoingGames.maybeWhen(
-                        data: (data) => data.isNotEmpty,
-                        orElse: () => false,
-                      )) ||
-                  (!hasServerContent &&
-                      offlineCorresGames.maybeWhen(
-                        data: (data) => data.isNotEmpty,
-                        orElse: () => false,
-                      ));
               widgets = [
                 const _EditableWidget(
                   widget: HomeEditableWidget.hello,
