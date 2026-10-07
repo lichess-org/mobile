@@ -7,7 +7,7 @@ version: 0.29.1+002901 # See README.md for details about versioning
 environment:
   sdk: ^3.13.0
   # this should be updated with every new flutter stable release
-  flutter: 3.47.5
+  flutter: 3.47.6
 
 dependencies:
   app_links: ^7.2.1
