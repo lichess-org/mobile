@@ -4,9 +4,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 /// [PuzzleStreak] with its current [Puzzle].
 typedef StreakState = ({PuzzleStreak streak, Puzzle puzzle, Puzzle? nextPuzzle});
@@ -92,10 +91,7 @@ class PuzzleStreakController() extends AsyncNotifier<StreakState> {
             ));
           })
           .catchError((_) {
-            final currentContext = ref.read(currentNavigatorKeyProvider).currentContext;
-            if (currentContext != null && currentContext.mounted) {
-              showSnackBar(currentContext, 'Error loading next puzzle', type: SnackBarType.error);
-            }
+            ref.read(uiEventBusProvider).emit(const ShowErrorEvent('Error loading next puzzle'));
           });
     }
 

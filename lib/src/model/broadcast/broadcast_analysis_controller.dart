@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';

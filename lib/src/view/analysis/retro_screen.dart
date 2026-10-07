@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/service/server_analysis_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';

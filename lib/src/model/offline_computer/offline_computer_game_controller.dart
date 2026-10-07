@@ -39,7 +39,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:logging/logging.dart';
 
 part 'offline_computer_game_controller.freezed.dart';

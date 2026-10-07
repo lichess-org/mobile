@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/game_share_service.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';

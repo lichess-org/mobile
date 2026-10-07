@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -33,7 +34,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
 import 'package:lichess_mobile/src/service/server_analysis_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 

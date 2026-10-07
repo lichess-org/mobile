@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/practice_analyser.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/service/position_evaluator.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 
 import '../../binding.dart';
 import '../../network/fake_websocket_channel.dart';
