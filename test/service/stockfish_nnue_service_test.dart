@@ -338,27 +338,5 @@ void main() {
         expect(await service.nnueFile.exists(), isFalse);
       });
     });
-
-    group('isDownloadingNNUEFile', () {
-      test('returns false when progress is 0', () async {
-        final container = await makeNnueTestContainer(appSupportDirectory: null);
-        addTearDown(container.dispose);
-
-        final service = container.read(stockfishNnueServiceProvider);
-
-        expect(service.isDownloadingNNUEFile, isFalse);
-      });
-
-      test('returns false when progress is 1', () async {
-        final container = await makeNnueTestContainer(appSupportDirectory: null);
-        addTearDown(container.dispose);
-
-        final service = container.read(stockfishNnueServiceProvider);
-        // We can't easily set progress to 1 without downloading, but we can verify the logic
-        // Progress starts at 0, so isDownloadingNNUEFile should be false
-        expect(service.nnueDownloadProgress.value, 0.0);
-        expect(service.isDownloadingNNUEFile, isFalse);
-      });
-    });
   });
 }

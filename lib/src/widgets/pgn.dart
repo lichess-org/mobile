@@ -376,6 +376,11 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
   }
 
   List<_CachedRenderedSubtree> _buildChangedSubtrees({required bool fullRebuild}) {
+    // Depends only on the root and the current path, so it must not be recomputed per part:
+    // each call walks the whole mainline and allocates a few strings per node.
+    final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
+    final currentMoveIsOnMainline = mainlinePartOfCurrentPath == widget.params.pathToCurrentMove;
+
     var path = UciPath.empty;
     return mainlineParts
         .mapIndexed((i, mainlineNodes) {
@@ -392,10 +397,6 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
           if (mainlineNodes.last.children.isNotEmpty) {
             path = path + mainlineNodes.last.children.first.id;
           }
-
-          final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
-          final currentMoveIsOnMainline =
-              mainlinePartOfCurrentPath == widget.params.pathToCurrentMove;
 
           final containsCurrentMove = currentMoveIsOnMainline
               ? mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
