@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// bus.
 sealed class const UiEvent();
 
-/// Shows [message] in a snackbar.
+/// Shows an error [message] in a snackbar.
 class const ShowErrorEvent(final String message) extends UiEvent;
 
 /// The channel on which [UiEvent]s travel from the model layer to the view layer.

@@ -12,11 +12,7 @@ final uiEventCoordinatorProvider = Provider<UiEventCoordinator>((Ref ref) {
   return coordinator;
 }, name: 'UiEventCoordinatorProvider');
 
-/// The view layer's half of the model/view split: listens to the [uiEventBusProvider] and shows
-/// the snackbars the model layer asks for.
-///
-/// Started from `_AppState.initState` before any service, so that no event is emitted before
-/// someone is listening.
+/// Listens to the [uiEventBusProvider] and react to UI events the model layer asks for.
 class UiEventCoordinator(final Ref ref) {
   StreamSubscription<UiEvent>? _subscription;
 
