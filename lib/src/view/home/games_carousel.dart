@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -55,22 +56,26 @@ class _GamesCarouselState<T>() extends State<GamesCarousel<T>> {
 
   @override
   Widget build(BuildContext context) {
+    // In edit mode the row already shows the widget's stable label.
+    final isEditing = IsEditingHome.isEditing(context);
+
     return Padding(
       padding: Styles.verticalBodyPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: ListSectionHeader(
-              title: Text(context.l10n.nbGamesInPlay(widget.list.length)),
-              onTap: widget.list.length > 2
-                  ? () {
-                      Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
-                    }
-                  : null,
+          if (!isEditing)
+            Padding(
+              padding: Styles.horizontalBodyPadding,
+              child: ListSectionHeader(
+                title: Text(context.l10n.nbGamesInPlay(widget.list.length)),
+                onTap: widget.list.length > 2
+                    ? () {
+                        Navigator.of(context).push(widget.moreScreenRouteBuilder(context));
+                      }
+                    : null,
+              ),
             ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: AspectRatio(

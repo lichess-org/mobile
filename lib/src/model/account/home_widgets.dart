@@ -18,7 +18,7 @@ enum HomeEditableWidget(
     // not shown in the UI, so no need to localize
     HomeEditableWidget.ongoingGames => 'Ongoing Games',
     HomeEditableWidget.hello => l10n.mobileHello,
-    // not shown in the UI, so no need to localize
+    // shown in edit mode only, hardcoded until it is worth localizing
     HomeEditableWidget.perfCards => 'Performance Cards',
     HomeEditableWidget.friends => l10n.friends,
     HomeEditableWidget.quickPairing => l10n.quickPairing,
