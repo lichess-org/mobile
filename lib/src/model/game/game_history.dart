@@ -179,7 +179,7 @@ class UserGameHistoryNotifier(final UserGameHistoryNotifierParams params)
               withMoves: prefs.displayMode == GameHistoryDisplayMode.detail,
             )
           : (await ref.watch(gameStorageProvider.future))
-                .page(max: _nbPerPage, until: _list.last.game.createdAt)
+                .page(max: _nbPerPage, until: _list.last.game.createdAt, filter: currentVal.filter)
                 .then(
                   (value) => value
                       // we can assume that `youAre` is not null either for logged
