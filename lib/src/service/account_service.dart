@@ -6,10 +6,10 @@ import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
+import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';

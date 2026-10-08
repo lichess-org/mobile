@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 
 /// A fake implementation of [StockfishNnueService] for testing.
 ///
