@@ -7,6 +7,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/app_links_service.dart';
+import 'package:lichess_mobile/src/app_refresh_service.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -78,6 +79,9 @@ class _AppState() extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();
+
+  late final AppLifecycleListener _appRefreshListener;
+  DateTime? _focusLostAt;
 
   // Adjusts some settings for small screens based on the MediaQuery data.
   Future<void> _screenSizeBasedInitialization(WidgetRef ref) async {
@@ -199,7 +203,29 @@ class _AppState() extends ConsumerState<Application> {
       }
     });
 
+    // Listen for app lifecycle changes and refresh the app appropriately
+    _appRefreshListener = AppLifecycleListener(
+      onPause: () {
+        _focusLostAt = DateTime.now();
+      },
+      onResume: () {
+        if (context.mounted && _focusLostAt != null) {
+          final duration = DateTime.now().difference(_focusLostAt!);
+          if (duration.inSeconds < 10) {
+            return;
+          }
+          ref.read(appRefreshProvider).refreshApp();
+        }
+      },
+    );
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _appRefreshListener.dispose();
+    super.dispose();
   }
 
   @override

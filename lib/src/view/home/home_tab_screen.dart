@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/app_refresh_service.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
@@ -27,7 +28,6 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -100,8 +100,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  DateTime? _focusLostAt;
-
   bool wasOnline = true;
   bool hasRefreshed = false;
 
@@ -129,7 +127,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
 
         if (!hasRefreshed && !wasOnline && isNowOnline) {
           hasRefreshed = true;
-          _refreshData(isOnline: isNowOnline);
+          ref.read(appRefreshProvider).refreshApp();
         }
 
         wasOnline = isNowOnline;
@@ -409,95 +407,62 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
               children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
             );
 
-            return FocusDetector(
-              onFocusLost: () {
-                _focusLostAt = DateTime.now();
-              },
-              onFocusRegained: () {
-                if (context.mounted && _focusLostAt != null) {
-                  final duration = DateTime.now().difference(_focusLostAt!);
-                  if (duration.inSeconds < 10) {
-                    return;
-                  }
-                  _refreshData(isOnline: isOnline);
-                }
-              },
-              child: _IsEditingHome(
-                isEditingWidgets: widget.editModeEnabled,
-                child: PlatformScaffold(
-                  appBar: widget.editModeEnabled
-                      ? PlatformAppBar(
-                          title: Text(context.l10n.mobileSettingsHomeWidgets),
-                          leading: const BackButton(),
-                          automaticallyImplyLeading: false,
-                        )
-                      : PlatformAppBar(
-                          title: Theme.of(context).platform == TargetPlatform.iOS
-                              ? AppBarLichessTitle(
-                                  iconSize:
-                                      Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
-                                )
-                              : const AppBarLichessTitle(),
-                          centerTitle: false,
-                          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                              ? Theme.of(context).textTheme.headlineSmall
-                              : null,
-                          actions: const [_ChallengeScreenButton(), AccountMenuButton()],
+            return _IsEditingHome(
+              isEditingWidgets: widget.editModeEnabled,
+              child: PlatformScaffold(
+                appBar: widget.editModeEnabled
+                    ? PlatformAppBar(
+                        title: Text(context.l10n.mobileSettingsHomeWidgets),
+                        leading: const BackButton(),
+                        automaticallyImplyLeading: false,
+                      )
+                    : PlatformAppBar(
+                        title: Theme.of(context).platform == TargetPlatform.iOS
+                            ? AppBarLichessTitle(
+                                iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                              )
+                            : const AppBarLichessTitle(),
+                        centerTitle: false,
+                        titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
+                            ? Theme.of(context).textTheme.headlineSmall
+                            : null,
+                        actions: const [_ChallengeScreenButton(), AccountMenuButton()],
+                      ),
+                body: widget.editModeEnabled
+                    ? content
+                    : HapticRefreshIndicator(
+                        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                            ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                            : 0.0,
+                        key: _refreshKey,
+                        onRefresh: ref.read(appRefreshProvider).refreshApp,
+                        child: content,
+                      ),
+                bottomNavigationBar: widget.editModeEnabled
+                    ? BottomAppBar(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(context.l10n.ok),
+                            ),
+                          ],
                         ),
-                  body: widget.editModeEnabled
-                      ? content
-                      : HapticRefreshIndicator(
-                          edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
-                          key: _refreshKey,
-                          onRefresh: () => _refreshData(isOnline: isOnline),
-                          child: content,
-                        ),
-                  bottomNavigationBar: widget.editModeEnabled
-                      ? BottomAppBar(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(context.l10n.ok),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
-                  floatingActionButton: widget.editModeEnabled || isTablet
-                      ? null
-                      : const FloatingPlayButton(),
-                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
-                ),
+                      )
+                    : null,
+                floatingActionButton: widget.editModeEnabled || isTablet
+                    ? null
+                    : const FloatingPlayButton(),
+                bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
               ),
             );
           },
           error: (_, _) => const CenterLoadingIndicator(),
           loading: () => const CenterLoadingIndicator(),
         );
-  }
-
-  Future<void> _refreshData({required bool isOnline}) async {
-    try {
-      await Future.wait([
-        ref.refresh(myRecentGamesProvider.future),
-        if (isOnline) ref.refresh(challengesProvider.future),
-        if (isOnline) ref.refresh(unreadMessagesProvider.future),
-        if (isOnline) ref.refresh(accountProvider.future),
-        if (isOnline) ref.refresh(ongoingGamesProvider.future),
-        if (isOnline) ref.refresh(featuredTournamentsProvider.future),
-        if (isOnline) ref.refresh(followingCarouselProvider.future),
-      ]);
-    } catch (_) {
-      // Refreshing while the server is unavailable is expected to fail. Each
-      // provider surfaces its own error, and the failed responses are what keep
-      // the server status up to date, so there is nothing to do here.
-    }
   }
 }
 
