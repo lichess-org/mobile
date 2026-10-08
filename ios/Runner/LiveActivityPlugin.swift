@@ -3,39 +3,11 @@ import Flutter
 import UIKit
 import UserNotifications
 
-/// Starts, updates and ends the game Live Activity (`GameActivityAttributes`, rendered by the
-/// LichessWidgets extension) on behalf of Flutter, over the `mobile.lichess.org/live_activity`
-/// channel.
-///
-/// Dart sends the attributes and content state as JSON-compatible maps, decoded here with
-/// `JSONDecoder` into the shared Codable types.
+/// Starts, updates and ends the game Live Activity on behalf of Flutter, over the 
+/// `mobile.lichess.org/live_activity` channel.
 ///
 /// Calls back to Dart with `onActivityState {id, state}` when an activity's state changes, e.g.
 /// `dismissed` when the user removes it from the Lock Screen.
-///
-/// "You left the game" is handled here, not in Dart. When the scene enters the background while a
-/// game is ongoing, the plugin begins a background task, which keeps the app (and its socket)
-/// running for `backgroundTimeRemaining`, and predicts when the app will be suspended.
-///
-/// The activities show the warning as soon as nothing updates them any more: just before the
-/// predicted suspension, or at once when the socket is lost (`staleDate`). They are handed that
-/// date as their `staleDate`, which flips `isStale` (the extension then shows the warning), and a
-/// timer also updates them at that date, as the app still runs then.
-///
-/// The user is alerted later, by a local notification (`leftDate(for:)`): half-way through the
-/// grace period lila gives before the opponent can claim victory, or along with the view when Dart
-/// sends no `leftWarningDelay` (bullet, or no claim possible). Losing the socket in the background
-/// moves it earlier, since lila counts a closed socket as gone at once; getting it back restores
-/// it. The app is usually suspended by then, so the notification is scheduled with the system.
-///
-/// Back in the foreground the task ends, the `staleDate` is cleared and the notification removed.
-/// The notification is also removed when the game ends or the user kills the app, as long as the
-/// app still runs then.
-/// Every activity update re-applies the current `staleDate`, so Dart only sends content.
-///
-/// While the app is in the background, an update that makes it the user's turn comes with an
-/// activity alert, since the user isn't looking at the game: it plays a sound and expands the
-/// Dynamic Island (a banner on devices without one).
 public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// How long before the predicted suspension the activities show the warning.
   private static let staleMargin: TimeInterval = 3

@@ -3,10 +3,6 @@ import Foundation
 
 // Shared by the Runner target (which starts and updates the activity) and the widget extension
 // (which renders it), so both sides agree on the type ActivityKit matches them by.
-//
-// The JSON shape of `GameActivityAttributes` and `ContentState` is the contract with Dart: the
-// Runner plugin decodes the maps sent over the `mobile.lichess.org/live_activity` channel with
-// `JSONDecoder`. Times are epoch milliseconds rather than `Date`, so the contract stays plain JSON.
 
 @available(iOS 16.2, *)
 struct GameActivityAttributes: ActivityAttributes {
