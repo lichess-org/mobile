@@ -67,7 +67,6 @@ private enum GameActivityLayout {
     static let boardCornerRadius: CGFloat = 4
     static let columnSpacing: CGFloat = 12
     static let rowSpacing: CGFloat = 6
-    static let compactClockWidth: CGFloat = 52
     /// In the compact and minimal island: its height (about 37 pt) less the system margins around
     /// the regions.
     static let compactBoardSize: CGFloat = 22
@@ -230,10 +229,16 @@ private struct CompactTrailingView: View {
         } else {
             let side = context.attributes.myColor
             let isRunning = context.state.isClockRunning(for: side)
-            GameClockText(state: context.state, side: side, alignment: .trailing)
+            // A running timer text takes all the width it is offered, which would widen the island
+            // while the user's clock runs. The clock is sized by its non-running text instead,
+            // which is as wide as the widest value the timer can show.
+            Text(GameClockText.format(milliseconds: context.state.clock(of: side)))
+                .hidden()
+                .overlay(alignment: .trailing) {
+                    GameClockText(state: context.state, side: side, alignment: .trailing)
+                }
                 .font(.caption.monospacedDigit().weight(isRunning ? .bold : .semibold))
                 .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
-                .frame(maxWidth: GameActivityLayout.compactClockWidth)
         }
     }
 }
