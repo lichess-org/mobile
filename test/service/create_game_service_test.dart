@@ -3,13 +3,13 @@ import 'dart:async' show unawaited;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
 
-import '../../network/fake_http_client_factory.dart';
-import '../../test_container.dart';
-import '../auth/fake_auth_storage.dart';
+import '../model/auth/fake_auth_storage.dart';
+import '../network/fake_http_client_factory.dart';
+import '../test_container.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

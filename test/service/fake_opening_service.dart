@@ -1,5 +1,5 @@
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/service/opening_service.dart';
 
 class const FakeOpeningService({
   /// Maps EPD (first 4 fields of FEN) to a [FullOpening].

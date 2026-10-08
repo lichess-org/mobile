@@ -6,25 +6,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/challenge_service.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../network/fake_websocket_channel.dart';
-import '../../network/socket_test.dart';
-import '../../test_container.dart';
-import '../../test_helpers.dart';
-import '../../test_provider_scope.dart';
-import '../auth/fake_auth_storage.dart';
+import '../model/auth/fake_auth_storage.dart';
+import '../network/fake_websocket_channel.dart';
+import '../network/socket_test.dart';
+import '../test_container.dart';
+import '../test_helpers.dart';
+import '../test_provider_scope.dart';
 
 class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 

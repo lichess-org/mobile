@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level_state.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 
 part 'learn_stage_controller.freezed.dart';
 

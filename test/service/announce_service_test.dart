@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/announce/announce_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/announce_service.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../network/fake_websocket_channel.dart';
-import '../../network/socket_test.dart';
-import '../../test_container.dart';
+import '../network/fake_websocket_channel.dart';
+import '../network/socket_test.dart';
+import '../test_container.dart';
 
 class _NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 

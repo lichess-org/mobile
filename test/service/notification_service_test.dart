@@ -6,17 +6,17 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/correspondence_service.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../binding.dart';
-import '../../test_container.dart';
-import '../../test_helpers.dart';
-import '../auth/fake_auth_storage.dart';
+import '../binding.dart';
+import '../model/auth/fake_auth_storage.dart';
+import '../test_container.dart';
+import '../test_helpers.dart';
 
 class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
