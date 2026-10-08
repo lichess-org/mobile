@@ -112,6 +112,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Game Live Activity/GameActivityAttributes.swift",
+				Localizable.xcstrings,
 			);
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 		};

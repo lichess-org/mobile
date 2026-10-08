@@ -214,7 +214,7 @@ private struct StatusLine: View {
 
     private var isMyTurn: Bool { state.turn == myColor }
 
-    private var headline: String { isMyTurn ? "Your turn" : "Waiting for opponent" }
+    private var headline: LocalizedStringKey { isMyTurn ? "Your turn" : "Waiting for opponent" }
 }
 
 // MARK: - Dynamic Island

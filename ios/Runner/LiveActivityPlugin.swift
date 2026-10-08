@@ -351,9 +351,11 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     center.removePendingNotificationRequests(withIdentifiers: [identifier])
     guard let date, !warnedLeft.contains(id) else { return }
     let content = UNMutableNotificationContent()
-    content.title = "You left the game"
+    content.title = String(localized: "You left the game")
     content.body =
-      state.claimable ? "Return or your opponent can claim victory soon." : "Return to the game."
+      state.claimable
+      ? String(localized: "Return or your opponent can claim victory soon.")
+      : String(localized: "Return to the game.")
     content.sound = .default
     let trigger = UNTimeIntervalNotificationTrigger(
       timeInterval: max(1, date.timeIntervalSinceNow), repeats: false)
