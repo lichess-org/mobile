@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,8 +9,10 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
+import 'package:multistockfish/multistockfish.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../network/fake_http_client_factory.dart';
@@ -18,9 +21,21 @@ import '../network/fake_http_client_factory.dart';
 Future<List<int>> bundledWeightsBytes() =>
     File('assets/maia/${MaiaRating.defaultRating.fileName}').readAsBytes();
 
+class ConfigurableFakeConnectivity({var ConnectivityResult result = ConnectivityResult.wifi})
+    implements Connectivity {
+  @override
+  Future<List<ConnectivityResult>> checkConnectivity() {
+    return Future.value([result]);
+  }
+
+  @override
+  Stream<List<ConnectivityResult>> get onConnectivityChanged => Stream.value([result]);
+}
+
 ProviderContainer makeWeightsContainer({
   required Directory? appSupportDirectory,
   MockClient? mockClient,
+  ConfigurableFakeConnectivity? connectivity,
 }) {
   final container = ProviderContainer(
     overrides: [
@@ -44,6 +59,7 @@ ProviderContainer makeWeightsContainer({
         httpClientFactoryProvider.overrideWith((ref) {
           return FakeHttpClientFactory(() => mockClient);
         }),
+      if (connectivity != null) connectivityPluginProvider.overrideWith((_) => connectivity),
     ],
   );
   addTearDown(container.dispose);
@@ -51,13 +67,257 @@ ProviderContainer makeWeightsContainer({
 }
 
 Future<Directory> makeTempDir() async {
-  final dir = await Directory.systemTemp.createTemp('maia_weights_test_');
+  final dir = await Directory.systemTemp.createTemp('weights_test_');
   addTearDown(() => dir.delete(recursive: true));
   return dir;
 }
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('StockfishNnueService', () {
+    group('nnueFile', () {
+      test('returns the correct file path when appSupportDirectory is available', () async {
+        final tempDir = await makeTempDir();
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        expect(service.nnueFile.path, '${tempDir.path}/${Stockfish.latestNNUE}');
+      });
+
+      test('throws exception when appSupportDirectory is null', () {
+        final container = makeWeightsContainer(appSupportDirectory: null);
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        expect(() => service.nnueFile, throwsException);
+      });
+    });
+
+    group('checkNNUEFile', () {
+      test('returns false when appSupportDirectory is null', () async {
+        final container = makeWeightsContainer(appSupportDirectory: null);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.checkNNUEFile();
+
+        expect(result, isFalse);
+      });
+
+      test('returns false when the file does not exist', () async {
+        final tempDir = await makeTempDir();
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.checkNNUEFile();
+
+        expect(result, isFalse);
+      });
+
+      test('returns false when the file exists but its checksum does not match', () async {
+        final tempDir = await makeTempDir();
+
+        // Create a file with invalid content
+        final netFile = File('${tempDir.path}/${Stockfish.latestNNUE}');
+        await netFile.writeAsBytes([1, 2, 3]);
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.checkNNUEFile();
+
+        expect(result, isFalse);
+      });
+
+      test('deletes the file when its checksum does not match', () async {
+        final tempDir = await makeTempDir();
+
+        final netFile = File('${tempDir.path}/${Stockfish.latestNNUE}');
+        await netFile.writeAsBytes([1, 2, 3]);
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        await service.checkNNUEFile();
+
+        expect(await netFile.exists(), isFalse);
+      });
+    });
+
+    group('hasOutdatedNNUEFiles', () {
+      test('returns false when appSupportDirectory is null', () async {
+        final container = makeWeightsContainer(appSupportDirectory: null);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.hasOutdatedNNUEFiles();
+
+        expect(result, isFalse);
+      });
+
+      test('returns true if we have outdated nnue files', () async {
+        final tempDir = await makeTempDir();
+
+        File('${tempDir.path}/someOldFile.nnue').create();
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.hasOutdatedNNUEFiles();
+
+        expect(result, isTrue);
+      });
+    });
+
+    group('deleteNNUEFiles', () {
+      test('throws exception when appSupportDirectory is null', () {
+        final container = makeWeightsContainer(appSupportDirectory: null);
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        expect(() => service.deleteNNUEFiles(), throwsException);
+      });
+
+      test('deletes .nnue files in appSupportDirectory', () async {
+        final tempDir = await makeTempDir();
+
+        // Create some .nnue files
+        final nnueFile1 = File('${tempDir.path}/test1.nnue');
+        final nnueFile2 = File('${tempDir.path}/test2.nnue');
+        final otherFile = File('${tempDir.path}/other.txt');
+        await nnueFile1.writeAsString('test1');
+        await nnueFile2.writeAsString('test2');
+        await otherFile.writeAsString('other');
+
+        final container = makeWeightsContainer(appSupportDirectory: tempDir);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        await service.deleteNNUEFiles();
+
+        expect(await nnueFile1.exists(), isFalse);
+        expect(await nnueFile2.exists(), isFalse);
+        expect(await otherFile.exists(), isTrue); // Non-.nnue files should not be deleted
+      });
+    });
+
+    group('downloadNNUEFile', () {
+      test('returns false when appSupportDirectory is null', () async {
+        final container = makeWeightsContainer(appSupportDirectory: null);
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.downloadNNUEFile(inBackground: true);
+
+        expect(result, isFalse);
+      });
+
+      test('prevents concurrent download operations', () async {
+        final tempDir = await makeTempDir();
+
+        final mockClient = MockClient((request) async {
+          // Simulate slow download
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+          return http.Response('test content', 200);
+        });
+
+        final container = makeWeightsContainer(
+          appSupportDirectory: tempDir,
+          mockClient: mockClient,
+          connectivity: ConfigurableFakeConnectivity(),
+        );
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        // Start first download
+        final firstDownload = service.downloadNNUEFile(inBackground: true);
+
+        // Immediately start second download while first is in progress
+        final secondDownload = service.downloadNNUEFile(inBackground: true);
+
+        final results = await Future.wait([firstDownload, secondDownload]);
+
+        // Second call should be rejected
+        expect(results[1], isFalse);
+      });
+
+      test('throws exception when in background and not on WiFi', () async {
+        final tempDir = await makeTempDir();
+
+        final container = makeWeightsContainer(
+          appSupportDirectory: tempDir,
+          connectivity: ConfigurableFakeConnectivity(result: ConnectivityResult.mobile),
+        );
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        expect(() => service.downloadNNUEFile(inBackground: true), throwsException);
+      });
+
+      test('allows sequential downloads after previous one completes', () async {
+        final tempDir = await makeTempDir();
+
+        var downloadCount = 0;
+        final mockClient = MockClient((request) async {
+          downloadCount++;
+          return http.Response('test content', 200);
+        });
+
+        final container = makeWeightsContainer(
+          appSupportDirectory: tempDir,
+          mockClient: mockClient,
+          connectivity: ConfigurableFakeConnectivity(),
+        );
+
+        final service = container.read(stockfishNnueServiceProvider);
+
+        // First download
+        await service.downloadNNUEFile(inBackground: true);
+
+        // Second download after first completes
+        await service.downloadNNUEFile(inBackground: true);
+
+        // Both downloads should have been allowed
+        expect(downloadCount, 2);
+      });
+
+      test('returns false and keeps nothing when the downloaded file is corrupted', () async {
+        final tempDir = await makeTempDir();
+
+        final mockClient = MockClient((request) async => http.Response('not a network', 200));
+
+        final container = makeWeightsContainer(
+          appSupportDirectory: tempDir,
+          mockClient: mockClient,
+          connectivity: ConfigurableFakeConnectivity(),
+        );
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.downloadNNUEFile(inBackground: true);
+
+        expect(result, isFalse);
+        expect(await service.nnueFile.exists(), isFalse);
+      });
+
+      test('returns false and keeps nothing when a download fails', () async {
+        final tempDir = await makeTempDir();
+
+        final mockClient = MockClient((request) async => http.Response('not found', 404));
+
+        final container = makeWeightsContainer(
+          appSupportDirectory: tempDir,
+          mockClient: mockClient,
+          connectivity: ConfigurableFakeConnectivity(),
+        );
+
+        final service = container.read(stockfishNnueServiceProvider);
+        final result = await service.downloadNNUEFile(inBackground: true);
+
+        expect(result, isFalse);
+        expect(await service.nnueFile.exists(), isFalse);
+      });
+    });
+  });
 
   group('MaiaWeightsService', () {
     test('the bundled networks are available before anything has been downloaded', () async {
