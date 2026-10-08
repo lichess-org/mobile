@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Δέχεσαι ισοπαλία;</string>
   <string name="account" comment="The account screen title.">Λογαριασμός</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Ρυθμίσεις</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Αυτές οι ρυθμίσεις αποθηκεύονται στον λογαριασμό σας στο Lichess και θα ισχύουν σε όλες τις συσκευές σας.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Προσθήκη στη μελέτη</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Όλες οι παρτίδες</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled Μαύρο</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Είστε σίγουρος/η;</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Είστε βέβαιοι ότι θέλετε να κατεβάσετε το αρχείο NNUE (%s);</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Θέση σκακιέρας στην οριζόντια διάταξη</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Ρυθμίσεις σκακιέρας</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ακύρωση προσφοράς ανάκλησης κίνησης</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Πρόκληση από τη θέση</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Όνομα κεφαλαίου</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Σκακιστική Μηχανή</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Εκκαθάριση</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Κωδικός</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Ο κωδικός πρέπει να έχει %s χαρακτήρες.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Αντιγράφηκε.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Εκκαθάριση αποθηκευμένης κίνησης</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Προσαρμογή</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Συμβουλή: Μπορείτε να προσθέσετε περισσότερα εργαλεία στην αρχική οθόνη ή να αφαιρέσετε αυτά που δε χρειάζεστε!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Απόκρυψη</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Ζώνη Κινδύνου</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Διαγράψτε τον λογαριασμό σας</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Συμπαγής</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Λεπτομερής</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Αποδέχεστε την πρόκληση;</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Λήψη των παρτίδων σου</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Πείτε μας τη γνώμη σας</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Φίλτρα</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλημέρα, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλημέρα</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλησπέρα, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Καλησπέρα</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Καλή κίνηση, αλλά υπάρχει καλύτερη</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Καλωσορίσατε</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Αρχική</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Αυτός ο κωδικός δεν είναι έγκυρος ή έχει λήξει.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers ζωντανά αυτή τη στιγμή</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Γρίφοι εκτός σύνδεσης</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Νέα παρτίδα</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Επόμενο λάθος</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Δε βρέθηκαν αποτελέσματα</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Δεν ακολουθείτε κανέναν χρήστη.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">ΟΚ</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Ο εξερευνητής ανοιγμάτων δεν είναι διαθέσιμος εκτός σύνδεσης.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Ή μεταφορτώστε ένα αρχείο PGN</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Παρτίδα χωρίς σύνδεση</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Επικόλληση από το πρόχειρο</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Φάτο</string>
   <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Πυρηνικό</string>
   <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
@@ -49,9 +68,11 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Τριών σαχ</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">Αντιγραφή PGN.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Παίκτες με \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Αριστερά</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Δεξιά</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Λειτουργία εξάσκησης</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Μεγέθυνση του επιλεγμένου κομματιού</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Προηγούμενη</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Θέλετε να τερματίσετε αυτόν τον γύρο;</string>
@@ -60,8 +81,11 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Λύστε όσα περισσότερα τακτικά μπορείτε σε 3 λεπτά.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Λύστε τακτικά από τα αγαπημένα σας ανοίγματα, ή επιλέξτε κάποιο θέμα.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Τακτικά</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Αξιολογείστε την εφαρμογή</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Πρόσφατες αναζητήσεις</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Διαγραφή σελιδοδείκτη</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Επιλογή μελέτης</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Αποστολή κωδικού</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Ανάλυση στον διακομιστή</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Θέση ρολογιού</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Πρότυπα</string>
@@ -85,20 +109,28 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Εμφάνιση περιγράμματος</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Δόνηση κατά την κίνηση</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Όταν αυτή η ρύθμιση είναι ενεργοποιημένη, η συσκευή σας θα δονείται σύντομα κάθε φορά που κάνετε μια κίνηση.</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Κοινοποίηση URL πρόκλησης</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Κοινοποίηση PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Κοινοποίηση URL παρτίδας</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Κοινοποίηση του FEN της θέσης</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Κοινοποίηση τακτικού</string>
   <string name="showComments" comment="Shown in the analysis screen.">Εμφάνιση σχολίων</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Εμφάνιση μπάρας υπεροχής</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Εμφάνιση αποτελέσματος</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Συνδεθείτε με τον φυλλομετρητή</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Συνδεθείτε με ένα email</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Μικρή σκακιέρα</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Κάτι πήγε στραβά.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Ταξινόμηση φίλων</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Απόκρυψη ένδειξης απειλής</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Χρώματα συστήματος</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Εμφάνιση</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Ολοκληρωμένο</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Μετάβαση στη σελίδα μου</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Η παραλλαγή %s δεν υποστηρίζεται σε αυτήν την έκδοση.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Χρήση συμμετρικών κομματιών</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Προβολή παρτίδας</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Αναμονή για αντίπαλο...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Δείτε</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Δεν μπορείτε να προκαλέσετε τον εαυτό σας</string>
 </resources>

@@ -13,16 +13,16 @@
   <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Brettposisjon i landskapsformat</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brettinnstillingar</string>
   <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Bronstein-forseinking</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Avbryt tilbud om angrerett</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Avbryt tilbod om angrerett</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Utfordring er oppretta: du vil bli varsla når partiet startar.\nDu kan få tilgang til det frå heim-fana.</string>
   <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Utfordra frå stilling</string>
   <string name="chapterName" comment="Label of the text field to name a new study chapter.">Kapittelnamn</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Sjakkmotor</string>
-  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Velg ein passande bakgrunn</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Vel ein passande bakgrunn</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Tøm</string>
   <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Koden går ut etter fem minutt og kan berre nyttast ein gong.</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kode</string>
-  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Koden er %s tegn lang.</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Koden er %s teikn lang.</string>
   <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopiert.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Fjern lagra trekk</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Tilpass</string>
@@ -46,10 +46,10 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Godt trekk, men det finst eit betre</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hei</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startside</string>
-  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dersom ein konto samsvarar med %1$s, vart det sendt ein %2$s tegnkode til den. Sjekk innboksen og skriv inn koden nedanfor.</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dersom ein konto samsvarar med %1$s, vart det sendt ein %2$s teiknkode til den. Sjekk innboksen og skriv inn koden nedanfor.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Denne koden er ugyldig eller er utløpt.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Direkte strøymarar</string>
-  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Lokal databasestørrelse</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Lokal databasestorleik</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Trekk ved slepp</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Når du trykkjer på ei brikke og held fingeren på den kan du skyve brikka for å endre målfeltet. Trekket vert då utført når du lyfter fingeren frå brikka.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du må vera innlogga for å sjå denne sida.</string>
@@ -95,7 +95,7 @@
   <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Vurder denne appen</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Nylege søk</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Fjern bokmerke</string>
-  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Velg ein studie</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Vel ein studie</string>
   <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Send meg ein kode</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Serveranalyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Urposisjon</string>
@@ -109,9 +109,9 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiv modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Skjul systemet sitt brukargrensesnitt under spel. Gjer dette dersom systemet sine navigasjonsrørsler ved skjermkanten forstyrrar deg. Gjeld skjermbileta for parti og sjakkoppgåver.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Erobra brikker</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Velg eit bilete</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Vel eit bilete</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Tilslør biletet</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Eigendefinert bakgrunn fungerar berre i mørk modus. Det tilrås å velgje eit mørkt bilete.</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Eigendefinert bakgrunn fungerar berre i mørk modus. Det tilrås å velje eit mørkt bilete.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Skjul brettet</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Vis brettet</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Sveip for å vise andre bakgrunnar</string>
@@ -141,11 +141,17 @@
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sorter vener</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Ikkje vis trugsmål meir</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemfargar</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tabellbasen er ikkje tilgjengeleg offline.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">For mange forsøk. Prøv igjen seinare.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Fullførde</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Gå til sida mi</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s er ikkje støtta i denne versjonen.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Bruk symmetriske brikker</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vis parti</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Vis lisensar</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Ventar på motspelar...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sjå</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Vi vil sende deg ein E-post-kode som du kan bruka for å logge på med.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Du kan ikkje utfordra deg sjølv</string>
 </resources>
