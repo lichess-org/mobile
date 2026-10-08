@@ -38,6 +38,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private var staleTimer: Timer?
   /// The date of the "You left the game" notification scheduled for each activity.
   private var leftDates: [String: Date] = [:]
+  /// When the pending "You left the game" notification of each activity goes off: later than its
+  /// `leftDates` entry when that date was already past at scheduling time.
+  private var leftFireDates: [String: Date] = [:]
   /// The activities whose "You left the game" notification went off during this stay in the
   /// background: it goes off once per stay.
   private var warnedLeft: Set<String> = []
@@ -132,7 +135,12 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     do {
       let activity = try find(args["id"])
       let state: GameActivityAttributes.ContentState = try decode(args["state"])
-      let previous = contents[activity.id] as? GameActivityAttributes.ContentState
+      // Ignores an activity this run didn't start or already ended: an update racing `end` would
+      // otherwise bring back a finished game.
+      guard let previous = contents[activity.id] as? GameActivityAttributes.ContentState else {
+        result(nil)
+        return
+      }
       contents[activity.id] = state
       let content = self.content(for: activity.id, state: state)
       let alert = isInBackground
@@ -170,21 +178,14 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
 
     let application = UIApplication.shared
     backgroundTask = application.beginBackgroundTask(withName: "LiveActivityGame") { [weak self] in
-      // The system cut the time short: the app is about to be suspended. Best effort, as the
-      // updates may not finish in time.
-      guard let self else { return }
-      if #available(iOS 16.2, *), let suspension = self.predictedSuspension, suspension > Date() {
-        self.predictedSuspension = Date()
-        self.applyLeftDates()
-      }
-      self.endBackgroundTask()
+      self?.endBackgroundTask()
     }
 
     let remaining = backgroundTask == .invalid ? 0 : application.backgroundTimeRemaining
     #if DEBUG
       NSLog("LiveActivityPlugin: background time remaining %.1f s", remaining)
     #endif
-    let window = remaining.isFinite ? min(remaining, Self.maxBackgroundTime) : 0
+    let window = min(remaining, Self.maxBackgroundTime)
     predictedSuspension = Date().addingTimeInterval(window)
     if !isSocketConnected { socketLostAt = Date() }
     applyLeftDates()
@@ -194,10 +195,11 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     isInBackground = false
     predictedSuspension = nil
     socketLostAt = nil
-    warnedLeft.removeAll()
     endBackgroundTask()
     guard #available(iOS 16.2, *) else { return }
     applyLeftDates()
+    // After `applyLeftDates`, which marks the activities whose notification went off as warned.
+    warnedLeft.removeAll()
     UNUserNotificationCenter.current().removeDeliveredNotifications(
       withIdentifiers: contents.keys.map(Self.leftNotificationIdentifier))
   }
@@ -251,12 +253,12 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   ) -> ActivityContent<GameActivityAttributes.ContentState> {
     let date = leftDate(for: state)
     if date != leftDates[id] {
-      if let previous = leftDates[id], previous <= Date() { warnedLeft.insert(id) }
+      if let fireDate = leftFireDates[id], fireDate <= Date() { warnedLeft.insert(id) }
       leftDates[id] = date
       #if DEBUG
         NSLog("LiveActivityPlugin: %@ notification date %@", id, date.map { "\($0)" } ?? "nil")
       #endif
-      scheduleLeftNotification(id: id, state: state, at: date)
+      leftFireDates[id] = scheduleLeftNotification(id: id, state: state, at: date)
     }
     return ActivityContent(state: state, staleDate: staleDate)
   }
@@ -313,15 +315,16 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   }
 
   /// Schedules the "You left the game" notification of an activity at `date`, replacing a pending
-  /// one, unless it already went off during this stay in the background.
+  /// one, unless it already went off during this stay in the background. Returns when it goes off,
+  /// or nil if none is scheduled.
   @available(iOS 16.2, *)
   private func scheduleLeftNotification(
     id: String, state: GameActivityAttributes.ContentState, at date: Date?
-  ) {
+  ) -> Date? {
     let center = UNUserNotificationCenter.current()
     let identifier = Self.leftNotificationIdentifier(id)
     center.removePendingNotificationRequests(withIdentifiers: [identifier])
-    guard let date, !warnedLeft.contains(id) else { return }
+    guard let date, !warnedLeft.contains(id) else { return nil }
     let content = UNMutableNotificationContent()
     content.title = String(localized: "You left the game")
     content.body =
@@ -329,15 +332,18 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
       ? String(localized: "Return or your opponent can claim victory soon.")
       : String(localized: "Return to the game.")
     content.sound = .default
-    let trigger = UNTimeIntervalNotificationTrigger(
-      timeInterval: max(1, date.timeIntervalSinceNow), repeats: false)
+    // A time interval trigger needs a positive interval.
+    let interval = max(1, date.timeIntervalSinceNow)
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
     center.add(UNNotificationRequest(identifier: identifier, content: content, trigger: trigger))
+    return Date().addingTimeInterval(interval)
   }
 
   /// Forgets an activity that ended or was dismissed, and removes its warning notification.
   private func forget(_ id: String) {
     contents[id] = nil
     leftDates[id] = nil
+    leftFireDates[id] = nil
     warnedLeft.remove(id)
     let identifier = Self.leftNotificationIdentifier(id)
     let center = UNUserNotificationCenter.current()
@@ -396,10 +402,11 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     return AlertConfiguration(title: "Your turn", body: body, sound: .default)
   }
 
-  /// Runs `operation` after every activity operation enqueued before it.
-  private func enqueue(_ operation: @escaping () async -> Void) {
+  /// Runs `operation` after every activity operation enqueued before it, on the main actor, where
+  /// Flutter results must be sent.
+  private func enqueue(_ operation: @escaping @MainActor () async -> Void) {
     let previous = lastActivityTask
-    lastActivityTask = Task {
+    lastActivityTask = Task { @MainActor in
       await previous?.value
       await operation()
     }
