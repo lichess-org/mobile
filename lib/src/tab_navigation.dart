@@ -103,6 +103,9 @@ class RouteStackObserver() extends NavigatorObserver {
         route.settings.name == name && (arguments == null || route.settings.arguments == arguments),
   );
 
+  /// The routes currently in the stack, from bottom to top.
+  Iterable<Route<dynamic>> get routes => _stack;
+
   /// Clears the tracked stack. Only useful in tests, where the global instance
   /// is shared across test cases.
   @visibleForTesting

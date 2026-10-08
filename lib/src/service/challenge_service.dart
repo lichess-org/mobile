@@ -155,9 +155,10 @@ class ChallengeService(final Ref ref) {
     showConfirmDialog(context, challenge);
   }
 
-  void _onChallengeAccepted(GameFullId fullId) {
+  Future<void> _onChallengeAccepted(GameFullId fullId) async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
+    if (!await confirmLeavingRealTimeGame(context, ref) || !context.mounted) return;
 
     final rootNavState = Navigator.of(context, rootNavigator: true);
     if (rootNavState.canPop()) {
@@ -193,7 +194,7 @@ class ChallengeService(final Ref ref) {
 
     ref.invalidate(ongoingGamesProvider);
 
-    _onChallengeAccepted(fullId);
+    await _onChallengeAccepted(fullId);
   }
 
   void showDeclineDialog(BuildContext context, ChallengeId id) {

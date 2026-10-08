@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -758,6 +759,101 @@ void main() {
         isA<GameScreen>().having((s) => s.source, 'source', const ExistingGameSource(gameFullId)),
       );
       expect(find.byType(TvScreen), findsNothing);
+    });
+
+    group('while a real time game is played', () {
+      const playedGameFullId = GameFullId('game0000aaaa');
+      const otherGameFullId = GameFullId('game0001bbbb');
+
+      /// Opens [playedGameFullId] from a link, as a real time game being played.
+      Future<void> openPlayedGame(WidgetTester tester) async {
+        final mockAccountRepository = MockAccountRepository();
+        when(() => mockAccountRepository.getOngoingGames(nb: 3)).thenAnswer(
+          (_) async => [
+            for (final fullId in [playedGameFullId, otherGameFullId])
+              OngoingGame(
+                id: fullId.gameId,
+                fullId: fullId,
+                orientation: Side.white,
+                fen: kInitialFEN,
+                perf: Perf.blitz,
+                speed: Speed.blitz,
+                variant: Variant.standard,
+                isMyTurn: true,
+              ),
+          ].lock,
+        );
+
+        await triggerAppLink(
+          tester,
+          Uri.parse('https://lichess.org/${playedGameFullId.gameId.value}'),
+          authUser: fakeAuthUser,
+          overrides: {
+            accountRepositoryProvider: accountRepositoryProvider.overrideWith(
+              (_) => mockAccountRepository,
+            ),
+          },
+        );
+        await tester.pump();
+        await tester.pump(kFakeWebSocketConnectionLag);
+        sendServerSocketMessages(GameController.socketUri(playedGameFullId), [
+          makeFullEvent(
+            playedGameFullId.gameId,
+            'e4 e5',
+            whiteUserName: fakeAuthUser.user.name,
+            blackUserName: 'Opponent',
+            youAre: Side.white,
+          ),
+        ]);
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+      }
+
+      /// Handles a link to [fullId] from the game screen.
+      Future<void> openLinkToGame(WidgetTester tester, GameFullId fullId) async {
+        final context = tester.element(find.byType(GameScreen));
+        unawaited(
+          ProviderScope.containerOf(context)
+              .read(appLinksServiceProvider)
+              .handleAppLink(context, Uri.parse('https://lichess.org/${fullId.gameId.value}')),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+      }
+
+      testWidgets('a link to that game keeps its screen', (tester) async {
+        await openPlayedGame(tester);
+        final gameScreenState = tester.state(find.byType(GameScreen));
+
+        await openLinkToGame(tester, playedGameFullId);
+
+        expect(find.text('You are playing!'), findsNothing);
+        expect(tester.state(find.byType(GameScreen)), same(gameScreenState));
+      });
+
+      testWidgets('a link to another game asks before leaving it', (tester) async {
+        await openPlayedGame(tester);
+
+        await openLinkToGame(tester, otherGameFullId);
+        expect(find.text('You are playing!'), findsOneWidget);
+
+        await tester.tap(find.text('No'));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(
+          tester.widget<GameScreen>(find.byType(GameScreen)).source,
+          const ExistingGameSource(playedGameFullId),
+        );
+
+        await openLinkToGame(tester, otherGameFullId);
+        await tester.tap(find.text('Yes'));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(
+          tester.widget<GameScreen>(find.byType(GameScreen)).source,
+          const ExistingGameSource(otherGameFullId),
+        );
+      });
     });
 
     testWidgets('replaces existing screen instead of stacking a duplicate', (tester) async {

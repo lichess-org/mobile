@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 /// A provider for [BroadcastService].
 final broadcastServiceProvider = Provider<BroadcastService>((Ref ref) {
@@ -35,10 +36,12 @@ class BroadcastService(final Ref ref) {
   }
 
   /// Returns the root navigator, popped back to its first route so that broadcast screens are
-  /// pushed on a clean stack.
-  NavigatorState? _resetToRootNavigator() {
+  /// pushed on a clean stack, or null if the user chose to stay on the real time game they are
+  /// playing.
+  Future<NavigatorState?> _resetToRootNavigator() async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return null;
+    if (!await confirmLeavingRealTimeGame(context, ref) || !context.mounted) return null;
 
     final navigator = Navigator.of(context, rootNavigator: true);
 
@@ -49,20 +52,20 @@ class BroadcastService(final Ref ref) {
     return navigator;
   }
 
-  void _onBroadcastRoundNotification(BroadcastRoundId roundId) {
-    final navigator = _resetToRootNavigator();
+  Future<void> _onBroadcastRoundNotification(BroadcastRoundId roundId) async {
+    final navigator = await _resetToRootNavigator();
     if (navigator == null) return;
     navigator.push(
       BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: BroadcastRoundTab.boards),
     );
   }
 
-  void _onBroadcastPlayerFollowNotification(
+  Future<void> _onBroadcastPlayerFollowNotification(
     BroadcastRoundId roundId,
     BroadcastGameId gameId,
     Side pov,
-  ) {
-    final navigator = _resetToRootNavigator();
+  ) async {
+    final navigator = await _resetToRootNavigator();
     if (navigator == null) return;
     navigator.push(
       BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: BroadcastRoundTab.boards),

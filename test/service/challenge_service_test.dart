@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,16 +11,20 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/challenge_service.dart';
 import 'package:lichess_mobile/src/service/notification_service.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show currentNavigatorKeyProvider, rootNavRouteStackObserver;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../model/auth/fake_auth_storage.dart';
+import '../model/game/game_socket_example_data.dart';
 import '../network/fake_websocket_channel.dart';
 import '../network/socket_test.dart';
 import '../test_container.dart';
@@ -640,6 +645,120 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       expect(find.byType(GameScreen), findsOneWidget);
+    }, variant: kPlatformVariant);
+  });
+
+  group('acceptChallenge while playing a real time game', () {
+    const playedGameFullId = GameFullId('qVChCOTcHSeW');
+    const challengeGameFullId = GameFullId('H9fIRZUkabcd');
+
+    /// Pumps the frames of a route or dialog transition. The game screen never settles, as its
+    /// loading board shimmers.
+    Future<void> settle(WidgetTester tester) async {
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+    }
+
+    /// Opens the game screen of [playedGameFullId], then accepts a challenge from it.
+    Future<void> acceptChallengeWhilePlaying(WidgetTester tester, {bool gameOver = false}) async {
+      final navigatorKey = GlobalKey<NavigatorState>();
+      final mockChallengeRepo = MockChallengeRepository();
+      when(() => mockChallengeRepo.accept(any())).thenAnswer((_) async {});
+      when(() => mockChallengeRepo.show(any())).thenAnswer(
+        (_) async => const Challenge(
+          id: ChallengeId('H9fIRZUk'),
+          gameFullId: challengeGameFullId,
+          status: ChallengeStatus.accepted,
+          variant: Variant.standard,
+          rated: true,
+          speed: Speed.rapid,
+          timeControl: ChallengeTimeControlType.clock,
+          clock: (time: Duration(seconds: 600), increment: Duration.zero),
+          sideChoice: SideChoice.random,
+        ),
+      );
+
+      final app = await makeTestProviderScope(
+        tester,
+        child: MaterialApp(
+          navigatorKey: navigatorKey,
+          navigatorObservers: [rootNavRouteStackObserver],
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => Navigator.of(
+                  context,
+                ).push(GameScreen.buildRoute(source: const ExistingGameSource(playedGameFullId))),
+                child: const Text('Play'),
+              ),
+            ),
+          ),
+        ),
+        overrides: {
+          challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
+            (_) => mockChallengeRepo,
+          ),
+          currentNavigatorKeyProvider: currentNavigatorKeyProvider.overrideWithValue(navigatorKey),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.tap(find.text('Play'));
+      await settle(tester);
+      sendServerSocketMessages(GameController.socketUri(playedGameFullId), [
+        makeFullEvent(
+          const GameId('qVChCOTc'),
+          'e4 e5',
+          whiteUserName: 'Peter',
+          blackUserName: 'Steven',
+          youAre: Side.white,
+        ),
+      ]);
+      await tester.pump();
+      if (gameOver) {
+        sendServerSocketMessages(GameController.socketUri(playedGameFullId), [
+          '{"t":"endData","d":{"status":"resign","winner":"white"}}',
+        ]);
+        // let the game-over popup show up, and close it
+        await settle(tester);
+        Navigator.of(navigatorKey.currentContext!).popUntil((route) => route is! PopupRoute);
+        await settle(tester);
+      }
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(GameScreen)));
+      container.read(challengeServiceProvider).acceptChallenge(const ChallengeId('H9fIRZUk'));
+      await settle(tester);
+    }
+
+    GameScreenSource gameScreenSource(WidgetTester tester) =>
+        tester.widget<GameScreen>(find.byType(GameScreen)).source;
+
+    testWidgets('stays on the game when the user does not confirm leaving it', (tester) async {
+      await acceptChallengeWhilePlaying(tester);
+
+      expect(find.text('You are playing!'), findsOneWidget);
+      await tester.tap(find.text('No'));
+      await settle(tester);
+
+      expect(find.text('You are playing!'), findsNothing);
+      expect(gameScreenSource(tester), const ExistingGameSource(playedGameFullId));
+    }, variant: kPlatformVariant);
+
+    testWidgets('opens the challenge game once the user confirms leaving the game', (tester) async {
+      await acceptChallengeWhilePlaying(tester);
+
+      await tester.tap(find.text('Yes'));
+      await settle(tester);
+
+      expect(gameScreenSource(tester), const ExistingGameSource(challengeGameFullId));
+    }, variant: kPlatformVariant);
+
+    testWidgets('does not ask once the game is over', (tester) async {
+      await acceptChallengeWhilePlaying(tester, gameOver: true);
+      await settle(tester);
+
+      expect(find.text('You are playing!'), findsNothing);
+      expect(gameScreenSource(tester), const ExistingGameSource(challengeGameFullId));
     }, variant: kPlatformVariant);
   });
 }

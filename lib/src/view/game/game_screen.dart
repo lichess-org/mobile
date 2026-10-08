@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -27,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
@@ -59,13 +62,65 @@ class const GameScreen({
   ConsumerState<GameScreen> createState() => _GameScreenState();
 }
 
+/// Whether [game] is a real time game still being played: the game screen can't be left with
+/// a back gesture while it is.
+bool _isRealTimePlayable(PlayableGame game) =>
+    game.meta.speed != Speed.correspondence && game.playable;
+
 final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
   Ref ref,
   GameFullId gameId,
 ) async {
   final state = await ref.watch(gameControllerProvider(gameId).future);
-  return state.game.meta.speed != Speed.correspondence && state.game.playable;
+  return _isRealTimePlayable(state.game);
 }, name: 'IsRealTimePlayableGameProvider');
+
+/// The real time game being played on [route], if it is a [GameScreen] route.
+GameFullId? realTimeGameOn(Ref ref, Route<dynamic> route) {
+  if (route is! ScreenRoute) return null;
+  final screen = route.screen;
+  if (screen is! GameScreen) return null;
+  // Only reads the providers of the game screen when they exist, as reading them would otherwise
+  // create them.
+  final loader = gameScreenLoaderProvider(screen.source);
+  if (!ref.exists(loader)) return null;
+  if (ref.read(loader).value case GameCreatedState(:final createdGameId)) {
+    final controller = gameControllerProvider(createdGameId);
+    if (!ref.exists(controller)) return null;
+    final game = ref.read(controller).value?.game;
+    return game != null && _isRealTimePlayable(game) ? createdGameId : null;
+  }
+  return null;
+}
+
+/// Asks the user to confirm leaving the real time game being played on one of [routes], if any.
+///
+/// The game screen can't be left with a back gesture while a real time game is played, but
+/// [NavigatorState.popUntil], [NavigatorState.pushReplacement] and the like bypass its [PopScope],
+/// so code removing routes from the root navigator, such as when opening a notification, must
+/// call this first.
+///
+/// Returns whether the routes can be removed.
+Future<bool> confirmLeavingRealTimeGame(
+  BuildContext context,
+  Ref ref, {
+  Iterable<Route<dynamic>>? routes,
+}) async {
+  final isPlaying = (routes ?? rootNavRouteStackObserver.routes).any(
+    (route) => realTimeGameOn(ref, route) != null,
+  );
+  if (!isPlaying) return true;
+  final confirmed = await showAdaptiveDialog<bool>(
+    context: context,
+    builder: (context) => YesNoDialog(
+      title: Text(context.l10n.youArePlaying),
+      content: const Text('Are you sure you want to leave the game?'),
+      onYes: () => Navigator.of(context).pop(true),
+      onNo: () => Navigator.of(context).pop(false),
+    ),
+  );
+  return confirmed ?? false;
+}
 
 class _GameScreenState() extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');

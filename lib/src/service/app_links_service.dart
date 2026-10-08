@@ -393,7 +393,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     if (routes != null) {
       final navigator = Navigator.of(context, rootNavigator: true);
       for (final route in routes) {
-        _pushDeepLinkRoute(navigator, route, animated: animated);
+        if (!await _pushDeepLinkRoute(navigator, route, animated: animated)) break;
       }
     } else {
       final isChallengeLink = await _tryResolveChallengeLink(context, uri);
@@ -411,11 +411,16 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   /// stacking when the top is already the same screen type — preventing
   /// duplicates when the user taps a deep link while already on that screen.
   /// Also applies [_withNoTransition] when [animated] is `false`.
-  static Future<void> _pushDeepLinkRoute(
+  ///
+  /// A game screen where a real time game is being played is only replaced once the user confirms
+  /// it, and not at all by a link to that same game.
+  ///
+  /// Completes once [route] is pushed, with whether it was.
+  Future<bool> _pushDeepLinkRoute(
     NavigatorState navigator,
     Route<dynamic> route, {
     required bool animated,
-  }) {
+  }) async {
     final pushed = animated ? route : _withNoTransition(route);
     Route<dynamic>? top;
     navigator.popUntil((r) {
@@ -426,9 +431,22 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     if (topRoute is ScreenRoute &&
         pushed is ScreenRoute &&
         topRoute.screen.runtimeType == pushed.screen.runtimeType) {
-      return navigator.pushReplacement(pushed);
+      final playedGame = realTimeGameOn(ref, topRoute);
+      if (playedGame != null) {
+        if (pushed.screen case GameScreen(source: ExistingGameSource(:final id))
+            when id == playedGame) {
+          return false;
+        }
+        if (!await confirmLeavingRealTimeGame(navigator.context, ref, routes: [topRoute]) ||
+            !navigator.mounted) {
+          return false;
+        }
+      }
+      navigator.pushReplacement(pushed);
+    } else {
+      navigator.push(pushed);
     }
-    return navigator.push(pushed);
+    return true;
   }
 
   /// Returns a copy of [route] with [Duration.zero] transition so the screen

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 
 /// A provider for [MessageService].
@@ -55,6 +56,7 @@ class MessageService(final Ref ref) {
 
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
+    if (!await confirmLeavingRealTimeGame(context, ref) || !context.mounted) return;
 
     final rootNavState = Navigator.of(context, rootNavigator: true);
     if (rootNavState.canPop()) {

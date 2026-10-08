@@ -71,6 +71,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   Future<void> _onNotificationResponse(GameFullId fullId) async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
+    if (!await confirmLeavingRealTimeGame(context, ref) || !context.mounted) return;
 
     final rootNavState = Navigator.of(context, rootNavigator: true);
     if (rootNavState.canPop()) {
