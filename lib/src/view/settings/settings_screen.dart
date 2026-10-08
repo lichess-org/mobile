@@ -1,6 +1,5 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -19,7 +18,6 @@ import 'package:lichess_mobile/src/view/settings/app_log_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
-import 'package:lichess_mobile/src/view/settings/live_activity_debug_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -169,13 +167,6 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                   Navigator.of(context).push(AppLogSettingsScreen.buildRoute());
                 },
               ),
-              if (kDebugMode && Theme.of(context).platform == TargetPlatform.iOS)
-                ListTile(
-                  leading: const Icon(Icons.dynamic_feed),
-                  title: const Text('Live Activity (debug)'),
-                  onTap: () => Navigator.of(context).push(LiveActivityDebugScreen.buildRoute()),
-                  trailing: const CupertinoListTileChevron(),
-                ),
               ListTile(
                 leading: const Icon(Icons.star_outline),
                 title: Text(context.l10n.mobileRateThisApp),
