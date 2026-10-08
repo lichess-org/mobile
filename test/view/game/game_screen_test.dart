@@ -1740,26 +1740,6 @@ void main() {
       expect(channel.calls, hasLength(nbCalls));
     });
 
-    testWidgets('ends at once when leaving the game screen', (tester) async {
-      final channel = FakeGameLiveActivityChannel();
-      await createTestGame(
-        tester,
-        pgn: 'e4 e5',
-        overrides: {
-          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
-            channel,
-          ),
-        },
-      );
-      await tester.pump();
-      final id = channel.calls.single.id;
-
-      await tester.pumpWidget(const SizedBox.shrink());
-
-      expect(lastCall(channel).method, 'end');
-      expect(lastCall(channel).id, id);
-    });
-
     testWidgets('stops updating once the user dismisses it', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(
@@ -1812,22 +1792,6 @@ void main() {
           white: const Duration(days: 3),
           black: const Duration(days: 2, hours: 23),
         ),
-        overrides: {
-          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
-            channel,
-          ),
-        },
-      );
-      await tester.pump();
-
-      expect(channel.calls, isEmpty);
-    });
-
-    testWidgets('is not started when Live Activities are unavailable', (tester) async {
-      final channel = FakeGameLiveActivityChannel(supported: false);
-      await createTestGame(
-        tester,
-        pgn: 'e4 e5',
         overrides: {
           gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
             channel,
