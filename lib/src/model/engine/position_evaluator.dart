@@ -607,9 +607,7 @@ class PositionEvaluator(
   /// Reports an engine failure the user cannot work around.
   ///
   /// Recoverable failures are left to the engine button, which already shows an error state; only
-  /// an engine that will not come back until the app is restarted is worth interrupting for. The
-  /// snackbar itself is shown by the view layer coordinator, since the model layer has no access
-  /// to the widget tree.
+  /// an engine that will not come back until the app is restarted is worth interrupting for.
   void _notifyUser(EngineFailure failure) {
     if (!failure.isUnrecoverable) return;
 

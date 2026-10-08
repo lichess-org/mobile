@@ -9,10 +9,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// Options for exporting a game as a GIF.
-///
-/// A plain immutable class on purpose: `build.yaml` only runs code generation for
-/// `lib/src/model/**`, `*_models.dart` and `*_providers.dart`, so a `@freezed` class here would
-/// have no generated part file in CI.
 class const GifExportOptions({
   required final bool playerNames,
   required final bool showPlayerRatings,
