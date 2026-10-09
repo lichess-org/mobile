@@ -190,10 +190,10 @@ class _BroadcastRoundScreenState()
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundState> asyncRound,
+    ({BroadcastRound round, bool? isSubscribed})? roundState,
   ) {
-    return switch (asyncRound) {
-      AsyncData(value: final roundState) => PlatformScaffold(
+    return switch (roundState) {
+      final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
           title: AppBarTitleText(
@@ -340,7 +340,7 @@ class _BroadcastRoundScreenState()
           _ => const BottomBar.empty(),
         },
       ),
-      _ => PlatformScaffold(
+      null => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
         body: const Center(child: CircularProgressIndicator.adaptive()),
@@ -352,40 +352,34 @@ class _BroadcastRoundScreenState()
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
-
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         final roundId = _selectedRoundId ?? tournament.defaultRoundId;
 
-        ref.listen(
+        // Null until the round is loaded, so this fires once when it first loads.
+        ref.listen<bool?>(
           broadcastRoundControllerProvider(roundId)
-              .select((state) => state.value?.games.isNotEmpty ?? false),
-          (_, hasGamesNow) {
-            if (widget.initialTab == null && hasGamesNow && !roundLoaded) {
-              roundLoaded = true;
-              _tabController.index = 1;
-            }
+              .select((state) => state.value?.games.isNotEmpty),
+          (_, hasGames) {
+            if (widget.initialTab != null || hasGames == null || roundLoaded) return;
+            roundLoaded = true;
+            if (hasGames) _tabController.index = 1;
           },
         );
 
-        final roundMetadata = ref.watch(
-          broadcastRoundControllerProvider(roundId).select((state) {
-            if (state.value == null) return loadingRound;
-            return AsyncData(
-              BroadcastRoundState(
-                round: state.value!.round,
-                games: const IMapConst({}),
-                isTeamTournament: state.value!.isTeamTournament,
-                isSubscribed: state.value!.isSubscribed,
-              ),
-            );
-          }),
+        // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
+        final roundState = ref.watch(
+          broadcastRoundControllerProvider(roundId).select(
+            (state) => switch (state.value) {
+              final value? => (round: value.round, isSubscribed: value.isSubscribed),
+              null => null,
+            },
+          ),
         );
 
-        return _buildContent(context, asyncTour, roundMetadata);
+        return _buildContent(context, asyncTour, roundState);
       case _:
-        return _buildContent(context, asyncTour, loadingRound);
+        return _buildContent(context, asyncTour, null);
     }
   }
 }

@@ -129,11 +129,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     // check provider is still mounted
     if (key == _key) {
       final isTeamTournament = round.tournament.teamTable == true;
-      final currentObserved = ref.read(observedGamesControllerProvider(broadcastRoundId));
-      final validObserved = currentObserved.where(round.games.containsKey).toISet();
-      if (validObserved != currentObserved) {
-        ref.read(observedGamesControllerProvider(broadcastRoundId).notifier).state = validObserved;
-      }
       state = AsyncData(
         BroadcastRoundState(
           round: round.round,
@@ -217,12 +212,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
 
   void _handleGamesChangeEvent(SocketEvent event) {
     final games = IMap.fromEntries(pick(event.data).asListOrThrow(gameFromPick));
-
-    final currentObserved = ref.read(observedGamesControllerProvider(broadcastRoundId));
-    final validObserved = currentObserved.where(games.containsKey).toISet();
-    if (validObserved != currentObserved) {
-      ref.read(observedGamesControllerProvider(broadcastRoundId).notifier).state = validObserved;
-    }
 
     state = AsyncData(state.requireValue.copyWith(round: state.requireValue.round, games: games));
 
@@ -311,16 +300,25 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     }
   }
 
+  /// Requests the evals of the observed games that are part of the round.
+  ///
+  /// The observed set is maintained by the widgets showing the games, so it may briefly hold ids of
+  /// games that the round no longer has: those are skipped.
   void _sendEvalMultiGet() {
+    // Supersedes any pending debounced request, since this one reads the latest observed set.
+    _evalRequestDebouncer.cancel();
     if (!state.hasValue) return;
-    final round = state.requireValue;
-    final observedGames = ref.read(observedGamesControllerProvider(broadcastRoundId));
+    final games = state.requireValue.games;
     final prefs = ref.read(broadcastPreferencesProvider);
-    if (prefs.showRoundEvaluationGauges == false || observedGames.isEmpty) return;
+    if (prefs.showRoundEvaluationGauges == false) return;
 
-    _socketClient.send('evalGetMulti', {
-      'fens': [for (final id in observedGames) round.games[id]!.fen],
-    });
+    final fens = [
+      for (final id in ref.read(observedGamesControllerProvider(broadcastRoundId)))
+        if (games[id] case final game?) game.fen,
+    ];
+    if (fens.isEmpty) return;
+
+    _socketClient.send('evalGetMulti', {'fens': fens});
   }
 }
 

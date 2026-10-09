@@ -38,42 +38,30 @@ class const BroadcastBoardsTab({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filteredGameIds = ref.watch(
-      broadcastRoundControllerProvider(roundId).select((state) {
-        final games = state.value?.games;
-        if (games == null) return null;
-
-        final validIds = <BroadcastGameId>[];
-
-        for (final entry in games.entries) {
-          final gameId = entry.key;
-          final game = entry.value;
-
-          if (showOnlyOngoingGames && !game.isOngoing) {
-            continue;
-          }
-
-          if (teamFilter != null &&
-              !Side.values.any((s) => game.players[s]?.player.team == teamFilter)) {
-            continue;
-          }
-
-          validIds.add(gameId);
-        }
-
-        return validIds.toIList();
-      }),
+    final boards = ref.watch(
+      broadcastRoundControllerProvider(roundId).select(
+        (state) => state.whenData(
+          (round) => (
+            hasGames: round.games.isNotEmpty,
+            gameIds: round.games.entries
+                .where(
+                  (entry) =>
+                      (!showOnlyOngoingGames || entry.value.isOngoing) &&
+                      (teamFilter == null ||
+                          Side.values.any(
+                            (s) => entry.value.players[s]?.player.team == teamFilter,
+                          )),
+                )
+                .map((entry) => entry.key)
+                .toIList(),
+          ),
+        ),
+      ),
     );
 
-    final gamesMap = ref.read(broadcastRoundControllerProvider(roundId)).value?.games;
-
-    return switch (filteredGameIds) {
-      final ids? => (() {
-        if (gamesMap == null) {
-          return const Center(child: CircularProgressIndicator.adaptive());
-        }
-
-        return gamesMap.isEmpty || ids.isEmpty
+    return switch (boards) {
+      AsyncData(value: (:final hasGames, :final gameIds)) =>
+        gameIds.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
                 child: Column(
@@ -83,23 +71,23 @@ class const BroadcastBoardsTab({
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
                     Text(
-                      gamesMap.isEmpty
-                          ? context.l10n.broadcastNoBoardsYet
-                          : 'No games matching filter criteria.',
+                      hasGames
+                          ? 'No games matching filter criteria.'
+                          : context.l10n.broadcastNoBoardsYet,
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               )
             : BroadcastPreview(
-                gameIds: ids,
+                gameIds: gameIds,
                 tournamentId: tournamentId,
                 roundId: roundId,
                 tournamentSlug: tournamentSlug,
                 teamFilter: teamFilter,
-              );
-      })(),
-      null => const Center(child: CircularProgressIndicator.adaptive()),
+              ),
+      AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
+      _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -170,20 +158,19 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     final round = ref.watch(
       broadcastRoundControllerProvider(widget.roundId).select((state) => state.value?.round),
     );
-    final games = _searchQuery.isNotEmpty
-        ? ref.watch(
-            broadcastRoundControllerProvider(widget.roundId).select((state) => state.value?.games),
-          )
-        : ref.read(broadcastRoundControllerProvider(widget.roundId)).value?.games;
-
-    final IList<BroadcastGameId>? gameIds = widget.gameIds == null || games == null
-        ? null
-        : _searchQuery.isEmpty
-        ? widget.gameIds
-        : widget.gameIds!.where((gameId) {
-            final game = games[gameId];
-            return game != null && _containsPlayer(game, _searchQuery);
-          }).toIList();
+    final searchQuery = _searchQuery;
+    final allGameIds = widget.gameIds;
+    // While searching, rebuilds only when the list of matching games changes.
+    final gameIds = allGameIds == null || searchQuery.isEmpty
+        ? allGameIds
+        : ref.watch(
+            broadcastRoundControllerProvider(widget.roundId).select(
+              (state) => allGameIds.where((gameId) {
+                final game = state.value?.games[gameId];
+                return game != null && _containsPlayer(game, searchQuery);
+              }).toIList(),
+            ),
+          );
 
     final showSearchBar = widget.gameIds != null && widget.gameIds!.length > 6;
     final pinnedComment = round?.pinnedComment;
