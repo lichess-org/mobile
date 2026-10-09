@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -46,6 +47,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
+import '../../model/game/fake_game_live_activity_channel.dart';
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -1575,6 +1577,230 @@ void main() {
 
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
       expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
+    });
+  });
+
+  group('Live Activity', () {
+    LiveActivityCall lastCall(FakeGameLiveActivityChannel channel) => channel.calls.last;
+
+    testWidgets('starts when the game loads, then follows moves and clocks', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, hasLength(1));
+      final start = channel.calls.single;
+      expect(start.method, 'start');
+      expect(start.attributes!.gameFullId, testGameFullId);
+      expect(start.attributes!.myColor, Side.white);
+      expect(start.attributes!.white.name, 'Peter');
+      expect(start.attributes!.black.name, 'Steven');
+      expect(start.state!.turn, Side.white);
+      expect(start.state!.lastMove, 'e7e5');
+      expect(start.state!.lastSan, 'e5');
+      expect(start.state!.claimable, isTrue);
+      expect(start.state!.clockRunning, isTrue);
+      // half the 60 s grace of a blitz game
+      expect(start.state!.leftWarningDelay, const Duration(seconds: 30));
+
+      // our move, played on the board
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).id, start.id);
+      expect(lastCall(channel).state!.turn, Side.black);
+      expect(lastCall(channel).state!.lastSan, 'd4');
+
+      // the server acknowledges it with new clock times
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "d2d4", "san": "d4", "clock": {"white": 170, "black": 180}}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).state!.whiteClock, const Duration(seconds: 170));
+
+      // opponent move
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 170, "black": 175}}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).state!.turn, Side.white);
+      expect(lastCall(channel).state!.lastMove, 'd7d5');
+      expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
+    });
+
+    testWidgets('reports the game socket connection state', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      FakeWebSocketChannel? gameSocket;
+      final socketFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final socket = createDefaultFakeWebSocketChannel(route);
+        if (route == testGameSocketUri) gameSocket = socket;
+        return socket;
+      });
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        socketFactory: socketFactory,
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      // the first pong
+      await tester.pump(kFakeWebSocketConnectionLag);
+      expect(channel.connectedCalls.last, isTrue);
+
+      gameSocket!.closeFromServer();
+      await tester.pump();
+      expect(channel.connectedCalls.last, isFalse);
+
+      // the socket reconnects after its backoff
+      await tester.pump(const Duration(seconds: 10));
+      expect(channel.connectedCalls.last, isTrue);
+    });
+
+    testWidgets('warns sooner when the user is down material', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Qh5 Nc6 Qxf7+ Kxf7',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // down 8 points: lila halves the grace
+      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 15));
+    });
+
+    testWidgets('warns as soon as the app stops running in bullet', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(minutes: 1),
+          black: Duration(minutes: 1),
+          emerg: Duration(seconds: 10),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls.single.state!.claimable, isTrue);
+      expect(channel.calls.single.state!.leftWarningDelay, isNull);
+    });
+
+    testWidgets('ends at once when the game is over', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"endData","d":{"status":"resign","winner":"white","clock":{"wc":17800,"bc":17000}}}',
+      ]);
+      await tester.pump();
+
+      final end = lastCall(channel);
+      expect(end.method, 'end');
+
+      // let the game-over popup and the dong play
+      await tester.pump(const Duration(seconds: 1));
+      final nbCalls = channel.calls.length;
+
+      // leaving the screen doesn't end it again
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(channel.calls, hasLength(nbCalls));
+    });
+
+    testWidgets('stops updating once the user dismisses it', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      channel.emitState(channel.calls.single.id!, LiveActivityState.dismissed);
+      await tester.pump();
+
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump();
+      expect(channel.calls, hasLength(1));
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(channel.calls, hasLength(1));
+    });
+
+    testWidgets('is not started for a spectator', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        youAre: null,
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, isEmpty);
+    });
+
+    testWidgets('is not started for a correspondence game', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: null,
+        correspondenceClock: (
+          daysPerTurn: 3,
+          white: const Duration(days: 3),
+          black: const Duration(days: 2, hours: 23),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, isEmpty);
     });
   });
 
