@@ -150,9 +150,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                                     title: switch (day.date) {
                                       null => const AppBarTitleText('To be announced'),
                                       final date => AppBarTitleText(
-                                        DateFormat.yMMMMd().format(
-                                          DateTime(date.year, date.month, date.day),
-                                        ),
+                                        DateFormat.yMMMMd().format(date.toUtc()),
                                       ),
                                     },
                                   ),
