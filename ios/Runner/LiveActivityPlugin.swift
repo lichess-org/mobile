@@ -222,9 +222,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     applyLeftDates()
   }
 
-  /// When the activities switch to the "You left the game" view, or nil while in the foreground:
-  /// as soon as nothing updates them any more, i.e. just before the app is suspended, or at once
-  /// when the socket is lost.
+  /// When the activities switch to the "You left the game" view, or nil while in the foreground.
   private var staleDate: Date? {
     guard isInBackground else { return nil }
     if let lost = socketLostAt { return lost }

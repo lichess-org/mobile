@@ -29,9 +29,9 @@ typedef _SyncKey = ({
 ///
 /// Lives as long as the game screen watches it. Starts the activity once the game is loaded, if it
 /// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves and clock changes,
-/// and removes it at once when the game is over or when the game screen is left: it is only useful
-/// while the game is being played. Also reports the game socket's connection state, which
-/// the native side uses to show "You left the game" while the app is in the background.
+/// and removes it at once when the game is over or when the game screen is left. Also reports the
+/// game socket's connection state, which the native side uses to show "You left the game" while the
+/// app is in the background.
 class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<void> {
   late GameLiveActivityChannel _channel;
   StreamSubscription<({String id, LiveActivityState state})>? _stateSubscription;
