@@ -130,6 +130,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('Cannot load broadcast calendar'), findsOneWidget);
+      expect(find.byIcon(Icons.error_outline), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
     });
   });

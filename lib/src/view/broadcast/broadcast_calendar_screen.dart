@@ -177,6 +177,8 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            const Icon(Icons.error_outline, size: 32),
+                            const SizedBox(height: 16),
                             const Text('Cannot load broadcast calendar'),
                             TextButton(
                               onPressed: () =>
