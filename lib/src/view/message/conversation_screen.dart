@@ -403,16 +403,16 @@ class const _MessageContent({
       ),
     );
 
-    final linkSpan = buildTextSpan(
-      linkify(text, linkifiers: AppLinksService.kLichessLinkifiers),
-      style: TextStyle(color: textColor),
-      linkStyle: Styles.linkStyle,
-      onOpen: onLinkOpen,
-    );
-
     return Stack(
       children: [
-        Text.rich(TextSpan(children: [linkSpan, spacer])),
+        RichLinkText(
+          text: text,
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          style: TextStyle(color: textColor),
+          linkStyle: Styles.linkStyle,
+          onOpen: onLinkOpen,
+          trailing: spacer,
+        ),
         Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
