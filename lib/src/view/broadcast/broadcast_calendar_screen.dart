@@ -68,18 +68,58 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
   Widget build(BuildContext context) {
     final params = (year: year, month: month);
     final calendar = ref.watch(broadcastCalendarProvider(params));
+    final maxYear = DateTime.now().year + 1;
+    final years = [for (int y = 2020; y <= maxYear; y++) y];
 
     return Scaffold(
       appBar: AppBar(title: AppBarTitleText(context.l10n.broadcastBroadcastCalendar)),
       body: Column(
         children: [
-          _MonthPicker(
-            year: year,
-            month: month,
-            onYearChanged: (value) => setState(() => year = value),
-            onMonthChanged: (value) => setState(() => month = value),
-            onPrevious: goToPreviousMonth,
-            onNext: goToNextMonth,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: goToPreviousMonth,
+                  tooltip: 'Previous month',
+                ),
+                Expanded(
+                  child: DropdownButton<int>(
+                    value: years.contains(year) ? year : null,
+                    isExpanded: true,
+                    items: [
+                      for (final y in years) DropdownMenuItem(value: y, child: Text(y.toString())),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) setState(() => year = value);
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Expanded(
+                  child: DropdownButton<int>(
+                    value: month,
+                    isExpanded: true,
+                    items: [
+                      for (int m = 1; m <= 12; m++)
+                        DropdownMenuItem(
+                          value: m,
+                          child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
+                        ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) setState(() => month = value);
+                    },
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: goToNextMonth,
+                  tooltip: 'Next month',
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: HapticRefreshIndicator(
@@ -150,65 +190,6 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                 _ => const Center(child: CircularProgressIndicator.adaptive()),
               },
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class const _MonthPicker({
-  required final int year,
-  required final int month,
-  required final ValueChanged<int> onYearChanged,
-  required final ValueChanged<int> onMonthChanged,
-  required final VoidCallback onPrevious,
-  required final VoidCallback onNext,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final maxYear = DateTime.now().year + 1;
-    final years = [for (int y = 2020; y <= maxYear; y++) y];
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.chevron_left),
-            onPressed: onPrevious,
-            tooltip: 'Previous month',
-          ),
-          Expanded(
-            child: DropdownButton<int>(
-              value: years.contains(year) ? year : null,
-              isExpanded: true,
-              items: [for (final y in years) DropdownMenuItem(value: y, child: Text(y.toString()))],
-              onChanged: (value) {
-                if (value != null) onYearChanged(value);
-              },
-            ),
-          ),
-          const SizedBox(width: 8.0),
-          Expanded(
-            child: DropdownButton<int>(
-              value: month,
-              isExpanded: true,
-              items: [
-                for (int m = 1; m <= 12; m++)
-                  DropdownMenuItem(
-                    value: m,
-                    child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
-                  ),
-              ],
-              onChanged: (value) {
-                if (value != null) onMonthChanged(value);
-              },
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.chevron_right),
-            onPressed: onNext,
-            tooltip: 'Next month',
           ),
         ],
       ),
