@@ -46,6 +46,23 @@ void main() {
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
     });
 
+    testWidgets('Loading state stays refreshable', variant: kPlatformVariant, (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(CustomScrollView), findsOneWidget);
+    });
+
     testWidgets('Shows empty state when month has no broadcasts', variant: kPlatformVariant, (
       tester,
     ) async {

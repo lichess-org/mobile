@@ -137,6 +137,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           ],
                         )
                       : CustomScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             for (final day in value)
                               SliverMainAxisGroup(
@@ -190,7 +191,15 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                     ),
                   ],
                 ),
-                _ => const Center(child: CircularProgressIndicator.adaptive()),
+                _ => const CustomScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  slivers: [
+                    SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(child: CircularProgressIndicator.adaptive()),
+                    ),
+                  ],
+                ),
               },
             ),
           ),
