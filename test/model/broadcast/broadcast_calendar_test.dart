@@ -44,6 +44,32 @@ void main() {
       expect(response[0].title, 'Tour A');
     });
 
+    test('getCalendar returns broadcasts sorted by round start, undated last', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/broadcast/calendar/2026/10') {
+          return mockResponse(
+            '''
+[
+  {"tour":{"id":"bbbbbbb1","name":"Tour B","slug":"tour-b"},"round":{"id":"rrrrrrr3","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790899200000}},
+  {"tour":{"id":"ccccccc1","name":"Undated Tour","slug":"undated-tour"},"round":{"id":"rrrrrrr9","name":"Round TBD","slug":"round-tbd","ongoing":false,"finished":false,"startsAfterPrevious":true}},
+  {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}}
+]
+''',
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await calendarContainer(mockClient);
+      final repo = container.read(broadcastRepositoryProvider);
+
+      final response = await repo.getCalendar(year: 2026, month: 10);
+
+      expect(response.map((broadcast) => broadcast.title), ['Tour A', 'Tour B', 'Undated Tour']);
+    });
+
     test('calendar provider groups by day and sorts', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {

@@ -97,11 +97,20 @@ class BroadcastRepository(final LichessClient client, final Aggregator aggregato
     );
   }
 
-  Future<IList<Broadcast>> getCalendar({required int year, required int month}) {
-    return client.readJsonList(
+  Future<IList<Broadcast>> getCalendar({required int year, required int month}) async {
+    final broadcasts = await client.readJsonList(
       Uri(path: '/api/broadcast/calendar/$year/$month'),
       mapper: (json) => _broadcastFromPick(pick(json).required()),
     );
+    final sorted = broadcasts.toList(growable: false)
+      ..sort((a, b) {
+        final aStart = a.round.startsAt;
+        final bStart = b.round.startsAt;
+        if (aStart == null) return 1;
+        if (bStart == null) return -1;
+        return aStart.compareTo(bStart);
+      });
+    return sorted.toIList();
   }
 
   /// Subscribes to, or unsubscribes from, a tournament.
