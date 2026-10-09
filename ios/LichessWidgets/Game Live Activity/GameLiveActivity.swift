@@ -7,7 +7,8 @@ import WidgetKit
 ///
 /// The app updates it while it runs. Once the app is suspended nothing updates it any more: the
 /// Runner plugin sets the `staleDate` to the predicted suspension time, and when `isStale` flips the
-/// view replaces the clocks with a "You left the game" warning.
+/// view replaces the clocks with a "You left the game" warning. While the app runs but its game
+/// socket is down, the status shows "Reconnecting" instead.
 ///
 /// No `widgetURL`: tapping the activity just brings the app back, where the game screen is already
 /// open.
@@ -40,11 +41,15 @@ struct GameLiveActivity: Widget {
             } minimal: {
                 if context.isStale {
                     LeftGameIcon()
+                } else if context.state.isReconnecting {
+                    ReconnectingIcon()
                 } else {
                     GameBoard(context: context, size: GameActivityLayout.compactBoardSize)
                 }
             }
-            .keylineTint(context.isStale ? lichessOrange : nil)
+            .keylineTint(
+                context.isStale ? lichessOrange : context.state.isReconnecting ? lichessRed : nil
+            )
         }
     }
 }
@@ -54,6 +59,9 @@ private let lichessGreen = Color(red: 0x62 / 255, green: 0x99 / 255, blue: 0x24 
 
 /// Lichess orange (`LichessColors.accent` in the app), for the "You left the game" warning.
 private let lichessOrange = Color(red: 0xD6 / 255, green: 0x4F / 255, blue: 0x00 / 255)
+
+/// Lichess red (`LichessColors.error` in the app), for the "Reconnecting" warning.
+private let lichessRed = Color(red: 0xCC / 255, green: 0x33 / 255, blue: 0x33 / 255)
 
 /// Lichess gold (`LichessColors.brag` in the app, `--c-brag` on the website), for titles.
 private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D / 255)
@@ -204,6 +212,16 @@ private struct StatusLine: View {
             .foregroundStyle(lichessOrange)
             .lineLimit(3)
             .minimumScaleFactor(0.8)
+        } else if state.isReconnecting {
+            Label {
+                Text("Reconnecting")
+            } icon: {
+                Image(systemName: ReconnectingIcon.systemName)
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(lichessRed)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
         } else {
             Text(headline)
                 .font(.subheadline.weight(.semibold))
@@ -219,13 +237,15 @@ private struct StatusLine: View {
 // MARK: - Dynamic Island
 
 /// The user's clock: in green while it runs, greyed out while it waits for the opponent. Once the
-/// user left the game, the warning icon instead.
+/// user left the game, or while reconnecting, a warning icon instead.
 private struct CompactTrailingView: View {
     let context: ActivityViewContext<GameActivityAttributes>
 
     var body: some View {
         if context.isStale {
             LeftGameIcon()
+        } else if context.state.isReconnecting {
+            ReconnectingIcon()
         } else {
             let side = context.attributes.myColor
             let isRunning = context.state.isClockRunning(for: side)
@@ -247,6 +267,15 @@ private struct LeftGameIcon: View {
     var body: some View {
         Image(systemName: "exclamationmark.triangle.fill")
             .foregroundStyle(lichessOrange)
+    }
+}
+
+private struct ReconnectingIcon: View {
+    static let systemName = "wifi.exclamationmark"
+
+    var body: some View {
+        Image(systemName: Self.systemName)
+            .foregroundStyle(lichessRed)
     }
 }
 
@@ -296,7 +325,7 @@ private extension GameActivityAttributes {
 }
 
 private extension GameActivityAttributes.ContentState {
-    static func preview(turn: GameActivityAttributes.Side) -> Self {
+    static func preview(turn: GameActivityAttributes.Side, reconnecting: Bool = false) -> Self {
         Self(
             fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
             lastMove: "b8c6",
@@ -307,7 +336,8 @@ private extension GameActivityAttributes.ContentState {
             clockAt: Date.now.timeIntervalSince1970 * 1000,
             clockRunning: true,
             claimable: true,
-            leftWarningDelay: 30_000
+            leftWarningDelay: 30_000,
+            reconnecting: reconnecting
         )
     }
 }
@@ -317,6 +347,7 @@ private extension GameActivityAttributes.ContentState {
 } contentStates: {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
+    GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
 }
 
 #Preview("Compact", as: .dynamicIsland(.compact), using: GameActivityAttributes.preview) {
@@ -324,6 +355,7 @@ private extension GameActivityAttributes.ContentState {
 } contentStates: {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
+    GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
 }
 
 #Preview("Minimal", as: .dynamicIsland(.minimal), using: GameActivityAttributes.preview) {
@@ -331,4 +363,5 @@ private extension GameActivityAttributes.ContentState {
 } contentStates: {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
+    GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
 }

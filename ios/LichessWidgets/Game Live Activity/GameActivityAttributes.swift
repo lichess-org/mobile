@@ -38,6 +38,9 @@ struct GameActivityAttributes: ActivityAttributes {
         /// Milliseconds after lila counts the player as gone to warn them that they left the game,
         /// or nil to warn as soon as the app stops running.
         let leftWarningDelay: Int?
+        /// Whether the game socket is down while the app still runs, so the app is trying to
+        /// reconnect. Set by the Runner plugin, absent from the state sent by Dart.
+        var reconnecting: Bool?
     }
 
     let gameFullId: String
@@ -56,6 +59,8 @@ extension GameActivityAttributes.ContentState {
     func clock(of side: GameActivityAttributes.Side) -> Int {
         side == .white ? whiteClock : blackClock
     }
+
+    var isReconnecting: Bool { reconnecting ?? false }
 
     var clockAtDate: Date { Date(timeIntervalSince1970: clockAt / 1000) }
 

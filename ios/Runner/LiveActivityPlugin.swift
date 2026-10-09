@@ -29,7 +29,8 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private var isInBackground = false
   /// When the app is predicted to be suspended, during a stay in the background.
   private var predictedSuspension: Date?
-  /// When the game socket was lost, during a stay in the background.
+  /// When the game socket was lost, during a stay in the background: lila counts the player as gone
+  /// from then on, which dates the "You left the game" notification.
   private var socketLostAt: Date?
   /// The `staleDate` applied to the activities.
   private var appliedStaleDate: Date?
@@ -44,7 +45,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// The activities whose "You left the game" notification went off during this stay in the
   /// background: it goes off once per stay.
   private var warnedLeft: Set<String> = []
-  /// Whether the game socket is connected, as reported by Dart.
+  /// Whether the game socket is connected, as reported by Dart. While it isn't, the activities show
+  /// "Reconnecting": Dart only reports it while the app runs, so the socket was lost to the network
+  /// (or the server), not to the app being suspended.
   private var isSocketConnected = true
   private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
   /// Tail of the chain of activity updates. ActivityKit calls are async, so they are chained to
@@ -215,17 +218,19 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private func setConnected(_ connected: Bool) {
     guard connected != isSocketConnected else { return }
     isSocketConnected = connected
-    guard isInBackground else { return }
-    // lila counts a closed socket as gone within a second, and the player as back once it
-    // reconnects.
-    socketLostAt = connected ? nil : Date()
-    applyLeftDates()
+    if isInBackground {
+      // lila counts a closed socket as gone within a second, and the player as back once it
+      // reconnects.
+      socketLostAt = connected ? nil : Date()
+    }
+    // All of them, to show or hide "Reconnecting".
+    updateActivities()
   }
 
-  /// When the activities switch to the "You left the game" view, or nil while in the foreground.
+  /// When the activities switch to the "You left the game" view, or nil while in the foreground:
+  /// just before the app is suspended. A socket lost before that shows "Reconnecting" instead.
   private var staleDate: Date? {
     guard isInBackground else { return nil }
-    if let lost = socketLostAt { return lost }
     return predictedSuspension?.addingTimeInterval(-Self.staleMargin)
   }
 
@@ -243,8 +248,8 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     return predictedSuspension?.addingTimeInterval(Self.silentSocketTimeout + delay)
   }
 
-  /// The content of an activity, with the current `staleDate`. Schedules the "You left the game"
-  /// notification when its date changes.
+  /// The content of an activity, with the current `staleDate` and connection state. Schedules the
+  /// "You left the game" notification when its date changes.
   @available(iOS 16.2, *)
   private func content(
     for id: String, state: GameActivityAttributes.ContentState
@@ -258,6 +263,8 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
       #endif
       leftFireDates[id] = scheduleLeftNotification(id: id, state: state, at: date)
     }
+    var state = state
+    state.reconnecting = !isSocketConnected
     return ActivityContent(state: state, staleDate: staleDate)
   }
 

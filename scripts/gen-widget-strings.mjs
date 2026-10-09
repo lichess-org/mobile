@@ -37,6 +37,7 @@ const WIDGET_KEYS = {
   'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts' },
   'Your turn': { arbKey: 'yourTurn', fallback: 'Your turn' },
   'Waiting for opponent': { arbKey: 'waitingForOpponent', fallback: 'Waiting for opponent' },
+  'Reconnecting': { arbKey: 'reconnecting', fallback: 'Reconnecting' },
 };
 
 // ARB locale codes use '_', iOS uses '-' for subtags.

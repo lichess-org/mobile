@@ -292,8 +292,9 @@ class GameLiveActivityChannel._() {
     }
   }
 
-  /// Tells whether the game socket is connected: losing it while the app is in the background
-  /// shows "You left the game" at once.
+  /// Tells whether the game socket is connected: the activity shows "Reconnecting" while it isn't.
+  /// Lost in the background, it also dates the "You left the game" notification, as lila counts the
+  /// player as gone from then on.
   Future<void> setConnected(bool connected) async {
     if (!_isIOS) return;
     try {
