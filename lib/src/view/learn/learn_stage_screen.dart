@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_progress_gate.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -39,17 +40,16 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
           actions: const [ToggleSoundButton()],
         ),
         // The controller reads the saved progress to pick the level to start with.
-        body: switch (ref.watch(learnProgressProvider)) {
-          AsyncData() => _Body(stage: stage),
-          AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
-          _ => const Center(child: CircularProgressIndicator.adaptive()),
-        },
+        body: LearnProgressGate(
+          builder: (context, progress) => _Body(stage: stage, progress: progress),
+        ),
       ),
     );
   }
 }
 
-class const _Body({required final LearnStage stage}) extends ConsumerStatefulWidget {
+class const _Body({required final LearnStage stage, required final LearnProgress progress})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
@@ -127,7 +127,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 },
               );
 
-              final table = _Table(state: state);
+              final table = _Table(state: state, progress: widget.progress);
 
               return isLandscape
                   ? Row(
@@ -159,7 +159,9 @@ class _BodyState() extends ConsumerState<_Body> {
             child: _StageIntro(stage: widget.stage, onStart: controller.hideIntro),
           )
         else if (state.stageCompleted)
-          _Overlay(child: _StageComplete(stage: widget.stage)),
+          _Overlay(
+            child: _StageComplete(stage: widget.stage, progress: widget.progress),
+          ),
       ],
     );
   }
@@ -262,13 +264,13 @@ class const _Apple() extends StatelessWidget {
 }
 
 /// The goal of the level, its result, and the progress through the stage.
-class const _Table({required final LearnStageState state}) extends ConsumerWidget {
+class const _Table({required final LearnStageState state, required final LearnProgress progress})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(learnStageControllerProvider(state.stage).notifier);
     final level = state.level;
     final l10n = context.l10n;
-    final progress = ref.watch(learnProgressProvider).value ?? LearnProgress.empty;
 
     final Widget result;
     if (level.failed) {
@@ -487,11 +489,11 @@ class const _StageIntro({required final LearnStage stage, required final VoidCal
   }
 }
 
-class const _StageComplete({required final LearnStage stage}) extends ConsumerWidget {
+class const _StageComplete({required final LearnStage stage, required final LearnProgress progress})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final progress = ref.watch(learnProgressProvider).value ?? LearnProgress.empty;
     final stageIndex = learnStages.indexOf(stage);
     final next = stageIndex + 1 < learnStages.length ? learnStages[stageIndex + 1] : null;
     return Column(
