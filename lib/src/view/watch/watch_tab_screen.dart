@@ -166,6 +166,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
     final content = [
       if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      const _BroadcastCalendarCard(),
       if (isTablet)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,18 +232,28 @@ class const _BroadcastWidget(
               ),
             ),
           },
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: OutlinedButton.icon(
-              icon: const Icon(Icons.calendar_month),
-              label: Text(context.l10n.broadcastBroadcastCalendar),
-              onPressed: () {
-                Navigator.of(context).push(BroadcastCalendarScreen.buildRoute());
-              },
-            ),
-          ),
         ],
       ),
+    );
+  }
+}
+
+class const _BroadcastCalendarCard() extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListSection(
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.calendar_month),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastBroadcastCalendar),
+          subtitle: const Text('Upcoming and past tournaments'),
+          onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
+        ),
+      ],
     );
   }
 }
