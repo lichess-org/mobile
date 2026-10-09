@@ -467,7 +467,13 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
 
   @override
   Widget build(BuildContext context) {
-    final rootComments = widget.rootComments?.map((c) => c.text).nonNulls ?? [];
+    final rootComments =
+        widget.rootComments
+            ?.map((comment) => comment.text)
+            .nonNulls
+            .map(withoutLichessAuthorAnnotations)
+            .where((text) => text.isNotEmpty) ??
+        [];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
