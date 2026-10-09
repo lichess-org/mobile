@@ -663,7 +663,6 @@ class const _GreetingWidget() extends ConsumerWidget {
         padding: Styles.bodyPadding,
         child: GestureDetector(
           onTap: () {
-            ref.invalidate(accountProvider);
             Navigator.of(context).push(ProfileScreen.buildRoute());
           },
           child: Row(
