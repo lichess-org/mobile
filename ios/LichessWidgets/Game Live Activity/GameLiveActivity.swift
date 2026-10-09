@@ -54,16 +54,9 @@ struct GameLiveActivity: Widget {
     }
 }
 
-/// Lichess green (`LichessColors.secondary` in the app), marking the user's turn.
 private let lichessGreen = Color(red: 0x62 / 255, green: 0x99 / 255, blue: 0x24 / 255)
-
-/// Lichess orange (`LichessColors.accent` in the app), for the "You left the game" warning.
 private let lichessOrange = Color(red: 0xD6 / 255, green: 0x4F / 255, blue: 0x00 / 255)
-
-/// Lichess red (`LichessColors.error` in the app), for the "Reconnecting" warning.
 private let lichessRed = Color(red: 0xCC / 255, green: 0x33 / 255, blue: 0x33 / 255)
-
-/// Lichess gold (`LichessColors.brag` in the app, `--c-brag` on the website), for titles.
 private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D / 255)
 
 private enum GameActivityLayout {
