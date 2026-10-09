@@ -88,7 +88,7 @@ void main() {
       expect(days.single.broadcasts.length, 2);
     });
 
-    test('groupBroadcastsByDate shows broadcasts without a start date', () async {
+    test('groupBroadcastsByDate puts broadcasts without a start date last', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {
           return mockResponse(
@@ -110,8 +110,35 @@ void main() {
 
       final days = groupBroadcastsByDate(await repo.getCalendar(year: 2026, month: 10));
 
-      expect(days.expand((day) => day.broadcasts).length, 2);
-      expect(days.first.broadcasts.last.title, 'Undated Tour');
+      expect(days.length, 2);
+      expect(days.last.date, isNull);
+      expect(days.last.broadcasts.single.title, 'Undated Tour');
+    });
+
+    test('groupBroadcastsByDate keeps months with only undated broadcasts', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/broadcast/calendar/2026/10') {
+          return mockResponse(
+            '''
+[
+  {"tour":{"id":"ccccccc1","name":"Undated Tour","slug":"undated-tour"},"round":{"id":"rrrrrrr9","name":"Round TBD","slug":"round-tbd","ongoing":false,"finished":false,"startsAfterPrevious":true}}
+]
+''',
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(broadcastRepositoryProvider);
+
+      final days = groupBroadcastsByDate(await repo.getCalendar(year: 2026, month: 10));
+
+      expect(days.length, 1);
+      expect(days.single.date, isNull);
+      expect(days.single.broadcasts.single.title, 'Undated Tour');
     });
   });
 }

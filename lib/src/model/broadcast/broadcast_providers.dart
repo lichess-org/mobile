@@ -114,7 +114,7 @@ final broadcastTeamStandingsProvider = FutureProvider.autoDispose
       );
     }, name: 'BroadcastTeamStandingsProvider');
 
-typedef BroadcastCalendarDay = ({DateTime date, IList<Broadcast> broadcasts});
+typedef BroadcastCalendarDay = ({DateTime? date, IList<Broadcast> broadcasts});
 
 IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
   final byDay = <DateTime, List<Broadcast>>{};
@@ -130,18 +130,12 @@ IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
   }
   final days = byDay.entries.toList(growable: false)..sort((a, b) => a.key.compareTo(b.key));
   for (final entry in days) {
-    entry.value.sort((a, b) {
-      final aStart = a.round.startsAt;
-      final bStart = b.round.startsAt;
-      if (aStart == null) return 1;
-      if (bStart == null) return -1;
-      return aStart.compareTo(bStart);
-    });
+    entry.value.sort((a, b) => a.round.startsAt!.compareTo(b.round.startsAt!));
   }
-  if (undated.isNotEmpty && days.isNotEmpty) {
-    days.first.value.addAll(undated);
-  }
-  return days.map((entry) => (date: entry.key, broadcasts: entry.value.toIList())).toIList();
+  return <BroadcastCalendarDay>[
+    for (final entry in days) (date: entry.key, broadcasts: entry.value.toIList()),
+    if (undated.isNotEmpty) (date: null, broadcasts: undated.toIList()),
+  ].toIList();
 }
 
 final broadcastCalendarProvider = FutureProvider.autoDispose
