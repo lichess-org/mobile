@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:logging/logging.dart';
 
 part 'game_live_activity.freezed.dart';
@@ -266,6 +267,7 @@ class GameLiveActivityChannel._() {
       return await _channel.invokeMethod<String>('start', {
         'attributes': attributes.toJson(),
         'state': state.toJson(),
+        'socketBackgroundTimeout': kDisconnectOnBackgroundTimeout.inMilliseconds,
       });
     } on PlatformException catch (e, st) {
       _log.severe('start failed', e, st);

@@ -11,11 +11,6 @@ import UserNotifications
 public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// How long before the predicted suspension the activities show the warning.
   private static let staleMargin: TimeInterval = 3
-  /// Upper bound of the background window: what iOS grants a background task today. With a
-  /// debugger attached `backgroundTimeRemaining` can be much larger and the app isn't suspended,
-  /// which would delay the warning past the point where lila marks the player offline (once
-  /// `SocketPool` closes the socket after a minute in the background).
-  private static let maxBackgroundTime: TimeInterval = 30
   /// How long lila-ws takes to count a silent socket (the app suspended) as gone: it drops the
   /// clients whose last ping is more than 30 s old.
   private static let silentSocketTimeout: TimeInterval = 30
@@ -27,6 +22,11 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// hasn't ended.
   private var contents: [String: Any] = [:]
   private var isInBackground = false
+  /// Upper bound of the background window: how long the app keeps the game socket open in the
+  /// background (`kDisconnectOnBackgroundTimeout` in Dart, sent with `start`). Where iOS grants
+  /// more background time, e.g. with a debugger attached, the app leaves the game then. The default
+  /// is a fallback only: every activity is started before the app goes to the background.
+  private var socketBackgroundTimeout: TimeInterval = 60
   /// When the app is predicted to be suspended, during a stay in the background.
   private var predictedSuspension: Date?
   /// When the game socket was lost, during a stay in the background: lila counts the player as gone
@@ -119,6 +119,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     do {
       let attributes: GameActivityAttributes = try decode(args["attributes"])
       let state: GameActivityAttributes.ContentState = try decode(args["state"])
+      if let timeout = args["socketBackgroundTimeout"] as? Int {
+        socketBackgroundTimeout = TimeInterval(timeout) / 1000
+      }
       let activity = try Activity.request(
         attributes: attributes,
         // Started in the foreground only, so there is no warning date yet.
@@ -188,7 +191,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     #if DEBUG
       NSLog("LiveActivityPlugin: background time remaining %.1f s", remaining)
     #endif
-    let window = min(remaining, Self.maxBackgroundTime)
+    let window = min(remaining, socketBackgroundTimeout)
     predictedSuspension = Date().addingTimeInterval(window)
     if !isSocketConnected { socketLostAt = Date() }
     applyLeftDates()
