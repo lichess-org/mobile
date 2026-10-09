@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_log_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/broadcast_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
@@ -116,6 +118,16 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                     : null,
                 onTap: () {
                   Navigator.of(context).push(EngineSettingsScreen.buildRoute());
+                },
+              ),
+              ListTile(
+                leading: const Icon(LichessIcons.radio_tower_lichess),
+                title: Text(context.l10n.broadcastBroadcasts, overflow: .ellipsis),
+                trailing: Theme.of(context).platform == .iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(BroadcastSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
