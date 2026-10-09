@@ -107,7 +107,11 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                               automaticallyImplyLeading: false,
                               primary: false,
                               pinned: true,
-                              title: AppBarTitleText(DateFormat.yMMMMd().format(day.date)),
+                              title: AppBarTitleText(
+                                DateFormat.yMMMMd().format(
+                                  DateTime(day.date.year, day.date.month, day.date.day),
+                                ),
+                              ),
                             ),
                             SliverList.separated(
                               separatorBuilder: (context, index) => PlatformDivider(

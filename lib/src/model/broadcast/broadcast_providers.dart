@@ -118,10 +118,14 @@ typedef BroadcastCalendarDay = ({DateTime date, IList<Broadcast> broadcasts});
 
 IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
   final byDay = <DateTime, List<Broadcast>>{};
+  final undated = <Broadcast>[];
   for (final broadcast in broadcasts) {
-    final startsAt = broadcast.round.startsAt;
-    if (startsAt == null) continue;
-    final day = DateTime(startsAt.year, startsAt.month, startsAt.day);
+    final startsAt = broadcast.round.startsAt?.toUtc();
+    if (startsAt == null) {
+      undated.add(broadcast);
+      continue;
+    }
+    final day = DateTime.utc(startsAt.year, startsAt.month, startsAt.day);
     (byDay[day] ??= []).add(broadcast);
   }
   final days = byDay.entries.toList(growable: false)..sort((a, b) => a.key.compareTo(b.key));
@@ -129,9 +133,13 @@ IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
     entry.value.sort((a, b) {
       final aStart = a.round.startsAt;
       final bStart = b.round.startsAt;
-      if (aStart == null || bStart == null) return 0;
+      if (aStart == null) return 1;
+      if (bStart == null) return -1;
       return aStart.compareTo(bStart);
     });
+  }
+  if (undated.isNotEmpty && days.isNotEmpty) {
+    days.first.value.addAll(undated);
   }
   return days.map((entry) => (date: entry.key, broadcasts: entry.value.toIList())).toIList();
 }
