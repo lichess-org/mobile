@@ -3,7 +3,7 @@ Copying Lichess Mobile
 
 Any file in this project that does not state otherwise and is not listed as an
 exception below is part of *Lichess Mobile*, the mobile app for
-[lichess.org](lichess.org/mobile), and copyright (c) 2022-2023 Lichess Mobile
+[lichess.org](https://lichess.org/mobile), and copyright (c) 2022-2023 Lichess Mobile
 contributors.
 
 For a list of the authors see the commit log or
@@ -27,6 +27,8 @@ Exceptions (free)
 Files | Author(s) | License
 --- | --- | ---
 Fontawesome in assets/fonts | [davegandy](https://fontawesome.com) | [SIL OFL 1.1](https://opensource.org/licenses/OFL-1.1)
+assets/images/learn/pieces | Thibault Duplessis and [Colin M.L. Burnett](https://en.wikipedia.org/wiki/User:Cburnett) | [GPLv2+](https://www.gnu.org/licenses/gpl-2.0.txt)
+assets/images/learn/*.webp | [game-icons.net](https://game-icons.net/about.html) | [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/) (Rasterized from the lila SVGs)
 
 External services
 -----------------

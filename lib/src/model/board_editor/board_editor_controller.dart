@@ -8,7 +8,11 @@ import 'package:lichess_mobile/src/model/common/chess960.dart';
 
 part 'board_editor_controller.freezed.dart';
 
-typedef BoardEditorControllerParams = ({Variant initialVariant, String? initialFen});
+typedef BoardEditorControllerParams = ({
+  Variant initialVariant,
+  String? initialFen,
+  Side? initialOrientation,
+});
 
 /// A provider for [BoardEditorController].
 final boardEditorControllerProvider = NotifierProvider.autoDispose
@@ -17,11 +21,8 @@ final boardEditorControllerProvider = NotifierProvider.autoDispose
       name: 'BoardEditorControllerProvider',
     );
 
-class BoardEditorController extends Notifier<BoardEditorState> {
-  BoardEditorController(this.params);
-
-  final BoardEditorControllerParams? params;
-
+class BoardEditorController(final BoardEditorControllerParams? params)
+    extends Notifier<BoardEditorState> {
   @override
   BoardEditorState build() {
     final variant = params?.initialVariant ?? Variant.standard;
@@ -32,7 +33,7 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     final pieces = readFen(fen).lock;
 
     return BoardEditorState(
-      orientation: Side.white,
+      orientation: params?.initialOrientation ?? Side.white,
       sideToPlay: setup.turn,
       variant: variant,
       pieces: pieces,
@@ -122,13 +123,22 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     );
   }
 
+  /// Derives the castling rights of [setup] without validating the position.
+  ///
+  /// The editor must hold illegal positions, such as a board with no king,
+  /// since the user builds them piece by piece. [Position.setupPosition]
+  /// rejects those, so the castles are derived directly from the setup,
+  /// mirroring what each variant does in its `fromSetup` constructor.
   IMap<CastlingRight, bool> _getCastlingRights(Variant variant, Setup setup) {
-    final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
+    final castles = switch (variant.rule) {
+      Rule.antichess || Rule.racingKings => Castles.empty,
+      _ => Castles.fromSetup(setup),
+    };
     return IMap({
-      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
-      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
-      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
-      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
+      CastlingRight.whiteKing: castles.rookOf(Side.white, CastlingSide.king) != null,
+      CastlingRight.whiteQueen: castles.rookOf(Side.white, CastlingSide.queen) != null,
+      CastlingRight.blackKing: castles.rookOf(Side.black, CastlingSide.king) != null,
+      CastlingRight.blackQueen: castles.rookOf(Side.black, CastlingSide.queen) != null,
     });
   }
 
@@ -215,13 +225,16 @@ class BoardEditorController extends Notifier<BoardEditorState> {
   }
 }
 
-enum CastlingRight { whiteKing, whiteQueen, blackKing, blackQueen }
+enum CastlingRight() {
+  whiteKing,
+  whiteQueen,
+  blackKing,
+  blackQueen,
+}
 
 @freezed
-sealed class BoardEditorState with _$BoardEditorState {
-  const BoardEditorState._();
-
-  const factory BoardEditorState({
+sealed class const BoardEditorState._() with _$BoardEditorState {
+  const factory({
     required Side orientation,
     required Side sideToPlay,
     required Variant variant,
@@ -248,50 +261,64 @@ sealed class BoardEditorState with _$BoardEditorState {
     },
   };
 
-  /// Returns the castling rights part of the FEN string.
-  ///
-  /// If the rook is missing on one side of the king, or the king is missing on the
-  /// backrank, the castling right is removed.
-  String get _castlingRightsPart {
-    final parts = <String>[];
-    final Map<CastlingRight, bool> hasRook = {};
-    final Board board = Board.parseFen(writeFen(pieces.unlock));
-    for (final side in Side.values) {
+  /// Checks if the pieces are in the correct positions so that castling is possible.
+  bool isCastlingPossible(Side side, CastlingSide castlingSide) {
+    if (variant == .chess960) {
+      final board = Board.parseFen(writeFen(pieces.unlock));
       final backrankKing = SquareSet.backrankOf(side) & board.kings;
       final rooksAndKings =
           (board.bySide(side) & SquareSet.backrankOf(side)) & (board.rooks | board.kings);
-      for (final castlingSide in CastlingSide.values) {
-        final candidate = castlingSide == CastlingSide.king
-            ? rooksAndKings.squares.lastOrNull
-            : rooksAndKings.squares.firstOrNull;
-        final isCastlingPossible =
-            candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
-        switch ((side, castlingSide)) {
-          case (Side.white, CastlingSide.king):
-            hasRook[CastlingRight.whiteKing] = isCastlingPossible;
-          case (Side.white, CastlingSide.queen):
-            hasRook[CastlingRight.whiteQueen] = isCastlingPossible;
-          case (Side.black, CastlingSide.king):
-            hasRook[CastlingRight.blackKing] = isCastlingPossible;
-          case (Side.black, CastlingSide.queen):
-            hasRook[CastlingRight.blackQueen] = isCastlingPossible;
-        }
-      }
+
+      final candidate = castlingSide == .king
+          ? rooksAndKings.squares.lastOrNull
+          : rooksAndKings.squares.firstOrNull;
+
+      return candidate != null && board.rooks.has(candidate) && backrankKing.singleSquare != null;
+    } else {
+      final Square kingSquare = side == .white ? .e1 : .e8;
+      final Square rookSquare = castlingSide == .king
+          ? (side == .white ? .h1 : .h8)
+          : (side == .white ? .a1 : .a8);
+
+      return pieces[kingSquare]?.role == .king &&
+          pieces[kingSquare]?.color == side &&
+          pieces[rookSquare]?.role == .rook &&
+          pieces[rookSquare]?.color == side;
     }
-    for (final right in CastlingRight.values) {
-      if (hasRook[right]! && castlingRights[right]!) {
-        switch (right) {
-          case CastlingRight.whiteKing:
-            parts.add('K');
-          case CastlingRight.whiteQueen:
-            parts.add('Q');
-          case CastlingRight.blackKing:
-            parts.add('k');
-          case CastlingRight.blackQueen:
-            parts.add('q');
-        }
-      }
+  }
+
+  /// Returns the castling rights part of the FEN string.
+  ///
+  /// For standard variants, checks if the kings and rooks are on their normal starting squares.
+  /// For Chess960, dynamically checks the backrank for rooks relative to the king.
+  /// Returns the castling rights part of the FEN string.
+  ///
+  /// For standard variants, checks if the kings and rooks are on their normal starting squares.
+  /// For Chess960, dynamically checks the backrank for rooks relative to the king.
+  String get _castlingRightsPart {
+    final parts = <String>[];
+
+    if (variant.sideCanCastle(.white) &&
+        castlingRights[.whiteKing]! &&
+        isCastlingPossible(.white, .king)) {
+      parts.add('K');
     }
+    if (variant.sideCanCastle(.white) &&
+        castlingRights[.whiteQueen]! &&
+        isCastlingPossible(.white, .queen)) {
+      parts.add('Q');
+    }
+    if (variant.sideCanCastle(.black) &&
+        castlingRights[.blackKing]! &&
+        isCastlingPossible(.black, .king)) {
+      parts.add('k');
+    }
+    if (variant.sideCanCastle(.black) &&
+        castlingRights[.blackQueen]! &&
+        isCastlingPossible(.black, .queen)) {
+      parts.add('q');
+    }
+
     return parts.isEmpty ? '-' : parts.join('');
   }
 

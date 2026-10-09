@@ -1,48 +1,43 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/engine.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:popover/popover.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A button to toggle engine evaluation and show engine depth.
-class EngineButton extends ConsumerStatefulWidget {
-  const EngineButton({required this.filters, this.onTap, this.savedEval, this.goDeeper});
-
-  final EngineEvaluationFilters filters;
-
-  final ClientEval? savedEval;
-
-  final VoidCallback? onTap;
-
-  final VoidCallback? goDeeper;
-
+class const EngineButton({
+  required final EngineEvaluationFilters filters,
+  final VoidCallback? onTap,
+  final ClientEval? savedEval,
+  final VoidCallback? goDeeper,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<EngineButton> createState() => _EngineButtonState();
 }
 
-class _EngineButtonState extends ConsumerState<EngineButton> {
+class _EngineButtonState() extends ConsumerState<EngineButton> {
   late Color fromChipColor;
   Color? toChipColor;
 
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
-    final (engineName: engineName, eval: localEval, state: engineState, currentWork: work) = ref
-        .watch(engineEvaluationProvider(widget.filters));
+    final (:engine, :engineSpec, eval: localEval, :isComputing, currentWork: _) = ref.watch(
+      engineEvaluationProvider(widget.filters),
+    );
     final eval = pickBestClientEval(localEval: localEval, savedEval: widget.savedEval);
 
     final newChipColor = prefs.isEnabled
-        ? switch (engineState) {
-            EngineState.computing => ColorScheme.of(context).primary,
-            _ => ColorScheme.of(context).primary.withValues(alpha: 0.65),
-          }
+        ? isComputing
+              ? ColorScheme.of(context).primary
+              : ColorScheme.of(context).primary.withValues(alpha: 0.65)
         : IconTheme.of(context).color ?? TextTheme.of(context).bodyMedium!.color!;
 
     fromChipColor = toChipColor ?? newChipColor;
@@ -73,7 +68,11 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
             showPopover(
               context: context,
               bodyBuilder: (_) {
-                return _EnginePopup(goDeeper: widget.goDeeper, filters: widget.filters);
+                return _EnginePopup(
+                  goDeeper: widget.goDeeper,
+                  filters: widget.filters,
+                  savedEval: widget.savedEval,
+                );
               },
               direction: PopoverDirection.top,
               width: 250,
@@ -113,17 +112,18 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
                       child: prefs.isEnabled
                           ? eval is CloudEval
                                 ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                                : switch (engineState) {
-                                    EngineState.computing || EngineState.idle =>
+                                : switch (engine) {
+                                    // No engine has been asked for yet.
+                                    null => Text('-', style: iconTextStyle),
+                                    AsyncError() => Text('!', style: iconTextStyle),
+                                    AsyncValue(isLoading: true) => loadingIndicator,
+                                    _ =>
                                       eval?.depth != null
                                           ? Text(
                                               '${math.min(99, eval!.depth)}',
                                               style: iconTextStyle,
                                             )
                                           : loadingIndicator,
-                                    EngineState.loading => loadingIndicator,
-                                    EngineState.initial => Text('-', style: iconTextStyle),
-                                    EngineState.error => Text('!', style: iconTextStyle),
                                   }
                           : const SizedBox.shrink(),
                     ),
@@ -136,7 +136,7 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
         Positioned(
           bottom: -6,
           child: Text(
-            engineShortLabel(engineName) ?? prefs.enginePref.shortLabel,
+            engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel,
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w700,
@@ -149,11 +149,49 @@ class _EngineButtonState extends ConsumerState<EngineButton> {
   }
 }
 
-class MicroChipPainter extends CustomPainter {
-  const MicroChipPainter(this.color);
+/// Toggle button for engine evaluation with a guard against concurrent toggles.
+///
+/// Encapsulates the [Builder]+[FutureBuilder] pattern that disables the button while a
+/// toggle request is in flight. Callers differ only in how they compute [filters],
+/// [savedEval], [isEnabled], [onToggle] and [onGoDeeper].
+class const EngineToggleButton({
+  required final EngineEvaluationFilters filters,
+  final ClientEval? savedEval,
+  final bool isEnabled = true,
+  required final Future<void> Function() onToggle,
+  required final VoidCallback onGoDeeper,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        Future<void>? toggleFuture;
+        return FutureBuilder(
+          future: toggleFuture,
+          builder: (context, snapshot) {
+            return EngineButton(
+              filters: filters,
+              savedEval: savedEval,
+              onTap: isEnabled && snapshot.connectionState != ConnectionState.waiting
+                  ? () async {
+                      toggleFuture = onToggle();
+                      try {
+                        await toggleFuture;
+                      } finally {
+                        toggleFuture = null;
+                      }
+                    }
+                  : null,
+              goDeeper: onGoDeeper,
+            );
+          },
+        );
+      },
+    );
+  }
+}
 
-  final Color color;
-
+class const MicroChipPainter(final Color color) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const pinLength = 3.5;
@@ -274,32 +312,26 @@ class MicroChipPainter extends CustomPainter {
   bool shouldRepaint(covariant MicroChipPainter oldDelegate) => color != oldDelegate.color;
 }
 
-class _EnginePopup extends ConsumerWidget {
-  const _EnginePopup({this.goDeeper, required this.filters});
-
-  final VoidCallback? goDeeper;
-  final EngineEvaluationFilters filters;
-
+class const _EnginePopup({
+  final VoidCallback? goDeeper,
+  required final EngineEvaluationFilters filters,
+  final ClientEval? savedEval,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final evalState = ref.watch(engineEvaluationProvider(filters));
-    final (state: engineState, currentWork: work, engineName: engineName, eval: evalStateEval) =
-        evalState;
+    final (:engine, :engineSpec, currentWork: work, eval: localEval, :isComputing) = ref.watch(
+      engineEvaluationProvider(filters),
+    );
     final bool canGoDeeper =
-        goDeeper != null &&
-        engineState != EngineState.computing &&
-        (work == null || work.isDeeper != true);
+        goDeeper != null && !isComputing && (work == null || work.isDeeper != true);
 
-    final currentEval = switch (engineState) {
-      EngineState.computing || EngineState.idle => evalStateEval,
-      _ => null,
-    };
+    final currentEval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     if (currentEval is CloudEval) {
       return ListTile(
         contentPadding: const EdgeInsets.only(left: 16.0),
         title: Text(context.l10n.cloudAnalysis),
-        subtitle: Text(context.l10n.depthX('${currentEval!.depth}')),
+        subtitle: Text(context.l10n.depthX('${currentEval.depth}')),
         trailing: canGoDeeper
             ? IconButton(
                 icon: const Icon(Icons.add_circle_outlined),
@@ -310,17 +342,14 @@ class _EnginePopup extends ConsumerWidget {
       );
     }
 
-    final knps = engineState == EngineState.computing ? ', ${evalStateEval?.knps.round()}kn/s' : '';
+    final knps = isComputing ? ', ${localEval?.knps.round()}kn/s' : '';
 
-    // remove Fairy-Stockfish version from engine name
-    final fixedEngineName = engineName != null && engineName.startsWith('Fairy-Stockfish')
-        ? 'Fairy-Stockfish'
-        : engineName ?? 'Stockfish';
+    final displayName = engineDisplayName(engine?.value, spec: engineSpec);
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: Image.asset('assets/images/stockfish/icon.png', width: 44, height: 44),
-      title: Text(fixedEngineName),
+      leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
+      title: Text(displayName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper
           ? IconButton(

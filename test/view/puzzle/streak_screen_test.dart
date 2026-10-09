@@ -1,11 +1,11 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -76,10 +76,8 @@ void main() {
 
       expect(find.textContaining(RegExp('1\$')), findsOneWidget);
 
-      // Exit screen -> score should be saved
+      // Exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // Enter streak screen again -> previous score should be loaded
@@ -163,7 +161,7 @@ void main() {
       expect(skipButtonFinder, findsOneWidget);
       expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNotNull);
 
-      await tester.tap(find.byTooltip('Skip this move'));
+      await tester.tap(findByTooltip('Skip this move'));
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 
       // verify skip button is now disabled
@@ -171,8 +169,6 @@ void main() {
 
       // exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // re-enter streak screen
@@ -209,7 +205,7 @@ void main() {
       //game over correctly appears
       expect(find.text('GAME OVER'), findsOneWidget);
 
-      final button = find.byTooltip('New streak');
+      final button = findByTooltip('New streak');
       await tester.tap(button);
       await tester.pumpAndSettle(const Duration(milliseconds: 500));
 

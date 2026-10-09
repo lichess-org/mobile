@@ -8,12 +8,12 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('PreferencesStorage');
 
-abstract class Serializable {
+abstract class Serializable() {
   Map<String, dynamic> toJson();
 }
 
 /// A preference category with its storage key
-enum PrefCategory {
+enum PrefCategory(final String storageKey) {
   general('preferences.general'),
   home('preferences.home'),
   board('preferences.board'),
@@ -31,11 +31,10 @@ enum PrefCategory {
   broadcast('preferences.broadcast'),
   engineEvaluation('preferences.engineEvaluation'),
   offlineComputerGame('preferences.offlineComputerGame'),
-  log('preferences.log');
-
-  const PrefCategory(this.storageKey);
-
-  final String storageKey;
+  account('preferences.account'),
+  log('preferences.log'),
+  clockTool('preferences.clockTool'),
+  relation('preferences.relation'),
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.
@@ -51,6 +50,8 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
       jsonEncode(value.toJson()),
     );
 
+    if (!ref.mounted) return;
+
     state = value;
   }
 
@@ -61,8 +62,8 @@ mixin PreferencesStorage<T extends Serializable> on Notifier<T> {
     }
     try {
       return fromJson(jsonDecode(stored) as Map<String, dynamic>);
-    } catch (e) {
-      _logger.warning('Failed to decode $prefCategory preferences: $e');
+    } catch (e, st) {
+      _logger.warning('Failed to decode $prefCategory preferences:', e, st);
       return defaults;
     }
   }
@@ -82,6 +83,8 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
       jsonEncode(value.toJson()),
     );
 
+    if (!ref.mounted) return;
+
     state = value;
   }
 
@@ -95,8 +98,8 @@ mixin SessionPreferencesStorage<T extends Serializable> on Notifier<T> {
     }
     try {
       return fromJson(jsonDecode(stored) as Map<String, dynamic>);
-    } catch (e) {
-      _logger.warning('Failed to decode $prefCategory preferences: $e');
+    } catch (e, st) {
+      _logger.warning('Failed to decode $prefCategory preferences:', e, st);
       return defaults(user: authUser?.user);
     }
   }

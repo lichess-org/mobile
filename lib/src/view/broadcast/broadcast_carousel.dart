@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +13,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/tab_navigation.dart' show watchTabInteraction;
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -24,8 +23,9 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
+import 'package:material_ui/material_ui.dart';
 
-const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.png');
+const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
 const kDefaultCardOpacity = 0.9;
 
@@ -41,12 +41,9 @@ const BroadcastList _emptyBroadcasts = (
 );
 
 class BroadcastCarousel extends StatefulWidget {
-  const BroadcastCarousel({required this.broadcasts, required this.worker, super.key})
-    : _isLoading = false;
+  const new({required this.broadcasts, required this.worker, super.key}) : _isLoading = false;
 
-  const BroadcastCarousel.loading({required this.worker})
-    : _isLoading = true,
-      broadcasts = _emptyBroadcasts;
+  const new loading({required this.worker}) : _isLoading = true, broadcasts = _emptyBroadcasts;
 
   final BroadcastList broadcasts;
   final ImageColorWorker worker;
@@ -67,7 +64,7 @@ class BroadcastCarousel extends StatefulWidget {
   State<BroadcastCarousel> createState() => _BroadcastCarouselState();
 }
 
-class _BroadcastCarouselState extends State<BroadcastCarousel> {
+class _BroadcastCarouselState() extends State<BroadcastCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -137,18 +134,13 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
 }
 
 class BroadcastCarouselItem extends ConsumerStatefulWidget {
-  const BroadcastCarouselItem({
-    required this.broadcast,
-    required this.flexWeights,
-    required this.worker,
-    super.key,
-  });
+  const new({required this.broadcast, required this.flexWeights, required this.worker, super.key});
 
   final Broadcast broadcast;
   final ImageColorWorker worker;
   final List<int> flexWeights;
 
-  const BroadcastCarouselItem.loading({required this.worker, required this.flexWeights})
+  const new loading({required this.worker, required this.flexWeights})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -184,7 +176,7 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
 }
 
-class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
+class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
@@ -240,7 +232,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
     final flexWeights = widget.flexWeights;
@@ -303,13 +295,10 @@ final Map<String, _CardColors?> _colorsCache = {};
 
 final _dateFormat = DateFormat.MMMd().add_jm();
 
-class _BroadcastCardContent extends StatelessWidget {
-  const _BroadcastCardContent({required this.broadcast, required _CardColors? cardColors})
-    : _cardColors = cardColors;
-
-  final Broadcast broadcast;
-  final _CardColors? _cardColors;
-
+class const _BroadcastCardContent({
+  required final Broadcast broadcast,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? eventDate;

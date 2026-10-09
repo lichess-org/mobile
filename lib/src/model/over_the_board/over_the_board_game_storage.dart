@@ -15,17 +15,15 @@ part 'over_the_board_game_storage.g.dart';
 final _logger = Logger('OverTheBoardGameStorage');
 
 @Freezed(fromJson: true, toJson: true)
-sealed class SavedOtbGame with _$SavedOtbGame {
-  const SavedOtbGame._();
-
-  factory SavedOtbGame({
+sealed class const SavedOtbGame._() with _$SavedOtbGame {
+  factory({
     required OverTheBoardGame game,
     required TimeIncrement timeIncrement,
     Duration? whiteTimeLeft,
     Duration? blackTimeLeft,
   }) = _SavedOtbGame;
 
-  factory SavedOtbGame.fromJson(Map<String, dynamic> json) => _$SavedOtbGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SavedOtbGameFromJson(json);
 }
 
 /// A provider for [OverTheBoardGameStorage].
@@ -35,10 +33,7 @@ final overTheBoardGameStorageProvider = Provider<OverTheBoardGameStorage>((Ref r
 
 const kOtbGameFileName = 'otb_game.json';
 
-class OverTheBoardGameStorage {
-  const OverTheBoardGameStorage(this.ref);
-  final Ref ref;
-
+class const OverTheBoardGameStorage(final Ref ref) {
   Future<File> _getFile() async {
     final dir = await getApplicationSupportDirectory();
     return File('${dir.path}/$kOtbGameFileName');
@@ -60,8 +55,8 @@ class OverTheBoardGameStorage {
       }
 
       return SavedOtbGame.fromJson(json);
-    } catch (e) {
-      _logger.warning('[OtbGameStorage] failed to fetch game: $e');
+    } catch (e, st) {
+      _logger.warning('[OtbGameStorage] failed to fetch game:', e, st);
       return null;
     }
   }
@@ -85,8 +80,8 @@ class OverTheBoardGameStorage {
           ).toJson(),
         ),
       );
-    } catch (e) {
-      _logger.warning('[OtbGameStorage] failed to save game: $e');
+    } catch (e, st) {
+      _logger.warning('[OtbGameStorage] failed to save game:', e, st);
     }
   }
 }

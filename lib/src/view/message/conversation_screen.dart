@@ -1,51 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 
-sealed class DisplayItem {}
+sealed class DisplayItem();
 
-class DateItem extends DisplayItem {
-  final DateTime date;
-  DateItem(this.date);
-}
+class DateItem(final DateTime date) extends DisplayItem;
 
-class MessageItem extends DisplayItem {
-  final Message message;
-  final bool isMe;
-  final int groupLength;
-  final int groupIndex;
-  MessageItem(
-    this.message, {
-    required this.isMe,
-    required this.groupLength,
-    required this.groupIndex,
-  });
-}
+class MessageItem(
+  final Message message, {
+  required final bool isMe,
+  required final int groupLength,
+  required final int groupIndex,
+}) extends DisplayItem;
 
-class GetMoreItem extends DisplayItem {}
+class GetMoreItem() extends DisplayItem;
 
-class ContactTypingItem extends DisplayItem {}
+class ContactTypingItem() extends DisplayItem;
 
-class ConversationScreen extends ConsumerStatefulWidget {
-  final LightUser user;
-
-  const ConversationScreen({super.key, required this.user});
-
+class const ConversationScreen({super.key, required final LightUser user})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({required LightUser user}) {
     return buildScreenRoute(screen: ConversationScreen(user: user));
   }
@@ -54,7 +42,7 @@ class ConversationScreen extends ConsumerStatefulWidget {
   ConsumerState<ConversationScreen> createState() => _ConversationScreenState();
 }
 
-class _ConversationScreenState extends ConsumerState<ConversationScreen> with RouteAware {
+class _ConversationScreenState() extends ConsumerState<ConversationScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -78,10 +66,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(conversationControllerProvider(widget.user.id)).value;
-    final canInteract =
-        state != null && !state.isBot && state.convo.postable && state.convo.messages.isNotEmpty;
-
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
@@ -101,7 +85,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
           },
         ),
         actions: [
-          if (canInteract)
+          if (widget.user.id.value != 'lichess')
             IconButton(
               icon: const Icon(Icons.delete_outline),
               tooltip: 'Delete conversation',
@@ -132,11 +116,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> with Ro
   }
 }
 
-class _Body extends ConsumerWidget {
-  final LightUser user;
-
-  const _Body({required this.user});
-
+class const _Body({required final LightUser user}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final messageStateAsync = ref.watch(conversationControllerProvider(user.id));
@@ -262,11 +242,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _ContactTyping extends ConsumerWidget {
-  final LightUser user;
-
-  const _ContactTyping({required this.user});
-
+class const _ContactTyping({required final LightUser user}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTyping = ref.watch(
@@ -290,10 +266,7 @@ class _ContactTyping extends ConsumerWidget {
   }
 }
 
-class _DateBubble extends StatelessWidget {
-  final DateTime date;
-  const _DateBubble({required this.date});
-
+class const _DateBubble({required final DateTime date}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -328,19 +301,12 @@ class _DateBubble extends StatelessWidget {
   }
 }
 
-class _MessageBubble extends ConsumerWidget {
-  const _MessageBubble({
-    required this.message,
-    required this.isMe,
-    required this.groupLength,
-    required this.groupIndex,
-  });
-
-  final Message message;
-  final bool isMe;
-  final int groupLength;
-  final int groupIndex;
-
+class const _MessageBubble({
+  required final Message message,
+  required final bool isMe,
+  required final int groupLength,
+  required final int groupIndex,
+}) extends ConsumerWidget {
   Color _bubbleColor(BuildContext context) {
     return isMe
         ? ColorScheme.of(context).secondaryContainer
@@ -365,58 +331,49 @@ class _MessageBubble extends ConsumerWidget {
     return ChatBubbleContextMenu(
       message: message.text,
       child: FractionallySizedBox(
-        alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+        alignment: isMe ? .centerRight : .centerLeft,
         widthFactor: 0.85,
-        child: Container(
-          margin: EdgeInsets.only(
-            bottom: !isInGroup || isFirstInGroup ? 8 : 2,
-            top: !isInGroup || isLastInGroup ? 8 : 2,
-            left: 8,
-            right: 8,
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-          decoration: BoxDecoration(
-            color: _bubbleColor(context),
-            borderRadius: BorderRadius.only(
-              topLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isLastInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              topRight: isMe
-                  ? isInGroup && !isLastInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
-              bottomLeft: isMe
-                  ? _bubbleRadius
-                  : isInGroup && !isFirstInGroup
-                  ? _inGroupRadius
-                  : _bubbleRadius,
-              bottomRight: isMe
-                  ? isInGroup && !isFirstInGroup
-                        ? _inGroupRadius
-                        : _bubbleRadius
-                  : _bubbleRadius,
+        child: Align(
+          alignment: isMe ? .centerRight : .centerLeft,
+          child: Container(
+            margin: EdgeInsets.only(
+              bottom: !isInGroup || isFirstInGroup ? 8 : 2,
+              top: !isInGroup || isLastInGroup ? 8 : 2,
+              left: 8,
+              right: 8,
             ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Linkify(
-                onOpen: (link) async =>
-                    await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
-                linkifiers: AppLinksService.kLichessLinkifiers,
-                text: message.text,
-                style: TextStyle(color: _textColor(context)),
-                linkStyle: Styles.linkStyle,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            decoration: BoxDecoration(
+              color: _bubbleColor(context),
+              borderRadius: BorderRadius.only(
+                topLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isLastInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                topRight: isMe
+                    ? isInGroup && !isLastInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
+                bottomLeft: isMe
+                    ? _bubbleRadius
+                    : isInGroup && !isFirstInGroup
+                    ? _inGroupRadius
+                    : _bubbleRadius,
+                bottomRight: isMe
+                    ? isInGroup && !isFirstInGroup
+                          ? _inGroupRadius
+                          : _bubbleRadius
+                    : _bubbleRadius,
               ),
-              const SizedBox(height: 4),
-              Text(
-                time,
-                style: TextStyle(fontSize: 11, color: _textColor(context).withValues(alpha: 0.6)),
-              ),
-            ],
+            ),
+            child: _MessageContent(
+              text: message.text,
+              time: time,
+              textColor: _textColor(context),
+              onLinkOpen: (link) => ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+            ),
           ),
         ),
       ),
@@ -424,17 +381,51 @@ class _MessageBubble extends ConsumerWidget {
   }
 }
 
-class _MessageInput extends ConsumerStatefulWidget {
-  const _MessageInput({required this.user, required this.state});
+class const _MessageContent({
+  required final String text,
+  required final String time,
+  required final Color textColor,
+  required final LinkCallback onLinkOpen,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final timeStyle = TextStyle(fontSize: 11, color: textColor.withValues(alpha: 0.6));
+    // workaround to prevent the message text from overlapping with the timestamp
+    final spacer = WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: Opacity(
+        opacity: 0,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(time, style: timeStyle),
+        ),
+      ),
+    );
 
-  final LightUser user;
-  final ConversationState state;
+    final linkSpan = buildTextSpan(
+      linkify(text, linkifiers: AppLinksService.kLichessLinkifiers),
+      style: TextStyle(color: textColor),
+      linkStyle: Styles.linkStyle,
+      onOpen: onLinkOpen,
+    );
 
+    return Stack(
+      children: [
+        Text.rich(TextSpan(children: [linkSpan, spacer])),
+        Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
+      ],
+    );
+  }
+}
+
+class const _MessageInput({required final LightUser user, required final ConversationState state})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MessageInput> createState() => _MessageInputState();
 }
 
-class _MessageInputState extends ConsumerState<_MessageInput> {
+class _MessageInputState() extends ConsumerState<_MessageInput> {
   final controller = TextEditingController();
 
   bool get isBlocked => widget.state.isBlocked ?? false;
@@ -498,6 +489,7 @@ class _MessageInputState extends ConsumerState<_MessageInput> {
           ),
           controller: controller,
           keyboardType: TextInputType.text,
+          textCapitalization: TextCapitalization.sentences,
           minLines: 1,
           maxLines: 4,
           enableSuggestions: true,

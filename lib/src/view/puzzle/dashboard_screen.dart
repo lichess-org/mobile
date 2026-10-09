@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:http/http.dart' show ClientException;
@@ -21,12 +20,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:material_ui/material_ui.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
-class PuzzleDashboardScreen extends StatelessWidget {
-  const PuzzleDashboardScreen({super.key});
-
+class const PuzzleDashboardScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleDashboardScreen());
   }
@@ -40,19 +38,14 @@ class PuzzleDashboardScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(children: const [PuzzleDashboardWidget()]);
   }
 }
 
-class PuzzleDashboardWidget extends ConsumerWidget {
-  final bool showDaysSelector;
-  const PuzzleDashboardWidget({this.showDaysSelector = false});
-
+class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
@@ -88,7 +81,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       loading: () {
-        final loaderHeight = MediaQuery.sizeOf(context).width;
+        final loaderHeight = MediaQuery.widthOf(context);
         return Shimmer(
           child: ShimmerLoading(
             isLoading: true,
@@ -96,7 +89,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               padding: Styles.bodySectionBottomPadding,
               child: Column(
                 children: [
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -108,7 +100,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -130,17 +121,11 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   }
 }
 
-class _ChartSection extends StatelessWidget {
-  const _ChartSection({
-    required this.dashboard,
-    required this.showDaysSelector,
-    required this.days,
-  });
-
-  final PuzzleDashboard dashboard;
-  final bool showDaysSelector;
-  final int days;
-
+class const _ChartSection({
+  required final PuzzleDashboard dashboard,
+  required final bool showDaysSelector,
+  required final int days,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
@@ -209,12 +194,10 @@ class _ChartSection extends StatelessWidget {
   }
 }
 
-class _PerformanceSection extends StatelessWidget {
-  const _PerformanceSection({required this.dashboard, required this.metric});
-
-  final PuzzleDashboard dashboard;
-  final Metric metric;
-
+class const _PerformanceSection({
+  required final PuzzleDashboard dashboard,
+  required final Metric metric,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themes = metric.sort(dashboard.themes, dashboard);
@@ -249,10 +232,7 @@ class _PerformanceSection extends StatelessWidget {
   }
 }
 
-class PuzzleChart extends StatelessWidget {
-  const PuzzleChart(this.puzzleData);
-  final List<PuzzleDashboardData> puzzleData;
-
+class const PuzzleChart(final List<PuzzleDashboardData> puzzleData) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radarColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
@@ -260,7 +240,7 @@ class PuzzleChart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: AspectRatio(
-        aspectRatio: MediaQuery.sizeOf(context).width > FormFactor.desktop ? 2.8 : 1.2,
+        aspectRatio: MediaQuery.widthOf(context) > FormFactor.desktop ? 2.8 : 1.2,
         child: RadarChart(
           RadarChartData(
             radarBorderData: BorderSide(width: 0.5, color: radarColor),
@@ -289,9 +269,7 @@ class PuzzleChart extends StatelessWidget {
   }
 }
 
-class DaysSelector extends ConsumerWidget {
-  const DaysSelector();
-
+class const DaysSelector() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -313,7 +291,7 @@ class DaysSelector extends ConsumerWidget {
   }
 }
 
-enum Metric {
+enum Metric() {
   strength,
   improvementArea;
 
@@ -360,17 +338,14 @@ enum Metric {
   };
 }
 
-enum Days {
+enum Days(final int days) {
   oneday(1),
   twodays(2),
   week(7),
   twoweeks(14),
   month(30),
   twomonths(60),
-  threemonths(90);
-
-  const Days(this.days);
-  final int days;
+  threemonths(90),
 }
 
 String _daysL10n(BuildContext context, Days day) {
@@ -392,10 +367,8 @@ String _daysL10n(BuildContext context, Days day) {
   }
 }
 
-class PuzzleThemeRow extends ConsumerWidget {
-  final PuzzleDashboardData data;
-  const PuzzleThemeRow({super.key, required this.data});
-
+class const PuzzleThemeRow({super.key, required final PuzzleDashboardData data})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeInfo = data.theme.l10n(context.l10n);

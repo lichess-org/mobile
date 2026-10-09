@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -25,11 +25,10 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
-
+class const ProfileScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ProfileScreen());
   }
@@ -44,25 +43,20 @@ final _accountActivityProvider = FutureProvider.autoDispose<IList<UserActivity>>
   return ref.read(userRepositoryProvider).getActivity(authUser.user.id);
 }, name: 'userActivityProvider');
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
-    final online = ref.watch(onlineStatusProvider).value ?? false;
+    final online = ref.watch(isDeviceOnlineProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
         title: account.when(
           data: (user) => user == null
               ? const SizedBox.shrink()
-              : ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: UserAvatar(user.lightUser, radius: 16),
-                  title: UserFullNameWidget(user: user.lightUser, showFlair: false),
-                  subtitle: Text(online == true ? context.l10n.online : context.l10n.offline),
-                ),
+              : UserAppBarTitleWidget(user: user.lightUser, isOnline: online, seenAt: user.seenAt),
           loading: () => const SizedBox.shrink(),
           error: (error, _) => const SizedBox.shrink(),
         ),
@@ -140,23 +134,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 }
 
-class AccountPerfCards extends ConsumerWidget {
-  const AccountPerfCards({this.padding});
-
-  final EdgeInsetsGeometry? padding;
-
+class const AccountPerfCards({final EdgeInsetsGeometry? padding}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
-    return account.when(
-      data: (user) {
-        if (user != null) {
-          return PerfCards(user: user, isMe: true, padding: padding);
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
-      loading: () => Shimmer(
+    // [PerfCards] shows nothing until the ratings preference is known, so the skeleton is kept until
+    // then rather than collapsing the section in between. Watching it here also starts that request
+    // alongside the account one, instead of once the account has loaded.
+    final showRatings = ref.watch(showRatingsPrefProvider);
+    return switch ((account, showRatings)) {
+      (AsyncData(value: final user?), AsyncData()) => PerfCards(
+        user: user,
+        isMe: true,
+        padding: padding,
+      ),
+      (AsyncData(value: null), _) ||
+      (AsyncError(), _) ||
+      (_, AsyncError()) => const SizedBox.shrink(),
+      _ => Shimmer(
         child: Padding(
           padding: padding ?? Styles.bodySectionPadding,
           child: SizedBox(
@@ -181,7 +176,6 @@ class AccountPerfCards extends ConsumerWidget {
           ),
         ),
       ),
-      error: (error, stack) => const SizedBox.shrink(),
-    );
+    };
   }
 }

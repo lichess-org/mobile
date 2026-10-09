@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
@@ -8,10 +7,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 
-class PieceSetScreen extends ConsumerStatefulWidget {
-  const PieceSetScreen({super.key});
-
+class const PieceSetScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PieceSetScreen());
   }
@@ -20,7 +18,7 @@ class PieceSetScreen extends ConsumerStatefulWidget {
   ConsumerState<PieceSetScreen> createState() => _PieceSetScreenState();
 }
 
-class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
+class _PieceSetScreenState() extends ConsumerState<PieceSetScreen> {
   bool isLoading = false;
 
   Future<void> onChanged(PieceSet? value) async {
@@ -56,8 +54,8 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.pieceSet),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),

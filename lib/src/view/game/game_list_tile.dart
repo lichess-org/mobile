@@ -1,16 +1,16 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,28 +18,29 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/game/gif_export.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
-class GameListTile extends StatelessWidget {
-  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
-
-  final LightExportedGameWithPov item;
-  final EdgeInsetsGeometry? padding;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameListTile({
+  required final LightExportedGameWithPov item,
+  final EdgeInsetsGeometry? padding,
+  final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final (game: game, pov: youAre) = item;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final (:game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
 
@@ -55,11 +56,29 @@ class GameListTile extends StatelessWidget {
       }
     }
 
-    final opponentTitle = UserFullNameWidget.player(
-      user: opponent.user,
-      aiLevel: opponent.aiLevel,
-      rating: opponent.rating,
-    );
+    // An imported game is not tied to a lichess account: the point of view is arbitrary, so show
+    // both players and no result icon.
+    final title = game.isImported
+        ? Text(
+            context.l10n.resVsX(
+              game.white.fullName(context.l10n),
+              game.black.fullName(context.l10n),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          )
+        : UserFullNameWidget.player(
+            user: opponent.user,
+            name: opponent.name,
+            aiLevel: opponent.aiLevel,
+            rating: opponent.rating,
+          );
+
+    final trailing = <Widget>[
+      if (me.analysis != null)
+        Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
+      if (!game.isImported) getResultIcon(game, youAre),
+    ];
 
     return ListTile(
       onTap: () => openGameScreen(
@@ -76,44 +95,30 @@ class GameListTile extends StatelessWidget {
           useRootNavigator: true,
           isDismissible: true,
           isScrollControlled: true,
-          builder: (context) => GameContextMenu(
-            game: game,
-            mySide: youAre,
-            opponentTitle: opponentTitle,
-            onPressedBookmark: onPressedBookmark,
-          ),
+          builder: (context) =>
+              GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
         );
       },
-      leading: Icon(game.perf.icon),
-      title: opponentTitle,
-      subtitle: Text(relativeDate(context.l10n, game.lastMoveAt, shortDate: false)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (me.analysis != null) ...[
-            Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-            const SizedBox(width: 5),
-          ],
-          getResultIcon(game, youAre),
-        ],
+      leading: Icon(game.isImported ? Icons.cloud_upload_outlined : game.perf.icon),
+      title: title,
+      // For an imported game, `lastMoveAt` is the import date, so prefer the PGN date if we have it.
+      subtitle: Text(
+        game.importDate != null
+            ? formatPgnDate(game.importDate!, shortDate: false)
+            : relativeDate(context.l10n, game.lastMoveAt, shortDate: false),
       ),
+      trailing: trailing.isEmpty
+          ? null
+          : Row(mainAxisSize: MainAxisSize.min, spacing: 5, children: trailing),
     );
   }
 }
 
-class GameContextMenu extends ConsumerWidget {
-  const GameContextMenu({
-    required this.game,
-    required this.mySide,
-    required this.opponentTitle,
-    required this.onPressedBookmark,
-  });
-
-  final LightExportedGame game;
-  final Side mySide;
-  final Widget opponentTitle;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameContextMenu({
+  required final LightExportedGame game,
+  required final Side mySide,
+  required final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
@@ -123,9 +128,8 @@ class GameContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 4.0)),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+              .add(const EdgeInsets.only(bottom: 4.0)),
           child: Text(
             context.l10n.resVsX(
               game.white.fullName(context.l10n),
@@ -173,6 +177,28 @@ class GameContextMenu extends ConsumerWidget {
                                 ),
                               ],
                             ),
+                            if (game.arenaTournamentId != null)
+                              Row(
+                                children: [
+                                  Icon(
+                                    LichessIcons.tournament_cup,
+                                    size: 13,
+                                    color: textShade(context, Styles.subtitleOpacity),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      game.arenaTournamentName ?? context.l10n.tournament,
+                                      maxLines: 2,
+                                      overflow: .ellipsis,
+                                      style: TextStyle(
+                                        color: textShade(context, Styles.subtitleOpacity),
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             if (game.lastFen != null)
                               Text(
                                 gameStatusL10n(
@@ -234,6 +260,14 @@ class GameContextMenu extends ConsumerWidget {
                     },
               child: Text(context.l10n.analysis),
             ),
+            if (game.arenaTournamentId != null)
+              BottomSheetContextMenuAction(
+                icon: LichessIcons.tournament_cup,
+                onPressed: () {
+                  Navigator.of(context).push(TournamentScreen.buildRoute(game.arenaTournamentId!));
+                },
+                child: Text(context.l10n.viewTournament),
+              ),
             if (isLoggedIn && onPressedBookmark != null)
               BottomSheetContextMenuAction(
                 onPressed: () => onPressedBookmark?.call(context),

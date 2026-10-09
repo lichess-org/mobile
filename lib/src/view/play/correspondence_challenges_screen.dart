@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -20,10 +19,9 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_ui/material_ui.dart';
 
-class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
-  const CorrespondenceChallengesScreen({super.key});
-
+class const CorrespondenceChallengesScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const CorrespondenceChallengesScreen());
   }
@@ -32,7 +30,7 @@ class CorrespondenceChallengesScreen extends ConsumerStatefulWidget {
   ConsumerState<CorrespondenceChallengesScreen> createState() => _ChallengesBodyState();
 }
 
-class _ChallengesBodyState extends ConsumerState<CorrespondenceChallengesScreen> {
+class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScreen> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   final _refreshKey = GlobalKey<RefreshIndicatorState>();

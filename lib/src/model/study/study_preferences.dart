@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/study/study_filter.dart';
 
 part 'study_preferences.freezed.dart';
 part 'study_preferences.g.dart';
@@ -11,7 +12,7 @@ final studyPreferencesProvider = NotifierProvider<StudyPreferencesNotifier, Stud
   name: 'StudyPreferencesProvider',
 );
 
-class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStorage<StudyPrefs> {
+class StudyPreferencesNotifier() extends Notifier<StudyPrefs> with PreferencesStorage<StudyPrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.study;
@@ -26,6 +27,10 @@ class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStor
   @override
   StudyPrefs build() {
     return fetch();
+  }
+
+  Future<void> setListOrder(StudyListOrder order) {
+    return save(state.copyWith(listOrder: order));
   }
 
   Future<void> toggleShowVariationArrows() {
@@ -62,10 +67,8 @@ class StudyPreferencesNotifier extends Notifier<StudyPrefs> with PreferencesStor
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysisPrefs {
-  const StudyPrefs._();
-
-  const factory StudyPrefs({
+sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, CommonAnalysisPrefs {
+  const factory({
     required bool showVariationArrows,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
     @JsonKey(defaultValue: true) required bool showEngineLines,
@@ -74,6 +77,7 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
     @JsonKey(defaultValue: false) required bool smallBoard,
+    @JsonKey(defaultValue: StudyListOrder.hot) required StudyListOrder listOrder,
   }) = _StudyPrefs;
 
   static const defaults = StudyPrefs(
@@ -85,9 +89,10 @@ sealed class StudyPrefs with _$StudyPrefs implements Serializable, CommonAnalysi
     showPgnComments: true,
     inlineNotation: false,
     smallBoard: false,
+    listOrder: StudyListOrder.hot,
   );
 
-  factory StudyPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$StudyPrefsFromJson(json);
   }
 }

@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="account" comment="The account screen title.">Akoon</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Habaynta Akoonka</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Habayntani waxay ka hir-galeysaa akoonkaaga Lichess, waxayna ka shaqaynaysaa aaladahaaga oo dhan.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Ciyaarahoo dhan</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ma hubtaa?</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Habaynta Looxa</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ka diid \"ii celi-da\"</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Masax</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Masax</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Masax dhaqaaqa kaydsan</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Ku biir ciyaar</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Jawaab celinta</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Qari faracyada</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Maalin wanaagsan, %s</string>
+  <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Maalin wanaagsan</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Fiid wanaagsan, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Fiid wanaagsan</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Guriga</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Toos</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Waa inaad soo gashaa appka si aad u booqato halkan.</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Ciyaar cusub</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Bilaa natiijo</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Laba qof</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Ciyaarhannada wata \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Bidix</string>
@@ -22,23 +29,19 @@
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Waxba kuma jiraan, fadlan bedel kala-soocitaanka</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Waxba kuma jiraan. Dhowr tartan oo xujooyin ah ciyaar horta.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Ku xalli inta halxidhaale ee aad karaysid 3 mirir gudahood.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Waxaad waayi doontaa Streakgaaga, natiijada haddana waa laguu kaydin.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Ciyaar hal xidhaale ku furmaya furitaanka aad jeceshay, ama dooro jawi.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Xujooyin</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Raadintii dhawaan</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Booska saacadda</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Habka imeersifada</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Habaynta</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Wadaag PGN-ka</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Wadaag lifaaqa ciyaarta</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN ahaan u wadaag qaab-dhiggan</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Wadaag xujadan</string>
   <string name="showComments" comment="Shown in the analysis screen.">Tus faallooyinka</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Tus natiijada</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Tus faracyada</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Wax baa khaldamay.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Midabada Moobilka</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Qalabyada</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Nooca jestan %s kuma jiro tirsigan.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Sugaya in tartamuhu kusoo biiro...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Daawo</string>

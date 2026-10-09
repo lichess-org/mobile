@@ -2,18 +2,18 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -31,6 +31,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -41,11 +42,13 @@ import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-typedef LoadingPosition = ({String? fen, Move? lastMove, Side? orientation});
+typedef LoadingParam = ({Variant variant, String? fen, Move? lastMove, Side? orientation});
 
-const _kGameEndDialogDelay = Duration(milliseconds: 500);
+/// Delay before the game end dialog is shown after a (non-bullet) game finishes.
+const kGameEndDialogDelay = Duration(milliseconds: 400);
 
 /// Game body for the [GameScreen].
 ///
@@ -56,46 +59,35 @@ const _kGameEndDialogDelay = Duration(milliseconds: 500);
 ///
 /// Handles the immersive mode through focus detection, and the pop scope to
 /// prevent the user from going back to the previous screen.
-class GameBody extends ConsumerWidget {
-  const GameBody({
-    required this.gameId,
-    this.loadingPosition,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-    required this.boardKey,
-  });
-
-  final GameFullId gameId;
-
-  final LoadingPosition? loadingPosition;
+class const GameBody({
+  required final GameFullId gameId,
+  final LoadingParam? loadingPosition,
 
   /// [GlobalKey] for the white clock.
   ///
   /// This parameter is mandatory because the clock state needs to be preserved
   /// when the orientation changes on tablet.
-  final GlobalKey whiteClockKey;
+  required final GlobalKey whiteClockKey,
 
   /// [GlobalKey] for the black clock.
   ///
   /// This parameter is mandatory because the clock state needs to be preserved
   /// when the orientation changes on tablet.
-  final GlobalKey blackClockKey;
-
-  /// [GlobalKey] for the board.
-  ///
-  /// Used to set gestures exclusion on android.
-  final GlobalKey boardKey;
+  required final GlobalKey blackClockKey,
 
   /// Callback to load a new game. Used when the game is finished and the user
   /// wants to play a rematch, or when switching through games in correspondence
   /// chess.
-  final void Function(GameFullId id) onLoadGameCallback;
+  required final void Function(GameFullId id) onLoadGameCallback,
 
   /// Callback to load a new opponent.
-  final void Function(PlayableGame game) onNewOpponentCallback;
+  required final void Function(PlayableGame game) onNewOpponentCallback,
 
+  /// [GlobalKey] for the board.
+  ///
+  /// Used to set gestures exclusion on android.
+  required final GlobalKey boardKey,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -104,6 +96,9 @@ class GameBody extends ConsumerWidget {
       ctrlProvider,
       (prev, state) => _stateListener(prev, state, context: context, ref: ref),
     );
+
+    // Keeps the game's iOS Live Activity in sync while the game screen is open.
+    ref.watch(gameLiveActivityControllerProvider(gameId));
 
     // Only watch the coarse async phase here so a move (which changes the
     // GameState value but not the phase) does NOT rebuild the whole body. The
@@ -128,7 +123,8 @@ class GameBody extends ConsumerWidget {
       case _GamePhase.refreshing:
         final value = ref.read(ctrlProvider).requireValue;
         return StandaloneGameLoadingContent(
-          position: (
+          loadingParam: (
+            variant: value.game.meta.variant,
             fen: value.game.lastPosition.fen,
             lastMove: value.game.moveAt(value.stepCursor),
             orientation: value.game.youAre,
@@ -141,7 +137,7 @@ class GameBody extends ConsumerWidget {
         );
       case _GamePhase.loading:
         return StandaloneGameLoadingContent(
-          position: loadingPosition,
+          loadingParam: loadingPosition,
           userActionsBar: _GameBottomBar(
             id: gameId,
             onLoadGameCallback: onLoadGameCallback,
@@ -176,11 +172,13 @@ class GameBody extends ConsumerWidget {
       // We want to show it only once, whether the game is already finished on
       // first load or not.
       if ((prev?.hasValue != true || prev!.requireValue.game.playable == true) &&
-          state.requireValue.game.playable == false) {
+          game.playable == false) {
         Timer(
-          (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
+          // already finished or bullet: show the dialog immediately
+          (prev?.hasValue != true && game.playable == false) ||
+                  (game.meta.speed == Speed.bullet || game.meta.speed == Speed.ultraBullet)
               ? Duration.zero
-              : _kGameEndDialogDelay,
+              : kGameEndDialogDelay,
           () {
             if (context.mounted) {
               showAdaptiveDialog<void>(
@@ -211,17 +209,6 @@ class GameBody extends ConsumerWidget {
     }
 
     if (prev?.hasValue == true && state.hasValue) {
-      // Opponent is gone long enough to show the claim win dialog.
-      if (!prev!.requireValue.game.canClaimWin && state.requireValue.game.canClaimWin) {
-        if (context.mounted) {
-          showAdaptiveDialog<void>(
-            context: context,
-            builder: (context) => _ClaimWinDialog(id: gameId),
-            barrierDismissible: true,
-          );
-        }
-      }
-
       if (state.requireValue.redirectGameId != null) {
         // Be sure to pop any dialogs that might be on top of the game screen.
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
@@ -234,7 +221,12 @@ class GameBody extends ConsumerWidget {
 /// Coarse rendering phase for the [GameBody], derived from the controller's
 /// [AsyncValue]. Used so that per-move state changes (which stay in the [data]
 /// phase) do not rebuild the whole body.
-enum _GamePhase { loading, data, refreshing, error }
+enum _GamePhase() {
+  loading,
+  data,
+  refreshing,
+  error,
+}
 
 _GamePhase _gamePhaseOf(AsyncValue<GameState> state) => switch (state) {
   AsyncError() => _GamePhase.error,
@@ -251,28 +243,19 @@ _GamePhase _gamePhaseOf(AsyncValue<GameState> state) => switch (state) {
 /// player table slots) only rebuilds on rare changes (board flip, zen toggle,
 /// game-end). Player tables, the move list and the bottom bar are self-watching
 /// children that rebuild independently.
-class _PlayableGameBoard extends ConsumerStatefulWidget {
-  const _PlayableGameBoard({
-    required this.gameId,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-    required this.boardKey,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-  });
-
-  final GameFullId gameId;
-  final GlobalKey whiteClockKey;
-  final GlobalKey blackClockKey;
-  final GlobalKey boardKey;
-  final void Function(GameFullId id) onLoadGameCallback;
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+class const _PlayableGameBoard({
+  required final GameFullId gameId,
+  required final GlobalKey whiteClockKey,
+  required final GlobalKey blackClockKey,
+  required final GlobalKey boardKey,
+  required final void Function(GameFullId id) onLoadGameCallback,
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_PlayableGameBoard> createState() => _PlayableGameBoardState();
 }
 
-class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
+class _PlayableGameBoardState() extends ConsumerState<_PlayableGameBoard> {
   late final ChessboardController _controller;
 
   /// Ply of the position currently shown on the board. Used to tell a forward
@@ -366,11 +349,19 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
           )
         : null;
     if (explosion != null) _controller.triggerExplosion(explosion);
-    tryExecutePremove(
-      _controller,
-      state.currentPosition,
-      (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
-    );
+
+    // Only play a queued premove when the opponent just moved, i.e. it is now
+    // our turn. This mirrors lila's `playedColor !== d.player.color` gate: a
+    // forward line change can also come from our own (optimistically applied)
+    // move, and attempting the premove then would validate it against a
+    // position where it isn't our turn and wrongly discard it.
+    if (state.currentPosition.turn == state.game.youAre) {
+      tryExecutePremove(
+        _controller,
+        state.currentPosition,
+        (move) => ref.read(_ctrlProvider.notifier).userMove(move, isPremove: true),
+      );
+    }
   }
 
   @override
@@ -413,9 +404,9 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
     final topSide = topPlayerIsBlack ? Side.black : Side.white;
     final bottomSide = topPlayerIsBlack ? Side.white : Side.black;
 
-    final animationDuration = shell.speed == Speed.ultraBullet || shell.speed == Speed.bullet
-        ? Duration.zero
-        : boardPrefs.pieceAnimationDuration;
+    final animationDuration = shell.hasPieceAnimation
+        ? boardPrefs.pieceAnimationDuration
+        : Duration.zero;
 
     return FocusDetector(
       onFocusRegained: () {
@@ -453,17 +444,14 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
             side: topSide,
             clockKey: topSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
           ),
-          bottomTable: shell.showClaimWinCountdown
-              ? _ClaimWinCountdown(
-                  gameId: widget.gameId,
-                  canClaimWin: shell.canClaimWin,
-                  countdown: shell.opponentLeftCountdown!,
-                )
-              : _GamePlayerTable(
-                  gameId: widget.gameId,
-                  side: bottomSide,
-                  clockKey: bottomSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
-                ),
+          bottomTable: _GamePlayerTable(
+            gameId: widget.gameId,
+            side: bottomSide,
+            clockKey: bottomSide == Side.white ? widget.whiteClockKey : widget.blackClockKey,
+            // The claim-win countdown / choices are the user's action, so they
+            // are shown in the bottom table only.
+            showOpponentLeftCountdown: true,
+          ),
           moveListBuilder: (type) => _GameMoveList(gameId: widget.gameId, type: type),
           zenMode: shell.zen,
           userActionsBar: _GameBottomBar(
@@ -481,15 +469,12 @@ class _PlayableGameBoardState extends ConsumerState<_PlayableGameBoard> {
 typedef _ShellData = ({
   Variant variant,
   Side youAre,
-  Speed speed,
+  bool hasPieceAnimation,
   bool zen,
   bool playable,
   bool canPremove,
   bool canAutoQueen,
   bool canAutoQueenOnPremove,
-  bool showClaimWinCountdown,
-  bool canClaimWin,
-  (Duration, DateTime)? opponentLeftCountdown,
   // Crazyhouse pockets (null for other variants). [Pockets] has value equality,
   // so this both supplies the pocket counts and drives the shell to rebuild on
   // each move in Crazyhouse, while other variants keep the build-once shell.
@@ -502,15 +487,12 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
   return (
     variant: s.game.meta.variant,
     youAre: s.game.youAre ?? Side.white,
-    speed: s.game.meta.speed,
+    hasPieceAnimation: s.hasPieceAnimation,
     zen: s.isZenModeActive,
     playable: s.game.playable,
     canPremove: s.canPremove,
     canAutoQueen: s.canAutoQueen,
     canAutoQueenOnPremove: s.canAutoQueenOnPremove,
-    showClaimWinCountdown: s.canShowClaimWinCountdown && s.opponentLeftCountdown != null,
-    canClaimWin: s.game.canClaimWin,
-    opponentLeftCountdown: s.opponentLeftCountdown,
     pockets: s.currentPosition.pockets,
   );
 }
@@ -519,13 +501,15 @@ _ShellData? _shellOf(AsyncValue<GameState> state) {
 ///
 /// Lives inside the [_PlayableGameBoard] shell and rebuilds independently on the
 /// state it actually needs, so it does not force the shell or board to rebuild.
-class _GamePlayerTable extends ConsumerWidget {
-  const _GamePlayerTable({required this.gameId, required this.side, required this.clockKey});
+class const _GamePlayerTable({
+  required final GameFullId gameId,
+  required final Side side,
+  required final GlobalKey clockKey,
 
-  final GameFullId gameId;
-  final Side side;
-  final GlobalKey clockKey;
-
+  /// Whether this table displays the claim-win countdown and choices when the
+  /// opponent has left. Only the bottom table (the user's) sets this.
+  final bool showOpponentLeftCountdown = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -549,15 +533,18 @@ class _GamePlayerTable extends ConsumerWidget {
           moveToConfirm: state.moveToConfirm,
           liveClock: state.liveClock,
           activeClockSide: state.activeClockSide,
+          // Only computed for the bottom table, so the top table stays stable.
+          canShowClaimWinCountdown: showOpponentLeftCountdown && state.canShowClaimWinCountdown,
+          canClaimWin: showOpponentLeftCountdown && state.game.canClaimWin,
+          opponentLeftCountdown: showOpponentLeftCountdown ? state.opponentLeftCountdown : null,
         );
       }),
     );
     if (data == null) return const SizedBox.shrink();
 
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final clockTenths = ref.watch(
-      accountPreferencesProvider.select((prefs) => prefs.value?.clockTenths),
-    );
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
 
     final game = data.game;
     final youAre = game.youAre ?? Side.white;
@@ -577,6 +564,8 @@ class _GamePlayerTable extends ConsumerWidget {
         : null;
 
     final sideUser = side == Side.white ? game.white.user : game.black.user;
+
+    final showOpponentLeft = data.canShowClaimWinCountdown && data.opponentLeftCountdown != null;
 
     return GamePlayer(
       game: game,
@@ -599,6 +588,18 @@ class _GamePlayerTable extends ConsumerWidget {
               },
               cancel: () {
                 ref.read(ctrlProvider.notifier).cancelMove();
+              },
+            )
+          : null,
+      opponentLeftCallbacks: showOpponentLeft
+          ? (
+              countdown: data.opponentLeftCountdown!,
+              canClaim: data.canClaimWin,
+              onClaimWin: () {
+                ref.read(ctrlProvider.notifier).forceResign();
+              },
+              onClaimDraw: () {
+                ref.read(ctrlProvider.notifier).forceDraw();
               },
             )
           : null,
@@ -634,12 +635,8 @@ class _GamePlayerTable extends ConsumerWidget {
 
 /// A self-watching move list, driven by the game controller so move updates do
 /// not force the [GameLayout] shell to rebuild.
-class _GameMoveList extends ConsumerWidget {
-  const _GameMoveList({required this.gameId, required this.type});
-
-  final GameFullId gameId;
-  final MoveListType type;
-
+class const _GameMoveList({required final GameFullId gameId, required final MoveListType type})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = gameControllerProvider(gameId);
@@ -666,17 +663,11 @@ class _GameMoveList extends ConsumerWidget {
   }
 }
 
-class _GameBottomBar extends ConsumerWidget {
-  const _GameBottomBar({
-    required this.id,
-    required this.onLoadGameCallback,
-    required this.onNewOpponentCallback,
-  });
-
-  final GameFullId id;
-  final void Function(GameFullId id) onLoadGameCallback;
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+class const _GameBottomBar({
+  required final GameFullId id,
+  required final void Function(GameFullId id) onLoadGameCallback,
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -705,6 +696,7 @@ class _GameBottomBar extends ConsumerWidget {
           isCorrespondence: game.meta.speed == Speed.correspondence,
           numPremoveLines: game.correspondenceForecast?.length,
           chatOptions: gameState.chatOptions,
+          chatAvailable: gameState.chatState != null,
         );
       }),
     );
@@ -712,7 +704,10 @@ class _GameBottomBar extends ConsumerWidget {
     if (data == null) return const BottomBar.empty();
 
     final canShowChat =
-        gamePrefs.enableChat == true && data.chatOptions != null && kidModeAsync.value == false;
+        gamePrefs.enableChat == true &&
+        data.chatOptions != null &&
+        data.chatAvailable &&
+        kidModeAsync.value == false;
     final numPremoveLines = data.numPremoveLines;
 
     return BottomBar(
@@ -861,19 +856,20 @@ class _GameBottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.settingsSettings),
+          onPressed: () => showModalBottomSheet<void>(
+            context: context,
+            isDismissible: true,
+            isScrollControlled: true,
+            builder: (_) => GameSettings(id: id),
+          ),
+        ),
+        BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: () {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
         ),
-        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
-            gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
-            },
-          ),
         if (gameState.game.abortable)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.abortGame),
@@ -960,6 +956,24 @@ class _GameBottomBar extends ConsumerWidget {
               ref.read(gameControllerProvider(id).notifier).declineRematch();
             },
           )
+        else if (gameState.correspondenceRematchId != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
+                );
+              }
+            },
+          )
         else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
@@ -967,17 +981,46 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: () {
               ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
             },
+          )
+        // Offline opponent in a clockless game: persistent challenge, not a socket offer.
+        else if (gameState.canOfferRematch &&
+            gameState.game.clock == null &&
+            gameState.game.me?.user != null &&
+            gameState.game.opponent?.user != null)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.rematch),
+            dismissOnPress: true,
+            onPressed: () async {
+              // dismissOnPress unmounts this context before the request
+              // completes, so capture the messenger now.
+              final messenger = ScaffoldMessenger.of(context);
+              try {
+                await ref.read(gameControllerProvider(id).notifier).challengeRematch();
+              } catch (_) {
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Could not send the rematch challenge')),
+                );
+              }
+            },
           ),
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: () => onNewOpponentCallback(gameState.game),
           ),
-        if (gameState.tournament?.isFinished == true)
+        if (gameState.tournament != null)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.backToTournament),
             onPressed: () {
               Navigator.of(context).push(TournamentScreen.buildRoute(gameState.tournament!.id));
+            },
+          ),
+        if (gameState.game.playable && gameState.game.meta.speed == Speed.correspondence ||
+            gameState.game.finished)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.analysis),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisScreen.buildRoute(gameState.analysisOptions));
             },
           ),
       ],
@@ -1012,12 +1055,8 @@ class _GameBottomBar extends ConsumerWidget {
 /// Isolated from [_GameBottomBar] so that the per-move changes it depends on
 /// (cursor position, blink hint) repaint only this button instead of rebuilding
 /// the whole bar on every move.
-class _MoveNavButton extends ConsumerWidget {
-  const _MoveNavButton({required this.id, required this.forward});
-
-  final GameFullId id;
-  final bool forward;
-
+class const _MoveNavButton({required final GameFullId id, required final bool forward})
+    extends ConsumerWidget {
   void _move(WidgetRef ref) {
     final notifier = ref.read(gameControllerProvider(id).notifier);
     if (forward) {
@@ -1069,17 +1108,11 @@ class _MoveNavButton extends ConsumerWidget {
   }
 }
 
-class _GameNegotiationDialog extends StatelessWidget {
-  const _GameNegotiationDialog({
-    required this.title,
-    required this.onAccept,
-    required this.onDecline,
-  });
-
-  final Widget title;
-  final VoidCallback onAccept;
-  final VoidCallback onDecline;
-
+class const _GameNegotiationDialog({
+  required final Widget title,
+  required final VoidCallback onAccept,
+  required final VoidCallback onDecline,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void decline() {
@@ -1102,11 +1135,7 @@ class _GameNegotiationDialog extends StatelessWidget {
   }
 }
 
-class _ThreefoldDialog extends ConsumerWidget {
-  const _ThreefoldDialog({required this.id});
-
-  final GameFullId id;
-
+class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final content = Text(context.l10n.threefoldRepetition);
@@ -1126,85 +1155,6 @@ class _ThreefoldDialog extends ConsumerWidget {
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),
         PlatformDialogAction(onPressed: decline, child: Text(context.l10n.cancel)),
       ],
-    );
-  }
-}
-
-class _ClaimWinDialog extends ConsumerWidget {
-  const _ClaimWinDialog({required this.id});
-
-  final GameFullId id;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = gameControllerProvider(id);
-    final gameState = ref.watch(ctrlProvider).requireValue;
-
-    final content = Text(context.l10n.opponentLeftChoices);
-
-    void onClaimWin() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).forceResign();
-    }
-
-    void onClaimDraw() {
-      Navigator.of(context).pop();
-      ref.read(ctrlProvider.notifier).forceDraw();
-    }
-
-    return AlertDialog.adaptive(
-      content: content,
-      actions: [
-        PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-          cupertinoIsDefaultAction: true,
-          child: Text(context.l10n.forceResignation),
-        ),
-        PlatformDialogAction(
-          onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-          child: Text(context.l10n.forceDraw),
-        ),
-      ],
-    );
-  }
-}
-
-class _ClaimWinCountdown extends StatelessWidget {
-  const _ClaimWinCountdown({
-    required this.gameId,
-    required this.canClaimWin,
-    required this.countdown,
-  });
-
-  final GameFullId gameId;
-  final bool canClaimWin;
-  final (Duration, DateTime) countdown;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: CountdownClockBuilder(
-          timeLeft: countdown.$1,
-          clockUpdatedAt: countdown.$2,
-          active: true,
-          builder: (context, duration) {
-            return InkWell(
-              onTap: canClaimWin
-                  ? () {
-                      showAdaptiveDialog<void>(
-                        context: context,
-                        builder: (context) => _ClaimWinDialog(id: gameId),
-                        barrierDismissible: true,
-                      );
-                    }
-                  : null,
-              child: Text(context.l10n.opponentLeftCounter(duration.inSeconds)),
-            );
-          },
-        ),
-      ),
     );
   }
 }

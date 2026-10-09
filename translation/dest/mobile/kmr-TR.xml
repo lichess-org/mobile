@@ -1,43 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">Hesab</string>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">Tercîhên hesabê</string>
+  <string name="account" comment="The account screen title.">Hesab</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Tercîhên hesabê</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Wê ev tercîh li hesabê te yê Lichessê werin tetbîqkirin û wê di temamê cîhazên te de werin emilandin.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Temamê lîstikan</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Tu piştrast î?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Opsîyonên texteyê</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Teklîfa vegerandinê betal bike</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Paqij bike</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Meydanxwazî hat çêkirin: Dema ku lîstik dest pê dike, hûn ê werin agahdarkirin. \nHûn dikarin li beşa Mal ê bigihîjin lîstikê.</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Paqij bike</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Hemleya qeydkirî paqij bike</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Tevlî lîstikekê bibe</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Taybet bike</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Pêşniyaz: Tu dikarî wîdgetên nû li ser Ekrana Serekî zêde bikî an jî yên nexwestî jê bibî!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Paşguh bike</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Hûrik</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Dûrûdirêj</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Paşragihan</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Êvara te bixêr, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Êvara te bixêr</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Rojbaş, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Rojbaş</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Varyasyonê biveşêre</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Êvara te bixêr, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Êvara te bixêr</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Destpêk</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Weşangerên zindî</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ji bo dîtina vê rûpelê divê tu têketî bî.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Lîstikek nû</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Netîce nîne</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Xêra xwe ji bîr neke ku temamê xisûsîyetên ji aplîkasyon an malpera berê vê gavê ne amade ne, feqet em her daîm xisûsîyetan îlawe dikin.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Tu ti bikarhênerekî taqîb nakî.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Vekirina Lê Koîlnê di rewşa derhêl de ne berdest e.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">An jî dosyeyeke PGNê bar bike</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Li ser texteyê</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Lîzerên bi \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Çep</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Rast</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Parçeya kaşkirî mezin bike</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Yê berî</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Tu dixwazî vê dewrê biqedînî?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Tiştek nîne ji bo nîşandanê, xêra xwe fîltreyan biguhêre</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Tiştek nîne. Hin lîstikên Firtûneya Pazilê bilîze.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Di 3 deqeyan de çiqas karibî pazilan çareser bike.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Tu yê serîya mewcûd ji dest bidî û skora te wê were qeydkirin.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Ji destpêkirinên xwe yên favorî pazilan bilîze, an temayekê bibijêre.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pazil</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Lêgerînên dawî</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Cihnîşanê rake</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Cihnîşanê rake</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Analîza serverê</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Ciyê saetê</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Temayên hazir</string>
@@ -48,9 +53,9 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Moda kaşkirinê</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Gava lîstinê înterfeysa bikarhênerîyê veşêre. Ger tu ji hereketên navîgasyonê yên sîstemê yên li kenarê ekranê nerihet bî, vê biemilîne. Ev mîheng li lîstikê û pazilên kişikê tê emilandin.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Kabikên zeftkirî</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Rismekî bibijêre</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Piştzemîna xisûsî tenê di moda tarî de dişixule. Rismekî tarî tê tewsîyekirin.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Rismekî bibijêre</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">Rismê şêlû bike / nezelal bike</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Piştzemîna xisûsî tenê di moda tarî de dişixule. Rismekî tarî tê tewsîyekirin.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Texteyê veşêre</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Texteyê nîşan bide</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Ji bo nîşandana piştzemînên din bişemitîne</string>
@@ -61,33 +66,20 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Sînor nîşan bide</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Hestê destlêdanê</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Gava çalak be, amûr a te wê bi demek kurt biheje li dema hûn kevirek ê bilivîn in an jî bixwin.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Sazkarî</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGNê parve bike</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">URLya lîstikê parve bike</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Cî wek FEN parve bike</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Vê pazilê parve bike</string>
   <string name="showComments" comment="Shown in the analysis screen.">Şîroveyan nîşan bide</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Encamî nîşan bide</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Guhartoyan nîşan bide</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Tiştek şaş çû.</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Nîşandana tehdîdê bide rawestandin</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Rengên sîstemê</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Rûkar</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Amûr</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Temambûyî</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Biçe rûpela min</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varyanta %s di vê versiyonê de nayê piştgirîkirin.</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Lîstikê Bibîne</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Li benda tevlî bûna hevrikî ye...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Bibîne</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Tu bi xêr hatî sepan a Lichess ê!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Lîstikê Bibîne</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Pêşniyaz: Tu dikarî wîdgetên nû li ser Ekrana Serekî zêde bikî an jî yên nexwestî jê bibî!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Paşguh bike</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">Taybet bike</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Nîşandana tehdîdê bide rawestandin</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">Temambûyî</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Biçe rûpela min</string>
-  <string name="displayModeCompact" comment="">Hûrik</string>
-  <string name="displayModeDetailed" comment="">Dûrûdirêj</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">Vekirina Lê Koîlnê di rewşa derhêl de ne berdest e.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Meydanxwazî hat çêkirin: Dema ku lîstik dest pê dike, hûn ê werin agahdarkirin. \nHûn dikarin li beşa Mal ê bigihîjin lîstikê.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Yê berî</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">An jî dosyeyeke PGNê bar bike</string>
 </resources>

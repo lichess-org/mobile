@@ -1,8 +1,8 @@
 import 'package:clock/clock.dart' as clock;
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('Clock', () {
@@ -57,6 +57,23 @@ void main() {
         ),
       );
       expect(find.text('0:01.0', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(
+            timeLeft: Duration(minutes: 59, seconds: 59),
+            clockTenths: ClockTenths.always,
+          ),
+        ),
+      );
+      expect(find.text('59:59.0', findRichText: true), findsOneWidget);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Clock(timeLeft: Duration(hours: 1, seconds: 1), clockTenths: ClockTenths.always),
+        ),
+      );
+      expect(find.text('1:00:01', findRichText: true), findsOneWidget);
     });
   });
 

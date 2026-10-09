@@ -3,20 +3,20 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../model/analysis/fake_opening_service.dart';
+import '../../service/fake_opening_service.dart';
 import '../../test_provider_scope.dart';
 
-class MockStudyRepository extends Mock implements StudyRepository {}
+class MockStudyRepository() extends Mock implements StudyRepository;
 
 const _testId = StudyId('test-id');
 
@@ -89,9 +89,8 @@ void main() {
   group('Study opening detection', () {
     testWidgets('opening is set when navigating to a mainline position', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -119,9 +118,8 @@ void main() {
 
     testWidgets('ancestor opening is used when current node has no direct opening', (tester) async {
       final mockRepository = MockStudyRepository();
-      when(
-        () => mockRepository.getStudy(id: _testId),
-      ).thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
+      when(() => mockRepository.getStudy(id: _testId))
+          .thenAnswer((_) async => (_makeStudy(), null, '1. e4 e5 2. Nf3'));
 
       final app = await makeTestProviderScopeApp(
         tester,

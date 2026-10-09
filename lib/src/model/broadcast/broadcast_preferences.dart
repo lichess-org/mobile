@@ -12,7 +12,8 @@ final broadcastPreferencesProvider = NotifierProvider<BroadcastPreferences, Broa
   name: 'BroadcastPreferencesProvider',
 );
 
-class BroadcastPreferences extends Notifier<BroadcastPrefs>
+class BroadcastPreferences()
+    extends Notifier<BroadcastPrefs>
     with PreferencesStorage<BroadcastPrefs> {
   @override
   @protected
@@ -69,7 +70,7 @@ class BroadcastPreferences extends Notifier<BroadcastPrefs>
 
 @Freezed(fromJson: true, toJson: true)
 sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, CommonAnalysisPrefs {
-  const factory BroadcastPrefs({
+  const factory({
     @JsonKey(defaultValue: true) required bool showRoundEvaluationGauges,
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
@@ -93,5 +94,5 @@ sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, Commo
     smallBoard: false,
   );
 
-  factory BroadcastPrefs.fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
 }

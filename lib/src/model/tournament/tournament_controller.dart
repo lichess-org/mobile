@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
+import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -21,11 +22,9 @@ final tournamentControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'TournamentControllerProvider',
     );
 
-class TournamentController extends AsyncNotifier<TournamentState> {
-  TournamentController(this.id);
-
-  final TournamentId id;
-
+class TournamentController(final TournamentId id)
+    extends AsyncNotifier<TournamentState>
+    with ChatMixin<TournamentState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   SocketClient? _socketClient;
@@ -42,6 +41,18 @@ class TournamentController extends AsyncNotifier<TournamentState> {
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   @override
+  @protected
+  StringId get chatId => id;
+
+  @override
+  @protected
+  String get chatReportResource => 'tournament/$id';
+
+  @override
+  @protected
+  bool get chatIsPublic => true;
+
+  @override
   Future<TournamentState> build() async {
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -53,7 +64,7 @@ class TournamentController extends AsyncNotifier<TournamentState> {
 
     _socketClient = _socketPool.open(socketUri(id), version: tournament.socketVersion);
     _socketSubscription?.cancel();
-    _socketSubscription = _socketClient!.stream.listen(_handleSocketEvent);
+    _socketSubscription = _socketClient!.stream.listen(handleSocketEvent);
 
     final countdown = tournament.timeToStart ?? tournament.timeToFinish;
     if (countdown != null && countdown.$1 > Duration.zero) {
@@ -72,10 +83,20 @@ class TournamentController extends AsyncNotifier<TournamentState> {
 
     _watchFeaturedGameIfChanged(previous: null, current: tournament.featuredGame?.id);
 
-    return TournamentState(tournament: tournament);
+    return TournamentState(tournament: tournament, chatState: await initChat(tournament.chat));
   }
 
-  void onFocusRegained() {
+  void onFocusGained() {
+    // Don't interfere with the initial [build] which opens the socket itself.
+    if (!state.hasValue) {
+      return;
+    }
+    // When another [TournamentScreen] for the same tournament is already in the
+    // route stack, this provider is kept alive and [build] won't re-run, so the
+    // socket (closed by the game we navigated through) isn't reopened by it.
+    // We use `onFocusGained` (not `onFocusRegained`) because a freshly pushed
+    // screen gains focus for the *first* time, which never triggers
+    // `onFocusRegained`.
     final currentClient = ref.read(socketPoolProvider).currentClient;
     if (currentClient.route != _socketClient?.route) {
       ref.invalidateSelf();
@@ -127,6 +148,10 @@ class TournamentController extends AsyncNotifier<TournamentState> {
         .read(tournamentRepositoryProvider)
         .loadPage(state.requireValue.tournament, page);
 
+    if (!state.hasValue) {
+      return;
+    }
+
     state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }
 
@@ -140,6 +165,10 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     final tournament = await ref
         .read(tournamentRepositoryProvider)
         .reload(state.requireValue.tournament);
+
+    if (!state.hasValue) {
+      return;
+    }
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();
@@ -156,7 +185,17 @@ class TournamentController extends AsyncNotifier<TournamentState> {
     state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }
 
-  void _handleSocketEvent(SocketEvent event) {
+  @protected
+  @override
+  void updateChatState(ChatState newState) {
+    state = AsyncValue.data(state.requireValue.copyWith(chatState: newState));
+  }
+
+  @protected
+  @override
+  void handleSocketEvent(SocketEvent event) {
+    super.handleSocketEvent(event);
+
     _logger.fine('Received socket event: $event');
 
     if (!state.hasValue) {
@@ -224,10 +263,8 @@ class TournamentController extends AsyncNotifier<TournamentState> {
 }
 
 @freezed
-sealed class TournamentState with _$TournamentState {
-  const TournamentState._();
-
-  const factory TournamentState({required Tournament tournament}) = _TournamentState;
+sealed class const TournamentState._() with _$TournamentState, ChatMixinState {
+  const factory({required Tournament tournament, ChatState? chatState}) = _TournamentState;
 
   String get name => tournament.meta.fullName;
   TournamentId get id => tournament.id;
@@ -259,4 +296,7 @@ sealed class TournamentState with _$TournamentState {
   ChatOptions? get chatOptions => tournament.chat != null
       ? TournamentChatOptions(id: tournament.id, writeable: tournament.chat!.writeable)
       : null;
+
+  @override
+  bool get chatEnabled => chatOptions != null;
 }

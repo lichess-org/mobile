@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/firebase_options.dart';
-import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
@@ -19,8 +18,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// the behavior of the fake.
 /// However, if the plugin is used in a way that doesn't allow for easy mocking
 /// with riverpod, a test binding can be used to provide a fake implementation.
-abstract class LichessBinding {
-  LichessBinding() : assert(_instance == null) {
+abstract class LichessBinding() {
+  this : assert(_instance == null) {
     initInstance();
   }
 
@@ -84,20 +83,15 @@ abstract class LichessBinding {
 
   /// Wraps [FirebaseMessaging.onBackgroundMessage].
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
-
-  /// The Stockfish singleton instance.
-  Stockfish get stockfish;
 }
 
 /// A concrete implementation of [LichessBinding] for the app.
-class AppLichessBinding extends LichessBinding {
-  AppLichessBinding();
-
+class AppLichessBinding() extends LichessBinding {
   /// Returns an instance of the binding that implements [LichessBinding].
   ///
   /// If no binding has yet been initialized, the [AppLichessBinding] class is
   /// used to create and initialize one.
-  factory AppLichessBinding.ensureInitialized() {
+  factory ensureInitialized() {
     if (LichessBinding._instance == null) {
       AppLichessBinding();
     }
@@ -178,7 +172,4 @@ class AppLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       FirebaseMessaging.onMessageOpenedApp;
-
-  @override
-  Stockfish get stockfish => Stockfish.instance;
 }

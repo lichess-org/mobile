@@ -10,8 +10,9 @@ import 'package:lichess_mobile/src/model/analysis/common_analysis_prefs.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
@@ -26,20 +27,18 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 /// - [BroadcastAnalysisBoard]
 /// - [StudyAnalysisBoard]
 /// - [RetroAnalysisBoard]
-abstract class AnalysisBoard extends ConsumerStatefulWidget {
-  const AnalysisBoard({super.key, required this.boardSize, this.boardRadius});
-
-  final double boardSize;
-  final BorderRadiusGeometry? boardRadius;
-}
+abstract class const AnalysisBoard({
+  super.key,
+  required final double boardSize,
+  final BorderRadiusGeometry? boardRadius,
+}) extends ConsumerStatefulWidget;
 
 /// Abstract state class for analysis board widgets.
 abstract class AnalysisBoardState<
   T extends AnalysisBoard,
   AnalysisState extends CommonAnalysisState,
   AnalysisPrefs extends CommonAnalysisPrefs
->
-    extends ConsumerState<T> {
+>() extends ConsumerState<T> {
   AnalysisState get analysisState;
 
   AnalysisPrefs get analysisPrefs;
@@ -137,22 +136,30 @@ abstract class AnalysisBoardState<
   void _onAnalysisStateChanged(AnalysisState? prev, AnalysisState? next) {
     if (!mounted || next == null) return;
     final boardPrefs = ref.read(boardPreferencesProvider);
+    final gameData = _buildGameData(next, boardPrefs);
     final controller = _controller;
+    if (gameData == null) {
+      if (controller != null) {
+        controller.dispose();
+        setState(() => _controller = null);
+      }
+      return;
+    }
     if (controller == null) {
       final ctrl = _createController(next, boardPrefs);
       if (ctrl != null) setState(() => _controller = ctrl);
       return;
     }
     final newFen = computeFen(next);
-    final gameData = _buildGameData(next, boardPrefs);
     final prevFen = prev != null ? computeFen(prev) : null;
     if (prevFen != newFen) {
-      if (gameData != null) controller.updatePosition(gameData, resetPremove: true);
+      controller.pendingPromotion = null;
+      controller.updatePosition(gameData, resetPremove: true);
       final explosionSquares = next.explosionSquares;
       if (explosionSquares != null) {
         controller.triggerExplosion(explosionSquares.toSet());
       }
-    } else if (gameData != null) {
+    } else {
       controller.updatePosition(gameData);
     }
   }

@@ -1,4 +1,5 @@
-import 'dart:ui' show Color, Locale;
+import 'dart:convert';
+import 'dart:ui' show Locale;
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -7,6 +8,12 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('JsonUtils');
+
+/// A JSON decoder that decodes UTF-8 bytes.
+///
+/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
+/// than decoding the bytes to a string and then parsing the JSON.
+final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 /// Reads a JSON list of objects and maps it using the provided mapper function.
 IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dynamic>) mapper}) {
@@ -27,16 +34,14 @@ IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dyn
         list.add(mapped);
       }
     } catch (e, st) {
-      _logger.severe('Could not read JSON object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T:', e, st);
       throw Exception('Could not read JSON object as $T: $e');
     }
   }
   return IList(list);
 }
 
-class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
-  const LocaleConverter();
-
+class const LocaleConverter() implements JsonConverter<Locale?, Map<String, dynamic>?> {
   @override
   Locale? fromJson(Map<String, dynamic>? json) {
     if (json == null) {
@@ -58,27 +63,6 @@ class LocaleConverter implements JsonConverter<Locale?, Map<String, dynamic>?> {
             'scriptCode': locale.scriptCode,
           }
         : null;
-  }
-}
-
-class ColorConverter implements JsonConverter<Color?, Map<String, dynamic>?> {
-  const ColorConverter();
-
-  @override
-  Color? fromJson(Map<String, dynamic>? json) {
-    return json != null
-        ? Color.from(
-            alpha: json['a'] as double,
-            red: json['r'] as double,
-            green: json['g'] as double,
-            blue: json['b'] as double,
-          )
-        : null;
-  }
-
-  @override
-  Map<String, dynamic>? toJson(Color? color) {
-    return color != null ? {'a': color.a, 'r': color.r, 'g': color.g, 'b': color.b} : null;
   }
 }
 

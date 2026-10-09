@@ -18,12 +18,7 @@ final challengeRepositoryProvider = Provider<ChallengeRepository>((Ref ref) {
 
 typedef ChallengesList = ({IList<Challenge> inward, IList<Challenge> outward});
 
-class ChallengeRepository {
-  const ChallengeRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class const ChallengeRepository(final LichessClient client, final Aggregator aggregator) {
   Future<ChallengesList> list() {
     final uri = Uri(path: '/api/challenge');
     return aggregator.readJson(
@@ -81,5 +76,10 @@ class ChallengeRepository {
   Future<void> cancel(ChallengeId id) async {
     final uri = Uri(path: '/api/challenge/$id/cancel');
     await client.postRead(uri);
+  }
+
+  Future<void> rematchOfGame(GameId id) async {
+    // don't add an /api/ prefix here; it's a web route, not an API endpoint
+    await client.postRead(Uri(path: '/challenge/rematch-of/$id'));
   }
 }

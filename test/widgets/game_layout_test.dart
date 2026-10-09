@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
@@ -30,9 +30,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
@@ -80,9 +79,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             moves: ['e4', 'e5'],
             topTable: Row(
@@ -129,9 +127,8 @@ void main() {
           home: GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
               variant: Variant.standard,
-              pockets: null,
+              position: Chess.initial,
             ),
             topTable: Row(
               mainAxisSize: MainAxisSize.max,
@@ -158,8 +155,18 @@ void main() {
         final isShortScreen =
             surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
             kSmallHeightMinusBoard;
-        final baseBoardSize = isTablet ? surface.width - 32.0 : surface.width;
-        final expectedBoardSize = isShortScreen ? baseBoardSize - 16.0 : baseBoardSize;
+
+        double expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+
+        final maxAllowedBoardSize = surface.height - 180.0;
+        if (expectedBoardSize > maxAllowedBoardSize) {
+          expectedBoardSize = maxAllowedBoardSize;
+        }
+
+        if (isShortScreen) {
+          expectedBoardSize -= 16.0;
+        }
+
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
@@ -251,48 +258,45 @@ void main() {
     );
   });
 
-  testWidgets(
-    'owned board becomes interactive when boardParams transitions from readonly',
-    (WidgetTester tester) async {
-      final paramsNotifier = ValueNotifier<GameBoardParams>(GameBoardParams.emptyBoard);
-      addTearDown(paramsNotifier.dispose);
-      final playedMoves = <Move>[];
+  testWidgets('owned board becomes interactive when boardParams transitions from readonly', (
+    WidgetTester tester,
+  ) async {
+    final paramsNotifier = ValueNotifier<GameBoardParams>(GameBoardParams.emptyBoard);
+    addTearDown(paramsNotifier.dispose);
+    final playedMoves = <Move>[];
 
-      final app = await makeTestProviderScope(
-        tester,
-        child: MaterialApp(
-          home: ValueListenableBuilder<GameBoardParams>(
-            valueListenable: paramsNotifier,
-            builder: (context, params, _) =>
-                GameLayout(orientation: Side.white, boardParams: params),
-          ),
+    final app = await makeTestProviderScope(
+      tester,
+      child: MaterialApp(
+        home: ValueListenableBuilder<GameBoardParams>(
+          valueListenable: paramsNotifier,
+          builder: (context, params, _) => GameLayout(orientation: Side.white, boardParams: params),
         ),
-      );
-      await tester.pumpWidget(app);
+      ),
+    );
+    await tester.pumpWidget(app);
 
-      // Readonly boards are controller-backed but non-interactive (PlayerSide.none).
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isFalse);
+    // Readonly boards are controller-backed but non-interactive (PlayerSide.none).
+    expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isFalse);
 
-      // Transition the same GameLayout to interactive params (triggers didUpdateWidget).
-      paramsNotifier.value = GameBoardParams.interactive(
-        variant: Variant.standard,
-        position: Chess.initial,
-        playerSide: PlayerSide.white,
-        onMove: (move, {viaDragAndDrop}) {
-          playedMoves.add(move);
-        },
-      );
-      await tester.pump();
+    // Transition the same GameLayout to interactive params (triggers didUpdateWidget).
+    paramsNotifier.value = GameBoardParams.interactive(
+      variant: Variant.standard,
+      position: Chess.initial,
+      playerSide: PlayerSide.white,
+      onMove: (move, {viaDragAndDrop}) {
+        playedMoves.add(move);
+      },
+    );
+    await tester.pump();
 
-      // The same board is now interactive.
-      expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isTrue);
+    // The same board is now interactive.
+    expect(tester.widget<Chessboard>(find.byType(Chessboard)).interactive, isTrue);
 
-      // And user interaction reaches the onMove callback.
-      await playMove(tester, 'e2', 'e4');
-      expect(playedMoves, [const NormalMove(from: Square.e2, to: Square.e4)]);
-    },
-    variant: kPlatformVariant,
-  );
+    // And user interaction reaches the onMove callback.
+    await playMove(tester, 'e2', 'e4');
+    expect(playedMoves, [const NormalMove(from: Square.e2, to: Square.e4)]);
+  }, variant: kPlatformVariant);
 
   testWidgets('Crazyhouse displays pockets and supports drop moves', (WidgetTester tester) async {
     final playedMoves = <Move>[];
@@ -329,8 +333,8 @@ void main() {
     tester,
   ) async {
     final after1e4 = Chess.initial.play(const NormalMove(from: Square.e2, to: Square.e4));
-    final boardNotifier = ValueNotifier<({String fen, Move? lastMove})>((
-      fen: kInitialFEN,
+    final boardNotifier = ValueNotifier<({Position position, Move? lastMove})>((
+      position: Chess.initial,
       lastMove: null,
     ));
     addTearDown(boardNotifier.dispose);
@@ -338,14 +342,13 @@ void main() {
     final app = await makeTestProviderScope(
       tester,
       child: MaterialApp(
-        home: ValueListenableBuilder<({String fen, Move? lastMove})>(
+        home: ValueListenableBuilder<({Position position, Move? lastMove})>(
           valueListenable: boardNotifier,
           builder: (context, value, _) => GameLayout(
             orientation: Side.white,
             boardParams: GameBoardParams.readonly(
-              fen: value.fen,
               variant: Variant.standard,
-              pockets: null,
+              position: value.position,
               lastMove: value.lastMove,
             ),
           ),
@@ -359,7 +362,7 @@ void main() {
 
     // Advance the readonly board to the position after 1.e4.
     boardNotifier.value = (
-      fen: after1e4.fen,
+      position: after1e4,
       lastMove: const NormalMove(from: Square.e2, to: Square.e4),
     );
     await tester.pumpAndSettle();

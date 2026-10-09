@@ -1,21 +1,17 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:material_ui/material_ui.dart';
 
-class MaterialDifferenceDisplay extends StatelessWidget {
-  const MaterialDifferenceDisplay({
-    required this.materialDiff,
-    this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
-  });
-
-  final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
-
+class const MaterialDifferenceDisplay({
+  required final MaterialDiffSide? materialDiff,
+  final MaterialDifferenceFormat? materialDifferenceFormat =
+      MaterialDifferenceFormat.materialDifference,
+}) extends StatelessWidget {
   static const _iconByRole = {
     Role.king: LichessIcons.chess_king,
     Role.queen: LichessIcons.chess_queen,

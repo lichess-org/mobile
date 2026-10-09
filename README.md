@@ -9,7 +9,7 @@ Contributions to this project are welcome!
 If you want to contribute, please read the [contributing guide](./CONTRIBUTING.md).
 
 If you are new to this project, you can [read the documentation](./docs) to get
-started. The [CLAUDE.md](./CLAUDE.md) is also a good resource to understand the
+started. The [AGENTS.md](./AGENTS.md) is also a good resource to understand the
 codebase.
 
 ## Setup
@@ -17,7 +17,7 @@ codebase.
 tl;dr: Install Flutter, clone the repo, run in order:
 - `flutter pub get`
 - `dart run build_runner watch`
-- `flutter analyze --watch`,
+- `flutter analyze --watch`
 
 and you're ready to code!
 
@@ -48,7 +48,7 @@ flutter test
 
 ## Internationalisation
 
-Do not edit the `app_en.arb` file by hand, this file is generated.
+Do not edit the files in `translation/` folder (except `translation/source/mobile.xml`), nor the `app_en.arb` file: these files are generated.
 For more information, see [Internationalisation](./docs/internationalisation.md).
 
 ## Releasing

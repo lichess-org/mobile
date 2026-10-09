@@ -22,6 +22,7 @@ final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
     (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$')),
     (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$')),
     (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$')),
+    (key: 'friends', pathRegexp: RegExp(r'^\/api\/mobile\/following$')),
   }),
   _watchUri: ISet({
     (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$')),
@@ -50,12 +51,10 @@ final aggregatorProvider = Provider<Aggregator>((ref) {
 /// if all uris grouped client side match the target server endpoint configuration.
 ///
 /// If there is no match, it will make atomic requests for each uri after the [aggregationInterval] delay.
-class Aggregator {
-  Aggregator(this.client, {this.aggregationInterval = kAggregationInterval});
-
-  final LichessClient client;
-  final Duration aggregationInterval;
-
+class Aggregator(
+  final LichessClient client, {
+  final Duration aggregationInterval = kAggregationInterval,
+}) {
   (Future<void>, ISet<Uri>)? _pending;
 
   final MemoryCache<ISet<Uri>, CachedAggregatorRequest> _groupRequests = MemoryCache(
@@ -111,7 +110,7 @@ class Aggregator {
     // Aggregation is disabled for widget tests to avoid dealing with timer and extra complexity.
     // The Aggregator is tested on its own.
     if (aggregationInterval == Duration.zero) {
-      return atomicClientCall();
+      return await atomicClientCall();
     }
 
     if (_pending == null) {
@@ -128,7 +127,7 @@ class Aggregator {
       _pending = null;
 
       if (uris.length == 1) {
-        return atomicClientCall();
+        return await atomicClientCall();
       }
 
       for (final group in _targetUris.entries) {
@@ -159,6 +158,6 @@ class Aggregator {
 
     _logger.warning('No aggregation found for URI: $uri');
 
-    return atomicClientCall();
+    return await atomicClientCall();
   }
 }

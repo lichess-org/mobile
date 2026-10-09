@@ -1,17 +1,14 @@
 import 'package:dartchess/dartchess.dart' hide Position;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:material_ui/material_ui.dart';
 
-class BoardEditorFilters extends ConsumerWidget {
-  const BoardEditorFilters({required this.params, super.key});
-
-  final BoardEditorControllerParams? params;
-
+class const BoardEditorFilters({required final BoardEditorControllerParams? params, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorController = boardEditorControllerProvider(params);
@@ -61,14 +58,17 @@ class BoardEditorFilters extends ConsumerWidget {
                     ),
                   ),
                   ...[CastlingSide.king, CastlingSide.queen].map((castlingSide) {
+                    final isPossible = editorState.isCastlingPossible(side, castlingSide);
                     return ChoiceChip(
                       label: Text(castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O'),
-                      selected: editorState.isCastlingAllowed(side, castlingSide),
-                      onSelected: (selected) {
-                        ref
-                            .read(editorController.notifier)
-                            .setCastling(side, castlingSide, selected);
-                      },
+                      selected: isPossible && editorState.isCastlingAllowed(side, castlingSide),
+                      onSelected: isPossible
+                          ? (selected) {
+                              ref
+                                  .read(editorController.notifier)
+                                  .setCastling(side, castlingSide, selected);
+                            }
+                          : null,
                     );
                   }),
                 ],
@@ -77,9 +77,9 @@ class BoardEditorFilters extends ConsumerWidget {
           }),
         ],
         if (editorState.variant.hasEnPassant && editorState.enPassantOptions.isNotEmpty) ...[
-          const Padding(
+          Padding(
             padding: Styles.bodySectionPadding,
-            child: Text('En passant', style: Styles.subtitle),
+            child: Text(context.l10n.enPassant, style: Styles.subtitle),
           ),
           Padding(
             padding: Styles.horizontalBodyPadding,

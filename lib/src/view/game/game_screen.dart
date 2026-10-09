@@ -1,39 +1,33 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/duration.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
-import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -43,19 +37,17 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 /// - From an existing game: using [ExistingGameSource].
 ///
 /// The screen will show a loading board while the game is being created.
-class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({required this.source, this.loadingPosition, this.lastMoveAt, super.key});
-
-  final GameScreenSource source;
-
-  final LoadingPosition? loadingPosition;
+class const GameScreen({
+  required final GameScreenSource source,
+  final LoadingParam? loadingPosition,
 
   /// The date of the last move played in the game. If null, the game is in progress.
-  final DateTime? lastMoveAt;
-
+  final DateTime? lastMoveAt,
+  super.key,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     required GameScreenSource source,
-    LoadingPosition? loadingPosition,
+    LoadingParam? loadingPosition,
     DateTime? lastMoveAt,
   }) {
     return buildScreenRoute(
@@ -75,7 +67,7 @@ final _isRealTimePlayableGameProvider = FutureProvider.autoDispose.family<bool, 
   return state.game.meta.speed != Speed.correspondence && state.game.playable;
 }, name: 'IsRealTimePlayableGameProvider');
 
-class _GameScreenState extends ConsumerState<GameScreen> {
+class _GameScreenState() extends ConsumerState<GameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
   final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
@@ -213,10 +205,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            actions: [
-              _WatcherButton(gameId: createdGameId),
-              _GameMenu(gameId: createdGameId),
-            ],
+            actions: [_GameMenu(gameId: createdGameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -280,7 +269,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             () => ref.read(createGameServiceProvider).cancelChallenge(),
           ),
           ExistingGameSource() => StandaloneGameLoadingContent(
-            position: widget.loadingPosition,
+            loadingParam: widget.loadingPosition,
             userActionsBar: const BottomBar.empty(),
           ),
         };
@@ -302,88 +291,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 }
 
-class _GameMenu extends ConsumerWidget {
-  const _GameMenu({required this.gameId});
+sealed class const _GameTitleVariant();
 
-  final GameFullId gameId;
+final class const _LobbyTitleVariant(final GameSeek seek) extends _GameTitleVariant;
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isBookmarkedAsync = ref.watch(isGameBookmarkedProvider(gameId));
+final class const _ChallengeTitleVariant(final ChallengeRequest challenge)
+    extends _GameTitleVariant;
 
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () => showModalBottomSheet<void>(
-            context: context,
-            isDismissible: true,
-            isScrollControlled: true,
-            builder: (_) => GameSettings(id: gameId),
-          ),
-        ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-        GameBookmarkContextMenuAction(
-          id: gameId.gameId,
-          bookmarked: isBookmarkedAsync.value ?? false,
-          onToggleBookmark: () =>
-              ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-        ),
-        ...(switch (ref.watch(gameShareDataProvider(gameId))) {
-          AsyncData(:final value) =>
-            value.finished
-                ? makeFinishedGameShareContextMenuActions(
-                    context,
-                    ref,
-                    gameId: gameId.gameId,
-                    orientation: value.pov ?? Side.white,
-                  )
-                : [],
-          _ => [],
-        }),
-      ],
-    );
-  }
-}
-
-sealed class _GameTitleVariant {
-  const _GameTitleVariant();
-}
-
-final class _LobbyTitleVariant extends _GameTitleVariant {
-  const _LobbyTitleVariant(this.seek);
-  final GameSeek seek;
-}
-
-final class _ChallengeTitleVariant extends _GameTitleVariant {
-  const _ChallengeTitleVariant(this.challenge);
-  final ChallengeRequest challenge;
-}
-
-final class _StandaloneTitleVariant extends _GameTitleVariant {
-  const _StandaloneTitleVariant({required this.id, this.lastMoveAt});
-  final GameFullId id;
-  final DateTime? lastMoveAt;
-}
+final class const _StandaloneTitleVariant({
+  required final GameFullId id,
+  final DateTime? lastMoveAt,
+}) extends _GameTitleVariant;
 
 /// Single title widget for all GameScreen AppBar configurations.
 ///
 /// When [monitorSocket] is true, shows "Reconnecting" if the socket is
 /// disconnected (ping rating == 0). [socketUri] scopes the ping check to a
 /// specific socket; null monitors the currently active route.
-class _GameTitle extends ConsumerWidget {
-  const _GameTitle(this.variant, {this.monitorSocket = false, this.socketUri});
-
-  final _GameTitleVariant variant;
-  final bool monitorSocket;
-  final Uri? socketUri;
-
+class const _GameTitle(
+  final _GameTitleVariant variant, {
+  final bool monitorSocket = false,
+  final Uri? socketUri,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (monitorSocket && ref.watch(socketPingProvider(socketUri)).rating == 0) {
@@ -393,7 +322,7 @@ class _GameTitle extends ConsumerWidget {
     return switch (variant) {
       _LobbyTitleVariant(:final seek) => _buildLobbyContent(context, seek),
       _ChallengeTitleVariant(:final challenge) => _buildChallengeContent(context, challenge),
-      _StandaloneTitleVariant(:final id, :final lastMoveAt) => _StandaloneGameTitle(
+      _StandaloneTitleVariant(:final id, :final lastMoveAt) => _ExportedGameTitle(
         id: id,
         lastMoveAt: lastMoveAt,
       ),
@@ -403,7 +332,7 @@ class _GameTitle extends ConsumerWidget {
   static Widget _buildLobbyContent(BuildContext context, GameSeek seek) {
     final mode = seek.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
         Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -415,7 +344,7 @@ class _GameTitle extends ConsumerWidget {
   static Widget _buildChallengeContent(BuildContext context, ChallengeRequest challenge) {
     final mode = challenge.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
-      mainAxisAlignment: .center,
+      mainAxisSize: .min,
       children: [
         Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
@@ -423,34 +352,6 @@ class _GameTitle extends ConsumerWidget {
           Text('${challenge.timeIncrement?.display}$mode')
         else if (challenge.days != null)
           Text('${context.l10n.nbDays(challenge.days!)}$mode'),
-      ],
-    );
-  }
-}
-
-class _TournamentGameTitle extends ConsumerWidget {
-  const _TournamentGameTitle(this.tournament);
-
-  final TournamentMeta tournament;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Flexible(child: AppBarTitleText(tournament.name)),
-        CountdownClockBuilder(
-          timeLeft: tournament.clock.timeLeft,
-          clockUpdatedAt: tournament.clock.at,
-          active: true,
-          tickInterval: const Duration(seconds: 1),
-          builder: (BuildContext context, Duration timeLeft) => Center(
-            child: Text(
-              '${timeLeft.toHoursMinutesSeconds()} ',
-              style: const TextStyle(fontFeatures: [FontFeature.tabularFigures()]),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -464,96 +365,70 @@ final _gameMetaProvider = FutureProvider.autoDispose.family<GameMeta, GameFullId
   return (await ref.read(gameControllerProvider(gameId).future)).game.meta;
 }, name: 'GameMetaProvider');
 
-class _StandaloneGameTitle extends ConsumerWidget {
-  const _StandaloneGameTitle({required this.id, this.lastMoveAt});
-
-  final GameFullId id;
-
-  final DateTime? lastMoveAt;
-
-  static final _gameTitledateFormat = DateFormat.yMMMd();
-
+class const _ExportedGameTitle({required final GameFullId id, final DateTime? lastMoveAt})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final metaAsync = ref.watch(_gameMetaProvider(id));
     return metaAsync.when(
-      data: (meta) {
-        if (meta.tournament?.isOngoing == true) {
-          return _TournamentGameTitle(meta.tournament!);
-        }
-
-        final mode = meta.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
-
-        final info = lastMoveAt != null ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}' : mode;
-
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(meta.perf.icon, color: DefaultTextStyle.of(context).style.color),
-            const SizedBox(width: 4.0),
-            if (meta.clock != null)
-              Flexible(
-                child: AppBarTitleText(
-                  '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
-                ),
-              )
-            else if (meta.daysPerTurn != null)
-              Flexible(child: AppBarTitleText('${context.l10n.nbDays(meta.daysPerTurn!)}$info'))
-            else
-              Flexible(child: AppBarTitleText('${meta.perf.label(context.l10n)}$info')),
-          ],
-        );
-      },
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: SizedBox(
-            height: 24.0,
-            width: 200.0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
-          ),
-        ),
-      ),
+      data: (meta) => ExportedGameTitle(meta: meta, lastMoveAt: lastMoveAt),
+      loading: () => const ExportedGameTitleLoading(),
       error: (error, _) => const SizedBox.shrink(),
     );
   }
 }
 
-class _WatcherButton extends ConsumerWidget {
-  const _WatcherButton({required this.gameId});
-  final GameFullId gameId;
-
+/// App bar menu holding the game actions: spectators, bookmark, share and export.
+class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (nb, isZenModeActive) = ref.watch(
-      gameControllerProvider(gameId).select((s) {
-        final state = s.value;
-        return (state?.nbWatchers ?? 0, state?.isZenModeActive ?? false);
-      }),
-    );
-    if (nb <= 0 || isZenModeActive) return const SizedBox.shrink();
-    return SemanticIconButton(
-      semanticsLabel: context.l10n.spectatorRoom,
-      onPressed: () {
-        final s = ref.read(gameControllerProvider(gameId)).value;
-        if (s == null) return;
-        showModalBottomSheet<void>(
-          context: context,
-          builder: (_) =>
-              WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
-        );
-      },
-      icon: Badge(
-        label: Text('$nb'),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-        textColor: Theme.of(context).colorScheme.onSurfaceVariant,
-        child: const Icon(Icons.person_outline),
-      ),
+    final gameState = ref.watch(gameControllerProvider(gameId)).value;
+    if (gameState == null) return const SizedBox.shrink();
+
+    return ContextMenuIconButton(
+      icon: const Icon(Icons.more_horiz),
+      semanticsLabel: context.l10n.menu,
+      actions: [
+        if (gameState.nbWatchers > 0)
+          ContextMenuAction(
+            icon: Icons.person_outline,
+            label: 'Spectators (${gameState.nbWatchers})',
+            onPressed: () {
+              final s = ref.read(gameControllerProvider(gameId)).value;
+              if (s == null) return;
+              showModalBottomSheet<void>(
+                context: context,
+                builder: (_) =>
+                    WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
+              );
+            },
+          ),
+        ContextMenuAction(
+          icon: gameState.game.bookmarked == true
+              ? Icons.bookmark_remove_outlined
+              : Icons.bookmark_add_outlined,
+          label: gameState.game.bookmarked == true
+              ? context.l10n.mobileRemoveBookmark
+              : context.l10n.bookmarkThisGame,
+          onPressed: () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
+        ),
+        ContextMenuAction(
+          icon: Theme.of(context).platform == TargetPlatform.iOS
+              ? Icons.ios_share_outlined
+              : Icons.share_outlined,
+          label: context.l10n.studyShareAndExport,
+          onPressed: () => showAdaptiveActionSheet<void>(
+            context: context,
+            actions: makeFinishedGameShareBottomSheetActions(
+              context,
+              ref,
+              gameId: gameId.gameId,
+              orientation: gameState.game.youAre ?? Side.white,
+              finished: gameState.game.finished,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

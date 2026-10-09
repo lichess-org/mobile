@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
@@ -13,7 +13,8 @@ final overTheBoardPreferencesProvider =
       name: 'OverTheBoardPreferencesProvider',
     );
 
-class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
+class OverTheBoardPreferencesNotifier()
+    extends Notifier<OverTheBoardPrefs>
     with PreferencesStorage<OverTheBoardPrefs> {
   @override
   @protected
@@ -24,7 +25,14 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   OverTheBoardPrefs get defaults => OverTheBoardPrefs.defaults;
 
   @override
-  OverTheBoardPrefs fromJson(Map<String, dynamic> json) => OverTheBoardPrefs.fromJson(json);
+  OverTheBoardPrefs fromJson(Map<String, dynamic> json) {
+    final migratedJson = Map<String, dynamic>.of(json);
+    if (migratedJson['timeControlType'] == 'realTime' ||
+        migratedJson['timeControlType'] == 'increment') {
+      migratedJson['timeControlType'] = 'clock';
+    }
+    return OverTheBoardPrefs.fromJson(migratedJson);
+  }
 
   @override
   OverTheBoardPrefs build() {
@@ -46,43 +54,33 @@ class OverTheBoardPreferencesNotifier extends Notifier<OverTheBoardPrefs>
   Future<void> setTimeIncrement(TimeIncrement timeIncrement) {
     return save(state.copyWith(timeIncrement: timeIncrement));
   }
-}
 
-enum TimeControlType {
-  realTime,
-  unlimited;
-
-  String label(AppLocalizations l10n) {
-    switch (this) {
-      case TimeControlType.realTime:
-        return l10n.realTime;
-      case TimeControlType.unlimited:
-        return l10n.unlimited;
-    }
+  Future<void> toggleBlindfoldMode() {
+    return save(state.copyWith(blindfoldMode: !state.blindfoldMode));
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
-  const OverTheBoardPrefs._();
-
+sealed class const OverTheBoardPrefs._() with _$OverTheBoardPrefs implements Serializable {
   static const _defaultTimeIncrement = TimeIncrement(300, 3);
 
-  const factory OverTheBoardPrefs({
+  const factory({
     required bool flipPiecesAfterMove,
     required bool symmetricPieces,
-    @Default(TimeControlType.realTime) TimeControlType timeControlType,
+    @Default(TimeControlType.unlimited) TimeControlType timeControlType,
     @Default(OverTheBoardPrefs._defaultTimeIncrement) TimeIncrement timeIncrement,
+    @Default(false) bool blindfoldMode,
   }) = _OverTheBoardPrefs;
 
   static const defaults = OverTheBoardPrefs(
     flipPiecesAfterMove: false,
     symmetricPieces: false,
-    timeControlType: TimeControlType.realTime,
+    timeControlType: TimeControlType.unlimited,
     timeIncrement: _defaultTimeIncrement,
+    blindfoldMode: false,
   );
 
-  factory OverTheBoardPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$OverTheBoardPrefsFromJson(json);
     } catch (e) {

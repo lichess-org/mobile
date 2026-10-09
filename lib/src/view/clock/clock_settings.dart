@@ -1,19 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
-import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
+import 'package:lichess_mobile/src/view/clock/clock_tool_settings_modal.dart';
+import 'package:material_ui/material_ui.dart';
 
 const _iconSize = 38.0;
 const _kIconPadding = EdgeInsets.all(10.0);
 
-class ClockSettings extends ConsumerWidget {
-  const ClockSettings({required this.orientation, super.key});
-
-  final Orientation orientation;
-
+class const ClockSettings({required final Orientation orientation, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockToolControllerProvider);
@@ -58,22 +55,28 @@ class ClockSettings extends ConsumerWidget {
               iconSize: _iconSize,
               onPressed: buttonsEnabled
                   ? () {
-                      final double screenHeight = MediaQuery.sizeOf(context).height;
+                      final double screenHeight = MediaQuery.heightOf(context);
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
                         constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
                         builder: (BuildContext context) {
-                          final options = ref.watch(
-                            clockToolControllerProvider.select((value) => value.options),
+                          final clockType = ref.watch(
+                            clockToolControllerProvider.select((value) => value.options.type),
                           );
-                          return TimeControlModal(
-                            excludeUltraBullet: true,
-                            timeIncrement: TimeIncrement(
-                              options.bottomTime.inSeconds,
-                              options.bottomIncrement.inSeconds,
-                            ),
-                            onSelected: (choice) {
+                          // Seed from the last global choice, not the current per-side
+                          // times, so editing a single clock does not change what this
+                          // modal shows.
+                          final timeIncrement = ref.watch(
+                            clockToolPreferencesProvider.select((prefs) => prefs.timeIncrement),
+                          );
+                          return ClockToolSettingsModal(
+                            clockType: clockType,
+                            timeIncrement: timeIncrement,
+                            onClockTypeSelected: (type) {
+                              ref.read(clockToolControllerProvider.notifier).updateClockType(type);
+                            },
+                            onTimeSelected: (choice) {
                               ref.read(clockToolControllerProvider.notifier).updateOptions(choice);
                             },
                           );
@@ -105,8 +108,7 @@ class ClockSettings extends ConsumerWidget {
             child: IconButton(
               padding: _kIconPadding,
               iconSize: _iconSize,
-              // TODO: translate
-              tooltip: 'Flip clock',
+              tooltip: context.l10n.mobileFlipClock,
               onPressed: buttonsEnabled
                   ? () => ref
                         .read(clockToolControllerProvider.notifier)
@@ -133,11 +135,7 @@ class ClockSettings extends ConsumerWidget {
   }
 }
 
-class _PlayResumeButton extends ConsumerWidget {
-  const _PlayResumeButton(this.iconSize);
-
-  final double iconSize;
-
+class const _PlayResumeButton(final double iconSize) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(clockToolControllerProvider.notifier);

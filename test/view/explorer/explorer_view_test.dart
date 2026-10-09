@@ -1,22 +1,20 @@
-import 'dart:convert';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_widgets.dart';
 import 'package:lichess_mobile/src/view/explorer/tablebase_view.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
@@ -41,34 +39,6 @@ void main() {
   });
 
   group('ExplorerView', () {
-    testWidgets('shows opening explorer for initial position', (WidgetTester tester) async {
-      const position = Chess.initial;
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Scaffold(
-          body: ExplorerView(
-            pov: Side.white,
-            position: position,
-            onMoveSelected: (move) {},
-            isComputerAnalysisAllowed: true,
-          ),
-        ),
-        authUser: authUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-      );
-      await tester.pumpWidget(app);
-
-      // wait for opening explorer data to load
-      await tester.pump(const Duration(milliseconds: 350));
-
-      expect(find.byType(OpeningExplorerView), findsOneWidget);
-      expect(find.byType(TablebaseView), findsNothing);
-    });
     testWidgets('shows opening explorer for position with >8 pieces', (WidgetTester tester) async {
       final position = Chess.fromSetup(
         Setup.parseFen('r4rk1/pb2qppp/2n1pn2/1pb5/8/PP1N1NP1/1Q2PPBP/R1B2RK1 b - - 2 15'),
@@ -129,54 +99,6 @@ void main() {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => mockClient);
           }),
-        },
-      );
-      await tester.pumpWidget(app);
-      await tester.pump(const Duration(milliseconds: 350));
-
-      expect(openingExplorerUrl?.path, '/lichess');
-      expect(openingExplorerUrl?.queryParameters['variant'], 'crazyhouse');
-    });
-
-    testWidgets('sends variant for crazyhouse lichess database', (WidgetTester tester) async {
-      Uri? openingExplorerUrl;
-      final mockClient = MockClient((request) {
-        if (request.url.host == kLichessOpeningExplorerHost) {
-          openingExplorerUrl = request.url;
-          if (request.url.path == '/lichess') {
-            return mockResponse(mastersOpeningExplorerResponse, 200);
-          }
-        }
-        return mockResponse('', 404);
-      });
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Scaffold(
-          body: ExplorerView(
-            pov: Side.white,
-            position: Crazyhouse.initial,
-            onMoveSelected: (move) {},
-            isComputerAnalysisAllowed: true,
-          ),
-        ),
-        authUser: authUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-        // Seed Lichess DB prefs to exercise the direct variant request path;
-        // the default Masters setting is covered by the fallback test above.
-        defaultPreferences: {
-          SessionPreferencesStorage.key(
-            PrefCategory.openingExplorer.storageKey,
-            authUser,
-          ): jsonEncode(
-            OpeningExplorerPrefs.defaults(
-              user: user,
-            ).copyWith(db: OpeningDatabase.lichess).toJson(),
-          ),
         },
       );
       await tester.pumpWidget(app);
@@ -304,7 +226,68 @@ void main() {
     });
   });
 
+  group('TablebaseView', () {
+    for (final pieceNotation in PieceNotation.values) {
+      testWidgets('uses ${pieceNotation.name} piece notation', (tester) async {
+        final position = Chess.fromSetup(Setup.parseFen('4k3/8/4q3/4PR2/5P2/6NK/8/8 w - - 3 131'));
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Scaffold(body: TablebaseView(position: position)),
+          authUser: authUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => mockClient);
+            }),
+            pieceNotationProvider: pieceNotationProvider.overrideWithValue(
+              AsyncValue.data(pieceNotation),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 350));
+
+        final moveText = tester.widget<Text>(find.text('Kh4'));
+        expect(
+          moveText.style?.fontFamily,
+          pieceNotation == PieceNotation.symbol ? 'ChessFont' : isNull,
+        );
+      });
+    }
+  });
+
   group('OpeningExplorerMoveTable', () {
+    for (final pieceNotation in PieceNotation.values) {
+      testWidgets('uses ${pieceNotation.name} piece notation', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Scaffold(
+            body: OpeningExplorerMoveTable(
+              moves: IList(const [
+                OpeningMove(uci: 'g1f3', san: 'Nf3', white: 50, draws: 10, black: 40),
+              ]),
+              whiteWins: 50,
+              draws: 10,
+              blackWins: 40,
+            ),
+          ),
+          overrides: {
+            pieceNotationProvider: pieceNotationProvider.overrideWithValue(
+              AsyncValue.data(pieceNotation),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump();
+
+        final moveText = tester.widget<Text>(find.text('Nf3'));
+        expect(
+          moveText.style?.fontFamily,
+          pieceNotation == PieceNotation.symbol ? 'ChessFont' : isNull,
+        );
+      });
+    }
+
     testWidgets('calls onMoveSelected with a DropMove when tapping a drop move row', (
       tester,
     ) async {

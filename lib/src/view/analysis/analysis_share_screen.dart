@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -11,15 +10,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final _dateFormatter = DateFormat('yyyy.MM.dd');
 
-class AnalysisShareScreen extends StatelessWidget {
-  const AnalysisShareScreen({required this.options});
-
-  final AnalysisOptions options;
-
+class const AnalysisShareScreen({required final AnalysisOptions options}) extends StatelessWidget {
   static Route<dynamic> buildRoute({required AnalysisOptions options}) {
     return buildScreenRoute(screen: AnalysisShareScreen(options: options));
   }
@@ -35,16 +31,12 @@ class AnalysisShareScreen extends StatelessWidget {
 
 const Set<String> _ratingHeaders = {'WhiteElo', 'BlackElo', 'WhiteRatingDiff', 'BlackRatingDiff'};
 
-class _EditPgnTagsForm extends ConsumerStatefulWidget {
-  const _EditPgnTagsForm(this.options);
-
-  final AnalysisOptions options;
-
+class const _EditPgnTagsForm(final AnalysisOptions options) extends ConsumerStatefulWidget {
   @override
   _EditPgnTagsFormState createState() => _EditPgnTagsFormState();
 }
 
-class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
+class _EditPgnTagsFormState() extends ConsumerState<_EditPgnTagsForm> {
   final Map<String, TextEditingController> _controllers = {};
   final Map<String, FocusNode> _focusNodes = {};
 
@@ -272,21 +264,13 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
   }
 }
 
-class _EditablePgnField extends StatelessWidget {
-  const _EditablePgnField({
-    required this.entry,
-    required this.controller,
-    required this.focusNode,
-    required this.onTap,
-    required this.onSubmitted,
-  });
-
-  final MapEntry<String, String> entry;
-  final TextEditingController controller;
-  final FocusNode focusNode;
-  final GestureTapCallback onTap;
-  final ValueChanged<String> onSubmitted;
-
+class const _EditablePgnField({
+  required final MapEntry<String, String> entry,
+  required final TextEditingController controller,
+  required final FocusNode focusNode,
+  required final GestureTapCallback onTap,
+  required final ValueChanged<String> onSubmitted,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

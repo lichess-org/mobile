@@ -1,18 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/log/http_log_paginator.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
-class HttpLogScreen extends ConsumerStatefulWidget {
-  const HttpLogScreen({super.key});
-
+class const HttpLogScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const HttpLogScreen());
   }
@@ -21,7 +20,7 @@ class HttpLogScreen extends ConsumerStatefulWidget {
   ConsumerState<HttpLogScreen> createState() => _HttpLogScreenState();
 }
 
-class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
+class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final TextEditingController _searchController = TextEditingController();
@@ -52,7 +51,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
 
   Future<void> _onRefresh() async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    return ref.read(httpLogPaginatorProvider(_searchQuery).notifier).refresh();
+    return await ref.read(httpLogPaginatorProvider(_searchQuery).notifier).refresh();
   }
 
   @override
@@ -64,8 +63,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              // TODO localize
-              tooltip: 'Clear all logs',
+              tooltip: context.l10n.mobileClearButton,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
@@ -84,7 +82,7 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: _searchController,
-              hintText: 'Search logs...',
+              hintText: context.l10n.searchSearch,
               onChanged: (value) => setState(() {
                 _searchQuery = value.isEmpty ? null : value;
               }),
@@ -106,24 +104,17 @@ class _HttpLogScreenState extends ConsumerState<HttpLogScreen> {
   }
 }
 
-class _HttpLogList extends ConsumerStatefulWidget {
-  const _HttpLogList({
-    required this.logs,
-    required this.onRefresh,
-    required this.scrollController,
-    required this.refreshIndicatorKey,
-  });
-
-  final List<HttpLogEntry> logs;
-  final ScrollController scrollController;
-  final GlobalKey<RefreshIndicatorState> refreshIndicatorKey;
-  final RefreshCallback onRefresh;
-
+class const _HttpLogList({
+  required final List<HttpLogEntry> logs,
+  required final RefreshCallback onRefresh,
+  required final ScrollController scrollController,
+  required final GlobalKey<RefreshIndicatorState> refreshIndicatorKey,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_HttpLogList> createState() => _HttpLogListState();
 }
 
-class _HttpLogListState extends ConsumerState<_HttpLogList> {
+class _HttpLogListState() extends ConsumerState<_HttpLogList> {
   @override
   Widget build(BuildContext context) {
     if (widget.logs.isEmpty) {
@@ -131,7 +122,7 @@ class _HttpLogListState extends ConsumerState<_HttpLogList> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('No logs to show'),
+            Text(context.l10n.nothingToSeeHere),
             TextButton(onPressed: widget.onRefresh, child: const Text('Tap to refresh')),
           ],
         ),
@@ -165,11 +156,7 @@ String _formatElapsed(Duration elapsed) {
   return '${(elapsed.inMilliseconds / 1000).toStringAsFixed(1)}s';
 }
 
-class HttpLogTile extends StatelessWidget {
-  const HttpLogTile({super.key, required this.httpLog});
-
-  final HttpLogEntry httpLog;
-
+class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extends StatelessWidget {
   String get endpoint => httpLog.requestUrl.host == kLichessHost
       ? Uri(path: httpLog.requestUrl.path, query: httpLog.requestUrl.query).toString()
       : httpLog.requestUrl.toString();

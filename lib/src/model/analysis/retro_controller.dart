@@ -9,23 +9,23 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/server_analysis_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:logging/logging.dart';
 
 part 'retro_controller.freezed.dart';
@@ -35,10 +35,8 @@ typedef RetroOptions = ({GameId id, Side initialSide});
 final Logger _logger = Logger('RetroController');
 
 @freezed
-sealed class Mistake with _$Mistake {
-  const Mistake._();
-
-  const factory Mistake({
+sealed class const Mistake._() with _$Mistake {
+  const factory({
     required ViewBranch branch,
     @Default(IList<UCIMove>.empty()) IList<UCIMove> openingExplorerSolutions,
   }) = _Mistake;
@@ -81,17 +79,16 @@ final retroControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'RetroControllerProvider',
     );
 
-class RetroController extends AsyncNotifier<RetroState>
+class RetroController(final RetroOptions options)
+    extends AsyncNotifier<RetroState>
     with EngineEvaluationMixin, ServerAnalysisMixin {
-  RetroController(this.options);
-
-  final RetroOptions options;
-
   late Root _root;
 
   late ExportedGame _game;
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
+
+  Timer? _serverAnalysisTimeout;
 
   Timer? _incorrectMoveTimer;
 
@@ -107,6 +104,7 @@ class RetroController extends AsyncNotifier<RetroState>
   Future<RetroState> build() async {
     ref.onDispose(() {
       _incorrectMoveTimer?.cancel();
+      _serverAnalysisTimeout?.cancel();
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -141,26 +139,22 @@ class RetroController extends AsyncNotifier<RetroState>
       state = AsyncValue.data(retroState);
 
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
-        requestServerAnalysis().catchError((Object e, StackTrace s) {
-          _logger.warning('Failed to request server analysis', e, s);
-          state = AsyncError(e, s);
+        requestServerAnalysis().catchError((Object e, StackTrace st) {
+          _logger.warning('Failed to request server analysis', e, st);
+          _serverAnalysisTimeout?.cancel();
+          state = AsyncError(e, st);
         });
       }
 
-      unawaited(
-        _serverAnalysisCompleter.future.timeout(
-          kMaxWaitForServerAnalysis,
-          onTimeout: () {
-            _logger.warning(
-              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-            );
-            state = AsyncError(
-              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-              StackTrace.current,
-            );
-          },
-        ),
-      );
+      _serverAnalysisTimeout = Timer(kMaxWaitForServerAnalysis, () {
+        _logger.warning(
+          'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+        );
+        state = AsyncError(
+          Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+          StackTrace.current,
+        );
+      });
 
       return state.requireValue;
     }
@@ -168,6 +162,7 @@ class RetroController extends AsyncNotifier<RetroState>
     state = AsyncData(await _computeMistakes(options.initialSide));
 
     socketClient.firstConnection.then((_) {
+      if (!ref.mounted) return;
       requestEval();
     });
 
@@ -204,7 +199,7 @@ class RetroController extends AsyncNotifier<RetroState>
           try {
             final entry = await ref
                 .read(openingExplorerRepositoryProvider)
-                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
+                .getMasterDatabase(branch.position.fen, since: MasterDb.earliestDate);
 
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
@@ -256,6 +251,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void onUserMove(Move move) {
+    if (!state.hasValue) return;
+
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
     final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
@@ -265,6 +262,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void userNext() {
+    if (!state.hasValue) return;
+
     _setPath(
       state.requireValue.currentPath +
           _root.nodeAt(state.requireValue.currentPath).children.first.id,
@@ -273,10 +272,14 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void userPrevious() {
+    if (!state.hasValue) return;
+
     _setPath(state.requireValue.currentPath.penultimate, isNavigating: true);
   }
 
   void viewSolution() {
+    if (!state.hasValue) return;
+
     final currentMistake = state.value?.currentMistake;
     if (currentMistake != null) {
       onUserMove(currentMistake.serverMove);
@@ -285,14 +288,20 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   Future<void> flipSide() async {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(await _computeMistakes(state.requireValue.pov.opposite));
   }
 
   void restart() {
+    if (!state.hasValue) return;
+
     _showMistake(0);
   }
 
   void nextMistake() {
+    if (!state.hasValue) return;
+
     _showMistake(state.requireValue.currentMistakeIndex + 1);
   }
 
@@ -378,6 +387,8 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 
   void _onIncorrectMove() {
+    if (!state.hasValue) return;
+
     state = AsyncValue.data(state.requireValue.copyWith(feedback: RetroFeedback.incorrect));
     userPrevious();
   }
@@ -388,6 +399,8 @@ class RetroController extends AsyncNotifier<RetroState>
 
   @override
   void onCurrentPathEvalChanged(bool isSameEvalString) {
+    if (!state.hasValue) return;
+
     _refreshCurrentNode(recomputeRootView: !isSameEvalString);
 
     if (state.requireValue.feedback == RetroFeedback.evalMove) {
@@ -458,6 +471,7 @@ class RetroController extends AsyncNotifier<RetroState>
     state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
     if (event.isAnalysisComplete) {
+      _serverAnalysisTimeout?.cancel();
       if (_serverAnalysisCompleter.isCompleted == false) {
         _serverAnalysisCompleter.complete();
       }
@@ -467,23 +481,28 @@ class RetroController extends AsyncNotifier<RetroState>
   }
 }
 
-enum RetroFeedback { findMove, evalMove, correct, incorrect, viewingSolution, done }
+enum RetroFeedback() {
+  findMove,
+  evalMove,
+  correct,
+  incorrect,
+  viewingSolution,
+  done,
+}
 
 @freezed
-sealed class RetroState
+sealed class const RetroState._()
     with
         _$RetroState,
         AnalysisExplosionMixin,
         EvaluationMixinState<RetroState>,
         ServerAnalysisMixinState
     implements CommonAnalysisState {
-  const RetroState._();
-
   @override
   RetroState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory RetroState({
+  const factory({
     required GameId gameId,
     required bool serverAnalysisAvailable,
 
@@ -541,7 +560,7 @@ sealed class RetroState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
-    filters: (id: evaluationContext.id, path: currentPath),
+    filters: (context: evaluationContext, path: currentPath),
   );
 
   bool get canGoNext => !isSolving && currentNode.hasChild;
@@ -549,10 +568,10 @@ sealed class RetroState
 }
 
 @freezed
-sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrentNodeInterface {
-  const RetroCurrentNode._();
-
-  const factory RetroCurrentNode({
+sealed class const RetroCurrentNode._()
+    with _$RetroCurrentNode
+    implements AnalysisCurrentNodeInterface {
+  const factory({
     required Position position,
     required bool isRoot,
     required bool hasChild,
@@ -562,7 +581,7 @@ sealed class RetroCurrentNode with _$RetroCurrentNode implements AnalysisCurrent
     IList<int>? nags,
   }) = _RetroCurrentNode;
 
-  factory RetroCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     if (node is Branch) {
       return RetroCurrentNode(
         sanMove: node.sanMove,

@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -16,6 +15,7 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -27,10 +27,12 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _dateFormatter = DateFormat.yMMMd();
 
@@ -39,12 +41,8 @@ const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
 const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
-class PerfStatsScreen extends StatelessWidget {
-  const PerfStatsScreen({required this.user, required this.perf, super.key});
-
-  final User user;
-  final Perf perf;
-
+class const PerfStatsScreen({required final User user, required final Perf perf, super.key})
+    extends StatelessWidget {
   static Route<dynamic> buildRoute({required User user, required Perf perf}) {
     return buildScreenRoute(
       screen: PerfStatsScreen(user: user, perf: perf),
@@ -62,12 +60,7 @@ class PerfStatsScreen extends StatelessWidget {
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title({required this.user, required this.perf});
-
-  final Perf perf;
-  final User user;
-
+class const _Title({required final User user, required final Perf perf}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allPerfs = Perf.values
@@ -89,9 +82,10 @@ class _Title extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(perf.icon),
-            Text(
-              ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
-              overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: AppBarTitleText(
+                ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
+              ),
             ),
             const Icon(Icons.arrow_drop_down),
           ],
@@ -115,9 +109,8 @@ class _Title extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                    ).pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
+                    Navigator.of(context)
+                        .pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
                   },
                 );
               })
@@ -128,12 +121,7 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.user, required this.perf});
-
-  final User user;
-  final Perf perf;
-
+class const _Body({required final User user, required final Perf perf}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ratingHistory = ref.watch(userRatingHistoryProvider(user.id));
@@ -259,9 +247,8 @@ class _Body extends ConsumerWidget {
                             context.l10n.rank,
                             value: data.rank == null
                                 ? '?'
-                                : NumberFormat.decimalPattern(
-                                    Intl.getCurrentLocale(),
-                                  ).format(data.rank),
+                                : NumberFormat.decimalPattern(Intl.getCurrentLocale())
+                                      .format(data.rank),
                           ),
                         StatCard(
                           context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
@@ -452,12 +439,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _StatGroup extends StatelessWidget {
-  const _StatGroup({required this.title, required this.children});
-
-  final String title;
-  final List<Widget> children;
-
+class const _StatGroup({required final String title, required final List<Widget> children})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -474,11 +457,7 @@ class _StatGroup extends StatelessWidget {
   }
 }
 
-class _UserGameWidget extends StatelessWidget {
-  final UserPerfGame? game;
-
-  const _UserGameWidget(this.game);
-
+class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Implement functionality to view game on tap.
@@ -492,13 +471,8 @@ class _UserGameWidget extends StatelessWidget {
   }
 }
 
-class _RatingWidget extends StatelessWidget {
-  final int? rating;
-  final UserPerfGame? game;
-  final Color color;
-
-  const _RatingWidget(this.rating, this.game, this.color);
-
+class const _RatingWidget(final int? rating, final UserPerfGame? game, final Color color)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return (rating == null)
@@ -516,16 +490,15 @@ class _RatingWidget extends StatelessWidget {
   }
 }
 
-class _PercentageValueWidget extends StatelessWidget {
-  final int value;
-  final int denominator;
-  final Color? color;
-  final bool isShaded;
-
-  const _PercentageValueWidget(this.value, this.denominator, {this.color, this.isShaded = false});
-
+class const _PercentageValueWidget(
+  final int value,
+  final int denominator, {
+  final Color? color,
+  final bool isShaded = false,
+}) extends StatelessWidget {
   String _getPercentageString(num numerator, num denominator) {
-    return '${((numerator / denominator) * 100).round()}%';
+    final fraction = denominator == 0 ? 0 : numerator / denominator;
+    return NumberFormat.percentPattern().format(fraction);
   }
 
   @override
@@ -555,13 +528,11 @@ class _PercentageValueWidget extends StatelessWidget {
   }
 }
 
-class _StreakWidget extends StatelessWidget {
-  final UserStreak? maxStreak;
-  final UserStreak? curStreak;
-  final Color? color;
-
-  const _StreakWidget(this.maxStreak, this.curStreak, {this.color});
-
+class const _StreakWidget(
+  final UserStreak? maxStreak,
+  final UserStreak? curStreak, {
+  final Color? color,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final valueStyle = TextStyle(fontSize: _defaultValueFontSize, color: color);
@@ -642,19 +613,12 @@ class _StreakWidget extends StatelessWidget {
   }
 }
 
-class _GameListWidget extends ConsumerWidget {
-  const _GameListWidget({
-    required this.games,
-    required this.perf,
-    required this.user,
-    required this.header,
-  });
-
-  final IList<UserPerfGame> games;
-  final Perf perf;
-  final User user;
-  final Widget header;
-
+class const _GameListWidget({
+  required final IList<UserPerfGame> games,
+  required final Perf perf,
+  required final User user,
+  required final Widget header,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
@@ -690,13 +654,11 @@ class _GameListWidget extends ConsumerWidget {
   }
 }
 
-class _GameListTile extends StatelessWidget {
-  const _GameListTile({required this.playerTitle, this.subtitle, this.onTap});
-
-  final Widget playerTitle;
-  final Widget? subtitle;
-  final GestureTapCallback? onTap;
-
+class const _GameListTile({
+  required final Widget playerTitle,
+  final Widget? subtitle,
+  final GestureTapCallback? onTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -712,16 +674,12 @@ class _GameListTile extends StatelessWidget {
   }
 }
 
-class _EloChart extends StatefulWidget {
-  final UserRatingHistoryPerf value;
-
-  const _EloChart(this.value);
-
+class const _EloChart(final UserRatingHistoryPerf value) extends StatefulWidget {
   @override
   State<_EloChart> createState() => _EloChartState();
 }
 
-class _EloChartState extends State<_EloChart> {
+class _EloChartState() extends State<_EloChart> {
   late DateRange _selectedRange;
 
   late List<FlSpot> _allFlSpot;
@@ -845,7 +803,7 @@ class _EloChartState extends State<_EloChart> {
                 .where((dateRange) => _dateIsInRange(dateRange))
                 .map(
                   (dateRange) => _RangeButton(
-                    text: dateRange.toString(),
+                    text: dateRange.label(context.l10n),
                     onPressed: () {
                       setState(() {
                         _selectedRange = dateRange;
@@ -952,13 +910,11 @@ class _EloChartState extends State<_EloChart> {
   }
 }
 
-class _RangeButton extends StatelessWidget {
-  const _RangeButton({required this.text, required this.onPressed, this.selected = false});
-
-  final String text;
-  final VoidCallback onPressed;
-  final bool selected;
-
+class const _RangeButton({
+  required final String text,
+  required final VoidCallback onPressed,
+  final bool selected = false,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chartColor = Styles.chartColor(context);
@@ -980,15 +936,14 @@ class _RangeButton extends StatelessWidget {
   }
 }
 
-enum DateRange {
+enum DateRange() {
   oneWeek,
   oneMonth,
   threeMonths,
   oneYear,
   allTime;
 
-  @override
-  String toString() => switch (this) {
+  String label(AppLocalizations _) => switch (this) {
     DateRange.oneWeek => '1W',
     DateRange.oneMonth => '1M',
     DateRange.threeMonths => '3M',

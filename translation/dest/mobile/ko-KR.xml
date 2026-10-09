@@ -1,93 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="account" comment="Title for the account screen.&#10;&#10;This is just a title for the account, NOT account preferences.">계정</string>
-  <string name="accountPreferences" comment="Displayed on settings screen.&#10;&#10;These preferences are applied to your Lichess account and will be used across all devices. They are not mobile-specific and will be synced with the server.">계정 환경 설정</string>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">무승부를 수락하시겠습니까?</string>
+  <string name="account" comment="The account screen title.">계정</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">계정 환경 설정</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">이 환경설정은 Lichess 계정에 저장되며, 모든 기기에서 공유됩니다.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">연구에 추가하기</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">모든 대국</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">수 무르기와 힌트 허용</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">AMOLED 블랙</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">정말로 NNUE 파일(%s)을 다운로드하시겠습니까?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">가로 화면에서의 보드 위치</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">체스판 설정</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">브론스타인 지연 방식</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">지우기</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">사용자 지정 포지션에서 도전</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">챕터 이름</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">체스 엔진</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">사용자 지정 배경 고르기</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">지우기</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">코드는 5분 뒤 만료되고 한 번만 사용할 수 있습니다.</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">코드</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">코드의 길이는 %s자입니다.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">복사 완료.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">저장된 수 삭제</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">게임 참가</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">맞춤설정</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">팁: 홈 스크린에 위젯을 추가하거나 필요없는 위젯을 삭제할 수 있습니다!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">무시</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">위험 구역</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">계정 삭제</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">간단</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">상세</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">도전을 수락하시겠습니까?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">나의 대국 다운로드</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">피드백</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 밤이에요, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 밤이에요</string>
-  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 날이에요, %s</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">필터</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">시계 뒤집기</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">수를 둔 뒤 기물과 상대 정보 뒤집기</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">수에 피드백 받기</string>
+  <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 날이에요, %s님</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 날이에요</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">라인 숨기기</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 밤이에요, %s님</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">좋은 밤이에요</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">좋은 수지만, 더 좋은 수가 있습니다</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">안녕하세요</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">홈</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">만약 %1$s 주소와 일치하는 계정이 있다면, 이메일로 길이 %2$s의 문자열 코드가 보내졌습니다. 수신함을 확인하고 아래에 코드를 입력하세요.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">유효하지 않거나 만료된 코드입니다.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">로컬 데이터베이스 크기</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">손가락을 뗄 때 수 두기</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">수를 탭해서 둘 때, 손가락을 움직여서 도착 지점을 바꿀 수 있도록 손가락을 뗄 때 수를 둡니다.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">이 페이지를 보려면 로그인해야 합니다.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">오프라인 퍼즐</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">새 게임</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">다음 실수</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">결과 없음</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">아직 기존 앱과 웹사이트의 모든 기능이 지원되는 것은 아니지만, 지속적으로 기능을 추가하고 있습니다.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">팔로우한 사용자가 없습니다.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">확인</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">확인</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">또는 PGN 파일 가져오기</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">로컬 게임</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">클립보드에서 붙여넣기</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">안티체스</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">아토믹</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">블리츠</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">불릿</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">클래시컬</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">통신</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">크레이지</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">커스텀</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">호드</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">언덕의왕</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">퍼즐</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">킹 경주</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">래피드</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3체크</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">울트라</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN 복사 완료.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">닉네임에 \"%s\"가 포함된 플레이어</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">왼쪽</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">오른쪽</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">연습 모드</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">드래그 중 기물 확대</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">이전</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3분 이내에 최대한 많은 퍼즐을 해결하세요.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">현재 연속 해결 기록을 잃고 점수는 저장될 것입니다.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하세요.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">퍼즐</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">이 앱 평가하기</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">최근 검색어</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">북마크 제거</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">북마크 제거</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">연구 선택</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">코드 보내기</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">서버 분석</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">시계 위치</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">프리셋</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">드래그 중 착지점 강조</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">원</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">칸</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">그려진 도형의 색상</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">해당 색상은 두 손가락을 사용하여 그리는 도형들에 적용됩니다.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">홈 위젯</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">전체 화면 모드</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">플레이 중 시스템 UI를 숨깁니다. 화면 모서리의 네비게이션 제스쳐가 방해되는 경우 사용하세요. 게임과 퍼즐 플레이에 모두 적용됩니다.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">잡힌 기물</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">사진 선택</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 사진을 사용하는 것을 추천합니다.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">사진 선택</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">사진을 흐리게</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">사용자 지정 배경은 다크 모드 사용 시에만 적용되므로 어두운 사진을 사용하는 것을 추천합니다.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">보드 숨기기</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">보드 보이기</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">스와이프로 배경 바꾸기</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">탭 또는 드래그</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">현재 위치와 원하는 위치에 탭하기</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">설정이 귀하의 Lichess 계정에 저장되었습니다. 설정은 귀하의 모든 디바이스에서 동기화됩니다.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">모양 그리기</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">두 손가락을 사용해 모양을 그릴 수 있습니다. 한 손가락을 빈 칸에 누른채로, 다른 손가락으로 원하는 칸을 탭하거나 드래그해서 모양을 그리세요.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">보드 테두리 보이기</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">터치 피드백</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">기물을 움직이거나 잡았을 때 기기가 짧게 진동합니다.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">설정</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">도전 URL 공유</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN 공유</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">로컬 분석 PGN 공유</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN으로 공유</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">이 퍼즐을 공유하기</string>
   <string name="showComments" comment="Shown in the analysis screen.">댓글 보기</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">엔진 라인 보이기</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">엔진 평가치 표시</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">결과 표시</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">라인 보이기</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">브라우저로 로그인</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">이메일로 로그인</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">단순 지연 방식</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">작은 보드</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">문제가 발생했습니다.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">친구 정렬</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">위험요소 표시하지 않기</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">시스템 색상</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">테이블베이스는 오프라인에서 사용할 수 없습니다.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">테마</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">도구</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">시도 횟수가 너무 많습니다. 나중에 다시 시도해 주세요.</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">종료됨</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">내 페이지로 이동</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">%s 변형 게임은 이 버전에서 지원되지 않습니다.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">대칭 디자인의 기물 사용</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">경기 보기</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">라이선스 보기</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">중계</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Lichess 앱에 오신 것을 환영합니다!</string>
-  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">경기 보기</string>
-  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">팁: 홈 스크린에 위젯을 추가하거나 필요없는 위젯을 삭제할 수 있습니다!</string>
-  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">무시</string>
-  <string name="customizeButton" comment="Text of a button, so translation should be short.">맞춤설정</string>
-  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">위험요소 표시하지 않기</string>
-  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word">종료됨</string>
-  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">내 페이지로 이동</string>
-  <string name="displayModeCompact" comment="">간단</string>
-  <string name="displayModeDetailed" comment="">상세</string>
-  <string name="openingExplorerNotAvailableOffline" comment="">오프닝 탐색기는 오프라인 상태에서 이용할 수 없습니다.</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.</string>
-  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">이전</string>
-  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">또는 PGN 파일 가져오기</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">로그인할 수 있는 코드를 이메일로 보내드리겠습니다.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">본인에게는 도전할 수 없습니다</string>
 </resources>

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,6 +18,47 @@ import 'fake_http_client_factory.dart';
 void main() {
   setUp(() {
     FakeClient.reset();
+  });
+
+  group('shouldRetryOn429', () {
+    http.Response response(int status, {String method = 'GET', String path = '/api/test'}) {
+      return http.Response(
+        '',
+        status,
+        request: http.Request(method, Uri.parse('https://lichess.org$path')),
+      );
+    }
+
+    test('retries a generic 429', () {
+      expect(shouldRetryOn429(response(429)), isTrue);
+      expect(shouldRetryOn429(response(429, method: 'POST')), isTrue);
+    });
+
+    test('does not retry non-429 responses', () {
+      expect(shouldRetryOn429(response(200)), isFalse);
+      expect(shouldRetryOn429(response(503)), isFalse);
+    });
+
+    test('does not retry a puzzle solve submission (POST /api/puzzle/batch)', () {
+      // solveBatch handles 429 with a back-off, so the retry only wastes a call
+      expect(
+        shouldRetryOn429(response(429, method: 'POST', path: '/api/puzzle/batch/mix')),
+        isFalse,
+      );
+    });
+
+    test('does not retry a puzzle batch download (GET /api/puzzle/batch)', () {
+      // Batch downloads are issued once per angle, so retrying doubles a burst the server has just
+      // refused.
+      expect(
+        shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/mix')),
+        isFalse,
+      );
+      expect(
+        shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/advancedPawn')),
+        isFalse,
+      );
+    });
   });
 
   group('LichessClient', () {
@@ -383,9 +425,98 @@ void main() {
       });
     });
   });
+
+  group('kQuietRequestHeader', () {
+    test('is stripped before the request is sent', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(defaultClientProvider);
+      await client.head(
+        Uri.https('www.gstatic.com', '/generate_204'),
+        headers: const {kQuietRequestHeader: '1'},
+      );
+      final requests = FakeClient.verifyRequests();
+      expect(requests.first.headers.containsKey(kQuietRequestHeader), isFalse);
+    });
+  });
+
+  group('downloadFile', () {
+    Future<File> targetFile() async {
+      final tempDir = await Directory.systemTemp.createTemp('download_test_');
+      addTearDown(() => tempDir.delete(recursive: true));
+      return File('${tempDir.path}/file.bin');
+    }
+
+    test('saves the file when the whole body arrives', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('hello', 200));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isTrue);
+      expect(await file.readAsString(), 'hello');
+    });
+
+    test('deletes the partial file when the body is truncated', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([utf8.encode('hel')]),
+          200,
+          contentLength: 5,
+        );
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('deletes the partial file when the stream fails', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        final controller = StreamController<List<int>>();
+        controller.add(utf8.encode('hel'));
+        controller.addError(const SocketException('connection reset'));
+        unawaited(controller.close());
+        return http.StreamedResponse(controller.stream, 200);
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('writes nothing when the server answers with an error', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('nope', 404));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('returns false when the request throws', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => throw const SocketException('no route'));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+  });
 }
 
-class FakeClient extends http.BaseClient {
+class FakeClient() extends http.BaseClient {
   static List<http.BaseRequest> _requests = [];
 
   static List<http.BaseRequest> verifyRequests() {

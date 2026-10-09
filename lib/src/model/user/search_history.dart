@@ -15,7 +15,7 @@ final searchHistoryProvider = NotifierProvider<SearchHistory, SearchHistoryState
   name: 'SearchHistoryProvider',
 );
 
-class SearchHistory extends Notifier<SearchHistoryState> {
+class SearchHistory() extends Notifier<SearchHistoryState> {
   static const maxHistory = 10;
 
   String _storageKey(AuthUser? authUser) => 'search.history.${authUser?.user.id ?? '**anon**'}';
@@ -44,6 +44,7 @@ class SearchHistory extends Notifier<SearchHistoryState> {
     final newState = SearchHistoryState(history: currentList.toIList());
     final authUser = ref.read(authControllerProvider);
     await _prefs.setString(_storageKey(authUser), jsonEncode(newState.toJson()));
+    if (!ref.mounted) return;
     state = newState;
   }
 
@@ -51,14 +52,14 @@ class SearchHistory extends Notifier<SearchHistoryState> {
     final newState = state.copyWith(history: IList());
     final prefKey = _storageKey(ref.read(authControllerProvider));
     await _prefs.setString(prefKey, jsonEncode(newState.toJson()));
+    if (!ref.mounted) return;
     state = newState;
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class SearchHistoryState with _$SearchHistoryState {
-  const factory SearchHistoryState({required IList<String> history}) = _SearchHistoryState;
+  const factory({required IList<String> history}) = _SearchHistoryState;
 
-  factory SearchHistoryState.fromJson(Map<String, dynamic> json) =>
-      _$SearchHistoryStateFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SearchHistoryStateFromJson(json);
 }

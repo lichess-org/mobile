@@ -19,13 +19,11 @@ final gameRepositoryProvider = Provider<GameRepository>((ref) {
   return GameRepository(client, aggregator, gameStorage);
 }, name: 'GameRepositoryProvider');
 
-class GameRepository {
-  const GameRepository(this.client, this.aggregator, this.storage);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-  final Future<GameStorage> storage;
-
+class const GameRepository(
+  final LichessClient client,
+  final Aggregator aggregator,
+  final Future<GameStorage> storage,
+) {
   /// Fetches a game from lichess API, or from local storage if there is no connectivity.
   Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) async {
     try {

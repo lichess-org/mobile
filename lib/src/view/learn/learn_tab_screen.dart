@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -9,14 +8,21 @@ import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _hotStudiesProvider = FutureProvider.autoDispose<IList<StudyPageItem>>((Ref ref) {
   return ref.withClientCacheFor(
@@ -51,9 +57,7 @@ final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref re
   );
 });
 
-class LearnTabScreen extends ConsumerWidget {
-  const LearnTabScreen({super.key});
-
+class const LearnTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -78,12 +82,24 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
+class const _Body() extends ConsumerWidget {
+  Future<void> _refreshData(WidgetRef ref) async {
+    try {
+      await Future.wait([
+        ref.refresh(_hotStudiesProvider.future),
+        ref.refresh(_myStudiesLengthProvider.future),
+        ref.refresh(_myFavoriteStudiesLengthProvider.future),
+      ]);
+    } catch (_) {
+      // Refreshing while the server is unavailable is expected to fail. The
+      // failed responses are what keep the server status up to date, so there
+      // is nothing to do here.
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final connectionStatus = ref.watch(lichessConnectionStatusProvider);
     final authUser = ref.watch(authControllerProvider);
     final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
@@ -91,77 +107,116 @@ class _Body extends ConsumerWidget {
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
-      child: ListView(
-        controller: learnScrollController,
-        children: [
-          ListSection(
-            hasLeading: true,
-            children: [
-              ListTile(
-                leading: const Icon(Symbols.where_to_vote),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(CoordinateTrainingScreen.buildRoute()),
-              ),
-            ],
-          ),
-          if (isOnline) ...[
+      child: HapticRefreshIndicator(
+        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+            ? MediaQuery.paddingOf(context).top + kToolbarHeight
+            : 0.0,
+        onRefresh: () => _refreshData(ref),
+        child: ListView(
+          controller: learnScrollController,
+          // Keep the list scrollable even when it is short, so that pulling to
+          // refresh still works while the studies are hidden by an outage.
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: [
             ListSection(
-              header: Text(context.l10n.studyMenu),
-              onHeaderTap: () =>
-                  Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
               hasLeading: true,
               children: [
-                ...(switch (ref.watch(_hotStudiesProvider)) {
-                  AsyncData(:final value) =>
-                    value
-                        .take(5)
-                        .map((study) => StudyListItem(study: study, titleMaxLines: 1))
-                        .toList(growable: false),
-                  _ => [],
-                }),
+                ListTile(
+                  leading: const Icon(Symbols.chess_pawn),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.chessBasics, style: Styles.callout),
+                  onTap: () =>
+                      Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.exercise),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.practice, style: Styles.callout),
+                  onTap: () =>
+                      Navigator.of(context, rootNavigator: true).push(PracticeScreen.buildRoute()),
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.where_to_vote),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
+                  onTap: () => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(CoordinateTrainingScreen.buildRoute()),
+                ),
               ],
             ),
-            if (haveIStudies || haveIFavoriteStudies)
+            // Learn, practice and coordinate training work offline, so only the studies are
+            // replaced by the outage message.
+            if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
+            if (connectionStatus == LichessConnectionStatus.online) ...[
               ListSection(
+                header: Text(context.l10n.studyMenu),
+                onHeaderTap: () =>
+                    Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
                 hasLeading: true,
-                margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
                 children: [
-                  if (haveIStudies)
-                    ListTile(
-                      leading: const Icon(Symbols.local_library),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.studyMyStudies),
-                      onTap: isOnline
-                          ? () => Navigator.of(
-                              context,
-                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.mine))
-                          : null,
-                    ),
-                  if (haveIFavoriteStudies)
-                    ListTile(
-                      leading: const Icon(Symbols.favorite),
-                      trailing: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const CupertinoListTileChevron()
-                          : null,
-                      title: Text(context.l10n.studyMyFavoriteStudies),
-                      onTap: isOnline
-                          ? () => Navigator.of(
-                              context,
-                            ).push(StudyListScreen.buildRoute(initialCategory: StudyCategory.likes))
-                          : null,
-                    ),
+                  ...(switch (ref.watch(_hotStudiesProvider)) {
+                    AsyncData(:final value) =>
+                      value
+                          .take(5)
+                          .map(
+                            (study) => StudyListItem(
+                              study: study,
+                              titleMaxLines: 1,
+                              onTap: (context, study) => Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+                            ),
+                          )
+                          .toList(growable: false),
+                    _ => [],
+                  }),
                 ],
               ),
+              if (haveIStudies || haveIFavoriteStudies)
+                ListSection(
+                  hasLeading: true,
+                  margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                  children: [
+                    if (haveIStudies)
+                      ListTile(
+                        leading: const Icon(Symbols.local_library),
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        title: Text(context.l10n.studyMyStudies),
+                        onTap: connectionStatus == LichessConnectionStatus.online
+                            ? () => Navigator.of(context).push(
+                                StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
+                              )
+                            : null,
+                      ),
+                    if (haveIFavoriteStudies)
+                      ListTile(
+                        leading: const Icon(Symbols.favorite),
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        title: Text(context.l10n.studyMyFavoriteStudies),
+                        onTap: connectionStatus == LichessConnectionStatus.online
+                            ? () => Navigator.of(context).push(
+                                StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
+                              )
+                            : null,
+                      ),
+                  ],
+                ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -9,17 +9,15 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays the performance cards of a user.
-class PerfCards extends StatelessWidget {
-  const PerfCards({required this.user, required this.isMe, this.padding, super.key});
-
-  final User user;
-
-  final bool isMe;
-
-  final EdgeInsetsGeometry? padding;
-
+class const PerfCards({
+  required final User user,
+  required final bool isMe,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
@@ -61,15 +59,24 @@ class PerfCards extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final resolvedPadding = (padding ?? Styles.bodySectionPadding).resolve(
+      Directionality.of(context),
+    );
+
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
       child: RatingPrefAware(
         child: Padding(
-          padding: padding ?? Styles.bodySectionPadding,
+          padding: EdgeInsets.only(top: resolvedPadding.top, bottom: resolvedPadding.bottom),
           child: SizedBox(
             height: 106,
             child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 3.0),
+              padding: EdgeInsets.only(
+                left: resolvedPadding.left,
+                right: resolvedPadding.right,
+                top: 3.0,
+                bottom: 3.0,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
               itemBuilder: (context, index) {

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Shows a platform adaptive choice picker dialog
 ///
@@ -17,7 +17,7 @@ Future<void> showChoicePicker<T>(
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
-      final deviceHeight = MediaQuery.sizeOf(context).height;
+      final deviceHeight = MediaQuery.heightOf(context);
       return showDialog<void>(
         context: context,
         builder: (context) {
@@ -36,7 +36,7 @@ Future<void> showChoicePicker<T>(
                 return RadioGroup(
                   groupValue: selectedItem,
                   onChanged: (value) {
-                    if (value != null && onSelectedItemChanged != null) {
+                    if (value is T && onSelectedItemChanged != null) {
                       onSelectedItemChanged(value);
                       Navigator.of(context).pop();
                     }

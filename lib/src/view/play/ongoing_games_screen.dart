@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -9,10 +10,9 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
-class OngoingGamesScreen extends ConsumerWidget {
-  const OngoingGamesScreen({super.key});
-
+class const OngoingGamesScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OngoingGamesScreen());
   }
@@ -27,12 +27,12 @@ class OngoingGamesScreen extends ConsumerWidget {
           orElse: () => const SizedBox.shrink(),
         ),
       ),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -48,12 +48,11 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class OngoingGamePreview extends ConsumerWidget {
-  const OngoingGamePreview({required this.game, this.padding, super.key});
-
-  final OngoingGame game;
-  final EdgeInsetsGeometry? padding;
-
+class const OngoingGamePreview({
+  required final OngoingGame game,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
@@ -91,6 +90,7 @@ class OngoingGamePreview extends ConsumerWidget {
           GameScreen.buildRoute(
             source: ExistingGameSource(game.fullId),
             loadingPosition: (
+              variant: game.variant,
               fen: game.fen,
               orientation: game.orientation,
               lastMove: game.lastMove,

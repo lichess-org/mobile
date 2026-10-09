@@ -9,37 +9,133 @@ class AppLocalizationsEt extends AppLocalizations {
   AppLocalizationsEt([String locale = 'et']) : super(locale);
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAcceptDraw => 'Accept draw?';
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccount => 'Konto';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferences => 'Konto eelistused';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAccountPreferencesHelp => 'Need eelistused salvestatakse sinu Lichess kontol ja kehtivad kõigil seadmetel.';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAddToStudy => 'Add to study';
 
   @override
-  String get mobileBoardSettings => 'Board settings';
+  String get mobileAllGames => 'Kõik mängud';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileAmoledBlack => 'Amoled black';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileAreYouSure => 'Kas oled kindel?';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'Are you sure you want to download the NNUE file ($param)?';
+  }
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+
+  @override
+  String get mobileBoardSettings => 'Mängulaua seaded';
+
+  @override
+  String get mobileBronsteinDelay => 'Bronstein delay';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Tühista tagasivõtmise pakkumine';
+
+  @override
+  String get mobileChallengeCreated => 'Väljakutse on loodud: saad teate, kui mäng algab.\nSelle leiad avalehelt.';
+
+  @override
+  String get mobileChallengeFromPosition => 'Challenge from position';
+
+  @override
+  String get mobileChapterName => 'Chapter Name';
+
+  @override
+  String get mobileChessEngine => 'Chess engine';
+
+  @override
+  String get mobileChooseCustomBackground => 'Choose a custom background';
+
+  @override
+  String get mobileClearButton => 'Tühjenda';
+
+  @override
+  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+
+  @override
+  String get mobileCodeFieldLabel => 'Code';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'The code is $param characters long.';
+  }
+
+  @override
+  String get mobileCopied => 'Copied.';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Salvestatud käigu tühistamine';
+
+  @override
+  String get mobileCustomizeButton => 'Kohanda';
+
+  @override
+  String get mobileCustomizeHomeTip => 'Nõuanne: võid avalehele lisada veel vidinaid või eemaldada need, mida enam ei vaja!';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => 'Taganda';
+
+  @override
+  String get mobileDangerZone => 'Danger zone';
+
+  @override
+  String get mobileDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get mobileDisplayModeCompact => 'Kompaktne';
+
+  @override
+  String get mobileDisplayModeDetailed => 'Detailne';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+
+  @override
+  String get mobileDownloadMyGames => 'Download my games';
+
+  @override
+  String get mobileFeedbackButton => 'Tagasiside';
+
+  @override
+  String get mobileFilters => 'Filters';
+
+  @override
+  String get mobileFlipClock => 'Flip clock';
+
+  @override
+  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+
+  @override
+  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+
+  @override
+  String mobileGoodDay(String param) {
+    return 'Tere päevast, $param';
+  }
+
+  @override
+  String get mobileGoodDayWithoutName => 'Tere päevast';
 
   @override
   String mobileGoodEvening(String param) {
@@ -47,49 +143,124 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get mobileGoodEveningWithoutName => 'Good evening';
+  String get mobileGoodEveningWithoutName => 'Tere õhtust';
 
   @override
-  String mobileGoodDay(String param) {
-    return 'Good day, $param';
-  }
+  String get mobileGoodMoveButThereIsBetter => 'Hea käik, aga on olemas parem';
 
   @override
-  String get mobileGoodDayWithoutName => 'Good day';
-
-  @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHello => 'Hello';
 
   @override
   String get mobileHomeTab => 'Kodu';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+  }
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileNewGame => 'New game';
+  String get mobileLiveStreamers => 'Reaalajas striimijad';
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'Palun arvesta, et hetkel ei ole kõik vana rakenduse või veebisaidi funktsioonid veel kättesaadavad, kuid lisame neid pidevalt juurde.';
+  String get mobileMoveOnRelease => 'Move on release';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any users.';
+  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+
+  @override
+  String get mobileMustBeLoggedIn => 'Selle lehe vaatamiseks peab olema sisse logitud.';
+
+  @override
+  String get mobileNbOfflinePuzzles => 'Offline puzzles';
+
+  @override
+  String get mobileNewGame => 'Uus mäng';
+
+  @override
+  String get mobileNextMistake => 'Next mistake';
+
+  @override
+  String get mobileNoSearchResults => 'Tulemused puuduvad';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'Sa pole jälgimas ühtki kasutajat.';
 
   @override
   String get mobileOkButton => 'Hüva';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'Maleavangute uurija pole võrguühenduseta saadaval.';
+
+  @override
+  String get mobileOrImportPgnFile => 'Või importi PGN-fail';
+
+  @override
   String get mobileOverTheBoard => 'Üle laua';
 
   @override
+  String get mobilePasteFromClipboard => 'Paste from clipboard';
+
+  @override
+  String get mobilePerfShortAntichess => 'Antichess';
+
+  @override
+  String get mobilePerfShortAtomic => 'Atomic';
+
+  @override
+  String get mobilePerfShortBlitz => 'Blitz';
+
+  @override
+  String get mobilePerfShortBullet => 'Bullet';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => 'Classical';
+
+  @override
+  String get mobilePerfShortCorrespondence => 'Corresp.';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'Crazy';
+
+  @override
+  String get mobilePerfShortFromPosition => 'From Pos.';
+
+  @override
+  String get mobilePerfShortHorde => 'Horde';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KotH';
+
+  @override
+  String get mobilePerfShortPuzzle => 'Puzzle';
+
+  @override
+  String get mobilePerfShortRacingKings => 'Racing';
+
+  @override
+  String get mobilePerfShortRapid => 'Rapid';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3check';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'Ultra';
+
+  @override
+  String get mobilePgnCopied => 'PGN copied.';
+
+  @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Kasutajad sisuga \"$param\"';
   }
 
   @override
@@ -99,106 +270,127 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePositionRight => 'Paremal';
 
   @override
+  String get mobilePracticeMode => 'Practice mode';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'Suurenda tiritud malendit';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePreviousPage => 'Eelmine';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormConfirmEndRun => 'Kas soovid partii lõpetada?';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Tulemused puuduvad. Palun mängi mõned pusletormi partiid.';
+  String get mobilePuzzleStormFilterNothingToShow => 'Tulemused puuduvad, palun muuda filtreid';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Tulemused puuduvad. Mängi paar Puzzle Storm vooru.';
 
   @override
   String get mobilePuzzleStormSubtitle => 'Lahenda 3 minuti jooksul nii palju puslesid kui võimalik.';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'Sa kaotad praeguse seeria ja sinu punktisumma salvestatakse.';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'Mängi oma lemmikavangute puslesid või vali teema.';
 
   @override
-  String get mobilePuzzlesTab => 'Pusle';
+  String get mobilePuzzlesTab => 'Pusled';
+
+  @override
+  String get mobileRateThisApp => 'Rate this app';
 
   @override
   String get mobileRecentSearches => 'Hiljutised otsingud';
 
   @override
-  String get mobileRemoveBookmark => 'Remove bookmark';
+  String get mobileRemoveBookmark => 'Eemalda järjehoidja';
 
   @override
-  String get mobileServerAnalysis => 'Server analysis';
+  String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMeACode => 'Send me a code';
+
+  @override
+  String get mobileServerAnalysis => 'Serveri analüüs';
 
   @override
   String get mobileSettingsClockPosition => 'Kella asukoht';
 
   @override
-  String get mobileSettingsCustomBackgroundPresets => 'Presets';
+  String get mobileSettingsCustomBackgroundPresets => 'Taustad';
 
   @override
-  String get mobileSettingsDraggedPieceTarget => 'Dragged piece target';
+  String get mobileSettingsDraggedPieceTarget => 'Lohistatud malendi siht';
 
   @override
-  String get mobileSettingsDraggedTargetCircle => 'Circle';
+  String get mobileSettingsDraggedTargetCircle => 'Ring';
 
   @override
-  String get mobileSettingsDraggedTargetSquare => 'Square';
+  String get mobileSettingsDraggedTargetSquare => 'Ruut';
 
   @override
-  String get mobileSettingsHomeWidgets => 'Home widgets';
+  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+
+  @override
+  String get mobileSettingsDrawnShapeColorHelp => 'This color is used for shapes drawn by hand using two fingers.';
+
+  @override
+  String get mobileSettingsHomeWidgets => 'Kodu vidinad';
 
   @override
   String get mobileSettingsImmersiveMode => 'Haarav seisund';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi navigeerimise väljad. Kehtib mängu- ja pusleekraanide kohta.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi juhtimise väljad. Kehtib mängu- ja pusleekraanide kohta.';
 
   @override
-  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Captured pieces';
+  String get mobileSettingsMaterialDifferenceCapturedPieces => 'Võetud malendid';
 
   @override
-  String get mobileSettingsPickAnImage => 'Pick an image';
+  String get mobileSettingsPickAnImage => 'Vali pilt';
+
+  @override
+  String get mobileSettingsPickAnImageBlur => 'Hägusta pilti';
 
   @override
   String get mobileSettingsPickAnImageHelp => 'Kohandatud taust töötab ainult tumedas olekus. Soovitatav on kasutada tumedat pilti.';
 
   @override
-  String get mobileSettingsPickAnImageBlur => 'Blur the image';
+  String get mobileSettingsPickAnImageHideBoard => 'Peida mängulaud';
 
   @override
-  String get mobileSettingsPickAnImageHideBoard => 'Hide board';
+  String get mobileSettingsPickAnImageShowBoard => 'Näita mängulauda';
 
   @override
-  String get mobileSettingsPickAnImageShowBoard => 'Show board';
+  String get mobileSettingsPickAnImageSwipeToDisplay => 'Libista, et näha teisi taustapilte';
 
   @override
-  String get mobileSettingsPickAnImageSwipeToDisplay => 'Swipe to display other backgrounds';
+  String get mobileSettingsPieceShiftMethodEither => 'Puuduta või lohista';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Either tap or drag';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Puuduta kahte ruutu';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tap two squares';
+  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
 
   @override
   String get mobileSettingsShapeDrawing => 'Kuju joonistamine';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Joonista kujundeid kahe sõrmega: hoia üht sõrme tühjal ruudul ja tõmba teisega, et kujundit joonistada.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Näita piire';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Puutetagasiside';
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.';
 
   @override
-  String get mobileSettingsTab => 'Seaded';
+  String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
   String get mobileShareGamePGN => 'Jaga PGN';
@@ -207,147 +399,90 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileShareGameURL => 'Jaga mängu URL';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePositionAsFEN => 'Jaga positsiooni FEN-ina';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileSharePuzzle => 'Jaga seda puslet';
+
+  @override
+  String get mobileShowComments => 'Näita kommentaare';
+
+  @override
+  String get mobileShowEngineLines => 'Show engine lines';
+
+  @override
+  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
 
   @override
   String get mobileShowResult => 'Näita tulemust';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileSignInWithBrowser => 'Sign in with the browser';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSignInWithEmail => 'Sign in with an email';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSimpleDelay => 'Simple delay';
 
   @override
-  String get mobileTheme => 'Theme';
+  String get mobileSmallBoard => 'Small board';
 
   @override
-  String get mobileToolsTab => 'Tööriistad';
+  String get mobileSomethingWentWrong => 'Midagi läks valesti.';
+
+  @override
+  String get mobileSortFriends => 'Sort friends';
+
+  @override
+  String get mobileStopShowingThreat => 'Lõpeta ohu näitamine';
+
+  @override
+  String get mobileSystemColors => 'Süsteemi värvid';
+
+  @override
+  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+
+  @override
+  String get mobileTheme => 'Teema';
+
+  @override
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+
+  @override
+  String get mobileTournamentCompleted => 'Lõpetatud';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Mine minu lehele';
 
   @override
   String mobileUnsupportedVariant(String param) {
-    return 'Variant $param ei ole rakenduse versioonis saadaval.';
+    return 'Variant $param ei ole selles versioonis saadaval.';
   }
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+
+  @override
+  String get mobileViewGame => 'Vaata mängu';
+
+  @override
+  String get mobileViewLicenses => 'View licences';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Vastase ühinemise ootamine...';
 
   @override
   String get mobileWatchTab => 'Vaata';
 
   @override
-  String get mobileWelcomeToLichessApp => 'Tere tulemast Lichess rakendusse!';
+  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileViewGame => 'View Game';
-
-  @override
-  String get mobileCustomizeHomeTip => 'Tip: You can add more widgets to the Home Screen or remove those you don\'t need!';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => 'Dismiss';
-
-  @override
-  String get mobileCustomizeButton => 'Customize';
-
-  @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
-
-  @override
-  String get mobileTournamentCompleted => 'Completed';
-
-  @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
-
-  @override
-  String get mobileDisplayModeCompact => 'Compact';
-
-  @override
-  String get mobileDisplayModeDetailed => 'Detailed';
-
-  @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'Opening Explorer is not available offline.';
-
-  @override
-  String get mobileChallengeCreated => 'Challenge created: You will be notified when the game starts.\nYou can access it from the home tab.';
-
-  @override
-  String get mobilePreviousPage => 'Previous';
-
-  @override
-  String get mobileOrImportPgnFile => 'Või importi PGN-fail';
-
-  @override
-  String get mobileGoodMoveButThereIsBetter => 'Good move, but there\'s better';
-
-  @override
-  String get variantStandard => 'Tavaline';
-
-  @override
-  String get variantStandardTitle => 'Tavapäraste malereeglitega (FIDE)';
-
-  @override
-  String get variantChess960 => 'Male960';
-
-  @override
-  String get variantChess960Title => 'The starting position of the home rank pieces is randomised.';
-
-  @override
-  String get variantKingOfTheHill => 'King of the Hill';
-
-  @override
-  String get variantKingOfTheHillTitle => 'Bring your King to the centre to win the game.';
-
-  @override
-  String get variantThreeCheck => 'Three-Check';
-
-  @override
-  String get variantThreeCheckTitle => 'Check your opponent 3 times to win the game.';
-
-  @override
-  String get variantAntichess => 'Antimale';
-
-  @override
-  String get variantAntichessTitle => 'Mängu võitmiseks kaota kõik oma malendid (või satu patiseisu).';
-
-  @override
-  String get variantAtomic => 'Atomic';
-
-  @override
-  String get variantAtomicTitle => 'Nuke your opponent\'s king to win.';
-
-  @override
-  String get variantHorde => 'Hord';
-
-  @override
-  String get variantHordeTitle => 'Ühel poolel on suur hulk ettureid, teisel tavalised malendid.';
-
-  @override
-  String get variantRacingKings => 'Kuningate võiduajamine';
-
-  @override
-  String get variantRacingKingsTitle => 'Võitmiseks jõua oma kuningaga malelaua teise otsa.';
-
-  @override
-  String get variantCrazyhouse => 'Crazyhouse';
-
-  @override
-  String get variantCrazyhouseTitle => 'Captured pieces can be dropped back on the board instead of moving a piece.';
-
-  @override
-  String get variantFromPosition => 'From Position';
-
-  @override
-  String get variantFromPositionTitle => 'Standard chess from a custom position';
+  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
 
   @override
   String get activityActivity => 'Aktiivsus';
@@ -601,7 +736,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Mängija(-d), kellel on määratud turniiriaja lõppedes kogunenud kõige enam punkte, kuulutatakse võitja(-te)ks.';
 
   @override
-  String get arenaHowDoesPairingWork => 'Kuidas toimub paarimine?';
+  String get arenaHowArePlayersPaired => 'How are players paired?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Turniiri alguses paaritakse mängijad nende reitingu alusel.\nKui mängu lõpetate, minge tagasi turniiri ooteruumi: seejärel paaritakse Teid sarnase reitinguga mängijaga. See tagab võimalikult lühikese ooteaja, kuid Te ei pruugi saada mängida kõigi turniiril osalevate mängijatega.\nMängige kiiresti ning naaske ooteruumi, et mängida rohkem mänge ja võita rohkem punkte.';
@@ -689,7 +824,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaEditTeamBattle => 'Edit team battle';
 
   @override
-  String get arenaDefender => 'Defender';
+  String get arenaDefenderLabel => 'Defender:';
 
   @override
   String get arenaPickYourTeam => 'Pick your team';
@@ -713,7 +848,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaTournamentStats => 'Tournament stats';
 
   @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
+  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
 
   @override
   String get arenaMedians => 'medians';
@@ -752,6 +887,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get arenaBerserkRate => 'Berserk rate';
+
+  @override
+  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -858,7 +996,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastDeleteRound => 'Kustuta see voor';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Kustuta lõplikult voor ja selle mängud.';
+  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Kustuta kõik mängud sellest voorust. Allikas peab olema aktiveeritud nende taastamiseks.';
@@ -870,7 +1008,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastDeleteTournament => 'Delete this tournament';
 
   @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
+  String get broadcastPermanentlyDeleteTournament => 'Permanently delete this tournament, including all rounds and games?';
 
   @override
   String get broadcastShowScores => 'Show player scores based on game results';
@@ -925,6 +1063,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get broadcastNoBoardsYet => 'No boards yet. These will appear once games are uploaded.';
+
+  @override
+  String get broadcastNoPlayersYet => 'No players yet. They will appear once games are uploaded.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1095,6 +1236,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get broadcastKnockouts => 'Knockouts';
+
+  @override
+  String get broadcastPinPlayer => 'Pin player';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1277,6 +1421,530 @@ class AppLocalizationsEt extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get learnLearnChess => 'Õpi malet';
+
+  @override
+  String get learnByPlaying => 'mängides!';
+
+  @override
+  String learnProgressX(String param) {
+    return 'Edenemine: $param';
+  }
+
+  @override
+  String get learnResetMyProgress => 'Lähtesta saavutused';
+
+  @override
+  String get learnYouWillLoseAllYourProgress => 'Kaotad kõik oma saavutused!';
+
+  @override
+  String get learnPlay => 'mängi!';
+
+  @override
+  String get learnChessPieces => 'Malendid';
+
+  @override
+  String get learnTheRook => 'Vanker';
+
+  @override
+  String get learnItMovesInStraightLines => 'Ta liigub sirgejooneliselt';
+
+  @override
+  String get learnRookIntro => 'Vanker on võimas nupp. Kas olete selle käsutamiseks valmis?';
+
+  @override
+  String get learnRookGoal => 'Vajutage vankri peale,\net viia see tähekeseni!';
+
+  @override
+  String get learnGrabAllTheStars => 'Haara kõik tähekesed!';
+
+  @override
+  String get learnTheFewerMoves => 'Mida vähem liigutusi teed,\nseda rohkem punkte saad!';
+
+  @override
+  String get learnUseTwoRooks => 'Kasutage kahte vankrit,\net kiirust lisada!';
+
+  @override
+  String get learnRookComplete => 'Õnnitlused! Oled õppinud edukalt vankrit valitsema.';
+
+  @override
+  String get learnTheBishop => 'Oda';
+
+  @override
+  String get learnItMovesDiagonally => 'Ta liigub diagonaalselt';
+
+  @override
+  String get learnBishopIntro => 'Järgmiseks õpime, kuidas oda liigutada!';
+
+  @override
+  String get learnYouNeedBothBishops => 'Üks oda heledatel ruutudel,\nteine oda tumedatel ruutudel.\nVajad mõlemat!';
+
+  @override
+  String get learnBishopComplete => 'Õnnitlused! Te valdate nüüd oda.';
+
+  @override
+  String get learnTheQueen => 'Lipp';
+
+  @override
+  String get learnQueenCombinesRookAndBishop => 'Lipp = vanker + oda';
+
+  @override
+  String get learnQueenIntro => 'Kõige tugevam malend astub mängu. Lehvitage vastu lipule!';
+
+  @override
+  String get learnQueenComplete => 'Õnnitlused! Kuningannal pole sulle saladusi.';
+
+  @override
+  String get learnTheKing => 'Kuningas';
+
+  @override
+  String get learnTheMostImportantPiece => 'Kõige tähtsam malend';
+
+  @override
+  String get learnKingIntro => 'Sina oled kuningas. Kui sa langed lahingus, siis mäng lõppeb.';
+
+  @override
+  String get learnTheKingIsSlow => 'Kuningas on aeglane.';
+
+  @override
+  String get learnLastOne => 'Viimane!';
+
+  @override
+  String get learnKingComplete => 'Sa oskad nüüd juhatajat juhtida!';
+
+  @override
+  String get learnTheKnight => 'Ratsu';
+
+  @override
+  String get learnItMovesInAnLShape => 'Ta liigub L-kujuliselt';
+
+  @override
+  String get learnKnightIntro => 'Siin on teile väljakutse. Ratsu on... viguriga vigur.';
+
+  @override
+  String get learnKnightsHaveAFancyWay => 'Ratsudel on huvitav komme\nringi hüpata!';
+
+  @override
+  String get learnKnightsCanJumpOverObstacles => 'Ratsud suudavad malenditest üle hüpata!\nKogu kõik tähed!';
+
+  @override
+  String get learnKnightComplete => 'Õnnitlused! Te valdate nüüd ratsukäike.';
+
+  @override
+  String get learnThePawn => 'Ettur';
+
+  @override
+  String get learnItMovesForwardOnly => 'Ta liigub ainult edasi';
+
+  @override
+  String get learnPawnIntro => 'Etturid on nõrgad, kuid nendes on palju potentsiaali.';
+
+  @override
+  String get learnPawnsMoveOneSquareOnly => 'Etturid liiguvad ühe ruudu kaupa.\nKui nad jõuavad mängulaua lõppu, siis nendest saab palju tugevam nupp!';
+
+  @override
+  String get learnMostOfTheTimePromotingToAQueenIsBest => 'Enamik juhtudest on mõtekas ettur muundada lipuks.\nKuid mõnikord tuleb ratsu rohkem kasuks!';
+
+  @override
+  String get learnPawnsMoveForward => 'Etturid liiguvad ainult edasi,\nkuid löövad diagonaalselt!';
+
+  @override
+  String get learnCaptureThenPromote => 'Löö, siis muunda!';
+
+  @override
+  String get learnUseAllThePawns => 'Kasuta kõiki ettureid!\nPole vajadust muundada.';
+
+  @override
+  String get learnAPawnOnTheSecondRank => 'Ettur teisel real saab liikuda 2 ruutu korraga!';
+
+  @override
+  String get learnGrabAllTheStarsNoNeedToPromote => 'Kogu kõik tähed!\nMuundada pole tarvus.';
+
+  @override
+  String get learnPawnComplete => 'Õnnitlused! Tunnete nüüd etturi käike.';
+
+  @override
+  String get learnPawnPromotion => 'Etturi muundamine';
+
+  @override
+  String get learnYourPawnReachedTheEndOfTheBoard => 'Sinu ettur on jõudnud viimasele reale!';
+
+  @override
+  String get learnItNowPromotesToAStrongerPiece => 'Nüüd ta muundub tugevamaks malendiks.';
+
+  @override
+  String get learnSelectThePieceYouWant => 'Vali malend, mida sa soovid!';
+
+  @override
+  String get learnFundamentals => 'Põhialused';
+
+  @override
+  String get learnCapture => 'Löömine';
+
+  @override
+  String get learnTakeTheEnemyPieces => 'Löö vastase malendid';
+
+  @override
+  String get learnCaptureIntro => 'Tuvasta vastase kaitseta malendid ning löö nad!';
+
+  @override
+  String get learnTakeTheBlackPieces => 'Löö mustad malendid!';
+
+  @override
+  String get learnTakeTheBlackPiecesAndDontLoseYours => 'Löö mustad malendid!\nÄra kaota enda omi.';
+
+  @override
+  String get learnCaptureComplete => 'Õnnitlused! Oskad vastase malendeid lüüa!';
+
+  @override
+  String get learnProtection => 'Kaitsmine';
+
+  @override
+  String get learnKeepYourPiecesSafe => 'Hoia oma malendid kaitse all';
+
+  @override
+  String get learnProtectionIntro => 'Tuvasta malendid, mida vastane ründab ja kaitse neid!';
+
+  @override
+  String get learnProtectionComplete => 'Õnnitlused! Malend, mida sa ei kaota on võidetud malend!';
+
+  @override
+  String get learnEscape => 'Sa oled rünnaku all!\nPõgene ohtu!';
+
+  @override
+  String get learnNoEscape => 'Põgenemisteed ei leidu,\nkuid sul on võimalik kaitsta!';
+
+  @override
+  String get learnDontLetThemTakeAnyUndefendedPiece => 'Ära lase neil võtta\nühtegi kaitseta malendid!';
+
+  @override
+  String get learnCombat => 'Võitlus';
+
+  @override
+  String get learnCaptureAndDefendPieces => 'Löö ning kaitse malendeid';
+
+  @override
+  String get learnCombatIntro => 'Hea mängija oskab rünnata ja kaitsta üheaegselt!';
+
+  @override
+  String get learnCombatComplete => 'Õnnitlused! Oskate võidelda malenditega!';
+
+  @override
+  String get learnCheckInOne => 'Tuli ühe käiguga';
+
+  @override
+  String get learnAttackTheOpponentsKing => 'Ründa vastase kuningat';
+
+  @override
+  String get learnCheckInOneIntro => 'Et anda tuld vastasele, ründa nende kuningat. Nad peavad seda kaitsma!';
+
+  @override
+  String get learnCheckInOneGoal => 'Sihi vastase kuningat \nühe liigutusega!';
+
+  @override
+  String get learnCheckInOneComplete => 'Õnnitlused! Sa andsid tuld vastasele, sundides nad oma kuningat kaitsma!';
+
+  @override
+  String get learnOutOfCheck => 'Tule alt väljumine';
+
+  @override
+  String get learnDefendYourKing => 'Kaitse oma kuningat';
+
+  @override
+  String get learnOutOfCheckIntro => 'Sa oled tule all! Sa pead põgenema või blokeerima rünnaku.';
+
+  @override
+  String get learnEscapeWithTheKing => 'Põgene kuningaga!';
+
+  @override
+  String get learnTheKingCannotEscapeButBlock => 'Kuningas ei saa põgeneda, \naga sa saad rünnaku blokeerida!';
+
+  @override
+  String get learnYouCanGetOutOfCheckByTaking => 'Sa saad tule alt välja\nkui lööd ründava malendi.';
+
+  @override
+  String get learnThisKnightIsCheckingThroughYourDefenses => 'Ratsu annab tuld\nläbi sinu kaitse!';
+
+  @override
+  String get learnEscapeOrBlock => 'Põgene kuningaga \nvõi blokeeri rünnak!';
+
+  @override
+  String get learnOutOfCheckComplete => 'Õnnitlused! Sinu kuningat ei saa rünnata, veendu, et sa suudad teda tule vastu kaitsta!';
+
+  @override
+  String get learnMateInOne => 'Matt ühe käiguga';
+
+  @override
+  String get learnDefeatTheOpponentsKing => 'Alista vastase kuningas';
+
+  @override
+  String get learnMateInOneIntro => 'Sa võidad kui su vastane ei saa tule vastu kaitsta.';
+
+  @override
+  String get learnAttackYourOpponentsKing => 'Ründa vastase kuningat nii, \net seda ei saa kaitsta!';
+
+  @override
+  String get learnMateInOneComplete => 'Õnnitlused! Nii võidetakse malemänge!';
+
+  @override
+  String get learnIntermediate => 'Kesktase';
+
+  @override
+  String get learnBoardSetup => 'Laua ülesehitus';
+
+  @override
+  String get learnHowTheGameStarts => 'Kuidas mäng algab';
+
+  @override
+  String get learnBoardSetupIntro => 'Kaks sõjaväge seisavad vastamisi, ole valmis lahinguks.';
+
+  @override
+  String get learnThisIsTheInitialPosition => 'See on iga malemängu \nesialgne seis! \nTee käik, et jätkata.';
+
+  @override
+  String get learnFirstPlaceTheRooks => 'Kõigepealt paigalda vankrid! \nNad lähevad nurkadesse.';
+
+  @override
+  String get learnThenPlaceTheKnights => 'Siis paigalda ratsud! \nNad lähevad vankrite kõrvale.';
+
+  @override
+  String get learnPlaceTheBishops => 'Paigalda odad! \nNad lähevad ratsude kõrvale.';
+
+  @override
+  String get learnPlaceTheQueen => 'Paigalda lipp! \nTa läheb oma värvile.';
+
+  @override
+  String get learnPlaceTheKing => 'Paigalda kuningas! \nKohe lipu kõrvale.';
+
+  @override
+  String get learnPawnsFormTheFrontLine => 'Etturid on eesliinis. \nTee käik, et jätkata.';
+
+  @override
+  String get learnBoardSetupComplete => 'Õnnitlused! Tead kuidas seadistada malelauda.';
+
+  @override
+  String get learnCastling => 'Vangerdus';
+
+  @override
+  String get learnEnPassant => 'En passant';
+
+  @override
+  String get learnTheSpecialKingMove => 'Kuninga eriline käik';
+
+  @override
+  String get learnCastlingIntro => 'Too oma kuningas turvalisse kohta, ja kasuta oma vankreid rünnakuks!';
+
+  @override
+  String get learnCastleKingSide => 'Liiguta oma kuningat kahe ruudu võrra,\net vangerdada kuningatiivale!';
+
+  @override
+  String get learnCastleQueenSide => 'Liiguta oma kuningat kahe ruudu võrra, \net vangerdada liputiivale!';
+
+  @override
+  String get learnTheKnightIsInTheWay => 'Ratsu on teel ees!\nLiiguta teda, siis vangerda kuningatiivale.';
+
+  @override
+  String get learnCastleKingSideMovePiecesFirst => 'Vangerda kuningatiivale!\nSa pead kõigepealt malendid eest ära koristama.';
+
+  @override
+  String get learnCastleQueenSideMovePiecesFirst => 'Vangerda liputiivale!\nSa pead kõigepealt malendid eest ära koristama.';
+
+  @override
+  String get learnYouCannotCastleIfMoved => 'Sa ei saa vangerdada\nsiis kui kuningas või vanker\non juba käinud.';
+
+  @override
+  String get learnYouCannotCastleIfAttacked => 'Sa ei saa vangerdada siis kui\nkuningas läbib tule all olevat välja.\nBlokeeri tuli, siis vangerda!';
+
+  @override
+  String get learnFindAWayToCastleKingSide => 'Leia viis, kuidas\nvangerdada kuningatiivale!';
+
+  @override
+  String get learnFindAWayToCastleQueenSide => 'Leia viis, kuidas\nvangerdada liputiivale!';
+
+  @override
+  String get learnCastlingComplete => 'Õnnitlused! Te peaksite peaaegu alati vangerdama mängus.';
+
+  @override
+  String get learnTheSpecialPawnMove => 'Eriline etturi liigutus';
+
+  @override
+  String get learnEnPassantIntro => 'Kui vastase ettur on liikunud kahe ruudu võrra, siis sa saad seda kui ühe ruuduna võtta.';
+
+  @override
+  String get learnBlackJustMovedThePawnByTwoSquares => 'Must liikus etturiga\nkaks ruutu edasi!\nVõta see en passant käiguga.';
+
+  @override
+  String get learnEnPassantOnlyWorksImmediately => 'En passant töötab ainult\nkohe pärast seda, kui vastane\nkäis etturiga.';
+
+  @override
+  String get learnEnPassantOnlyWorksOnFifthRank => 'En passant töötab ainult juhul,\nkui sinu ettur on 5. real.';
+
+  @override
+  String get learnTakeAllThePawnsEnPassant => 'Löö kõik etturid en passant käiguga!';
+
+  @override
+  String get learnEnPassantComplete => 'Õnnitlused! Oskad nüüd en passant käiku.';
+
+  @override
+  String get learnStalemate => 'Patt';
+
+  @override
+  String get learnTheGameIsADraw => 'See mäng on viik';
+
+  @override
+  String get learnStalemateIntro => 'Kui mängija ei ole tules ning tal ei ole ühtegi legaalset käiku, siis tegemist on patiga. Tulemus on viik: kumbki ei võida ega kaota.';
+
+  @override
+  String get learnStalemateGoal => 'Musta patti viimine:\n- Must ei saa kuhugi käia\n- Must ei ole tules.';
+
+  @override
+  String get learnStalemateComplete => 'Õnnitlused! Parem on olla patis kui matis!';
+
+  @override
+  String get learnAdvanced => 'Edasijõudnud';
+
+  @override
+  String get learnPieceValue => 'Malendi väärtus';
+
+  @override
+  String get learnEvaluatePieceStrength => 'Hinda malendi tugevust';
+
+  @override
+  String get learnPieceValueIntro => 'Malendid suurema liikuvusega on väärtuslikumad!\nLipp = 9\nVanker = 5\nOda = 3\nRatsu = 3\nEttur = 1\nKuningas on hindamatu! Sellest ilma jäämine on võrdne kaotusega.';
+
+  @override
+  String get learnQueenOverBishop => 'Löö kõrgeima\nväärtusega malend!\nLipp > Oda';
+
+  @override
+  String get learnPieceValueExchange => 'Löö kõige väärtuslikum malend!\nÄra vaheta kõrgema väärtusega\nmalendit vähem väärtusliku eest.';
+
+  @override
+  String get learnPieceValueLegal => 'Löö kõige väärtuslikum malend!\nTehke kindlaks et käik\noleks reeglipärane!';
+
+  @override
+  String get learnTakeThePieceWithTheHighestValue => 'Löö kõrgeima\nväärtusega malend!';
+
+  @override
+  String get learnPieceValueComplete => 'Õnnitlused! Sa tead vigurite väärtust!\nLipp = 9\nVanker = 5\nOda = 3\nRatsu = 3\nEttur = 1';
+
+  @override
+  String get learnCheckInTwo => 'Tuli kahe käiguga';
+
+  @override
+  String get learnTwoMovesToGiveCheck => 'Kaks käiku, et anda tuld';
+
+  @override
+  String get learnCheckInTwoIntro => 'Leia õige kahe käiguga kombinatsioon, mille tulemusena jääb vastase kuningas tulle!';
+
+  @override
+  String get learnCheckInTwoGoal => 'Ohusta vastase kuningat\nkahe käiguga!';
+
+  @override
+  String get learnCheckInTwoComplete => 'Õnnitlused! Andsid vastasele tuld, sundides teda ohule reageerima!';
+
+  @override
+  String get learnWhatNext => 'Mis edasi?';
+
+  @override
+  String get learnYouKnowHowToPlayChess => 'Sa oskad mängida malet, õnnitlused! Kas sa tahad saada tugevamaks mängijaks?';
+
+  @override
+  String get learnRegister => 'Registreeru';
+
+  @override
+  String get learnGetAFreeLichessAccount => 'Lichess konto loomine on tasuta';
+
+  @override
+  String get learnPractice => 'Harjuta';
+
+  @override
+  String get learnLearnCommonChessPositions => 'Õpi tuntud maleseise';
+
+  @override
+  String get learnPuzzles => 'Pusled';
+
+  @override
+  String get learnExerciseYourTacticalSkills => 'Harjuta oma taktikalist taipu';
+
+  @override
+  String get learnVideos => 'Videod';
+
+  @override
+  String get learnWatchInstructiveChessVideos => 'Vaata õpetlikke malevideosid';
+
+  @override
+  String get learnPlayPeople => 'Mängi inimestega';
+
+  @override
+  String get learnOpponentsFromAroundTheWorld => 'Vastased kõikjalt maailmast';
+
+  @override
+  String get learnPlayMachine => 'Mängi arvuti vastu';
+
+  @override
+  String get learnTestYourSkillsWithTheComputer => 'Pane oma oskused proovile arvuti vastu';
+
+  @override
+  String get learnLetsGo => 'Alustame!';
+
+  @override
+  String learnStageX(String param) {
+    return 'Osa $param';
+  }
+
+  @override
+  String get learnAwesome => 'Lahe!';
+
+  @override
+  String get learnExcellent => 'Suurepärane!';
+
+  @override
+  String get learnGreatJob => 'Hästi tehtud!';
+
+  @override
+  String get learnPerfect => 'Täiuslik!';
+
+  @override
+  String get learnOutstanding => 'Uskumatu!';
+
+  @override
+  String get learnWayToGo => 'Väga hea!';
+
+  @override
+  String get learnYesYesYes => 'Jah, jah, jah!';
+
+  @override
+  String get learnYoureGoodAtThis => 'Sa oled selles hea!';
+
+  @override
+  String get learnNailedIt => 'Fantastiline.';
+
+  @override
+  String get learnRightOn => 'Just nii!';
+
+  @override
+  String learnStageXComplete(String param) {
+    return 'Osa $param läbitud';
+  }
+
+  @override
+  String get learnNext => 'Järgmine';
+
+  @override
+  String learnNextX(String param) {
+    return 'Järgmine: $param';
+  }
+
+  @override
+  String get learnBackToMenu => 'Tagasi menüüsse';
+
+  @override
+  String get learnPuzzleFailed => 'Kukkusid läbi!';
+
+  @override
+  String get learnRetry => 'Uuesti';
+
+  @override
   String get patronDonate => 'Anneta';
 
   @override
@@ -1389,6 +2057,207 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get perfStatNow => 'nüüd';
+
+  @override
+  String get practiceMakesPerfect => 'makes your chess perfect';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+
+  @override
+  String get practiceSecHeadCheckmates => 'Checkmates';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+
+  @override
+  String get practiceStNamThePin => 'The Pin';
+
+  @override
+  String get practiceStNamTheSkewer => 'The Skewer';
+
+  @override
+  String get practiceStNamTheFork => 'The Fork';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+
+  @override
+  String get practiceStNamDoubleCheck => 'Double Check';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+
+  @override
+  String get practiceStNamZwischenzug => 'Zwischenzug';
+
+  @override
+  String get practiceStNamXRay => 'X-Ray';
+
+  @override
+  String get practiceStNamZugzwang => 'Zugzwang';
+
+  @override
+  String get practiceStNamInterference => 'Interference';
+
+  @override
+  String get practiceStNamGreekGift => 'Greek Gift';
+
+  @override
+  String get practiceStNamDeflection => 'Deflection';
+
+  @override
+  String get practiceStNamAttraction => 'Attraction';
+
+  @override
+  String get practiceStNamUnderpromotion => 'Underpromotion';
+
+  @override
+  String get practiceStNamDesperado => 'Desperado';
+
+  @override
+  String get practiceStNamCounterCheck => 'Counter Check';
+
+  @override
+  String get practiceStNamUndermining => 'Undermining';
+
+  @override
+  String get practiceStNamClearance => 'Clearance';
+
+  @override
+  String get practiceStNamKeySquares => 'Key Squares';
+
+  @override
+  String get practiceStNamOpposition => 'Opposition';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+
+  @override
+  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+
+  @override
+  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+
+  @override
+  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+
+  @override
+  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+
+  @override
+  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+
+  @override
+  String get practiceStDesYumSkewers => 'Yum - skewers!';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'In-between moves';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+
+  @override
+  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+
+  @override
+  String get practiceStDesDistractingADefender => 'Distracting a defender';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+
+  @override
+  String get practiceStDesReachAKeySquare => 'Reach a key square';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+
+  @override
+  String get practiceStDesVersusAQueen => 'Versus a Queen';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
 
   @override
   String get preferencesPreferences => 'Sätted';
@@ -1514,6 +2383,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Käigu kinnitus';
 
   @override
+  String get preferencesMultipleChoices => 'Multiple choices. ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
 
   @override
@@ -1559,13 +2431,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesNotifyStreamStart => 'Striimija alustab otseülekannet';
 
   @override
-  String get preferencesNotifyInboxMsg => 'Postkastis on uus sõnum';
+  String get preferencesNotifyDirectMessage => 'New direct message';
 
   @override
-  String get preferencesNotifyForumMention => 'Mainimised foorumis';
+  String get preferencesNotifyForumMentions => 'Forum mentions';
 
   @override
-  String get preferencesNotifyInvitedStudy => 'Kutse uuringule';
+  String get preferencesNotifyStudyInvites => 'Study invites';
 
   @override
   String get preferencesNotifyGameEvent => 'Kirimale mängu uuendused';
@@ -1574,10 +2446,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesNotifyChallenge => 'Väljakutsed';
 
   @override
-  String get preferencesNotifyTournamentSoon => 'Turniir algab peatselt';
+  String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts you have subscribed to';
+  String get preferencesNotifyBroadcasts => 'Broadcasts';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Kirimale aeg hakkab lõppema';
@@ -1604,6 +2476,78 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesShowClockOnTheLeft => 'Show on the left on mobile devices';
 
   @override
+  String get preferencesInlineNotation => 'Inline notation';
+
+  @override
+  String get preferencesShowServerAnalysis => 'Show server analysis';
+
+  @override
+  String get preferencesShowBestMoveArrows => 'Show best move arrows';
+
+  @override
+  String get preferencesShowManeuverArrows => 'Show maneuver arrows';
+
+  @override
+  String get preferencesShowGauge => 'Show evaluation gauge';
+
+  @override
+  String get preferencesShowMoveAnnotationsOnBoard => 'Show move annotations';
+
+  @override
+  String get preferencesShowVariationArrows => 'Show variation arrows';
+
+  @override
+  String get preferencesShowLiveGlyphs => 'Live engine annotations';
+
+  @override
+  String get preferencesShowUndefendedPieces => 'Show undefended pieces';
+
+  @override
+  String get preferencesShowPinnedPieces => 'Show pinned pieces';
+
+  @override
+  String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesDisclosureMode => 'Enable variation hiding';
+
+  @override
+  String get preferencesGeneralSettings => 'General';
+
+  @override
+  String get preferencesMoveListSettings => 'Move list';
+
+  @override
+  String get preferencesBoardSettings => 'Board';
+
+  @override
+  String get preferencesAnalysisSettings => 'Analysis settings';
+
+  @override
+  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+
+  @override
+  String get preferencesHoverOverSettingLabelsForHelp => 'Hover over setting labels for help';
+
+  @override
+  String get preferencesNetwork => 'Network';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'You are currently using Content Delivery Network (CDN) routing.';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => 'If you have frequent disconnects, try changing the routing.';
+
+  @override
+  String get preferencesUseDirectRouting => 'Use direct routing';
+
+  @override
+  String get preferencesUseCdnRouting => 'Use CDN routing';
+
+  @override
   String get puzzlePuzzles => 'Pusled';
 
   @override
@@ -1628,7 +2572,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleMates => 'Matid';
 
   @override
-  String get puzzleMateThemes => 'Mate themes';
+  String get puzzleMateThemes => 'Matt-teemad';
 
   @override
   String get puzzleGoals => 'Eesmärgid';
@@ -1643,10 +2587,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleDidYouLikeThisPuzzle => 'Kas sulle meeldis see pusle?';
 
   @override
-  String get puzzleUpVote => 'Hääleta poolt';
+  String get puzzleUpVote => 'Hääleta poolt!';
 
   @override
-  String get puzzleDownVote => 'Hääleta vastu';
+  String get puzzleDownVote => 'Hääleta vastu!';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.';
@@ -1690,19 +2634,19 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzlePuzzleComplete => 'Pusle lahendatud!';
 
   @override
-  String get puzzleByOpenings => 'By openings';
+  String get puzzleByOpenings => 'Avangute kaupa';
 
   @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+  String get puzzlePuzzlesByOpenings => 'Pusled avangute kaupa';
 
   @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+  String get puzzleOpeningsYouPlayedTheMost => 'Avangud, mida oled reitingumängudes kõige sagedamini mänginud';
 
   @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+  String get puzzleUseFindInPage => 'Kasuta brauseri menüüs funktsiooni \"Leia lehelt\", et leida oma lemmikavang!';
 
   @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+  String get puzzleUseCtrlF => 'Kasuta Ctrl+f, et leida oma lemmikavang!';
 
   @override
   String get puzzleNotTheMove => 'See ei ole õige käik!';
@@ -1836,8 +2780,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
+      other: '$count punkti võrra madalam puslereiting kui sinul',
+      one: 'Ühe punkti võrra madalam puslereiting kui sinul',
     );
     return '$_temp0';
   }
@@ -1847,8 +2791,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
+      other: '$count punkti võrra kõrgem puslereiting kui sinul',
+      one: 'Ühe punkti võrra kõrgem puslereiting kui sinul',
     );
     return '$_temp0';
   }
@@ -1858,8 +2802,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count puzzles found in games by $param2',
-      one: 'One puzzle found in games by $param2',
+      other: '$param2 mängudest leiti $count puslet',
+      one: '$param2 mängudest leiti üks pusle',
     );
     return '$_temp0';
   }
@@ -1956,6 +2900,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeCastling => 'Vangerdus';
 
   @override
+  String get puzzleThemeEnPassant => 'En passant';
+
+  @override
   String get puzzleThemeCastlingDescription => 'Too kuningas ohust eemale ja valmista vanker rünnakuks ette.';
 
   @override
@@ -1974,7 +2921,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Corner mate';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
 
   @override
   String get puzzleThemeCrushing => 'Crushing';
@@ -2049,7 +2996,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'Taktika mängu viimases faasis.';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'Taktika, kus rakendatakse en passant reeglit, kus ettur saab lüüa mööda läinud vastase etturit kasutades algset kahe ruutu käiku.';
+  String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
 
   @override
   String get puzzleThemeEpauletteMate => 'Epaulette mate';
@@ -2067,7 +3014,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeFork => 'Kahvel';
 
   @override
-  String get puzzleThemeForkDescription => 'Käik, millega mängija ründab oma malendiga korraga mitut vastase malendit.';
+  String get puzzleThemeForkOpposingPiecesDescription => 'A move where a piece attacks two or more opposing pieces simultaneously.';
 
   @override
   String get puzzleThemeHangingPiece => 'Kaitseta malend';
@@ -2079,7 +3026,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemeHookMate => 'Hook mate';
 
   @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
+  String get puzzleThemeHookMateOpposingPawnDescription => 'Checkmate using a rook, knight, and pawn, where an opposing pawn blocks the king\'s escape.';
 
   @override
   String get puzzleThemeInterference => 'Interference';
@@ -2103,13 +3050,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsbury\'s mate';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy\'s mate';
 
   @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Swallow\'s tail mate';
@@ -2229,7 +3176,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzleThemePromotion => 'Muundamine';
 
   @override
-  String get puzzleThemePromotionDescription => 'Muunda oma ettur lipuks või teiseks viguriks.';
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Lipulõppmäng';
@@ -2339,6 +3286,14 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get recapAwaitQuestion => 'What have you been up to this year?';
+
+  @override
+  String recapRecapReady(String param) {
+    return 'Your $param recap is ready!';
+  }
+
+  @override
   String get searchSearch => 'Otsi';
 
   @override
@@ -2354,28 +3309,54 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settingsCantOpenSimilarAccount => 'Uut samanimelist kontot ei saa luua, isegi kui sümbolite register on erinev.';
 
   @override
-  String get settingsCancelKeepAccount => 'Cancel and keep my account';
+  String get settingsCancelKeepAccount => 'Tühista ja säilita minu konto';
 
   @override
-  String get settingsCloseAccountAreYouSure => 'Are you sure you want to close your account?';
+  String get settingsCloseAccountAreYouSure => 'Kas oled kindel, et soovid oma konto sulgeda?';
 
   @override
   String get settingsThisAccountIsClosed => 'See konto on suletud.';
 
   @override
-  String get gameSetup => 'Game setup';
+  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
 
   @override
-  String get challengeAFriend => 'Challenge a friend';
+  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+
+  @override
+  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+
+  @override
+  String get settingsDeleteYourAccount => 'Delete your account';
+
+  @override
+  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return 'Would you like to $param instead?';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'close your account';
+
+  @override
+  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
+
+  @override
+  String get gameSetup => 'Mängu seadistamine';
+
+  @override
+  String get challengeAFriend => 'Kutse mängule';
 
   @override
   String get playAgainstComputer => 'Mängi arvuti vastu';
 
   @override
-  String get gameMode => 'Game mode';
+  String get gameMode => 'Mängulaad';
 
   @override
-  String get createLobbyGame => 'Create lobby game';
+  String get createLobbyGame => 'Loo fuajeemäng';
 
   @override
   String get toInviteSomeoneToPlayGiveThisUrl => 'Et kutsuda kedagi mängima, anna talle see URL';
@@ -2387,13 +3368,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get waitingForOpponent => 'Ootan vastast';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'Või lase vastasel skaneerida see QR-kood';
 
   @override
-  String get reusableChallengeUrl => 'Reusable challenge URL';
+  String get reusableChallengeUrl => 'Korduvkasutatav väljakutse-URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Püsiviide, mille kaudu saab igaüks sind nendega seadetega mängule kutsuda.';
 
   @override
   String get waiting => 'Ootan vastust';
@@ -2446,7 +3427,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get createAGame => 'Loo mäng';
 
   @override
-  String get createTheGame => 'Create the game';
+  String get createTheGame => 'Loo mäng';
 
   @override
   String get whiteIsVictorious => 'Võitis valge';
@@ -2527,10 +3508,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get blackDidntMove => 'Must ei sooritanud käiku';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Valge katkestas mängu';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Must katkestas mängu';
 
   @override
   String get requestAComputerAnalysis => 'Nõua arvuti analüüsi';
@@ -2589,10 +3570,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get deleteFromHere => 'Kustuta alates siit';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Peida variatsioonid';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Näita variatsioone';
 
   @override
   String get forceVariation => 'Tee variatsiooniks';
@@ -2649,12 +3630,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return '$param minimaalne reiting';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return '$param maksimaalne reiting';
   }
 
   @override
@@ -2740,10 +3721,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get bestMoveArrow => 'Parima käigu nool';
 
   @override
-  String get showVariationArrows => 'Show variation arrows';
+  String get showVariationArrows => 'Näita variatsiooninooli';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Visuaalsed motiivid';
 
   @override
   String get undefendedPieces => 'Kaitsmata nupud';
@@ -2758,22 +3739,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get multipleLines => 'Mitu liini';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Määra laual hindamisjoonte ja käigunoolte arv';
 
   @override
   String get searchTime => 'Otsingu aeg';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Määra aeg uute seisude hindamiseks';
 
   @override
   String get threads => 'Lõimed ';
 
   @override
-  String get threadsDescription => 'Set this below your CPU\'s thread count, the ticks mark a good safe choice';
+  String get threadsDescription => 'Määra see väärtus väiksemaks CPU lõimede arvust, märgitud väärtused on hea ja turvaline valik';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Rohkem lõime kasutab parema analüüsi jaoks rohkem akut';
 
   @override
   String get cpus => 'CPU-d';
@@ -2782,7 +3763,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get memory => 'Mälu';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Kõrgemad väärtused võivad jõudlust parandada';
 
   @override
   String get infiniteAnalysis => 'Lõputu analüüs';
@@ -2806,13 +3787,25 @@ class AppLocalizationsEt extends AppLocalizations {
   String get flipBoard => 'Keera lauda';
 
   @override
+  String get toggleLocalEngine => 'Toggle local engine';
+
+  @override
+  String get engineSettings => 'Engine settings';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+
+  @override
+  String get illegalPosition => 'Illegal position';
+
+  @override
   String get threefoldRepetition => 'Kolmekordne kordus';
 
   @override
   String get claimADraw => 'Võta viik';
 
   @override
-  String get drawClaimed => 'Draw claimed';
+  String get drawClaimed => 'Nõutav viik';
 
   @override
   String get offerDraw => 'Paku viiki';
@@ -2948,6 +3941,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get password => 'Parool';
 
   @override
+  String get showPassword => 'Show password';
+
+  @override
   String get changePassword => 'Muuda parooli';
 
   @override
@@ -2979,7 +3975,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String proceedToX(String param) {
-    return 'Proceed to $param';
+    return 'Suundu aadressile $param';
   }
 
   @override
@@ -3017,11 +4013,11 @@ class AppLocalizationsEt extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Oodake 5 minutit ja värskendage postkasti.';
 
   @override
-  String get checkSpamFolder => 'Kiri võib sattuda ka rämpsposti kausta. Sel juhul palun märkige see mitte rämpspostina.';
+  String get checkSpamOrJunkFolder => 'Kui sa ei saa kinnituskirja, kontrolli oma rämpsposti või prügikasti kausta. Märgi kindlasti lichess.org sõnumid turvaliseks ja \"mitte rämpspostiks\", et olla olulise teabega kursis.';
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Kui sa ei leia oma kinnituskirja, saada e-kiri aadressile $param ja me kinnitame su konto sinu eest.';
   }
 
   @override
@@ -3059,16 +4055,16 @@ class AppLocalizationsEt extends AppLocalizations {
   String get gamesPlayed => 'Mänge mängitud';
 
   @override
-  String get ok => 'OK';
+  String get ok => 'Hüva';
 
   @override
   String get cancel => 'Katkesta';
 
   @override
-  String get whiteTimeOut => 'Valge aeg sai läbi';
+  String get whiteRanOutOfTime => 'White ran out of time';
 
   @override
-  String get blackTimeOut => 'Musta aeg sai läbi';
+  String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
   String get drawOfferSent => 'Viigi pakkumine saadetud';
@@ -3116,13 +4112,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get standard => 'Standard';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Kohandatud seis';
 
   @override
   String get unlimited => 'Piiramatu';
 
   @override
-  String get unlimitedDescription => 'Take all the time you need';
+  String get unlimitedDescription => 'Võta endale nii palju aega, kui vaja';
 
   @override
   String get mode => 'Variant';
@@ -3203,7 +4199,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get exportGames => 'Ekspordi mängud';
 
   @override
-  String get ratingFilter => 'Rating filter';
+  String get ratingFilter => 'Reitingu valik';
 
   @override
   String get thisAccountViolatedTos => 'Selle konto kasutaja rikkus Lichessi teenusetingimusi';
@@ -3218,31 +4214,31 @@ class AppLocalizationsEt extends AppLocalizations {
   String get proposeATakeback => 'Paku tagasivõttu';
 
   @override
-  String get whiteProposesTakeback => 'White proposes takeback';
+  String get whiteProposesTakeback => 'Valge teeb tagasivõtmise ettepaneku';
 
   @override
-  String get blackProposesTakeback => 'Black proposes takeback';
+  String get blackProposesTakeback => 'Must teeb tagasivõtmise ettepaneku';
 
   @override
   String get takebackPropositionSent => 'Tagasivõtu ettepanek esitatud';
 
   @override
-  String get whiteDeclinesTakeback => 'White declines takeback';
+  String get whiteDeclinesTakeback => 'Valge keeldub tagasivõtmisest';
 
   @override
-  String get blackDeclinesTakeback => 'Black declines takeback';
+  String get blackDeclinesTakeback => 'Must keeldub tagasivõtmisest';
 
   @override
-  String get whiteAcceptsTakeback => 'White accepts takeback';
+  String get whiteAcceptsTakeback => 'Valge nõustub tagasivõtmisega';
 
   @override
-  String get blackAcceptsTakeback => 'Black accepts takeback';
+  String get blackAcceptsTakeback => 'Must nõustub tagasivõtmisega';
 
   @override
-  String get whiteCancelsTakeback => 'White cancels takeback';
+  String get whiteCancelsTakeback => 'Valge tühistab tagasivõtmise';
 
   @override
-  String get blackCancelsTakeback => 'Black cancels takeback';
+  String get blackCancelsTakeback => 'Must tühistab tagasivõtmise';
 
   @override
   String get yourOpponentProposesATakeback => 'Vastane teeb ettepaneku tagasivõtuks';
@@ -3266,7 +4262,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get backToTournament => 'Tagasi turniirile';
 
   @override
-  String get noDrawBeforeSwissLimit => 'You cannot draw before 30 moves are played in a Swiss tournament.';
+  String get noDrawBeforeSwissLimit => 'Šveitsi turniiril ei saa viiki teha enne, kui on tehtud 30 käiku.';
 
   @override
   String get thematic => 'Temaatiline';
@@ -3277,7 +4273,7 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
+  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -3360,16 +4356,16 @@ class AppLocalizationsEt extends AppLocalizations {
   String get leaderboard => 'Edetabel';
 
   @override
-  String get screenshotCurrentPosition => 'Tee kuvatõmmis praegusest seisust';
+  String get positionAsImage => 'Position as image';
 
   @override
   String get gameAsGIF => 'Salvesta mäng GIF-ina';
 
   @override
-  String get playerNames => 'Player names';
+  String get playerNames => 'Mängijate nimed';
 
   @override
-  String get moveAnnotations => 'Move annotations';
+  String get moveAnnotations => 'Käikude märkused';
 
   @override
   String get pasteTheFenStringHere => 'Aseta FEN kood siia';
@@ -3378,7 +4374,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get pasteThePgnStringHere => 'Aseta PGN kood siia';
 
   @override
-  String get orUploadPgnFile => 'Või lae üles PGN fail';
+  String get orUploadPgnFile => 'Või lae üles PGN-fail';
 
   @override
   String get continueFromHere => 'Jätka siit';
@@ -3393,7 +4389,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get importGameExplanation => 'Mängu PGN-i kleepimisel saate vaadeldava korduse,\narvutianalüüsi, mängu jututoa ning jagatava URL-i.';
 
   @override
-  String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
+  String get importGameDataPrivacyWarning => 'Sellele PGN-ile on avalik juurdepääs. Mängu privaatseks importimiseks kasuta uuringut.';
 
   @override
   String get thisIsAChessCaptcha => 'See on male CAPTCHA';
@@ -3420,7 +4416,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get reconnecting => 'Taasühendamine';
 
   @override
-  String get noNetwork => 'Offline';
+  String get noNetwork => 'Ühenduseta';
 
   @override
   String get favoriteOpponents => 'Lemmikvastased';
@@ -3459,6 +4455,9 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get less => 'Vähem';
+
+  @override
   String get more => 'Rohkem';
 
   @override
@@ -3491,7 +4490,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get winner => 'Võitja';
 
   @override
-  String get standings => 'Standings';
+  String get standings => 'Edetabel';
 
   @override
   String get createANewTournament => 'Loo uus turniir';
@@ -3533,7 +4532,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get losses => 'Kaotused';
 
   @override
-  String get startingIn => 'Starting in';
+  String get startingIn => 'Alguseni';
 
   @override
   String standByX(String param) {
@@ -3568,7 +4567,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get blackWins => 'Musta võite';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Viigimäär';
 
   @override
   String get draws => 'Viike';
@@ -3594,7 +4593,7 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Juhuslik Chess960-positsioon';
 
   @override
   String get startPosition => 'Algseis';
@@ -3633,22 +4632,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get editProfile => 'Muuda profiili';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Tegelik nimi';
 
   @override
-  String get setFlair => 'Set your flair';
+  String get setFlair => 'Määra oma piktogramm';
 
   @override
-  String get flair => 'Flair';
+  String get flair => 'Piktogramm';
 
   @override
-  String get youCanHideFlair => 'There is a setting to hide all user flairs across the entire site.';
+  String get youCanHideFlair => 'Kasutajate piktogrammide peitmiseks kogu saidil on olemas säte.';
 
   @override
   String get biography => 'Kirjeldus';
 
   @override
-  String get countryRegion => 'Country or region';
+  String get countryRegion => 'Riik või piirkond';
 
   @override
   String get thankYou => 'Aitäh!';
@@ -3666,7 +4665,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get makeAStudy => 'Hoiustamiseks ja jagamiseks kaalutle uuringu koostamist.';
 
   @override
-  String get clearSavedMoves => 'Tühista käigud';
+  String get clearLocalData => 'Clear local data';
 
   @override
   String get previouslyOnLichessTV => 'Eelnevalt Lichess TV-s';
@@ -3693,7 +4692,22 @@ class AppLocalizationsEt extends AppLocalizations {
   String get puzzles => 'Pusled';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Veebirobotid';
+
+  @override
+  String get aboutBotsOnLichess => 'About bots on Lichess';
+
+  @override
+  String get featuredBots => 'Featured bots';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+
+  @override
+  String get communityBots => 'Community bots';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
 
   @override
   String get name => 'Nimi';
@@ -3714,10 +4728,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get yes => 'Jah';
 
   @override
-  String get website => 'Website';
+  String get website => 'Veebileht';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobiil';
 
   @override
   String get help => 'Abi:';
@@ -3747,6 +4761,15 @@ class AppLocalizationsEt extends AppLocalizations {
   String get reply => 'Vasta';
 
   @override
+  String get reopen => 'Ava uuesti';
+
+  @override
+  String get quote => 'Tsiteering';
+
+  @override
+  String get postEdited => 'muudetud';
+
+  @override
   String get message => 'Sõnum';
 
   @override
@@ -3774,13 +4797,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get other => 'Muu';
 
   @override
-  String get reportCheatBoostHelp => 'Paste the link to the game(s) and explain what is wrong about this user\'s behaviour. Don\'t just say \"they cheat\", but tell us how you came to this conclusion.';
+  String get reportCheatBoostHelp => 'Kleebi mängu(de) link ja selgita, mis on selle kasutaja käitumises valesti. Ära ütle lihtsalt \"ta teeb sohki\", vaid selgita, kuidas sellele järeldusele jõudsid.';
 
   @override
-  String get reportUsernameHelp => 'Explain why this username is offensive. Don\'t just say \"it\'s offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.';
+  String get reportUsernameHelp => 'Selgita, miks see kasutajanimi on solvav. Ära ütle lihtsalt \"see on solvav/sobimatu\", vaid selgita, kuidas sellele järeldusele jõudsid, eriti kui solvavus on raskesti mõistetav, ei ole inglise keeles, on slängis või viitab ajaloolisele või kultuurilisele kontekstile.';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
+  String get processReportFasterInEnglish => 'Vaatame sinu teate kiiremini läbi, kui kirjutad inglise keeles.';
 
   @override
   String get error_provideOneCheatedGameLink => 'Palun andke vähemalt üks link pettust sisaldavale mängule.';
@@ -3823,13 +4846,16 @@ class AppLocalizationsEt extends AppLocalizations {
   String get invalidAuthenticationCode => 'Väär autentimise kood';
 
   @override
-  String get clearField => 'Clear field';
+  String get clearField => 'Tühjenda väli';
 
   @override
-  String get orSeparator => 'Or';
+  String get orSeparator => 'Või';
 
   @override
-  String get logInByEmail => 'Log in by email';
+  String get logInByEmail => 'Logi sisse e-posti teel';
+
+  @override
+  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
 
   @override
   String get emailMeALink => 'Saada mulle link meilile';
@@ -3892,7 +4918,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get outsideTheBoard => 'Lauast väljas';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares';
+  String get allSquaresOfTheBoard => 'Igal ruudul';
 
   @override
   String get onSlowGames => 'Aeglastes mängudes';
@@ -3902,6 +4928,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get never => 'Mitte kunagi';
+
+  @override
+  String get defeatOnly => 'Defeat only';
+
+  @override
+  String get drawAndDefeat => 'Draw and defeat';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4086,16 +5118,25 @@ class AppLocalizationsEt extends AppLocalizations {
   String get really => 'päriselt';
 
   @override
+  String get lichessUpdates => 'Lichess updates';
+
+  @override
   String get contribute => 'Panusta';
+
+  @override
+  String get changelog => 'Changelog';
 
   @override
   String get termsOfService => 'Kasutajatingimused';
 
   @override
-  String get titleVerification => 'Title verification';
+  String get titleVerification => 'Tiitli tõendamine';
 
   @override
   String get sourceCode => 'Lähtekood';
+
+  @override
+  String get blockAds => 'Block ads';
 
   @override
   String get simultaneousExhibitions => 'Simultaanid';
@@ -4109,7 +5150,7 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get yourPendingSimuls => 'Your pending simuls';
+  String get yourPendingSimuls => 'Sinu ootel olevad simultaanid';
 
   @override
   String get createdSimuls => 'Hiljuti loodud simultaanid';
@@ -4118,7 +5159,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get hostANewSimul => 'Korralda uus simultaan';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Register to join or host a simul';
+  String get signUpToHostOrJoinASimul => 'Registreeru simultaaniga liitumiseks või korraldamiseks';
 
   @override
   String get noSimulFound => 'Simultaani ei leitud';
@@ -4148,7 +5189,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get create => 'Loo';
 
   @override
-  String get whenCreateSimul => 'Kui lood simultaani, saad mängida samaaegselt mitme vastasega.';
+  String get creatingASimul => 'Simultaani loomine võimaldab sul mängida korraga mitme vastase vastu.';
 
   @override
   String get simulVariantsHint => 'Kui valid mitu varianti, saab iga mängija valida ise millist mängida.';
@@ -4160,13 +5201,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get simulAddExtraTime => 'Võid lisada kellale lisaaega, et simultaaniga paremini hakkama saada.';
 
   @override
-  String get simulHostExtraTime => 'Sinultaani korraldaja lisaaeg';
+  String get extraClockTimeForHost => 'Extra clock time for the host:';
 
   @override
-  String get simulAddExtraTimePerPlayer => 'Add initial time to your clock for each player joining the simul.';
+  String get simulAddExtraTimePerPlayer => 'Lisa aega oma kellale iga simultaaniga liituva mängija kohta.';
 
   @override
-  String get simulHostExtraTimePerPlayer => 'Host extra clock time per player';
+  String get simulHostExtraTimePerPlayer => 'Mängija kohta lisaaeg';
 
   @override
   String get lichessTournaments => 'Lichessi turniirid';
@@ -4193,40 +5234,46 @@ class AppLocalizationsEt extends AppLocalizations {
   String get keyGoToStartOrEnd => 'mine algusesse/lõppu';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+
+  @override
+  String get keyCycleSelectedVariation => 'Valitud variatsiooni tsükkel';
 
   @override
   String get keyShowOrHideComments => 'näita/peida kommentaarid';
 
   @override
+  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
+
+  @override
   String get keyEnterOrExitVariation => 'lisa/eemalda variatsioon';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Eelmine haru';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Järgmine haru';
 
   @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
+  String get toggleVariationArrows => 'Variatsiooninoolte lülitus';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Eelmise/järgmise variatsiooni kordus';
 
   @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
+  String get toggleGlyphAnnotations => 'Käigu märkuste lülitus';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Seisu märkuste lülitus';
 
   @override
-  String get toggleObservationAnnotations => 'Toggle observation annotations';
+  String get toggleObservationAnnotations => 'Vaatlusmärkuste lülitus';
 
   @override
-  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Variatsiooninooled võimaldavad liikuda ilma käikude loendit kasutamata.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'valitud käigu tegemine';
 
   @override
   String get newTournament => 'Uus turniir';
@@ -4271,7 +5318,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String betterThanPercentPlayers(String param1, String param2) {
-    return 'Better than $param1 of $param2 players';
+    return 'Parem kui $param1 $param2 mängijatest';
   }
 
   @override
@@ -4298,14 +5345,14 @@ class AppLocalizationsEt extends AppLocalizations {
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Kui sa ei näe e-maili, vaata ka teised kohad üle nagu rämpspost ja muud kaustad.';
 
   @override
-  String get ifYouDoNotGetTheEmail => 'If you do not get the email within 5 minutes:';
+  String get ifYouDoNotGetTheEmail => 'Kui sa ei saa e-kirja 5 minuti jooksul:';
 
   @override
-  String get checkAllEmailFolders => 'Check all junk, spam, and other folders';
+  String get checkAllEmailFolders => 'Vaata üle kõik prügi, rämpsu ja muud kaustad';
 
   @override
   String verifyYourAddress(String param) {
-    return 'Verify that $param is your email address';
+    return 'Kinnita, et $param on sinu e-posti aadress';
   }
 
   @override
@@ -4339,7 +5386,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get downloadImported => 'Lae imporditud PNG';
 
   @override
-  String get downloadAllGames => 'Download all games';
+  String get downloadAllGames => 'Lae alla kõik mängud';
 
   @override
   String get crosstable => 'Skoor';
@@ -4354,7 +5401,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get analysisShapesHowTo => 'Vajuta shift + click või paremat hiirenuppu, et joonistada lauale ringe ja nooli.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl or shift = red; command, alt, or meta = blue; a key from each = yellow.';
+  String get primaryColorArrowsHowTo => 'Ctrl või Shift = punane; Command, Alt või Meta = sinine; klahv kummastki rühmast = kollane.';
 
   @override
   String get letOtherPlayersMessageYou => 'Luba teistel mängijatel saata sulle sõnumeid';
@@ -4378,7 +5425,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get kidMode => 'Lapserežiim';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Lasterežiim on lubatud.';
 
   @override
   String get kidModeExplanation => 'See on seotud turvalisusega. Lapserežiimis igasugune suhtlemine sellel lehel on välja lülitatud. Aktiveerige see režiim, et kaitsta lapsi ja kooliõpilasi teiste kasutajate eest.';
@@ -4401,6 +5448,11 @@ class AppLocalizationsEt extends AppLocalizations {
   String get security => 'Turvalisus';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Sessioonid';
 
   @override
@@ -4416,7 +5468,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get viewTheSolution => 'Vaata lahendust';
 
   @override
-  String get noChallenges => 'No challenges.';
+  String get noChallenges => 'Väljakutsed puuduvad.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -4434,10 +5489,10 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Meeldib';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Märgitud meeldivaks';
 
   @override
   String get quickPairing => 'Kiirelt mängu';
@@ -4457,10 +5512,13 @@ class AppLocalizationsEt extends AppLocalizations {
   String get language => 'Keel';
 
   @override
-  String get allLanguages => 'All languages';
+  String get allLanguages => 'Kõik keeled';
 
   @override
   String get background => 'Taust';
+
+  @override
+  String get theme => 'Teema';
 
   @override
   String get light => 'Hele';
@@ -4469,34 +5527,43 @@ class AppLocalizationsEt extends AppLocalizations {
   String get dark => 'Tume';
 
   @override
-  String get transparent => 'Läbipaistev';
+  String get picture => 'Pilt';
 
   @override
   String get deviceTheme => 'Seadme teema';
 
   @override
+  String get roundness => 'Ümarus';
+
+  @override
+  String get backgroundImage => 'Background image';
+
+  @override
   String get backgroundImageUrl => 'Taustapildi URL:';
 
   @override
-  String get board => 'Board';
+  String get imageOpacity => 'Image opacity';
 
   @override
-  String get size => 'Size';
+  String get board => 'Laud';
 
   @override
-  String get opacity => 'Opacity';
+  String get size => 'Suurus';
 
   @override
-  String get brightness => 'Brightness';
+  String get opacity => 'Läbipaistmatus';
 
   @override
-  String get contrast => 'Contrast';
+  String get brightness => 'Heledus';
 
   @override
-  String get hue => 'Hue';
+  String get contrast => 'Kontrastsus';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get hue => 'Värvitoon';
+
+  @override
+  String get boardReset => 'Taasta värvide algseaded';
 
   @override
   String get pieceSet => 'Malendite kujundus';
@@ -4546,13 +5613,13 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String perfRatingX(String param) {
-    return 'Reiting: $param';
+  String perfRatingLabel(String param) {
+    return 'Rating: $param.';
   }
 
   @override
   String yourRatingIsX(String param) {
-    return 'Your rating is $param';
+    return 'Sinu reiting on $param';
   }
 
   @override
@@ -4694,14 +5761,14 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Challenge $param';
+    return 'Väljakutse $param';
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Oled saanud Lichessilt privaatsõnumi.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get readTheMessage => 'Read the message';
 
   @override
   String get sorry => 'Vabandust :(';
@@ -4766,10 +5833,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get edit => 'Muuda';
 
   @override
-  String get ultraBullet => 'UltraBullet';
+  String get ultraBullet => 'Ultravälkmale';
 
   @override
-  String get bullet => 'Bullet';
+  String get bullet => 'Supervälkmale';
 
   @override
   String get blitz => 'Välkmale';
@@ -4837,7 +5904,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get theForumEtiquette => 'foorumi etikett';
 
   @override
-  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+  String get pleaseBeNiceInTheForum => 'Palun käitu foorumis viisakalt.';
 
   @override
   String get thisTopicIsArchived => 'See teema on arhiveeritud ja sellele ei saa enam vastata.';
@@ -4888,9 +5955,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String youHaveJoinedTeamX(String param1) {
     return 'Oled liitunud meeskonnaga \"$param1\".';
   }
-
-  @override
-  String get someoneYouReportedWasBanned => 'Keegi, kellest sa teatasid, sai mängukeelu';
 
   @override
   String get congratsYouWon => 'Palju õnne, sa võitsid!';
@@ -4986,8 +6050,8 @@ class AppLocalizationsEt extends AppLocalizations {
   String get simulDescriptionHelp => 'Tahad osalejatele midagi öelda?';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
+  String youCanFormatTextUsing(String param) {
+    return 'Teksti saab vormindada $param abil.';
   }
 
   @override
@@ -5009,7 +6073,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get onlyTeamMembers => 'Ainult võistkonnaliikmed';
 
   @override
-  String get navigateMoveTree => 'Navigeeri käiguloendis';
+  String get moveListNavigation => 'Käikute loendi juhtimine';
 
   @override
   String get mouseTricks => 'Hiiretrikid';
@@ -5036,7 +6100,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get reopenYourAccount => 'Ava oma konto uuesti';
 
   @override
-  String get reopenYourAccountDescription => 'If you closed your account, but have since changed your mind, you get a chance of getting your account back.';
+  String get reopenYourAccountDescription => 'Kui sulgesid oma konto, kuid oled vahepeal meelt muutnud, on sul võimalus oma konto tagasi saada.';
 
   @override
   String get emailAssociatedToaccount => 'Kontoga seotud e-posti aadress';
@@ -5062,7 +6126,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get resignTheGame => 'Alistu';
 
   @override
-  String get youCantStartNewGame => 'Uut mängu ei saa alustada enne, kui see mäng on lõpetatud.';
+  String get youCantStartNewGame => 'Sa ei saa alustada uut mängu, kui on sinu kord.';
 
   @override
   String get since => 'Alates';
@@ -5083,54 +6147,75 @@ class AppLocalizationsEt extends AppLocalizations {
   String get ourEventTips => 'Meie nõuanded ürituste korraldamiseks';
 
   @override
-  String get instructions => 'Instructions';
+  String get instructions => 'Juhised';
 
   @override
-  String get showMeEverything => 'Show me everything';
+  String get showMeEverything => 'Näita mulle kõike';
 
   @override
   String get lichessPatronInfo => 'Lichess on heategevuslik ja täiesti tasuta avatud lähtekoodiga tarkvara.\nKõik tegevuskulud, arendus ja sisu rahastatakse ainult kasutajate annetustest.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Siin pole hetkel midagi näha.';
 
   @override
-  String get stats => 'Stats';
+  String get stats => 'Statistika';
 
   @override
-  String get accessibility => 'Accessibility';
+  String get accessibility => 'Ligipääsetavus';
 
   @override
-  String get enableBlindMode => 'Enable blind mode';
+  String get enableBlindMode => 'Pimerežiimi lubamine';
 
   @override
-  String get disableBlindMode => 'Disable blind mode';
+  String get disableBlindMode => 'Pimerežiimi keelamine';
 
   @override
-  String get copyToClipboard => 'Copy to clipboard';
+  String get copyToClipboard => 'Kopeeri lõikepuhvrile';
 
   @override
-  String get online => 'online';
+  String get online => 'ühendusega';
 
   @override
-  String get offline => 'offline';
+  String get offline => 'ühenduseta';
 
   @override
-  String get search => 'Search';
+  String get search => 'Otsing';
 
   @override
-  String get clearSearch => 'Clear search';
+  String get clearSearch => 'Tühjenda otsing';
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Otsingule \"$param\" ei leitud vastet';
   }
 
   @override
-  String get tags => 'Tags';
+  String get tags => 'Sildid';
 
   @override
-  String get enPassant => 'En passant rights';
+  String get enPassant => 'En passant õigused';
+
+  @override
+  String get settings => 'Seaded';
+
+  @override
+  String get verifyingYourDevice => 'Verifying your device...';
+
+  @override
+  String get chessOpenings => 'Chess openings';
+
+  @override
+  String get boards => 'Boards';
+
+  @override
+  String get write => 'Write';
+
+  @override
+  String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {
@@ -5155,17 +6240,6 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count prohmakat',
-      one: '$count prohmakas',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5177,34 +6251,12 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count viga',
-      one: '$count viga',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count Viga',
       one: '$count Viga',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ebatäpsust',
-      one: '$count ebatäpsus',
     );
     return '$_temp0';
   }
@@ -5247,8 +6299,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count rating over $param2 games',
-      one: '$count rating over $param2 game',
+      other: '$count reiting $param2 mängu kohta',
+      one: '$count reiting $param2 mängu kohta',
     );
     return '$_temp0';
   }
@@ -5423,8 +6475,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count simuls',
-      one: '$count simul',
+      other: '$count simultaani',
+      one: '$count simultaan',
     );
     return '$_temp0';
   }
@@ -5962,7 +7014,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyCurrentChapterUrl => 'Praeguse peatüki URL';
 
   @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Te saate selle asetada foorumisse või oma Lichessi blogisse sängitamiseks';
+  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
 
   @override
   String get studyStartAtInitialPosition => 'Alusta algseisus';
@@ -6334,10 +7386,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyCustomPositionText => 'Set up the board your way.<br>Suited to explore endgames.';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
+  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -6414,6 +7466,12 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get teamTeam => 'Võistkond';
+
+  @override
+  String get teamTeamUpdates => 'Team updates';
+
+  @override
   String get teamIncorrectEntryCode => 'Incorrect entry code.';
 
   @override
@@ -6437,6 +7495,9 @@ class AppLocalizationsEt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => 'Kaheastmeline autentimine';
 
   @override
   String get timeagoJustNow => 'äsja';
@@ -6613,13 +7674,70 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => 'Kaheastmeline autentimine';
-
-  @override
   String get ublogCommunity => 'Community';
 
   @override
   String ublogXBlog(String param) {
     return 'Kasutaja $param blogi';
   }
+
+  @override
+  String get variantStandard => 'Tavaline';
+
+  @override
+  String get variantStandardTitle => 'Tavapäraste malereeglitega (FIDE)';
+
+  @override
+  String get variantChess960 => 'Male960';
+
+  @override
+  String get variantChess960Title => 'Kodurea malendite algpositsioonid määratakse juhuslikult.';
+
+  @override
+  String get variantKingOfTheHill => 'Mäekuningas';
+
+  @override
+  String get variantKingOfTheHillTitle => 'Võitmiseks liigu oma kuningaga keskele.';
+
+  @override
+  String get variantThreeCheck => 'Kolmetulemale';
+
+  @override
+  String get variantThreeCheckTitle => 'Võitmiseks ründa vastase kuningat 3 korda.';
+
+  @override
+  String get variantAntichess => 'Antimale';
+
+  @override
+  String get variantAntichessTitle => 'Mängu võitmiseks kaota kõik oma malendid (või satu patiseisu).';
+
+  @override
+  String get variantAtomic => 'Aatomimale';
+
+  @override
+  String get variantAtomicTitle => 'Võitmiseks hävita vastase kuningas.';
+
+  @override
+  String get variantHorde => 'Hord';
+
+  @override
+  String get variantHordeTitle => 'Ühel poolel on suur hulk ettureid, teisel tavalised malendid.';
+
+  @override
+  String get variantRacingKings => 'Kuningate võidujooks';
+
+  @override
+  String get variantRacingKingsTitle => 'Võitmiseks jõua oma kuningaga malelaua teise otsa.';
+
+  @override
+  String get variantCrazyhouse => 'Pealepanemismale';
+
+  @override
+  String get variantCrazyhouseTitle => 'Malendi liigutamise asemel saab löödud malendi lauale tagasi panna.';
+
+  @override
+  String get variantFromPosition => 'Positsioonilt';
+
+  @override
+  String get variantFromPositionTitle => 'Tavaline male kohandatud positsioonilt';
 }

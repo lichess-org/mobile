@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
@@ -47,7 +47,7 @@ class GameLayout extends ConsumerStatefulWidget {
   /// Exactly one of [boardParams] (the screen lets [GameLayout] own the board
   /// controller) or [controllerParams] (the screen owns the controller, for the
   /// high-performance path) must be provided.
-  const GameLayout({
+  const new({
     required this.orientation,
     this.boardParams,
     this.controllerParams,
@@ -78,7 +78,7 @@ class GameLayout extends ConsumerStatefulWidget {
        );
 
   /// Creates an empty game layout (useful for loading).
-  const GameLayout.empty({this.moves, this.errorMessage})
+  const new empty({this.moves, this.errorMessage})
     : orientation = Side.white,
       boardParams = GameBoardParams.emptyBoard,
       controllerParams = null,
@@ -189,7 +189,7 @@ class GameLayout extends ConsumerStatefulWidget {
   ConsumerState<GameLayout> createState() => _GameLayoutState();
 }
 
-class _GameLayoutState extends ConsumerState<GameLayout> {
+class _GameLayoutState() extends ConsumerState<GameLayout> {
   /// The controller created and owned by this state, used only in the
   /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
   ChessboardController? _ownController;
@@ -316,19 +316,25 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           castlingMethod: boardPrefs.castlingMethod,
           boardHighlights: boardPrefs.boardHighlights,
         ),
-      ReadonlyBoardParams(:final fen, :final lastMove) => GameData(
-        fen: fen,
+      ReadonlyBoardParams(:final lastMove, :final position) => GameData(
+        fen: position.fen,
         playerSide: PlayerSide.none,
-        sideToMove: _sideToMoveFromFen(fen),
+        sideToMove: position.turn,
         validMoves: const <Square, Set<Square>>{},
         lastMove: lastMove,
+        kingSquareInCheck: boardPrefs.boardHighlights && position.isCheck
+            ? position.board.kingOf(position.turn)
+            : null,
+      ),
+      EmptyBoardParams() => const GameData(
+        fen: kEmptyFEN,
+        playerSide: PlayerSide.none,
+        sideToMove: Side.white,
+        validMoves: <Square, Set<Square>>{},
+        lastMove: null,
+        kingSquareInCheck: null,
       ),
     };
-  }
-
-  Side _sideToMoveFromFen(String fen) {
-    final parts = fen.split(' ');
-    return parts.length > 1 && parts[1] == 'b' ? Side.black : Side.white;
   }
 
   @override
@@ -348,6 +354,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
         ? (playerSide == PlayerSide.none ? null : _controller?.game.sideToMove)
         : switch (widget.boardParams!) {
             ReadonlyBoardParams() => null,
+            EmptyBoardParams() => null,
             InteractiveBoardParams(:final position, :final playerSide) =>
               playerSide == PlayerSide.none ? null : position.turn,
           };
@@ -489,6 +496,7 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           );
         } else {
           final defaultBoardSize = constraints.biggest.shortestSide;
+          final maxHeight = constraints.maxHeight;
 
           final isShortScreen = isShortVerticalScreen(context);
 
@@ -499,6 +507,12 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
           double effectiveBoardSize =
               (isTablet ? defaultBoardSize - kTabletBoardTableSidePadding * 2 : defaultBoardSize) -
               pocketsPadding;
+
+          //Reserve vertical space for the top and bottom tables and the user actions bar if present.
+          final maxAllowedBoardSize = maxHeight - 180.0;
+          if (effectiveBoardSize > maxAllowedBoardSize) {
+            effectiveBoardSize = maxAllowedBoardSize;
+          }
 
           if (isShortScreen) {
             effectiveBoardSize -= 16;
@@ -560,27 +574,16 @@ class _GameLayoutState extends ConsumerState<GameLayout> {
   }
 }
 
-class BoardSettingsOverrides {
-  const BoardSettingsOverrides({
-    this.animationDuration,
-    this.autoQueenPromotion,
-    this.autoQueenPromotionOnPremove,
-    this.blindfoldMode,
-    this.drawShape,
-    this.pieceOrientationBehavior,
-    this.pieceAssets,
-    this.enablePremoves,
-  });
-
-  final Duration? animationDuration;
-  final bool? autoQueenPromotion;
-  final bool? autoQueenPromotionOnPremove;
-  final bool? blindfoldMode;
-  final DrawShapeOptions? drawShape;
-  final PieceOrientationBehavior? pieceOrientationBehavior;
-  final PieceAssets? pieceAssets;
-  final bool? enablePremoves;
-
+class const BoardSettingsOverrides({
+  final Duration? animationDuration,
+  final bool? autoQueenPromotion,
+  final bool? autoQueenPromotionOnPremove,
+  final bool? blindfoldMode,
+  final DrawShapeOptions? drawShape,
+  final PieceOrientationBehavior? pieceOrientationBehavior,
+  final PieceAssets? pieceAssets,
+  final bool? enablePremoves,
+}) {
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
       animationDuration: animationDuration,

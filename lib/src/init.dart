@@ -1,7 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:dynamic_system_colors/dynamic_system_colors.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,16 +8,16 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
-import 'package:material_color_utilities/palettes/core_palette.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 
@@ -43,7 +42,7 @@ Future<void> initializeApp() async {
       await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
 
       // on android 12+ set board theme to system colors
-      if (getCorePalette() != null) {
+      if (getSystemCorePalettes() != null) {
         final boardPrefs = BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system);
         await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
       }
@@ -55,7 +54,7 @@ Future<void> initializeApp() async {
       prefs.setString('installed_version', appVersion.canonicalizedVersion);
     }
   } catch (e, st) {
-    _logger.severe('Error during app initialization: $e');
+    _logger.severe('Error during app initialization:', e, st);
     LichessBinding.instance.firebaseCrashlytics.recordError(
       e,
       st,
@@ -93,8 +92,8 @@ Future<void> preloadPieceImages() async {
   if (storedPrefs != null) {
     try {
       boardPrefs = BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
-    } catch (e) {
-      _logger.warning('Failed to decode board preferences: $e');
+    } catch (e, st) {
+      _logger.warning('Failed to decode board preferences:', e, st);
     }
   }
 
@@ -107,22 +106,9 @@ Future<void> preloadPieceImages() async {
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   // On android 12+ set dynamic color schemes
   try {
-    Future.wait([DynamicColorPlugin.getCorePalette(), DynamicColorPlugin.getColorSchemes()]).then((
-      List<dynamic> value,
-    ) {
-      // TODO migrate
-      // ignore: deprecated_member_use
-      final CorePalette? palette = value[0] as CorePalette?;
-      final schemes = value[1] as dynamic;
-      final ColorSchemes? colorSchemes = schemes != null
-          // ignore: avoid_dynamic_calls
-          ? (light: schemes.light as ColorScheme, dark: schemes.dark as ColorScheme)
-          : null;
-
-      setSystemColors(palette, colorSchemes);
-    });
-  } catch (e) {
-    _logger.fine('Device does not support core palette: $e');
+    await loadSystemColors();
+  } catch (e, st) {
+    _logger.fine('Device does not support dynamic colors:', e, st);
   }
 
   // lock orientation to portrait on android phones
@@ -143,6 +129,10 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
   );
 
   /// Enables high refresh rate for devices where it was previously disabled
+  unawaited(_setHighRefreshRate());
+}
+
+Future<void> _setHighRefreshRate() async {
   final List<DisplayMode> supported = await FlutterDisplayMode.supported;
   final DisplayMode active = await FlutterDisplayMode.active;
 

@@ -61,4 +61,4 @@ It is OK for private functions that are used only once, and of course for widget
 In general it is good to respect these rules:
 
 - don't write a private function (or private class) for a widget that is used only once, just write it directly
-- write a `StatelessWidget` for a reusable widget, even if it's scope is limited to a single screen
+- write a `StatelessWidget` for a reusable widget, even if its scope is limited to a single screen

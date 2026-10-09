@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -16,12 +15,9 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:material_ui/material_ui.dart';
 
-class ChallengeOddBotsScreen extends StatelessWidget {
-  const ChallengeOddBotsScreen(this.bot);
-
-  final LightUser bot;
-
+class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget {
   static Route<dynamic> buildRoute(LightUser bot) {
     return buildScreenRoute(screen: ChallengeOddBotsScreen(bot));
   }
@@ -35,21 +31,12 @@ class ChallengeOddBotsScreen extends StatelessWidget {
   }
 }
 
-class _ChallengeBody extends ConsumerStatefulWidget {
-  const _ChallengeBody(this.bot);
-
-  final LightUser bot;
-
+class const _ChallengeBody(final LightUser bot) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_ChallengeBody> createState() => _ChallengeBodyState();
 }
 
-class _BotFen {
-  final String fen;
-  final Side side;
-
-  _BotFen({required this.fen, required this.side});
-}
+class _BotFen({required final String fen, required final Side side});
 
 final Map<String, List<_BotFen>> _botFens = {
   'leelaknightodds': [
@@ -103,7 +90,7 @@ final Map<String, List<_BotFen>> _botFens = {
 };
 final oddBots = _botFens.keys;
 
-class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
+class _ChallengeBodyState() extends ConsumerState<_ChallengeBody> {
   String? fen;
   SideChoice sideChoice = SideChoice.white;
   late int seconds;

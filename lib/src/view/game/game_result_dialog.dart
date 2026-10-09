@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -13,23 +12,26 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_ui/material_ui.dart';
 
-class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
-
-  final GameFullId id;
+class const GameResultDialog({
+  required final GameFullId id,
 
   /// Callback to load a new opponent.
-  final void Function(PlayableGame game) onNewOpponentCallback;
-
+  required final void Function(PlayableGame game) onNewOpponentCallback,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<GameResultDialog> createState() => _GameResultDialogState();
 }
 
-class _GameResultDialogState extends ConsumerState<GameResultDialog> {
+class _GameResultDialogState() extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
 
@@ -49,6 +51,59 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   void dispose() {
     _buttonActivationTimer.cancel();
     super.dispose();
+  }
+
+  /// The rematch button action, or null to disable it. A socket offer if the
+  /// opponent is online, otherwise a challenge for offline clockless games.
+  VoidCallback? _rematchAction(BuildContext context, GameState value) {
+    if (!_activateButtons || value.game.opponent?.offeringRematch == true) {
+      return null;
+    }
+    final ctrlProvider = gameControllerProvider(widget.id);
+    if (value.game.opponent?.onGame == true) {
+      return () {
+        ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
+      };
+    }
+    if (value.game.clock == null &&
+        value.game.me?.user != null &&
+        value.game.opponent?.user != null) {
+      return () async {
+        try {
+          await ref.read(ctrlProvider.notifier).challengeRematch();
+        } catch (_) {
+          if (context.mounted) {
+            showSnackBar(context, 'Could not send the rematch challenge', type: SnackBarType.error);
+          }
+        }
+      };
+    }
+    return null;
+  }
+
+  /// Navigates back to the tournament this game belongs to.
+  ///
+  /// If we came from the tournament screen (the usual case: we were on the
+  /// tournament, the game was pushed on top and we played it), it is still in
+  /// the navigation stack, so we close the dialog and pop back to it. Otherwise
+  /// (e.g. the game was opened from the home recent games list) there is no
+  /// tournament screen to go back to, so we push a fresh one.
+  void _backToTournament(TournamentId tournamentId) {
+    final navigator = Navigator.of(context);
+    if (rootNavRouteStackObserver.containsRoute(
+      TournamentScreen.routeName,
+      arguments: tournamentId.value,
+    )) {
+      navigator.popUntil(
+        (route) =>
+            route.settings.name == TournamentScreen.routeName &&
+            route.settings.arguments == tournamentId.value,
+      );
+    } else {
+      // Close the dialog first, then push the tournament screen.
+      navigator.popUntil((route) => route is! PopupRoute);
+      navigator.push(TournamentScreen.buildRoute(tournamentId));
+    }
   }
 
   @override
@@ -74,7 +129,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
               firstChild: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (value.game.me?.offeringRematch == true) ...[
+                  if (value.game.me?.offeringRematch == true ||
+                      value.correspondenceRematchId != null) ...[
                     Flexible(
                       flex: 3,
                       child: Text(
@@ -85,8 +141,22 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                     ),
                     const Spacer(),
                     IconButton.outlined(
-                      onPressed: () {
-                        ref.read(ctrlProvider.notifier).declineRematch();
+                      onPressed: () async {
+                        if (value.game.me?.offeringRematch == true) {
+                          ref.read(ctrlProvider.notifier).declineRematch();
+                        } else {
+                          try {
+                            await ref.read(ctrlProvider.notifier).cancelRematchChallenge();
+                          } catch (_) {
+                            if (context.mounted) {
+                              showSnackBar(
+                                context,
+                                'Could not cancel the rematch challenge',
+                                type: SnackBarType.error,
+                              );
+                            }
+                          }
+                        }
                       },
                       tooltip: context.l10n.cancelRematchOffer,
                       icon: const Icon(Icons.cancel),
@@ -94,14 +164,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   ] else if (value.canOfferRematch)
                     Expanded(
                       child: FilledButton(
-                        onPressed:
-                            _activateButtons &&
-                                value.game.opponent?.onGame == true &&
-                                value.game.opponent?.offeringRematch != true
-                            ? () {
-                                ref.read(ctrlProvider.notifier).proposeOrAcceptRematch();
-                              }
-                            : null,
+                        onPressed: _rematchAction(context, value),
                         child: Text(context.l10n.rematch),
                       ),
                     )
@@ -167,14 +230,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             if (value.tournament?.isOngoing == true) ...[
               FilledButton.icon(
                 icon: const Icon(Icons.play_arrow),
-                onPressed: () {
-                  // Close the dialog
-                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                  // Close the game screen
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop(); // Pop the screen after frame
-                  });
-                },
+                onPressed: () => _backToTournament(value.tournament!.id),
                 label: Text(context.l10n.backToTournament, textAlign: TextAlign.center),
               ),
               FilledButton.tonalIcon(
@@ -184,12 +240,7 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
                   ref
                       .read(tournamentControllerProvider(value.tournament!.id).notifier)
                       .joinOrPause();
-                  // Close the dialog
-                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
-                  // Close the game screen
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.of(context).pop(); // Pop the screen after frame
-                  });
+                  _backToTournament(value.tournament!.id);
                 },
                 label: Text(context.l10n.pause, textAlign: TextAlign.center),
               ),
@@ -209,30 +260,11 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   }
 }
 
-class ExportedGameResultDialog extends StatelessWidget {
-  const ExportedGameResultDialog({required this.game, super.key});
-
-  final BaseGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    final content = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [GameResult(game: game)],
-    );
-
-    return _ResultDialog(child: content);
-  }
-}
-
-class OverTheBoardGameResultDialog extends StatelessWidget {
-  const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
-
-  final OverTheBoardGame game;
-
-  final void Function() onRematch;
-
+class const OverTheBoardGameResultDialog({
+  super.key,
+  required final OverTheBoardGame game,
+  required final void Function() onRematch,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Column(
@@ -267,11 +299,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
   }
 }
 
-class GameResult extends StatelessWidget {
-  const GameResult({required this.game, super.key});
-
-  final BaseGame game;
-
+class const GameResult({required final BaseGame game, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showWinner = game.winner != null
@@ -302,14 +330,10 @@ class GameResult extends StatelessWidget {
   }
 }
 
-class _ResultDialog extends StatelessWidget {
-  const _ResultDialog({required this.child});
-
-  final Widget child;
-
+class const _ResultDialog({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.sizeOf(context).width;
+    final screenWidth = MediaQuery.widthOf(context);
     final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
     final sizedContent = SizedBox(
       width: min(screenWidth, kMaterialPopupMenuMaxWidth),

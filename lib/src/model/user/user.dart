@@ -1,19 +1,20 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'user.freezed.dart';
 part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-sealed class LightUser with _$LightUser {
-  const LightUser._();
-
-  const factory LightUser({
+sealed class const LightUser._() with _$LightUser {
+  const factory({
     required UserId id,
     required String name,
     String? title,
@@ -28,7 +29,9 @@ sealed class LightUser with _$LightUser {
 
   bool get isPatron => patronColor != null;
 
-  factory LightUser.fromJson(Map<String, dynamic> json) => _$LightUserFromJson(json);
+  bool get isBot => title == 'BOT';
+
+  factory fromJson(Map<String, dynamic> json) => _$LightUserFromJson(json);
 }
 
 extension LightUserExtension on Pick {
@@ -69,14 +72,12 @@ extension LightUserExtension on Pick {
 
 @freezed
 sealed class TemporaryBan with _$TemporaryBan {
-  const factory TemporaryBan({required DateTime date, required Duration duration}) = _TemporaryBan;
+  const factory({required DateTime date, required Duration duration}) = _TemporaryBan;
 }
 
 @freezed
-sealed class User with _$User {
-  const User._();
-
-  const factory User({
+sealed class const User._() with _$User {
+  const factory({
     required UserId id,
     required String username,
     String? title,
@@ -107,9 +108,9 @@ sealed class User with _$User {
 
   bool get isBot => title == 'BOT';
 
-  factory User.fromServerJson(Map<String, dynamic> json) => User.fromPick(pick(json).required());
+  factory fromServerJson(Map<String, dynamic> json) => User.fromPick(pick(json).required());
 
-  factory User.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     final receivedPerfsMap = pick('perfs').asMapOrEmpty<String, Map<String, dynamic>>();
     return User(
       id: pick('id').asUserIdOrThrow(),
@@ -153,7 +154,7 @@ sealed class User with _$User {
 
 @freezed
 sealed class UserGameCount with _$UserGameCount {
-  const factory UserGameCount({
+  const factory({
     required int all,
     // TODO(#454): enable rest of fields when needed for filtering
     // required int rated,
@@ -170,10 +171,9 @@ sealed class UserGameCount with _$UserGameCount {
     // required int me,
   }) = _UserGameCount;
 
-  factory UserGameCount.fromJson(Map<String, dynamic> json) =>
-      UserGameCount.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => UserGameCount.fromPick(pick(json).required());
 
-  factory UserGameCount.fromPick(RequiredPick pick) => UserGameCount(
+  factory fromPick(RequiredPick pick) => UserGameCount(
     all: pick('all').asIntOrThrow(),
     // TODO(#454): enable rest of fields when needed for filtering
     // rated: pick('rated').asIntOrThrow(),
@@ -193,11 +193,11 @@ sealed class UserGameCount with _$UserGameCount {
 
 @freezed
 sealed class PlayTime with _$PlayTime {
-  const factory PlayTime({required Duration total, required Duration tv}) = _PlayTime;
+  const factory({required Duration total, required Duration tv}) = _PlayTime;
 
-  factory PlayTime.fromJson(Map<String, dynamic> json) => PlayTime.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => PlayTime.fromPick(pick(json).required());
 
-  factory PlayTime.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return PlayTime(
       total: pick('total').asDurationFromSecondsOrThrow(),
       tv: pick('tv').asDurationFromSecondsOrThrow(),
@@ -206,10 +206,8 @@ sealed class PlayTime with _$PlayTime {
 }
 
 @freezed
-sealed class UserPerf with _$UserPerf {
-  const UserPerf._();
-
-  const factory UserPerf({
+sealed class const UserPerf._() with _$UserPerf {
+  const factory({
     required int rating,
     required int ratingDeviation,
     required int progression,
@@ -218,9 +216,9 @@ sealed class UserPerf with _$UserPerf {
     bool? provisional,
   }) = _UserPerf;
 
-  factory UserPerf.fromJson(Map<String, dynamic> json) => UserPerf.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => UserPerf.fromPick(pick(json).required());
 
-  factory UserPerf.fromPick(RequiredPick pick) => UserPerf(
+  factory fromPick(RequiredPick pick) => UserPerf(
     rating: pick('rating').asIntOrThrow(),
     ratingDeviation: pick('rd').asIntOrThrow(),
     progression: pick('prog').asIntOrThrow(),
@@ -229,7 +227,7 @@ sealed class UserPerf with _$UserPerf {
     provisional: pick('prov').asBoolOrNull(),
   );
 
-  factory UserPerf.fromJsonStreak(Map<String, dynamic> json) => UserPerf(
+  factory fromJsonStreak(Map<String, dynamic> json) => UserPerf(
     rating: UserActivityStreak.fromJson(json).score,
     ratingDeviation: 0,
     progression: 0,
@@ -242,17 +240,12 @@ sealed class UserPerf with _$UserPerf {
 
 @freezed
 sealed class UserStatus with _$UserStatus {
-  const factory UserStatus({
-    required UserId id,
-    required String name,
-    bool? online,
-    bool? playing,
-  }) = _UserStatus;
+  const factory({required UserId id, required String name, bool? online, bool? playing}) =
+      _UserStatus;
 
-  factory UserStatus.fromJson(Map<String, dynamic> json) =>
-      UserStatus.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => UserStatus.fromPick(pick(json).required());
 
-  factory UserStatus.fromPick(RequiredPick pick) => UserStatus(
+  factory fromPick(RequiredPick pick) => UserStatus(
     id: pick('id').asUserIdOrThrow(),
     name: pick('name').asStringOrThrow(),
     online: pick('online').asBoolOrNull(),
@@ -262,7 +255,7 @@ sealed class UserStatus with _$UserStatus {
 
 @freezed
 sealed class UserActivityTournament with _$UserActivityTournament {
-  const factory UserActivityTournament({
+  const factory({
     required String id,
     required String name,
     required int nbGames,
@@ -271,10 +264,10 @@ sealed class UserActivityTournament with _$UserActivityTournament {
     required int rankPercent,
   }) = _UserActivityTournament;
 
-  factory UserActivityTournament.fromJson(Map<String, dynamic> json) =>
+  factory fromJson(Map<String, dynamic> json) =>
       UserActivityTournament.fromPick(pick(json).required());
 
-  factory UserActivityTournament.fromPick(RequiredPick pick) => UserActivityTournament(
+  factory fromPick(RequiredPick pick) => UserActivityTournament(
     id: pick('tournament', 'id').asStringOrThrow(),
     name: pick('tournament', 'name').asStringOrThrow(),
     nbGames: pick('nbGames').asIntOrThrow(),
@@ -286,18 +279,17 @@ sealed class UserActivityTournament with _$UserActivityTournament {
 
 @freezed
 sealed class UserActivityStreak with _$UserActivityStreak {
-  const factory UserActivityStreak({required int runs, required int score}) = _UserActivityStreak;
+  const factory({required int runs, required int score}) = _UserActivityStreak;
 
-  factory UserActivityStreak.fromJson(Map<String, dynamic> json) =>
-      UserActivityStreak.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => UserActivityStreak.fromPick(pick(json).required());
 
-  factory UserActivityStreak.fromPick(RequiredPick pick) =>
+  factory fromPick(RequiredPick pick) =>
       UserActivityStreak(runs: pick('runs').asIntOrThrow(), score: pick('score').asIntOrThrow());
 }
 
 @freezed
 sealed class UserActivityScore with _$UserActivityScore {
-  const factory UserActivityScore({
+  const factory({
     required int win,
     required int loss,
     required int draw,
@@ -305,10 +297,9 @@ sealed class UserActivityScore with _$UserActivityScore {
     required int ratingAfter,
   }) = _UserActivityScore;
 
-  factory UserActivityScore.fromJson(Map<String, dynamic> json) =>
-      UserActivityScore.fromPick(pick(json).required());
+  factory fromJson(Map<String, dynamic> json) => UserActivityScore.fromPick(pick(json).required());
 
-  factory UserActivityScore.fromPick(RequiredPick pick) => UserActivityScore(
+  factory fromPick(RequiredPick pick) => UserActivityScore(
     win: pick('win').asIntOrThrow(),
     loss: pick('loss').asIntOrThrow(),
     draw: pick('draw').asIntOrThrow(),
@@ -318,10 +309,8 @@ sealed class UserActivityScore with _$UserActivityScore {
 }
 
 @freezed
-sealed class UserActivity with _$UserActivity {
-  const UserActivity._();
-
-  const factory UserActivity({
+sealed class const UserActivity._() with _$UserActivity {
+  const factory({
     required DateTime startTime,
     required DateTime endTime,
     IMap<Perf, UserActivityScore>? games,
@@ -355,7 +344,7 @@ sealed class UserActivity with _$UserActivity {
 
 @freezed
 sealed class UserPerfStats with _$UserPerfStats {
-  const factory UserPerfStats({
+  const factory({
     required double rating,
     required double deviation,
     bool? provisional,
@@ -391,14 +380,14 @@ sealed class UserPerfStats with _$UserPerfStats {
 
 @freezed
 sealed class UserStreak with _$UserStreak {
-  const factory UserStreak.gameStreak({
+  const factory gameStreak({
     required int gamesPlayed,
     required bool isValueEmpty,
     required UserPerfGame? startGame,
     required UserPerfGame? endGame,
   }) = UserGameStreak;
 
-  const factory UserStreak.timeStreak({
+  const factory timeStreak({
     required Duration timePlayed,
     required bool isValueEmpty,
     required UserPerfGame? startGame,
@@ -407,10 +396,8 @@ sealed class UserStreak with _$UserStreak {
 }
 
 @freezed
-sealed class UserPerfGame with _$UserPerfGame {
-  const UserPerfGame._();
-
-  const factory UserPerfGame({
+sealed class const UserPerfGame._() with _$UserPerfGame {
+  const factory({
     required DateTime finishedAt,
     required GameId gameId,
     int? opponentRating,
@@ -425,31 +412,23 @@ sealed class UserPerfGame with _$UserPerfGame {
 }
 
 @immutable
-class UserRatingHistoryPerf {
-  final Perf perf;
-  final IList<UserRatingHistoryPoint> points;
-
-  const UserRatingHistoryPerf({required this.perf, required this.points});
-}
+class const UserRatingHistoryPerf({
+  required final Perf perf,
+  required final IList<UserRatingHistoryPoint> points,
+});
 
 @immutable
-class UserRatingHistoryPoint {
-  final DateTime date;
-  final int elo;
-
-  const UserRatingHistoryPoint({required this.date, required this.elo});
-}
+class const UserRatingHistoryPoint({required final DateTime date, required final int elo});
 
 @freezed
 sealed class CrosstableMatchup with _$CrosstableMatchup {
-  const factory CrosstableMatchup({required IMap<UserId, double> users, required int nbGames}) =
-      _CrosstableMatchup;
+  const factory({required IMap<UserId, double> users, required int nbGames}) = _CrosstableMatchup;
 
-  factory CrosstableMatchup.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return CrosstableMatchup.fromPick(pick(json).required());
   }
 
-  factory CrosstableMatchup.fromPick(RequiredPick pick) => CrosstableMatchup(
+  factory fromPick(RequiredPick pick) => CrosstableMatchup(
     nbGames: pick('nbGames').asIntOrThrow(),
     users: pick('users')
         .asMapOrThrow<String, num>()
@@ -460,17 +439,17 @@ sealed class CrosstableMatchup with _$CrosstableMatchup {
 
 @freezed
 sealed class Crosstable with _$Crosstable {
-  const factory Crosstable({
+  const factory({
     required IMap<UserId, double> users,
     required int nbGames,
     CrosstableMatchup? matchup,
   }) = _Crosstable;
 
-  factory Crosstable.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return Crosstable.fromPick(pick(json).required());
   }
 
-  factory Crosstable.fromPick(RequiredPick pick) => Crosstable(
+  factory fromPick(RequiredPick pick) => Crosstable(
     nbGames: pick('nbGames').asIntOrThrow(),
     users: pick('users')
         .asMapOrThrow<String, num>()
@@ -480,4 +459,29 @@ sealed class Crosstable with _$Crosstable {
       return CrosstableMatchup.fromPick(matchupPick.required());
     }),
   );
+}
+
+/// Perfs with enough rated games, sorted by game count descending.
+///
+/// This runs in every row of every scrolling user lists (leaderboards, search,
+/// teams), so the filter + sort is memoized per map instance. [IMap] is
+/// immutable, so instance identity implies value identity and the cached list
+/// stays valid as long as the map is alive.
+///
+/// Expando uses a weak reference, ensuring that the cache is garbage collected
+/// once the perf map is destroyed
+final _sortedPerfsCache = Expando<List<Perf>>('sortedUserPerfs');
+
+extension PerfsHelpers on IMap<Perf, UserPerf> {
+  List<Perf> get sortedUserPerfs => _sortedPerfsCache[this] ??=
+      Perf.values
+          .where((element) {
+            final p = this[element];
+            return p != null && p.numberOfGamesOrRuns > 0 && p.ratingDeviation < kClueLessDeviation;
+          })
+          .toList(growable: false)
+        ..sort((p1, p2) => this[p2]!.numberOfGamesOrRuns.compareTo(this[p1]!.numberOfGamesOrRuns));
+
+  int? get displayRating => sortedUserPerfs.isEmpty ? null : this[sortedUserPerfs.first]?.rating;
+  IconData? get displayIcon => sortedUserPerfs.isEmpty ? null : sortedUserPerfs.first.icon;
 }

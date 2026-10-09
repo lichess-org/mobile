@@ -1,15 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AppBarLichessTitle extends StatelessWidget {
-  const AppBarLichessTitle({super.key, this.iconSize = 24});
-
-  final double iconSize;
-
+class const AppBarLichessTitle({super.key, final double iconSize = 24}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text.rich(
@@ -32,19 +28,14 @@ class AppBarLichessTitle extends StatelessWidget {
 }
 
 /// A widget that displays a title in the app bar with auto-sizing text.
-class AppBarTitleText extends StatelessWidget {
-  const AppBarTitleText(
-    this.text, {
-    super.key,
-    this.minFontSize,
-    this.maxFontSize,
-    this.maxLines = 1,
-  }) : assert(maxLines > 0 && maxLines <= 2);
-
-  final String text;
-  final int maxLines;
-  final double? minFontSize;
-  final double? maxFontSize;
+class const AppBarTitleText(
+  final String text, {
+  super.key,
+  final double? minFontSize,
+  final double? maxFontSize,
+  final int maxLines = 1,
+}) extends StatelessWidget {
+  this : assert(maxLines > 0 && maxLines <= 2);
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +52,16 @@ class AppBarTitleText extends StatelessWidget {
   }
 }
 
-class LichessMessage extends StatefulWidget {
-  const LichessMessage({super.key, this.style, this.textAlign = TextAlign.start});
-
-  final TextStyle? style;
-  final TextAlign textAlign;
-
+class const LichessMessage({
+  super.key,
+  final TextStyle? style,
+  final TextAlign textAlign = TextAlign.start,
+}) extends StatefulWidget {
   @override
   State<LichessMessage> createState() => _LichessMessageState();
 }
 
-class _LichessMessageState extends State<LichessMessage> {
+class _LichessMessageState() extends State<LichessMessage> {
   late TapGestureRecognizer _recognizer;
 
   @override
@@ -116,5 +106,13 @@ class _LichessMessageState extends State<LichessMessage> {
         textAlign: widget.textAlign,
       ),
     );
+  }
+}
+
+/// An icon that represents opening a button or a link in a external application.
+class const OpenInNewIcon() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(Icons.open_in_new, size: 18);
   }
 }

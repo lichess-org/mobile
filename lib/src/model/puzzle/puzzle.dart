@@ -11,16 +11,11 @@ part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
-sealed class Puzzle with _$Puzzle {
-  const Puzzle._();
+sealed class const Puzzle._() with _$Puzzle {
+  const factory({required PuzzleData puzzle, required PuzzleGame game, bool? isDailyPuzzle}) =
+      _Puzzle;
 
-  const factory Puzzle({
-    required PuzzleData puzzle,
-    required PuzzleGame game,
-    bool? isDailyPuzzle,
-  }) = _Puzzle;
-
-  factory Puzzle.fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleFromJson(json);
 
   /// Test user moves against solution.
   bool testSolution(Iterable<SanMove> sanMoves) {
@@ -40,10 +35,8 @@ sealed class Puzzle with _$Puzzle {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzleData with _$PuzzleData {
-  const PuzzleData._();
-
-  const factory PuzzleData({
+sealed class const PuzzleData._() with _$PuzzleData {
+  const factory({
     required PuzzleId id,
     required int rating,
     required int plays,
@@ -54,31 +47,25 @@ sealed class PuzzleData with _$PuzzleData {
 
   Side get sideToMove => initialPly.isEven ? Side.black : Side.white;
 
-  factory PuzzleData.fromJson(Map<String, dynamic> json) => _$PuzzleDataFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleDataFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzleGlicko with _$PuzzleGlicko {
-  const PuzzleGlicko._();
+sealed class const PuzzleGlicko._() with _$PuzzleGlicko {
+  const factory({required double rating, required double deviation, bool? provisional}) =
+      _PuzzleGlicko;
 
-  const factory PuzzleGlicko({
-    required double rating,
-    required double deviation,
-    bool? provisional,
-  }) = _PuzzleGlicko;
-
-  factory PuzzleGlicko.fromJson(Map<String, dynamic> json) => _$PuzzleGlickoFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleGlickoFromJson(json);
 }
 
 @freezed
 sealed class PuzzleRound with _$PuzzleRound {
-  const factory PuzzleRound({required PuzzleId id, required int ratingDiff, required bool win}) =
-      _PuzzleRound;
+  const factory({required PuzzleId id, required int ratingDiff, required bool win}) = _PuzzleRound;
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleGame with _$PuzzleGame {
-  const factory PuzzleGame({
+  const factory({
     required GameId id,
     required Perf perf,
     required bool rated,
@@ -87,34 +74,32 @@ sealed class PuzzleGame with _$PuzzleGame {
     required String pgn,
   }) = _PuzzleGame;
 
-  factory PuzzleGame.fromJson(Map<String, dynamic> json) => _$PuzzleGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleGameFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleGamePlayer with _$PuzzleGamePlayer {
-  const factory PuzzleGamePlayer({required Side side, required String name, String? title}) =
-      _PuzzleGamePlayer;
+  const factory({required Side side, required String name, String? title}) = _PuzzleGamePlayer;
 
-  factory PuzzleGamePlayer.fromJson(Map<String, dynamic> json) => _$PuzzleGamePlayerFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleGamePlayerFromJson(json);
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleSolution with _$PuzzleSolution {
-  const factory PuzzleSolution({required PuzzleId id, required bool win, required bool rated}) =
-      _PuzzleSolution;
+  const factory({required PuzzleId id, required bool win, required bool rated}) = _PuzzleSolution;
 
-  factory PuzzleSolution.fromJson(Map<String, dynamic> json) => _$PuzzleSolutionFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleSolutionFromJson(json);
 }
 
 @freezed
 sealed class PuzzlePreview with _$PuzzlePreview {
-  const factory PuzzlePreview({
+  const factory({
     required Side orientation,
     required String initialFen,
     required Move initialMove,
   }) = _PuzzlePreview;
 
-  factory PuzzlePreview.fromPuzzle(Puzzle puzzle) {
+  factory fromPuzzle(Puzzle puzzle) {
     final root = Root.fromPgnMoves(puzzle.game.pgn);
     final node = root.nodeAt(root.mainlinePath) as Branch;
     return PuzzlePreview(
@@ -126,17 +111,15 @@ sealed class PuzzlePreview with _$PuzzlePreview {
 }
 
 @Freezed(fromJson: true)
-sealed class LitePuzzle with _$LitePuzzle {
-  const LitePuzzle._();
-
-  const factory LitePuzzle({
+sealed class const LitePuzzle._() with _$LitePuzzle {
+  const factory({
     required PuzzleId id,
     required String fen,
     required IList<UCIMove> solution,
     required int rating,
   }) = _LitePuzzle;
 
-  factory LitePuzzle.fromJson(Map<String, dynamic> json) => _$LitePuzzleFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$LitePuzzleFromJson(json);
 
   (Side, String, Move) get preview {
     final pos1 = Chess.fromSetup(Setup.parseFen(fen));
@@ -148,15 +131,13 @@ sealed class LitePuzzle with _$LitePuzzle {
 
 @freezed
 sealed class PuzzleDashboard with _$PuzzleDashboard {
-  const factory PuzzleDashboard({
-    required PuzzleDashboardData global,
-    required IList<PuzzleDashboardData> themes,
-  }) = _PuzzleDashboard;
+  const factory({required PuzzleDashboardData global, required IList<PuzzleDashboardData> themes}) =
+      _PuzzleDashboard;
 }
 
 @freezed
 sealed class PuzzleDashboardData with _$PuzzleDashboardData {
-  const factory PuzzleDashboardData({
+  const factory({
     required int nb,
     required int firstWins,
     required int replayWins,
@@ -166,9 +147,8 @@ sealed class PuzzleDashboardData with _$PuzzleDashboardData {
 }
 
 @freezed
-sealed class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
-  const PuzzleHistoryEntry._();
-  const factory PuzzleHistoryEntry({
+sealed class const PuzzleHistoryEntry._() with _$PuzzleHistoryEntry {
+  const factory({
     required bool win,
     required DateTime date,
     required PuzzleId id,
@@ -178,7 +158,7 @@ sealed class PuzzleHistoryEntry with _$PuzzleHistoryEntry {
     Duration? solvingTime,
   }) = _PuzzleHistoryEntry;
 
-  factory PuzzleHistoryEntry.fromLitePuzzle(LitePuzzle puzzle, bool win, Duration duration) {
+  factory fromLitePuzzle(LitePuzzle puzzle, bool win, Duration duration) {
     final (_, fen, move) = puzzle.preview;
     return PuzzleHistoryEntry(
       date: DateTime.now(),

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -6,7 +5,8 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:popover/popover.dart';
+import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,18 +14,14 @@ import 'package:url_launcher/url_launcher.dart';
 ///
 /// If [socketUri] is provided, it will be used to get the lag rating from that socket route only,
 /// otherwise it will use the default socket route.
-class SocketPingRatingIcon extends ConsumerWidget {
-  const SocketPingRatingIcon({this.socketUri, super.key});
-
-  final Uri? socketUri;
-
+class const SocketPingRatingIcon({final Uri? socketUri, super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ping = ref.watch(socketPingProvider(socketUri));
 
     return SemanticIconButton(
       semanticsLabel: 'PING: ${ping.averageLag.inMilliseconds}ms',
-      icon: LagIndicator(lagRating: ping.rating, size: 24.0),
+      icon: LagIndicator(lagRating: ping.rating, isActive: ping.isActive, size: 24.0),
       onPressed: () {
         showPopover(
           context: context,
@@ -68,17 +64,13 @@ class SocketPingRatingIcon extends ConsumerWidget {
   }
 }
 
-class SocketPingRatingListTile extends ConsumerWidget {
-  const SocketPingRatingListTile({this.socketUri, super.key});
-
-  final Uri? socketUri;
-
+class const SocketPingRatingListTile({final Uri? socketUri, super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ping = ref.watch(socketPingProvider(socketUri));
 
     return ListTile(
-      leading: LagIndicator(lagRating: ping.rating),
+      leading: LagIndicator(lagRating: ping.rating, isActive: ping.isActive),
       title: ping.averageLag > Duration.zero
           ? Text.rich(
               TextSpan(
@@ -109,15 +101,22 @@ class SocketPingRatingListTile extends ConsumerWidget {
 }
 
 /// An indicator that shows the lag rating of the connection.
-class LagIndicator extends StatelessWidget {
-  const LagIndicator({required this.lagRating, this.size = 20.0, super.key})
-    : assert(lagRating >= 0 && lagRating <= 4);
-
+class const LagIndicator({
   /// The lag rating from 0 to 4.
-  final int lagRating;
+  required final int lagRating,
+
+  /// Whether the connection is active (connected or trying to reconnect).
+  ///
+  /// When the lag rating is 0 and the connection is active, a loading animation
+  /// is shown to indicate a reconnection attempt. When inactive, no animation is
+  /// shown.
+  final bool isActive = true,
 
   /// Visual size of the indicator.
-  final double size;
+  final double size = 20.0,
+  super.key,
+}) extends StatelessWidget {
+  this : assert(lagRating >= 0 && lagRating <= 4);
 
   static const inactiveColor = Color(0x339E9E9E);
 
@@ -144,7 +143,7 @@ class LagIndicator extends StatelessWidget {
             inactiveColor: inactiveColor,
             levels: materialLevels,
           ),
-          if (lagRating == 0)
+          if (lagRating == 0 && isActive)
             Center(
               child: SpinKitThreeBounce(color: Colors.grey, size: size / 2),
             ),
@@ -154,53 +153,42 @@ class LagIndicator extends StatelessWidget {
   }
 }
 
-class OfflineBanner extends ConsumerWidget {
-  const OfflineBanner();
-
+class const OfflineBanner() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(onlineStatusProvider);
     final theme = Theme.of(context);
-    return isOnlineAsync.when(
-      data: (isOnline) {
-        if (isOnline) {
-          return const SizedBox.shrink();
-        }
-        return Material(
-          child: Container(
-            height: 40,
-            color: theme.colorScheme.tertiaryContainer,
-            child: Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: Row(
-                children: [
-                  Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
-                  const SizedBox(width: 5),
-                  Flexible(
-                    child: Text(
-                      'Network connectivity unavailable.',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
-                    ),
-                  ),
-                ],
+    if (ref.watch(isDeviceOnlineProvider)) {
+      return const SizedBox.shrink();
+    }
+    return Material(
+      child: Container(
+        height: 40,
+        color: theme.colorScheme.tertiaryContainer,
+        child: Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: Row(
+            children: [
+              Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
+              const SizedBox(width: 5),
+              Flexible(
+                child: Text(
+                  'Network connectivity unavailable.',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stack) => const SizedBox.shrink(),
+        ),
+      ),
     );
   }
 }
 
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
-class ButtonLoadingIndicator extends StatelessWidget {
-  const ButtonLoadingIndicator({super.key});
-
+class const ButtonLoadingIndicator({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
@@ -212,9 +200,7 @@ class ButtonLoadingIndicator extends StatelessWidget {
 }
 
 /// A centered circular progress indicator
-class CenterLoadingIndicator extends StatelessWidget {
-  const CenterLoadingIndicator({super.key});
-
+class const CenterLoadingIndicator({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(child: CircularProgressIndicator.adaptive());
@@ -225,11 +211,8 @@ class CenterLoadingIndicator extends StatelessWidget {
 ///
 /// This widget is intended to be used when a request fails and the user can
 /// retry it.
-class FullScreenRetryRequest extends StatelessWidget {
-  const FullScreenRetryRequest({super.key, required this.onRetry});
-
-  final VoidCallback onRetry;
-
+class const FullScreenRetryRequest({super.key, required final VoidCallback onRetry})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -247,7 +230,11 @@ class FullScreenRetryRequest extends StatelessWidget {
   }
 }
 
-enum SnackBarType { error, info, success }
+enum SnackBarType() {
+  error,
+  info,
+  success,
+}
 
 /// Shows a snackbar with the given message.
 void showSnackBar(BuildContext context, String message, {SnackBarType type = SnackBarType.info}) {

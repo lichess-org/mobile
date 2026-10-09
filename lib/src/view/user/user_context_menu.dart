@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -15,14 +13,13 @@ import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
-class UserContextMenu extends ConsumerWidget {
-  const UserContextMenu({this.user, this.userId, super.key})
-    : assert(user != null || userId != null, 'user or userId must be provided');
-
-  final User? user;
-  final UserId? userId;
+class const UserContextMenu({final User? user, final UserId? userId, super.key})
+    extends ConsumerWidget {
+  this : assert(user != null || userId != null, 'user or userId must be provided');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,7 +41,7 @@ class UserContextMenu extends ConsumerWidget {
                   UserFullNameWidget(user: value.lightUser, style: Styles.title),
                   const SizedBox(height: 8.0),
                   if (value.profile?.bio != null)
-                    Linkify(
+                    RichLinkText(
                       onOpen: (link) async =>
                           await ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
                       linkifiers: AppLinksService.kLichessLinkifiers,
@@ -81,7 +78,8 @@ class UserContextMenu extends ConsumerWidget {
                 if (authUser != null && value.canChallenge != null)
                   BottomSheetContextMenuAction(
                     onPressed: value.canChallenge == true
-                        ? () => UserScreen.challengeUser(value, context: context, ref: ref)
+                        ? () =>
+                              UserScreen.challengeUser(value.lightUser, context: context, ref: ref)
                         : () {
                             Navigator.of(context).pop();
                             showSnackBar(

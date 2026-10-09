@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'coordinate_training_preferences.freezed.dart';
 part 'coordinate_training_preferences.g.dart';
@@ -14,7 +16,8 @@ final coordinateTrainingPreferencesProvider =
       name: 'CoordinateTrainingPreferencesProvider',
     );
 
-class CoordinateTrainingPreferences extends Notifier<CoordinateTrainingPrefs>
+class CoordinateTrainingPreferences()
+    extends Notifier<CoordinateTrainingPrefs>
     with PreferencesStorage<CoordinateTrainingPrefs> {
   @override
   @protected
@@ -53,15 +56,17 @@ class CoordinateTrainingPreferences extends Notifier<CoordinateTrainingPrefs>
   Future<void> setSideChoice(SideChoice sideChoice) {
     return save(state.copyWith(sideChoice: sideChoice));
   }
+
+  Future<void> addScore({required Side side, required int score}) {
+    final updated = state.addScore(side: side, score: score);
+    state = updated;
+    return save(updated);
+  }
 }
 
-enum TimeChoice {
+enum TimeChoice(final Duration? duration) {
   thirtySeconds(Duration(seconds: 30)),
   unlimited(null);
-
-  const TimeChoice(this.duration);
-
-  final Duration? duration;
 
   // TODO l10n
   Widget label(AppLocalizations l10n) {
@@ -74,7 +79,7 @@ enum TimeChoice {
   }
 }
 
-enum TrainingMode {
+enum TrainingMode() {
   findSquare,
   nameSquare;
 
@@ -88,16 +93,48 @@ enum TrainingMode {
   }
 }
 
-@Freezed(fromJson: true, toJson: true)
-sealed class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements Serializable {
-  const CoordinateTrainingPrefs._();
+const int kMaxCoordinateScoresCount = 20;
 
-  const factory CoordinateTrainingPrefs({
+@Freezed(fromJson: true, toJson: true)
+sealed class const CoordinateScores._() with _$CoordinateScores {
+  const factory({
+    @Default(IListConst<int>([])) @_IntIListConverter() IList<int> white,
+    @Default(IListConst<int>([])) @_IntIListConverter() IList<int> black,
+  }) = _CoordinateScores;
+
+  static const defaults = CoordinateScores();
+
+  factory fromJson(Map<String, dynamic> json) {
+    return _$CoordinateScoresFromJson(json);
+  }
+
+  double? get averageWhite => white.isEmpty ? null : white.reduce((a, b) => a + b) / white.length;
+
+  double? get averageBlack => black.isEmpty ? null : black.reduce((a, b) => a + b) / black.length;
+
+  CoordinateScores addScore({required Side side, required int score}) {
+    final list = side == Side.white ? white : black;
+    final updatedList =
+        (list.length >= kMaxCoordinateScoresCount
+                ? list.sublist(list.length - kMaxCoordinateScoresCount + 1)
+                : list)
+            .add(score);
+
+    return side == Side.white ? copyWith(white: updatedList) : copyWith(black: updatedList);
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+sealed class const CoordinateTrainingPrefs._()
+    with _$CoordinateTrainingPrefs
+    implements Serializable {
+  const factory({
     required bool showCoordinates,
     required bool showPieces,
     required TrainingMode mode,
     required TimeChoice timeChoice,
     required SideChoice sideChoice,
+    @Default(CoordinateScores.defaults) @_CoordinateScoresConverter() CoordinateScores scores,
   }) = _CoordinateTrainingPrefs;
 
   static const defaults = CoordinateTrainingPrefs(
@@ -106,9 +143,41 @@ sealed class CoordinateTrainingPrefs with _$CoordinateTrainingPrefs implements S
     mode: TrainingMode.findSquare,
     timeChoice: TimeChoice.thirtySeconds,
     sideChoice: SideChoice.random,
+    scores: CoordinateScores.defaults,
   );
 
-  factory CoordinateTrainingPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$CoordinateTrainingPrefsFromJson(json);
+  }
+
+  CoordinateTrainingPrefs addScore({required Side side, required int score}) {
+    return copyWith(
+      scores: scores.addScore(side: side, score: score),
+    );
+  }
+}
+
+class const _CoordinateScoresConverter()
+    implements JsonConverter<CoordinateScores, Map<String, dynamic>> {
+  @override
+  CoordinateScores fromJson(Map<String, dynamic> json) {
+    return CoordinateScores.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson(CoordinateScores object) {
+    return object.toJson();
+  }
+}
+
+class const _IntIListConverter() implements JsonConverter<IList<int>, List<dynamic>> {
+  @override
+  IList<int> fromJson(List<dynamic> json) {
+    return IList(json.whereType<int>());
+  }
+
+  @override
+  List<dynamic> toJson(IList<int> object) {
+    return object.toList();
   }
 }

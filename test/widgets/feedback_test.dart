@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 
 void main() {
@@ -14,6 +14,19 @@ void main() {
       );
 
       expect(find.byType(SpinKitThreeBounce), findsOneWidget);
+      expect(find.byType(SignalStrengthIndicator), findsOneWidget);
+    });
+
+    testWidgets('does not show loading indicator when lagRating is 0 but inactive', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: LagIndicator(lagRating: 0, isActive: false, size: 40.0)),
+        ),
+      );
+
+      expect(find.byType(SpinKitThreeBounce), findsNothing);
       expect(find.byType(SignalStrengthIndicator), findsOneWidget);
     });
 

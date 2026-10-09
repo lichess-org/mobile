@@ -10,11 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 part 'storm_controller.freezed.dart';
@@ -31,11 +31,7 @@ final stormControllerProvider = NotifierProvider.autoDispose
       name: 'StormControllerProvider',
     );
 
-class StormController extends Notifier<StormState> {
-  StormController(this.params);
-
-  final StormControllerParams params;
-
+class StormController(final StormControllerParams params) extends Notifier<StormState> {
   Timer? _firstMoveTimer;
 
   IList<LitePuzzle> get _puzzles => params.$1;
@@ -215,6 +211,7 @@ class StormController extends Notifier<StormState> {
       ),
     );
     Future<void>.delayed(userMove ? Duration.zero : const Duration(milliseconds: 250), () {
+      if (!ref.mounted) return;
       if (pos.board.pieceAt(move.to) != null) {
         ref
             .read(moveFeedbackServiceProvider)
@@ -267,10 +264,8 @@ class StormController extends Notifier<StormState> {
 }
 
 @freezed
-sealed class StormState with _$StormState {
-  const StormState._();
-
-  const factory StormState({
+sealed class const StormState._() with _$StormState {
+  const factory({
     /// Index of the current puzzle being played
     required int puzzleIndex,
 
@@ -324,16 +319,22 @@ sealed class StormState with _$StormState {
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 }
 
-enum StormMode { initial, running, ended }
+enum StormMode() {
+  initial,
+  running,
+  ended,
+}
 
-enum ComboState { increase, reset, noChange }
+enum ComboState() {
+  increase,
+  reset,
+  noChange,
+}
 
 /// A `StormCombo` object represents the current and best combo of a storm run
 @freezed
-sealed class StormCombo with _$StormCombo {
-  const StormCombo._();
-
-  const factory StormCombo({required int current, required int best}) = _StormCombo;
+sealed class const StormCombo._() with _$StormCombo {
+  const factory({required int current, required int best}) = _StormCombo;
 
   /// List representing the bonus awared at each level
   static const levelBonus = [3, 5, 6, 10];
@@ -386,7 +387,7 @@ sealed class StormCombo with _$StormCombo {
   }
 }
 
-class StormClock {
+class StormClock() {
   final StreamController<(Duration, int?)> timeStreamController =
       StreamController<(Duration, int?)>.broadcast();
 

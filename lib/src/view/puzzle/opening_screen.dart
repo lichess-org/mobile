@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -13,13 +12,14 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _openingsSortProvider = StateProvider.autoDispose<PuzzleOpeningSort>(
   (ref) => PuzzleOpeningSort.popular,
 );
 
 final _openingsProvider = FutureProvider.autoDispose
-    .family<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?), PuzzleOpeningSort>((
+    .family<(bool, ISet<String>, IList<PuzzleOpeningFamily>?), PuzzleOpeningSort>((
       ref,
       sort,
     ) async {
@@ -34,9 +34,7 @@ final _openingsProvider = FutureProvider.autoDispose
       return (connectivityStatus.isOnline, savedOpenings, onlineOpenings);
     });
 
-class OpeningThemeScreen extends ConsumerWidget {
-  const OpeningThemeScreen({super.key});
-
+class const OpeningThemeScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OpeningThemeScreen());
   }
@@ -76,9 +74,7 @@ class OpeningThemeScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sort = ref.watch(_openingsSortProvider);
@@ -94,20 +90,16 @@ class _Body extends ConsumerWidget {
             ],
           );
         } else {
-          return ListView(
-            children: [
-              ListSection(
-                children: [
-                  for (final openingKey in savedOpenings.keys)
-                    _OpeningTile(
-                      name: openingKey.replaceAll('_', ' '),
-                      openingKey: openingKey,
-                      count: savedOpenings[openingKey]!,
-                      titleStyle: null,
-                    ),
-                ],
-              ),
-            ],
+          // A user can have hundreds of saved openings, so this list is built lazily and each tile
+          // counts its own puzzles: only the visible ones are read from the database.
+          final savedKeys = savedOpenings.toList()..sort();
+          return ListView.separated(
+            padding: Styles.bodySectionPadding,
+            itemCount: savedKeys.length,
+            separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
+                ? const PlatformDivider(height: 0)
+                : const SizedBox.shrink(),
+            itemBuilder: (context, index) => _SavedOpeningTile(openingKey: savedKeys[index]),
           );
         }
       },
@@ -119,12 +111,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OpeningFamily extends ConsumerWidget {
-  const _OpeningFamily({required this.openingFamily, required this.titleStyle});
-
-  final PuzzleOpeningFamily openingFamily;
-  final TextStyle? titleStyle;
-
+class const _OpeningFamily({
+  required final PuzzleOpeningFamily openingFamily,
+  required final TextStyle? titleStyle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Theme(
@@ -174,24 +164,34 @@ class _OpeningFamily extends ConsumerWidget {
   }
 }
 
-class _OpeningTile extends StatelessWidget {
-  const _OpeningTile({
-    required this.name,
-    required this.openingKey,
-    required this.count,
-    this.titleStyle,
-  });
+/// An opening tile that reads the number of saved puzzles of that opening from the database.
+class const _SavedOpeningTile({required final String openingKey}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _OpeningTile(
+      name: openingKey.replaceAll('_', ' '),
+      openingKey: openingKey,
+      count: ref.watch(savedBatchNbUnsolvedProvider(PuzzleOpening(openingKey))).value,
+      titleStyle: null,
+    );
+  }
+}
 
-  final String name;
-  final String openingKey;
-  final int count;
-  final TextStyle? titleStyle;
+class const _OpeningTile({
+  required final String name,
+  required final String openingKey,
 
+  /// The number of puzzles of that opening, or `null` while it is still unknown.
+  required final int? count,
+  final TextStyle? titleStyle,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(name, overflow: TextOverflow.ellipsis, style: titleStyle),
-      trailing: Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity))),
+      trailing: count != null
+          ? Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity)))
+          : null,
       onTap: () {
         Navigator.of(
           context,

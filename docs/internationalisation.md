@@ -1,6 +1,6 @@
 # Internationalisation
 
-We're using the official Flutter way of internationalising our app, as desbribed in the
+We're using the official Flutter way of internationalising our app, as described in the
 [documentation](https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#setting-up).
 
 What is specific to this project is the way the ARB files are generated.
@@ -26,7 +26,7 @@ All three steps are combined in a single script:
 
 ## How to add new translations
 
-[Translations in Crowdin](../translation/sources) are organised by module.
+[Translations in Crowdin](../translation/source) are organised by module.
 
 There is one module for the mobile app: [mobile.xml](../translation/source/mobile.xml).
 
@@ -59,7 +59,7 @@ You should see the new strings in the `lib/l10n/app_*.arb` and `lib/l10n/app_*.d
 
 There are some strings that appear only in this app, but not on lichess.org.
 
-If you have a new string to be translated, add it to `translations/source/mobile.xml`. Make sure to include a `comment`
+If you have a new string to be translated, add it to `translation/source/mobile.xml`. Make sure to include a `comment`
 attribute, describing the usage of the string and its contents (e.g. placeholders). Some strings also must not exceed a
 certain width due to UI constraints, use the `maxLength` attribute for that.
 

@@ -4,10 +4,12 @@ targets:
       json_serializable:
         generate_for:
           - lib/src/model/**/*.dart
+          - lib/src/service/**/*.dart
           - lib/src/**/*_models.dart
       freezed:
         generate_for:
           - lib/src/model/**/*.dart
+          - lib/src/service/**/*.dart
           - lib/src/**/*_models.dart
           - lib/src/**/*_providers.dart
         options:

@@ -2,55 +2,45 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
-import 'package:lichess_mobile/src/model/chat/chat_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
-import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
-import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:logging/logging.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends StatelessWidget {
-  const StudyScreen({required this.options, super.key});
-
-  final StudyOptions options;
-
+class const StudyScreen({required final StudyOptions options, super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudyScreen(options: options));
   }
@@ -61,11 +51,7 @@ class StudyScreen extends StatelessWidget {
   }
 }
 
-class _StudyScreenLoader extends ConsumerWidget {
-  const _StudyScreenLoader({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyScreenLoader({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -74,7 +60,7 @@ class _StudyScreenLoader extends ConsumerWidget {
       case AsyncData(:final value):
         return _StudyScreen(options: options, studyState: value);
       case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study: $error', stackTrace);
+        _logger.severe('Cannot load study:', error, stackTrace);
         return Scaffold(
           appBar: AppBar(title: const Text('')),
           body: DefaultTabController(
@@ -146,17 +132,15 @@ class _StudyScreenLoader extends ConsumerWidget {
   }
 }
 
-class _StudyScreen extends ConsumerStatefulWidget {
-  const _StudyScreen({required this.options, required this.studyState});
-
-  final StudyOptions options;
-  final StudyState studyState;
-
+class const _StudyScreen({
+  required final StudyOptions options,
+  required final StudyState studyState,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_StudyScreen> createState() => _StudyScreenState();
 }
 
-class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
+class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
@@ -219,35 +203,16 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   }
 }
 
-class _StudyMenu extends ConsumerWidget {
-  const _StudyMenu({required this.options});
-
-  final StudyOptions options;
-
+class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final state = ref.watch(studyControllerProvider(options)).requireValue;
-    final kidModeAsync = ref.watch(kidModeProvider);
-    final showEngineLines = ref.watch(
-      studyPreferencesProvider.select((prefs) => prefs.showEngineLines),
-    );
-
-    final chatOptions = state.study.chat != null
-        ? StudyChatOptions(options: options, writeable: state.study.chat!.writeable)
-        : null;
 
     return ContextMenuIconButton(
       semanticsLabel: 'Study menu',
       icon: const Icon(Icons.more_horiz),
       actions: [
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () {
-            Navigator.of(context).push(StudySettingsScreen.buildRoute(options));
-          },
-        ),
         if (authUser != null)
           ContextMenuAction(
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
@@ -256,13 +221,6 @@ class _StudyMenu extends ConsumerWidget {
               ref.read(studyControllerProvider(options).notifier).toggleLike();
             },
           ),
-        ContextMenuAction(
-          icon: showEngineLines ? Icons.subtitles_outlined : Icons.subtitles_off_outlined,
-          label: showEngineLines ? 'Hide Engine Lines' : 'Show Engine Lines',
-          onPressed: () {
-            ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines();
-          },
-        ),
         ContextMenuAction(
           icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
           label: context.l10n.studyShareAndExport,
@@ -316,7 +274,7 @@ class _StudyMenu extends ConsumerWidget {
                   ),
                   if (state.currentPosition != null)
                     BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
+                      makeLabel: (context) => Text(context.l10n.positionAsImage),
                       onPressed: () async {
                         try {
                           final image = await ref
@@ -375,50 +333,13 @@ class _StudyMenu extends ConsumerWidget {
             );
           },
         ),
-        ContextMenuAction(
-          label: context.l10n.studyMembers,
-          icon: Icons.group_outlined,
-          onPressed: () => showModalBottomSheet<void>(
-            context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            isDismissible: true,
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
-            builder: (_) => DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              snap: true,
-              expand: false,
-              builder: (context, scrollController) {
-                return _StudyMembersSheet(options: options, scrollController: scrollController);
-              },
-            ),
-          ),
-        ),
-        if (chatOptions != null && kidModeAsync.value == false)
-          ContextMenuAction(
-            label: context.l10n.chatRoom,
-            onPressed: () {
-              Navigator.of(context).push(ChatScreen.buildRoute(options: chatOptions));
-            },
-            icon: Icons.chat_bubble_outline,
-          ),
-        ContextMenuAction(
-          icon: CupertinoIcons.arrow_2_squarepath,
-          label: context.l10n.flipBoard,
-          onPressed: () {
-            ref.read(studyControllerProvider(options).notifier).toggleBoard();
-          },
-        ),
       ],
     );
   }
 }
 
-class _CannotRequestServerAnalysisReason extends StatelessWidget {
-  const _CannotRequestServerAnalysisReason({required this.reason});
-
-  final String reason;
-
+class const _CannotRequestServerAnalysisReason({required final String reason})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -427,13 +348,11 @@ class _CannotRequestServerAnalysisReason extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.tabController, required this.tabs});
-
-  final StudyOptions options;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body({
+  required final StudyOptions options,
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;
@@ -471,6 +390,17 @@ class _Body extends ConsumerWidget {
         ? StudyGamebook(options)
         : StudyTreeView(options, showTopDivider: tabs.length == 1);
 
+    final playerWidgets = playerWidgetsFromPgnHeaders(
+      pgnHeaders: studyState.pgnHeaders,
+      sideToMove: studyState.currentPosition?.turn ?? Side.white,
+      whiteClock: studyState.currentPosition?.turn == Side.white
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+      blackClock: studyState.currentPosition?.turn == Side.black
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+    );
+
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
@@ -478,6 +408,8 @@ class _Body extends ConsumerWidget {
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
       smallBoard: studyPrefs.smallBoard,
+      boardHeader: pov == Side.white ? playerWidgets.black : playerWidgets.white,
+      boardFooter: pov == Side.white ? playerWidgets.white : playerWidgets.black,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
@@ -490,7 +422,7 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
-              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
+              filters: (context: studyState.evaluationContext, path: studyState.currentPath),
               analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
@@ -574,16 +506,16 @@ extension on PgnCommentShape {
   }
 }
 
-class StudyAnalysisBoard extends AnalysisBoard {
-  const StudyAnalysisBoard({required this.options, required super.boardSize, super.boardRadius});
-
-  final StudyOptions options;
-
+class const StudyAnalysisBoard({
+  required final StudyOptions options,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyAnalysisBoardState
+class _StudyAnalysisBoardState()
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
   StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
@@ -599,6 +531,10 @@ class _StudyAnalysisBoardState
   StudyState get analysisState => ref.watch(studyControllerProvider(widget.options)).requireValue;
 
   @override
+  bool computeInteractive(StudyState state) =>
+      !state.gamebookActive || state.currentPosition?.turn == state.pov;
+
+  @override
   StudyPrefs get analysisPrefs => ref.watch(studyPreferencesProvider);
 
   @override
@@ -611,7 +547,7 @@ class _StudyAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(StudyState state) =>
@@ -660,38 +596,5 @@ class _StudyAnalysisBoardState
     });
 
     return super.build(context);
-  }
-}
-
-class _StudyMembersSheet extends ConsumerWidget {
-  const _StudyMembersSheet({required this.options, required this.scrollController});
-
-  final StudyOptions options;
-  final ScrollController scrollController;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(studyControllerProvider(options)).requireValue;
-
-    return BottomSheetScrollableContainer(
-      scrollController: scrollController,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.studyNbMembers(state.study.members.length),
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-        const SizedBox(height: 16),
-        for (final member in state.study.members.values)
-          ListTile(
-            title: UserFullNameWidget(user: member.user),
-            onTap: () {
-              Navigator.of(context).push(UserOrProfileScreen.buildRoute(member.user));
-            },
-          ),
-      ],
-    );
   }
 }

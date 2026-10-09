@@ -1,15 +1,14 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:material_ui/material_ui.dart';
 
-class WatcherListBottomSheet extends StatelessWidget {
-  const WatcherListBottomSheet({required this.nbWatchers, required this.watcherNames, super.key});
-
-  final int nbWatchers;
-  final IList<String> watcherNames;
-
+class const WatcherListBottomSheet({
+  required final int nbWatchers,
+  required final IList<String> watcherNames,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

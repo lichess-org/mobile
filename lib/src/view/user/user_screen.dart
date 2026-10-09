@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/text_badge.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,16 +39,16 @@ final _userScreenDataProvider = FutureProvider.autoDispose.family<UserScreenData
   name: 'UserScreenDataProvider',
 );
 
-class UserScreen extends ConsumerStatefulWidget {
-  const UserScreen({required this.user, super.key});
-
-  final LightUser user;
-
+class const UserScreen({required final LightUser user, super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(LightUser user) {
     return buildScreenRoute(screen: UserScreen(user: user));
   }
 
-  static void challengeUser(User user, {required BuildContext context, required WidgetRef ref}) {
+  static void challengeUser(
+    LightUser user, {
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     final authUser = ref.read(authControllerProvider);
     if (authUser == null) {
       showSnackBar(
@@ -58,16 +58,16 @@ class UserScreen extends ConsumerStatefulWidget {
       );
       return;
     }
-    final isOddBot = oddBots.contains(user.lightUser.name.toLowerCase());
+    final isOddBot = oddBots.contains(user.name.toLowerCase());
     if (isOddBot) {
-      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user.lightUser));
+      Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user));
     } else {
       showModalBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
-          return CreateChallengeBottomSheet(user: user.lightUser);
+          return CreateChallengeBottomSheet(user: user);
         },
       );
     }
@@ -77,7 +77,7 @@ class UserScreen extends ConsumerStatefulWidget {
   ConsumerState<UserScreen> createState() => _UserScreenState();
 }
 
-class _UserScreenState extends ConsumerState<UserScreen> {
+class _UserScreenState() extends ConsumerState<UserScreen> {
   bool isLoading = false;
 
   void setIsLoading(bool value) {
@@ -95,16 +95,14 @@ class _UserScreenState extends ConsumerState<UserScreen> {
       data: (data) => data.user.lightUser.copyWith(isOnline: data.isOnline),
       orElse: () => null,
     );
+    final seenAt = userScreenData.maybeWhen(data: (data) => data.user.seenAt, orElse: () => null);
     return PlatformScaffold(
       appBar: PlatformAppBar(
         titleSpacing: 0,
-        title: ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(updatedLightUser ?? widget.user, radius: 16),
-          title: UserFullNameWidget(user: updatedLightUser ?? widget.user, showFlair: false),
-          subtitle: updatedLightUser != null
-              ? Text(updatedLightUser.isOnline == true ? context.l10n.online : context.l10n.offline)
-              : null,
+        title: UserAppBarTitleWidget(
+          user: updatedLightUser ?? widget.user,
+          isOnline: updatedLightUser?.isOnline == true,
+          seenAt: seenAt,
         ),
         actions: [
           if (isLoading) const PlatformAppBarLoadingIndicator(),
@@ -143,19 +141,12 @@ class _UserScreenState extends ConsumerState<UserScreen> {
   }
 }
 
-class _UserProfileListView extends ConsumerWidget {
-  const _UserProfileListView(
-    this.data,
-    this.isLoading,
-    this.setIsLoading, {
-    required this.onRefresh,
-  });
-
-  final UserScreenData data;
-  final bool isLoading;
-  final void Function(bool value) setIsLoading;
-  final RefreshCallback onRefresh;
-
+class const _UserProfileListView(
+  final UserScreenData data,
+  final bool isLoading,
+  final void Function(bool value) setIsLoading, {
+  required final RefreshCallback onRefresh,
+}) extends ConsumerWidget {
   String _scoreDisplay(double score) {
     final integerPart = score.truncate();
     final decimalPart = score - integerPart;
@@ -169,7 +160,7 @@ class _UserProfileListView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final UserScreenData(:user, :recentGames, :activity, :isPlayingLive, :crosstable) = data;
 
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final nbOfGames = user.count?.all ?? 0;
     final authUser = ref.watch(authControllerProvider);
     final kidMode = ref.watch(kidModeProvider);
@@ -178,10 +169,10 @@ class _UserProfileListView extends ConsumerWidget {
       return Center(child: Text(context.l10n.settingsThisAccountIsClosed, style: Styles.bold));
     }
 
-    Future<void> userAction(Future<void> Function(LichessClient client) action) async {
+    Future<void> userAction(Future<void> Function() action) async {
       setIsLoading(true);
       try {
-        await ref.withClient(action).then((_) => ref.invalidate(_userScreenDataProvider(user.id)));
+        await action.call().then((_) => ref.invalidate(_userScreenDataProvider(user.id)));
       } finally {
         setIsLoading(false);
       }
@@ -241,7 +232,7 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.challengeChallengeToPlay),
                     leading: const Icon(LichessIcons.crossed_swords),
                     onTap: user.canChallenge == true
-                        ? () => UserScreen.challengeUser(user, context: context, ref: ref)
+                        ? () => UserScreen.challengeUser(user.lightUser, context: context, ref: ref)
                         : () => showSnackBar(
                             context,
                             context.l10n.challengeXDoesNotAcceptChallenges(user.username),
@@ -265,7 +256,12 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.follow),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).follow(user.id)),
+                        : () async {
+                            await userAction(
+                              () => ref.read(relationRepositoryProvider).follow(user.id),
+                            );
+                            ref.invalidate(followingProvider);
+                          },
                   )
                 else if (user.following == true)
                   ListTile(
@@ -273,8 +269,12 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.unfollow),
                     onTap: isLoading
                         ? null
-                        : () =>
-                              userAction((client) => RelationRepository(client).unfollow(user.id)),
+                        : () async {
+                            await userAction(
+                              () => ref.read(relationRepositoryProvider).unfollow(user.id),
+                            );
+                            ref.invalidate(followingProvider);
+                          },
                   ),
                 if (user.following != true && user.blocking != true)
                   ListTile(
@@ -282,7 +282,8 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.block),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).block(user.id)),
+                        : () =>
+                              userAction(() => ref.read(relationRepositoryProvider).block(user.id)),
                   )
                 else if (user.blocking == true)
                   ListTile(
@@ -290,7 +291,9 @@ class _UserProfileListView extends ConsumerWidget {
                     title: Text(context.l10n.unblock),
                     onTap: isLoading
                         ? null
-                        : () => userAction((client) => RelationRepository(client).unblock(user.id)),
+                        : () => userAction(
+                            () => ref.read(relationRepositoryProvider).unblock(user.id),
+                          ),
                   ),
                 ListTile(
                   leading: const Icon(Icons.report_problem_outlined),

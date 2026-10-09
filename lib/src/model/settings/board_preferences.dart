@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -7,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:material_ui/material_ui.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
@@ -19,7 +19,7 @@ final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   name: 'BoardPreferencesProvider',
 );
 
-class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
+class BoardPreferences() extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.board;
@@ -54,6 +54,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
     await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
+  Future<void> toggleMoveOnRelease() async {
+    await save(state.copyWith(moveOnRelease: !state.moveOnRelease));
   }
 
   Future<void> setCastlingMethod(CastlingMethod castlingMethod) {
@@ -132,11 +136,9 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BoardPrefs with _$BoardPrefs implements Serializable {
-  const BoardPrefs._();
-
+sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
   @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
-  const factory BoardPrefs({
+  const factory({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
@@ -161,6 +163,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     required LandscapeBoardPosition landscapeBoardPosition,
     @JsonKey(defaultValue: PieceShiftMethod.either, unknownEnumValue: PieceShiftMethod.either)
     required PieceShiftMethod pieceShiftMethod,
+    @JsonKey(defaultValue: false) required bool moveOnRelease,
     @JsonKey(
       defaultValue: CastlingMethod.kingOverRook,
       unknownEnumValue: CastlingMethod.kingOverRook,
@@ -200,6 +203,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     premoves: true,
     confirmResignAndDraw: true,
     pieceShiftMethod: PieceShiftMethod.either,
+    moveOnRelease: false,
     castlingMethod: CastlingMethod.kingOverRook,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
@@ -235,13 +239,14 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       dragTargetKind: dragTargetKind,
       pieceShiftMethod: pieceShiftMethod,
+      moveOnRelease: moveOnRelease,
       drawShape: DrawShapeOptions(enable: enableShapeDrawings, newShapeColor: shapeColor.color),
       enableDrops: variant == Variant.crazyhouse,
       canPromoteToKing: variant == Variant.antichess,
     );
   }
 
-  factory BoardPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$BoardPrefsFromJson(json);
   }
 
@@ -250,7 +255,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
-enum ShapeColor {
+enum ShapeColor() {
   green,
   red,
   blue,
@@ -284,7 +289,7 @@ enum HighlightColor {
 }
 
 /// The chessboard theme.
-enum BoardTheme {
+enum BoardTheme(final String label, final String gifApiName) {
   system('System', 'system'),
   brown('Brown', 'brown'),
   wood('Wood', 'wood'),
@@ -311,11 +316,6 @@ enum BoardTheme {
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
   horsey('Horsey', 'horsey');
-
-  final String label;
-  final String gifApiName;
-
-  const BoardTheme(this.label, this.gifApiName);
 
   ChessboardColorScheme get colors {
     switch (this) {
@@ -411,7 +411,7 @@ enum BoardTheme {
   };
 }
 
-enum MaterialDifferenceFormat {
+enum MaterialDifferenceFormat() {
   materialDifference,
   capturedPieces,
   hidden;
@@ -425,7 +425,7 @@ enum MaterialDifferenceFormat {
   };
 }
 
-enum ClockPosition {
+enum ClockPosition() {
   left,
   right;
 
@@ -435,7 +435,7 @@ enum ClockPosition {
   };
 }
 
-enum LandscapeBoardPosition {
+enum LandscapeBoardPosition() {
   left,
   right;
 
@@ -445,7 +445,7 @@ enum LandscapeBoardPosition {
   };
 }
 
-enum CastlingMethod {
+enum CastlingMethod() {
   /// Allow castling by moving either the king over the rook or two squares (to match lichess website).
   kingOverRook,
 

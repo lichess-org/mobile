@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 
-class BroadcastGameSettingsScreen extends ConsumerWidget {
-  const BroadcastGameSettingsScreen(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastGameSettingsScreen(
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+) extends ConsumerWidget {
   static Route<dynamic> buildRoute({
     required BroadcastRoundId roundId,
     required BroadcastGameId gameId,
@@ -28,6 +27,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
     final controller = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
+    final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
 
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.settingsSettings)),
@@ -36,13 +36,26 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
           ListSection(
             children: [
               SwitchSettingTile(
+                title: Text(context.l10n.sound),
+                value: isSoundEnabled,
+                onChanged: (value) {
+                  ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+                },
+              ),
+              SwitchSettingTile(
                 title: Text(context.l10n.inlineNotation),
                 value: broadcastPrefs.inlineNotation,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
-                title: const Text('Small board'), // TODO l10n
+                title: Text(context.l10n.mobileShowEngineLines),
+                value: broadcastPrefs.showEngineLines,
+                onChanged: (value) =>
+                    ref.read(broadcastPreferencesProvider.notifier).toggleShowEngineLines(),
+              ),
+              SwitchSettingTile(
+                title: Text(context.l10n.mobileSmallBoard),
                 value: broadcastPrefs.smallBoard,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleSmallBoard(),
@@ -70,8 +83,7 @@ class BroadcastGameSettingsScreen extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show evaluation gauge'),
+                title: Text(context.l10n.mobileShowEvaluationGauge),
                 value: broadcastPrefs.showEvaluationGauge,
                 onChanged: (value) =>
                     ref.read(broadcastPreferencesProvider.notifier).toggleShowEvaluationGauge(),

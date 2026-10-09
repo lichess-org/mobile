@@ -9,18 +9,20 @@ on:
         default: "v0.4.0"
         type: string
 
-# Declare default permissions as read only.
-permissions: read-all
+# Creating a release and its tag writes to the repository.
+permissions:
+  contents: write
 
 jobs:
   draft-release:
     name: Draft Github release
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # needs: create-build
     steps:
       - name: Draft release with release notes
         id: create_release
-        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
         with:
           tag_name: ${{ github.event.inputs.version }}
           draft: true

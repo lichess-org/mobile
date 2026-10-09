@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -29,20 +29,19 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-class LobbyScreenLoadingContent extends StatefulWidget {
-  const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
-
-  final GameSeek seek;
-  final Future<void> Function() cancelGameCreation;
-
+class const LobbyScreenLoadingContent(
+  final GameSeek seek,
+  final Future<void> Function() cancelGameCreation,
+) extends StatefulWidget {
   @override
   State<LobbyScreenLoadingContent> createState() => _LobbyScreenLoadingContentState();
 }
 
-class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
+class _LobbyScreenLoadingContentState() extends State<LobbyScreenLoadingContent> {
   Future<void>? _cancelGameCreationFuture;
 
   @override
@@ -73,7 +72,7 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
                 ),
               ],
               const SizedBox(height: 16.0),
-              _LobbyNumbers(),
+              const _LobbyNumbers(),
             ],
           ),
         ),
@@ -117,17 +116,15 @@ class _LobbyScreenLoadingContentState extends State<LobbyScreenLoadingContent> {
   }
 }
 
-class UserChallengeLoadingContent extends StatefulWidget {
-  const UserChallengeLoadingContent(this.challenge, this.cancelChallenge);
-
-  final ChallengeRequest challenge;
-  final Future<void> Function() cancelChallenge;
-
+class const UserChallengeLoadingContent(
+  final ChallengeRequest challenge,
+  final Future<void> Function() cancelChallenge,
+) extends StatefulWidget {
   @override
   State<UserChallengeLoadingContent> createState() => _UserChallengeLoadingContentState();
 }
 
-class _UserChallengeLoadingContentState extends State<UserChallengeLoadingContent> {
+class _UserChallengeLoadingContentState() extends State<UserChallengeLoadingContent> {
   Future<void>? _cancelChallengeFuture;
 
   @override
@@ -195,22 +192,16 @@ class _UserChallengeLoadingContentState extends State<UserChallengeLoadingConten
   }
 }
 
-class OpenChallengeLoadingContent extends ConsumerStatefulWidget {
-  const OpenChallengeLoadingContent({
-    required this.id,
-    required this.challengeRequest,
-    required this.cancelChallenge,
-  });
-
-  final ChallengeId id;
-  final ChallengeRequest challengeRequest;
-  final Future<void> Function() cancelChallenge;
-
+class const OpenChallengeLoadingContent({
+  required final ChallengeId id,
+  required final ChallengeRequest challengeRequest,
+  required final Future<void> Function() cancelChallenge,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<OpenChallengeLoadingContent> createState() => _OpenChallengeLoadingContentState();
 }
 
-class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadingContent> {
+class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoadingContent> {
   Future<void>? _cancelChallengeFuture;
 
   @override
@@ -250,7 +241,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                         onTap: () async {
                           await Clipboard.setData(ClipboardData(text: challengeLink));
                           if (!context.mounted) return;
-                          showSnackBar(context, 'Copied.'); // TODO l10n
+                          showSnackBar(context, context.l10n.mobileCopied);
                         },
                         child: Text.rich(
                           TextSpan(
@@ -262,9 +253,8 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
                               TextSpan(text: ' $challengeLink'),
                             ],
                           ),
-                          style: TextTheme.of(context).bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          style: TextTheme.of(context).bodyMedium
+                              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                         ),
                       ),
                     ),
@@ -364,7 +354,7 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
         BottomBar(
           children: [
             BottomBarButton(
-              label: 'Share challenge URL', // TODO l10n
+              label: context.l10n.mobileShareChallengeUrl,
               onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
               showLabel: true,
               icon: Icons.share,
@@ -408,14 +398,11 @@ class _OpenChallengeLoadingContentState extends ConsumerState<OpenChallengeLoadi
 }
 
 class _GameParamsDisplay extends StatelessWidget {
-  const _GameParamsDisplay({required this.perf, required this.timeIncrement, required this.days});
+  const new({required this.perf, required this.timeIncrement, required this.days});
 
-  _GameParamsDisplay.seek(GameSeek seek)
-    : perf = seek.perf,
-      timeIncrement = seek.timeIncrement,
-      days = seek.days;
+  new seek(GameSeek seek) : perf = seek.perf, timeIncrement = seek.timeIncrement, days = seek.days;
 
-  _GameParamsDisplay.challengeRequest(ChallengeRequest challenge)
+  new challengeRequest(ChallengeRequest challenge)
     : perf = challenge.perf,
       timeIncrement = challenge.timeIncrement,
       days = challenge.days;
@@ -442,35 +429,49 @@ class _GameParamsDisplay extends StatelessWidget {
   }
 }
 
-class StandaloneGameLoadingContent extends StatelessWidget {
-  const StandaloneGameLoadingContent({this.position, this.userActionsBar, super.key});
-
-  final LoadingPosition? position;
-  final Widget? userActionsBar;
-
+class const StandaloneGameLoadingContent({
+  final LoadingParam? loadingParam,
+  final Widget? userActionsBar,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final lastMove = position?.lastMove;
+    final loadingFen = loadingParam?.fen;
+    final variant = loadingParam?.variant ?? Variant.standard;
+    Position? loadingPosition;
+    if (loadingFen != null) {
+      try {
+        loadingPosition = Position.setupPosition(
+          variant.rule,
+          Setup.parseFen(loadingFen),
+          ignoreImpossibleCheck: true,
+        );
+      } catch (_) {
+        loadingPosition = null;
+      }
+    }
+    final lastMove = loadingParam?.lastMove;
     return Shimmer(
       child: SafeArea(
         child: GameLayout(
-          orientation: position?.orientation ?? Side.white,
-          boardParams: GameBoardParams.readonly(
-            fen: position?.fen ?? kEmptyFEN,
-            variant: Variant.standard,
-            pockets: null,
-            lastMove: switch (lastMove) {
-              // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
-              // e.g. instead of P@c4 the UCI will be c4c4.
-              // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
-              // The dropped role does not matter, since we just use it for the square highlight.
-              NormalMove(:final from, :final to) when from == to => DropMove(
-                to: to,
-                role: Role.pawn,
-              ),
-              _ => lastMove,
-            },
-          ),
+          orientation: loadingParam?.orientation ?? Side.white,
+          boardParams: loadingPosition == null
+              ? GameBoardParams.emptyBoard
+              : GameBoardParams.readonly(
+                  variant: variant,
+                  position: loadingPosition,
+                  lastMove: switch (lastMove) {
+                    // In crazyhouse games, the "ongoing games" endpoint does not return the correct UCI for crazyhouse games,
+                    // e.g. instead of P@c4 the UCI will be c4c4.
+                    // This leads to a "duplicate key" error, since chessground would try to highlight the same square twice.
+                    // The dropped role does not matter, since we just use it for the square highlight.
+                    NormalMove(:final from, :final to) when from == to => DropMove(
+                      to: to,
+                      role: Role.pawn,
+                    ),
+                    _ => lastMove,
+                  },
+                ),
           topTable: const LoadingPlayerWidget(),
           bottomTable: const LoadingPlayerWidget(),
           moves: const [],
@@ -484,9 +485,7 @@ class StandaloneGameLoadingContent extends StatelessWidget {
 /// A widget that shows a loading indicator for a player.
 ///
 /// Must be wrapped in a [Shimmer] widget.
-class LoadingPlayerWidget extends StatelessWidget {
-  const LoadingPlayerWidget({super.key});
-
+class const LoadingPlayerWidget({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShimmerLoading(
@@ -529,12 +528,8 @@ class LoadingPlayerWidget extends StatelessWidget {
   }
 }
 
-class LoadGameError extends StatelessWidget {
-  const LoadGameError(this.errorMessage, {this.showBottomBar = true});
-
-  final String errorMessage;
-  final bool showBottomBar;
-
+class const LoadGameError(final String errorMessage, {final bool showBottomBar = true})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -566,12 +561,10 @@ class LoadGameError extends StatelessWidget {
 }
 
 /// A board that shows a message that a challenge has been declined.
-class ChallengeDeclinedBoard extends StatelessWidget {
-  const ChallengeDeclinedBoard({required this.declineReason, required this.challenge});
-
-  final String declineReason;
-  final Challenge challenge;
-
+class const ChallengeDeclinedBoard({
+  required final String declineReason,
+  required final Challenge challenge,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textColor = DefaultTextStyle.of(context).style.color;
@@ -605,7 +598,10 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Text(' — '),
-                            UserFullNameWidget(user: challenge.destUser?.user),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: UserFullNameWidget(user: challenge.destUser?.user),
+                            ),
                             if (challenge.destUser?.lagRating != null) ...[
                               const SizedBox(width: 6.0),
                               LagIndicator(lagRating: challenge.destUser!.lagRating!, size: 13.0),
@@ -634,7 +630,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
   }
 }
 
-class _LobbyNumbers extends ConsumerWidget {
+class const _LobbyNumbers() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lobbyNumbers = ref.watch(lobbyNumbersProvider);
@@ -661,13 +657,8 @@ class _LobbyNumbers extends ConsumerWidget {
   }
 }
 
-class _BoardOverlayCard extends StatelessWidget {
-  const _BoardOverlayCard({this.padding, required this.child});
-
-  final EdgeInsetsGeometry? padding;
-
-  final Widget child;
-
+class const _BoardOverlayCard({final EdgeInsetsGeometry? padding, required final Widget child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(

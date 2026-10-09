@@ -6,17 +6,11 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 part 'game_board_params.freezed.dart';
 
 @freezed
-sealed class GameBoardParams with _$GameBoardParams {
-  const GameBoardParams._();
+sealed class const GameBoardParams._() with _$GameBoardParams {
+  const factory readonly({required Variant variant, required Position position, Move? lastMove}) =
+      ReadonlyBoardParams;
 
-  const factory GameBoardParams.readonly({
-    required String fen,
-    required Variant variant,
-    required Pockets? pockets,
-    Move? lastMove,
-  }) = ReadonlyBoardParams;
-
-  const factory GameBoardParams.interactive({
+  const factory interactive({
     required Variant variant,
     required Position position,
     required PlayerSide playerSide,
@@ -24,25 +18,26 @@ sealed class GameBoardParams with _$GameBoardParams {
     Move? lastMove,
   }) = InteractiveBoardParams;
 
-  static const emptyBoard = ReadonlyBoardParams(
-    fen: kEmptyFEN,
-    variant: Variant.standard,
-    pockets: null,
-  );
+  const factory empty({@Default(Variant.standard) Variant variant}) = EmptyBoardParams;
+
+  static const emptyBoard = EmptyBoardParams();
 
   String get fen => switch (this) {
-    ReadonlyBoardParams(:final fen) => fen,
+    ReadonlyBoardParams(:final position) => position.fen,
     InteractiveBoardParams(:final position) => position.fen,
+    EmptyBoardParams() => kEmptyFEN,
   };
 
   Pockets? get pockets => switch (this) {
-    ReadonlyBoardParams(:final pockets) => pockets,
+    ReadonlyBoardParams(:final position) => position.pockets,
     InteractiveBoardParams(:final position) => position.pockets,
+    EmptyBoardParams() => null,
   };
 
   PlayerSide get playerSide => switch (this) {
     ReadonlyBoardParams() => PlayerSide.none,
     InteractiveBoardParams(:final playerSide) => playerSide,
+    EmptyBoardParams() => PlayerSide.none,
   };
 }
 
@@ -54,23 +49,15 @@ sealed class GameBoardParams with _$GameBoardParams {
 /// only needs to provide what isn't part of the controller — the [variant] (for
 /// board settings), the [onMove] callback, and the crazyhouse [pockets] (which
 /// the owner must refresh on each move).
-class ControllerBoardParams {
-  const ControllerBoardParams({
-    required this.controller,
-    required this.variant,
-    this.onMove,
-    this.pockets,
-  });
-
+class const ControllerBoardParams({
   /// The externally owned controller. [GameLayout] renders the board with it but
   /// never creates, disposes, or drives it.
-  final ChessboardController controller;
-
-  final Variant variant;
+  required final ChessboardController controller,
+  required final Variant variant,
 
   /// Called when the user completes a move on the board.
-  final void Function(Move, {bool? viaDragAndDrop})? onMove;
+  final void Function(Move, {bool? viaDragAndDrop})? onMove,
 
   /// Crazyhouse pockets, or null for variants without pockets.
-  final Pockets? pockets;
-}
+  final Pockets? pockets,
+});

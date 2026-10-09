@@ -1,6 +1,5 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -8,9 +7,10 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_scaffold.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -22,17 +22,18 @@ import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MoreTabScreen extends ConsumerWidget {
-  const MoreTabScreen({super.key});
-
+class const MoreTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -61,12 +62,10 @@ class MoreTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final authUser = ref.watch(authControllerProvider);
 
     return ListTileTheme.merge(
@@ -105,17 +104,24 @@ class _Body extends ConsumerWidget {
                     : null,
                 title: Text(context.l10n.openingExplorer),
                 enabled: isOnline,
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
-                  OpeningExplorerScreen.buildRoute(
-                    const AnalysisOptions.pgn(
-                      id: StringId('standalone_opening_explorer'),
-                      orientation: Side.white,
-                      pgn: '',
-                      isComputerAnalysisAllowed: false,
-                      variant: Variant.standard,
+                onTap: () {
+                  if (authUser == null) {
+                    showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                    return;
+                  }
+
+                  Navigator.of(context, rootNavigator: true).push(
+                    OpeningExplorerScreen.buildRoute(
+                      const AnalysisOptions.pgn(
+                        id: StringId('standalone_opening_explorer'),
+                        orientation: Side.white,
+                        pgn: '',
+                        isComputerAnalysisAllowed: false,
+                        variant: Variant.standard,
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               ListTile(
                 leading: const Icon(Icons.edit_outlined),
@@ -127,6 +133,7 @@ class _Body extends ConsumerWidget {
                   BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
+                    initialOrientation: null,
                   )),
                 ),
               ),
@@ -204,16 +211,15 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _AccountSection extends ConsumerWidget {
-  const _AccountSection();
-
+class const _AccountSection() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(onlineStatusProvider).value ?? false;
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final unreadTeamUpdates = ref.watch(unreadTeamUpdatesCountProvider).value ?? 0;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     final user = authUser?.user;
@@ -230,10 +236,10 @@ class _AccountSection extends ConsumerWidget {
             enabled: isOnline,
             onTap: () {
               ref.invalidate(accountProvider);
-              Navigator.of(context, rootNavigator: true).push(ProfileScreen.buildRoute());
+              Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),
-          if (!kidMode)
+          if (!kidMode) ...[
             ListTile(
               leading: Badge.count(
                 isLabelVisible: unreadMessages > 0,
@@ -244,16 +250,30 @@ class _AccountSection extends ConsumerWidget {
               trailing: isIOS ? const CupertinoListTileChevron() : null,
               enabled: isOnline,
               onTap: () {
-                Navigator.of(context, rootNavigator: true).push(ContactsScreen.buildRoute());
+                Navigator.of(context).push(ContactsScreen.buildRoute());
               },
             ),
+            ListTile(
+              leading: Badge.count(
+                isLabelVisible: unreadTeamUpdates > 0,
+                count: unreadTeamUpdates,
+                child: const Icon(Icons.groups_outlined),
+              ),
+              title: Text(context.l10n.teamTeamUpdates),
+              trailing: isIOS ? const CupertinoListTileChevron() : null,
+              enabled: isOnline,
+              onTap: () {
+                Navigator.of(context).push(TeamUpdatesScreen.buildRoute());
+              },
+            ),
+          ],
         ],
         ListTile(
           leading: const Icon(Icons.settings_outlined),
           title: Text(context.l10n.settingsSettings),
           trailing: isIOS ? const CupertinoListTileChevron() : null,
           onTap: () {
-            Navigator.of(context, rootNavigator: true).push(SettingsScreen.buildRoute());
+            Navigator.of(context).push(SettingsScreen.buildRoute());
           },
         ),
       ],

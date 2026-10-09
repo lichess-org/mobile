@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -13,12 +12,15 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:material_ui/material_ui.dart';
 
 final _themesProvider =
     FutureProvider.autoDispose<
       (bool, IMap<PuzzleThemeKey, int>, IMap<PuzzleThemeKey, PuzzleThemeData>?, bool)
     >((ref) async {
-      final isOnline = await ref.watch(onlineStatusProvider.future);
+      final isOnline = await ref.watch(
+        connectivityChangesProvider.selectAsync((status) => status.isOnline),
+      );
       final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
       IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
       if (isOnline) {
@@ -32,9 +34,7 @@ final _themesProvider =
       return (isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
     });
 
-class PuzzleThemesScreen extends StatelessWidget {
-  const PuzzleThemesScreen({super.key});
-
+class const PuzzleThemesScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleThemesScreen());
   }
@@ -48,14 +48,12 @@ class PuzzleThemesScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -122,18 +120,15 @@ class _BodyState extends ConsumerState<_Body> {
         return ListView(
           children: [
             searchBar,
-            Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                enabled: openingsAvailable,
-                title: Text(context.l10n.puzzleByOpenings),
-                trailing: const Icon(Icons.keyboard_arrow_right),
-                onExpansionChanged: openingsAvailable
-                    ? (expanded) {
-                        Navigator.of(context).push(OpeningThemeScreen.buildRoute());
-                      }
-                    : null,
-              ),
+            ListTile(
+              enabled: openingsAvailable,
+              title: Text(context.l10n.puzzleByOpenings),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+              onTap: openingsAvailable
+                  ? () {
+                      Navigator.of(context).push(OpeningThemeScreen.buildRoute());
+                    }
+                  : null,
             ),
             for (final category in list)
               _Category(
@@ -151,21 +146,13 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _ThemeTile extends StatelessWidget {
-  const _ThemeTile({
-    required this.theme,
-    required this.isThemeAvailable,
-    required this.hasConnectivity,
-    required this.onlineThemes,
-    required this.savedThemes,
-  });
-
-  final PuzzleThemeKey theme;
-  final bool isThemeAvailable;
-  final bool hasConnectivity;
-  final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-  final IMap<PuzzleThemeKey, int> savedThemes;
-
+class const _ThemeTile({
+  required final PuzzleThemeKey theme,
+  required final bool isThemeAvailable,
+  required final bool hasConnectivity,
+  required final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes,
+  required final IMap<PuzzleThemeKey, int> savedThemes,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeCountStyle = TextStyle(
@@ -206,26 +193,22 @@ class _ThemeTile extends StatelessWidget {
   }
 }
 
-class _Category extends StatelessWidget {
-  const _Category({
-    required this.hasConnectivity,
-    required this.category,
-    required this.onlineThemes,
-    required this.savedThemes,
-  });
-
-  final bool hasConnectivity;
-  final PuzzleThemeCategory category;
-  final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
-  final IMap<PuzzleThemeKey, int> savedThemes;
-
+class const _Category({
+  required final bool hasConnectivity,
+  required final PuzzleThemeCategory category,
+  required final IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes,
+  required final IMap<PuzzleThemeKey, int> savedThemes,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (categoryName, themes) = category;
+    final isCategoryAvailable =
+        hasConnectivity || themes.any((theme) => savedThemes.containsKey(theme));
 
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
+        enabled: isCategoryAvailable,
         title: Text(categoryName),
         children: [
           ListSection(

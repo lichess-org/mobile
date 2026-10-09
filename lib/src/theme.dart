@@ -1,51 +1,58 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:material_ui/material_ui.dart';
 
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
 );
 
-ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
+ThemeData makeAppTheme(
+  BuildContext context, {
+  required BackgroundThemeMode themeMode,
+  required (BackgroundColor, bool)? backgroundColor,
+  required BackgroundImage? backgroundImage,
+  required bool systemColors,
+  required BoardTheme boardTheme,
+}) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-  final brightness = generalPrefs.isForcedDarkMode
+  final isForcedDarkMode = backgroundColor != null || backgroundImage != null;
+  final brightness = isForcedDarkMode
       ? Brightness.dark
-      : switch (generalPrefs.themeMode) {
+      : switch (themeMode) {
           BackgroundThemeMode.light => Brightness.light,
-          BackgroundThemeMode.dark => Brightness.dark,
+          BackgroundThemeMode.dark || BackgroundThemeMode.amoled => Brightness.dark,
           BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
         };
 
-  if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
-    return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
+  if (backgroundColor == null && backgroundImage == null) {
+    return _makeDefaultTheme(
+      brightness,
+      themeMode: themeMode,
+      systemColors: systemColors,
+      boardTheme: boardTheme,
+      isIOS: isIOS,
+    );
   } else {
     return _makeBackgroundImageTheme(
-      baseTheme:
-          generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
+      baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
       seedColor:
-          generalPrefs.backgroundImage?.seedColor ??
-          (generalPrefs.backgroundColor!.$2
-              ? generalPrefs.backgroundColor!.$1.darker
-              : generalPrefs.backgroundColor!.$1.color),
+          backgroundImage?.seedColor ??
+          (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
       isIOS: isIOS,
-      isBackgroundImage: generalPrefs.backgroundImage != null,
+      isBackgroundImage: backgroundImage != null,
     );
   }
 }
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class CustomTheme extends ThemeExtension<CustomTheme> {
-  const CustomTheme({required this.rowEven, required this.rowOdd});
-
-  final Color rowEven;
-  final Color rowOdd;
-
+class const CustomTheme({required final Color rowEven, required final Color rowOdd})
+    extends ThemeExtension<CustomTheme> {
   @override
   CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
     return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
@@ -76,18 +83,18 @@ extension CustomThemeBuildContext on BuildContext {
 // --
 
 ThemeData _makeDefaultTheme(
-  Brightness brightness,
-  GeneralPrefs generalPrefs,
-  BoardPrefs boardPrefs,
-  bool isIOS,
-) {
-  final boardTheme = boardPrefs.boardTheme;
+  Brightness brightness, {
+  required BackgroundThemeMode themeMode,
+  required bool systemColors,
+  required BoardTheme boardTheme,
+  required bool isIOS,
+}) {
   final dynamicColorSchemes = getDynamicColorSchemes();
   final systemScheme = switch (brightness) {
     Brightness.light => dynamicColorSchemes?.light,
     Brightness.dark => dynamicColorSchemes?.dark,
   };
-  final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
+  final hasSystemColors = systemScheme != null && systemColors;
 
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
@@ -123,7 +130,9 @@ ThemeData _makeDefaultTheme(
       ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
       : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
-  return theme.copyWith(
+  final isAmoled = themeMode == BackgroundThemeMode.amoled;
+
+  final finalTheme = theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     appBarTheme: _appBarTheme.copyWith(
@@ -166,6 +175,24 @@ ThemeData _makeDefaultTheme(
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
     extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
+  );
+
+  if (!isAmoled) return finalTheme;
+
+  return finalTheme.copyWith(
+    scaffoldBackgroundColor: const Color(0xFF000000),
+    appBarTheme: finalTheme.appBarTheme.copyWith(
+      backgroundColor: const Color(0xFF000000),
+      surfaceTintColor: Colors.transparent,
+    ),
+    bottomAppBarTheme: finalTheme.bottomAppBarTheme.copyWith(color: const Color(0xFF000000)),
+    colorScheme: finalTheme.colorScheme.copyWith(
+      surface: const Color(0xFF000000),
+      surfaceContainerLowest: const Color(0xFF000000),
+      surfaceContainerLow: const Color(0xFF000000),
+      surfaceContainer: const Color(0xFF000000),
+      surfaceTint: Colors.transparent,
+    ),
   );
 }
 

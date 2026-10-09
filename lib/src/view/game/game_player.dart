@@ -1,16 +1,15 @@
 import 'dart:async';
 
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -20,52 +19,44 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget to display player information above/below the chess board.
-class GamePlayer extends StatelessWidget {
-  const GamePlayer({
-    required this.game,
-    required this.side,
-    this.socketUri,
-    this.matchupScore,
-    this.clock,
-    this.materialDiff,
-    this.materialDifferenceFormat,
-    this.confirmMoveCallbacks,
-    this.timeToMove,
-    this.shouldLinkToUserProfile = true,
-    this.mePlaying = false,
-    this.canGoForward = false,
-    this.zenMode = false,
-    this.clockPosition = ClockPosition.right,
-    super.key,
-  });
-
-  final BaseGame game;
-  final Side side;
-
-  final Uri? socketUri;
-
-  final Widget? clock;
-  final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
+class const GamePlayer({
+  required final BaseGame game,
+  required final Side side,
+  final Uri? socketUri,
+  final double? matchupScore,
+  final Widget? clock,
+  final MaterialDiffSide? materialDiff,
+  final MaterialDifferenceFormat? materialDifferenceFormat,
 
   /// if confirm move preference is enabled, used to display confirmation buttons
-  final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks;
+  final ({VoidCallback confirm, VoidCallback cancel})? confirmMoveCallbacks,
 
-  final double? matchupScore;
-  final bool shouldLinkToUserProfile;
-  final bool mePlaying;
-  final bool canGoForward;
-  final bool zenMode;
-  final ClockPosition clockPosition;
+  /// When the opponent has left the game, used to display the claim-win countdown
+  /// and, once the opponent has been gone long enough, the claim choices.
+  final ({
+    (Duration, DateTime) countdown,
+    bool canClaim,
+    VoidCallback onClaimWin,
+    VoidCallback onClaimDraw,
+  })?
+  opponentLeftCallbacks,
 
   /// Time left for the player to move at the start of the game.
-  final Duration? timeToMove;
-
+  final Duration? timeToMove,
+  final bool shouldLinkToUserProfile = true,
+  final bool mePlaying = false,
+  final bool canGoForward = false,
+  final bool zenMode = false,
+  final ClockPosition clockPosition = ClockPosition.right,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerFontSize = isShortVerticalScreen(context) ? 15.0 : 16.0;
@@ -145,10 +136,13 @@ class GamePlayer extends StatelessWidget {
                 const SizedBox(width: 5),
               ],
               Flexible(
-                child: Text(
-                  player.displayName(context.l10n),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
+                child: Tooltip(
+                  message: player.displayName(context.l10n),
+                  child: Text(
+                    player.displayName(context.l10n),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               if (player.user?.flair != null) ...[
@@ -205,6 +199,20 @@ class GamePlayer extends StatelessWidget {
       ],
     );
 
+    // When the opponent has left, the countdown / claim choices take the whole
+    // table width (the clock is hidden) to leave enough room for the buttons.
+    if (opponentLeftCallbacks != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: OpponentLeftCountdown(
+          countdown: opponentLeftCallbacks!.countdown,
+          canClaim: opponentLeftCallbacks!.canClaim,
+          onClaimWin: opponentLeftCallbacks!.onClaimWin,
+          onClaimDraw: opponentLeftCallbacks!.onClaimDraw,
+        ),
+      );
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -235,9 +243,8 @@ class GamePlayer extends StatelessWidget {
                                   if (mePlaying) {
                                     ref.invalidate(accountProvider);
                                   }
-                                  Navigator.of(
-                                    context,
-                                  ).push(UserOrProfileScreen.buildRoute(player.user!));
+                                  Navigator.of(context)
+                                      .push(UserOrProfileScreen.buildRoute(player.user!));
                                 }
                               : null,
                           child: playerWidget,
@@ -253,12 +260,11 @@ class GamePlayer extends StatelessWidget {
   }
 }
 
-class ConfirmMove extends StatelessWidget {
-  const ConfirmMove({required this.onConfirm, required this.onCancel, super.key});
-
-  final VoidCallback onConfirm;
-  final VoidCallback onCancel;
-
+class const ConfirmMove({
+  required final VoidCallback onConfirm,
+  required final VoidCallback onCancel,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -293,6 +299,92 @@ class ConfirmMove extends StatelessWidget {
   }
 }
 
+/// Shown in the player table when the opponent has left the game.
+///
+/// While the claim threshold has not been reached, displays a live countdown.
+/// Once [canClaim] is true, displays the two claim choices inline (so there is
+/// no dialog to dismiss). The player clock is hidden to leave enough room.
+class const OpponentLeftCountdown({
+  required final (Duration, DateTime) countdown,
+  required final bool canClaim,
+  required final VoidCallback onClaimWin,
+  required final VoidCallback onClaimDraw,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (!canClaim) {
+      return CountdownClockBuilder(
+        timeLeft: countdown.$1,
+        clockUpdatedAt: countdown.$2,
+        active: true,
+        builder: (context, duration) => Text(
+          context.l10n.opponentLeftCounter(duration.inSeconds),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      );
+    }
+    return Column(
+      mainAxisSize: .max,
+      mainAxisAlignment: .center,
+      children: [
+        // The buttons are the priority: they keep their full size and stay
+        // visible even when vertical space is constrained.
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              child: OpacityButton(
+                semanticsLabel: context.l10n.forceResignation,
+                onPressed: onClaimWin,
+                child: Text(
+                  context.l10n.forceResignation,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ColorScheme.of(context).secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Flexible(
+              child: OpacityButton(
+                semanticsLabel: context.l10n.forceDraw,
+                onPressed: onClaimDraw,
+                child: Text(
+                  context.l10n.forceDraw,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: ColorScheme.of(context).secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        // The explanatory text comes second and is dropped entirely on short
+        // screens, where every pixel counts and the buttons take priority.
+        if (!isShortVerticalScreen(context)) ...[
+          const SizedBox(height: 8.0),
+          Text(
+            context.l10n.opponentLeftChoices,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
 String _scoreDisplay(double score) {
   final integerPart = score.truncate();
   final decimalPart = score - integerPart;
@@ -302,17 +394,16 @@ String _scoreDisplay(double score) {
       : '$integerPart${decimalPart == 0.5 ? '½' : ''}';
 }
 
-class MoveExpiration extends ConsumerStatefulWidget {
-  const MoveExpiration({required this.timeToMove, required this.mePlaying, super.key});
-
-  final Duration timeToMove;
-  final bool mePlaying;
-
+class const MoveExpiration({
+  required final Duration timeToMove,
+  required final bool mePlaying,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<MoveExpiration> createState() => _MoveExpirationState();
 }
 
-class _MoveExpirationState extends ConsumerState<MoveExpiration> {
+class _MoveExpirationState() extends ConsumerState<MoveExpiration> {
   static const _period = Duration(milliseconds: 1000);
   Timer? _timer;
   Duration timeLeft = Duration.zero;
@@ -339,9 +430,11 @@ class _MoveExpirationState extends ConsumerState<MoveExpiration> {
   @override
   void didUpdateWidget(covariant MoveExpiration oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _timer?.cancel();
-    timeLeft = widget.timeToMove;
-    _timer = startTimer();
+    if (oldWidget.timeToMove != widget.timeToMove) {
+      _timer?.cancel();
+      timeLeft = widget.timeToMove;
+      _timer = startTimer();
+    }
   }
 
   @override

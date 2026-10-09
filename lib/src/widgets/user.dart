@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -7,27 +6,22 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A Wifi icon representing that the user is currently connected (online) or not.
-class ConnectedIcon extends StatelessWidget {
-  const ConnectedIcon({
-    required this.isConnected,
-    this.shouldShowIsOnGameLabels = false,
-    this.size,
-    super.key,
-  });
-
-  final bool isConnected;
+class const ConnectedIcon({
+  required final bool isConnected,
 
   /// Whether to show "is on game" labels in tooltips.
-  final bool shouldShowIsOnGameLabels;
-
-  final double? size;
-
+  final bool shouldShowIsOnGameLabels = false,
+  final double? size,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = isConnected
@@ -44,13 +38,65 @@ class ConnectedIcon extends StatelessWidget {
   }
 }
 
+/// App bar title for the user and profile screens.
+///
+/// Shows the user's avatar and name, with a subtitle displaying the online
+/// status, or the time they were last seen active if offline.
+class const UserAppBarTitleWidget({
+  required final LightUser user,
+  required final bool isOnline,
+
+  /// The last time the user was seen active, shown when [isOnline] is false.
+  final DateTime? seenAt,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        UserAvatar(user, radius: 16),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Column(
+            mainAxisSize: .min,
+            crossAxisAlignment: .start,
+            children: [
+              UserFullNameWidget(user: user, showFlair: false),
+              if (isOnline)
+                Text(
+                  context.l10n.online,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else if (seenAt != null)
+                Text(
+                  context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else
+                Text(
+                  context.l10n.offline,
+                  style: subtitleTextStyle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// A wing icon representing a Lichess patron with its chosen color.
-class PatronIcon extends StatelessWidget {
-  const PatronIcon({this.color, this.size, super.key});
-
-  final int? color;
-  final double? size;
-
+class const PatronIcon({final int? color, final double? size, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = DefaultTextStyle.of(context).style;
@@ -96,10 +142,12 @@ class PatronIcon extends StatelessWidget {
 
 /// Displays a user name, title, flair (optional) with an optional rating.
 class UserFullNameWidget extends ConsumerWidget {
-  const UserFullNameWidget({
+  const new({
     required this.user,
+    this.name,
     this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -109,10 +157,12 @@ class UserFullNameWidget extends ConsumerWidget {
     super.key,
   });
 
-  const UserFullNameWidget.player({
+  const new player({
     required this.user,
+    this.name,
     required this.aiLevel,
     this.rating,
+    this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
     this.showFlair = true,
@@ -123,7 +173,10 @@ class UserFullNameWidget extends ConsumerWidget {
   });
 
   final LightUser? user;
+  final String? name;
   final int? rating;
+
+  final int? ratingDiff;
 
   /// The AI level, if the user is lichess AI.
   final int? aiLevel;
@@ -156,6 +209,7 @@ class UserFullNameWidget extends ConsumerWidget {
 
     final displayName =
         user?.name ??
+        name ??
         (aiLevel != null
             ? context.l10n.aiNameLevelAiLevel('Stockfish', aiLevel.toString())
             : context.l10n.anonymous);
@@ -210,6 +264,21 @@ class UserFullNameWidget extends ConsumerWidget {
             ),
           ),
         ],
+        if (shouldShowRating && ratingDiff != null) ...[
+          const SizedBox(width: 5),
+          Text(
+            ratingDiff! > 0 ? '+$ratingDiff' : '$ratingDiff',
+            style: contextTextStyle.copyWith(
+              fontWeight: .w400,
+              fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
+              color: ratingDiff! > 0
+                  ? context.lichessColors.good
+                  : ratingDiff! == 0
+                  ? context.lichessColors.brag
+                  : context.lichessColors.error,
+            ),
+          ),
+        ],
       ],
     );
     if (onTap != null) {
@@ -223,17 +292,13 @@ class UserFullNameWidget extends ConsumerWidget {
 ///
 /// Shows the user's flair if available, otherwise their initials with a
 /// deterministic background color derived from the first letter of their name.
-class UserAvatar extends ConsumerStatefulWidget {
-  const UserAvatar(this.user, {this.radius = 20.0, super.key});
-
-  final LightUser user;
-  final double radius;
-
+class const UserAvatar(final LightUser user, {final double radius = 20.0, super.key})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<UserAvatar> createState() => _UserAvatarState();
 }
 
-class _UserAvatarState extends ConsumerState<UserAvatar> {
+class _UserAvatarState() extends ConsumerState<UserAvatar> {
   bool _errorLoadingFlair = false;
 
   @override

@@ -9,18 +9,23 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
+import 'package:logging/logging.dart';
 
 part 'puzzle_controller.freezed.dart';
+
+final _logger = Logger('PuzzleController');
 
 final puzzleControllerProvider = NotifierProvider.autoDispose
     .family<PuzzleController, PuzzleState, PuzzleContext>(
@@ -28,11 +33,7 @@ final puzzleControllerProvider = NotifierProvider.autoDispose
       name: 'PuzzleControllerProvider',
     );
 
-class PuzzleController extends Notifier<PuzzleState> {
-  PuzzleController(this.initialContext);
-
-  final PuzzleContext initialContext;
-
+class PuzzleController(final PuzzleContext initialContext) extends Notifier<PuzzleState> {
   static final Uri socketUri = Uri(path: '/analysis/socket/v5');
 
   late Branch _gameTree;
@@ -40,8 +41,12 @@ class PuzzleController extends Notifier<PuzzleState> {
   Timer? _viewSolutionTimer;
   IList<PuzzleId>? _replayRemaining;
 
-  Future<PuzzleService> get _service =>
-      ref.read(puzzleServiceFactoryProvider)(queueLength: kPuzzleLocalQueueLength);
+  Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
+    queueLength: offlineQueueLengthForAngle(
+      initialContext.angle,
+      ref.read(puzzlePreferencesProvider).nbOfflinePuzzles,
+    ),
+  );
 
   @override
   PuzzleState build() {
@@ -70,7 +75,9 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (glicko != null) {
         state = state.copyWith(glicko: glicko);
       }
-    } catch (_) {}
+    } catch (e, st) {
+      _logger.warning('Failed to update user rating:', e, st);
+    }
   }
 
   PuzzleState _loadNewContext(PuzzleContext context) {
@@ -197,12 +204,30 @@ class PuzzleController extends Notifier<PuzzleState> {
 
     await ref.read(puzzlePreferencesProvider.notifier).setDifficulty(difficulty);
 
-    final nextPuzzle = (await _service).resetBatch(
+    final nextPuzzleFuture = (await _service).resetBatch(
       userId: initialContext.userId,
       angle: initialContext.angle,
     );
 
     state = state.copyWith(isChangingDifficulty: false);
+
+    // Wait for the reset to land before topping the queue back up: [resetBatch]
+    // saves a batch built from a snapshot taken before its own request, without
+    // merging, so a fill running concurrently would see its writes overwritten,
+    // and its "the queue did not grow" check would then stop it early, below
+    // the configured count.
+    final nextPuzzle = await nextPuzzleFuture;
+
+    // Difficulty invalidates the queue, so resetBatch only refetched one batch
+    // (capped at 50 by the server). Top the queue back up to the configured
+    // count in the background, matching the settings-change behaviour.
+    if (ref.mounted) {
+      unawaited(
+        ref
+            .read(puzzleQueueFillerProvider.notifier)
+            .fill(userId: initialContext.userId, angle: initialContext.angle),
+      );
+    }
 
     return nextPuzzle;
   }
@@ -264,10 +289,8 @@ class PuzzleController extends Notifier<PuzzleState> {
     } else {
       ref
           .read(
-            puzzleSessionProvider((
-              userId: initialContext.userId,
-              angle: initialContext.angle,
-            )).notifier,
+            puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                .notifier,
           )
           .addAttempt(state.puzzle.puzzle.id, win: result == PuzzleResult.win);
 
@@ -308,6 +331,8 @@ class PuzzleController extends Notifier<PuzzleState> {
               );
       }
 
+      ref.invalidate(puzzleRecentActivityProvider);
+
       if (!ref.mounted) return;
 
       state = state.copyWith(nextContext: next);
@@ -316,10 +341,8 @@ class PuzzleController extends Notifier<PuzzleState> {
       if (rounds != null) {
         ref
             .read(
-              puzzleSessionProvider((
-                userId: initialContext.userId,
-                angle: initialContext.angle,
-              )).notifier,
+              puzzleSessionProvider((userId: initialContext.userId, angle: initialContext.angle))
+                  .notifier,
             )
             .setRatingDiffs(rounds);
       }
@@ -411,17 +434,25 @@ class PuzzleController extends Notifier<PuzzleState> {
   }
 }
 
-enum PuzzleMode { load, play, view }
+enum PuzzleMode() {
+  load,
+  play,
+  view,
+}
 
-enum PuzzleResult { win, lose }
+enum PuzzleResult() {
+  win,
+  lose,
+}
 
-enum PuzzleFeedback { good, bad }
+enum PuzzleFeedback() {
+  good,
+  bad,
+}
 
 @freezed
-sealed class PuzzleState with _$PuzzleState {
-  const PuzzleState._();
-
-  const factory PuzzleState({
+sealed class const PuzzleState._() with _$PuzzleState {
+  const factory({
     required Puzzle puzzle,
     required PuzzleGlicko? glicko,
     required PuzzleMode mode,

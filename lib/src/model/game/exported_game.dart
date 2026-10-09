@@ -30,13 +30,11 @@ typedef ClockData = ({Duration initial, Duration increment});
 ///
 /// See [PlayableGame] for a game owned by the current user and that can be played unless finished.
 @Freezed(fromJson: true, toJson: true)
-sealed class ExportedGame
+sealed class const ExportedGame._()
     with BaseGame, _$ExportedGame, ServerGame, IndexableSteps
     implements ServerGame {
-  const ExportedGame._();
-
   @Assert('steps.isNotEmpty')
-  factory ExportedGame({
+  factory({
     required GameId id,
     required GameMeta meta,
     // TODO refactor to not include this field
@@ -61,12 +59,12 @@ sealed class ExportedGame
   ///
   /// Currently, those endpoints are supported:
   /// - GET /game/export/:id
-  factory ExportedGame.fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
+  factory fromServerJson(Map<String, dynamic> json, {bool withBookmarked = false}) {
     return _archivedGameFromPick(pick(json).required(), withBookmarked: withBookmarked);
   }
 
   /// Create an exported game from a local storage JSON.
-  factory ExportedGame.fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ExportedGameFromJson(json);
 }
 
 /// A [LightExportedGame] associated with a point of view of a player.
@@ -79,10 +77,8 @@ typedef LightExportedGameWithPov = ({LightExportedGame game, Side pov});
 /// - GET /api/games/user/:userId
 /// - GET /api/games/export/_ids
 @Freezed(fromJson: true, toJson: true)
-sealed class LightExportedGame with _$LightExportedGame {
-  const LightExportedGame._();
-
-  const factory LightExportedGame({
+sealed class const LightExportedGame._() with _$LightExportedGame {
+  const factory({
     required GameId id,
 
     /// If the full game id is available, it means this is a game owned by the
@@ -98,6 +94,11 @@ sealed class LightExportedGame with _$LightExportedGame {
     required Player black,
     required Variant variant,
     GameSource? source,
+
+    /// The date of an imported game, as found in the PGN tags at import time.
+    ///
+    /// This is a raw PGN date string, which may be partially unknown (e.g. '1972.08.??').
+    String? importDate,
     LightOpening? opening,
     String? lastFen,
     String? moves,
@@ -106,9 +107,11 @@ sealed class LightExportedGame with _$LightExportedGame {
     ClockData? clock,
     int? daysPerTurn,
     bool? bookmarked,
+    TournamentId? arenaTournamentId,
+    String? arenaTournamentName,
   }) = _ExportedGameData;
 
-  factory LightExportedGame.fromServerJson(
+  factory fromServerJson(
     Map<String, dynamic> json, {
 
     /// Whether to ask the server if the game is bookmarked
@@ -124,11 +127,7 @@ sealed class LightExportedGame with _$LightExportedGame {
     );
   }
 
-  factory LightExportedGame.fromPick(
-    RequiredPick pick, {
-    bool withBookmarked = false,
-    bool isBookmarked = false,
-  }) {
+  factory fromPick(RequiredPick pick, {bool withBookmarked = false, bool isBookmarked = false}) {
     return _lightExportedGameFromPick(
       pick,
       withBookmarked: withBookmarked,
@@ -136,10 +135,12 @@ sealed class LightExportedGame with _$LightExportedGame {
     );
   }
 
-  factory LightExportedGame.fromJson(Map<String, dynamic> json) =>
-      _$LightExportedGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$LightExportedGameFromJson(json);
 
   bool get isBookmarked => bookmarked == true;
+
+  /// Whether the game was imported on lichess, and thus not played on the site.
+  bool get isImported => source?.isImport == true;
 
   String clockDisplay(AppLocalizations l10n) {
     return daysPerTurn != null
@@ -166,9 +167,8 @@ IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
 
 ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = false}) {
   final data = _lightExportedGameFromPick(pick, withBookmarked: withBookmarked);
-  final clocks = pick(
-    'clocks',
-  ).asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
+  final clocks = pick('clocks')
+      .asListOrNull<Duration>((p0) => Duration(milliseconds: p0.asIntOrThrow() * 10));
   final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
@@ -192,9 +192,8 @@ ExportedGame _archivedGameFromPick(RequiredPick pick, {bool withBookmarked = fal
       opening: data.opening,
       division: division,
     ),
-    source: pick(
-      'source',
-    ).letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrThrow((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -245,9 +244,9 @@ LightExportedGame _lightExportedGameFromPick(
   return LightExportedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
-    source: pick(
-      'source',
-    ).letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    source: pick('source')
+        .letOrNull((pick) => GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown),
+    importDate: pick('import', 'date').asStringOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
@@ -269,6 +268,8 @@ LightExportedGame _lightExportedGameFromPick(
         : withBookmarked
         ? pick('bookmarked').asBoolOrFalse()
         : null,
+    arenaTournamentId: pick('arenaTour', 'id').asTournamentIdOrNull(),
+    arenaTournamentName: pick('arenaTour', 'name').asStringOrNull(),
   );
 }
 
@@ -318,6 +319,13 @@ PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
     blunders: pick('blunder').asIntOrThrow(),
     acpl: pick('acpl').asIntOrNull(),
     accuracy: pick('accuracy').asIntOrNull(),
+    phases: pick('phases').letOrNull(
+      (p) => (
+        opening: p('opening').asIntOrNull(),
+        middlegame: p('middlegame').asIntOrNull(),
+        endgame: p('endgame').asIntOrNull(),
+      ),
+    ),
   );
 }
 

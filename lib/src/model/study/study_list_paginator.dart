@@ -14,11 +14,8 @@ final studyListPaginatorProvider = AsyncNotifierProvider.autoDispose
       name: 'StudyListPaginatorProvider',
     );
 
-class StudyListPaginatorNotifier extends AsyncNotifier<StudyList> {
-  StudyListPaginatorNotifier(this.params);
-
-  final StudyListNotifierParams params;
-
+class StudyListPaginatorNotifier(final StudyListNotifierParams params)
+    extends AsyncNotifier<StudyList> {
   @override
   Future<StudyList> build() {
     return _nextPage();
@@ -29,6 +26,8 @@ class StudyListPaginatorNotifier extends AsyncNotifier<StudyList> {
     if (studyList.nextPage == null) return;
 
     final newStudyPage = await _nextPage();
+
+    if (!ref.mounted) return;
 
     state = AsyncData((
       nextPage: newStudyPage.nextPage,

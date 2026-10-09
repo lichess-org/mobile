@@ -1,7 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/account/account_pref_types.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -29,12 +29,7 @@ final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
 
-class AccountRepository {
-  AccountRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class AccountRepository(final LichessClient client, final Aggregator aggregator) {
   Future<User> getProfile() {
     return aggregator.readJson(
       Uri(path: '/api/account', queryParameters: {'playban': '1'}),
@@ -87,7 +82,7 @@ class AccountRepository {
 }
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
-  return (
+  return AccountPrefState(
     zenMode: Zen.fromInt(pick('zen').asIntOrThrow()),
     pieceNotation: PieceNotation.fromInt(pick('pieceNotation').asIntOrThrow()),
     showRatings: ShowRatings.fromInt(pick('ratings').asIntOrThrow()),

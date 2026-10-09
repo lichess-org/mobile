@@ -1,8 +1,8 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -14,14 +14,16 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/auth/fake_auth_storage.dart';
@@ -29,15 +31,11 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 import 'example_data.dart';
 
-class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
-class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+class MockPuzzleStorage() extends Mock implements PuzzleStorage;
 
-class MockPuzzlePreferences extends PuzzlePreferences with Mock {
-  MockPuzzlePreferences(this._rated);
-
-  final bool _rated;
-
+class MockPuzzlePreferences(final bool _rated) extends PuzzlePreferences with Mock {
   @override
   PuzzlePrefs build() {
     return PuzzlePrefs(
@@ -53,6 +51,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
     registerFallbackValue(puzzle);
+    registerFallbackValue(const PuzzleTheme(PuzzleThemeKey.mix));
   });
 
   final mockBatchStorage = MockPuzzleBatchStorage();
@@ -78,9 +77,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
-      ).thenAnswer((_) async => puzzle);
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+          .thenAnswer((_) async => puzzle);
 
       await tester.pumpWidget(app);
 
@@ -110,9 +108,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id),
-      ).thenAnswer((_) async => puzzle);
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+          .thenAnswer((_) async => puzzle);
 
       await tester.pumpWidget(app);
 
@@ -121,6 +118,211 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.text('Your turn'), findsOneWidget);
+    });
+
+    testWidgets('Warns the user when the server rate-limits solve submissions', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle.puzzle.id,
+        ),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+          .thenAnswer((_) async => puzzle);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      // arm the solve back-off, as a 429 on a solve flush would; the screen
+      // watches it and warns the user with the rejected count.
+      final container = ProviderScope.containerOf(tester.element(find.byType(PuzzleScreen)));
+      container.read(puzzleSolveLimiterProvider.notifier).markLimited(7);
+      await tester.pump();
+
+      expect(find.textContaining('You solved 7 puzzles'), findsOneWidget);
+    });
+
+    testWidgets(
+      'Changing the offline puzzles setting updates the displayed value and fills the queue',
+      variant: kPlatformVariant,
+      (tester) async {
+        // The offline-puzzles setting change triggers a one-time queue fill, so
+        // the mocks must serve the fill's storage reads/writes and a batch
+        // response for the deficit request.
+        int nbSelectReq = 0;
+        final mockClient = MockClient((request) {
+          if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
+            nbSelectReq++;
+            return mockResponse(batchOf1, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        // Use fresh mocks local to this test so the fill's `any`-matcher stubs
+        // don't leak into other tests sharing the module-level mocks.
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => batchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(mockClient, ref),
+            ),
+          },
+          // The offline-puzzles setting is a logged-in-only feature, so the
+          // tile is only rendered for an authenticated user.
+          authUser: fakeAuthUser,
+        );
+
+        when(() => historyStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+        // Queue starts full enough for the deficit fetch to append once.
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+        when(
+          () => batchStorage.save(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+            data: any(named: 'data'),
+          ),
+        ).thenAnswer((_) async {});
+
+        await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile shows the default value
+        final tileFinder = find.widgetWithText(SettingsListTile, 'Offline puzzles');
+        expect(tileFinder, findsOneWidget);
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '100');
+
+        // open the choice picker and select a larger value
+        await tester.tap(tileFinder);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('200').last);
+        await tester.pumpAndSettle();
+
+        // the tile reflects the new value
+        expect(tester.widget<SettingsListTile>(tileFinder).settingsValue, '200');
+
+        // the change triggered the offline queue fill
+        expect(nbSelectReq, greaterThan(0));
+      },
+    );
+
+    testWidgets(
+      'Offline puzzles setting is hidden for anonymous players',
+      variant: kPlatformVariant,
+      (tester) async {
+        final batchStorage = MockPuzzleBatchStorage();
+        final historyStorage = MockPuzzleStorage();
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: PuzzleScreen(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: puzzle.puzzle.id,
+          ),
+          overrides: {
+            puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+              (ref) => batchStorage,
+            ),
+            puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+          },
+          // No authUser: an anonymous player must not see the setting, because
+          // the larger offline queue is a logged-in-only feature.
+        );
+
+        when(() => historyStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+        when(
+          () => batchStorage.fetch(
+            userId: any(named: 'userId'),
+            angle: any(named: 'angle'),
+          ),
+        ).thenAnswer((_) async => PuzzleBatch(solved: IList(const []), unsolved: IList([puzzle])));
+
+        await tester.pumpWidget(app);
+        await tester.pump(const Duration(milliseconds: 200));
+
+        // open settings
+        await tester.tap(find.byIcon(Icons.settings));
+        await tester.pumpAndSettle();
+
+        // the offline puzzles tile is not shown for an anonymous player
+        expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
+      },
+    );
+
+    testWidgets('Offline puzzles setting is hidden for non-mix angles', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      // Enter through the puzzle-stream path (no puzzleId) so the loaded context
+      // keeps the requested angle; loading a puzzle by id always tags the
+      // context as mix. The configurable queue is limited to mix, so the tile
+      // must not show for an opening angle, even for a logged-in user.
+      final batchStorage = MockPuzzleBatchStorage();
+      final historyStorage = MockPuzzleStorage();
+
+      // stored queue already covers the non-mix cap, so nextPuzzle needs no fetch
+      final fullQueue = PuzzleBatch(
+        solved: IList(const []),
+        unsolved: IList([for (var i = 0; i < kFixedOfflineQueueLength; i++) puzzle]),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleScreen(angle: PuzzleOpening('A00')),
+        overrides: {
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => batchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => historyStorage),
+        },
+        authUser: fakeAuthUser,
+      );
+
+      when(
+        () => batchStorage.fetch(
+          userId: any(named: 'userId'),
+          angle: any(named: 'angle'),
+        ),
+      ).thenAnswer((_) async => fullQueue);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 200));
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+
+      expect(find.widgetWithText(SettingsListTile, 'Offline puzzles'), findsNothing);
     });
 
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
@@ -135,9 +337,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
@@ -163,9 +364,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
-      ).thenAnswer((_) async => puzzle2);
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -190,9 +390,8 @@ void main() {
         data: any(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
@@ -209,7 +408,7 @@ void main() {
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.tapAt(squareOffset(Square.g4, boardRect, orientation: Side.black));
       await tester.pump();
-      expect(find.byKey(const Key('g4-selected')), findsNothing);
+      expect(getBoardSelectedSquare(tester), isNull);
 
       const orientation = Side.black;
 
@@ -269,9 +468,8 @@ void main() {
           return mockResponse('', 404);
         });
 
-        when(
-          () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
-        ).thenAnswer((_) async => puzzle2);
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
 
         final app = await makeTestProviderScopeApp(
           tester,
@@ -388,9 +586,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
-      ).thenAnswer((_) async => puzzle2);
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
@@ -400,9 +597,8 @@ void main() {
         data: any(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       await tester.pumpWidget(app);
 
@@ -508,9 +704,8 @@ void main() {
             ),
           ).thenAnswer((_) async => batch);
 
-          when(
-            () => mockHistoryStorage.save(puzzle: any(named: 'puzzle')),
-          ).thenAnswer((_) async {});
+          when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
+              .thenAnswer((_) async {});
 
           await tester.pumpWidget(app);
 
@@ -736,9 +931,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id),
-      ).thenAnswer((_) async => puzzle2);
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -765,9 +959,8 @@ void main() {
         data: any(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       await tester.pumpWidget(app);
 
@@ -875,8 +1068,7 @@ void main() {
           rated: true,
           id: GameId('5gVQo79W'),
           perf: Perf.rapid,
-          pgn:
-              'e4 c6 Nf3 d5 e5 Bg4 Be2 Nd7 d4 e6 Nc3 c5 b3 cxd4 Nxd4 Bxe2 Qxe2 Bb4 Bb2 Qc7 Nb5 Qc6 Nd6+ Bxd6 exd6 Qxd6 O-O-O Ngf6 g4 O-O-O Nb5 Qb6 Bd4 Qa5 Nxa7+ Kb8 a4 Ne4 Qe3 f6 f3 Nec5 g5 Qxa7 gxf6 gxf6 b4 b6 bxc5 bxc5 Ba1 Rhe8 Kd2 Qxa4 Rb1+ Kc7 Bb2 Qa5+ c3 Rb8 f4 Qa2 Kc2 Qa4+ Kd2 Qa2 Kc2 c4 Qc1 Qb3+ Kd2 Nc5 Ke2 Qb6 Ba3 Nb3 Qc2 Ra8 Qxh7+ Kc6 Bb2 Ra2 Qg6 Rd8 Qxf6 Rd6 Qf7 Nc5 Qe8+ Nd7 Kf3 Rxb2',
+          pgn: 'e4 c6 Nf3 d5 e5 Bg4 Be2 Nd7 d4 e6 Nc3 c5 b3 cxd4 Nxd4 Bxe2 Qxe2 Bb4 Bb2 Qc7 Nb5 Qc6 Nd6+ Bxd6 exd6 Qxd6 O-O-O Ngf6 g4 O-O-O Nb5 Qb6 Bd4 Qa5 Nxa7+ Kb8 a4 Ne4 Qe3 f6 f3 Nec5 g5 Qxa7 gxf6 gxf6 b4 b6 bxc5 bxc5 Ba1 Rhe8 Kd2 Qxa4 Rb1+ Kc7 Bb2 Qa5+ c3 Rb8 f4 Qa2 Kc2 Qa4+ Kd2 Qa2 Kc2 c4 Qc1 Qb3+ Kd2 Nc5 Ke2 Qb6 Ba3 Nb3 Qc2 Ra8 Qxh7+ Kc6 Bb2 Ra2 Qg6 Rd8 Qxf6 Rd6 Qf7 Nc5 Qe8+ Nd7 Kf3 Rxb2',
           black: PuzzleGamePlayer(side: Side.black, name: 'Kostas123451'),
           white: PuzzleGamePlayer(side: Side.white, name: 'ash44'),
         ),
@@ -896,9 +1088,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id),
-      ).thenAnswer((_) async => buggyPuzzle);
+      when(() => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id))
+          .thenAnswer((_) async => buggyPuzzle);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
@@ -908,9 +1099,8 @@ void main() {
         data: any(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       await tester.pumpWidget(app);
 
@@ -958,8 +1148,7 @@ void main() {
           rated: true,
           id: GameId('EyRPebr1'),
           perf: Perf.rapid,
-          pgn:
-              'e4 e5 Nc3 Nc6 f4 exf4 Nf3 Bc5 d4 Bb4 Bxf4 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Ne5+ Nxe5 Qh5+ g6 Qxe5 Nxc3',
+          pgn: 'e4 e5 Nc3 Nc6 f4 exf4 Nf3 Bc5 d4 Bb4 Bxf4 Nf6 Bc4 Nxe4 Bxf7+ Kxf7 Ne5+ Nxe5 Qh5+ g6 Qxe5 Nxc3',
           black: PuzzleGamePlayer(side: Side.black, name: 'Towelie1356'),
           white: PuzzleGamePlayer(side: Side.white, name: 'Faustocoppi'),
         ),
@@ -979,9 +1168,8 @@ void main() {
         },
       );
 
-      when(
-        () => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id),
-      ).thenAnswer((_) async => buggyPuzzle);
+      when(() => mockHistoryStorage.fetch(puzzleId: buggyPuzzle.puzzle.id))
+          .thenAnswer((_) async => buggyPuzzle);
 
       when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
 
@@ -991,9 +1179,8 @@ void main() {
         data: any(named: 'data'),
       );
       when(saveDBReq).thenAnswer((_) async {});
-      when(
-        () => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)),
-      ).thenAnswer((_) async => batch);
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
 
       await tester.pumpWidget(app);
 

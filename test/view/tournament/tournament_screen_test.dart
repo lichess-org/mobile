@@ -1,7 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -11,9 +11,12 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
@@ -84,6 +87,7 @@ String makeTournamentJson({
   required int nbPlayers,
   String? verdictsJson,
   TournamentMe? me,
+  bool isStarted = true,
   bool isPrivate = false,
   String featuredGameJson = '',
 }) {
@@ -110,8 +114,8 @@ String makeTournamentJson({
   "nbPlayers": $nbPlayers,
   ${meToJson(me)}
   "duels": [ ],
-  "secondsToFinish": 2744,
-  "isStarted": true,
+  "${isStarted ? 'secondsToFinish' : 'secondsToStart'}": 2744,
+  "isStarted": $isStarted,
   $featuredGameJson
   "standing": {
     "page": 1,
@@ -544,6 +548,50 @@ void main() {
       expect(find.text('11-12 / 12'), findsOneWidget);
     });
 
+    for (final isStarted in [false, true]) {
+      testWidgets('${isStarted ? 'Shows' : 'Hides'} pairing status for a joined '
+          '${isStarted ? 'started' : 'scheduled'} tournament', (WidgetTester tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(
+                standings: makeTestPlayers(10),
+                nbPlayers: 11,
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                isStarted: isStarted,
+              ),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        const name = 'tom-anders';
+        final authUser = AuthUser(
+          user: LightUser(id: UserId.fromUserName(name), name: name),
+          token: 'test-token',
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+          authUser: authUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump();
+
+        expect(
+          find.text('Stand by $name, pairing players, get ready!'),
+          isStarted ? findsOneWidget : findsNothing,
+        );
+      });
+    }
+
     testWidgets('Cannot join tournament if not logged in', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
@@ -694,6 +742,81 @@ void main() {
       await tester.pump();
       expect(find.text('Steven'), findsOneWidget);
     });
+
+    testWidgets(
+      'Reconnects the tournament socket when the same tournament is pushed again over a game',
+      (WidgetTester tester) async {
+        // Non-regression test for the bug where pushing a second [TournamentScreen]
+        // for a tournament already in the route stack (tournament -> player -> game
+        // -> same tournament) did not reopen the tournament socket that the game
+        // had closed. The controller is kept alive by the first screen, so [build]
+        // (which opens the socket) does not re-run; the new screen must reconnect
+        // the socket when it gains focus.
+        const tournamentId = TournamentId('82QbxlJb');
+        const gameId = GameFullId('1234567890ab');
+
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: tournamentId),
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // Wait for tournament data to load and the socket to open.
+        await tester.pump();
+
+        final socketPool = ProviderScope.containerOf(tester.element(find.byType(TournamentScreen)))
+            .read(socketPoolProvider);
+
+        // The tournament socket is the active one.
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+
+        // Navigate to one of the tournament's games (like tapping an ongoing game):
+        // this opens the game socket and closes the tournament socket.
+        final navigator = Navigator.of(tester.element(find.byType(TournamentScreen)));
+        navigator.push(GameScreen.buildRoute(source: const ExistingGameSource(gameId)));
+        await tester.pump();
+        await tester.pump(kFakeWebSocketConnectionLag);
+        sendServerSocketMessages(GameController.socketUri(gameId), [
+          makeFullEvent(gameId.gameId, '', whiteUserName: 'White', blackUserName: 'Black'),
+        ]);
+        await tester.pump();
+
+        expect(find.byType(GameScreen), findsOneWidget);
+        // The game socket is now the active one; the tournament socket was closed.
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Push the SAME tournament again on top of the game. The provider is kept
+        // alive by the first screen, so `build` doesn't re-run: the socket must be
+        // reopened by the newly focused screen.
+        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        await tester.pump(); // start the route transition
+        // Complete the push transition so the new screen becomes fully visible
+        // and its `FocusDetector` reports a focus gain -> onFocusGained.
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.pump(); // onFocusGained -> invalidateSelf
+        await tester.pump(); // rebuild: getTournament resolves -> socket reopens
+        await tester.pump(kFakeWebSocketConnectionLag);
+
+        expect(find.byType(TournamentScreen), findsWidgets);
+        // The tournament socket must be reconnected.
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+      },
+    );
   });
   testWidgets('Shows player details when tapping on a player', (WidgetTester tester) async {
     final mockClient = MockClient((request) {

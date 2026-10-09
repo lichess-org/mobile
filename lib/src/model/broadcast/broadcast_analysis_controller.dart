@@ -18,18 +18,17 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:logging/logging.dart';
 
 part 'broadcast_analysis_controller.freezed.dart';
@@ -45,13 +44,10 @@ final broadcastAnalysisControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'BroadcastAnalysisControllerProvider',
     );
 
-class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
+class BroadcastAnalysisController(final BroadcastAnalysisControllerParams params)
+    extends AsyncNotifier<BroadcastAnalysisState>
     with EngineEvaluationMixin, OpeningExplorerMixin<BroadcastAnalysisState>
     implements PgnTreeNotifier {
-  BroadcastAnalysisController(this.params);
-
-  final BroadcastAnalysisControllerParams params;
-
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -123,7 +119,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _root = Root.fromPgnGame(game, isLichessAnalysis: true);
     final currentPath = _root.mainlinePath;
     final currentNode = _root.nodeAt(currentPath);
-    final lastMove = _root.branchAt(_root.mainlinePath)?.sanMove.move;
+    final lastMove = _root.branchAt(currentPath)?.sanMove.move;
 
     // don't use ref.watch here: we don't want to invalidate state when the
     // analysis preferences change
@@ -180,7 +176,7 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
       final broadcastPath = newRoot.mainlinePath;
       final lastMove = wasOnLivePath
-          ? newRoot.branchAt(newRoot.mainlinePath)?.sanMove.move
+          ? newRoot.branchAt(broadcastPath)?.sanMove.move
           : curState.lastMove;
 
       newRoot.merge(_root);
@@ -257,8 +253,8 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     final (UciPath? newPath, bool isNewNode) result;
     try {
       result = _root.addMoveAt(path, uciMove, clock: clock);
-    } on PlayException catch (e) {
-      _logger.warning('Could not add broadcast move $uciMove at $path: $e');
+    } on PlayException catch (e, st) {
+      _logger.warning('Could not add broadcast move $uciMove at $path:', e, st);
       _reloadPgn();
       return;
     }
@@ -305,7 +301,11 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 
     if (!state.requireValue.currentPosition.isLegal(move)) return;
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.requireValue.currentPath, move);
+    final (newPath, isNewNode) = _root.addMoveAt(
+      state.requireValue.currentPath,
+      move,
+      isUserAdded: true,
+    );
     if (newPath != null) {
       _setPath(newPath, shouldRecomputeRootView: isNewNode, shouldForceShowVariation: true);
     }
@@ -353,6 +353,16 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     if (!state.hasValue) return;
 
     state = AsyncData(state.requireValue.copyWith(pov: state.requireValue.pov.opposite));
+  }
+
+  /// Sets the side the board is viewed from.
+  ///
+  /// Used to open the game from the point of view of a specific player, for instance when the
+  /// screen is opened from a notification about a followed player.
+  void setPov(Side pov) {
+    if (!state.hasValue) return;
+
+    state = AsyncData(state.requireValue.copyWith(pov: pov));
   }
 
   @override
@@ -405,6 +415,13 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
     _root.deleteAt(path);
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
+
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
 
   void _setPath(
     UciPath path, {
@@ -549,15 +566,13 @@ class BroadcastAnalysisController extends AsyncNotifier<BroadcastAnalysisState>
 }
 
 @freezed
-sealed class BroadcastAnalysisState
+sealed class const BroadcastAnalysisState._()
     with
         _$BroadcastAnalysisState,
         AnalysisExplosionMixin,
         EvaluationMixinState<BroadcastAnalysisState>,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const BroadcastAnalysisState._();
-
   @override
   ViewRoot get analysisRoot => root;
 
@@ -565,7 +580,7 @@ sealed class BroadcastAnalysisState
   BroadcastAnalysisState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory BroadcastAnalysisState({
+  const factory({
     /// Broadcast game ID
     required StringId id,
 
@@ -671,6 +686,6 @@ sealed class BroadcastAnalysisState
     position: currentPosition,
     savedEval: currentNode.eval,
     serverEval: currentNode.serverEval,
-    filters: (id: evaluationContext.id, path: currentPath),
+    filters: (context: evaluationContext, path: currentPath),
   );
 }

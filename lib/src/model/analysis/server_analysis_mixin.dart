@@ -5,10 +5,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
+import 'package:lichess_mobile/src/service/server_analysis_service.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 /// Interface for Notifier's State that uses [ServerAnalysisMixin].
 mixin ServerAnalysisMixinState {
@@ -30,7 +31,7 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
       _serverAnalysisService.currentAnalysis;
 
   @override
-  void runBuild() {
+  WhenComplete runBuild() {
     _serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
     // Avoid registering the listener multiple times when the notifier is rebuilt.
@@ -41,7 +42,7 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
       _serverAnalysisService.lastAnalysisEvent.removeListener(_onServerAnalysisEvent);
     });
 
-    super.runBuild();
+    return super.runBuild();
   }
 
   @mustCallSuper
@@ -50,17 +51,15 @@ mixin ServerAnalysisMixin<T extends ServerAnalysisMixinState> on AnyNotifier<Asy
     if (serverAnalysisSource != null) {
       await ref.read(serverAnalysisServiceProvider).requestAnalysis(serverAnalysisSource, side);
     } else {
-      return Future.error('Cannot request server analysis');
+      return await Future.error('Cannot request server analysis');
     }
   }
 
   Future<void> onServerAnalysisEvent(ServerEvalEvent event);
 
   Future<void> _onServerAnalysisEvent() async {
-    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value case (
-      final source,
-      final event,
-    ) when source == state.value?.serverAnalysisSource) {
+    if (ref.read(serverAnalysisServiceProvider).lastAnalysisEvent.value
+        case (final source, final event) when source == state.value?.serverAnalysisSource) {
       ServerAnalysisService.mergeOngoingAnalysis(positionTree, event.tree);
       await onServerAnalysisEvent(event);
     }
