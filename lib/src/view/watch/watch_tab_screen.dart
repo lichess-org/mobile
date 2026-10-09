@@ -242,6 +242,7 @@ class const _BroadcastCalendarCard() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
       hasLeading: true,
       children: [
         ListTile(
