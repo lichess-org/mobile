@@ -48,10 +48,10 @@ struct ChessBoardView: View {
         }
     }
 
-    private var highlightedSquares: Set<String>
-        guard let lm = lastMove, lm.count >= 4 else { return [] }
-        return [String(lm.prefix(2)), String(lm.dropFirst(2).prefix(2))]
-    }
+     private var highlightedSquares: Set<String> {                                                                                                                                      
+        guard let lm = lastMove, lm.count >= 4 else { return [] }                                                                                                                      
+        return [String(lm.prefix(2)), String(lm.dropFirst(2).prefix(2))]                                                                                                               
+    } 
 
     private func squareName(rankIndex: Int, fileIndex: Int) -> String {
         let files = "abcdefgh"
