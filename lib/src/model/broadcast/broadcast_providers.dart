@@ -145,7 +145,7 @@ final broadcastCalendarProvider = FutureProvider.autoDispose
         (client) => ref
             .read(broadcastRepositoryProvider)
             .getCalendar(year: params.year, month: params.month),
-        const Duration(minutes: 10),
+        const Duration(hours: 1),
       );
       return groupBroadcastsByDate(broadcasts);
     }, name: 'BroadcastCalendarProvider');
