@@ -48,20 +48,11 @@ struct GameLiveActivity: Widget {
                 }
             }
             .keylineTint(
-                context.isStale ? lichessOrange : context.state.isReconnecting ? lichessRed : nil
+                context.isStale ? Color.orange : context.state.isReconnecting ? Color.red : nil
             )
         }
     }
 }
-
-/// Lichess green (`LichessColors.secondary` in the app), marking the user's turn.
-private let lichessGreen = Color(red: 0x62 / 255, green: 0x99 / 255, blue: 0x24 / 255)
-
-/// Lichess orange (`LichessColors.accent` in the app), for the "You left the game" warning.
-private let lichessOrange = Color(red: 0xD6 / 255, green: 0x4F / 255, blue: 0x00 / 255)
-
-/// Lichess red (`LichessColors.error` in the app), for the "Reconnecting" warning.
-private let lichessRed = Color(red: 0xCC / 255, green: 0x33 / 255, blue: 0x33 / 255)
 
 /// Lichess gold (`LichessColors.brag` in the app, `--c-brag` on the website), for titles.
 private let lichessGold = Color(red: 0xBF / 255, green: 0x81 / 255, blue: 0x1D / 255)
@@ -186,7 +177,7 @@ private struct PlayerClock: View {
             .fontWeight(isRunning ? .bold : .regular)
             .foregroundStyle(
                 isRunning
-                    ? (isMe ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.primary))
+                    ? (isMe ? AnyShapeStyle(.green) : AnyShapeStyle(.primary))
                     : AnyShapeStyle(.secondary)
             )
     }
@@ -209,7 +200,7 @@ private struct StatusLine: View {
                 Image(systemName: "exclamationmark.triangle.fill")
             }
             .font(.caption.weight(.semibold))
-            .foregroundStyle(lichessOrange)
+            .foregroundStyle(.orange)
             .lineLimit(3)
             .minimumScaleFactor(0.8)
         } else if state.isReconnecting {
@@ -219,13 +210,13 @@ private struct StatusLine: View {
                 Image(systemName: ReconnectingIcon.systemName)
             }
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(lichessRed)
+            .foregroundStyle(.red)
             .lineLimit(1)
             .minimumScaleFactor(0.8)
         } else {
             Text(headline)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(isMyTurn ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.primary))
+                .foregroundStyle(isMyTurn ? AnyShapeStyle(.green) : AnyShapeStyle(.primary))
         }
     }
 
@@ -258,7 +249,7 @@ private struct CompactTrailingView: View {
                     GameClockText(state: context.state, side: side, alignment: .trailing)
                 }
                 .font(.caption.monospacedDigit().weight(isRunning ? .bold : .semibold))
-                .foregroundStyle(isRunning ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.secondary))
+                .foregroundStyle(isRunning ? AnyShapeStyle(.green) : AnyShapeStyle(.secondary))
         }
     }
 }
@@ -266,7 +257,7 @@ private struct CompactTrailingView: View {
 private struct LeftGameIcon: View {
     var body: some View {
         Image(systemName: "exclamationmark.triangle.fill")
-            .foregroundStyle(lichessOrange)
+            .foregroundStyle(.orange)
     }
 }
 
@@ -275,7 +266,7 @@ private struct ReconnectingIcon: View {
 
     var body: some View {
         Image(systemName: Self.systemName)
-            .foregroundStyle(lichessRed)
+            .foregroundStyle(.red)
     }
 }
 
