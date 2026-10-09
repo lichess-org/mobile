@@ -64,6 +64,25 @@ void main() {
 
       expect(find.text('No broadcasts this month'), findsOneWidget);
     });
+
+    testWidgets('Shows retry on error', variant: kPlatformVariant, (tester) async {
+      final errorClient = MockClient((request) => mockResponse('', 404));
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => errorClient);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      expect(find.text('Cannot load broadcast calendar'), findsOneWidget);
+      expect(find.text('Retry'), findsOneWidget);
+    });
   });
 }
 

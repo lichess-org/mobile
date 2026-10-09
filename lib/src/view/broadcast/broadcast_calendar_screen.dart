@@ -84,50 +84,49 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
           Expanded(
             child: HapticRefreshIndicator(
               onRefresh: () => ref.refresh(broadcastCalendarProvider(params).future),
-              child: calendar.when(
-                data: (days) {
-                  if (days.isEmpty) {
-                    return const CustomScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      slivers: [
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Center(child: Text('No broadcasts this month')),
-                        ),
-                      ],
-                    );
-                  }
-                  return CustomScrollView(
-                    slivers: [
-                      for (final day in days)
-                        SliverMainAxisGroup(
+              child: switch (calendar) {
+                AsyncData(:final value) =>
+                  value.isEmpty
+                      ? const CustomScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
                           slivers: [
-                            SliverAppBar(
-                              centerTitle: false,
-                              automaticallyImplyLeading: false,
-                              primary: false,
-                              pinned: true,
-                              title: AppBarTitleText(
-                                DateFormat.yMMMMd().format(
-                                  DateTime(day.date.year, day.date.month, day.date.day),
-                                ),
-                              ),
-                            ),
-                            SliverList.separated(
-                              separatorBuilder: (context, index) => PlatformDivider(
-                                height: 1,
-                                indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
-                              ),
-                              itemCount: day.broadcasts.length,
-                              itemBuilder: (context, index) =>
-                                  BroadcastListTile(broadcast: day.broadcasts[index]),
+                            SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Center(child: Text('No broadcasts this month')),
                             ),
                           ],
+                        )
+                      : CustomScrollView(
+                          slivers: [
+                            for (final day in value)
+                              SliverMainAxisGroup(
+                                slivers: [
+                                  SliverAppBar(
+                                    centerTitle: false,
+                                    automaticallyImplyLeading: false,
+                                    primary: false,
+                                    pinned: true,
+                                    title: AppBarTitleText(
+                                      DateFormat.yMMMMd().format(
+                                        DateTime(day.date.year, day.date.month, day.date.day),
+                                      ),
+                                    ),
+                                  ),
+                                  SliverList.separated(
+                                    separatorBuilder: (context, index) => PlatformDivider(
+                                      height: 1,
+                                      indent:
+                                          BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                                    ),
+                                    itemCount: day.broadcasts.length,
+                                    itemBuilder: (context, index) =>
+                                        BroadcastListTile(broadcast: day.broadcasts[index]),
+                                  ),
+                                ],
+                              ),
+                          ],
                         ),
-                    ],
-                  );
-                },
-                error: (_, _) => CustomScrollView(
+                AsyncError() => CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: [
                     SliverFillRemaining(
@@ -148,8 +147,8 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                     ),
                   ],
                 ),
-                loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-              ),
+                _ => const Center(child: CircularProgressIndicator.adaptive()),
+              },
             ),
           ),
         ],
