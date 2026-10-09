@@ -1,10 +1,22 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
+import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
+
+Future<ProviderContainer> calendarContainer(http.Client client) => makeContainer(
+  overrides: {
+    httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+      return FakeHttpClientFactory(() => client);
+    }),
+  },
+);
 
 void main() {
   group('BroadcastCalendar', () {
@@ -22,7 +34,7 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await lichessClientContainer(mockClient);
+      final container = await calendarContainer(mockClient);
       final repo = container.read(broadcastRepositoryProvider);
 
       final response = await repo.getCalendar(year: 2026, month: 10);
@@ -32,7 +44,7 @@ void main() {
       expect(response[0].title, 'Tour A');
     });
 
-    test('groupBroadcastsByDate groups by day and sorts', () async {
+    test('calendar provider groups by day and sorts', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {
           return mockResponse(
@@ -44,11 +56,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await lichessClientContainer(mockClient);
-      final repo = container.read(broadcastRepositoryProvider);
-
-      final broadcasts = await repo.getCalendar(year: 2026, month: 10);
-      final days = groupBroadcastsByDate(broadcasts);
+      final container = await calendarContainer(mockClient);
+      final days = await container.read(broadcastCalendarProvider((year: 2026, month: 10)).future);
 
       expect(days.length, 2);
       expect(days[0].broadcasts.length, 2);
@@ -59,7 +68,7 @@ void main() {
       );
     });
 
-    test('groupBroadcastsByDate groups by UTC day', () async {
+    test('calendar provider groups by UTC day', () async {
       final early = DateTime.utc(2026, 9, 30, 0, 30).millisecondsSinceEpoch;
       final late = DateTime.utc(2026, 9, 30, 23, 30).millisecondsSinceEpoch;
       final mockClient = MockClient((request) {
@@ -78,17 +87,15 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await lichessClientContainer(mockClient);
-      final repo = container.read(broadcastRepositoryProvider);
-
-      final days = groupBroadcastsByDate(await repo.getCalendar(year: 2026, month: 9));
+      final container = await calendarContainer(mockClient);
+      final days = await container.read(broadcastCalendarProvider((year: 2026, month: 9)).future);
 
       expect(days.length, 1);
       expect(days.single.date, DateTime.utc(2026, 9, 30));
       expect(days.single.broadcasts.length, 2);
     });
 
-    test('groupBroadcastsByDate puts broadcasts without a start date last', () async {
+    test('calendar provider puts broadcasts without a start date last', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {
           return mockResponse(
@@ -105,17 +112,15 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await lichessClientContainer(mockClient);
-      final repo = container.read(broadcastRepositoryProvider);
-
-      final days = groupBroadcastsByDate(await repo.getCalendar(year: 2026, month: 10));
+      final container = await calendarContainer(mockClient);
+      final days = await container.read(broadcastCalendarProvider((year: 2026, month: 10)).future);
 
       expect(days.length, 2);
       expect(days.last.date, isNull);
       expect(days.last.broadcasts.single.title, 'Undated Tour');
     });
 
-    test('groupBroadcastsByDate keeps months with only undated broadcasts', () async {
+    test('calendar provider keeps months with only undated broadcasts', () async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {
           return mockResponse(
@@ -131,10 +136,8 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final container = await lichessClientContainer(mockClient);
-      final repo = container.read(broadcastRepositoryProvider);
-
-      final days = groupBroadcastsByDate(await repo.getCalendar(year: 2026, month: 10));
+      final container = await calendarContainer(mockClient);
+      final days = await container.read(broadcastCalendarProvider((year: 2026, month: 10)).future);
 
       expect(days.length, 1);
       expect(days.single.date, isNull);
