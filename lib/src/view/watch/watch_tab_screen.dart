@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -230,6 +231,16 @@ class const _BroadcastWidget(
               ),
             ),
           },
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.calendar_month),
+              label: Text(context.l10n.broadcastBroadcastCalendar),
+              onPressed: () {
+                Navigator.of(context).push(BroadcastCalendarScreen.buildRoute());
+              },
+            ),
+          ),
         ],
       ),
     );

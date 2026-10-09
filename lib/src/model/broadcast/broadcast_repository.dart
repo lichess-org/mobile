@@ -97,6 +97,13 @@ class BroadcastRepository(final LichessClient client, final Aggregator aggregato
     );
   }
 
+  Future<IList<Broadcast>> getCalendar({required int year, required int month}) {
+    return client.readJsonList(
+      Uri(path: '/api/broadcast/calendar/$year/$month'),
+      mapper: (json) => _broadcastFromPick(pick(json).required()),
+    );
+  }
+
   /// Subscribes to, or unsubscribes from, a tournament.
   ///
   /// Subscribers get a notification when each round of the tournament starts.

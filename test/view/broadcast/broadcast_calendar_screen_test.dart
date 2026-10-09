@@ -1,0 +1,75 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '../../network/fake_http_client_factory.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
+
+final client = MockClient((request) {
+  if (request.url.path == '/api/broadcast/calendar/2026/10') {
+    return mockResponse(
+      calendarScreenResponse,
+      200,
+      headers: {'content-type': 'application/json; charset=utf-8'},
+    );
+  }
+  return mockResponse('', 404);
+});
+
+void main() {
+  group('BroadcastCalendarScreen', () {
+    testWidgets('Displays grouped broadcasts for the month', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      await tester.pump();
+
+      expect(find.byType(BroadcastListTile), findsNWidgets(2));
+      expect(find.byType(DropdownButton<int>), findsNWidgets(2));
+    });
+
+    testWidgets('Shows empty state when month has no broadcasts', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final emptyClient = MockClient((request) => mockResponse('[]', 200));
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 11),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => emptyClient);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      expect(find.text('No broadcasts this month'), findsOneWidget);
+    });
+  });
+}
+
+const calendarScreenResponse = '''
+[
+  {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}},
+  {"tour":{"id":"bbbbbbb1","name":"Tour B","slug":"tour-b"},"round":{"id":"rrrrrrr2","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790899200000}}
+]
+''';

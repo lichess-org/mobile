@@ -113,3 +113,39 @@ final broadcastTeamStandingsProvider = FutureProvider.autoDispose
         const Duration(seconds: 30),
       );
     }, name: 'BroadcastTeamStandingsProvider');
+
+typedef BroadcastCalendarDay = ({DateTime date, IList<Broadcast> broadcasts});
+
+IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
+  final byDay = <DateTime, List<Broadcast>>{};
+  for (final broadcast in broadcasts) {
+    final startsAt = broadcast.round.startsAt;
+    if (startsAt == null) continue;
+    final day = DateTime(startsAt.year, startsAt.month, startsAt.day);
+    (byDay[day] ??= []).add(broadcast);
+  }
+  final days = byDay.entries.toList(growable: false)..sort((a, b) => a.key.compareTo(b.key));
+  for (final entry in days) {
+    entry.value.sort((a, b) {
+      final aStart = a.round.startsAt;
+      final bStart = b.round.startsAt;
+      if (aStart == null || bStart == null) return 0;
+      return aStart.compareTo(bStart);
+    });
+  }
+  return days.map((entry) => (date: entry.key, broadcasts: entry.value.toIList())).toIList();
+}
+
+final broadcastCalendarProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastCalendarDay>, ({int year, int month})>((
+      Ref ref,
+      ({int year, int month}) params,
+    ) async {
+      final broadcasts = await ref.withClientCacheFor(
+        (client) => ref
+            .read(broadcastRepositoryProvider)
+            .getCalendar(year: params.year, month: params.month),
+        const Duration(minutes: 10),
+      );
+      return groupBroadcastsByDate(broadcasts);
+    }, name: 'BroadcastCalendarProvider');
