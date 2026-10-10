@@ -1,9 +1,15 @@
+import 'dart:convert';
+import 'dart:io' as io;
+import 'dart:math';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
@@ -37,13 +43,110 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
+const kCompactPortraitProfiles = [
+  (
+    name: 'zoomed-iphone',
+    surface: Size(320.0, 693.0),
+    physicalPadding: EdgeInsets.only(top: 141.0, bottom: 102.0),
+    heightCapped: false,
+  ),
+  (
+    name: 'height-capped',
+    surface: Size(360.0, 560.0),
+    physicalPadding: EdgeInsets.only(top: 72.0, bottom: 72.0),
+    heightCapped: true,
+  ),
+];
+
+/// Allows game state transitions that toggle the native wakelock in a widget test.
+void mockWakelock() {
+  const channel = 'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+  final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMessageHandler(
+    channel,
+    (_) async => const StandardMessageCodec().encodeMessage([null]),
+  );
+  addTearDown(() => messenger.setMockMessageHandler(channel, null));
+}
+
+/// Checks width-filling or height-capped sizing in a portrait phone game layout.
+void expectCompactBoardLayout(
+  WidgetTester tester, {
+  required bool heightCapped,
+  double heightReserve = 180.0,
+}) {
+  final layout = tester.getRect(find.byType(GameLayout));
+  final board = tester.getRect(_anyBoard());
+  final heightCap = layout.height - heightReserve;
+  expect(heightCap < layout.width, heightCapped);
+  expect(board.size, Size.square(min(layout.width, heightCap)));
+  expect(board.center.dx, moreOrLessEquals(layout.center.dx));
+  expect(board.top, greaterThanOrEqualTo(layout.top));
+  expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+  expect(tester.getRect(find.byType(SolidColorChessboardBackground)), board);
+}
+
+Future<void>? _layoutGoldenFonts;
+
+Future<void> _loadLayoutGoldenFonts() async {
+  final manifest = (jsonDecode(await rootBundle.loadString('FontManifest.json')) as List<dynamic>)
+      .cast<Map<String, dynamic>>();
+  for (final entry in manifest) {
+    final loader = FontLoader(entry['family'] as String);
+    for (final font in (entry['fonts'] as List<dynamic>).cast<Map<String, dynamic>>()) {
+      loader.addFont(rootBundle.load(font['asset'] as String));
+    }
+    await loader.load();
+  }
+
+  final flutterRoot = io.Platform.environment['FLUTTER_ROOT'];
+  if (flutterRoot == null) {
+    throw StateError('Run layout renders with flutter test so the SDK fonts can be located.');
+  }
+  final fonts = await Future.wait([
+    for (final weight in ['Regular', 'Medium', 'Bold', 'Italic'])
+      io.File('$flutterRoot/bin/cache/artifacts/material_fonts/Roboto-$weight.ttf')
+          .readAsBytes()
+          .then(ByteData.sublistView),
+  ]);
+  // Use the SDK's Roboto consistently; iOS variants are not native-font screenshots.
+  for (final family in ['Ahem', 'Roboto', 'CupertinoSystemText', 'CupertinoSystemDisplay']) {
+    final loader = FontLoader(family);
+    for (final font in fonts) {
+      loader.addFont(Future.value(font));
+    }
+    await loader.load();
+  }
+}
+
+/// Preloads fonts and pieces before building a game for opt-in visual captures.
+Future<void> prepareLayoutGolden(WidgetTester tester) async {
+  if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+    await tester.runAsync(() async {
+      await (_layoutGoldenFonts ??= _loadLayoutGoldenFonts());
+      await ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0);
+    });
+  }
+}
+
+/// Opt-in renders only; paths are relative to each caller's test file.
+Future<void> expectLayoutGolden(Finder screen, String path) async {
+  if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+    expect(ChessgroundImages.instance.isAllLoaded(PieceSet.cburnett.assets), isTrue);
+    await expectLater(
+      screen,
+      matchesGoldenFile('$path-${debugDefaultTargetPlatformOverride!.name}.png'),
+    );
+  }
+}
+
 /// Mocks a surface with a given size.
 class const TestSurface({required final Widget child, required final Size size, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
-      data: MediaQueryData(size: size),
+      data: MediaQueryData.fromView(View.of(context)).copyWith(size: size),
       child: SizedBox(width: size.width, height: size.height, child: child),
     );
   }
@@ -66,6 +169,36 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
 
 /// Finds either an interactive [Chessboard] or a [StaticChessboard].
 Finder _anyBoard() => find.byWidgetPredicate((w) => w is Chessboard || w is StaticChessboard);
+
+/// Checks that controls fit in the safe area, avoid the board, and enabled buttons receive taps.
+void expectGameControlsVisible(WidgetTester tester, Finder controls) {
+  final view = tester.view;
+  final ratio = view.devicePixelRatio;
+  final safeArea = Rect.fromLTRB(
+    view.viewPadding.left / ratio,
+    view.viewPadding.top / ratio,
+    (view.physicalSize.width - view.viewPadding.right) / ratio,
+    (view.physicalSize.height - view.viewPadding.bottom) / ratio,
+  );
+  final boardRect = tester.getRect(_anyBoard());
+  expect(controls, findsWidgets);
+  for (var index = 0; index < controls.evaluate().length; index++) {
+    final control = controls.at(index);
+    final rect = tester.getRect(control);
+    final reason = '${control.describeMatch(Plurality.one)}: $rect should fit in $safeArea';
+    expect(rect.width, greaterThan(0), reason: reason);
+    expect(rect.height, greaterThan(0), reason: reason);
+    expect(rect.left, greaterThanOrEqualTo(safeArea.left), reason: reason);
+    expect(rect.top, greaterThanOrEqualTo(safeArea.top), reason: reason);
+    expect(rect.right, lessThanOrEqualTo(safeArea.right), reason: reason);
+    expect(rect.bottom, lessThanOrEqualTo(safeArea.bottom), reason: reason);
+    expect(rect.overlaps(boardRect), isFalse, reason: '$control overlaps the board');
+    final widget = tester.widget(control);
+    if (widget is BottomBarButton && widget.enabled) {
+      expect(control.hitTestable(), findsOneWidget, reason: '$control should receive taps');
+    }
+  }
+}
 
 /// Returns the pieces of the first [Chessboard] or [StaticChessboard] found in the widget tree.
 ///

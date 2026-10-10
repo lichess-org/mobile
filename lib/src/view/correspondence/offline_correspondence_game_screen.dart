@@ -69,14 +69,18 @@ class const _Title(final OfflineCorrespondenceGame game) extends StatelessWidget
   Widget build(BuildContext context) {
     final mode = game.rated ? ' • ${context.l10n.rated}' : ' • ${context.l10n.casual}';
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(game.perf.icon, color: DefaultTextStyle.of(context).style.color),
         const SizedBox(width: 4.0),
-        if (game.daysPerTurn != null)
-          Text('${context.l10n.nbDays(game.daysPerTurn!)}$mode')
-        else
-          Text('∞$mode'),
+        Flexible(
+          child: Text(
+            game.daysPerTurn != null ? '${context.l10n.nbDays(game.daysPerTurn!)}$mode' : '∞$mode',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
