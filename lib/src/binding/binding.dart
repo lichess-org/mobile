@@ -1,15 +1,20 @@
+/// @docImport 'package:firebase_crashlytics/firebase_crashlytics.dart';
+/// @docImport 'package:lichess_mobile/src/binding/binding_fdroid.dart';
+/// @docImport 'package:lichess_mobile/src/binding/binding_play.dart';
+library;
+
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lichess_mobile/firebase_options.dart';
+import 'package:lichess_mobile/src/crashlytics/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
 ///
 /// Only one instance of this class will be created during the app's lifetime.
-/// See [AppLichessBinding] for the concrete implementation.
+/// See concrete implementations [PlayLichessBinding] and [FdroidLichessBinding] for the app.
 ///
 /// Modeled after the Flutter framework's [WidgetsBinding] class.
 ///
@@ -39,12 +44,12 @@ abstract class LichessBinding() {
         throw FlutterError.fromParts([
           ErrorSummary('Lichess binding has not yet been initialized.'),
           ErrorHint(
-            'In the app, this is done by the `AppLichessBinding.ensureInitialized()` call '
-            'in the `void main()` method.',
+            'In the app, this is done by the ensureInitialized() call in the '
+            '`Future<void> bootstrapApp()` function.',
           ),
           ErrorHint(
             'In a test, one can call `TestLichessBinding.ensureInitialized()` as the '
-            "first line in the test's `main()` method to initialize the binding.",
+            "first line in the test's `main()` function to initialize the binding.",
           ),
         ]);
       }
@@ -73,7 +78,7 @@ abstract class LichessBinding() {
   FirebaseMessaging get firebaseMessaging;
 
   /// Wraps [FirebaseCrashlytics.instance].
-  FirebaseCrashlytics get firebaseCrashlytics;
+  Crashlytics get firebaseCrashlytics;
 
   /// Wraps [FirebaseMessaging.onMessage].
   Stream<RemoteMessage> get firebaseMessagingOnMessage;
@@ -85,19 +90,9 @@ abstract class LichessBinding() {
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
 }
 
-/// A concrete implementation of [LichessBinding] for the app.
-class AppLichessBinding() extends LichessBinding {
-  /// Returns an instance of the binding that implements [LichessBinding].
-  ///
-  /// If no binding has yet been initialized, the [AppLichessBinding] class is
-  /// used to create and initialize one.
-  factory ensureInitialized() {
-    if (LichessBinding._instance == null) {
-      AppLichessBinding();
-    }
-    return LichessBinding.instance as AppLichessBinding;
-  }
-
+/// Base class for [LichessBinding] implementations, providing shared logic for the Play Store and
+/// F-Droid versions.
+abstract class LichessBindingBase() extends LichessBinding {
   late Future<SharedPreferencesWithCache> _sharedPreferencesWithCache;
   SharedPreferencesWithCache? _syncSharedPreferencesWithCache;
 
@@ -107,12 +102,12 @@ class AppLichessBinding() extends LichessBinding {
       throw FlutterError.fromParts([
         ErrorSummary('Shared preferences have not yet been preloaded.'),
         ErrorHint(
-          'In the app, this is done by the `await AppLichessBinding.preloadSharedPreferences()` call '
-          'in the `Future<void> main()` method.',
+          'In the app, this is done by waiting the `preloadSharedPreferences()` call in the '
+          '`Future<void> bootstrapApp()` function.',
         ),
         ErrorHint(
           'In a test, one can call `TestLichessBinding.setInitialSharedPreferencesValues({})` as the '
-          "first line in the test's `main()` method.",
+          "first line in the test's `main()` function.",
         ),
       ]);
     }
@@ -139,27 +134,7 @@ class AppLichessBinding() extends LichessBinding {
   }
 
   @override
-  Future<void> initializeFirebase() async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-    if (kReleaseMode) {
-      FlutterError.onError = firebaseCrashlytics.recordFlutterFatalError;
-      PlatformDispatcher.instance.onError = (error, stack) {
-        if (kDebugMode) {
-          return false;
-        } else {
-          firebaseCrashlytics.recordError(error, stack);
-          return true;
-        }
-      };
-    }
-  }
-
-  @override
   FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
-
-  @override
-  FirebaseCrashlytics get firebaseCrashlytics => FirebaseCrashlytics.instance;
 
   @override
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler) {
