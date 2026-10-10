@@ -44,6 +44,7 @@ void main() {
 
       expect(find.byType(BroadcastListTile), findsNWidgets(2));
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
+      expect(find.byType(DropdownButtonHideUnderline), findsNWidgets(2));
     });
 
     testWidgets('Loading state stays refreshable', variant: kPlatformVariant, (tester) async {

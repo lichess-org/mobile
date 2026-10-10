@@ -85,32 +85,57 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                   tooltip: 'Previous month',
                 ),
                 Expanded(
-                  child: DropdownButton<int>(
-                    value: years.contains(year) ? year : null,
-                    isExpanded: true,
-                    items: [
-                      for (final y in years) DropdownMenuItem(value: y, child: Text(y.toString())),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) setState(() => year = value);
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: DropdownButton<int>(
-                    value: month,
-                    isExpanded: true,
-                    items: [
-                      for (int m = 1; m <= 12; m++)
-                        DropdownMenuItem(
-                          value: m,
-                          child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              value: years.contains(year) ? year : null,
+                              isExpanded: true,
+                              items: [
+                                for (final y in years)
+                                  DropdownMenuItem(value: y, child: Text(y.toString())),
+                              ],
+                              onChanged: (value) {
+                                if (value != null) setState(() => year = value);
+                              },
+                            ),
+                          ),
                         ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) setState(() => month = value);
-                    },
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            width: 1.0,
+                            height: 24.0,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                        ),
+                        Expanded(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<int>(
+                              value: month,
+                              isExpanded: true,
+                              items: [
+                                for (int m = 1; m <= 12; m++)
+                                  DropdownMenuItem(
+                                    value: m,
+                                    child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
+                                  ),
+                              ],
+                              onChanged: (value) {
+                                if (value != null) setState(() => month = value);
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 IconButton(
