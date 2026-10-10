@@ -84,7 +84,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              tooltip: 'Delete all logs',
+              tooltip: context.l10n.mobileClearButton,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
