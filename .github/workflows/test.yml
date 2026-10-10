@@ -7,6 +7,10 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
   pull_request:
@@ -15,8 +19,18 @@ on:
       - '!lib/l10n/**'
       - 'test/**'
       - 'pubspec.yaml'
+      - 'pubspec.lock'
+      - 'analysis_options.yaml'
+      - 'build.yaml'
+      - '.github/workflows/test.yml'
     branches:
       - main
+
+# Cancel superseded PR runs so only the latest pushed commit is actually tested.
+# Pushes to main are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Declare default permissions as read only.
 permissions: read-all
@@ -25,14 +39,16 @@ jobs:
   unit-test:
     name: Unit tests on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    # A hung widget test otherwise occupies a runner until the 6 hour default.
+    timeout-minutes: 30
     strategy:
       matrix:
         os: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: 🐦 Install flutter
-        uses: subosito/flutter-action@v2.23.0
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           cache: true
           flutter-version-file: pubspec.yaml

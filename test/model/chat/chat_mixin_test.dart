@@ -9,27 +9,22 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart' show SoundTheme;
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_container.dart';
 
 // A test [ChatMixinState] holding the chat state and the enabled flag.
-class _FakeChatState with ChatMixinState {
-  const _FakeChatState({required this.chatState, required this.chatEnabled});
-
-  @override
-  final ChatState? chatState;
-
-  @override
-  final bool chatEnabled;
-
+class const _FakeChatState({
+  @override required final ChatState? chatState,
+  @override required final bool chatEnabled,
+}) with ChatMixinState {
   _FakeChatState copyWith({ChatState? chatState, bool? chatEnabled}) => _FakeChatState(
     chatState: chatState ?? this.chatState,
     chatEnabled: chatEnabled ?? this.chatEnabled,
@@ -38,19 +33,12 @@ class _FakeChatState with ChatMixinState {
 
 // A minimal notifier that mixes in [ChatMixin] so its logic can be exercised in
 // isolation. Test helpers expose the protected members.
-class _TestChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
-  _TestChatNotifier({
-    required this.initialData,
-    required this.isPublic,
-    required this.enabled,
-    this.playerSide,
-  });
-
-  final ChatData? initialData;
-  final bool isPublic;
-  final bool enabled;
-  final Side? playerSide;
-
+class _TestChatNotifier({
+  required final ChatData? initialData,
+  required final bool isPublic,
+  required final bool enabled,
+  final Side? playerSide,
+}) extends AsyncNotifier<_FakeChatState> with ChatMixin<_FakeChatState> {
   @override
   StringId get chatId => const StringId('test-chat-id');
 
@@ -79,7 +67,7 @@ class _TestChatNotifier extends AsyncNotifier<_FakeChatState> with ChatMixin<_Fa
 }
 
 // Records played sounds so the unread-notification behavior can be asserted.
-class _RecordingSoundService implements SoundService {
+class _RecordingSoundService() implements SoundService {
   final List<Sound> played = [];
 
   @override

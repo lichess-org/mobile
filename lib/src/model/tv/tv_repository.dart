@@ -18,12 +18,7 @@ final tvRepositoryProvider = Provider<TvRepository>((ref) {
   return TvRepository(client, aggregator);
 }, name: 'TvRepositoryProvider');
 
-class TvRepository {
-  const TvRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class const TvRepository(final LichessClient client, final Aggregator aggregator) {
   Future<TvChannels> channels() {
     return aggregator.readJson(
       Uri(path: '/api/tv/channels'),

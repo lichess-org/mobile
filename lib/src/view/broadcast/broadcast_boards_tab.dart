@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -27,29 +29,39 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
 /// A tab that displays the live games of a broadcast round.
-class BroadcastBoardsTab extends ConsumerWidget {
-  const BroadcastBoardsTab({
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.showOnlyOngoingGames,
-    required this.teamFilter,
-  });
-
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final bool showOnlyOngoingGames;
-  final String? teamFilter;
-
+class const BroadcastBoardsTab({
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final bool showOnlyOngoingGames,
+  required final String? teamFilter,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final round = ref.watch(broadcastRoundControllerProvider(roundId));
+    final boards = ref.watch(
+      broadcastRoundControllerProvider(roundId).select(
+        (state) => state.whenData(
+          (round) => (
+            hasGames: round.games.isNotEmpty,
+            gameIds: round.games.entries
+                .where(
+                  (entry) =>
+                      (!showOnlyOngoingGames || entry.value.isOngoing) &&
+                      (teamFilter == null ||
+                          Side.values.any(
+                            (s) => entry.value.players[s]?.player.team == teamFilter,
+                          )),
+                )
+                .map((entry) => entry.key)
+                .toIList(),
+          ),
+        ),
+      ),
+    );
 
-    return switch (round) {
-      AsyncData(:final value) => (() {
-        final filteredGames = _filteredGames(value.games, showOnlyOngoingGames, teamFilter);
-        return value.games.isEmpty || filteredGames.isEmpty
+    return switch (boards) {
+      AsyncData(value: (:final hasGames, :final gameIds)) =>
+        gameIds.isEmpty
             ? Padding(
                 padding: Styles.bodyPadding,
                 child: Column(
@@ -59,86 +71,55 @@ class BroadcastBoardsTab extends ConsumerWidget {
                     const Icon(Icons.info, size: 30),
                     const SizedBox(height: 8.0),
                     Text(
-                      value.games.isEmpty
-                          ? context.l10n.broadcastNoBoardsYet
-                          : 'No games matching filter criteria.',
+                      hasGames
+                          ? 'No games matching filter criteria.'
+                          : context.l10n.broadcastNoBoardsYet,
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               )
             : BroadcastPreview(
-                games: filteredGames,
+                gameIds: gameIds,
                 tournamentId: tournamentId,
                 roundId: roundId,
-                title: value.round.name,
                 tournamentSlug: tournamentSlug,
-                roundSlug: value.round.slug,
-                customScoring: value.round.customScoring,
-                pinnedComment: value.round.pinnedComment,
                 teamFilter: teamFilter,
-              );
-      })(),
+              ),
       AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
       _ => const Center(child: CircularProgressIndicator.adaptive()),
     };
   }
-
-  IList<BroadcastGame> _filteredGames(
-    IMap<BroadcastGameId, BroadcastGame> games,
-    bool showOnlyOngoingGames,
-    String? teamFilter,
-  ) {
-    final ongoingFiltered = showOnlyOngoingGames
-        ? games.values.where((game) => game.isOngoing).toIList()
-        : games.values.toIList();
-    return teamFilter == null
-        ? ongoingFiltered
-        : ongoingFiltered
-              .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
-              .toIList();
-  }
 }
 
 class BroadcastPreview extends ConsumerStatefulWidget {
-  const BroadcastPreview({
+  const new({
     required this.tournamentId,
     required this.roundId,
-    required this.games,
-    required this.title,
+    required this.gameIds,
     required this.tournamentSlug,
-    required this.roundSlug,
-    required this.customScoring,
-    required this.pinnedComment,
     required this.teamFilter,
   });
 
   // A circular progress indicator is used instead of shimmers currently
-  const BroadcastPreview.loading()
+  const new loading()
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
-      games = null,
-      title = '',
+      gameIds = null,
       tournamentSlug = '',
-      roundSlug = '',
-      customScoring = null,
-      pinnedComment = null,
       teamFilter = null;
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
-  final IList<BroadcastGame>? games;
-  final String title;
+  final IList<BroadcastGameId>? gameIds;
   final String tournamentSlug;
-  final String roundSlug;
-  final BroadcastCustomScoring? customScoring;
-  final String? pinnedComment;
   final String? teamFilter;
+
   @override
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
 
-class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
+class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
   String _searchQuery = '';
   late final TextEditingController _searchController;
 
@@ -173,13 +154,27 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
-    final IList<BroadcastGame>? games = widget.games == null
-        ? null
-        : _searchQuery.isEmpty
-        ? widget.games
-        : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
-    final showSearchBar = widget.games != null && widget.games!.length > 6;
-    final hasComment = widget.pinnedComment != null && widget.pinnedComment!.isNotEmpty;
+
+    final round = ref.watch(
+      broadcastRoundControllerProvider(widget.roundId).select((state) => state.value?.round),
+    );
+    final searchQuery = _searchQuery;
+    final allGameIds = widget.gameIds;
+    // While searching, rebuilds only when the list of matching games changes.
+    final gameIds = allGameIds == null || searchQuery.isEmpty
+        ? allGameIds
+        : ref.watch(
+            broadcastRoundControllerProvider(widget.roundId).select(
+              (state) => allGameIds.where((gameId) {
+                final game = state.value?.games[gameId];
+                return game != null && _containsPlayer(game, searchQuery);
+              }).toIList(),
+            ),
+          );
+
+    final showSearchBar = widget.gameIds != null && widget.gameIds!.length > 6;
+    final pinnedComment = round?.pinnedComment;
+    final hasComment = pinnedComment != null && pinnedComment.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
     return CustomScrollView(
@@ -189,7 +184,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
             bottom: false,
             sliver: SliverPadding(
               padding: Styles.bodyPadding.copyWith(bottom: 0.0),
-              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: widget.pinnedComment!)),
+              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: pinnedComment)),
             ),
           ),
 
@@ -233,7 +228,7 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                       ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
                       : 0);
 
-              if (games == null) {
+              if (gameIds == null) {
                 return BoardThumbnail.loading(
                   size: boardSize,
                   header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
@@ -241,24 +236,22 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
                 );
               }
 
-              final game = games[index];
-              final playingSide = Setup.parseFen(game.fen).turn;
+              final gameId = gameIds[index];
 
               return ObservedBoardThumbnail(
                 roundId: widget.roundId,
-                game: game,
-                title: widget.title,
+                gameId: gameId,
+                title: round?.name ?? '',
                 tournamentId: widget.tournamentId,
                 tournamentSlug: widget.tournamentSlug,
-                roundSlug: widget.roundSlug,
+                roundSlug: round?.slug ?? '',
                 showEvaluationGauge: showEvaluationGauges,
                 boardSize: boardSize,
                 boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-                playingSide: playingSide,
-                customScoring: widget.customScoring,
+                customScoring: round?.customScoring,
                 teamFilter: widget.teamFilter,
               );
-            }, childCount: games == null ? numberLoadingBoards : games.length),
+            }, childCount: gameIds == null ? numberLoadingBoards : gameIds.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: numberOfBoardsByRow,
               crossAxisSpacing: boardSpacing,
@@ -273,58 +266,49 @@ class _BroadcastPreviewState extends ConsumerState<BroadcastPreview> {
   }
 }
 
-class ObservedBoardThumbnail extends ConsumerStatefulWidget {
-  const ObservedBoardThumbnail({
-    required this.roundId,
-    required this.game,
-    required this.title,
-    required this.tournamentId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.showEvaluationGauge,
-    required this.boardSize,
-    required this.boardWithMaybeEvalBarWidth,
-    required this.playingSide,
-    required this.customScoring,
-    required this.teamFilter,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGame game;
-  final String title;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final bool showEvaluationGauge;
-  final double boardSize;
-  final double boardWithMaybeEvalBarWidth;
-  final Side playingSide;
-  final BroadcastCustomScoring? customScoring;
-  final String? teamFilter;
-
+class const ObservedBoardThumbnail({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required final String title,
+  required final BroadcastTournamentId tournamentId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final bool showEvaluationGauge,
+  required final double boardSize,
+  required final double boardWithMaybeEvalBarWidth,
+  required final BroadcastCustomScoring? customScoring,
+  required final String? teamFilter,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ObservedBoardThumbnail> createState() => _ObservedBoardThumbnailState();
 }
 
-class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail> {
+class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnail> {
   bool isBoardVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    final game = ref.watch(
+      broadcastRoundControllerProvider(widget.roundId)
+          .select((state) => state.value?.games[widget.gameId]),
+    );
+
+    if (game == null) return const SizedBox.shrink();
+
+    final playingSide = Setup.parseFen(game.fen).turn;
     final orientation = widget.teamFilter != null
-        ? widget.game.players.entries
+        ? game.players.entries
                   .firstWhereOrNull((entry) => entry.value.player.team == widget.teamFilter)
                   ?.key ??
               Side.white
         : Side.white;
+
     return VisibilityDetector(
-      key: ValueKey(widget.game.id),
+      key: ValueKey(widget.gameId),
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.3) {
           if (!isBoardVisible && context.mounted) {
-            ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .addObservedGame(widget.game.id);
+            ref.read(observedGamesControllerProvider(widget.roundId).notifier).add(widget.gameId);
             setState(() {
               isBoardVisible = true;
             });
@@ -332,8 +316,8 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
         } else {
           if (isBoardVisible && context.mounted) {
             ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .removeObservedGame(widget.game.id);
+                .read(observedGamesControllerProvider(widget.roundId).notifier)
+                .remove(widget.gameId);
             setState(() {
               isBoardVisible = false;
             });
@@ -347,7 +331,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
             BroadcastGameScreen.buildRoute(
               tournamentId: widget.tournamentId,
               roundId: widget.roundId,
-              gameId: widget.game.id,
+              gameId: widget.gameId,
               tournamentSlug: widget.tournamentSlug,
               roundSlug: widget.roundSlug,
               title: widget.title,
@@ -356,25 +340,25 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
           );
         },
         orientation: orientation,
-        fen: widget.game.fen,
+        fen: game.fen,
         showEvaluationGauge: widget.showEvaluationGauge,
-        whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
-            ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
+        whiteWinningChances: (game.cp != null || game.mate != null)
+            ? ExternalEval(cp: game.cp, mate: game.mate).winningChances(Side.white)
             : null,
-        lastMove: widget.game.lastMove,
+        lastMove: game.lastMove,
         size: widget.boardSize,
         header: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
-          game: widget.game,
+          game: game,
           side: orientation.opposite,
-          playingSide: widget.playingSide,
+          playingSide: playingSide,
           customScoring: widget.customScoring,
         ),
         footer: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
-          game: widget.game,
+          game: game,
           side: orientation,
-          playingSide: widget.playingSide,
+          playingSide: playingSide,
           customScoring: widget.customScoring,
         ),
       ),
@@ -382,11 +366,7 @@ class _ObservedBoardThumbnailState extends ConsumerState<ObservedBoardThumbnail>
   }
 }
 
-class _PlayerWidgetLoading extends StatelessWidget {
-  const _PlayerWidgetLoading({required this.width});
-
-  final double width;
-
+class const _PlayerWidgetLoading({required final double width}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -402,21 +382,13 @@ class _PlayerWidgetLoading extends StatelessWidget {
   }
 }
 
-class _PlayerWidget extends StatelessWidget {
-  const _PlayerWidget({
-    required this.width,
-    required this.game,
-    required this.side,
-    required this.playingSide,
-    required this.customScoring,
-  });
-
-  final BroadcastGame game;
-  final Side side;
-  final Side playingSide;
-  final double width;
-  final BroadcastCustomScoring? customScoring;
-
+class const _PlayerWidget({
+  required final double width,
+  required final BroadcastGame game,
+  required final Side side,
+  required final Side playingSide,
+  required final BroadcastCustomScoring? customScoring,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final playerWithClock = game.players[side]!;
@@ -439,10 +411,8 @@ class _PlayerWidget extends StatelessWidget {
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: .bold,
-                    color: game.status.colorFor(side, context),
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                 )
               else if (clock != null)
                 CountdownClockBuilder(
@@ -471,18 +441,20 @@ bool _containsPlayer(BroadcastGame game, String query) {
   return game.players.values.any((pwc) => pwc.player.name?.toLowerCase().contains(q) ?? false);
 }
 
-class _PinnedCommentCard extends StatelessWidget {
-  const _PinnedCommentCard({required this.text});
-
-  final String text;
-
+class const _PinnedCommentCard({required final String text}) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       margin: EdgeInsets.zero,
       child: ListTile(
         leading: const Icon(LichessIcons.radio_tower_lichess, size: 28),
-        title: Text(text, style: TextStyle(fontSize: _kPlayerWidgetTextStyle.fontSize)),
+        title: RichLinkText(
+          text: text,
+          style: TextStyle(fontSize: _kPlayerWidgetTextStyle.fontSize),
+          linkStyle: Styles.linkStyle.copyWith(fontSize: _kPlayerWidgetTextStyle.fontSize),
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          onOpen: (link) => ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
+        ),
       ),
     );
   }

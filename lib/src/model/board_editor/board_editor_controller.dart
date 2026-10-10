@@ -21,11 +21,8 @@ final boardEditorControllerProvider = NotifierProvider.autoDispose
       name: 'BoardEditorControllerProvider',
     );
 
-class BoardEditorController extends Notifier<BoardEditorState> {
-  BoardEditorController(this.params);
-
-  final BoardEditorControllerParams? params;
-
+class BoardEditorController(final BoardEditorControllerParams? params)
+    extends Notifier<BoardEditorState> {
   @override
   BoardEditorState build() {
     final variant = params?.initialVariant ?? Variant.standard;
@@ -126,13 +123,22 @@ class BoardEditorController extends Notifier<BoardEditorState> {
     );
   }
 
+  /// Derives the castling rights of [setup] without validating the position.
+  ///
+  /// The editor must hold illegal positions, such as a board with no king,
+  /// since the user builds them piece by piece. [Position.setupPosition]
+  /// rejects those, so the castles are derived directly from the setup,
+  /// mirroring what each variant does in its `fromSetup` constructor.
   IMap<CastlingRight, bool> _getCastlingRights(Variant variant, Setup setup) {
-    final position = Position.setupPosition(variant.rule, setup, ignoreImpossibleCheck: true);
+    final castles = switch (variant.rule) {
+      Rule.antichess || Rule.racingKings => Castles.empty,
+      _ => Castles.fromSetup(setup),
+    };
     return IMap({
-      CastlingRight.whiteKing: position.castles.rookOf(Side.white, CastlingSide.king) != null,
-      CastlingRight.whiteQueen: position.castles.rookOf(Side.white, CastlingSide.queen) != null,
-      CastlingRight.blackKing: position.castles.rookOf(Side.black, CastlingSide.king) != null,
-      CastlingRight.blackQueen: position.castles.rookOf(Side.black, CastlingSide.queen) != null,
+      CastlingRight.whiteKing: castles.rookOf(Side.white, CastlingSide.king) != null,
+      CastlingRight.whiteQueen: castles.rookOf(Side.white, CastlingSide.queen) != null,
+      CastlingRight.blackKing: castles.rookOf(Side.black, CastlingSide.king) != null,
+      CastlingRight.blackQueen: castles.rookOf(Side.black, CastlingSide.queen) != null,
     });
   }
 
@@ -219,13 +225,16 @@ class BoardEditorController extends Notifier<BoardEditorState> {
   }
 }
 
-enum CastlingRight { whiteKing, whiteQueen, blackKing, blackQueen }
+enum CastlingRight() {
+  whiteKing,
+  whiteQueen,
+  blackKing,
+  blackQueen,
+}
 
 @freezed
-sealed class BoardEditorState with _$BoardEditorState {
-  const BoardEditorState._();
-
-  const factory BoardEditorState({
+sealed class const BoardEditorState._() with _$BoardEditorState {
+  const factory({
     required Side orientation,
     required Side sideToPlay,
     required Variant variant,

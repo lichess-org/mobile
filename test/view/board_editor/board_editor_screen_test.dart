@@ -6,23 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/engine/fake_engine.dart';
+import '../../test_helpers.dart' show getBoardPieces, mockClipboard;
 import '../../test_provider_scope.dart';
-
-void _mockClipboard(String text) {
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-    SystemChannels.platform,
-    (methodCall) async {
-      if (methodCall.method == 'Clipboard.getData') {
-        return {'text': text};
-      }
-      return null;
-    },
-  );
-}
 
 void main() {
   group('Board Editor', () {
@@ -321,6 +313,32 @@ void main() {
       );
     });
 
+    testWidgets('Analysis opens with Fairy-Stockfish after adding a 33rd piece', (tester) async {
+      fakeEngine = FakeEngine();
+      addTearDown(() => fakeEngine = FakeEngine());
+      final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.byKey(const Key('piece-button-white-knight')));
+      await tester.pump();
+      await tapSquare(tester, 'e3');
+
+      const fen = 'rnbqkbnr/pppppppp/8/8/8/4N3/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+      expect(tester.widget<ChessboardEditor>(find.byType(ChessboardEditor)).pieces, readFen(fen));
+      expect(
+        tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
+        isNotNull,
+      );
+
+      await tester.tap(find.byKey(const Key('analysis-board-button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AnalysisScreen), findsOneWidget);
+      expect(getBoardPieces(tester), readFen(fen));
+      expect(fakeEngine.spec, const StockfishSpec.fairy());
+      expect(fakeEngine.position?.fen, fen);
+    });
+
     testWidgets('illegal position cannot be analyzed', (tester) async {
       final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
       await tester.pumpWidget(app);
@@ -444,7 +462,7 @@ void main() {
       testWidgets('Pasting valid FEN loads position and closes dialog', (tester) async {
         // Spanish Opening after 1.e4 e5 2.Nf3 Nc6 3.Bb5: bishop on c4, not f1
         const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 3';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -469,7 +487,7 @@ void main() {
       testWidgets('Pasting FEN with black to move correctly sets side to play', (tester) async {
         // Same position as above but with black to move
         const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 2 3';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -489,7 +507,7 @@ void main() {
         // Start with a position that has all castling rights (default start)
         // then paste a FEN where only white king-side and black queen-side castling remain
         const fen = 'r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w Kq - 0 1';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -510,7 +528,7 @@ void main() {
       });
 
       testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
-        _mockClipboard('not a valid fen');
+        mockClipboard('not a valid fen');
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -523,6 +541,50 @@ void main() {
 
         expect(find.byType(AlertDialog), findsNothing);
         expect(find.text('Invalid FEN'), findsOneWidget);
+      });
+
+      testWidgets('Pasting a FEN whose position is illegal sets up the board', (tester) async {
+        // Black is in check while it is White's turn, so the position is
+        // illegal, but the board can still be built
+        const fen = '4k3/4Q3/8/8/8/8/8/4K3 w - - 0 1';
+        mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Invalid FEN'), findsNothing);
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        expect(container.read(boardEditorControllerProvider(null)).fen, fen);
+
+        // The position is not playable, so it still cannot be analyzed
+        expect(
+          tester.widget<BottomBarButton>(find.byKey(const Key('analysis-board-button'))).onTap,
+          isNull,
+        );
+      });
+
+      testWidgets('Pasting a FEN with a missing king sets up the board', (tester) async {
+        const fen = '4k3/8/8/8/8/8/8/8 w - - 0 1';
+        mockClipboard(fen);
+
+        final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
+        await tester.pumpWidget(app);
+
+        await tester.tap(find.byIcon(Icons.edit));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.paste));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Invalid FEN'), findsNothing);
+        final container = ProviderScope.containerOf(tester.element(find.byType(BoardEditorScreen)));
+        expect(container.read(boardEditorControllerProvider(null)).fen, fen);
       });
     });
 

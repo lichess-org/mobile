@@ -43,7 +43,7 @@ const _iPhone16ZoomedSurface = Size(320.0, 693.0);
 const _iPhone16ZoomedDevicePixelRatio = 3.0;
 const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
 
-class MockOverTheBoardGameStorage extends Mock implements OverTheBoardGameStorage {}
+class MockOverTheBoardGameStorage() extends Mock implements OverTheBoardGameStorage;
 
 void main() {
   registerFallbackValue(
@@ -90,6 +90,7 @@ void main() {
       testWidgets('compact portrait ${profile.name} keeps clocks and actions usable', (
         tester,
       ) async {
+        await prepareLayoutGolden(tester);
         const wakelockChannel =
             'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
         final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
@@ -207,7 +208,7 @@ void main() {
 
       // Now for game result dialog to show up
       await tester.pumpAndSettle(const Duration(milliseconds: 600));
-      expect(find.text('White time out • Black is victorious'), findsOneWidget);
+      expect(find.text('White ran out of time • Black is victorious'), findsOneWidget);
 
       await tester.tap(find.text('Rematch'));
       expect(activeClock(tester), null);
@@ -399,6 +400,46 @@ void main() {
       expect(findWhiteClock(tester).timeLeft, lessThan(time));
     });
 
+    testWidgets('Moves record the clock they were played on', (tester) async {
+      const time = Duration(minutes: 5);
+
+      await initOverTheBoardGame(tester, TimeIncrement(time.inSeconds, 3));
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'e7', 'e5');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      final clocks = game.clocks;
+      expect(clocks, isNotNull);
+      expect(clocks!.length, 2);
+      // White's move is what starts the clock, so it costs white nothing — and, since the clock
+      // was not running, earns no increment either.
+      expect(clocks[0], time);
+      // Black thought for less than the increment it is given back.
+      expect(clocks[1], greaterThan(time));
+
+      // And they come out the other end as PGN clock comments.
+      expect(game.makePgn(), contains('[%clk '));
+      expect(game.makePgn(), contains('[TimeControl "300+3"]'));
+    });
+
+    testWidgets('Moves of an untimed game record no clock', (tester) async {
+      await initOverTheBoardGame(tester, const TimeIncrement.infinite());
+
+      await playMove(tester, 'e2', 'e4');
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+      final game = container.read(overTheBoardGameControllerProvider).game;
+
+      expect(game.clocks, isNull);
+      expect(game.makePgn(), isNot(contains('[%clk ')));
+    });
+
     testWidgets('Loading saved game', (tester) async {
       final gameStorage = MockOverTheBoardGameStorage();
 
@@ -454,9 +495,9 @@ void main() {
             appBar: AppBar(title: const Text('Test OTB Screen')),
             body: FilledButton(
               child: const Text('OTB'),
-              onPressed: () => Navigator.of(
-                context,
-              ).push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
+              onPressed: () =>
+                  Navigator.of(context)
+                      .push(buildScreenRoute<void>(screen: const OverTheBoardScreen())),
             ),
           ),
         ),
@@ -494,16 +535,23 @@ void main() {
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
-      // Close OTB screen and confirm dialog to trigger save
+      // Close OTB screen to trigger save
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Yes'));
 
       verify(
         () => gameStorage.save(
           any(),
           timeIncrement: const TimeIncrement(5, 3),
-          whiteTimeLeft: const Duration(minutes: 2),
+          // White's clock was left running, so at most a tick's worth of time has been charged
+          // to white since the last reading.
+          whiteTimeLeft: any(
+            named: 'whiteTimeLeft',
+            that: allOf(
+              lessThanOrEqualTo(const Duration(minutes: 2)),
+              greaterThan(const Duration(minutes: 1, seconds: 59)),
+            ),
+          ),
           blackTimeLeft: const Duration(minutes: 1),
         ),
       ).called(1);

@@ -1,14 +1,35 @@
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart' show CountdownClockBuilder;
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PlaybanMessage extends StatelessWidget {
-  const PlaybanMessage({required this.playban, this.centerText = false, super.key});
+/// Shows the dialog explaining why [playban] was applied.
+void showPlaybanDialog(BuildContext context, TemporaryBan playban) {
+  showAdaptiveDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog.adaptive(
+        content: PlaybanMessage(playban: playban, centerText: true),
+        actions: [
+          PlatformDialogAction(
+            child: const Text('OK'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
 
-  final TemporaryBan playban;
-  final bool centerText;
-
+class const PlaybanMessage({
+  required final TemporaryBan playban,
+  final bool centerText = false,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

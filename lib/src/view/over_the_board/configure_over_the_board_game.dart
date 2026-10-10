@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
@@ -38,23 +39,22 @@ void showConfigureGameSheet(
   );
 }
 
-class _ConfigureOverTheBoardGameSheet extends ConsumerStatefulWidget {
-  const _ConfigureOverTheBoardGameSheet({required this.initialVariant, this.initialFen});
-
-  final Variant initialVariant;
-
-  final String? initialFen;
-
+class const _ConfigureOverTheBoardGameSheet({
+  required final Variant initialVariant,
+  final String? initialFen,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_ConfigureOverTheBoardGameSheet> createState() =>
       _ConfigureOverTheBoardGameSheetState();
 }
 
-class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
+class _ConfigureOverTheBoardGameSheetState()
+    extends ConsumerState<_ConfigureOverTheBoardGameSheet> {
   late Variant chosenVariant;
   late TimeControlType chosenTimeControlType;
 
   late TimeIncrement timeIncrement;
+  late TimeIncrement prevIncrement;
 
   String? _fromPositionFen;
   final _fenController = TextEditingController();
@@ -79,8 +79,9 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text.isEmpty ? null : _fenController.text);
     });
-    final clockProvider = ref.read(overTheBoardClockProvider);
-    timeIncrement = clockProvider.timeIncrement;
+    final preferences = ref.read(overTheBoardPreferencesProvider);
+    timeIncrement = preferences.timeIncrement;
+    prevIncrement = timeIncrement;
     chosenTimeControlType = timeIncrement.isInfinite
         ? TimeControlType.unlimited
         : TimeControlType.clock;
@@ -94,15 +95,17 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
   }
 
   void _setTimeControlType(TimeControlType type) {
-    ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(type);
+    chosenTimeControlType = type;
     setState(() {
-      chosenTimeControlType = type;
-
       if (type == TimeControlType.unlimited) {
+        prevIncrement = timeIncrement;
         timeIncrement = const TimeIncrement.infinite();
       } else if (timeIncrement.isInfinite) {
-        timeIncrement = OverTheBoardPrefs.defaults.timeIncrement;
+        timeIncrement = prevIncrement;
       }
+    });
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(timeIncrement).then((_) {
+      ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(chosenTimeControlType);
     });
   }
 
@@ -119,14 +122,14 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
   }
 
   void _updateTimeIncrement(TimeIncrement newIncrement) {
-    ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(newIncrement);
     setState(() {
       timeIncrement = newIncrement;
-      if (timeIncrement.isInfinite) {
-        _setTimeControlType(TimeControlType.unlimited);
-      } else {
-        _setTimeControlType(TimeControlType.clock);
-      }
+      chosenTimeControlType = timeIncrement.isInfinite
+          ? TimeControlType.unlimited
+          : TimeControlType.clock;
+    });
+    ref.read(overTheBoardPreferencesProvider.notifier).setTimeIncrement(newIncrement).then((_) {
+      ref.read(overTheBoardPreferencesProvider.notifier).setTimeControlType(chosenTimeControlType);
     });
   }
 
@@ -164,44 +167,86 @@ class _ConfigureOverTheBoardGameSheetState extends ConsumerState<_ConfigureOverT
               child: hasClock
                   ? Column(
                       children: [
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.minutesPerSide}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: clockLabelInMinutes(timeIncrement.time),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: timeIncrement.time,
-                            values: kAvailableTimesInSeconds,
-                            labelBuilder: clockLabelInMinutes,
-                            onChange: _setTotalTime,
-                            onChangeEnd: _setTotalTime,
-                          ),
+                        Builder(
+                          builder: (context) {
+                            int seconds = timeIncrement.time;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.minutesPerSide}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: clockLabelInMinutes(seconds),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: seconds,
+                                    values: kAvailableTimesInSeconds,
+                                    labelBuilder: clockLabelInMinutes,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        seconds = value.toInt();
+                                      });
+                                      _setTotalTime(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
-                        ListTile(
-                          title: Text.rich(
-                            TextSpan(
-                              text: '${context.l10n.incrementInSeconds}: ',
-                              children: [
-                                TextSpan(
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                                  text: timeIncrement.increment.toString(),
-                                ),
-                              ],
-                            ),
-                          ),
-                          subtitle: NonLinearSlider(
-                            value: timeIncrement.increment,
-                            values: kAvailableIncrementsInSeconds,
-                            onChange: _setIncrement,
-                            onChangeEnd: _setIncrement,
-                          ),
+                        Builder(
+                          builder: (context) {
+                            int incrementSeconds = timeIncrement.increment;
+                            return StatefulBuilder(
+                              builder: (context, setState) {
+                                return ListTile(
+                                  title: Text.rich(
+                                    TextSpan(
+                                      text: '${context.l10n.incrementInSeconds}: ',
+                                      children: [
+                                        TextSpan(
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                          ),
+                                          text: incrementSeconds.toString(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  subtitle: NonLinearSlider(
+                                    value: incrementSeconds,
+                                    values: kAvailableIncrementsInSeconds,
+                                    onChange: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                    },
+                                    onChangeEnd: (num value) {
+                                      setState(() {
+                                        incrementSeconds = value.toInt();
+                                      });
+                                      _setIncrement(value);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ],
                     )
@@ -275,9 +320,7 @@ void showConfigureDisplaySettings(BuildContext context) {
   );
 }
 
-class OverTheBoardDisplaySettings extends ConsumerWidget {
-  const OverTheBoardDisplaySettings();
-
+class const OverTheBoardDisplaySettings() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(overTheBoardPreferencesProvider);
@@ -285,16 +328,22 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
-          title: const Text('Use symmetric pieces'),
+          title: Text(context.l10n.mobileUseSymmetricPieces),
           value: prefs.symmetricPieces,
           onChanged: (_) =>
               ref.read(overTheBoardPreferencesProvider.notifier).toggleSymmetricPieces(),
         ),
         SwitchSettingTile(
-          title: const Text('Flip pieces and opponent info after move'),
+          title: Text(context.l10n.mobileFlipPiecesAfterMove),
           value: prefs.flipPiecesAfterMove,
           onChanged: (_) =>
               ref.read(overTheBoardPreferencesProvider.notifier).toggleFlipPiecesAfterMove(),
+        ),
+        SwitchSettingTile(
+          title: Text(context.l10n.preferencesBlindfold),
+          value: prefs.blindfoldMode,
+          onChanged: (_) =>
+              ref.read(overTheBoardPreferencesProvider.notifier).toggleBlindfoldMode(),
         ),
       ],
     );

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
@@ -29,6 +28,8 @@ import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -36,11 +37,21 @@ final _logger = Logger('HttpClient');
 
 const _maxCacheSize = 2 * 1024 * 1024;
 
+/// Request header marking a request whose failure is expected and must not pollute the logs.
+///
+/// The connectivity checks run precisely when the device may be offline, so their requests fail
+/// as a matter of course; logging each failure as a warning only buries the records that matter.
+/// A request carrying this header is logged at [Level.FINEST] instead. The header is stripped
+/// before the request goes out, so it never reaches the server.
+const kQuietRequestHeader = 'x-quiet-request';
+
+bool guessIsUnsecureSchemeFromHost(String host) {
+  return host.startsWith('localhost') || host.startsWith('10.') || host.startsWith('192.168.');
+}
+
 /// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
 Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
-    kLichessHost.startsWith('localhost') ||
-        kLichessHost.startsWith('10.') ||
-        kLichessHost.startsWith('192.168.')
+    guessIsUnsecureSchemeFromHost(kLichessHost)
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
@@ -53,11 +64,7 @@ final _lichessMainHost = lichessUri('/').host;
 /// Creates the appropriate http client for the platform.
 ///
 /// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
-class HttpClientFactory {
-  const HttpClientFactory({this.wrapper});
-
-  final Client Function(Client client)? wrapper;
-
+class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
   Client _createClient() {
     const userAgent = 'Lichess Mobile';
     try {
@@ -189,13 +196,13 @@ Duration _defaultDelay(int retryCount) =>
     const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 final userAgentProvider = Provider<String>((Ref ref) {
-  final authUser = ref.watch(authControllerProvider);
+  final user = ref.watch(authControllerProvider.select((value) => value?.user));
 
   return makeUserAgent(
     ref.read(preloadedDataProvider).requireValue.packageInfo,
     ref.read(preloadedDataProvider).requireValue.deviceInfo,
     ref.read(preloadedDataProvider).requireValue.sri,
-    authUser?.user,
+    user,
   );
 });
 
@@ -214,7 +221,9 @@ String makeUserAgent(PackageInfo info, BaseDeviceInfo deviceInfo, String sri, Li
 
 /// Downloads a file from the given [url] and saves it to the [file].
 ///
-/// Returns true if the download was successful, false otherwise.
+/// Returns true if the download was successful, false otherwise. A download that fails halfway
+/// through leaves nothing behind: the partial file is deleted, so that a later attempt starts from
+/// a clean slate instead of finding a file that looks downloaded but is truncated.
 Future<bool> downloadFile(
   Client client,
   Uri url,
@@ -224,11 +233,37 @@ Future<bool> downloadFile(
 }) async {
   _logger.fine('Downloading $url to ${file.path}');
 
-  final response = await client.send(Request('GET', url));
+  Future<bool> discard(String reason, [Object? error, StackTrace? stackTrace]) async {
+    _logger.warning('Download of $url failed: $reason', error, stackTrace);
+    try {
+      if (await file.exists()) await file.delete();
+    } catch (e, st) {
+      _logger.warning('Could not delete the incomplete ${file.path}:', e, st);
+    }
+    return false;
+  }
+
+  final StreamedResponse response;
+  try {
+    response = await client.send(Request('GET', url));
+  } catch (e, st) {
+    return await discard('the request failed', e, st);
+  }
+
+  if (response.statusCode != 200) {
+    // The body is an error page, not the file we asked for.
+    await response.stream.drain<void>().catchError((Object _) {});
+    return await discard('unexpected status ${response.statusCode}');
+  }
+
   final sink = file.openWrite();
 
   int received = 0;
-  final totalLength = response.contentLength ?? expectedLength;
+  final contentLength = response.contentLength;
+  final totalLength = contentLength ?? expectedLength;
+
+  Object? failure;
+  StackTrace? failureStackTrace;
 
   try {
     await response.stream
@@ -241,66 +276,42 @@ Future<bool> downloadFile(
         })
         .pipe(sink);
   } catch (e, st) {
-    _logger.warning('Failed to download file:', e, st);
+    failure = e;
+    failureStackTrace = st;
   } finally {
+    // Closing the sink is what actually flushes the bytes to disk, so its failure is a download
+    // failure, not a detail to log and forget.
     try {
       await sink.flush();
       await sink.close();
-    } on FileSystemException catch (e, st) {
-      _logger.warning('Failed to save file:', e, st);
+    } catch (e, st) {
+      failure ??= e;
+      failureStackTrace ??= st;
     }
   }
 
-  final length = await file.length();
+  if (failure != null) {
+    return await discard('the file could not be written', failure, failureStackTrace);
+  }
+
+  // Fewer bytes than announced means the body was cut short. More is not an error: a client that
+  // transparently decompresses the body reports the compressed length here.
+  if (contentLength != null && received < contentLength) {
+    return await discard('got $received bytes out of $contentLength');
+  }
+
+  final int length;
+  try {
+    length = await file.length();
+  } catch (e, st) {
+    return await discard('the file could not be read back', e, st);
+  }
+
+  if (length != received) {
+    return await discard('only $length bytes of $received made it to disk');
+  }
+
   return length > 0;
-}
-
-/// Downloads multiple files from the given [urls] and saves them to the corresponding [files].
-///
-/// [onProgress] will aggregate the progress of all downloads.
-Future<bool> downloadFiles(
-  Client client,
-  List<Uri> urls,
-  List<File> files, {
-  List<int>? expectedLengths,
-  void Function(int received, int length)? onProgress,
-}) async {
-  if (urls.length != files.length) {
-    throw ArgumentError('Urls and files must have the same length.');
-  }
-  if (expectedLengths != null && expectedLengths.length != urls.length) {
-    throw ArgumentError('expectedLengths must have the same length as urls.');
-  }
-
-  // aggregrate progress of all files
-  final Map<Uri, int> fileLengths = {};
-  final Map<Uri, int> fileReceived = {};
-  final results = await Future.wait(
-    urls.asMap().entries.map((entry) {
-      final index = entry.key;
-      final url = entry.value;
-      final file = files[index];
-
-      return downloadFile(
-        client,
-        url,
-        file,
-        expectedLength: expectedLengths?[index],
-        onProgress: (received, length) {
-          fileReceived[url] = received;
-          fileLengths[url] = length;
-          // only call onProgress if all files lengths are known
-          if (fileLengths.length == urls.length) {
-            final totalReceived = fileReceived.values.fold(0, (a, b) => a + b);
-            final totalLength = fileLengths.values.fold(0, (a, b) => a + b);
-            onProgress?.call(totalReceived, totalLength);
-          }
-        },
-      );
-    }),
-  );
-
-  return results.every((result) => result);
 }
 
 /// A [Client] that intercepts all requests, responses, and errors using the provided callbacks.
@@ -318,15 +329,12 @@ Future<bool> downloadFiles(
 /// See also:
 /// - [BaseClient] for the base class.
 /// - [Client] for the interface that this class implements.
-class _RegisterCallbackClient extends BaseClient {
-  _RegisterCallbackClient(this._inner, {this.onRequest, this.onResponse, this.onError});
-
-  final Client _inner;
-
-  final void Function(BaseRequest request)? onRequest;
-  final void Function(BaseResponse response)? onResponse;
-  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError;
-
+class _RegisterCallbackClient(
+  final Client _inner, {
+  final void Function(BaseRequest request)? onRequest,
+  final void Function(BaseResponse response)? onResponse,
+  final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError,
+}) extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     try {
@@ -352,13 +360,12 @@ class _RegisterCallbackClient extends BaseClient {
 /// * Logs all requests and responses with status code >= 400.
 /// * When a response has the 401 status, checks if the authUser token is still valid,
 /// and deletes the authUser if it's not.
-class LichessClient implements Client {
-  LichessClient(this._inner, this._ref);
-
+class LichessClient(final Client _inner, final Ref _ref) implements Client {
   static const defaultRequestTimeout = Duration(seconds: 15);
 
-  final Ref _ref;
-  final Client _inner;
+  final PackageInfo _cachedPackageInfo = _ref.read(preloadedDataProvider).requireValue.packageInfo;
+  final BaseDeviceInfo _cachedDeviceInfo = _ref.read(preloadedDataProvider).requireValue.deviceInfo;
+  final String _cachedSri = _ref.read(preloadedDataProvider).requireValue.sri;
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -369,18 +376,23 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(preloadedDataProvider).requireValue.packageInfo,
-      _ref.read(preloadedDataProvider).requireValue.deviceInfo,
-      _ref.read(preloadedDataProvider).requireValue.sri,
+      _cachedPackageInfo,
+      _cachedDeviceInfo,
+      _cachedSri,
       authUser?.user,
     );
 
-    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+    final quiet = request.headers.remove(kQuietRequestHeader) != null;
+
+    _logger.log(
+      quiet ? Level.FINEST : Level.INFO,
+      '${request.method} ${request.url} ${request.headers['User-Agent']}',
+    );
 
     try {
       final response = await _inner.send(request).timeout(defaultRequestTimeout);
 
-      _logIfError(response);
+      _logIfError(response, quiet: quiet);
 
       // Only the main server can tell us whether lichess is up: the opening
       // explorer and the tablebase run on their own servers and may well be
@@ -395,17 +407,18 @@ class LichessClient implements Client {
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed:', e, st);
+      _logger.log(quiet ? Level.FINEST : Level.WARNING, 'Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
 
-  void _logIfError(BaseResponse response) {
+  void _logIfError(BaseResponse response, {required bool quiet}) {
     if (response.request != null && response.statusCode >= 400) {
       final request = response.request!;
       final method = request.method;
       final url = request.url;
-      _logger.warning(
+      _logger.log(
+        quiet ? Level.FINEST : Level.WARNING,
         '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
       );
     }
@@ -493,7 +506,7 @@ class LichessClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 
@@ -501,36 +514,37 @@ class LichessClient implements Client {
 ///
 /// * Sets the user-agent header with the app version, build number, and device info.
 /// * Logs all requests and responses with status code >= 400.
-class DefaultClient implements Client {
-  DefaultClient(this._inner, {required this._userAgent});
-
-  final Client _inner;
-  final String _userAgent;
-
+class DefaultClient(final Client _inner, {required final String _userAgent}) implements Client {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     request.headers['User-Agent'] = _userAgent;
 
-    _logger.info('${request.method} ${request.url} ${request.headers['User-Agent']}');
+    final quiet = request.headers.remove(kQuietRequestHeader) != null;
+
+    _logger.log(
+      quiet ? Level.FINEST : Level.INFO,
+      '${request.method} ${request.url} ${request.headers['User-Agent']}',
+    );
 
     try {
       final response = await _inner.send(request);
 
-      _logIfError(response);
+      _logIfError(response, quiet: quiet);
 
       return response;
     } catch (e, st) {
-      _logger.warning('Request to ${request.url} failed:', e, st);
+      _logger.log(quiet ? Level.FINEST : Level.WARNING, 'Request to ${request.url} failed:', e, st);
       rethrow;
     }
   }
 
-  void _logIfError(BaseResponse response) {
+  void _logIfError(BaseResponse response, {required bool quiet}) {
     if (response.request != null && response.statusCode >= 400) {
       final request = response.request!;
       final method = request.method;
       final url = request.url;
-      _logger.warning(
+      _logger.log(
+        quiet ? Level.FINEST : Level.WARNING,
         '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
       );
     }
@@ -615,17 +629,17 @@ class DefaultClient implements Client {
       }
     }
 
-    return Response.fromStream(await send(request));
+    return await Response.fromStream(await send(request));
   }
 }
 
 /// An exception thrown when the server responds with a status code >= 400.
-class ServerException extends ClientException {
-  final int statusCode;
-  final Map<String, dynamic>? jsonError;
-
-  ServerException(this.statusCode, super.message, Uri super.url, this.jsonError);
-}
+class ServerException(
+  final int statusCode,
+  super.message,
+  Uri super.url,
+  final Map<String, dynamic>? jsonError,
+) extends ClientException;
 
 /// Throws an error if [response] is not successful.
 void _checkResponseSuccess(Uri url, Response response) {
@@ -647,12 +661,6 @@ void _checkResponseSuccess(Uri url, Response response) {
   }
   throw ServerException(response.statusCode, message, url, jsonError);
 }
-
-/// A JSON decoder that decodes UTF-8 bytes.
-///
-/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
-/// than decoding the bytes to a string and then parsing the JSON.
-final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 extension ClientExtension on Client {
   /// Sends an HTTP POST request with the given headers and body to the given URL and read response body.
@@ -855,12 +863,12 @@ extension ClientExtension on Client {
   IList<T> _readNdJsonList<T>(Response response, T Function(Map<String, dynamic>) mapper) {
     try {
       return IList(
-        LineSplitter.split(
-          utf8.decode(response.bodyBytes),
-        ).where((e) => e.isNotEmpty && e != '\n').map((e) {
-          final json = jsonDecode(e) as Map<String, dynamic>;
-          return mapper(json);
-        }),
+        LineSplitter.split(utf8.decode(response.bodyBytes))
+            .where((e) => e.isNotEmpty && e != '\n')
+            .map((e) {
+              final json = jsonDecode(e) as Map<String, dynamic>;
+              return mapper(json);
+            }),
       );
     } catch (e, st) {
       _logger.severe('Could not read nd-json objects as List<$T>.', e, st);
@@ -886,12 +894,8 @@ extension ClientRefExtension on Ref {
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
   Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
-    final link = keepAlive();
-    final timer = Timer(duration, link.close);
+    final link = cacheFor(duration);
     final client = read(lichessClientProvider);
-    onDispose(() {
-      timer.cancel();
-    });
     try {
       return await fn(client);
     } on ServerException {
@@ -912,13 +916,9 @@ extension ClientRefExtension on Ref {
     Future<U> Function(LichessClient, Aggregator) fn,
     Duration duration,
   ) async {
-    final link = keepAlive();
-    final timer = Timer(duration, link.close);
+    final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     final aggregator = read(aggregatorProvider);
-    onDispose(() {
-      timer.cancel();
-    });
     try {
       return await fn(client, aggregator);
     } on ServerException {

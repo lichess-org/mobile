@@ -11,11 +11,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class AnalysisSettingsScreen extends ConsumerWidget {
-  const AnalysisSettingsScreen(this.options);
-
-  final AnalysisOptions options;
-
+class const AnalysisSettingsScreen(final AnalysisOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute({required AnalysisOptions options}) {
     return buildScreenRoute(screen: AnalysisSettingsScreen(options));
   }
@@ -49,14 +45,13 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                         ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
                   ),
                   SwitchSettingTile(
-                    // TODO: l10n
-                    title: const Text('Show engine lines'),
+                    title: Text(context.l10n.mobileShowEngineLines),
                     value: prefs.showEngineLines,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
                   ),
                   SwitchSettingTile(
-                    title: const Text('Small board'), // TODO l10n
+                    title: Text(context.l10n.mobileSmallBoard),
                     value: prefs.smallBoard,
                     onChanged: (value) =>
                         ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
@@ -85,8 +80,7 @@ class AnalysisSettingsScreen extends ConsumerWidget {
                       },
                     ),
                     SwitchSettingTile(
-                      // TODO: l10n
-                      title: const Text('Show evaluation gauge'),
+                      title: Text(context.l10n.mobileShowEvaluationGauge),
                       value: prefs.showEvaluationGauge,
                       onChanged: (value) => ref
                           .read(analysisPreferencesProvider.notifier)

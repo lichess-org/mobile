@@ -6,7 +6,12 @@
  *   node scripts/gen-widget-strings.mjs
  *
  * The output is a String Catalog (Xcode 15+) containing all widget UI strings.
- * Xcode picks it up automatically via the fileSystemSynchronizedRootGroup.
+ * Xcode picks it up automatically via the fileSystemSynchronizedRootGroup. The Runner target is a
+ * member too, for the Live Activity alerts and notifications sent by LiveActivityPlugin.swift.
+ *
+ * Only the WIDGET_KEYS entries are generated: the strings Xcode extracts from the Swift sources
+ * are kept as they are, and the file is written in Xcode's format so that neither tool rewrites
+ * what the other one wrote.
  *
  * To add a new string:
  *   1. Add the ARB key to WIDGET_KEYS below with its default English value.
@@ -30,6 +35,9 @@ const WIDGET_KEYS = {
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
   'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts' },
+  'Your turn': { arbKey: 'yourTurn', fallback: 'Your turn' },
+  'Waiting for opponent': { arbKey: 'waitingForOpponent', fallback: 'Waiting for opponent' },
+  'Reconnecting': { arbKey: 'reconnecting', fallback: 'Reconnecting' },
 };
 
 // ARB locale codes use '_', iOS uses '-' for subtags.
@@ -43,8 +51,10 @@ const arbFiles = fs
   .filter((f) => f.startsWith('app_') && f.endsWith('.arb') && f !== 'app_en_US.arb')
   .map((f) => ({ file: f, locale: arbToIosLocale(f.replace(/^app_/, '').replace(/\.arb$/, '')) }));
 
-// Build the strings dictionary.
-const strings = {};
+// Start from the existing catalog to keep the strings extracted by Xcode.
+const strings = fs.existsSync(OUT_FILE)
+  ? JSON.parse(fs.readFileSync(OUT_FILE, 'utf8')).strings
+  : {};
 
 for (const [uiString, { arbKey, fallback, param = false }] of Object.entries(WIDGET_KEYS)) {
   const localizations = {};
@@ -75,7 +85,21 @@ const catalog = {
   version: '1.0',
 };
 
-fs.writeFileSync(OUT_FILE, JSON.stringify(catalog, null, 2) + '\n');
+// Xcode sorts keys case-insensitively, writes `"key" : value` and puts a blank line in `{}`.
+function sortKeys(value) {
+  if (Array.isArray(value)) return value.map(sortKeys);
+  if (value === null || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }) || (a < b ? -1 : 1))
+      .map((k) => [k, sortKeys(value[k])]),
+  );
+}
+
+const json = JSON.stringify(sortKeys(catalog), null, 2)
+  .replace(/^(\s*"(?:[^"\\]|\\.)*"):/gm, '$1 :')
+  .replace(/^(\s*)(.*)\{\}/gm, '$1$2{\n\n$1}');
+fs.writeFileSync(OUT_FILE, json);
 console.log(`Written: ${path.relative(ROOT, OUT_FILE)}`);
 console.log(`  Strings: ${Object.keys(strings).length}`);
 console.log(`  Locales: ${arbFiles.length}`);

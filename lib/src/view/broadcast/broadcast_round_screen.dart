@@ -27,7 +27,7 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum BroadcastRoundTab {
+enum BroadcastRoundTab() {
   overview,
   boards,
   players,
@@ -44,7 +44,7 @@ enum BroadcastRoundTab {
   }
 }
 
-enum _BroadcastGameFilter {
+enum _BroadcastGameFilter() {
   all,
   ongoing;
 
@@ -58,18 +58,12 @@ enum _BroadcastGameFilter {
   }
 }
 
-class BroadcastRoundScreenLoading extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastRoundTab? initialTab;
-  final String? teamFilter;
-
-  const BroadcastRoundScreenLoading({
-    super.key,
-    required this.roundId,
-    this.initialTab,
-    this.teamFilter,
-  });
-
+class const BroadcastRoundScreenLoading({
+  super.key,
+  required final BroadcastRoundId roundId,
+  final BroadcastRoundTab? initialTab,
+  final String? teamFilter,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastRoundId roundId, {
     BroadcastRoundTab? initialTab,
@@ -111,13 +105,11 @@ class BroadcastRoundScreenLoading extends ConsumerWidget {
   }
 }
 
-class BroadcastRoundScreen extends ConsumerStatefulWidget {
-  final Broadcast broadcast;
-  final BroadcastRoundTab? initialTab;
-  final String? teamFilter;
-
-  const BroadcastRoundScreen({required this.broadcast, this.initialTab, this.teamFilter});
-
+class const BroadcastRoundScreen({
+  required final Broadcast broadcast,
+  final BroadcastRoundTab? initialTab,
+  final String? teamFilter,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
       screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
@@ -128,7 +120,8 @@ class BroadcastRoundScreen extends ConsumerStatefulWidget {
   _BroadcastRoundScreenState createState() => _BroadcastRoundScreenState();
 }
 
-class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
+class _BroadcastRoundScreenState()
+    extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
@@ -168,7 +161,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
     if (_tabController.indexIsChanging) {
       final currentRoundId = _selectedRoundId ?? widget.broadcast.roundToLinkId;
 
-      ref.read(broadcastRoundControllerProvider(currentRoundId).notifier).clearObservedGames();
+      ref.read(observedGamesControllerProvider(currentRoundId).notifier).clear();
     }
   }
 
@@ -197,10 +190,10 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundState> asyncRound,
+    ({BroadcastRound round, bool? isSubscribed})? roundState,
   ) {
-    return switch (asyncRound) {
-      AsyncData(value: final roundState) => PlatformScaffold(
+    return switch (roundState) {
+      final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
           title: AppBarTitleText(
@@ -260,7 +253,12 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
                   icon: Icons.filter_list,
                   label: context.l10n.filterGames,
                   onPressed: () {
-                    final games = asyncRound.value.games.values;
+                    final currentRoundId =
+                        _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                    final gamesMap = currentRoundId != null
+                        ? ref.read(broadcastRoundControllerProvider(currentRoundId)).value?.games
+                        : null;
+                    final games = gamesMap?.values ?? const [];
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
                     final uniqueTeams = games
@@ -342,7 +340,7 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
           _ => const BottomBar.empty(),
         },
       ),
-      _ => PlatformScaffold(
+      null => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
         body: const Center(child: CircularProgressIndicator.adaptive()),
@@ -354,48 +352,44 @@ class _BroadcastRoundScreenState extends ConsumerState<BroadcastRoundScreen>
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
-
     switch (asyncTour) {
       case AsyncData(value: final tournament):
-        // Eagerly initalize the round controller so it stays alive when switching tabs
-        // and to know if the round has games to show
-        final roundState = ref.watch(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
+        final roundId = _selectedRoundId ?? tournament.defaultRoundId;
+
+        // Null until the round is loaded, so this fires once when it first loads.
+        ref.listen<bool?>(
+          broadcastRoundControllerProvider(roundId)
+              .select((state) => state.value?.games.isNotEmpty),
+          (_, hasGames) {
+            if (widget.initialTab != null || hasGames == null || roundLoaded) return;
+            roundLoaded = true;
+            if (hasGames) _tabController.index = 1;
+          },
         );
 
-        ref.listen(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-          (_, round) {
-            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
-              roundLoaded = true;
-              if (round.value!.games.isNotEmpty) {
-                _tabController.index = 1;
-              }
-            }
-          },
+        // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
+        final roundState = ref.watch(
+          broadcastRoundControllerProvider(roundId).select(
+            (state) => switch (state.value) {
+              final value? => (round: value.round, isSubscribed: value.isSubscribed),
+              null => null,
+            },
+          ),
         );
 
         return _buildContent(context, asyncTour, roundState);
       case _:
-        return _buildContent(context, asyncTour, loadingRound);
+        return _buildContent(context, asyncTour, null);
     }
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.tournament,
-    required this.roundId,
-    required this.setTournamentId,
-    required this.setRoundId,
-  });
-
-  final BroadcastTournament tournament;
-  final BroadcastRoundId roundId;
-  final void Function(BroadcastTournamentId) setTournamentId;
-  final void Function(BroadcastRoundId) setRoundId;
-
+class const _BottomBar({
+  required final BroadcastTournament tournament,
+  required final BroadcastRoundId roundId,
+  required final void Function(BroadcastTournamentId) setTournamentId,
+  required final void Function(BroadcastRoundId) setRoundId,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
@@ -474,19 +468,12 @@ class _BottomBar extends ConsumerWidget {
   }
 }
 
-class _RoundSelectorMenu extends ConsumerStatefulWidget {
-  const _RoundSelectorMenu({
-    required this.selectedRoundId,
-    required this.rounds,
-    required this.scrollController,
-    required this.setRoundId,
-  });
-
-  final BroadcastRoundId selectedRoundId;
-  final IList<BroadcastRound> rounds;
-  final ScrollController scrollController;
-  final void Function(BroadcastRoundId) setRoundId;
-
+class const _RoundSelectorMenu({
+  required final BroadcastRoundId selectedRoundId,
+  required final IList<BroadcastRound> rounds,
+  required final ScrollController scrollController,
+  required final void Function(BroadcastRoundId) setRoundId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_RoundSelectorMenu> createState() => _RoundSelectorState();
 }
@@ -494,7 +481,7 @@ class _RoundSelectorMenu extends ConsumerStatefulWidget {
 final _dateFormatMonth = DateFormat.MMMd().add_jm();
 final _dateFormatYearMonth = DateFormat.yMMMd().add_jm();
 
-class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
+class _RoundSelectorState() extends ConsumerState<_RoundSelectorMenu> {
   final currentRoundKey = GlobalKey();
 
   @override
@@ -539,24 +526,17 @@ class _RoundSelectorState extends ConsumerState<_RoundSelectorMenu> {
   }
 }
 
-class _TournamentSelectorMenu extends ConsumerStatefulWidget {
-  const _TournamentSelectorMenu({
-    required this.tournament,
-    required this.group,
-    required this.scrollController,
-    required this.setTournamentId,
-  });
-
-  final BroadcastTournament tournament;
-  final IList<BroadcastTournamentGroup> group;
-  final ScrollController scrollController;
-  final void Function(BroadcastTournamentId) setTournamentId;
-
+class const _TournamentSelectorMenu({
+  required final BroadcastTournament tournament,
+  required final IList<BroadcastTournamentGroup> group,
+  required final ScrollController scrollController,
+  required final void Function(BroadcastTournamentId) setTournamentId,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TournamentSelectorMenu> createState() => _TournamentSelectorState();
 }
 
-class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
+class _TournamentSelectorState() extends ConsumerState<_TournamentSelectorMenu> {
   final currentTournamentKey = GlobalKey();
 
   @override
@@ -591,15 +571,13 @@ class _TournamentSelectorState extends ConsumerState<_TournamentSelectorMenu> {
   }
 }
 
-class _BroadcastSettingsBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastSettingsBottomSheet();
-
+class const _BroadcastSettingsBottomSheet() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
       _BroadcastSettingsBottomSheetState();
 }
 
-class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSettingsBottomSheet> {
+class _BroadcastSettingsBottomSheetState() extends ConsumerState<_BroadcastSettingsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
@@ -624,29 +602,20 @@ class _BroadcastSettingsBottomSheetState extends ConsumerState<_BroadcastSetting
   }
 }
 
-class _BroadcastGamesFilterBottomSheet extends ConsumerStatefulWidget {
-  const _BroadcastGamesFilterBottomSheet(
-    this.selectedFilter,
-    this.selectedTeam, {
-    required this.allGamesCount,
-    required this.ongoingGamesCount,
-    required this.onGameFilterChange,
-    required this.teams,
-  });
-
-  final _BroadcastGameFilter selectedFilter;
-  final String? selectedTeam;
-  final int allGamesCount;
-  final int ongoingGamesCount;
-  final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange;
-  final IList<String>? teams;
-
+class const _BroadcastGamesFilterBottomSheet(
+  final _BroadcastGameFilter selectedFilter,
+  final String? selectedTeam, {
+  required final int allGamesCount,
+  required final int ongoingGamesCount,
+  required final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange,
+  required final IList<String>? teams,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
       _BroadcastGamesFilterBottomSheetState();
 }
 
-class _BroadcastGamesFilterBottomSheetState
+class _BroadcastGamesFilterBottomSheetState()
     extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
   late _BroadcastGameFilter filter;
   late String? selectedTeam;

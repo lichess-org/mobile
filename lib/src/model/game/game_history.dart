@@ -6,7 +6,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'game_history.freezed.dart';
@@ -40,12 +40,12 @@ final myRecentGamesProvider = FutureProvider.autoDispose<IList<LightExportedGame
   final isServerUp = ref.watch(serverStatusProvider) == ServerStatus.up;
   final authUser = ref.watch(authControllerProvider);
   if (authUser != null && online && isServerUp) {
-    return ref
+    return await ref
         .read(gameRepositoryProvider)
         .getUserGames(authUser.user.id, max: kNumberOfRecentGames);
   } else {
     final storage = await ref.watch(gameStorageProvider.future);
-    return storage
+    return await storage
         .page(userId: authUser?.user.id, max: kNumberOfRecentGames)
         .then(
           (value) => value
@@ -75,7 +75,7 @@ final userNumberOfGamesProvider = FutureProvider.autoDispose.family<int, LightUs
       ? (await ref.watch(userProvider(user.id).future)).count?.all ?? 0
       : authUser != null && online && isServerUp
       ? (await ref.watch(accountProvider.future))?.count?.all ?? 0
-      : (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
+      : await (await ref.watch(gameStorageProvider.future)).count(userId: user?.id);
 }, name: 'UserNumberOfGamesProvider');
 
 typedef UserGameHistoryNotifierParams = ({UserId? userId, GameFilterState filter});
@@ -90,11 +90,8 @@ final userGameHistoryProvider = AsyncNotifierProvider.autoDispose
       name: 'UserGameHistoryProvider',
     );
 
-class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
-  UserGameHistoryNotifier(this.params);
-
-  final UserGameHistoryNotifierParams params;
-
+class UserGameHistoryNotifier(final UserGameHistoryNotifierParams params)
+    extends AsyncNotifier<UserGameHistoryState> {
   final _list = <LightExportedGameWithPov>[];
 
   StreamSubscription<(GameId, bool)>? _bookmarkChangesSubscription;
@@ -217,7 +214,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
     final entry = gameList.firstWhereOrNull((e) => e.game.id == id);
     if (entry == null) return;
 
-    final (game: game, pov: pov) = entry;
+    final (:game, :pov) = entry;
     final index = gameList.indexOf(entry);
 
     state = AsyncData(
@@ -230,7 +227,7 @@ class UserGameHistoryNotifier extends AsyncNotifier<UserGameHistoryState> {
 
 @freezed
 sealed class UserGameHistoryState with _$UserGameHistoryState {
-  const factory UserGameHistoryState({
+  const factory({
     required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,
     required GameFilterState filter,

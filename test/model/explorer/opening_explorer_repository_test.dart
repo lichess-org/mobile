@@ -235,4 +235,63 @@ void main() {
       }
     });
   });
+
+  group('OpeningExplorerRepository date range', () {
+    const emptyEntry = '{"white": 0, "draws": 0, "black": 0, "moves": [], "opening": null}';
+
+    test('masters sends years', () async {
+      final mockClient = MockClient((request) {
+        expect(request.url.queryParameters['since'], '1990');
+        expect(request.url.queryParameters['until'], '2005');
+        return mockResponse(emptyEntry, 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(openingExplorerRepositoryProvider);
+
+      await repo.getMasterDatabase(
+        'fen',
+        since: DateTime.utc(1990, 4),
+        until: DateTime.utc(2005, 9),
+      );
+    });
+
+    test('lichess sends zero padded months', () async {
+      final mockClient = MockClient((request) {
+        expect(request.url.queryParameters['since'], '2020-03');
+        expect(request.url.queryParameters['until'], '2021-11');
+        return mockResponse(emptyEntry, 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(openingExplorerRepositoryProvider);
+
+      await repo.getLichessDatabase(
+        'fen',
+        variant: Variant.standard,
+        speeds: const ISetConst({Speed.rapid}),
+        ratings: const ISetConst({1000}),
+        since: DateTime.utc(2020, 3),
+        until: DateTime.utc(2021, 11),
+      );
+    });
+
+    test('omits unset bounds', () async {
+      final mockClient = MockClient((request) {
+        expect(request.url.queryParameters.containsKey('since'), isFalse);
+        expect(request.url.queryParameters.containsKey('until'), isFalse);
+        return mockResponse(emptyEntry, 200);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(openingExplorerRepositoryProvider);
+
+      await repo.getLichessDatabase(
+        'fen',
+        variant: Variant.standard,
+        speeds: const ISetConst({Speed.rapid}),
+        ratings: const ISetConst({1000}),
+      );
+    });
+  });
 }

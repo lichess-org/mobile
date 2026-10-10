@@ -15,7 +15,9 @@ final puzzlePreferencesProvider = NotifierProvider<PuzzlePreferences, PuzzlePref
   name: 'PuzzlePreferencesProvider',
 );
 
-class PuzzlePreferences extends Notifier<PuzzlePrefs> with SessionPreferencesStorage<PuzzlePrefs> {
+class PuzzlePreferences()
+    extends Notifier<PuzzlePrefs>
+    with SessionPreferencesStorage<PuzzlePrefs> {
   @override
   @protected
   final prefCategory = PrefCategory.puzzle;
@@ -88,7 +90,7 @@ int offlineQueueLengthForAngle(PuzzleAngle angle, int nbOfflinePuzzles) =>
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
-  const factory PuzzlePrefs({
+  const factory({
     required UserId? id,
     required PuzzleDifficulty difficulty,
 
@@ -106,7 +108,7 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     @Default(100) int nbOfflinePuzzles,
   }) = _PuzzlePrefs;
 
-  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
+  factory defaults({UserId? id}) => PuzzlePrefs(
     id: id,
     difficulty: PuzzleDifficulty.normal,
     autoNext: false,
@@ -114,5 +116,5 @@ sealed class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
     nbOfflinePuzzles: 100,
   );
 
-  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzlePrefsFromJson(json);
 }

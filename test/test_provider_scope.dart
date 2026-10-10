@@ -13,18 +13,22 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/opening_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:material_ui/material_ui.dart';
@@ -32,12 +36,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
-import 'model/analysis/fake_opening_service.dart';
+import 'model/engine/fake_engine.dart';
+import 'model/game/fake_game_live_activity_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
+import 'service/fake_opening_service.dart';
+import 'service/fake_sound_service.dart';
+import 'service/fake_weights_service.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
 
@@ -82,16 +89,12 @@ Future<Widget> makeTestProviderScopeApp(
   );
 }
 
-class _FakeApp extends ConsumerStatefulWidget {
-  const _FakeApp({required this.home});
-
-  final Widget home;
-
+class const _FakeApp({required final Widget home}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_FakeApp> createState() => _FakeAppState();
 }
 
-class _FakeAppState extends ConsumerState<_FakeApp> {
+class _FakeAppState() extends ConsumerState<_FakeApp> {
   @override
   void initState() {
     final socketClient = ref.read(socketPoolProvider).currentClient;
@@ -264,8 +267,23 @@ Future<Widget> makeTestProviderScope(
       return pool;
     }),
     connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
+    // Every engine in tests is a [FakeEngine] over a fake transport. Read lazily, so a test can
+    // configure [fakeEngine] right up to the moment it pumps its widget.
+    engineFactoryProvider: engineFactoryProvider.overrideWith(
+      (ref) => EngineFactory(connect: (spec) => fakeEngine.connect(spec)),
+    ),
+    // No disk and no asset bundle behind the Maia networks: only the bundled one is there, which
+    // is what a device that has never downloaded one looks like.
+    maiaWeightsServiceProvider: maiaWeightsServiceProvider.overrideWithValue(
+      FakeMaiaWeightsService(),
+    ),
+    // Otherwise every engine move in the suite would wait out a human-looking think.
+    thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
+    gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+      FakeGameLiveActivityChannel(),
+    ),
     openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),
     preloadedDataProvider: preloadedDataProvider.overrideWith((ref) {
       return (

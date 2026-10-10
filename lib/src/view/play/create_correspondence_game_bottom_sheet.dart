@@ -5,9 +5,9 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/common_play_widgets.dart';
@@ -18,14 +18,12 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CreateCorrespondenceGameBottomSheet extends ConsumerStatefulWidget {
-  const CreateCorrespondenceGameBottomSheet({super.key});
-
+class const CreateCorrespondenceGameBottomSheet({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateCorrespondenceGameBottomSheet> createState() => _CreateGameBodyState();
 }
 
-class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
+class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBottomSheet> {
   Future<void>? _pendingCreateGame;
 
   @override
@@ -158,9 +156,8 @@ class _CreateGameBodyState extends ConsumerState<CreateCorrespondenceGameBottomS
                               }
                             }
                             if (context.mounted) {
-                              Navigator.of(
-                                context,
-                              ).popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context)
+                                  .popUntil((route) => route is! ModalBottomSheetRoute);
                             }
                           },
                     child: Text(context.l10n.createAGame),

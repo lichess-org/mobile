@@ -8,10 +8,10 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../binding.dart';
-import '../../model/auth/fake_auth_storage.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
+import '../auth/fake_auth_storage.dart';
 
 /// Builds a valid `/api/account/preferences` server response, with the `zen`
 /// value overridable so tests can assert parsing and refetching.

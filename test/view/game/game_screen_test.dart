@@ -16,20 +16,21 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
@@ -46,6 +47,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:wakelock_plus_platform_interface/messages.g.dart';
 
+import '../../model/game/fake_game_live_activity_channel.dart';
 import '../../model/game/game_socket_example_data.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
@@ -64,9 +66,9 @@ final client = MockClient((request) {
   return mockResponse('', 404);
 });
 
-class MockSoundService extends Mock implements SoundService {}
+class MockSoundService() extends Mock implements SoundService;
 
-class MockCreateGameService extends Mock implements CreateGameService {}
+class MockCreateGameService() extends Mock implements CreateGameService;
 
 const _iPhone16ZoomedSurface = Size(320.0, 693.0);
 const _iPhone16ZoomedDevicePixelRatio = 3.0;
@@ -282,12 +284,10 @@ void main() {
         );
 
         final createGameService = MockCreateGameService();
-        when(
-          () => createGameService.newOpenOrRealTimeChallenge(challengeRequest),
-        ).thenAnswer((_) async => challenge);
-        when(
-          () => createGameService.waitForChallengeResponse(challenge),
-        ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+        when(() => createGameService.newOpenOrRealTimeChallenge(challengeRequest))
+            .thenAnswer((_) async => challenge);
+        when(() => createGameService.waitForChallengeResponse(challenge))
+            .thenAnswer((_) => Completer<ChallengeResponse>().future);
 
         final app = await makeTestProviderScopeApp(
           tester,
@@ -360,9 +360,8 @@ void main() {
     testWidgets('lobby loading shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newLobbyGame(any()),
-      ).thenAnswer((_) => Completer<GameSeekResponse>().future);
+      when(() => createGameService.newLobbyGame(any()))
+          .thenAnswer((_) => Completer<GameSeekResponse>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -383,9 +382,8 @@ void main() {
     testWidgets('seek cancelled shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newLobbyGame(any()),
-      ).thenAnswer((_) async => const GameSeekCancelled());
+      when(() => createGameService.newLobbyGame(any()))
+          .thenAnswer((_) async => const GameSeekCancelled());
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -414,9 +412,8 @@ void main() {
         sideChoice: .random,
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) => Completer<Challenge>().future);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) => Completer<Challenge>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -462,12 +459,10 @@ void main() {
         ),
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
-      when(
-        () => createGameService.waitForChallengeResponse(any()),
-      ).thenAnswer((_) async => const ChallengeResponseCancelled());
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any()))
+          .thenAnswer((_) async => const ChallengeResponseCancelled());
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -512,9 +507,8 @@ void main() {
         ),
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
       when(() => createGameService.waitForChallengeResponse(any())).thenAnswer(
         (_) async => ChallengeResponseDeclined(challenge: challenge, declineReason: null),
       );
@@ -555,12 +549,10 @@ void main() {
         sideChoice: .random,
       );
       final createGameService = MockCreateGameService();
-      when(
-        () => createGameService.newOpenOrRealTimeChallenge(any()),
-      ).thenAnswer((_) async => challenge);
-      when(
-        () => createGameService.waitForChallengeResponse(any()),
-      ).thenAnswer((_) => Completer<ChallengeResponse>().future);
+      when(() => createGameService.newOpenOrRealTimeChallenge(any()))
+          .thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(any()))
+          .thenAnswer((_) => Completer<ChallengeResponse>().future);
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -926,8 +918,8 @@ void main() {
         // flagged (white), not the side to move in the corrupted local position.
         await tester.pump(const Duration(milliseconds: 400));
         await tester.pump();
-        expect(find.text('White time out • Draw'), findsOneWidget);
-        expect(find.text('Black time out • Draw'), findsNothing);
+        expect(find.text('White ran out of time • Draw'), findsOneWidget);
+        expect(find.text('Black ran out of time • Draw'), findsNothing);
 
         // wait for the dong
         await tester.pump(const Duration(seconds: 500));
@@ -1727,6 +1719,230 @@ void main() {
     });
   });
 
+  group('Live Activity', () {
+    LiveActivityCall lastCall(FakeGameLiveActivityChannel channel) => channel.calls.last;
+
+    testWidgets('starts when the game loads, then follows moves and clocks', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, hasLength(1));
+      final start = channel.calls.single;
+      expect(start.method, 'start');
+      expect(start.attributes!.gameFullId, testGameFullId);
+      expect(start.attributes!.myColor, Side.white);
+      expect(start.attributes!.white.name, 'Peter');
+      expect(start.attributes!.black.name, 'Steven');
+      expect(start.state!.turn, Side.white);
+      expect(start.state!.lastMove, 'e7e5');
+      expect(start.state!.lastSan, 'e5');
+      expect(start.state!.claimable, isTrue);
+      expect(start.state!.clockRunning, isTrue);
+      // half the 60 s grace of a blitz game
+      expect(start.state!.leftWarningDelay, const Duration(seconds: 30));
+
+      // our move, played on the board
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).id, start.id);
+      expect(lastCall(channel).state!.turn, Side.black);
+      expect(lastCall(channel).state!.lastSan, 'd4');
+
+      // the server acknowledges it with new clock times
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 1, "d": {"ply": 3, "uci": "d2d4", "san": "d4", "clock": {"white": 170, "black": 180}}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).state!.whiteClock, const Duration(seconds: 170));
+
+      // opponent move
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "move", "v": 2, "d": {"ply": 4, "uci": "d7d5", "san": "d5", "clock": {"white": 170, "black": 175}}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).state!.turn, Side.white);
+      expect(lastCall(channel).state!.lastMove, 'd7d5');
+      expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
+    });
+
+    testWidgets('reports the game socket connection state', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      FakeWebSocketChannel? gameSocket;
+      final socketFactory = ListenableFakeWebSocketChannelFactory((route) {
+        final socket = createDefaultFakeWebSocketChannel(route);
+        if (route == testGameSocketUri) gameSocket = socket;
+        return socket;
+      });
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        socketFactory: socketFactory,
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      // the first pong
+      await tester.pump(kFakeWebSocketConnectionLag);
+      expect(channel.connectedCalls.last, isTrue);
+
+      gameSocket!.closeFromServer();
+      await tester.pump();
+      expect(channel.connectedCalls.last, isFalse);
+
+      // the socket reconnects after its backoff
+      await tester.pump(const Duration(seconds: 10));
+      expect(channel.connectedCalls.last, isTrue);
+    });
+
+    testWidgets('warns sooner when the user is down material', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5 Qh5 Nc6 Qxf7+ Kxf7',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // down 8 points: lila halves the grace
+      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 15));
+    });
+
+    testWidgets('warns as soon as the app stops running in bullet', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(minutes: 1),
+          black: Duration(minutes: 1),
+          emerg: Duration(seconds: 10),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls.single.state!.claimable, isTrue);
+      expect(channel.calls.single.state!.leftWarningDelay, isNull);
+    });
+
+    testWidgets('ends at once when the game is over', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"endData","d":{"status":"resign","winner":"white","clock":{"wc":17800,"bc":17000}}}',
+      ]);
+      await tester.pump();
+
+      final end = lastCall(channel);
+      expect(end.method, 'end');
+
+      // let the game-over popup and the dong play
+      await tester.pump(const Duration(seconds: 1));
+      final nbCalls = channel.calls.length;
+
+      // leaving the screen doesn't end it again
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(channel.calls, hasLength(nbCalls));
+    });
+
+    testWidgets('stops updating once the user dismisses it', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      channel.emitState(channel.calls.single.id!, LiveActivityState.dismissed);
+      await tester.pump();
+
+      await playMove(tester, 'd2', 'd4');
+      await tester.pump();
+      expect(channel.calls, hasLength(1));
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      expect(channel.calls, hasLength(1));
+    });
+
+    testWidgets('is not started for a spectator', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        youAre: null,
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, isEmpty);
+    });
+
+    testWidgets('is not started for a correspondence game', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: null,
+        correspondenceClock: (
+          daysPerTurn: 3,
+          white: const Duration(days: 3),
+          black: const Duration(days: 2, hours: 23),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      expect(channel.calls, isEmpty);
+    });
+  });
+
   group('Castling', () {
     const String castlingSetupPgn = 'e4 e5 Nf3 Nf6 Bc4 Bc5 d3 d6 Bd2 Bd7 Nc3 Nc6 Qe2 Qe7';
 
@@ -2357,9 +2573,8 @@ void main() {
     group('Enabled', () {
       testWidgets('onNewMessage', (WidgetTester tester) async {
         final mockSoundService = MockSoundService();
-        when(
-          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
-        ).thenAnswer((_) async {});
+        when(() => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')))
+            .thenAnswer((_) async {});
         await createTestGame(
           tester,
           pgn: 'e4 e5',
@@ -2371,9 +2586,8 @@ void main() {
           '{"t":"message","d":{"u":"Steven","t":"Hello!"}}',
         ]);
         await tester.pump();
-        verify(
-          () => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')),
-        ).called(1);
+        verify(() => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')))
+            .called(1);
       });
 
       testWidgets('chat messages do not disappear when game state changes', (
@@ -3079,8 +3293,7 @@ const _finishedGameFullEvent = '''
 
 /// Necessary to mock wakelock_plus method calls
 /// See: https://github.com/fluttercommunity/wakelock_plus/blob/0c74e5bbc6aefac57b6c96bb7ef987705ed559ec/wakelock_plus_platform_interface/lib/messages.g.dart#L127-L156
-class _PigeonCodec extends StandardMessageCodec {
-  const _PigeonCodec();
+class const _PigeonCodec() extends StandardMessageCodec {
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is int) {

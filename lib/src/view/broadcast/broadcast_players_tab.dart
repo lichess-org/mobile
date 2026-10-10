@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -27,11 +28,8 @@ final playersAndTournamentProvider = FutureProvider.autoDispose
     });
 
 /// A tab that displays the players participating in a broadcast tournament.
-class BroadcastPlayersTab extends ConsumerWidget {
-  const BroadcastPlayersTab({required this.tournamentId});
-
-  final BroadcastTournamentId tournamentId;
-
+class const BroadcastPlayersTab({required final BroadcastTournamentId tournamentId})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (ref.watch(playersAndTournamentProvider(tournamentId))) {
@@ -42,7 +40,10 @@ class BroadcastPlayersTab extends ConsumerWidget {
   }
 }
 
-enum _SortingTypes { elo, score }
+enum _SortingTypes() {
+  elo,
+  score,
+}
 
 typedef _BroadcastPlayerPicker<T> = T? Function(BroadcastPlayerWithOverallResult player);
 
@@ -54,17 +55,15 @@ const _kTableRowPadding = EdgeInsets.symmetric(
 );
 const _kHeaderTextStyle = TextStyle(fontWeight: FontWeight.bold, overflow: TextOverflow.ellipsis);
 
-class BroadcastPlayersList extends ConsumerStatefulWidget {
-  const BroadcastPlayersList(this.players, this.tournament);
-
-  final IList<BroadcastPlayerWithOverallResult> players;
-  final BroadcastTournament tournament;
-
+class const BroadcastPlayersList(
+  final IList<BroadcastPlayerWithOverallResult> players,
+  final BroadcastTournament tournament,
+) extends ConsumerStatefulWidget {
   @override
   ConsumerState<BroadcastPlayersList> createState() => _BroadcastPlayersListState();
 }
 
-class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
+class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
   late IList<BroadcastPlayerWithOverallResult> players;
   late _SortingTypes currentSort;
   bool reverse = false;
@@ -141,9 +140,10 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
 
   void sort() {
     final compare = switch (currentSort) {
-      _SortingTypes.elo =>
-        (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
-            bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
+      _SortingTypes.elo => (
+        BroadcastPlayerWithOverallResult p1,
+        BroadcastPlayerWithOverallResult p2,
+      ) => bothCompare((p) => p.player.rating, (p) => p.score)(p2, p1),
       _SortingTypes.score =>
         (BroadcastPlayerWithOverallResult p1, BroadcastPlayerWithOverallResult p2) =>
             p1.rank != null && p2.rank != null
@@ -263,13 +263,11 @@ class _BroadcastPlayersListState extends ConsumerState<BroadcastPlayersList> {
   }
 }
 
-class _TableTitleCell extends StatelessWidget {
-  const _TableTitleCell({required this.title, required this.onTap, this.sortIcon});
-
-  final Widget title;
-  final void Function() onTap;
-  final IconData? sortIcon;
-
+class const _TableTitleCell({
+  required final Widget title,
+  required final void Function() onTap,
+  final IconData? sortIcon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -304,16 +302,11 @@ class _TableTitleCell extends StatelessWidget {
   }
 }
 
-class BroadcastPlayerRow extends StatelessWidget {
-  const BroadcastPlayerRow({
-    required this.playerWithOverallResult,
-    required this.tournament,
-    required this.index,
-  });
-
-  final BroadcastPlayerWithOverallResult playerWithOverallResult;
-  final BroadcastTournament tournament;
-  final int index;
+class const BroadcastPlayerRow({
+  required final BroadcastPlayerWithOverallResult playerWithOverallResult,
+  required final BroadcastTournament tournament,
+  required final int index,
+}) extends StatelessWidget {
   void _showTieBreaksBottomSheet(BuildContext context) {
     final tieBreaks = playerWithOverallResult.tieBreaks;
     if (tieBreaks == null || tieBreaks.isEmpty) return;
@@ -420,8 +413,7 @@ class BroadcastPlayerRow extends StatelessWidget {
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null)
-            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+          if (federation != null) Image.asset(federation.flagAsset, height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,

@@ -11,10 +11,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'ongoing_game.freezed.dart';
 
 @freezed
-sealed class OngoingGame with _$OngoingGame {
-  const OngoingGame._();
-
-  factory OngoingGame({
+sealed class const OngoingGame._() with _$OngoingGame {
+  factory({
     required GameId id,
     required GameFullId fullId,
     required Side orientation,
@@ -32,7 +30,7 @@ sealed class OngoingGame with _$OngoingGame {
 
   bool get isRealTime => speed != Speed.correspondence;
 
-  factory OngoingGame.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return _ongoingGameFromPick(pick(json).required());
   }
 }

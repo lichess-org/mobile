@@ -4,31 +4,23 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:multistockfish/multistockfish.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'model/engine/fake_stockfish.dart';
 
 /// The binding instance used in tests.
 TestLichessBinding get testBinding => TestLichessBinding.instance;
 
 /// Lichess binding for testing.
-class TestLichessBinding extends LichessBinding {
-  TestLichessBinding() {
-    // Logger.root.level = Level.ALL;
-    // Logger.root.onRecord.listen((record) {
-    //   // ignore: avoid_print
-    //   print(
-    //     '${DateFormat('H:m:s.S').format(record.time)} [${record.level}] ${record.loggerName}: ${record.message}',
-    //   );
-    // });
-  }
-
+class TestLichessBinding() extends LichessBinding {
   /// Initialize the binding if necessary, and ensure it is a [TestLichessBinding].
   ///
   /// If there is an existing binding but it is not a [TestLichessBinding],
   /// this method throws an error.
-  factory TestLichessBinding.ensureInitialized() {
+  ///
+  /// Also initializes the Flutter binding, which the app widely assumes to exist: an
+  /// [AppLifecycleListener] alone — the connectivity notifier and the socket pool both build one —
+  /// throws without it.
+  factory ensureInitialized() {
+    TestWidgetsFlutterBinding.ensureInitialized();
     if (_instance == null) {
       TestLichessBinding();
     }
@@ -122,18 +114,9 @@ class TestLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       firebaseMessaging.onMessageOpenedApp.stream;
-
-  Stockfish _stockfish = FakeStockfish();
-
-  @override
-  Stockfish get stockfish => _stockfish;
-
-  set stockfish(Stockfish instance) {
-    _stockfish = instance;
-  }
 }
 
-class FakeSharedPreferences implements SharedPreferencesWithCache {
+class FakeSharedPreferences() implements SharedPreferencesWithCache {
   final Map<String, dynamic> _values = {};
 
   @override
@@ -231,7 +214,7 @@ typedef FirebaseMessagingRequestPermissionCall = ({
   bool sound,
 });
 
-class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
+class FakeFirebaseCrashlytics() extends Fake implements FirebaseCrashlytics {
   /// Errors passed to [recordError], oldest first.
   final List<({Object? exception, StackTrace? stack, Object? reason, bool fatal})> recordedErrors =
       [];
@@ -257,7 +240,7 @@ class FakeFirebaseCrashlytics extends Fake implements FirebaseCrashlytics {
   }
 }
 
-class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
+class FakeFirebaseMessaging() extends Fake implements FirebaseMessaging {
   /// Whether [requestPermission] will grant permission.
   bool _willGrantPermission = true;
 
@@ -401,14 +384,11 @@ class FakeFirebaseMessaging extends Fake implements FirebaseMessaging {
 ///
 /// Use it to check that code awaiting a preference write actually observes the
 /// new value. Set [writeDelay] to exaggerate the latency.
-class SlowFakeSharedPreferences extends FakeSharedPreferences {
-  SlowFakeSharedPreferences({this.writeDelay = Duration.zero});
-
-  final Duration writeDelay;
-
+class SlowFakeSharedPreferences({final Duration writeDelay = Duration.zero})
+    extends FakeSharedPreferences {
   @override
   Future<bool> setString(String key, String value) async {
     await Future<void>.delayed(writeDelay);
-    return super.setString(key, value);
+    return await super.setString(key, value);
   }
 }

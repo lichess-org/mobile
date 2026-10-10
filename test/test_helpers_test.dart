@@ -70,13 +70,11 @@ void main() {
   });
 }
 
-class _ControlsFixture extends StatelessWidget {
-  const _ControlsFixture({required this.top, required this.covered, required this.enabled});
-
-  final double top;
-  final bool covered;
-  final bool enabled;
-
+class const _ControlsFixture({
+  required final double top,
+  required final bool covered,
+  required final bool enabled,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonRect = Rect.fromLTWH(20.0, top, 80.0, 48.0);

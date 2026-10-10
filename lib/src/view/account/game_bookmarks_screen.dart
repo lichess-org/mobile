@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -12,11 +12,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GameBookmarksScreen extends ConsumerWidget {
-  const GameBookmarksScreen({required this.nbBookmarks, super.key});
-
-  final int nbBookmarks;
-
+class const GameBookmarksScreen({required final int nbBookmarks, super.key})
+    extends ConsumerWidget {
   static Route<dynamic> buildRoute({required int nbBookmarks}) {
     return buildScreenRoute(screen: GameBookmarksScreen(nbBookmarks: nbBookmarks));
   }
@@ -30,14 +27,12 @@ class GameBookmarksScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
 
   @override

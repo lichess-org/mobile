@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -56,23 +56,17 @@ void openGameScreen(
   }
 }
 
-class GameBookmarkContextMenuAction extends StatefulWidget {
-  const GameBookmarkContextMenuAction({
-    required this.id,
-    required this.bookmarked,
-    required this.onToggleBookmark,
-    super.key,
-  });
-
-  final GameId id;
-  final bool bookmarked;
-  final Future<void> Function() onToggleBookmark;
-
+class const GameBookmarkContextMenuAction({
+  required final GameId id,
+  required final bool bookmarked,
+  required final Future<void> Function() onToggleBookmark,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<GameBookmarkContextMenuAction> createState() => _GameBookmarkContextMenuActionState();
 }
 
-class _GameBookmarkContextMenuActionState extends State<GameBookmarkContextMenuAction> {
+class _GameBookmarkContextMenuActionState() extends State<GameBookmarkContextMenuAction> {
   Future<void>? _pendingBookmarkAction;
   late bool _bookmarked;
 

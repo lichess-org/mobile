@@ -7,20 +7,13 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// Each variation is shown as a button with the move SAN, and if annotations are enabled, the move
 /// annotation is also shown (e.g. "!" or "?")
-class VariationsBar extends StatelessWidget {
-  const VariationsBar({
-    super.key,
-    required this.currentNode,
-    required this.currentPath,
-    required this.showAnnotations,
-    required this.onJump,
-  });
-
-  final ViewNode currentNode;
-  final UciPath currentPath;
-  final bool showAnnotations;
-  final void Function(UciPath) onJump;
-
+class const VariationsBar({
+  super.key,
+  required final ViewNode currentNode,
+  required final UciPath currentPath,
+  required final bool showAnnotations,
+  required final void Function(UciPath) onJump,
+}) extends StatelessWidget {
   static const maxVarSize = 55;
 
   @override

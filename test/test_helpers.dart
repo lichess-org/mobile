@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io' as io;
 import 'dart:math';
 
 import 'package:chessground/chessground.dart';
@@ -84,12 +86,46 @@ void expectCompactBoardLayout(
   expect(tester.getRect(find.byType(SolidColorChessboardBackground)), board);
 }
 
-/// Preloads pieces before building a game for opt-in visual captures.
+Future<void>? _layoutGoldenFonts;
+
+Future<void> _loadLayoutGoldenFonts() async {
+  final manifest = (jsonDecode(await rootBundle.loadString('FontManifest.json')) as List<dynamic>)
+      .cast<Map<String, dynamic>>();
+  for (final entry in manifest) {
+    final loader = FontLoader(entry['family'] as String);
+    for (final font in (entry['fonts'] as List<dynamic>).cast<Map<String, dynamic>>()) {
+      loader.addFont(rootBundle.load(font['asset'] as String));
+    }
+    await loader.load();
+  }
+
+  final flutterRoot = io.Platform.environment['FLUTTER_ROOT'];
+  if (flutterRoot == null) {
+    throw StateError('Run layout renders with flutter test so the SDK fonts can be located.');
+  }
+  final fonts = await Future.wait([
+    for (final weight in ['Regular', 'Medium', 'Bold', 'Italic'])
+      io.File('$flutterRoot/bin/cache/artifacts/material_fonts/Roboto-$weight.ttf')
+          .readAsBytes()
+          .then(ByteData.sublistView),
+  ]);
+  // Use the SDK's Roboto consistently; iOS variants are not native-font screenshots.
+  for (final family in ['Ahem', 'Roboto', 'CupertinoSystemText', 'CupertinoSystemDisplay']) {
+    final loader = FontLoader(family);
+    for (final font in fonts) {
+      loader.addFont(Future.value(font));
+    }
+    await loader.load();
+  }
+}
+
+/// Preloads fonts and pieces before building a game for opt-in visual captures.
 Future<void> prepareLayoutGolden(WidgetTester tester) async {
   if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
-    await tester.runAsync(
-      () => ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0),
-    );
+    await tester.runAsync(() async {
+      await (_layoutGoldenFonts ??= _loadLayoutGoldenFonts());
+      await ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0);
+    });
   }
 }
 
@@ -105,12 +141,8 @@ Future<void> expectLayoutGolden(Finder screen, String path) async {
 }
 
 /// Mocks a surface with a given size.
-class TestSurface extends StatelessWidget {
-  const TestSurface({required this.child, required this.size, super.key});
-
-  final Size size;
-  final Widget child;
-
+class const TestSurface({required final Widget child, required final Size size, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -204,6 +236,11 @@ bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
 /// Returns the valid moves set currently highlighted on the interactive chessboard.
 Set<Square> getBoardValidMoves(WidgetTester tester) {
   return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
+}
+
+/// Returns the square of the currently selected piece, or null if no piece is selected.
+Square? getBoardSelectedSquare(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.selected;
 }
 
 /// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.

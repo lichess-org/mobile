@@ -22,11 +22,9 @@ final tournamentControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'TournamentControllerProvider',
     );
 
-class TournamentController extends AsyncNotifier<TournamentState> with ChatMixin<TournamentState> {
-  TournamentController(this.id);
-
-  final TournamentId id;
-
+class TournamentController(final TournamentId id)
+    extends AsyncNotifier<TournamentState>
+    with ChatMixin<TournamentState> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   SocketClient? _socketClient;
@@ -150,6 +148,10 @@ class TournamentController extends AsyncNotifier<TournamentState> with ChatMixin
         .read(tournamentRepositoryProvider)
         .loadPage(state.requireValue.tournament, page);
 
+    if (!state.hasValue) {
+      return;
+    }
+
     state = AsyncValue.data(state.requireValue.copyWith(tournament: tournament));
   }
 
@@ -163,6 +165,10 @@ class TournamentController extends AsyncNotifier<TournamentState> with ChatMixin
     final tournament = await ref
         .read(tournamentRepositoryProvider)
         .reload(state.requireValue.tournament);
+
+    if (!state.hasValue) {
+      return;
+    }
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();
@@ -257,11 +263,8 @@ class TournamentController extends AsyncNotifier<TournamentState> with ChatMixin
 }
 
 @freezed
-sealed class TournamentState with _$TournamentState, ChatMixinState {
-  const TournamentState._();
-
-  const factory TournamentState({required Tournament tournament, ChatState? chatState}) =
-      _TournamentState;
+sealed class const TournamentState._() with _$TournamentState, ChatMixinState {
+  const factory({required Tournament tournament, ChatState? chatState}) = _TournamentState;
 
   String get name => tournament.meta.fullName;
   TournamentId get id => tournament.id;

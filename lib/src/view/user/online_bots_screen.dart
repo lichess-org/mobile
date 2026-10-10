@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,9 +19,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OnlineBotsScreen extends StatelessWidget {
-  const OnlineBotsScreen();
-
+class const OnlineBotsScreen() extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OnlineBotsScreen());
   }
@@ -29,16 +28,13 @@ class OnlineBotsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.onlineBots)),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
 
-class OnlineBotsWidget extends ConsumerWidget {
-  const OnlineBotsWidget({required this.onlineBots, super.key});
-
-  final AsyncValue<IList<User>> onlineBots;
-
+class const OnlineBotsWidget({required final AsyncValue<IList<User>> onlineBots, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (onlineBots) {
@@ -81,7 +77,7 @@ class OnlineBotsWidget extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onlineBots = ref.watch(onlineBotsProvider);
@@ -167,11 +163,7 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
   }
 }
 
-class _BotRatings extends StatelessWidget {
-  const _BotRatings({required this.bot});
-
-  final User bot;
-
+class const _BotRatings({required final User bot}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RatingPrefAware(

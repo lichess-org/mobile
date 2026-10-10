@@ -1,0 +1,216 @@
+import 'dart:math' show max;
+
+import 'package:async/async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:logging/logging.dart';
+import 'package:result_extensions/result_extensions.dart';
+
+part 'puzzle_service.freezed.dart';
+
+/// A provider for [PuzzleService].
+final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
+  final nbOfflinePuzzles = ref.watch(
+    puzzlePreferencesProvider.select((prefs) => prefs.nbOfflinePuzzles),
+  );
+  return ref.read(puzzleServiceFactoryProvider)(queueLength: nbOfflinePuzzles);
+}, name: 'PuzzleServiceProvider');
+
+/// A provider for [PuzzleServiceFactory].
+final puzzleServiceFactoryProvider = Provider<PuzzleServiceFactory>((Ref ref) {
+  return PuzzleServiceFactory(ref);
+}, name: 'PuzzleServiceFactoryProvider');
+
+class PuzzleServiceFactory(final Ref _ref) {
+  Future<PuzzleService> call({required int queueLength}) async {
+    return PuzzleService(
+      _ref,
+      batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
+      puzzleStorage: await _ref.read(puzzleStorageProvider.future),
+      queueLength: queueLength,
+    );
+  }
+}
+
+@freezed
+sealed class PuzzleContext with _$PuzzleContext {
+  const factory({
+    required Puzzle puzzle,
+    required PuzzleAngle angle,
+    required UserId? userId,
+
+    /// Current Glicko rating of the user if available.
+    PuzzleGlicko? glicko,
+
+    /// List of solved puzzle results if available.
+    IList<PuzzleRound>? rounds,
+
+    /// If true, the result won't be recorded on the server for this puzzle.
+    bool? casual,
+    bool? isPuzzleStreak,
+
+    /// Remaining puzzle IDs to replay after the current one.
+    IList<PuzzleId>? replayRemaining,
+  }) = _PuzzleContext;
+}
+
+class PuzzleService(
+  final Ref _ref, {
+  required final PuzzleBatchStorage batchStorage,
+  required final PuzzleStorage puzzleStorage,
+  required final int queueLength,
+}) {
+  final Logger _log = Logger('PuzzleService');
+
+  /// Loads the next puzzle from database and the glicko rating if available.
+  ///
+  /// Will sync with server if necessary.
+  /// This future should never fail on network errors.
+  Future<PuzzleContext?> nextPuzzle({
+    required UserId? userId,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
+  }) {
+    return Result.release(
+      _syncAndLoadData(userId, angle).map(
+        (data) => data.$1 != null && data.$1!.unsolved.isNotEmpty
+            ? PuzzleContext(
+                puzzle: data.$1!.unsolved[0],
+                angle: angle,
+                userId: userId,
+                glicko: data.$2,
+                rounds: data.$3,
+              )
+            : null,
+      ),
+    );
+  }
+
+  /// Update puzzle queue with the solved puzzle, sync with server and returns
+  /// the next puzzle with the glicko rating if available.
+  ///
+  /// This future should never fail on network errors.
+  Future<PuzzleContext?> solve({
+    required UserId? userId,
+    required PuzzleSolution solution,
+    required Puzzle puzzle,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
+  }) async {
+    puzzleStorage.save(puzzle: puzzle);
+    const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
+    final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
+    await batchStorage.save(
+      userId: userId,
+      angle: angle,
+      data: PuzzleBatch(
+        solved: IList([...data.solved, solution]),
+        unsolved: data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
+      ),
+    );
+    return await nextPuzzle(userId: userId, angle: angle);
+  }
+
+  /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
+  Future<PuzzleContext?> resetBatch({
+    required UserId? userId,
+    PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
+  }) async {
+    await batchStorage.delete(userId: userId, angle: angle);
+    return await nextPuzzle(userId: userId, angle: angle);
+  }
+
+  /// Deletes the puzzle batch of [angle] from the local storage.
+  Future<void> deleteBatch({required UserId? userId, required PuzzleAngle angle}) async {
+    await batchStorage.delete(userId: userId, angle: angle);
+  }
+
+  /// Synchronize offline puzzle queue with server and gets latest data.
+  ///
+  /// This task will fetch missing puzzles so the queue length is always equal to
+  /// `queueLength`.
+  /// It will call [PuzzleRepository.solveBatch] if necessary.
+  ///
+  /// This method should never fail, as if the network is down it will fallback
+  /// to the local database.
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)> _syncAndLoadData(
+    UserId? userId,
+    PuzzleAngle angle,
+  ) async {
+    final data = await batchStorage.fetch(userId: userId, angle: angle);
+
+    final unsolved = data?.unsolved ?? IList(const []);
+    final solved = data?.solved ?? IList(const []);
+
+    final deficit = max(0, queueLength - unsolved.length);
+
+    // anonymous users can't solve puzzles, so their sync only ever downloads
+    final isSolving = solved.isNotEmpty && userId != null;
+
+    // Back off while the server is rate-limiting solves: keep serving from the
+    // local unsolved queue instead of firing another solveBatch that will 429
+    // again. This also stops the queue from refilling (solveBatch is the only
+    // refill path once there are pending solves), so the solved backlog can't
+    // grow past the current unsolved queue.
+    if (isSolving && _ref.read(puzzleSolveLimiterProvider.notifier).isLimited) {
+      return Result.value((data, null, null));
+    }
+
+    if (deficit > 0 || solved.isNotEmpty) {
+      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
+
+      final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
+
+      final batchResponse = _ref.withClient(
+        (client) => Result.capture(
+          isSolving
+              ? PuzzleRepository(client)
+                    .solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+        ),
+      );
+
+      return await batchResponse
+          .fold(
+            (value) => Result.value((
+              PuzzleBatch(
+                solved: IList(const []),
+                unsolved: IList([...unsolved, ...value.puzzles]),
+              ),
+              value.glicko,
+              value.rounds,
+              true, // should save the batch
+            )),
+
+            // we don't need to save the batch if the request failed
+            (error, _) {
+              // Arm the back-off when the server rejects a solve flush with 429,
+              // so later solves stop hammering it and the UI can warn the user.
+              if (isSolving && error is ServerException && error.statusCode == 429) {
+                _ref.read(puzzleSolveLimiterProvider.notifier).markLimited(solved.length);
+              }
+              return Result.value((data, null, null, false));
+            },
+          )
+          .flatMap((tuple) async {
+            final (newBatch, glicko, rounds, shouldSave) = tuple;
+            if (newBatch != null && shouldSave) {
+              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
+            }
+            return Result.value((newBatch, glicko, rounds));
+          });
+    }
+
+    return Result.value((data, null, null));
+  }
+}

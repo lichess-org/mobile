@@ -18,12 +18,7 @@ final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
   return BroadcastRepository(client, aggregator);
 }, name: 'BroadcastRepositoryProvider');
 
-class BroadcastRepository {
-  BroadcastRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class BroadcastRepository(final LichessClient client, final Aggregator aggregator) {
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
@@ -298,7 +293,7 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     name: pick('name').asStringOrNull(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    federation: pick('fed').asStringOrNull(),
+    federation: pick('fed').asFederationIdOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
     team: pick('team').asStringOrNull(),
   );
@@ -382,9 +377,9 @@ StatByFideTC pickStats(RequiredPick pick) {
   final rapid = pick('rapid').asIntOrNull();
   final blitz = pick('blitz').asIntOrNull();
   return {
-    if (standard != null) BroadcastFideTC.standard: standard,
-    if (rapid != null) BroadcastFideTC.rapid: rapid,
-    if (blitz != null) BroadcastFideTC.blitz: blitz,
+    BroadcastFideTC.standard: ?standard,
+    BroadcastFideTC.rapid: ?rapid,
+    BroadcastFideTC.blitz: ?blitz,
   }.lock;
 }
 

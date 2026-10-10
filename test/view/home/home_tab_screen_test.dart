@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
-import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
@@ -17,6 +12,7 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/home/games_carousel.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -29,7 +25,6 @@ import '../../mock_server_responses.dart';
 import '../../model/auth/auth_repository_test.dart';
 import '../../model/auth/fake_auth_storage.dart';
 import '../../model/challenge/challenge_repository_test.dart';
-import '../../model/engine/fake_nnue_service.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
 import '../../test_helpers.dart';
@@ -239,6 +234,71 @@ void main() {
       expect(find.text('1 game in play'), findsOneWidget);
       expect(find.byType(OngoingGameCarouselItem), findsOneWidget);
     });
+
+    group('home widgets edit mode', () {
+      testWidgets('featured tournaments checkbox is hidden when there are none to show', (
+        tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse('{"featured":[]}', 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+      });
+
+      testWidgets('featured tournaments checkbox is shown when there are some to show', (
+        tester,
+      ) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/tournament/featured') {
+            return mockResponse(mockFeaturedTournamentsResponse, 200);
+          }
+          return mockResponse('', 200);
+        });
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+
+        // wait for connectivity
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Customize'));
+        await tester.pumpAndSettle(); // wait for settings screen to open
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
+        expect(find.byType(FeaturedTournamentsWidget), findsOneWidget);
+        expect(find.text('Open tournaments'), findsOneWidget);
+      });
+    });
   });
 
   group('Home offline', () {
@@ -251,33 +311,6 @@ void main() {
       await tester.pump();
 
       expect(find.byType(OfflineBanner), findsOneWidget);
-    });
-
-    testWidgets('shows Play button', (tester) async {
-      final app = await makeOfflineTestProviderScope(tester, child: const Application());
-
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(find.byType(FloatingActionButton), findsOneWidget);
-    });
-
-    testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
-      await tester.pumpWidget(app);
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('libre, no-ads, open source chess server.', findRichText: true),
-        findsOneWidget,
-      );
-      expect(find.text('Sign in'), findsOneWidget);
-      expect(find.text('About Lichess...'), findsOneWidget);
     });
 
     testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
@@ -355,11 +388,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via button', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -391,11 +420,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via going to settings', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -434,90 +459,8 @@ void main() {
         expect(find.text(customizeTip), findsNothing);
       });
     });
-
-    group('NNUE files missing tip', () {
-      const nnueFilesMissingTip =
-          'New Stockfish version available! Go to the settings to download the updated NNUE files.';
-      testWidgets('Shown if engine pref is latest sf and NNUE files are missing', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
-            ),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sfLatest)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsOneWidget);
-      });
-
-      testWidgets('Not shown if nnue files are available', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(FakeNnueService()),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sfLatest)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsNothing);
-      });
-
-      testWidgets('Not shown if engine pref is sf16', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          overrides: {
-            nnueServiceProvider: nnueServiceProvider.overrideWithValue(
-              FakeNnueServiceUnavailable(),
-            ),
-          },
-          authUser: fakeAuthUser,
-          defaultPreferences: {
-            PrefCategory.engineEvaluation.storageKey: jsonEncode(
-              EngineEvaluationPrefState.defaults
-                  .copyWith(enginePref: ChessEnginePref.sf16)
-                  .toJson(),
-            ),
-          },
-          child: const Application(),
-        );
-
-        await tester.pumpWidget(app);
-
-        // Wait for hasOutdatedNNUEFiles() future to complete
-        await tester.pumpAndSettle();
-
-        expect(find.text(nnueFilesMissingTip), findsNothing);
-      });
-    });
   });
+
   group('Server offline', () {
     testWidgets('offline-capable widgets are kept, server-backed ones are replaced', (
       tester,
@@ -553,24 +496,6 @@ void main() {
       // ...but the locally stored games are still listed below it.
       expect(find.text('Recent games'), findsOneWidget);
       expect(find.byType(GameListTile), findsNWidgets(3));
-    });
-
-    testWidgets('outage page shown and Play button still accessible', (tester) async {
-      final app = await makeTestProviderScope(
-        tester,
-        child: const Application(),
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => serverDownClient());
-          }),
-        },
-      );
-
-      await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ServerOutageDisplay), findsOneWidget);
-      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
     testWidgets('a 502 shows the outage message', (tester) async {

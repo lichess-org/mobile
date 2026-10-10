@@ -61,16 +61,6 @@ void main() {
       expect(updated.customButtonEnabled, isFalse);
     });
 
-    test('min-1 validation: at least one time control or custom must remain', () {
-      final allDisabledCount = TimeIncrement.matrixPresets.length;
-
-      // All TC disabled + custom disabled = 0 enabled → invalid
-      expect(TimeIncrement.matrixPresets.length - allDisabledCount, 0);
-
-      // All TC disabled + custom enabled = 1 enabled → valid
-      expect(TimeIncrement.matrixPresets.length - allDisabledCount + 1, 1);
-    });
-
     test('removing a single control from disabled list re-enables it', () {
       final prefs = HomePrefs(
         disabledWidgets: const IListConst([]),

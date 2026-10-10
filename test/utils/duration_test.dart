@@ -3,7 +3,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockAppLocalizations extends Mock implements AppLocalizations {}
+class MockAppLocalizations() extends Mock implements AppLocalizations;
 
 void main() {
   final mockAppLocalizations = MockAppLocalizations();
