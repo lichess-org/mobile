@@ -35,11 +35,10 @@ const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings
 // Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
   'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'widget_daily_puzzle_title' },
-  'Community': { arbKey: 'ublogCommunity', fallback: 'Community', androidName: 'widget_community_title' },
+  'Community': { arbKey: 'ublogCommunity', fallback: 'Community'},
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
   'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'widget_broadcast_title' },
-  
 };
 
 
@@ -92,85 +91,79 @@ console.log(`  Strings: ${Object.keys(strings).length}`);
 console.log(`  Locales: ${arbFiles.length}`);
 
 
-const UNTRANSLATED_ANDROID_STRINGS = {                              
-    widget_broadcast_description: 'Shows ongoing and upcoming chess broadcasts.',                                                       
-    widget_live: 'LIVE',                                              
-    widget_no_broadcasts: 'No active broadcasts',                     
-    widget_daily_puzzle_description: 'Shows daily puzzle',            
-    widget_no_dailyPuzzle: 'No New Puzzles',                          
-    widget_daily_puzzle_error: "Couldn't load puzzle",                
+const UNTRANSLATED_ANDROID_STRINGS = {
+  widget_broadcast_description: 'Shows ongoing and upcoming chess broadcasts.',
+  widget_live: 'LIVE',
+  widget_no_broadcasts: 'No active broadcasts',
+  widget_daily_puzzle_description: 'Shows daily puzzle',
+  widget_no_dailyPuzzle: 'No New Puzzles',
+  widget_daily_puzzle_error: "Couldn't load puzzle",
 };
 
-const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src',    
-  'main', 'res');                                                     
-                                                                      
-function xmlEscape(s) {                                             
-  return s.replace(/&/g, '&amp;').replace(/</g,'&lt;')
-  .replace(/>/g, '&gt;')                                       
-  .replace(/"/g, '\\"').replace(/'/g, "\\'");                     
-}
+const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');
 
+function xmlEscape(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '\\"').replace(/'/g, "\\'");
+}
 
 function arbToAndroidValue(value, param) {
   return param ? value.replace(/\{param\}/g, '%1$s') : value;
 }
 
-const androidLocaleGroups = new Map(); 
+const androidLocaleGroups = new Map();
 
-for (const { file } of arbFiles) {                                  
+for (const { file } of arbFiles) {
   const arbLocale = file.replace(/^app_/, '').replace(/\.arb$/, '');
-  if (arbLocale === 'en') continue;                                         
-  const qualifier = `b+${arbLocale.replace(/_/g, '+')}`;                                      
-  const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));                                                           
-                                                                      
-  for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {                                      
-    if (!androidName) continue;                                     
-    const raw = arb[arbKey];                                        
-    if (raw == null || raw === fallback) continue;                                           
-    const value = arbToAndroidValue(raw, param);                    
-    if (!androidLocaleGroups.has(qualifier))
-      androidLocaleGroups.set(qualifier, {});
-    androidLocaleGroups.get(qualifier)[androidName] = value;        
-  }                                                                 
-}        
+  if (arbLocale === 'en') continue;
+  const qualifier = `b+${arbLocale.replace(/_/g, '+')}`;
+  const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));
 
-for (const [qualifier, entries] of androidLocaleGroups) {           
-  const dir = path.join(ANDROID_RES_DIR, `values-${qualifier}`);    
-  fs.mkdirSync(dir, { recursive: true });                           
-  const body = Object.entries(entries).map(([name, value]) => 
-    `    <string name="${name}">${xmlEscape(value)}</string>`)                       
-    .join('\n');                                                    
-  fs.writeFileSync(                                                 
-    path.join(dir, 'strings.xml'),                                  
-    `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n${body}\n</resources>\n`           
-  );                                                                
-}  
+  for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
+    if (!androidName) continue;
+    const raw = arb[arbKey];
+    if (raw == null || raw === fallback) continue;
+    const value = arbToAndroidValue(raw, param);
+    if (!androidLocaleGroups.has(qualifier)) androidLocaleGroups.set(qualifier, {});
+    androidLocaleGroups.get(qualifier)[androidName] = value;
+  }
+}
 
+for (const [qualifier, entries] of androidLocaleGroups) {
+  const dir = path.join(ANDROID_RES_DIR, `values-${qualifier}`);
+  fs.mkdirSync(dir, { recursive: true });
+  const body = Object.entries(entries)
+    .map(([name, value]) => `    <string name="${name}">${xmlEscape(value)}</string>`)
+    .join('\n');
+  fs.writeFileSync(
+    path.join(dir, 'strings.xml'),
+    `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n${body}\n</resources>\n`
+  );
+}
 console.log(`  Android locales: ${androidLocaleGroups.size}`);
 
-                                                
-const DEFAULT_STRINGS_FILE = path.join(ANDROID_RES_DIR, 'values', 'strings.xml');                                                     
-const enArb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, 'app_en.arb'), 'utf8'));                                            
-const defaultEntries = [];                                          
-                                                                      
-for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {                                      
-  if (!androidName) continue;                                       
-  let value = enArb[arbKey] ?? fallback;                            
-  if (param) value = value.replace(/\{param\}/g, '%1$s');           
-  defaultEntries.push(`    <string name="${androidName}">${xmlEscape(value)}</string>`);               
-} 
-                                                               
-                                                                      
-for (const [name, value] of Object.entries(UNTRANSLATED_ANDROID_STRINGS)) {                     
-  defaultEntries.push(`    <string name="${name}">${xmlEscape(value)}</string>`);                      
-}                                                                   
-                                                                      
-fs.writeFileSync(                                                   
-  DEFAULT_STRINGS_FILE,                                             
-  '<?xml version="1.0" encoding="utf-8"?>\n' +                      
-  '<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->\n' + '<resources>\n' +                                                 
-  defaultEntries.join('\n') + '\n' +                                
-  '</resources>\n'                                                  
-);                                                                  
 
-console.log(`  Default strings: ${defaultEntries.length}`);  
+const DEFAULT_STRINGS_FILE = path.join(ANDROID_RES_DIR, 'values', 'strings.xml');
+const enArb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, 'app_en.arb'), 'utf8'));
+const defaultEntries = [];
+
+for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
+  if (!androidName) continue;
+  let value = enArb[arbKey] ?? fallback;
+  if (param) value = value.replace(/\{param\}/g, '%1$s');
+  defaultEntries.push(`    <string name="${androidName}">${xmlEscape(value)}</string>`);
+}
+
+for (const [name, value] of Object.entries(UNTRANSLATED_ANDROID_STRINGS)) {
+  defaultEntries.push(`    <string name="${name}">${xmlEscape(value)}</string>`);
+}
+
+fs.writeFileSync(
+  DEFAULT_STRINGS_FILE,
+  '<?xml version="1.0" encoding="utf-8"?>\n' +
+  '<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->\n' +
+  '<resources>\n' +
+  defaultEntries.join('\n') + '\n' +
+  '</resources>\n'
+);
+console.log(`  Default strings: ${defaultEntries.length}`);
