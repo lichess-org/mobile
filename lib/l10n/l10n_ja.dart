@@ -30,6 +30,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'AMOLED用ブラック';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'ホーム';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

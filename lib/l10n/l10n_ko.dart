@@ -30,6 +30,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '수 무르기와 힌트 허용';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'AMOLED 블랙';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileHomeTab => '홈';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

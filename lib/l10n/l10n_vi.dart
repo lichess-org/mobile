@@ -30,6 +30,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Trang chủ';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

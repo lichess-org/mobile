@@ -71,7 +71,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('App Logs'),
+        title: Text(context.l10n.mobileAppLogs),
         actions: [
           if (logs.isNotEmpty)
             IconButton(

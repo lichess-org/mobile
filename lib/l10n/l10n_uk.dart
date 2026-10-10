@@ -30,6 +30,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Темна AMOLED';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Головна';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

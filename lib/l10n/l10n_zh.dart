@@ -30,6 +30,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '允许悔棋和提示';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled 纯黑';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileHomeTab => '首页';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

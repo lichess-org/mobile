@@ -30,6 +30,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permetre desfer els moviments i les pistes';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Negre amoled';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Inici';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

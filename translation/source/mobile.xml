@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Add to study</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All games</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Allow takebacks and hints</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">App Logs</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled black</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Are you sure you want to download the NNUE file (%s)?</string>
@@ -46,6 +47,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Good move, but there's better</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hello</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the HTTP request logs stored on the device.">HTTP logs</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">If an account matches %1$s, a %2$s character code was sent to it. Check your inbox and enter the code below.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">This code is invalid or has expired.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>

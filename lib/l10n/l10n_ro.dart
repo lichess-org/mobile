@@ -30,6 +30,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permite datul înapoi și sugestii';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Negru Amoled';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Acasă';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

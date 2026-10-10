@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Allow takebacks and hints'**
   String get mobileAllowTakebacksAndHints;
 
+  /// No description provided for @mobileAppLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'App Logs'**
+  String get mobileAppLogs;
+
   /// No description provided for @mobileAmoledBlack.
   ///
   /// In en, this message translates to:
@@ -471,6 +477,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get mobileHomeTab;
+
+  /// No description provided for @mobileHttpLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP logs'**
+  String get mobileHttpLogs;
 
   /// No description provided for @mobileIfAccountMatchesCodeSent.
   ///

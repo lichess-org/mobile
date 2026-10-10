@@ -30,6 +30,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permitir rectificar xogadas e pistas';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Negro AMOLED';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Inicio';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

@@ -30,6 +30,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Asosiy';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

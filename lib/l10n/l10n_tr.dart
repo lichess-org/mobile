@@ -30,6 +30,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Hamleyi geri almaya ve ipuçlarına izin verir';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled siyah';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Ana sayfa';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

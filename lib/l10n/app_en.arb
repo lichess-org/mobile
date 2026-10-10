@@ -6,6 +6,7 @@
   "mobileAddToStudy": "Add to study",
   "mobileAllGames": "All games",
   "mobileAllowTakebacksAndHints": "Allow takebacks and hints",
+  "mobileAppLogs": "App Logs",
   "mobileAmoledBlack": "Amoled black",
   "mobileAreYouSure": "Are you sure?",
   "mobileAreYouSureDownloadNnue": "Are you sure you want to download the NNUE file ({param})?",
@@ -73,6 +74,7 @@
   "mobileGoodMoveButThereIsBetter": "Good move, but there's better",
   "mobileHello": "Hello",
   "mobileHomeTab": "Home",
+  "mobileHttpLogs": "HTTP logs",
   "mobileIfAccountMatchesCodeSent": "If an account matches {param1}, a {param2} character code was sent to it. Check your inbox and enter the code below.",
   "@mobileIfAccountMatchesCodeSent": {
     "placeholders": {

@@ -30,6 +30,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permettre les reprises de coups et les indices';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Noir Amoled';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Accueil';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

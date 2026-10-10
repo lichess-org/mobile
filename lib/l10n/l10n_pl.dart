@@ -30,6 +30,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Zezwalaj na cofanie ruchów i podpowiedzi';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -153,6 +156,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Start';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
