@@ -68,8 +68,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  // TODO localize
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () =>
                       ref.read(httpLogPaginatorProvider(_searchQuery).notifier).deleteAll(),
                 );

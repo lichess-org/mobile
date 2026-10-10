@@ -100,6 +100,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '무시';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => '위험 구역';
 
   @override

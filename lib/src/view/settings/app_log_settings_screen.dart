@@ -89,7 +89,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
                     ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();

@@ -100,6 +100,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Gizle';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Tehlikeli bölge';
 
   @override

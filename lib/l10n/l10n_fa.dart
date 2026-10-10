@@ -100,6 +100,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'رد کردن';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override

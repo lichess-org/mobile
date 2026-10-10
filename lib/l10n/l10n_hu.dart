@@ -100,6 +100,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Bezárás';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override

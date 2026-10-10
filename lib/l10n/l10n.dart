@@ -370,6 +370,12 @@ abstract class AppLocalizations {
   /// **'Dismiss'**
   String get mobileCustomizeHomeTipDismiss;
 
+  /// No description provided for @mobileDeleteAllLogsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to delete all logs?'**
+  String get mobileDeleteAllLogsConfirmation;
+
   /// No description provided for @mobileDangerZone.
   ///
   /// In en, this message translates to:

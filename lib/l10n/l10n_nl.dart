@@ -100,6 +100,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Gevarenzone';
 
   @override

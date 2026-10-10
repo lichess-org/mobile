@@ -42,6 +42,7 @@
   "mobileCustomizeButton": "Customize",
   "mobileCustomizeHomeTip": "Tip: You can add more widgets to the Home Screen or remove those you don't need!",
   "mobileCustomizeHomeTipDismiss": "Dismiss",
+  "mobileDeleteAllLogsConfirmation": "Do you want to delete all logs?",
   "mobileDangerZone": "Danger zone",
   "mobileDeleteYourAccount": "Delete your account",
   "mobileDisplayModeCompact": "Compact",

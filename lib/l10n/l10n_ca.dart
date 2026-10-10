@@ -100,6 +100,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Descarta';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Zona perillosa';
 
   @override
