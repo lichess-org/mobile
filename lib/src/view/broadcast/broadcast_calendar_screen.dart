@@ -89,7 +89,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                     padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Theme.of(context).dividerColor),
-                      borderRadius: BorderRadius.circular(24.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
                     child: Row(
                       children: [

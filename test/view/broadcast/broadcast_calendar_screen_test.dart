@@ -50,6 +50,19 @@ void main() {
       )) {
         expect(dropdown.isDense, isFalse);
       }
+      final pills = tester
+          .widgetList<Container>(
+            find.ancestor(
+              of: find.byType(DropdownButton<int>).first,
+              matching: find.byType(Container),
+            ),
+          )
+          .where((c) {
+            final decoration = c.decoration;
+            return decoration is BoxDecoration &&
+                decoration.borderRadius == BorderRadius.circular(5.0);
+          });
+      expect(pills, hasLength(1));
     });
 
     testWidgets('Loading state stays refreshable', variant: kPlatformVariant, (tester) async {
