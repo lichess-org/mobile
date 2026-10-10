@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_from_image.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
@@ -53,6 +54,10 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
           title: context.l10n.boardEditor,
         ),
         actions: [
+          BoardFromImageButton(
+            onPlacementRead: (placement) =>
+                ref.read(boardEditorControllerProvider(params).notifier).loadFen(placement),
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: 'FEN',
