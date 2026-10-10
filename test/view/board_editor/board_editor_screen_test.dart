@@ -13,20 +13,8 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../model/engine/fake_engine.dart';
-import '../../test_helpers.dart' show getBoardPieces;
+import '../../test_helpers.dart' show getBoardPieces, mockClipboard;
 import '../../test_provider_scope.dart';
-
-void _mockClipboard(String text) {
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-    SystemChannels.platform,
-    (methodCall) async {
-      if (methodCall.method == 'Clipboard.getData') {
-        return {'text': text};
-      }
-      return null;
-    },
-  );
-}
 
 void main() {
   group('Board Editor', () {
@@ -474,7 +462,7 @@ void main() {
       testWidgets('Pasting valid FEN loads position and closes dialog', (tester) async {
         // Spanish Opening after 1.e4 e5 2.Nf3 Nc6 3.Bb5: bishop on c4, not f1
         const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 3';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -499,7 +487,7 @@ void main() {
       testWidgets('Pasting FEN with black to move correctly sets side to play', (tester) async {
         // Same position as above but with black to move
         const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 2 3';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -519,7 +507,7 @@ void main() {
         // Start with a position that has all castling rights (default start)
         // then paste a FEN where only white king-side and black queen-side castling remain
         const fen = 'r3kbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK2R w Kq - 0 1';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -540,7 +528,7 @@ void main() {
       });
 
       testWidgets('Pasting invalid FEN closes dialog and shows snackbar', (tester) async {
-        _mockClipboard('not a valid fen');
+        mockClipboard('not a valid fen');
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -559,7 +547,7 @@ void main() {
         // Black is in check while it is White's turn, so the position is
         // illegal, but the board can still be built
         const fen = '4k3/4Q3/8/8/8/8/8/4K3 w - - 0 1';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);
@@ -583,7 +571,7 @@ void main() {
 
       testWidgets('Pasting a FEN with a missing king sets up the board', (tester) async {
         const fen = '4k3/8/8/8/8/8/8/8 w - - 0 1';
-        _mockClipboard(fen);
+        mockClipboard(fen);
 
         final app = await makeTestProviderScopeApp(tester, home: const BoardEditorScreen());
         await tester.pumpWidget(app);

@@ -7,9 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
 
 part 'practice_gamebook_controller.freezed.dart';
 

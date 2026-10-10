@@ -75,6 +75,10 @@ extension type const StudyChapterId(String value) implements StringId {
 
 extension type const FideId(int value) implements IntId;
 
+extension type const FederationId(String value) implements StringId {
+  new fromCode(String code) : this(code.toUpperCase());
+}
+
 extension IDPick on Pick {
   StringId asStringIdOrThrow() {
     final value = required().value;
@@ -268,6 +272,23 @@ extension IDPick on Pick {
     if (value == null) return null;
     try {
       return asFideIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  FederationId asFederationIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return FederationId.fromCode(value);
+    }
+    throw PickException("value $value at $debugParsingExit can't be casted to FederationId");
+  }
+
+  FederationId? asFederationIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asFederationIdOrThrow();
     } catch (_) {
       return null;
     }
