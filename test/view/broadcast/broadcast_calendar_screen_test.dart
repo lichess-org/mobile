@@ -45,6 +45,11 @@ void main() {
       expect(find.byType(BroadcastListTile), findsNWidgets(2));
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
       expect(find.byType(DropdownButtonHideUnderline), findsNWidgets(2));
+      for (final dropdown in tester.widgetList<DropdownButton<int>>(
+        find.byType(DropdownButton<int>),
+      )) {
+        expect(dropdown.isDense, isTrue);
+      }
     });
 
     testWidgets('Loading state stays refreshable', variant: kPlatformVariant, (tester) async {
@@ -132,6 +137,7 @@ void main() {
 
       expect(find.text('Cannot load broadcast calendar'), findsOneWidget);
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
+      expect(find.byIcon(Icons.refresh), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
     });
   });

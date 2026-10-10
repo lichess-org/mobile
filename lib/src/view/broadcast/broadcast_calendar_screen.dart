@@ -76,7 +76,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 8.0),
             child: Row(
               children: [
                 IconButton(
@@ -86,7 +86,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Theme.of(context).dividerColor),
                       borderRadius: BorderRadius.circular(24.0),
@@ -97,6 +97,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               value: years.contains(year) ? year : null,
+                              isDense: true,
                               isExpanded: true,
                               items: [
                                 for (final y in years)
@@ -112,7 +113,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Container(
                             width: 1.0,
-                            height: 24.0,
+                            height: 20.0,
                             color: Theme.of(context).dividerColor,
                           ),
                         ),
@@ -120,6 +121,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               value: month,
+                              isDense: true,
                               isExpanded: true,
                               items: [
                                 for (int m = 1; m <= 12; m++)
@@ -205,10 +207,11 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                             const Icon(Icons.error_outline, size: 32),
                             const SizedBox(height: 16),
                             const Text('Cannot load broadcast calendar'),
-                            TextButton(
+                            TextButton.icon(
                               onPressed: () =>
                                   ref.refresh(broadcastCalendarProvider(params).future),
-                              child: const Text('Retry'),
+                              icon: const Icon(Icons.refresh),
+                              label: const Text('Retry'),
                             ),
                           ],
                         ),
