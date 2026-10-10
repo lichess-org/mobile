@@ -279,6 +279,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePreviousPage => 'Папярэдняя';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Жадаеце скончыць гэтую серыю?';
 
   @override

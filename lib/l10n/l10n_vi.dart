@@ -279,6 +279,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trang trước';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
 
   @override
