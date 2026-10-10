@@ -206,7 +206,7 @@ class const _BroadcastWidget(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: Styles.verticalBodyPadding,
+      padding: const EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

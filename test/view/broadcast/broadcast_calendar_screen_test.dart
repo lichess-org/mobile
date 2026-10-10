@@ -48,7 +48,7 @@ void main() {
       for (final dropdown in tester.widgetList<DropdownButton<int>>(
         find.byType(DropdownButton<int>),
       )) {
-        expect(dropdown.isDense, isTrue);
+        expect(dropdown.isDense, isFalse);
       }
     });
 

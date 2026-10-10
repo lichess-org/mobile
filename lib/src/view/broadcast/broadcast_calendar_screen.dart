@@ -97,7 +97,6 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               value: years.contains(year) ? year : null,
-                              isDense: true,
                               isExpanded: true,
                               items: [
                                 for (final y in years)
@@ -121,7 +120,6 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<int>(
                               value: month,
-                              isDense: true,
                               isExpanded: true,
                               items: [
                                 for (int m = 1; m <= 12; m++)
