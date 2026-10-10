@@ -43,6 +43,19 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("prod") {
+            dimension = "environment"
+        }
+
+        create("preview") {
+            dimension = "environment"
+            applicationIdSuffix = ".preview"
+        }
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String?
