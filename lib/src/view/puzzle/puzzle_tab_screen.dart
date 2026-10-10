@@ -306,7 +306,7 @@ class const _PuzzleMenu() extends ConsumerWidget {
           _PuzzleMenuListTile(
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
-            subtitle: 'Review your past puzzle attempts.',
+            subtitle: context.l10n.mobilePuzzleHistoryDescription,
             enabled: isOnline,
             onTap: isOnline
                 ? () => Navigator.of(

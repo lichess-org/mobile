@@ -285,6 +285,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobilePreviousPage => 'Aurrekoa';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Saiakera hau amaitu nahi duzu?';
 
   @override

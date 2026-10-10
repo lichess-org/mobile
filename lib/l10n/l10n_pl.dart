@@ -285,6 +285,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePreviousPage => 'Wróć';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';
 
   @override

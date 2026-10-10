@@ -285,6 +285,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePreviousPage => 'Vorher';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
 
   @override

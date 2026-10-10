@@ -285,6 +285,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobilePreviousPage => 'پیشین';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'می‌خواهید این دور را پایان دهید؟';
 
   @override

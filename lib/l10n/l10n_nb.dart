@@ -285,6 +285,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Vil du avslutte denne runden?';
 
   @override

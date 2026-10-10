@@ -88,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Practice mode</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Magnify dragged piece</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Previous</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Review your past puzzle attempts.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Do you want to end this run?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nothing to show, please change the filters</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nothing to show. Play some runs of Puzzle Storm.</string>

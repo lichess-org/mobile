@@ -285,6 +285,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePreviousPage => '上一页';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';
 
   @override
