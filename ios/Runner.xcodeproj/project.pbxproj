@@ -19,6 +19,7 @@
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 78A3181F2AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage */; };
 		8E71ED42C124B1DC264C35B5 /* SharePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23144F22AF9BFCA0EB65C4B6 /* SharePlugin.swift */; };
+		17CFFE08A32FA7A2DC603D2B /* LiveActivityPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AFD1799D9076A152C22919C /* LiveActivityPlugin.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -73,6 +74,7 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		23144F22AF9BFCA0EB65C4B6 /* SharePlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SharePlugin.swift; sourceTree = "<group>"; };
+		2AFD1799D9076A152C22919C /* LiveActivityPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveActivityPlugin.swift; sourceTree = "<group>"; };
 		2F2A90DC2F6DF5F3008DA3C7 /* LichessWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LichessWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F2A90DD2F6DF5F3008DA3C7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		2F2A90DF2F6DF5F3008DA3C7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -106,6 +108,14 @@
 			);
 			target = 2F2A90DB2F6DF5F3008DA3C7 /* LichessWidgetsExtension */;
 		};
+		1E953CA416915866F530DF5C /* Exceptions for "LichessWidgets" folder in "Runner" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Game Live Activity/GameActivityAttributes.swift",
+				Localizable.xcstrings,
+			);
+			target = 97C146ED1CF9000F007C117D /* Runner */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -113,6 +123,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				2F2A90F02F6DF5F4008DA3C7 /* Exceptions for "LichessWidgets" folder in "LichessWidgetsExtension" target */,
+				1E953CA416915866F530DF5C /* Exceptions for "LichessWidgets" folder in "Runner" target */,
 			);
 			explicitFileTypes = {
 			};
@@ -204,6 +215,7 @@
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				23144F22AF9BFCA0EB65C4B6 /* SharePlugin.swift */,
+				2AFD1799D9076A152C22919C /* LiveActivityPlugin.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -459,6 +471,7 @@
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				8E71ED42C124B1DC264C35B5 /* SharePlugin.swift in Sources */,
+				17CFFE08A32FA7A2DC603D2B /* LiveActivityPlugin.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +618,7 @@
 				INFOPLIST_FILE = LichessWidgets/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LichessWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -651,7 +664,7 @@
 				INFOPLIST_FILE = LichessWidgets/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LichessWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -696,7 +709,7 @@
 				INFOPLIST_FILE = LichessWidgets/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = LichessWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

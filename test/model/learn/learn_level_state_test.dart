@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level_state.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 
 LearnLevel levelOf(String stageKey, int levelId) => learnStageByKey(stageKey)!.levels[levelId - 1];
 
