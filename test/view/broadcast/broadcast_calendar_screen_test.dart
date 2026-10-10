@@ -60,7 +60,7 @@ void main() {
           .where((c) {
             final decoration = c.decoration;
             return decoration is BoxDecoration &&
-                decoration.borderRadius == BorderRadius.circular(5.0);
+                decoration.borderRadius == BorderRadius.circular(28.0);
           });
       expect(pills, hasLength(1));
     });
