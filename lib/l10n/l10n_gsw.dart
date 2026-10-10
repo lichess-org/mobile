@@ -30,6 +30,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ablehne';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Startsite';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -277,6 +286,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Vorher';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';

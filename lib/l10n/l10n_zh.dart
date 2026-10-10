@@ -30,6 +30,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '允许悔棋和提示';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled 纯黑';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '取消';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => '危险操作';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileHomeTab => '首页';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -277,6 +286,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => '上一页';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';

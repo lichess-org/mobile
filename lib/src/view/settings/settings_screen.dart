@@ -151,7 +151,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.http),
-                title: const Text('HTTP logs'),
+                title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
@@ -159,7 +159,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
-                title: const Text('App Logs'),
+                title: Text(context.l10n.mobileAppLogs),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,

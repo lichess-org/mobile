@@ -30,6 +30,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App Logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Avvis';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Hjem';
+
+  @override
+  String get mobileHttpLogs => 'HTTP logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -277,6 +286,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Forrige';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Vil du avslutte denne runden?';

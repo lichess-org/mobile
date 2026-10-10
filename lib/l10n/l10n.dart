@@ -238,6 +238,12 @@ abstract class AppLocalizations {
   /// **'Allow takebacks and hints'**
   String get mobileAllowTakebacksAndHints;
 
+  /// No description provided for @mobileAppLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'App Logs'**
+  String get mobileAppLogs;
+
   /// No description provided for @mobileAmoledBlack.
   ///
   /// In en, this message translates to:
@@ -364,6 +370,12 @@ abstract class AppLocalizations {
   /// **'Dismiss'**
   String get mobileCustomizeHomeTipDismiss;
 
+  /// No description provided for @mobileDeleteAllLogsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to delete all logs?'**
+  String get mobileDeleteAllLogsConfirmation;
+
   /// No description provided for @mobileDangerZone.
   ///
   /// In en, this message translates to:
@@ -471,6 +483,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get mobileHomeTab;
+
+  /// No description provided for @mobileHttpLogs.
+  ///
+  /// In en, this message translates to:
+  /// **'HTTP logs'**
+  String get mobileHttpLogs;
 
   /// No description provided for @mobileIfAccountMatchesCodeSent.
   ///
@@ -711,6 +729,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Previous'**
   String get mobilePreviousPage;
+
+  /// No description provided for @mobilePuzzleHistoryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review your past puzzle attempts.'**
+  String get mobilePuzzleHistoryDescription;
 
   /// No description provided for @mobilePuzzleStormConfirmEndRun.
   ///
