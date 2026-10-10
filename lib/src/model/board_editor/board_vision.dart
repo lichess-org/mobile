@@ -107,22 +107,22 @@ class BoardVisionService(final Ref _ref) {
 /// The reader keeps the model in memory once it has read a first picture, until the provider is
 /// disposed: watch it for as long as more pictures may come.
 final boardReaderProvider = Provider.autoDispose<BoardReader>((Ref ref) {
-  final reader = BoardReader(ref.read(boardVisionServiceProvider).modelPath);
+  final reader = BoardReader(ref.read(boardVisionServiceProvider));
   ref.onDispose(() => unawaited(reader.close()));
   return reader;
 }, name: 'BoardReaderProvider');
 
-/// Reads the piece placement of a chessboard from a picture of it, with the model at [_modelPath].
+/// Reads the piece placement of a chessboard from a picture of it, with the model of [_service].
 ///
 /// The model is loaded on the first read, and kept until [close] is called.
-class BoardReader(final String _modelPath) {
+class BoardReader(final BoardVisionService _service) {
   Future<OrtSession>? _session;
   bool _closed = false;
 
   Future<OrtSession> _loadSession() async {
     final stopwatch = Stopwatch()..start();
     final session = await OnnxRuntime().createSession(
-      _modelPath,
+      _service.modelPath,
       options: OrtSessionOptions(intraOpNumThreads: math.min(4, Platform.numberOfProcessors)),
     );
     _logger.info('Loaded the board vision model in ${stopwatch.elapsedMilliseconds}ms');
