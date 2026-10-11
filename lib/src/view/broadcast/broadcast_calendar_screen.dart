@@ -165,6 +165,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             for (final day in value)
+<<<<<<< HEAD
                               SliverMainAxisGroup(
                                 slivers: [
                                   SliverAppBar(
@@ -187,6 +188,20 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                                         BroadcastCalendarTile(broadcast: day.broadcasts[index]),
                                   ),
                                 ],
+=======
+                              SliverToBoxAdapter(
+                                child: ListSection(
+                                  header: switch (day.date) {
+                                    null => Text(context.l10n.mobileToBeAnnounced),
+                                    final date => Text(DateFormat.yMMMMd().format(date.toUtc())),
+                                  },
+                                  hasLeading: true,
+                                  children: [
+                                    for (final broadcast in day.broadcasts)
+                                      BroadcastCalendarTile(broadcast: broadcast),
+                                  ],
+                                ),
+>>>>>>> 803bbb8a5 (Calendar day groups use TV-style list sections)
                               ),
                           ],
                         ),
