@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
@@ -139,6 +140,36 @@ void main() {
       expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
     });
 
+    testWidgets('Shows live marker for started rounds', variant: kPlatformVariant, (tester) async {
+      final liveClient = MockClient((request) {
+        if (request.url.path == '/api/broadcast/calendar/2026/10') {
+          return mockResponse(
+            liveResponse,
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          );
+        }
+        return mockResponse('', 404);
+      });
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => liveClient);
+          }),
+        },
+      );
+
+      await withClock(Clock.fixed(DateTime.utc(2026, 10, 11)), () async {
+        await tester.pumpWidget(app);
+        await tester.pump();
+      });
+
+      expect(find.byType(BroadcastCalendarTile), findsNWidgets(3));
+      expect(find.textContaining('LIVE'), findsNWidgets(2));
+    });
+
     testWidgets('Shows retry on error', variant: kPlatformVariant, (tester) async {
       final errorClient = MockClient((request) => mockResponse('', 404));
       final app = await makeTestProviderScopeApp(
@@ -173,5 +204,13 @@ const mixedResponse = '''
 [
   {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}},
   {"tour":{"id":"ccccccc1","name":"Undated Tour","slug":"undated-tour"},"round":{"id":"rrrrrrr9","name":"Round TBD","slug":"round-tbd","ongoing":false,"finished":false,"startsAfterPrevious":true}}
+]
+''';
+
+const liveResponse = '''
+[
+  {"tour":{"id":"ddddddd1","name":"Live Tour","slug":"live-tour"},"round":{"id":"rrrrrrr3","name":"Round 1","slug":"round-1","ongoing":true,"finished":false,"startsAt":1791676800000}},
+  {"tour":{"id":"eeeeeee1","name":"Started Tour","slug":"started-tour"},"round":{"id":"rrrrrrr4","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1791590400000}},
+  {"tour":{"id":"fffffff1","name":"Future Tour","slug":"future-tour"},"round":{"id":"rrrrrrr5","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1793836800000}}
 ]
 ''';
