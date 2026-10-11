@@ -165,28 +165,18 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             for (final day in value)
-                              SliverMainAxisGroup(
-                                slivers: [
-                                  SliverAppBar(
-                                    centerTitle: false,
-                                    automaticallyImplyLeading: false,
-                                    primary: false,
-                                    pinned: true,
-                                    title: switch (day.date) {
-                                      null => AppBarTitleText(context.l10n.mobileToBeAnnounced),
-                                      final date => AppBarTitleText(
-                                        DateFormat.yMMMMd().format(date.toUtc()),
-                                      ),
-                                    },
-                                  ),
-                                  SliverList.separated(
-                                    separatorBuilder: (context, index) =>
-                                        const PlatformDivider(height: 1),
-                                    itemCount: day.broadcasts.length,
-                                    itemBuilder: (context, index) =>
-                                        BroadcastCalendarTile(broadcast: day.broadcasts[index]),
-                                  ),
-                                ],
+                              SliverToBoxAdapter(
+                                child: ListSection(
+                                  header: switch (day.date) {
+                                    null => Text(context.l10n.mobileToBeAnnounced),
+                                    final date => Text(DateFormat.yMMMMd().format(date.toUtc())),
+                                  },
+                                  hasLeading: true,
+                                  children: [
+                                    for (final broadcast in day.broadcasts)
+                                      BroadcastCalendarTile(broadcast: broadcast),
+                                  ],
+                                ),
                               ),
                           ],
                         ),

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -43,6 +44,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
+      expect(find.byType(ListSection), findsNWidgets(2));
       expect(find.text('Tour A'), findsOneWidget);
       expect(find.text('Tour B'), findsOneWidget);
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
