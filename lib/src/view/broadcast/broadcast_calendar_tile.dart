@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -14,13 +15,21 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
 
   @override
   Widget build(BuildContext context) {
+    // The calendar payload has no `ongoing` flag, so a round that started and
+    // isn't finished counts as live.
+    final isLive =
+        broadcast.isLive ||
+        (broadcast.round.startsAt != null &&
+            !broadcast.isFinished &&
+            !broadcast.round.startsAt!.isAfter(clock.now()));
+
     final subtitle = broadcast.round.startsAt != null
         ? '${broadcast.round.name} · ${relativeDate(context.l10n, broadcast.round.startsAt!)}'
         : broadcast.round.name;
 
     final fallbackIcon = Icon(
       LichessIcons.radio_tower_lichess,
-      color: broadcast.isLive ? context.lichessColors.error : null,
+      color: isLive ? context.lichessColors.error : null,
     );
 
     return ListTile(
@@ -37,7 +46,22 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
             )
           : fallbackIcon,
       title: Text(broadcast.title),
-      subtitle: Text(subtitle),
+      subtitle: isLive
+          ? Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'LIVE · ',
+                    style: TextStyle(
+                      color: context.lichessColors.error,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(text: subtitle),
+                ],
+              ),
+            )
+          : Text(subtitle),
       trailing: Theme.of(context).platform == TargetPlatform.iOS
           ? const CupertinoListTileChevron()
           : null,
