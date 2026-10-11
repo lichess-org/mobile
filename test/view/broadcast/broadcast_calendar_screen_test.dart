@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -45,6 +46,7 @@ void main() {
 
       expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
       expect(find.byType(ListSection), findsNWidgets(2));
+      expect(find.byType(HttpNetworkImageWidget), findsOneWidget);
       expect(find.text('Tour A'), findsOneWidget);
       expect(find.text('Tour B'), findsOneWidget);
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
@@ -162,7 +164,7 @@ void main() {
 
 const calendarScreenResponse = '''
 [
-  {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}},
+  {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a","image":"https://image.lichess1.org/tour-a.webp"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}},
   {"tour":{"id":"bbbbbbb1","name":"Tour B","slug":"tour-b"},"round":{"id":"rrrrrrr2","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790899200000}}
 ]
 ''';
