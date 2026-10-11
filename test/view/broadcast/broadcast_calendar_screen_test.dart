@@ -48,6 +48,9 @@ void main() {
       expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
       expect(find.byType(ListSection), findsNWidgets(2));
       expect(find.byType(HttpNetworkImageWidget), findsOneWidget);
+      final cover = tester.widget<HttpNetworkImageWidget>(find.byType(HttpNetworkImageWidget));
+      expect(cover.width, 80.0);
+      expect(cover.height, 40.0);
       expect(find.text('Tour A'), findsOneWidget);
       expect(find.text('Tour B'), findsOneWidget);
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
