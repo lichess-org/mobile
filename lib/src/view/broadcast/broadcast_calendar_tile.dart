@@ -11,7 +11,9 @@ import 'package:material_ui/material_ui.dart';
 
 /// A calendar row styled like the Lichess TV tiles on the Watch tab.
 class const BroadcastCalendarTile({required final Broadcast broadcast}) extends StatelessWidget {
-  static const _coverSize = 52.0;
+  // Cover photo keeps the web header image aspect ratio of 2.
+  static const _coverWidth = 80.0;
+  static const _coverHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +40,8 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
               borderRadius: BorderRadius.circular(8.0),
               child: HttpNetworkImageWidget(
                 broadcast.tour.imageUrl!,
-                width: _coverSize,
-                height: _coverSize,
+                width: _coverWidth,
+                height: _coverHeight,
                 fit: BoxFit.cover,
                 errorBuilder: (context, _, _) => fallbackIcon,
               ),
