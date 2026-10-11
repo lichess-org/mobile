@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,10 +90,23 @@ class _AccountMenuScreenState()
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
+    final switchAccountState = ref.watch(switchAccountMutation);
 
     ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+    ref.listen(switchAccountMutation, (_, next) {
+      if (next case MutationError(:final error)) {
+        showSnackBar(
+          context,
+          error is AccountSessionExpiredException
+              ? 'Your session has expired, please sign in again.'
+              : context.l10n.mobileSomethingWentWrong,
+          type: SnackBarType.error,
+        );
+      }
+    });
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
+    final otherAccounts = ref.watch(otherAccountsProvider).value ?? const IListConst([]);
     final kidMode = account.value?.kid ?? false;
     final LightUser? user = account.value?.lightUser ?? authUser?.user;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
@@ -180,6 +195,32 @@ class _AccountMenuScreenState()
               ),
             ),
           ],
+          if (user != null || otherAccounts.isNotEmpty)
+            ListSection(
+              header: otherAccounts.isNotEmpty ? const Text('Switch account') : null,
+              children: [
+                for (final other in otherAccounts)
+                  ListTile(
+                    leading: UserAvatar(other.user),
+                    title: UserFullNameWidget(user: other.user, showFlair: false),
+                    enabled: isOnline && switchAccountState is! MutationPending,
+                    onTap: () {
+                      // The error is surfaced by the [ref.listen] on [switchAccountMutation] above;
+                      // ignore the rethrown future so it does not become an unhandled exception.
+                      switchAccountMutation.run(ref, (tsx) async {
+                        await tsx.get(authControllerProvider.notifier).switchAccount(other);
+                      }).ignore();
+                    },
+                  ),
+                if (user != null)
+                  ListTile(
+                    leading: const Icon(Icons.person_add_outlined),
+                    title: const Text('Add account'),
+                    enabled: isOnline && signInState is! MutationPending,
+                    onTap: () => showSignInOptions(context, ref),
+                  ),
+              ],
+            ),
           ListSection(
             children: [
               if (user != null && account.hasValue && !kidMode) ...[
