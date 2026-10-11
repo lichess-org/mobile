@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -180,14 +180,11 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                                     },
                                   ),
                                   SliverList.separated(
-                                    separatorBuilder: (context, index) => PlatformDivider(
-                                      height: 1,
-                                      indent:
-                                          BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
-                                    ),
+                                    separatorBuilder: (context, index) =>
+                                        const PlatformDivider(height: 1),
                                     itemCount: day.broadcasts.length,
                                     itemBuilder: (context, index) =>
-                                        BroadcastListTile(broadcast: day.broadcasts[index]),
+                                        BroadcastCalendarTile(broadcast: day.broadcasts[index]),
                                   ),
                                 ],
                               ),
