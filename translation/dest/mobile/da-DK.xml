@@ -11,14 +11,21 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Skakprogram</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Ryd</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kode</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Koden er %s tegn lang.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopieret.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Ryd gemt træk</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Tilpas</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Du kan tilføje flere widgets til startskærmen eller fjerne dem, du ikke har brug for!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Afvis</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Farezone</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Slet din konto</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompakt</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detaljeret</string>
   <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Accepterer du udfordringen?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download mine partier</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtre</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goddag, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goddag</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Godaften, %s</string>
@@ -60,8 +67,11 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Løs så mange opgaver som muligt på 3 minutter.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Spil opgaver fra dine foretrukne åbninger, eller vælg et tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Opgaver</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Bedøm denne app</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Seneste søgninger</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Fjern bogmærke</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Vælg et studie</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Send mig en kode</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server-analyse</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Ur-position</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Forudindstillinger</string>
