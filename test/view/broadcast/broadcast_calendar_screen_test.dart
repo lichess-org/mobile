@@ -3,7 +3,7 @@ import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -42,7 +42,9 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byType(BroadcastListTile), findsNWidgets(2));
+      expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
+      expect(find.text('Tour A'), findsOneWidget);
+      expect(find.text('Tour B'), findsOneWidget);
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
       expect(find.byType(DropdownButtonHideUnderline), findsNWidgets(2));
       for (final dropdown in tester.widgetList<DropdownButton<int>>(
@@ -130,7 +132,7 @@ void main() {
 
       expect(find.text(DateFormat.yMMMMd().format(DateTime(2026, 10, 1))), findsOneWidget);
       expect(find.text('To be announced'), findsOneWidget);
-      expect(find.byType(BroadcastListTile), findsNWidgets(2));
+      expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
     });
 
     testWidgets('Shows retry on error', variant: kPlatformVariant, (tester) async {
