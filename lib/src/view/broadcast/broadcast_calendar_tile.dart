@@ -9,11 +9,31 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// Placeholder shown when a tour has no cover photo, or it fails to load.
+///
+/// Keeps the 2:1 cover ratio so rows stay aligned with photo tiles.
+class const BroadcastCalendarFallbackIcon({super.key, required final bool isLive})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: BroadcastCalendarTile.coverWidth,
+      height: BroadcastCalendarTile.coverHeight,
+      child: Center(
+        child: Icon(
+          LichessIcons.radio_tower_lichess,
+          color: isLive ? context.lichessColors.error : null,
+        ),
+      ),
+    );
+  }
+}
+
 /// A calendar row styled like the Lichess TV tiles on the Watch tab.
 class const BroadcastCalendarTile({required final Broadcast broadcast}) extends StatelessWidget {
   // Cover photo keeps the web header image aspect ratio of 2.
-  static const _coverWidth = 80.0;
-  static const _coverHeight = 40.0;
+  static const coverWidth = 80.0;
+  static const coverHeight = 40.0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +49,22 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
         ? '${broadcast.round.name} · ${relativeDate(context.l10n, broadcast.round.startsAt!)}'
         : broadcast.round.name;
 
-    final fallbackIcon = Icon(
-      LichessIcons.radio_tower_lichess,
-      color: isLive ? context.lichessColors.error : null,
-    );
+    final fallbackIcon = BroadcastCalendarFallbackIcon(isLive: isLive);
 
     return ListTile(
       leading: broadcast.tour.imageUrl != null
-          ? ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: HttpNetworkImageWidget(
-                broadcast.tour.imageUrl!,
-                width: _coverWidth,
-                height: _coverHeight,
-                fit: BoxFit.cover,
-                errorBuilder: (context, _, _) => fallbackIcon,
+          ? SizedBox(
+              width: coverWidth,
+              height: coverHeight,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: HttpNetworkImageWidget(
+                  broadcast.tour.imageUrl!,
+                  width: coverWidth,
+                  height: coverHeight,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, _, _) => fallbackIcon,
+                ),
               ),
             )
           : fallbackIcon,

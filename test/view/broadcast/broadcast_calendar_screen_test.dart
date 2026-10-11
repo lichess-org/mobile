@@ -51,6 +51,11 @@ void main() {
       final cover = tester.widget<HttpNetworkImageWidget>(find.byType(HttpNetworkImageWidget));
       expect(cover.width, 80.0);
       expect(cover.height, 40.0);
+      final fallbacks = find.byType(BroadcastCalendarFallbackIcon);
+      expect(fallbacks, findsWidgets);
+      for (final element in fallbacks.evaluate()) {
+        expect(tester.getSize(find.byWidget(element.widget)), const Size(80.0, 40.0));
+      }
       expect(find.text('Tour A'), findsOneWidget);
       expect(find.text('Tour B'), findsOneWidget);
       expect(find.byType(DropdownButton<int>), findsNWidgets(2));
