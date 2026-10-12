@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassAppBar, GlassContainer, GlassIconButton, GlassScaffold, LiquidRoundedSuperellipse;
@@ -51,7 +53,8 @@ const double _kGlassToolbarHeight = 44.0;
 /// transparency on iOS.
 ///
 /// On iOS the [Scaffold] is placed inside a [GlassScaffold], which draws the [appBar] as a liquid
-/// glass navigation bar above the body.
+/// glass navigation bar above the body. On the root screen of a tab the [appBar] is not sticky: it
+/// scrolls away with the body, like the iOS 26 main tabs.
 ///
 /// Limitations:
 /// - It does not work with a [CustomScrollView] and [SliverAppBar] as the body.
@@ -100,6 +103,8 @@ class const PlatformScaffold({
     final appBarHeight = appBar != null
         ? _kGlassToolbarHeight + (appBar!.bottom?.preferredSize.height ?? 0)
         : 0.0;
+    final isTabRoot = hasExtendedBodyParentScaffold && (ModalRoute.of(context)?.isFirst ?? false);
+    final stickyAppBar = appBar != null && !isTabRoot;
 
     // The app bar is outside of the inner Scaffold: provide a Material for its text and actions.
     return Material(
@@ -113,9 +118,11 @@ class const PlatformScaffold({
         resizeToAvoidBottomInset: false,
         // A progressive blur works over any background, including the user's background image.
         edgeStyle: .blur,
-        appBar: appBar != null
+        appBar: stickyAppBar
             ? PreferredSize(preferredSize: Size.fromHeight(appBarHeight), child: appBar!)
             : null,
+        // Keeps the status bar area blurred when the app bar is part of the body.
+        topEdgeFade: true,
         // GlassScaffold does not inset the body, so the app bar height is added to the top padding
         // like Scaffold.extendBodyBehindAppBar does.
         body: Builder(
@@ -125,11 +132,69 @@ class const PlatformScaffold({
               data: mediaQuery.copyWith(
                 padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + appBarHeight),
               ),
-              child: scaffold,
+              child: appBar != null && !stickyAppBar
+                  ? _ScrollAwayAppBar(
+                      // The app bar insets itself with the top padding, without its own height.
+                      appBar: MediaQuery(data: mediaQuery, child: appBar!),
+                      child: scaffold,
+                    )
+                  : scaffold,
             );
           },
         ),
       ),
+    );
+  }
+}
+
+/// Places [appBar] above [child], and moves it up as the main scroll view of [child] scrolls.
+///
+/// The [appBar] covers the top padding of the [MediaQuery], which must account for its height.
+class const _ScrollAwayAppBar({required final Widget appBar, required final Widget child})
+    extends StatefulWidget {
+  @override
+  State<_ScrollAwayAppBar> createState() => _ScrollAwayAppBarState();
+}
+
+class _ScrollAwayAppBarState() extends State<_ScrollAwayAppBar> {
+  final ValueNotifier<double> _scrollOffset = ValueNotifier(0);
+
+  @override
+  void dispose() {
+    _scrollOffset.dispose();
+    super.dispose();
+  }
+
+  bool _onScrollNotification(ScrollNotification notification) {
+    if (notification.depth == 0 && notification.metrics.axis == Axis.vertical) {
+      _scrollOffset.value = notification.metrics.pixels;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.paddingOf(context).top;
+    return Stack(
+      children: [
+        NotificationListener<ScrollNotification>(
+          onNotification: _onScrollNotification,
+          child: widget.child,
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: height,
+          child: ValueListenableBuilder(
+            valueListenable: _scrollOffset,
+            // Not clamped below 0, so that the app bar follows the content when it overscrolls.
+            builder: (context, offset, child) =>
+                Transform.translate(offset: Offset(0, -math.min(offset, height)), child: child),
+            child: widget.appBar,
+          ),
+        ),
+      ],
     );
   }
 }
