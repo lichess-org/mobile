@@ -46,6 +46,7 @@ dependencies:
       url: https://github.com/HaonRekcef/flutter_markdown_plus.git
       ref: 74dd63f3dc91bcf919a612a1816ca82df248472e
   flutter_native_splash: ^2.4.8
+  flutter_onnxruntime: ^1.9.0
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
   flutter_slidable: ^4.0.3
