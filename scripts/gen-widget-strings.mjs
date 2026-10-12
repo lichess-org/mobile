@@ -34,11 +34,11 @@ const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings
 // Map each widget UI string to its ARB key and English fallback.
 // Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
-  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'widget_daily_puzzle_title' },
+  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'daily_puzzle_title' },
   'Community': { arbKey: 'ublogCommunity', fallback: 'Community'},
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
-  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'widget_broadcast_title' },
+  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'broadcast_title' },
 };
 
 
@@ -92,12 +92,12 @@ console.log(`  Locales: ${arbFiles.length}`);
 
 
 const UNTRANSLATED_ANDROID_STRINGS = {
-  widget_broadcast_description: 'Shows ongoing and upcoming chess broadcasts.',
-  widget_live: 'LIVE',
-  widget_no_broadcasts: 'No active broadcasts',
-  widget_daily_puzzle_description: 'Shows daily puzzle',
-  widget_no_dailyPuzzle: 'No New Puzzles',
-  widget_daily_puzzle_error: "Couldn't load puzzle",
+  broadcast_description: 'Shows ongoing and upcoming chess broadcasts.',
+  live: 'LIVE',
+  no_broadcasts: 'No active broadcasts',
+  daily_puzzle_description: 'Shows daily puzzle',
+  no_dailyPuzzle: 'No New Puzzles',
+  daily_puzzle_error: "Couldn't load puzzle",
 };
 
 const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');

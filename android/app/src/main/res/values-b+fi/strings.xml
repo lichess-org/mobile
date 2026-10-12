@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_daily_puzzle_title">Päivän tehtävä</string>
-    <string name="widget_broadcast_title">Lähetykset</string>
+    <string name="daily_puzzle_title">Päivän tehtävä</string>
+    <string name="broadcast_title">Lähetykset</string>
 </resources>

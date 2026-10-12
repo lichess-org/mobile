@@ -143,7 +143,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       }
     } catch (e: Exception) {
       Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
-      remoteViews.setTextViewText(R.id.no_puzzle, context.getString(R.string.widget_daily_puzzle_error))
+      remoteViews.setTextViewText(R.id.no_puzzle, context.getString(R.string.daily_puzzle_error))
       remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
       remoteViews.setViewVisibility(R.id.puzzle_board_image, View.GONE)
     }

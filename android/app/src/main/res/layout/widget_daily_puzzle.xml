@@ -20,7 +20,7 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:src="@drawable/ic_stat_lichess_notification"
-        android:contentDescription="@string/widget_daily_puzzle_title"
+        android:contentDescription="@string/daily_puzzle_title"
         android:tint="@color/widget_text_primary"/>
 
       <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginStart="6dp"
-        android:text="@string/widget_daily_puzzle_title"
+        android:text="@string/daily_puzzle_title"
         android:textColor="@color/widget_text_primary"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -58,7 +58,7 @@
       android:layout_height="wrap_content"
       android:paddingVertical="20dp"
       android:gravity="center"
-      android:text="@string/widget_no_dailyPuzzle"
+      android:text="@string/no_dailyPuzzle"
       android:textColor="@color/widget_text_secondary"
       android:textSize="14sp"
       android:visibility="gone" />
