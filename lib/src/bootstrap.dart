@@ -18,6 +18,7 @@ Future<void> bootstrapApp({
   required LichessBindingBase Function() initializeBinding,
   required NotificationService Function(Ref) notificationServiceFactory,
   Widget app = const AppInitializationScreen(),
+  List<String> args = const [],
 }) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = initializeBinding();
@@ -35,7 +36,13 @@ Future<void> bootstrapApp({
 
   // Must run before [initializeApp], which uses the system colors to pick the default board theme
   // on first run.
-  if (defaultTargetPlatform == TargetPlatform.android) {
+  //
+  // Skip display initialization when the app is started in the background by Unified Push to
+  // avoid a crash.
+  //
+  // Ideally, we should also skip runApp to avoid running the full app when receiving a
+  // notification.
+  if (defaultTargetPlatform == TargetPlatform.android && !args.contains('--unifiedpush-bg')) {
     await androidDisplayInitialization(widgetsBinding);
   }
 
