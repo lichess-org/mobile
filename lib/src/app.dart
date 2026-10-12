@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/service/broadcast_service.dart';
 import 'package:lichess_mobile/src/service/challenge_service.dart';
 import 'package:lichess_mobile/src/service/correspondence_service.dart';
 import 'package:lichess_mobile/src/service/message_service.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/service/quick_actions.dart';
 import 'package:lichess_mobile/src/service/recap_service.dart';
 import 'package:lichess_mobile/src/service/shared_pgn_service.dart';

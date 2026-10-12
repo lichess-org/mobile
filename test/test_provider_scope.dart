@@ -25,7 +25,8 @@ import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/fcm_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
@@ -221,6 +222,9 @@ Future<Widget> makeTestProviderScope(
     notificationDisplayProvider: notificationDisplayProvider.overrideWith((ref) {
       return FakeNotificationDisplay();
     }),
+    notificationServiceProvider: notificationServiceFactoryProvider.overrideWith(
+      (_) => FcmService.new,
+    ),
     databaseProvider: databaseProvider.overrideWith((ref) async {
       final testDb = await openAppDatabase(databaseFactoryFfiNoIsolate, inMemoryDatabasePath);
       ref.onDispose(testDb.close);
