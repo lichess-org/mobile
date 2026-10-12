@@ -15,8 +15,7 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('BoardVision');
 
-// ChessQueries Lite, a vision model that reads the piece placement off a picture of a board, the
-// same int8 quantized build that lichess.org runs in its board editor.
+// ChessQueries Lite, a vision model that reads the piece placement off a picture of a board.
 // https://huggingface.co/joelseytre/chessq-lite
 const _modelFileName = 'chessq-lite-v4-int8.onnx';
 final _modelUrl = Uri.parse('$kLichessCDNHost/assets/lifat/vision/$_modelFileName');
@@ -138,7 +137,7 @@ class BoardReader(final BoardVisionService _service) {
     final stopwatch = Stopwatch()..start();
 
     // The image is decoded and scaled down by the engine, which can only be reached from the root
-    // isolate. Like on lichess.org, the whole picture is stretched to the square the model reads.
+    // isolate.
     final codec = await ui.instantiateImageCodec(
       imageBytes,
       targetWidth: _resolution,
@@ -164,6 +163,7 @@ class BoardReader(final BoardVisionService _service) {
       session = await pending;
     } catch (_) {
       if (identical(_session, pending)) _session = null;
+      _logger.warning('Could not load the board vision model, will retry on next read.');
       rethrow;
     }
 
@@ -186,7 +186,7 @@ class BoardReader(final BoardVisionService _service) {
     } finally {
       await tensor.dispose();
     }
-    _logger.info(
+    _logger.fine(
       'Read $placement: preprocessing ${preprocessingTime}ms, '
       'inference ${stopwatch.elapsedMilliseconds}ms',
     );
@@ -201,7 +201,7 @@ class BoardReader(final BoardVisionService _service) {
     if (pending == null) return;
     try {
       await (await pending).close();
-      _logger.info('Released the board vision model');
+      _logger.fine('Released the board vision model');
     } catch (e, st) {
       _logger.warning('Could not release the board vision model:', e, st);
     }

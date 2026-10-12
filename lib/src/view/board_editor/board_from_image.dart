@@ -17,9 +17,6 @@ const _maxPictureSide = 1288.0;
 
 /// A button that sets up the board from a photo of a chessboard, taken with the camera or picked
 /// from the photo library.
-///
-/// The model that reads the photos is kept in memory from the first photo for as long as the button
-/// is mounted, so that it is loaded only once per board editor.
 class const BoardFromImageButton({super.key, required final void Function(String) onPlacementRead})
     extends ConsumerWidget {
   Future<void> _readFrom(BuildContext context, BoardReader reader, ImageSource source) async {
