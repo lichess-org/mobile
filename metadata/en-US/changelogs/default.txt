@@ -1,0 +1,4 @@
+We continuously update the application with new features, improvements and bug fixes.
+
+Release versions and more informations are available at:
+https://github.com/lichess-org/mobile/releases

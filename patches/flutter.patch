@@ -1,0 +1,13 @@
+diff --git a/packages/flutter_tools/lib/src/asset.dart b/packages/flutter_tools/lib/src/asset.dart
+index 2f13da2ef01..8acd1eb4b5b 100644
+--- a/packages/flutter_tools/lib/src/asset.dart
++++ b/packages/flutter_tools/lib/src/asset.dart
+@@ -911,7 +911,7 @@ class ManifestAssetBundle implements AssetBundle {
+       final List<String> decodedEntryVariantPaths = rawEntryVariantsPaths
+           .map((String value) => Uri.decodeFull(value))
+           .toList();
+-      manifest[decodedEntryPath] = decodedEntryVariantPaths;
++      manifest[decodedEntryPath] = decodedEntryVariantPaths..sort();
+     }
+     return manifest;
+   }
