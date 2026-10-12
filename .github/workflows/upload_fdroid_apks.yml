@@ -1,0 +1,75 @@
+name: Build and upload the F-Droid APKs
+on:
+  release:
+    types: [released]
+
+permissions: read-all
+
+jobs:
+  fdroid-apks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mobile code
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version-file: pubspec.yaml
+
+      - name: Patch Flutter
+        run: |
+          git -C ${{ env.FLUTTER_ROOT }} apply $GITHUB_WORKSPACE/patches/flutter.patch
+          rm ${{ env.FLUTTER_ROOT }}/bin/cache/flutter_tools.snapshot
+
+      - name: Install dependencies
+        run: |
+          flutter pub remove firebase_core
+          flutter pub remove firebase_crashlytics
+          flutter pub remove firebase_messaging
+          flutter pub get --enforce-lockfile
+
+      - name: Patch dependencies
+        run: |
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/jni-*/src/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_chess-*/android/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_light-*/android/CMakeLists.txt
+          sed -i 's/-Wl,/-Wl,--build-id=none,/' ~/.pub-cache/hosted/pub.dev/multistockfish_variant-*/android/CMakeLists.txt
+          sed -i '/target_link_libraries/i target_link_options(lc0 PRIVATE "LINKER:--build-id=none")' ~/.pub-cache/hosted/pub.dev/lc0-*/android/CMakeLists.txt
+          truncate -s 0 ~/.pub-cache/hosted/pub.dev/webcrypto-*/android/CMakeLists.txt
+
+      - name: Code generation
+        run: dart run build_runner build
+
+      - name: Configure Keystore
+        run: |
+          echo "${{ secrets.FDROID_KEYSTORE_FILE }}" | base64 --decode > app/lichess-fdroid.keystore
+          echo "storeFile=lichess-fdroid.keystore" >> key.properties
+          echo "keyAlias=${{ secrets.FDROID_KEYSTORE_KEY_ALIAS }}" >> key.properties
+          echo "storePassword=${{ secrets.FDROID_KEYSTORE_STORE_PASSWORD }}" >> key.properties
+          echo "keyPassword=${{ secrets.FDROID_KEYSTORE_KEY_PASSWORD }}" >> key.properties
+        working-directory: android
+
+      - name: Build APKs
+        run: |
+          export SOURCE_DATE_EPOCH=0
+          flutter build apk --split-per-abi --target-platform=android-x64 --android-project-arg=isFdroidBuild=true --target=lib/main_fdroid.dart --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
+          flutter build apk --split-per-abi --target-platform=android-arm --android-project-arg=isFdroidBuild=true --target=lib/main_fdroid.dart --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
+          flutter build apk --split-per-abi --target-platform=android-arm64 --android-project-arg=isFdroidBuild=true --target=lib/main_fdroid.dart --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=wG1OLhUR3CSXdDybqrtIW227QGrtiM3d
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
+        with:
+          aws-access-key-id: ${{ secrets.S3_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.S3_SECRET_KEY }}
+          aws-region: eu-west-3
+
+      - name: Upload APKs
+        run: aws s3 cp build/app/outputs/flutter-apk "s3://lichess-fdroid-releases/${GITHUB_REF_NAME%.fdroid}" --recursive --exclude "*.sha1"

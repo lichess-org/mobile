@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/build_info.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -12,6 +13,7 @@ import 'package:logging/logging.dart';
 
 final _logger = Logger('Connectivity');
 
+@visibleForTesting
 const kConnectivityThrottleDelay = Duration(seconds: 5);
 
 /// A provider that exposes a [Connectivity] instance.
@@ -240,7 +242,7 @@ typedef ConnectivityStatus = ({bool isOnline, AppLifecycleState? appState});
 /// The URIs [isOnline] probes.
 @visibleForTesting
 final internetCheckUris = List<Uri>.unmodifiable([
-  Uri.parse('https://www.gstatic.com/generate_204'),
+  if (!isFdroidBuild) Uri.parse('https://www.gstatic.com/generate_204'),
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ]);
 
