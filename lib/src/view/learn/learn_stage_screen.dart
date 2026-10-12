@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -31,17 +32,19 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stageNumber = learnStages.indexOf(stage) + 1;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
-        actions: const [ToggleSoundButton()],
+    return WakelockWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
+          actions: const [ToggleSoundButton()],
+        ),
+        // The controller reads the saved progress to pick the level to start with.
+        body: switch (ref.watch(learnProgressProvider)) {
+          AsyncData() => _Body(stage: stage),
+          AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
+        },
       ),
-      // The controller reads the saved progress to pick the level to start with.
-      body: switch (ref.watch(learnProgressProvider)) {
-        AsyncData() => _Body(stage: stage),
-        AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
     );
   }
 }

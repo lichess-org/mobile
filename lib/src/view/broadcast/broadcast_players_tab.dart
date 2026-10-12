@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -412,8 +413,7 @@ class const BroadcastPlayerRow({
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null)
-            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+          if (federation != null) Image.asset(federation.flagAsset, height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,

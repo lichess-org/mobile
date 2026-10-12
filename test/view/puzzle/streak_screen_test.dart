@@ -76,10 +76,8 @@ void main() {
 
       expect(find.textContaining(RegExp('1\$')), findsOneWidget);
 
-      // Exit screen -> score should be saved
+      // Exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // Enter streak screen again -> previous score should be loaded
@@ -171,8 +169,6 @@ void main() {
 
       // exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // re-enter streak screen

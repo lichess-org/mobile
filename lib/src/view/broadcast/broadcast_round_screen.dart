@@ -161,7 +161,7 @@ class _BroadcastRoundScreenState()
     if (_tabController.indexIsChanging) {
       final currentRoundId = _selectedRoundId ?? widget.broadcast.roundToLinkId;
 
-      ref.read(broadcastRoundControllerProvider(currentRoundId).notifier).clearObservedGames();
+      ref.read(observedGamesControllerProvider(currentRoundId).notifier).clear();
     }
   }
 
@@ -190,10 +190,10 @@ class _BroadcastRoundScreenState()
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundState> asyncRound,
+    ({BroadcastRound round, bool? isSubscribed})? roundState,
   ) {
-    return switch (asyncRound) {
-      AsyncData(value: final roundState) => PlatformScaffold(
+    return switch (roundState) {
+      final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
           title: AppBarTitleText(
@@ -253,7 +253,12 @@ class _BroadcastRoundScreenState()
                   icon: Icons.filter_list,
                   label: context.l10n.filterGames,
                   onPressed: () {
-                    final games = asyncRound.value.games.values;
+                    final currentRoundId =
+                        _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                    final gamesMap = currentRoundId != null
+                        ? ref.read(broadcastRoundControllerProvider(currentRoundId)).value?.games
+                        : null;
+                    final games = gamesMap?.values ?? const [];
                     final allCount = games.length;
                     final ongoingCount = games.where((g) => g.isOngoing).length;
                     final uniqueTeams = games
@@ -335,7 +340,7 @@ class _BroadcastRoundScreenState()
           _ => const BottomBar.empty(),
         },
       ),
-      _ => PlatformScaffold(
+      null => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
         body: const Center(child: CircularProgressIndicator.adaptive()),
@@ -347,31 +352,34 @@ class _BroadcastRoundScreenState()
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
-
     switch (asyncTour) {
       case AsyncData(value: final tournament):
-        // Eagerly initalize the round controller so it stays alive when switching tabs
-        // and to know if the round has games to show
-        final roundState = ref.watch(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
+        final roundId = _selectedRoundId ?? tournament.defaultRoundId;
+
+        // Null until the round is loaded, so this fires once when it first loads.
+        ref.listen<bool?>(
+          broadcastRoundControllerProvider(roundId)
+              .select((state) => state.value?.games.isNotEmpty),
+          (_, hasGames) {
+            if (widget.initialTab != null || hasGames == null || roundLoaded) return;
+            roundLoaded = true;
+            if (hasGames) _tabController.index = 1;
+          },
         );
 
-        ref.listen(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-          (_, round) {
-            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
-              roundLoaded = true;
-              if (round.value!.games.isNotEmpty) {
-                _tabController.index = 1;
-              }
-            }
-          },
+        // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
+        final roundState = ref.watch(
+          broadcastRoundControllerProvider(roundId).select(
+            (state) => switch (state.value) {
+              final value? => (round: value.round, isSubscribed: value.isSubscribed),
+              null => null,
+            },
+          ),
         );
 
         return _buildContent(context, asyncTour, roundState);
       case _:
-        return _buildContent(context, asyncTour, loadingRound);
+        return _buildContent(context, asyncTour, null);
     }
   }
 }

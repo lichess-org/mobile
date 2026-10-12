@@ -89,7 +89,6 @@ class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends
               padding: Styles.bodySectionBottomPadding,
               child: Column(
                 children: [
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -101,7 +100,6 @@ class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends
                       ),
                     ),
                   ),
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
