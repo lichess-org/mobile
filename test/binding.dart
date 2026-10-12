@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
+import 'package:lichess_mobile/src/binding/binding_fcm.dart';
 import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 TestLichessBinding get testBinding => LichessBinding.instance as TestLichessBinding;
 
 /// Lichess binding for testing.
-class TestLichessBinding() extends LichessBinding {
+class TestLichessBinding() extends LichessBinding with FcmBinding {
   /// Initialize the binding if necessary, and ensure it is a [TestLichessBinding].
   ///
   /// If there is an existing binding but it is not a [TestLichessBinding],

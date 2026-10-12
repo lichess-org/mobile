@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -80,7 +80,7 @@ Future<void> initializeLocalNotifications(Locale locale) async {
       ),
       linux: const LinuxInitializationSettings(defaultActionName: 'Action'),
     ),
-    onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
+    onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 }
