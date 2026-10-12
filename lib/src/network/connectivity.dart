@@ -264,7 +264,7 @@ typedef ConnectivityStatus = ({bool isOnline, AppLifecycleState? appState});
 /// The URIs [isOnline] probes.
 @visibleForTesting
 final internetCheckUris = List<Uri>.unmodifiable([
-  Uri.parse('https://www.gstatic.com/generate_204'),
+  if (!kIsFdroidBuild) Uri.parse('https://www.gstatic.com/generate_204'),
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ]);
 

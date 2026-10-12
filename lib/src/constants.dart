@@ -34,6 +34,8 @@ const kLichessVapidPublicKey = String.fromEnvironment(
       'BKLo08qJgT9tmfl1dgFpvh5l-Dd17cpuqJ_ZWP-_mcfPjPns89Zjg3W49rrQR_AQJYzn4arFPiSb4_k0HM7NACA',
 );
 
+const kIsFdroidBuild = bool.fromEnvironment('isFdroidBuild');
+
 const kLichessCustomUriSchemeName = 'org.lichess.mobile';
 
 const kLichessClientId = 'lichess_mobile';
