@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 
@@ -19,13 +19,13 @@ final messageServiceProvider = Provider<MessageService>((Ref ref) {
 
 class MessageService(final Ref ref) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
-  StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
+  StreamSubscription<ReceivedPushMessage>? _pushSubscription;
 
   void start() {
-    _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, :fromBackground) = data;
-      switch (fcmMessage) {
-        case NewMessageFcmMessage():
+    _pushSubscription = NotificationService.pushMessageStream.listen((data) {
+      final (message: pushMessage, :fromBackground) = data;
+      switch (pushMessage) {
+        case NewMessagePushMessage():
           ref.invalidate(contactsProvider);
           ref.invalidate(unreadMessagesProvider);
         case _:
@@ -68,7 +68,7 @@ class MessageService(final Ref ref) {
   }
 
   void dispose() {
-    _fcmSubscription?.cancel();
+    _pushSubscription?.cancel();
     _notificationResponseSubscription?.cancel();
   }
 }

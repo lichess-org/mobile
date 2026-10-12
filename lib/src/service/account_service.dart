@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/play/playban.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -47,7 +47,7 @@ class AccountService(final Ref _ref) {
 
       if (playban != null && lastPlaybanNotificationDate != playban.date) {
         _savePlaybanNotificationDate(playban.date);
-        _ref.read(notificationServiceProvider).show(PlaybanNotification(playban));
+        _ref.read(notificationPresenterProvider).show(PlaybanNotification(playban));
         _refreshTimer?.cancel();
         _refreshTimer = Timer(playban.duration, () {
           _ref.invalidate(accountProvider);
@@ -55,7 +55,7 @@ class AccountService(final Ref _ref) {
       } else if (playban == null && lastPlaybanNotificationDate != null) {
         _refreshTimer?.cancel();
         _ref
-            .read(notificationServiceProvider)
+            .read(notificationPresenterProvider)
             .cancel(lastPlaybanNotificationDate.toIso8601String().hashCode);
         _clearPlaybanNotificationDate();
       }
