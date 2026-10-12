@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -50,85 +51,97 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final online = ref.watch(isDeviceOnlineProvider);
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        titleSpacing: 0,
-        title: account.when(
-          data: (user) => user == null
-              ? const SizedBox.shrink()
-              : UserAppBarTitleWidget(user: user.lightUser, isOnline: online, seenAt: user.seenAt),
-          loading: () => const SizedBox.shrink(),
-          error: (error, _) => const SizedBox.shrink(),
-        ),
-        actions: [
-          SemanticIconButton(
-            icon: const Icon(Icons.edit),
-            semanticsLabel: context.l10n.editProfile,
-            onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
-          ),
-          account.when(
+    return FocusDetector(
+      onFocusGained: () {
+        if (!context.mounted) return;
+        ref.invalidate(accountProvider);
+        ref.invalidate(_accountActivityProvider);
+        ref.invalidate(myRecentGamesProvider);
+      },
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          titleSpacing: 0,
+          title: account.when(
             data: (user) => user == null
                 ? const SizedBox.shrink()
-                : SemanticIconButton(
-                    icon: const PlatformShareIcon(),
-                    semanticsLabel: 'Share profile',
-                    onPressed: () => launchShareDialog(
-                      context,
-                      ShareParams(uri: lichessUri('/@/${user.username}')),
-                    ),
+                : UserAppBarTitleWidget(
+                    user: user.lightUser,
+                    isOnline: online,
+                    seenAt: user.seenAt,
                   ),
             loading: () => const SizedBox.shrink(),
             error: (error, _) => const SizedBox.shrink(),
           ),
-        ],
-      ),
-      body: account.when(
-        data: (user) {
-          if (user == null) {
-            return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
-          }
-          final activity = ref.watch(_accountActivityProvider);
-          final recentGames = ref.watch(myRecentGamesProvider);
-          final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
-          return HapticRefreshIndicator(
-            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                : 0.0,
-            key: _refreshIndicatorKey,
-            onRefresh: () => Future.wait([
-              ref.refresh(accountProvider.future),
-              ref.refresh(_accountActivityProvider.future),
-              ref.refresh(myRecentGamesProvider.future),
-            ]),
-            child: ListView(
-              children: [
-                UserProfileWidget(user: user),
-                const AccountPerfCards(),
-                if (user.count != null && user.count!.bookmark > 0)
-                  ListSection(
-                    hasLeading: true,
-                    children: [
-                      ListTile(
-                        title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
-                        leading: const Icon(Icons.bookmarks_outlined),
-                        onTap: () {
-                          Navigator.of(
-                            context,
-                          ).push(GameBookmarksScreen.buildRoute(nbBookmarks: user.count!.bookmark));
-                        },
-                      ),
-                    ],
-                  ),
-                UserActivityWidget(activity: activity, user: user.lightUser),
-                RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
-              ],
+          actions: [
+            SemanticIconButton(
+              icon: const Icon(Icons.edit),
+              semanticsLabel: context.l10n.editProfile,
+              onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
             ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-        error: (error, _) {
-          return FullScreenRetryRequest(onRetry: () => ref.invalidate(accountProvider));
-        },
+            account.when(
+              data: (user) => user == null
+                  ? const SizedBox.shrink()
+                  : SemanticIconButton(
+                      icon: const PlatformShareIcon(),
+                      semanticsLabel: 'Share profile',
+                      onPressed: () => launchShareDialog(
+                        context,
+                        ShareParams(uri: lichessUri('/@/${user.username}')),
+                      ),
+                    ),
+              loading: () => const SizedBox.shrink(),
+              error: (error, _) => const SizedBox.shrink(),
+            ),
+          ],
+        ),
+        body: account.when(
+          data: (user) {
+            if (user == null) {
+              return Center(child: Text(context.l10n.mobileMustBeLoggedIn));
+            }
+            final activity = ref.watch(_accountActivityProvider);
+            final recentGames = ref.watch(myRecentGamesProvider);
+            final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
+            return HapticRefreshIndicator(
+              edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                  ? MediaQuery.paddingOf(context).top + kToolbarHeight
+                  : 0.0,
+              key: _refreshIndicatorKey,
+              onRefresh: () => Future.wait([
+                ref.refresh(accountProvider.future),
+                ref.refresh(_accountActivityProvider.future),
+                ref.refresh(myRecentGamesProvider.future),
+              ]),
+              child: ListView(
+                children: [
+                  UserProfileWidget(user: user),
+                  const AccountPerfCards(),
+                  if (user.count != null && user.count!.bookmark > 0)
+                    ListSection(
+                      hasLeading: true,
+                      children: [
+                        ListTile(
+                          title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
+                          leading: const Icon(Icons.bookmarks_outlined),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              GameBookmarksScreen.buildRoute(nbBookmarks: user.count!.bookmark),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  UserActivityWidget(activity: activity, user: user.lightUser),
+                  RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
+                ],
+              ),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+          error: (error, _) {
+            return FullScreenRetryRequest(onRetry: () => ref.invalidate(accountProvider));
+          },
+        ),
       ),
     );
   }

@@ -147,7 +147,6 @@ class _AccountMenuScreenState()
                   ),
                   enabled: isOnline,
                   onTap: () {
-                    ref.invalidate(accountProvider);
                     _navigate(context, ProfileScreen.buildRoute());
                   },
                 ),
