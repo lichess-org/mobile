@@ -9,7 +9,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Chấp nhận hòa?';
 
   @override
   String get mobileAccount => 'Tài khoản';
@@ -21,13 +21,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'Các tùy chọn này được áp dụng cho tài khoản Lichess của bạn và sẽ được sử dụng trên tất cả các thiết bị.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Thêm vào nghiên cứu';
 
   @override
   String get mobileAllGames => 'Tất cả ván đấu';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Cho phép đi lại và xem gợi ý';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -37,11 +37,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Bạn có chắc chắn muốn tải xuống tệp NNUE ($param) không?';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => 'Vị trí bàn cờ ở chế độ ngang';
 
   @override
   String get mobileBoardSettings => 'Cài đặt bàn cờ';
@@ -56,33 +56,33 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileChallengeCreated => 'Đã thách đấu người chơi: Bạn sẽ được thông báo nếu trận đấu bắt đầu.\nBạn có thể truy cập trận đấu từ trang chủ.';
 
   @override
-  String get mobileChallengeFromPosition => 'Challenge from position';
+  String get mobileChallengeFromPosition => 'Thách đấu từ thế cờ';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => 'Tên Chương';
 
   @override
   String get mobileChessEngine => 'Công cụ cờ vua';
 
   @override
-  String get mobileChooseCustomBackground => 'Choose a custom background';
+  String get mobileChooseCustomBackground => 'Chọn hình nền tùy chỉnh';
 
   @override
   String get mobileClearButton => 'Xóa';
 
   @override
-  String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
+  String get mobileCodeExpiresMessage => 'Mã sẽ hết hạn sau 5 phút và chỉ có thể được sử dụng một lần.';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'Mã';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'Mã hợp lệ có độ dài là $param kí tự.';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'Đã sao chép.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
@@ -97,10 +97,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Bỏ qua';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => 'Khu vực nguy hiểm';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Xoá tài khoản của bạn';
 
   @override
   String get mobileDisplayModeCompact => 'Thu gọn';
@@ -109,25 +109,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Mở rộng';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Bạn có chấp nhận lời thách đấu không?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Tải về các ván đấu của tôi';
 
   @override
   String get mobileFeedbackButton => 'Phản hồi';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'Bộ lọc';
 
   @override
   String get mobileFlipClock => 'Flip clock';
 
   @override
-  String get mobileFlipPiecesAfterMove => 'Flip pieces and opponent info after move';
+  String get mobileFlipPiecesAfterMove => 'Đảo chiều quân cờ và thông tin đối thủ sau mỗi nước đi';
 
   @override
-  String get mobileGetFeedbackOnMoves => 'Get feedback on your moves';
+  String get mobileGetFeedbackOnMoves => 'Nhận góp ý về các nước cờ của bạn';
 
   @override
   String mobileGoodDay(String param) {
@@ -149,30 +149,30 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Nước đi tốt, nhưng có nước đi tốt hơn nữa';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Xin chào';
 
   @override
   String get mobileHomeTab => 'Trang chủ';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+    return 'Nếu tài khoản liên kết với $param1, một mã $param2 kí tự sẽ được gửi đến tài khoản đó. Kiểm tra hộp thư đến của bạn và nhập mã bên dưới.';
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
+  String get mobileInvalidOrExpiredLoginCode => 'Mã này không hợp lệ hoặc đã hết hạn.';
 
   @override
   String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
 
   @override
-  String get mobileLocalDatabaseSize => 'Local database size';
+  String get mobileLocalDatabaseSize => 'Kích thước CSDL cục bộ';
 
   @override
   String get mobileMoveOnRelease => 'Move on release';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+  String get mobileMoveOnReleaseSubtitle => 'Khi di chuyển một quân cờ bằng cách chạm, thao tác di chuyển được thực hiện khi bạn nhấc ngón tay lên, cho phép bạn trượt ngón tay để thay đổi ô đích.';
 
   @override
   String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
@@ -184,7 +184,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileNewGame => 'Ván cờ mới';
 
   @override
-  String get mobileNextMistake => 'Next mistake';
+  String get mobileNextMistake => 'Nước đi sai lầm tiếp theo';
 
   @override
   String get mobileNoSearchResults => 'Không có kết quả';
@@ -205,7 +205,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOverTheBoard => 'Trên bàn cờ';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => 'Dán từ bảng nhớ tạm';
 
   @override
   String get mobilePerfShortAntichess => 'Phản cờ';
@@ -256,7 +256,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Siêu đạn';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'Đã sao chép PGN.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -270,13 +270,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePositionRight => 'Phải';
 
   @override
-  String get mobilePracticeMode => 'Practice mode';
+  String get mobilePracticeMode => 'Chế độ luyện tập';
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Phóng to quân cờ được kéo';
 
   @override
-  String get mobilePreviousPage => 'Trang trước';
+  String get mobilePreviousPage => 'Trước đó';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
@@ -297,7 +297,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePuzzlesTab => 'Câu đố';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'Đánh giá ứng dụng này';
 
   @override
   String get mobileRecentSearches => 'Tìm kiếm gần đây';
@@ -306,10 +306,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Chọn một nghiên cứu';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'Gửi mã cho tôi';
 
   @override
   String get mobileServerAnalysis => 'Phân tích trên máy chủ';
@@ -330,7 +330,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Hình vuông';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => 'Màu sắc hình vẽ';
 
   @override
   String get mobileSettingsDrawnShapeColorHelp => 'Màu này được dùng cho các hình vẽ bằng hai ngón tay.';
@@ -372,7 +372,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Nhấn 2 ô vuông';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => 'Các tùy chọn của bạn đã được lưu trong tài khoản Lichess. Chúng sẽ được đồng bộ hóa trên tất cả các thiết bị của bạn.';
 
   @override
   String get mobileSettingsShapeDrawing => 'Vẽ hình';
@@ -390,7 +390,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Khi được bật, thiết bị sẽ rung trong thời gian ngắn khi bạn di chuyển hoặc ăn một quân cờ.';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShareChallengeUrl => 'Chia sẻ URL thách đấu';
 
   @override
   String get mobileShareGamePGN => 'Chia sẻ tập tin PGN';
@@ -411,31 +411,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileShowComments => 'Hiển thị bình luận';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'Hiện các dòng đánh giá của công cụ';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => 'Hiện thanh lợi thế';
 
   @override
   String get mobileShowResult => 'Xem kết quả';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'Đăng nhập bằng trình duyệt';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'Đăng nhập bằng email';
 
   @override
   String get mobileSimpleDelay => 'Simple delay';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => 'Bàn cờ nhỏ';
 
   @override
   String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => 'Sắp xếp bạn bè';
 
   @override
   String get mobileStopShowingThreat => 'Dừng hiện mối nguy';
@@ -450,7 +450,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileTheme => 'Giao diện';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileTooManyLoginAttempts => 'Quá nhiều lần thử. Vui lòng thử lại sau.';
 
   @override
   String get mobileTournamentCompleted => 'Đã hoàn thành';
@@ -470,7 +470,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileViewGame => 'Xem Trận Gốc';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'Xem giấy phép';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
@@ -479,10 +479,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileWatchTab => 'Xem';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'Chúng tôi sẽ gửi mã đăng nhập cho bạn qua email.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Bạn không thể tự thách đấu chính mình';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -1218,7 +1218,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastKnockouts => 'Loại trực tiếp';
 
   @override
-  String get broadcastPinPlayer => 'Pin player';
+  String get broadcastPinPlayer => 'Ghim kỳ thủ';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -2037,205 +2037,205 @@ class AppLocalizationsVi extends AppLocalizations {
   String get perfStatNow => 'bây giờ';
 
   @override
-  String get practiceMakesPerfect => 'makes your chess perfect';
+  String get practiceMakesPerfect => 'giúp kỹ năng cờ vua của bạn hoàn hảo hơn';
 
   @override
-  String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
+  String get practiceSignUpToSaveYourProgress => 'Đăng ký tài khoản để lưu tiến trình của bạn';
 
   @override
-  String get practiceSecHeadCheckmates => 'Checkmates';
+  String get practiceSecHeadCheckmates => 'Chiếu hết';
 
   @override
-  String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
+  String get practiceSecHeadFundamentalTactics => 'Chiến thuật cơ bản';
 
   @override
-  String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
+  String get practiceSecHeadAdvancedTactics => 'Chiến thuật nâng cao';
 
   @override
-  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+  String get practiceSecHeadPawnEndgames => 'Cờ tàn Tốt';
 
   @override
-  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+  String get practiceSecHeadRookEndgames => 'Cờ tàn Xe';
 
   @override
-  String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
+  String get practiceStNamPieceCheckmatesI => 'Chiếu hết bằng các quân cờ I';
 
   @override
-  String get practiceStNamCheckmatePatternsI => 'Checkmate Patterns I';
+  String get practiceStNamCheckmatePatternsI => 'Các mô hình chiếu hết I';
 
   @override
-  String get practiceStNamCheckmatePatternsII => 'Checkmate Patterns II';
+  String get practiceStNamCheckmatePatternsII => 'Các mô hình chiếu hết II';
 
   @override
-  String get practiceStNamCheckmatePatternsIII => 'Checkmate Patterns III';
+  String get practiceStNamCheckmatePatternsIII => 'Các mô hình chiếu hết III';
 
   @override
-  String get practiceStNamCheckmatePatternsIV => 'Checkmate Patterns IV';
+  String get practiceStNamCheckmatePatternsIV => 'Các mô hình chiếu hết IV';
 
   @override
-  String get practiceStNamPieceCheckmatesII => 'Piece Checkmates II';
+  String get practiceStNamPieceCheckmatesII => 'Chiếu hết bằng các quân cờ II';
 
   @override
-  String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
+  String get practiceStNamKnightAndBishopMate => 'Chiếu hết bằng Mã & Tượng';
 
   @override
-  String get practiceStNamThePin => 'The Pin';
+  String get practiceStNamThePin => 'Đòn ghim';
 
   @override
-  String get practiceStNamTheSkewer => 'The Skewer';
+  String get practiceStNamTheSkewer => 'Đòn xiên';
 
   @override
-  String get practiceStNamTheFork => 'The Fork';
+  String get practiceStNamTheFork => 'Tấn công đôi';
 
   @override
-  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+  String get practiceStNamDiscoveredAttacks => 'Đòn tấn công mở';
 
   @override
-  String get practiceStNamDoubleCheck => 'Double Check';
+  String get practiceStNamDoubleCheck => 'Chiếu Đôi';
 
   @override
-  String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
+  String get practiceStNamOverloadedPieces => 'Quân cờ quá tải';
 
   @override
-  String get practiceStNamZwischenzug => 'Zwischenzug';
+  String get practiceStNamZwischenzug => 'Nước cờ trung gian';
 
   @override
-  String get practiceStNamXRay => 'X-Ray';
+  String get practiceStNamXRay => 'Đòn xuyên thấu';
 
   @override
-  String get practiceStNamZugzwang => 'Zugzwang';
+  String get practiceStNamZugzwang => 'Đòn cưỡng ép';
 
   @override
-  String get practiceStNamInterference => 'Interference';
+  String get practiceStNamInterference => 'Đòn can thiệp';
 
   @override
-  String get practiceStNamGreekGift => 'Greek Gift';
+  String get practiceStNamGreekGift => 'Món quà Hy Lạp';
 
   @override
-  String get practiceStNamDeflection => 'Deflection';
+  String get practiceStNamDeflection => 'Đánh lạc hướng';
 
   @override
-  String get practiceStNamAttraction => 'Attraction';
+  String get practiceStNamAttraction => 'Đòn thu hút';
 
   @override
-  String get practiceStNamUnderpromotion => 'Underpromotion';
+  String get practiceStNamUnderpromotion => 'Không phong hậu';
 
   @override
-  String get practiceStNamDesperado => 'Desperado';
+  String get practiceStNamDesperado => 'Hồi quang phản chiếu';
 
   @override
-  String get practiceStNamCounterCheck => 'Counter Check';
+  String get practiceStNamCounterCheck => 'Đáp trả chiếu tướng';
 
   @override
-  String get practiceStNamUndermining => 'Undermining';
+  String get practiceStNamUndermining => 'Bào mòn quân lực';
 
   @override
-  String get practiceStNamClearance => 'Clearance';
+  String get practiceStNamClearance => 'Đòn dọn đường';
 
   @override
-  String get practiceStNamKeySquares => 'Key Squares';
+  String get practiceStNamKeySquares => 'Ô cờ quan trọng';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => 'Thế đối vua';
 
   @override
-  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+  String get practiceStNam7thRankRookPawn => 'Tốt hàng 7';
 
   @override
-  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+  String get practiceStNamBasicRookEndgames => 'Các thế cờ tàn Xe cơ bản';
 
   @override
-  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+  String get practiceStNamIntermediateRookEndings => 'Tàn cuộc xe trung cấp';
 
   @override
-  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+  String get practiceStNamPracticalRookEndings => 'Luyện tập các thế cờ tàn Xe';
 
   @override
-  String get practiceStDesBasicCheckmates => 'Basic checkmates';
+  String get practiceStDesBasicCheckmates => 'Chiếu hết cơ bản';
 
   @override
-  String get practiceStDesRecognizeThePatterns => 'Recognize the patterns';
+  String get practiceStDesRecognizeThePatterns => 'Nhận biết các mô hình';
 
   @override
-  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+  String get practiceStDesChallengingCheckmates => 'Chiếu hết đầy thử thách';
 
   @override
-  String get practiceStDesInteractiveLesson => 'Interactive lesson';
+  String get practiceStDesInteractiveLesson => 'Bài học tương tác';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Pin it to win it';
+  String get practiceStDesPinItToWinIt => 'Ghim nó để hạ nó';
 
   @override
-  String get practiceStDesYumSkewers => 'Yum - skewers!';
+  String get practiceStDesYumSkewers => 'Thịt xiên - Ngon thí!';
 
   @override
   String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
 
   @override
-  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+  String get practiceStDesIncludingDiscoveredChecks => 'Bao gồm đòn chiếu mở';
 
   @override
-  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+  String get practiceStDesAVeryPowerfulTactic => 'Một chiến thuật rất hiệu quả';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => 'Chúng có quá nhiều thứ phải làm';
 
   @override
   String get practiceStDesInBetweenMoves => 'In-between moves';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Tấn công xuyên qua quân địch';
 
   @override
-  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+  String get practiceStDesBeingForcedToMove => 'Bị buộc phải di chuyển';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Chèn một quân cờ để tạo một hiệu quả tuyệt vời';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Nghiên cứu bố thí món quà Hy Lạp';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => 'Đánh lạc hướng quân phòng thủ';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => 'Dụ quân cờ vào ô cờ xấu';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => 'Phong cấp - nhưng không phải phong hậu!';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Mất một quân cờ, nhưng nó vẫn có ích';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => 'Đáp trả chiếu tướng bằng chiếu tướng';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => 'Loại bỏ quân phòng thủ';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => 'Tránh ra cho ta!';
 
   @override
   String get practiceStDesReachAKeySquare => 'Reach a key square';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => 'Chiếm lợi thế đối đầu';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => 'Đối đầu với quân Hậu';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => 'Và thế thụ động Xe đấu Xe';
 
   @override
-  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+  String get practiceStDesLucenaAndPhilidor => 'Lucena và Philidor';
 
   @override
-  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+  String get practiceStDesBroadenYourKnowledge => 'Mở rộng kiến ​​thức của bạn';
 
   @override
-  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
+  String get practiceStDesRookEndingsWithSeveralPawns => 'Tàn cuộc xe với nhiều quân tốt';
 
   @override
   String get preferencesPreferences => 'Tuỳ chỉnh';
@@ -2361,7 +2361,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Xác nhận nước đi';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Nhiều lựa chọn. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Có thể bị vô hiệu hóa trong ván cờ với mục lục bàn cờ';
@@ -2508,22 +2508,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesHoverOverSettingLabelsForHelp => 'Di chuột qua các cài đặt để xem giải thích';
 
   @override
-  String get preferencesNetwork => 'Network';
+  String get preferencesNetwork => 'Mạng';
 
   @override
-  String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
+  String get preferencesYouAreCurrentlyUsingDirectRouting => 'Bạn hiện đang sử dụng định tuyến mạng trực tiếp.';
 
   @override
-  String get preferencesYouAreCurrentlyUsingCdnRouting => 'You are currently using Content Delivery Network (CDN) routing.';
+  String get preferencesYouAreCurrentlyUsingCdnRouting => 'Bạn hiện đang sử dụng định tuyến Mạng phân tán nội dung (CDN).';
 
   @override
-  String get preferencesFrequentDisconnectsAdvice => 'If you have frequent disconnects, try changing the routing.';
+  String get preferencesFrequentDisconnectsAdvice => 'Nếu bạn thường xuyên bị mất kết nối, hãy thử thay đổi kiểu định tuyến.';
 
   @override
-  String get preferencesUseDirectRouting => 'Use direct routing';
+  String get preferencesUseDirectRouting => 'Dùng định tuyến mạng trực tiếp';
 
   @override
-  String get preferencesUseCdnRouting => 'Use CDN routing';
+  String get preferencesUseCdnRouting => 'Dùng định tuyến mạng CDN';
 
   @override
   String get puzzlePuzzles => 'Câu đố';
@@ -3290,19 +3290,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';
 
   @override
-  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+  String get settingsWereSorryToSeeYouGo => 'Chúng tôi rất tiếc khi thấy bạn rời đi.';
 
   @override
-  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+  String get settingsCloseAccountForeverLabel => 'Đóng cửa vĩnh viễn: khiến việc mở lại tài khoản là không thể';
 
   @override
-  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+  String get settingsCloseAccountForeverWarning => 'Ngăn việc mở lại tài khoản sau này. Nếu bạn chọn ô này, ngay cả các quản trị viên cũng không thể mở lại tài khoản của bạn theo yêu cầu của bạn.';
 
   @override
-  String get settingsDeleteYourAccount => 'Delete your account';
+  String get settingsDeleteYourAccount => 'Xóa tài khoản';
 
   @override
-  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+  String get settingsDeleteAccountWarning => 'Sau khi bạn xóa tài khoản, tài khoản đó sẽ bị xóa khỏi Lichess và quản trị viên của chúng tôi sẽ không thể khôi phục lại tài khoản đó cho bạn.';
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
@@ -3310,10 +3310,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get settingsCloseYourAccount => 'close your account';
+  String get settingsCloseYourAccount => 'đóng tài khoản của bạn';
 
   @override
-  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
+  String get settingsDeleteAccountConfirmText => 'Tôi hiểu rằng các tài khoản bị xóa sẽ không thể khôi phục được';
 
   @override
   String get gameSetup => 'Thiết lập ván đấu';
@@ -4667,19 +4667,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get onlineBots => 'Các Bot trực tuyến';
 
   @override
-  String get aboutBotsOnLichess => 'About bots on Lichess';
+  String get aboutBotsOnLichess => 'Thông tin về bot trên Lichess';
 
   @override
-  String get featuredBots => 'Featured bots';
+  String get featuredBots => 'Các bot nổi bật';
 
   @override
-  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+  String get tryPlayingTheseInnovativeChessEngines => 'Hãy thử chơi những bot cờ vua sáng tạo này! Chúng là những chương trình mà chúng tôi yêu thích nhất.';
 
   @override
-  String get communityBots => 'Community bots';
+  String get communityBots => 'Các bot cộng đồng';
 
   @override
-  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Thêm nhiều bot cờ vua khác được tạo ra bởi cộng đồng Lichess. Chúng được lưu trữ bởi chính những người tạo ra chúng và có thể không phải lúc nào cũng trực tuyến.';
 
   @override
   String get name => 'Tên';
@@ -4757,7 +4757,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reason => 'Lý do';
 
   @override
-  String get whatIsIheMatter => 'Có chuyện gì vậy?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Gian lận';
@@ -4778,7 +4778,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get processReportFasterInEnglish => 'Chúng tôi có thể xử lý báo cáo của bạn nhanh hơn nếu bạn viết bằng tiếng Anh.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Hãy cung cấp ít nhất một đường dẫn đến ván cờ bị gian lận.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -4827,7 +4827,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get logInByEmail => 'Đăng nhập bằng email';
 
   @override
-  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
+  String get emailLoginInstructions => 'Chúng tôi sẽ gửi cho bạn một email chứa đường dẫn để đăng nhập.';
 
   @override
   String get emailMeALink => 'Gửi cho tôi một liên kết trong Email';
@@ -4902,10 +4902,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get never => 'Không bao giờ';
 
   @override
-  String get defeatOnly => 'Defeat only';
+  String get defeatOnly => 'Chỉ khi thua';
 
   @override
-  String get drawAndDefeat => 'Draw and defeat';
+  String get drawAndDefeat => 'Chỉ khi hòa hoặc thua';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -5090,13 +5090,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get really => 'thật sự';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Cập nhật từ Lichess';
 
   @override
   String get contribute => 'Đóng góp';
 
   @override
-  String get changelog => 'Changelog';
+  String get changelog => 'Nhật kí thay đổi';
 
   @override
   String get termsOfService => 'Điều khoản Dịch vụ';
@@ -5108,7 +5108,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sourceCode => 'Mã Nguồn';
 
   @override
-  String get blockAds => 'Block ads';
+  String get blockAds => 'Chặn quảng cáo';
 
   @override
   String get simultaneousExhibitions => 'Đấu cờ đồng loạt';
@@ -5215,7 +5215,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get keyShowOrHideComments => 'hiện/ẩn bình luận';
 
   @override
-  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
+  String get keyShowOrHideCurrentVariation => 'ẩn/hiện thế cờ hiện tại';
 
   @override
   String get keyEnterOrExitVariation => 'vào/thoát biến';
@@ -5421,7 +5421,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String activeSessionsDescription(String param1, String param2) {
-    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+    return 'Đây là danh sách các thiết bị và ứng dụng đang đăng nhập vào tài khoản của bạn. Nếu bạn phát hiện bất kỳ hoạt động đáng ngờ nào, hãy <a href=\'$param1\'>kiểm tra địa chỉ email khôi phục</a> và <a href=\'$param2\'>thay đổi mật khẩu</a>.';
   }
 
   @override
@@ -5443,7 +5443,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get noChallenges => 'Không có lời thách đấu nào.';
 
   @override
-  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
+  String get browserNotificationsDenied => 'Thông báo bật lên đã bị vô hiệu bởi cài đặt của trình duyệt';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6175,19 +6175,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get verifyingYourDevice => 'Đang xác minh thiết bị của bạn...';
 
   @override
-  String get chessOpenings => 'Chess openings';
+  String get chessOpenings => 'Khai cuộc cờ vua';
 
   @override
-  String get boards => 'Boards';
+  String get boards => 'Các bàn đấu';
 
   @override
-  String get write => 'Write';
+  String get write => 'Soạn thảo';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Xem trước';
 
   @override
-  String get done => 'Done';
+  String get done => 'Hoàn thành';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6913,7 +6913,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyShowEvalBar => 'Thanh lợi thế';
 
   @override
-  String get studyNext => 'Trang tiếp theo';
+  String get studyNext => 'Kế tiếp';
 
   @override
   String get studyShareAndExport => 'Chia sẻ & xuất';
@@ -7133,7 +7133,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyWhereDoYouWantToStudyThat => 'Bạn muốn nghiên cứu ở đâu?';
 
   @override
-  String get studyGoodMove => 'Nước tốt';
+  String get studyGoodMove => 'Nước cờ tốt';
 
   @override
   String get studyMistake => 'Sai lầm';
@@ -7394,7 +7394,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get teamTeam => 'Đội';
 
   @override
-  String get teamTeamUpdates => 'Thông báo của đội';
+  String get teamTeamUpdates => 'Cập nhật của đội';
 
   @override
   String get teamIncorrectEntryCode => 'Mã không chính xác.';

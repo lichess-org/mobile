@@ -4813,7 +4813,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get reason => 'Motiv';
 
   @override
-  String get whatIsIheMatter => 'Care este problema?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Trișează';
@@ -4834,7 +4834,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get processReportFasterInEnglish => 'Îți putem procesa raportul mai rapid dacă scrii în engleză.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Te rugăm să furnizezi cel puțin un link către un joc în care s-a trișat.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6243,7 +6243,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preview => 'Previzualizare';
 
   @override
-  String get done => 'Done';
+  String get done => 'Finalizat';
 
   @override
   String opponentLeftCounter(int count) {

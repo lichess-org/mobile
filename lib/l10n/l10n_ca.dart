@@ -330,7 +330,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSettingsDraggedTargetSquare => 'Quadrat';
 
   @override
-  String get mobileSettingsDrawnShapeColor => 'Drawn shape color';
+  String get mobileSettingsDrawnShapeColor => 'Color de la forma dibuixada';
 
   @override
   String get mobileSettingsDrawnShapeColorHelp => 'El color s\'utilitza per a les formes dibuixades a mà amb dos dits.';
@@ -4785,7 +4785,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get reason => 'Raó';
 
   @override
-  String get whatIsIheMatter => 'Quin és el problema?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Trampós';
@@ -4806,7 +4806,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get processReportFasterInEnglish => 'Podrem processar els teus comentaris més ràpid si ho escrius en anglès.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Si us plau, proporcioneu com a mínim un enllaç a un joc on s\'han fet trampes.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

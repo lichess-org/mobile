@@ -1274,7 +1274,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String challengeChallengesX(String param1) {
-    return '$param1 karşılaşmaları';
+    return 'Meydan okumalar: $param1';
   }
 
   @override
@@ -1576,7 +1576,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get learnSelectThePieceYouWant => 'Dilediğin taşı seç!';
 
   @override
-  String get learnFundamentals => 'Temel Prensipler';
+  String get learnFundamentals => 'Temel prensipler';
 
   @override
   String get learnCapture => 'Taş yeme';
@@ -2596,7 +2596,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get puzzleYourPuzzleRatingWillNotChange => 'Bulmaca puanınız değişmeyecek. Bulmacaların bir yarış olmadığını unutmayın. Bu puan mevcut becerilerinize en uygun bulmacayı seçmeye yardımcı olur.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Beyaz için en iyi hamleyi bulunuz.';
+  String get puzzleFindTheBestMoveForWhite => 'Beyaz için en iyi hamleyi bulun.';
 
   @override
   String get puzzleFindTheBestMoveForBlack => 'Siyah için en iyi hamleyi bulun.';
@@ -4353,7 +4353,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get save => 'Kaydet';
 
   @override
-  String get leaderboard => 'Lider Tablosu';
+  String get leaderboard => 'Lider tablosu';
 
   @override
   String get positionAsImage => 'Görsel olarak pozisyon';
@@ -4785,7 +4785,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reason => 'Sebep';
 
   @override
-  String get whatIsIheMatter => 'Problem nedir?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Hile';
@@ -4806,7 +4806,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get processReportFasterInEnglish => 'İngilizce yazarsanız bildiriminizi daha hızlı işleme alabiliriz.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Lütfen hileli gördüğünüz en az 1 adet oyun linki verin.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5106,7 +5106,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String aboutX(String param) {
-    return '$param hakkında';
+    return '$param Hakkında';
   }
 
   @override
@@ -5127,7 +5127,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get changelog => 'Değişiklik Notları';
 
   @override
-  String get termsOfService => 'Hizmet koşulları';
+  String get termsOfService => 'Hizmet Koşulları';
 
   @override
   String get titleVerification => 'Ünvan doğrulaması';
@@ -6215,7 +6215,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preview => 'Önizleme';
 
   @override
-  String get done => 'Done';
+  String get done => 'Bitti';
 
   @override
   String opponentLeftCounter(int count) {

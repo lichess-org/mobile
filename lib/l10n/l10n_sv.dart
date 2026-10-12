@@ -4785,7 +4785,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get reason => 'Anledning';
 
   @override
-  String get whatIsIheMatter => 'Vad är problemet?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Fusk';
@@ -4806,7 +4806,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get processReportFasterInEnglish => 'Vi kan behandla din anmälan snabbare om du skriver på engelska.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Ange minst en länk till ett spel där användaren fuskade.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

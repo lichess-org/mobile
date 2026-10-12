@@ -3374,30 +3374,30 @@ class AppLocalizationsSl extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'Račun je zaprt.';
 
   @override
-  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+  String get settingsWereSorryToSeeYouGo => 'Žal nam je, da odhajate.';
 
   @override
-  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+  String get settingsCloseAccountForeverLabel => 'Trajno zapri: onemogoči ponovno odprtje';
 
   @override
-  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+  String get settingsCloseAccountForeverWarning => 'Preprečite poznejše ponovno odprtje računa. Če označite to polje, niti skrbniki ne bodo mogli znova odpreti vašega računa na vašo zahtevo.';
 
   @override
-  String get settingsDeleteYourAccount => 'Delete your account';
+  String get settingsDeleteYourAccount => 'Izbrišite svoj račun';
 
   @override
-  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+  String get settingsDeleteAccountWarning => 'Ko izbrišete svoj račun, je ta odstranjen s platforme Lichess in ga naši skrbniki ne bodo mogli obnoviti.';
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
-    return 'Would you like to $param instead?';
+    return 'Bi raje $param?';
   }
 
   @override
-  String get settingsCloseYourAccount => 'close your account';
+  String get settingsCloseYourAccount => 'zaprite svoj račun';
 
   @override
-  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
+  String get settingsDeleteAccountConfirmText => 'Razumem, da izbrisanih računov ni mogoče obnoviti';
 
   @override
   String get gameSetup => 'Nastavitev igre';
@@ -4841,7 +4841,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get reason => 'Razlog';
 
   @override
-  String get whatIsIheMatter => 'Kaj je narobe?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Goljufija';
@@ -4862,7 +4862,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Navedite vsaj eno povezavo do igre s primerom goljufanja.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6271,7 +6271,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get preview => 'Preview';
 
   @override
-  String get done => 'Done';
+  String get done => 'Opravljeno';
 
   @override
   String opponentLeftCounter(int count) {

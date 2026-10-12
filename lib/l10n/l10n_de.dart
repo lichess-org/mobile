@@ -4785,7 +4785,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reason => 'Grund';
 
   @override
-  String get whatIsIheMatter => 'Was ist das Problem?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Betrug';
@@ -4806,7 +4806,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get processReportFasterInEnglish => 'Wir können deinen Bericht schneller bearbeiten, wenn du auf Englisch schreibst.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Bitte gib mindestens einen Link zu einem Spiel an, in dem betrogen wurde.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6215,7 +6215,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preview => 'Vorschau';
 
   @override
-  String get done => 'Done';
+  String get done => 'Erledigt';
 
   @override
   String opponentLeftCounter(int count) {
