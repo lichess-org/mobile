@@ -468,6 +468,9 @@ Android must not change: every glass code path is behind a
 - **Floating action buttons**: use `PlatformFloatingActionButton` (a tinted glass capsule on iOS)
   instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
   prefer a nav bar action on iOS.
+- **Search fields**: a `PlatformSearchBar` placed in an app bar (e.g. its `bottom`) takes
+  `inAppBar: true`, which makes it a `GlassSearchBar` on iOS. A search field inside the body
+  stays a regular field.
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, sheets), not for content such as cards or list rows.
 

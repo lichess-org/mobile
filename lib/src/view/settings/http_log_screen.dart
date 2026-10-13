@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -57,8 +58,8 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
   @override
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: const Text('HTTP logs'),
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
@@ -82,6 +83,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: _searchController,
+              inAppBar: true,
               hintText: context.l10n.searchSearch,
               onChanged: (value) => setState(() {
                 _searchQuery = value.isEmpty ? null : value;
@@ -129,6 +131,10 @@ class _HttpLogListState() extends ConsumerState<_HttpLogList> {
       );
     }
     return HapticRefreshIndicator(
+      // On iOS the list extends behind the glass app bar, whose height is in the top padding.
+      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+          ? MediaQuery.paddingOf(context).top
+          : 0.0,
       key: widget.refreshIndicatorKey,
       onRefresh: widget.onRefresh,
       child: ListView.separated(

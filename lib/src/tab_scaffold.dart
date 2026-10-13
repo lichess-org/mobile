@@ -74,6 +74,8 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
             // A progressive blur works over any background, including the user's background image.
             edgeStyle: .blur,
             bottomBar: tabBar,
+            // The floating tab bar has no edge effect around it, like in iOS apps.
+            bottomEdgeFade: false,
             // GlassScaffold does not inset the body, so the tab bar height is set as the bottom
             // padding, which the tab screens' [PlatformScaffold] extend their body into.
             body: Builder(

@@ -1,6 +1,9 @@
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassSearchBar;
 import 'package:material_ui/material_ui.dart';
 
 /// Displays a [SearchBar] with platform adaptations.
+///
+/// On iOS, a search bar placed in the app bar ([inAppBar]) is a liquid glass search field.
 class const PlatformSearchBar({
   /// See [SearchBar.controller].
   final TextEditingController? controller,
@@ -32,6 +35,12 @@ class const PlatformSearchBar({
 
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode,
+
+  /// Whether the search bar is placed in the app bar, like in its `bottom`.
+  ///
+  /// On iOS it is then a liquid glass search field, part of the glass navigation bar. That field
+  /// has no [onTap], and calls [onClear] whenever its text becomes empty, after [onChanged].
+  final bool inAppBar = false,
 }) extends StatefulWidget {
   @override
   State<PlatformSearchBar> createState() => _PlatformSearchBarState();
@@ -56,6 +65,22 @@ class _PlatformSearchBarState() extends State<PlatformSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.inAppBar && Theme.of(context).platform == TargetPlatform.iOS) {
+      return GlassSearchBar(
+        controller: widget.controller,
+        focusNode: widget.focusNode,
+        placeholder: widget.hintText ?? MaterialLocalizations.of(context).searchFieldLabel,
+        autofocus: widget.autoFocus,
+        onSubmitted: widget.onSubmitted,
+        onChanged: (term) {
+          widget.onChanged?.call(term);
+          if (term.isEmpty) widget.onClear?.call();
+        },
+        // Floats alone in the app bar, there is no parent glass layer to share.
+        useOwnLayer: true,
+      );
+    }
+
     return SearchBar(
       elevation: const WidgetStatePropertyAll(0),
       controller: widget.controller,
