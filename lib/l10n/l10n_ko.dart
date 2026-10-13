@@ -4769,7 +4769,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get reason => '이유';
 
   @override
-  String get whatIsIheMatter => '무엇이 문제인가요?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => '부정행위';
@@ -4790,7 +4790,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get processReportFasterInEnglish => '신고를 영어로 작성하시면 더 빠르게 처리해 드릴 수 있습니다.';
 
   @override
-  String get error_provideOneCheatedGameLink => '검토할 대국의 링크를 하나 이상 제공해 주세요.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6199,7 +6199,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get preview => '미리보기';
 
   @override
-  String get done => 'Done';
+  String get done => '완료';
 
   @override
   String opponentLeftCounter(int count) {

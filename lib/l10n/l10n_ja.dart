@@ -4769,7 +4769,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reason => '理由';
 
   @override
-  String get whatIsIheMatter => 'どうされましたか？';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'ソフト使用';
@@ -4790,7 +4790,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get processReportFasterInEnglish => '英語で書くと通報への対応が速くなります。';
 
   @override
-  String get error_provideOneCheatedGameLink => '不正のあった対局 1 局以上へのリンクを添えてください。';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6199,7 +6199,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preview => 'プレビュー';
 
   @override
-  String get done => 'Done';
+  String get done => '完了';
 
   @override
   String opponentLeftCounter(int count) {
