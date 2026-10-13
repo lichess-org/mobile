@@ -55,6 +55,23 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
   }
 }
 
+/// The background of a non-glass bar over scrolling content on iOS, like tabs in the app bar or a
+/// [BottomBar].
+///
+/// It is the iOS default bar tint, or with a background image or color theme (transparent
+/// scaffold), the surface color with the same opacity, so that the bar is not grey over the
+/// background.
+Color cupertinoBarTint(BuildContext context) {
+  // A material based Cupertino theme does not resolve the default dynamic color.
+  final barTint = CupertinoDynamicColor.resolve(
+    CupertinoTheme.of(context).barBackgroundColor,
+    context,
+  );
+  return Theme.of(context).scaffoldBackgroundColor.a == 0
+      ? ColorScheme.of(context).surface.withValues(alpha: barTint.a)
+      : barTint;
+}
+
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
 
@@ -255,23 +272,11 @@ class const PlatformAppBar({
             )
           : null;
 
-      // A bar with a non-glass bottom (e.g. tabs) is tinted with the iOS default bar background:
-      // the scroll edge effect fades out above the bottom, where the content would show through.
-      // With a background image or color theme (transparent scaffold), the surface color is used
-      // instead, so that the bar is not grey over the background.
-      final Color backgroundColor;
-      if (bottom != null && (tintBottom ?? bottom is TabBar)) {
-        // A material based Cupertino theme does not resolve the default dynamic color.
-        final barTint = CupertinoDynamicColor.resolve(
-          CupertinoTheme.of(context).barBackgroundColor,
-          context,
-        );
-        backgroundColor = Theme.of(context).scaffoldBackgroundColor.a == 0
-            ? colorScheme.surface.withValues(alpha: barTint.a)
-            : barTint;
-      } else {
-        backgroundColor = Colors.transparent;
-      }
+      // The scroll edge effect fades out above a non-glass bottom (e.g. tabs), where the content
+      // would show through: the bar is tinted.
+      final backgroundColor = bottom != null && (tintBottom ?? bottom is TabBar)
+          ? cupertinoBarTint(context)
+          : Colors.transparent;
 
       return GlassAppBar(
         backgroundColor: backgroundColor,

@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
@@ -29,16 +28,15 @@ class BottomBar extends StatelessWidget {
   /// Whether to expand the children to fill the available space. Defaults to true.
   final bool expandChildren;
 
-  /// Whether to use a transparent background on iOS. Defaults to false.
+  /// Whether to use a translucent background on iOS, with the same tint as the app bar over
+  /// tabs ([cupertinoBarTint]), for a bar over scrolling content. Defaults to false.
   final bool cupertinoTransparent;
 
   @override
   Widget build(BuildContext context) {
-    Widget bar = BottomAppBar(
+    final bar = BottomAppBar(
       color: Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent
-          ? (BottomAppBarTheme.of(context).color ?? ColorScheme.of(context).surface).withValues(
-              alpha: kCupertinoBarOpacity,
-            )
+          ? cupertinoBarTint(context)
           : null,
       height: kBottomBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
@@ -49,15 +47,6 @@ class BottomBar extends StatelessWidget {
             : children,
       ),
     );
-
-    if (Theme.of(context).platform == TargetPlatform.iOS && cupertinoTransparent) {
-      bar = ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
-          child: bar,
-        ),
-      );
-    }
 
     return MediaQuery.withClampedTextScaling(maxScaleFactor: 1.4, child: bar);
   }
