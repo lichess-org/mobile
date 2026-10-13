@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -29,7 +30,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -60,6 +60,8 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
+    show GlassButton, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -196,11 +198,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
 
             if (shouldShowWelcomeScreen) {
               final welcomeWidgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
                 if (showOutage) const ServerOutageDisplay(),
                 if (!widget.editModeEnabled) ...[
                   Padding(
@@ -277,11 +274,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
               ];
             } else if (isTablet) {
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
                 if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 if (hasServerContent)
@@ -347,19 +339,12 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         orElse: () => false,
                       ));
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
                 if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 _EditableWidget(
                   widget: HomeEditableWidget.perfCards,
                   shouldShow: authUser != null && hasServerContent,
-                  child: AccountPerfCards(
-                    padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-                  ),
+                  child: const AccountPerfCards(padding: Styles.bodySectionPadding),
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
@@ -432,7 +417,9 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           automaticallyImplyLeading: false,
                         )
                       : PlatformAppBar(
-                          title: Theme.of(context).platform == TargetPlatform.iOS
+                          title: authUser != null
+                              ? _GreetingWidget(authUser.user)
+                              : Theme.of(context).platform == TargetPlatform.iOS
                               ? AppBarLichessTitle(
                                   iconSize:
                                       Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
@@ -646,54 +633,64 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   name: '_isDayTimeProvider',
 );
 
-class const _GreetingWidget() extends ConsumerWidget {
+/// The greeting of the logged in user, as the app bar title, which opens the profile.
+///
+/// On iOS it is a glass button.
+class const _GreetingWidget(final LightUser user) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
     final isDayTime = ref.watch(_isDayTimeProvider);
+    final greeting =
+        '${isDayTime ? '☀️' : '🌙'} ${(isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening)(user.name)}';
+
+    void openProfile() {
+      ref.invalidate(accountProvider);
+      Navigator.of(context).push(ProfileScreen.buildRoute());
+    }
+
+    if (Theme.of(context).platform != TargetPlatform.iOS) {
+      return InkWell(
+        onTap: openProfile,
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        child: Text(greeting, maxLines: 1, overflow: TextOverflow.ellipsis),
+      );
+    }
+
     final style = TextTheme.of(context).bodyLarge;
-
-    const iconSize = 24.0;
-
-    final user = authUser?.user;
-
+    const horizontalPadding = 16.0;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.3,
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: GestureDetector(
-          onTap: () {
-            ref.invalidate(accountProvider);
-            Navigator.of(context).push(ProfileScreen.buildRoute());
-          },
-          child: Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // The Row lets the button be only as wide as its content (it would otherwise fill the
+          // title width), which is limited to the title width.
+          return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                isDayTime ? '☀️' : '🌙',
-                style: const TextStyle(fontSize: iconSize, height: 1.0),
-              ),
-              const SizedBox(width: 5.0),
-              if (user != null)
-                Flexible(
-                  child: l10nWithWidget(
-                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
-                    Text(user.name, style: style),
-                    textStyle: style,
-                  ),
-                )
-              else
-                Flexible(
-                  child: Text(
-                    isDayTime
-                        ? context.l10n.mobileGoodDayWithoutName
-                        : context.l10n.mobileGoodEveningWithoutName,
-                    style: style,
+              GlassButton.custom(
+                onTap: openProfile,
+                label: greeting,
+                // Like the app bar buttons.
+                height: 44.0,
+                shape: const LiquidRoundedSuperellipse(borderRadius: 22.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: math.max(0.0, constraints.maxWidth - 2 * horizontalPadding),
+                    ),
+                    child: Text(
+                      greeting,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: style,
+                    ),
                   ),
                 ),
+              ),
             ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }
