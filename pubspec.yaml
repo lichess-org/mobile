@@ -2,12 +2,12 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.29.1+002901 # See README.md for details about versioning
+version: 0.30.0+003000 # See README.md for details about versioning
 
 environment:
   sdk: ^3.13.0
   # this should be updated with every new flutter stable release
-  flutter: 3.47.6
+  flutter: 3.47.7
 
 dependencies:
   app_links: ^7.2.1
@@ -27,7 +27,7 @@ dependencies:
   deep_pick: ^1.1.0
   device_info_plus: ^13.2.0
   dynamic_system_colors: ^1.9.0
-  fast_immutable_collections: ^11.2.0
+  fast_immutable_collections: ^12.0.0
   file_picker: ^13.1.0
   firebase_core: ^4.13.0
   firebase_crashlytics: ^5.2.7
@@ -46,6 +46,7 @@ dependencies:
       url: https://github.com/HaonRekcef/flutter_markdown_plus.git
       ref: 74dd63f3dc91bcf919a612a1816ca82df248472e
   flutter_native_splash: ^2.4.8
+  flutter_onnxruntime: ^1.9.0
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
   flutter_slidable: ^4.0.3

@@ -159,23 +159,23 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'Se unha conta coincide con $param1, envióuselle un código de caracteres de $param2. Consulta a túa caixa de entrada e introduce o código a continuación.';
+    return 'Se hai unha conta asociada ao correo electrónico $param1, enviouse a este enderezo un código de $param2 caracteres. Comproba a túa bandexa de entrada e introduce este código a continuación.';
   }
 
   @override
-  String get mobileInvalidOrExpiredLoginCode => 'O código é inválido ou caducou.';
+  String get mobileInvalidOrExpiredLoginCode => 'O código é incorrecto ou caducou.';
 
   @override
   String get mobileLiveStreamers => 'Presentadores en directo';
 
   @override
-  String get mobileLocalDatabaseSize => 'Tamaño da Base de Datos local';
+  String get mobileLocalDatabaseSize => 'Tamaño da base de datos local';
 
   @override
   String get mobileMoveOnRelease => 'Mover ao soltar';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'Ao mover unha peza tocando, o movemento realízase ao levantar o dedo, o que permite deslizar para cambiar a casa de destino.';
+  String get mobileMoveOnReleaseSubtitle => 'Cando moves unha peza premendo dúas casas, a xogada realízase só o levantares o dedo: deste xeito podes deslizalo para cambiar a casa de destino.';
 
   @override
   String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta páxina.';
@@ -187,7 +187,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileNewGame => 'Nova partida';
 
   @override
-  String get mobileNextMistake => 'Novo erro';
+  String get mobileNextMistake => 'Seguinte erro';
 
   @override
   String get mobileNextMonth => 'Next month';
@@ -309,7 +309,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobilePuzzlesTab => 'Problemas';
 
   @override
-  String get mobileRateThisApp => 'Valorar esta app';
+  String get mobileRateThisApp => 'Valorar esta aplicación';
 
   @override
   String get mobileRecentSearches => 'Procuras recentes';
@@ -378,13 +378,13 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsPickAnImageSwipeToDisplay => 'Arrastrar para amosar outros fondos';
 
   @override
-  String get mobileSettingsPieceShiftMethodEither => 'Tocar ou arrastrar';
+  String get mobileSettingsPieceShiftMethodEither => 'Tocando ou arrastrando';
 
   @override
-  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocar dúas casas';
+  String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Tocando dúas casas';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'As túas preferencias foron gardadas na túa conta de Lichess. Sincronizaranse en tódolos teus dispositivos.';
+  String get mobileSettingsPreferencesSaved => 'Gardáronse os axustes da túa conta de Lichess. Serán sincronizados en tódolos teus dispositivos.';
 
   @override
   String get mobileSettingsShapeDrawing => 'Debuxo de figuras';
@@ -411,7 +411,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileShareGameURL => 'Compartir o URL da partida';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Partillar análise local PGN';
+  String get mobileShareLocalAnalysisPgn => 'Partillar o PGN da análise local';
 
   @override
   String get mobileSharePositionAsFEN => 'Compartir a posición coma FEN';
@@ -423,22 +423,22 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileShowComments => 'Amosar os comentarios';
 
   @override
-  String get mobileShowEngineLines => 'Ver liñas do motor';
+  String get mobileShowEngineLines => 'Ver as liñas da máquina';
 
   @override
-  String get mobileShowEvaluationGauge => 'Ver indicador de avaliación';
+  String get mobileShowEvaluationGauge => 'Ver o indicador de avaliación';
 
   @override
   String get mobileShowResult => 'Amosar o resultado';
 
   @override
-  String get mobileSignInWithBrowser => 'Iniciar sesión co navegador';
+  String get mobileSignInWithBrowser => 'Rexistrarse co navegador';
 
   @override
-  String get mobileSignInWithEmail => 'Iniciar sesión cun correo electrónico';
+  String get mobileSignInWithEmail => 'Rexistrarse cun correo electrónico';
 
   @override
-  String get mobileSimpleDelay => 'Retardo simple';
+  String get mobileSimpleDelay => 'Modo con retardo simple';
 
   @override
   String get mobileSmallBoard => 'Taboleiro pequeno';
@@ -447,7 +447,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Algo foi mal.';
 
   @override
-  String get mobileSortFriends => 'Ordear amigos/as';
+  String get mobileSortFriends => 'Ordenar as amizades';
 
   @override
   String get mobileStopShowingThreat => 'Non amosar a ameaza';
@@ -456,7 +456,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSystemColors => 'Cores do sistema';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase non está dispoñible sen conexión.';
+  String get mobileTablebaseOffline => 'A base de datos de finais non está dispoñible sen conexión.';
 
   @override
   String get mobileTheme => 'Tema';
@@ -488,7 +488,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileViewGame => 'Ver a partida';
 
   @override
-  String get mobileViewLicenses => 'Ver licencias';
+  String get mobileViewLicenses => 'Ver as licenzas';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Agardando un rival...';
@@ -497,10 +497,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileWatchTab => 'Ver';
 
   @override
-  String get mobileWeWillEmailYouCode => 'Enviarémosche por correo electrónico un código para iniciar sesión.';
+  String get mobileWeWillEmailYouCode => 'Enviarémosche un código por correo electrónico para que poidas rexistrarte.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'Non podes desafiarte a ti mesmo/a';
+  String get mobileYouCannotChallengeYourself => 'Non podes desafiarte a ti mesmo';
 
   @override
   String get activityActivity => 'Actividade';
@@ -2368,7 +2368,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesClickTwoSquares => 'Premendo na casa de orixe e despois na de destino';
 
   @override
-  String get preferencesDragPiece => 'Arrastrar a peza';
+  String get preferencesDragPiece => 'Arrastrando a peza';
 
   @override
   String get preferencesBothClicksAndDrag => 'Ambas';
@@ -4803,7 +4803,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Que pasou?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Trampa';
@@ -4824,7 +4824,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get processReportFasterInEnglish => 'Poderemos procesar máis rápido a túa denuncia se escribes en Inglés.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Por favor, proporciona cando menos unha ligazón a unha partida para a súa revisión.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -4861,7 +4861,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get incorrectPassword => 'Contrasinal incorrecto';
 
   @override
-  String get invalidAuthenticationCode => 'Código de autenticación inválido';
+  String get invalidAuthenticationCode => 'Código de autenticación non válido';
 
   @override
   String get clearField => 'Limpar campo';
@@ -6233,7 +6233,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preview => 'Vista previa';
 
   @override
-  String get done => 'Done';
+  String get done => 'Feito';
 
   @override
   String opponentLeftCounter(int count) {

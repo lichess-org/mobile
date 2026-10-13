@@ -9,7 +9,7 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Согласиться на ничью?';
 
   @override
   String get mobileAccount => 'Аккаунт';
@@ -62,7 +62,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => 'Название главы';
 
   @override
   String get mobileChessEngine => 'Шахматный движок';
@@ -103,7 +103,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileDangerZone => 'Danger zone';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Удалить свою учётную запись';
 
   @override
   String get mobileDisplayModeCompact => 'Компактный';
@@ -115,7 +115,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Скачать мои партии';
 
   @override
   String get mobileFeedbackButton => 'Отзыв';
@@ -265,7 +265,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePerfShortUltraBullet => 'Ультра';
 
   @override
-  String get mobilePgnCopied => 'PGN copied.';
+  String get mobilePgnCopied => 'PGN скопирован.';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -423,7 +423,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileShowComments => 'Показать комментарии';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'Показать линии движка';
 
   @override
   String get mobileShowEvaluationGauge => 'Show evaluation gauge';
@@ -432,10 +432,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileShowResult => 'Показать результат';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'Войти через браузер';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'Войти с помощью email';
 
   @override
   String get mobileSimpleDelay => 'Simple delay';
@@ -4859,7 +4859,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get reason => 'Причина';
 
   @override
-  String get whatIsIheMatter => 'Что это было?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Жульничество';
@@ -4880,7 +4880,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get processReportFasterInEnglish => 'Мы сможем обрабатывать ваши обращения быстрее, если вы напишете их на английском языке.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Пожалуйста, добавьте ссылку хотя бы на одну игру, где по вашему мнению были нарушены правила.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

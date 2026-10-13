@@ -4857,7 +4857,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get reason => 'Priežastis';
 
   @override
-  String get whatIsIheMatter => 'Kas nutiko?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Sukčiaviavo';
@@ -4878,7 +4878,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Pateikite bent vieną nuorodą į partiją, kurioje buvo sukčiauta.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
