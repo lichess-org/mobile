@@ -1,3 +1,4 @@
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassSearchBar;
 import 'package:material_ui/material_ui.dart';
 
@@ -103,4 +104,61 @@ class _PlatformSearchBarState() extends State<PlatformSearchBar> {
       textInputAction: TextInputAction.search,
     );
   }
+}
+
+/// An app bar action that opens a search screen.
+///
+/// The button morphs into the search field of that screen, wrapped in a [SearchFieldHero] with the
+/// same [heroTag].
+class const SearchHeroButton({
+  required final Object heroTag,
+  required final VoidCallback onPressed,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: heroTag,
+      flightShuttleBuilder: _searchHeroFlightShuttleBuilder,
+      child: IconButton(
+        onPressed: onPressed,
+        tooltip: context.l10n.searchSearch,
+        icon: const Icon(Icons.search),
+      ),
+    );
+  }
+}
+
+/// The search field of a search screen, which a [SearchHeroButton] with the same [tag] turns into.
+class const SearchFieldHero({required final Object tag, required final Widget child, super.key})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Hero(tag: tag, flightShuttleBuilder: _searchHeroFlightShuttleBuilder, child: child);
+  }
+}
+
+/// A search field shape growing from the search button: the real field is a text field, which
+/// must not be built twice during the flight.
+Widget _searchHeroFlightShuttleBuilder(
+  BuildContext flightContext,
+  Animation<double> animation,
+  HeroFlightDirection flightDirection,
+  BuildContext fromHeroContext,
+  BuildContext toHeroContext,
+) {
+  final colorScheme = ColorScheme.of(flightContext);
+  return DecoratedBox(
+    decoration: BoxDecoration(
+      color: colorScheme.surfaceContainerHigh,
+      borderRadius: const BorderRadius.all(Radius.circular(28.0)),
+    ),
+    child: Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Padding(
+        padding: const EdgeInsetsDirectional.only(start: 12.0),
+        child: Icon(Icons.search, color: colorScheme.onSurfaceVariant),
+      ),
+    ),
+  );
 }

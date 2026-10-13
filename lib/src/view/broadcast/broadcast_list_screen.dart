@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 enum _BroadcastFilter() {
@@ -43,12 +44,11 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
   @override
   Widget build(BuildContext context) {
     final title = AppBarTitleText(context.l10n.broadcastBroadcasts);
-    final searchButton = SemanticIconButton(
-      icon: const Icon(Icons.search),
+    final searchButton = SearchHeroButton(
+      heroTag: BroadcastSearchScreen.heroTag,
       onPressed: () {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
-      semanticsLabel: context.l10n.searchSearch,
     );
     final filterButton = SemanticIconButton(
       icon: const Icon(Icons.filter_list),
