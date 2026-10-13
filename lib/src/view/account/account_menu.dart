@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -364,6 +365,9 @@ class _AccountMenuScreenState()
 /// On Android opens [AccountMenuScreen] as a full-screen page sliding from the
 /// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
 /// nested navigation.
+///
+/// Swiping down on the avatar switches to another of the accounts the user is signed in to, as a
+/// shortcut to the account menu's "Switch account" list.
 class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
@@ -375,18 +379,56 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
 
+  /// How far down the avatar must be dragged to switch accounts.
+  static const _switchDragDistance = 24.0;
+
+  /// How far down the avatar has been dragged so far.
+  ///
+  /// The distance is used rather than the velocity of the drag, which is zero when the finger stops
+  /// before it is lifted.
+  double _dragDistance = 0;
+
+  /// Switches to the least recently used of the other accounts, so that swiping again and again
+  /// goes through all of them in turn.
+  Future<void> _switchToNextAccount() async {
+    final others = ref.read(otherAccountsProvider).value;
+    if (others == null || others.isEmpty || !ref.read(isDeviceOnlineProvider)) return;
+    if (ref.read(switchAccountMutation) is MutationPending) return;
+
+    final next = others.last;
+    HapticFeedback.selectionClick();
+    try {
+      await switchAccountMutation.run(ref, (tsx) async {
+        await tsx.get(authControllerProvider.notifier).switchAccount(next);
+      });
+      if (!mounted) return;
+      showSnackBar(context, 'Switched to ${next.user.name}');
+    } catch (e) {
+      if (!mounted) return;
+      showSnackBar(
+        context,
+        e is AccountSessionExpiredException
+            ? 'Your session has expired, please sign in again.'
+            : context.l10n.mobileSomethingWentWrong,
+        type: SnackBarType.error,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
     final client = ref.watch(defaultClientProvider);
+    // Watched so that the other accounts are already known when the user swipes.
+    final hasOtherAccounts = ref.watch(otherAccountsProvider).value?.isNotEmpty ?? false;
 
     void openMenu() {
       Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
     }
 
-    return switch (account) {
+    final button = switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
         count: unreadMessages,
@@ -431,6 +473,17 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
         onPressed: openMenu,
       ),
     };
+
+    if (account.value == null || !hasOtherAccounts) return button;
+
+    return GestureDetector(
+      onVerticalDragStart: (_) => _dragDistance = 0,
+      onVerticalDragUpdate: (details) => _dragDistance += details.delta.dy,
+      onVerticalDragEnd: (_) {
+        if (_dragDistance >= _switchDragDistance) _switchToNextAccount();
+      },
+      child: button,
+    );
   }
 }
 
