@@ -283,7 +283,11 @@ class const PlatformAppBar({
                 child: DefaultTextStyle.merge(
                   style: TextStyle(color: colorScheme.onSurface)
                       .merge(titleTextStyle ?? AppBarTheme.of(context).titleTextStyle),
-                  child: title!,
+                  // GlassAppBar leaves no gap between a centered title and the buttons around it,
+                  // unlike a leading aligned one: the same gap is added here.
+                  child: centerTitle ?? true
+                      ? Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: title)
+                      : title!,
                 ),
               )
             : null,
