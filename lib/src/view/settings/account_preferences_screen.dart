@@ -1,4 +1,3 @@
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -225,16 +224,26 @@ class _AccountPreferencesScreenState()
               header: SettingsSectionTitle(context.l10n.mobileDangerZone),
               hasLeading: true,
               children: [
-                ListTile(
-                  leading: const Icon(Symbols.dangerous),
-                  title: Text(context.l10n.settingsCloseAccount),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-                  onTap: () {
-                    Navigator.of(context).push(CloseAccountScreen.buildRoute());
-                  },
-                ),
+                // iOS keeps the browser-based delete flow: App Store policy requires an
+                // in-app account deletion option, and delete (not close) is the web flow.
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  ListTile(
+                    leading: const Icon(Symbols.dangerous),
+                    title: Text(context.l10n.mobileDeleteYourAccount),
+                    trailing: const OpenInNewIcon(),
+                    onTap: () {
+                      launchUrl(lichessUri('/account/delete'));
+                    },
+                  )
+                else
+                  ListTile(
+                    leading: const Icon(Symbols.dangerous),
+                    title: Text(context.l10n.settingsCloseAccount),
+                    trailing: null,
+                    onTap: () {
+                      Navigator.of(context).push(CloseAccountScreen.buildRoute());
+                    },
+                  ),
               ],
             ),
           ],

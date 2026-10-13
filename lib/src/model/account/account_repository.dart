@@ -10,12 +10,14 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
+/// A provider that fetches the current user's account information.
 final accountProvider = FutureProvider.autoDispose<User?>((Ref ref) {
   final authUser = ref.watch(authControllerProvider);
   if (authUser == null) return null;
   return ref.read(accountRepositoryProvider).getProfile();
 }, name: 'AccountProvider');
 
+/// A provider that fetches the current user's kid mode status.
 final kidModeProvider = FutureProvider.autoDispose<bool>((ref) async {
   final account = await ref.watch(accountProvider.future);
   return account?.kid ?? false;
