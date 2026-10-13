@@ -508,6 +508,9 @@ Android must not change: every glass code path is behind a
   `IconButton`s break.
 - **`GlassAppBar` has its own `SafeArea`**: when it is laid out inside the body, give it the
   original `MediaQuery` (without the bar height added), or its content is pushed out of its bounds.
+- **Glass look**: use the package's default glass settings and the default `soft` scroll edge
+  effect of `GlassScaffold`. Don't pass `edgeStyle: .blur` (it adds a heavy progressive blur under
+  the bars) or app-wide glass overrides without a design decision.
 - In widget tests on iOS, `GlassTabBar` renders each tab label twice, so use `findsWidgets`.
 
 ## iOS Home Screen Widgets (WidgetKit Extension)

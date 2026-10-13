@@ -127,8 +127,6 @@ class const PlatformScaffold({
         statusBarStyle: .auto,
         // The inner Scaffold already resizes for the keyboard.
         resizeToAvoidBottomInset: false,
-        // A progressive blur works over any background, including the user's background image.
-        edgeStyle: .blur,
         appBar: stickyAppBar
             ? PreferredSize(
                 preferredSize: Size.fromHeight(appBarHeight),

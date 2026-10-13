@@ -71,8 +71,6 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
             enableBackgroundSampling: false,
             // Each tab screen resizes for the keyboard in its own Scaffold.
             resizeToAvoidBottomInset: false,
-            // A progressive blur works over any background, including the user's background image.
-            edgeStyle: .blur,
             bottomBar: tabBar,
             // The floating tab bar has no edge effect around it, like in iOS apps.
             bottomEdgeFade: false,
