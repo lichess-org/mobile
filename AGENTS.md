@@ -476,6 +476,11 @@ Android must not change: every glass code path is behind a
 - **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
   `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
   give an iOS field its own `border` radius.
+- **Bar tint**: `PlatformScaffold` tints a sticky `PlatformAppBar` that has a title with the iOS
+  bar tint (`cupertinoBarTint`) and a hairline, only while content is scrolled under it (like a
+  UIKit navigation bar), detected from the body's vertical scroll notifications. Bars without a
+  title (or with a search field as title), board screens and tab root headers are never tinted.
+  Don't pass a placeholder title (`SizedBox.shrink()`): leave it null.
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, sheets), not for content such as cards or list rows.
 

@@ -1,8 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoDynamicColor, CupertinoTheme;
+import 'package:cupertino_ui/cupertino_ui.dart'
+    show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassAppBar,
@@ -55,8 +57,8 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
   }
 }
 
-/// The background of a non-glass bar over scrolling content on iOS, like tabs in the app bar or a
-/// [BottomBar].
+/// The background of a bar over scrolling content on iOS: behind a [PlatformAppBar] with a title
+/// while content is scrolled under it, and a [BottomBar].
 ///
 /// It is the iOS default bar tint, or with a background image or color theme (transparent
 /// scaffold), the surface color with the same opacity, so that the bar is not grey over the
@@ -74,6 +76,9 @@ Color cupertinoBarTint(BuildContext context) {
 
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
+
+/// Height of the tint of a [PlatformAppBar] below its buttons, when it has no bottom.
+const double _kGlassBarTintBottomPadding = 8.0;
 
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
@@ -144,6 +149,16 @@ class const PlatformScaffold({
         : 0.0;
     final isTabRoot = hasExtendedBodyParentScaffold && (ModalRoute.of(context)?.isFirst ?? false);
     final stickyAppBar = appBar != null && !isTabRoot;
+    // A sticky app bar with a title, over scrolling content, is tinted while content is scrolled
+    // under it, like a UIKit navigation bar. A search field is glass, so it does not count as a
+    // title.
+    final title = appBar?.title;
+    final hasTintedAppBar =
+        stickyAppBar &&
+        extendBodyBehindAppBar &&
+        title != null &&
+        title is! SearchFieldHero &&
+        title is! PlatformSearchBar;
     // GlassScaffold installs a CupertinoTheme that sets the icon color to its primary color: the
     // app icon theme is restored for the app bar and the body.
     final iconTheme = IconTheme.of(context);
@@ -165,8 +180,9 @@ class const PlatformScaffold({
               )
             : null,
         // Keeps the status bar area blurred when the app bar is part of the body. Nothing scrolls
-        // under a body laid out below the app bar, whose top would be faded.
-        topEdgeFade: extendBodyBehindAppBar,
+        // under a body laid out below the app bar, whose top would be faded. A tinted app bar
+        // replaces the fade.
+        topEdgeFade: extendBodyBehindAppBar && !hasTintedAppBar,
         // GlassScaffold does not inset the body, so the app bar height is added to the top padding
         // like Scaffold.extendBodyBehindAppBar does.
         body: Builder(
@@ -194,12 +210,83 @@ class const PlatformScaffold({
                         appBar: MediaQuery(data: mediaQuery, child: appBar!),
                         child: scaffold,
                       )
+                    : hasTintedAppBar
+                    ? _ScrollEdgeTint(
+                        // Leaves a gap below the buttons, unless a bottom (e.g. tabs) is there.
+                        height:
+                            mediaQuery.padding.top +
+                            appBarHeight +
+                            (appBar!.bottom == null ? _kGlassBarTintBottomPadding : 0.0),
+                        child: scaffold,
+                      )
                     : scaffold,
               ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+/// Paints the iOS bar tint ([cupertinoBarTint]) and a hairline behind a glass app bar, over the top
+/// [height] of [child], while the content of its vertical scroll view is scrolled under it.
+class const _ScrollEdgeTint({required final double height, required final Widget child})
+    extends StatefulWidget {
+  @override
+  State<_ScrollEdgeTint> createState() => _ScrollEdgeTintState();
+}
+
+class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
+  bool _isScrolledUnder = false;
+
+  bool _onScrollMetrics(ScrollMetrics metrics) {
+    if (metrics.axis != Axis.vertical) return false;
+    // In a reversed scroll view (e.g. a chat), the content under the app bar is after the viewport.
+    final isScrolledUnder = metrics.axisDirection == AxisDirection.down
+        ? metrics.extentBefore > 0
+        : metrics.extentAfter > 0;
+    if (isScrolledUnder != _isScrolledUnder) {
+      setState(() => _isScrolledUnder = isScrolledUnder);
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        NotificationListener<ScrollMetricsNotification>(
+          onNotification: (notification) => _onScrollMetrics(notification.metrics),
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (notification) => _onScrollMetrics(notification.metrics),
+            child: widget.child,
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: widget.height,
+          child: IgnorePointer(
+            child: AnimatedOpacity(
+              opacity: _isScrolledUnder ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 150),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: cupertinoBarTint(context),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
+                      width: 0.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -265,12 +352,6 @@ class const PlatformAppBar({
   final List<Widget>? actions,
   final PreferredSizeWidget? bottom,
 
-  /// Whether the bar is tinted behind a non-glass [bottom] on iOS, to keep it legible over the
-  /// content.
-  ///
-  /// Defaults to true when [bottom] is a [TabBar].
-  final bool? tintBottom,
-
   /// Whether the buttons are smaller than the toolbar on iOS, leaving a gap below them.
   ///
   /// For screens whose content starts right below the app bar, like the analysis board, which
@@ -304,14 +385,7 @@ class const PlatformAppBar({
             )
           : null;
 
-      // The scroll edge effect fades out above a non-glass bottom (e.g. tabs), where the content
-      // would show through: the bar is tinted.
-      final backgroundColor = bottom != null && (tintBottom ?? bottom is TabBar)
-          ? cupertinoBarTint(context)
-          : Colors.transparent;
-
       return GlassAppBar(
-        backgroundColor: backgroundColor,
         title: title != null
             ? IconTheme.merge(
                 // Like the Material AppBar, so that icons in the title are not given the primary

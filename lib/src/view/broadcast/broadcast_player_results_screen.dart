@@ -73,13 +73,13 @@ class const BroadcastPlayerResultsScreenLoading({
         player: player,
         playerId: playerId,
       ),
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(title: const Text('')),
+      AsyncError(:final error) => PlatformScaffold(
+        appBar: const PlatformAppBar(title: Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => Scaffold(
-        appBar: AppBar(title: const Text('')),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+      _ => const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('')),
+        body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }

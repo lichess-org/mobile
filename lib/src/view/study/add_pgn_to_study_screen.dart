@@ -34,8 +34,6 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.mobileSelectAStudy),
-        // The category chips are not glass.
-        tintBottom: true,
         bottom: authUser != null
             ? StudyCategoryChips(
                 categories: [

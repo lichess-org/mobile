@@ -76,7 +76,10 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
 
     switch (challengesAsync) {
       case AsyncError():
-        return const Scaffold(body: Center(child: Text('Could not load correspondence seeks')));
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+          body: const Center(child: Text('Could not load correspondence seeks')),
+        );
       case AsyncData(value: final seeks):
         final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
         return PlatformScaffold(
@@ -146,7 +149,10 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
           ),
         );
       case _:
-        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
     }
   }
 }

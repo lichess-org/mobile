@@ -171,8 +171,14 @@ class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
             },
           ),
         ),
-        AsyncValue(:final error?) => Scaffold(body: Center(child: Text(error.toString()))),
-        _ => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
+        AsyncValue(:final error?) => PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.chatRoom)),
+          body: Center(child: Text(error.toString())),
+        ),
+        _ => PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.chatRoom)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        ),
       },
     );
   }

@@ -33,7 +33,7 @@ class const PuzzleDashboardScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const PlatformScaffold(
-      appBar: PlatformAppBar(title: SizedBox.shrink(), actions: [DaysSelector()]),
+      appBar: PlatformAppBar(actions: [DaysSelector()]),
       body: _Body(),
     );
   }

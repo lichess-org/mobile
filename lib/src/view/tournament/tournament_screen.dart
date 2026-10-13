@@ -131,7 +131,7 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
 
     return switch (ref.watch(tournamentControllerProvider(widget.id))) {
       AsyncError(:final error) => PlatformScaffold(
-        appBar: const PlatformAppBar(title: SizedBox.shrink()),
+        appBar: const PlatformAppBar(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(child: Text('Could not load tournament: $error')),
@@ -139,7 +139,7 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
       ),
       AsyncValue(:final value?) => _Body(id: widget.id, state: value),
       _ => const PlatformScaffold(
-        appBar: PlatformAppBar(title: SizedBox.shrink()),
+        appBar: PlatformAppBar(),
         body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
