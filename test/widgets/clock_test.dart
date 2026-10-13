@@ -1,11 +1,51 @@
 import 'package:clock/clock.dart' as clock;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../test_helpers.dart';
+
 void main() {
   group('Clock', () {
+    testWidgets('large text keeps every clock digit visible in a narrow player row', (
+      tester,
+    ) async {
+      await prepareLayoutGolden(tester, loadFonts: true);
+      for (final time in [
+        const Duration(seconds: 58),
+        const Duration(minutes: 59, seconds: 59),
+        const Duration(hours: 12, minutes: 34, seconds: 56),
+        const Duration(milliseconds: 988),
+      ]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: MediaQuery(
+              data: const MediaQueryData(textScaler: TextScaler.linear(2)),
+              child: Center(
+                child: SizedBox(width: 90, child: Clock(timeLeft: time)),
+              ),
+            ),
+          ),
+        );
+        final text = find.descendant(of: find.byType(Clock), matching: find.byType(RichText));
+        final paragraph = tester.renderObject<RenderParagraph>(text);
+        expect(paragraph.maxLines, 1);
+        expect(paragraph.didExceedMaxLines, isFalse);
+        final painted = Rect.fromPoints(
+          paragraph.localToGlobal(Offset.zero),
+          paragraph.localToGlobal(paragraph.size.bottomRight(Offset.zero)),
+        );
+        final clockRect = tester.getRect(find.byType(Clock));
+        expect(painted.left, greaterThanOrEqualTo(clockRect.left));
+        expect(painted.right, lessThanOrEqualTo(clockRect.right));
+        expect(painted.top, greaterThanOrEqualTo(clockRect.top));
+        expect(painted.bottom, lessThanOrEqualTo(clockRect.bottom));
+        expect(tester.takeException(), isNull);
+      }
+    });
+
     testWidgets('shows milliseconds when time < 1s and active is false', (
       WidgetTester tester,
     ) async {

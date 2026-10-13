@@ -475,10 +475,12 @@ class const _Player({required final Side side}) extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      game.opponentSpec.displayName,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
+                    Flexible(
+                      child: Text(
+                        game.opponentSpec.displayName,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     if (gameState.isEngineThinking) ...const [
                       SizedBox(width: 8),
@@ -714,9 +716,9 @@ class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
       opacity: isEvaluatingMove && gameState.practiceComment == null ? 0.5 : 1.0,
       duration: const Duration(milliseconds: 300),
       child: Container(
-        height: cardHeight,
+        constraints: BoxConstraints(minHeight: cardHeight),
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
           color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(8),

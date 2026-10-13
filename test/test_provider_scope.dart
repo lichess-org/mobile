@@ -317,6 +317,6 @@ Future<Widget> makeTestProviderScope(
     // Use the same retry policy as the app, so tests see production behaviour.
     retry: lichessProviderRetry,
     overrides: overrideMap.values.toList(),
-    child: TestSurface(size: surfaceSize, child: child),
+    child: TestSurface(child: child),
   );
 }

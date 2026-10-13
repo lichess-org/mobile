@@ -130,108 +130,125 @@ void main() {
     });
 
     for (final profile in kCompactPortraitProfiles) {
-      testWidgets('compact post-startup practice feedback ${profile.name}', (tester) async {
-        mockWakelock();
-        await prepareLayoutGolden(tester);
-        final suggestion = Move.parse('d2d4')! as NormalMove;
-        final commentState = _stateWithPracticeComment(
-          PracticeComment(
-            verdict: MoveVerdict.notBest,
-            evalAfter: '+0.3',
-            moveSuggestion: SanMove('d4', suggestion),
-          ),
-        );
-        final evaluatingState = commentState.copyWith(
-          game: commentState.game.copyWith(
-            steps: commentState.game.steps.replace(
-              1,
-              commentState.game.steps[1].copyWith(computerAnalysis: null),
-            ),
-          ),
-          isEvaluatingMove: true,
-        );
-        final controller = await _pumpWithState(
+      for (final textScale in [1.0, 1.3, 2.0]) {
+        testWidgets('compact post-startup practice feedback ${profile.name} textScale=$textScale', (
           tester,
-          evaluatingState,
-          surfaceSize: profile.surface,
-          devicePixelRatio: 3.0,
-          physicalViewPadding: profile.physicalPadding,
-          failOnOverflow: true,
-        );
-        Navigator.of(tester.element(find.text('Play'))).pop();
-        await tester.pumpAndSettle();
-
-        void checkLayout({required bool commentVisible}) {
-          expectCompactBoardLayout(
-            tester,
-            heightCapped: profile.heightCapped,
-            heightReserve: 196.0,
+        ) async {
+          mockBoardPlatformChannels();
+          await prepareLayoutGolden(tester, loadFonts: true);
+          final suggestion = Move.parse('d2d4')! as NormalMove;
+          final commentState = _stateWithPracticeComment(
+            PracticeComment(
+              verdict: MoveVerdict.notBest,
+              evalAfter: '+0.3',
+              moveSuggestion: SanMove('d4', suggestion),
+            ),
           );
-          expectGameControlsVisible(tester, find.byType(BottomBarButton));
-          if (commentVisible) {
-            final card = tester.getRect(
-              find.byWidget(_findCommentCardContainer(tester, Icons.info)),
+          final evaluatingState = commentState.copyWith(
+            game: commentState.game.copyWith(
+              steps: commentState.game.steps.replace(
+                1,
+                commentState.game.steps[1].copyWith(computerAnalysis: null),
+              ),
+            ),
+            isEvaluatingMove: true,
+          );
+          final controller = await _pumpWithState(
+            tester,
+            evaluatingState,
+            surfaceSize: profile.surface,
+            devicePixelRatio: 3.0,
+            physicalViewPadding: profile.physicalPadding,
+            failOnOverflow: true,
+          );
+          Navigator.of(tester.element(find.text('Play'))).pop();
+          await tester.pumpAndSettle();
+          tester.platformDispatcher.textScaleFactorTestValue = textScale;
+          addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+          await tester.pump();
+
+          void checkLayout({required bool commentVisible}) {
+            expect(
+              MediaQuery.textScalerOf(tester.element(find.byType(OfflineComputerGameScreen)))
+                  .scale(16.0),
+              16.0 * textScale,
             );
-            for (final control in [
-              find.text("Good move, but there's better"),
-              find.text('+0.3'),
-              find.textContaining('Best was'),
-            ]) {
-              expectGameControlsVisible(tester, control);
-              final rect = tester.getRect(control);
-              expect(rect.left, greaterThanOrEqualTo(card.left));
-              expect(rect.right, lessThanOrEqualTo(card.right));
-              expect(rect.top, greaterThanOrEqualTo(card.top));
-              expect(rect.bottom, lessThanOrEqualTo(card.bottom));
+            expectCompactBoardLayout(
+              tester,
+              heightCapped: profile.heightCapped,
+              heightReserve: 196.0,
+              allowTableExpansion: textScale > 1.0,
+            );
+            expectGameControlsVisible(tester, find.byType(BottomBarButton));
+            if (commentVisible) {
+              final card = tester.getRect(
+                find.byWidget(_findCommentCardContainer(tester, Icons.info)),
+              );
+              for (final control in [
+                find.text("Good move, but there's better"),
+                find.text('+0.3'),
+                find.textContaining('Best was'),
+              ]) {
+                expectGameControlsVisible(tester, control);
+                final rect = tester.getRect(control);
+                expect(rect.left, greaterThanOrEqualTo(card.left));
+                expect(rect.right, lessThanOrEqualTo(card.right));
+                expect(rect.top, greaterThanOrEqualTo(card.top));
+                expect(rect.bottom, lessThanOrEqualTo(card.bottom));
+              }
+              final verdict = tester.getRect(find.text("Good move, but there's better"));
+              final suggestion = tester.getRect(find.textContaining('Best was'));
+              final evaluation = tester.getRect(find.text('+0.3'));
+              expect(verdict.overlaps(suggestion), isFalse);
+              expect(verdict.overlaps(evaluation), isFalse);
+              expect(suggestion.overlaps(evaluation), isFalse);
+              expect(find.byTooltip("Good move, but there's better"), findsOneWidget);
+            } else {
+              expect(find.text("Good move, but there's better"), findsNothing);
+              expect(find.textContaining('Best was'), findsNothing);
             }
-            final verdict = tester.getRect(find.text("Good move, but there's better"));
-            final suggestion = tester.getRect(find.textContaining('Best was'));
-            final evaluation = tester.getRect(find.text('+0.3'));
-            expect(verdict.overlaps(suggestion), isFalse);
-            expect(verdict.overlaps(evaluation), isFalse);
-            expect(suggestion.overlaps(evaluation), isFalse);
-            expect(find.byTooltip("Good move, but there's better"), findsOneWidget);
-          } else {
-            expect(find.text("Good move, but there's better"), findsNothing);
-            expect(find.textContaining('Best was'), findsNothing);
+            expect(tester.takeException(), isNull);
           }
-          expect(tester.takeException(), isNull);
-        }
 
-        checkLayout(commentVisible: false);
-        controller.testState = commentState;
-        await tester.pumpAndSettle();
-        checkLayout(commentVisible: true);
-        await expectLayoutGolden(
-          find.byType(OfflineComputerGameScreen),
-          '../../../build/compact-layout/practice-feedback-${profile.name}',
-        );
-        await tester.longPress(find.text("Good move, but there's better"));
-        await tester.pumpAndSettle();
-        expect(find.text("Good move, but there's better", findRichText: true), findsNWidgets(2));
-        Tooltip.dismissAllToolTips();
-        await tester.pumpAndSettle();
-        final suggestedMove = find.textContaining('Best was');
-        expect(suggestedMove.hitTestable(), findsOneWidget);
-        await tester.tap(suggestedMove);
-        await tester.pump();
-        expect(controller.testState.showingSuggestedMove, suggestion);
-        checkLayout(commentVisible: true);
-        await tester.tap(suggestedMove);
-        await tester.pump();
-        expect(controller.testState.showingSuggestedMove, isNull);
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-initial-${profile.name}-$textScale',
+          );
+          checkLayout(commentVisible: false);
+          controller.testState = commentState;
+          await tester.pumpAndSettle();
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-feedback-${profile.name}-$textScale',
+          );
+          checkLayout(commentVisible: true);
+          await tester.longPress(find.text("Good move, but there's better"));
+          await tester.pumpAndSettle();
+          expect(find.text("Good move, but there's better", findRichText: true), findsNWidgets(2));
+          Tooltip.dismissAllToolTips();
+          await tester.pumpAndSettle();
+          final suggestedMove = find.textContaining('Best was');
+          expect(suggestedMove.hitTestable(), findsOneWidget);
+          await tester.tap(suggestedMove);
+          await tester.pump();
+          expect(controller.testState.showingSuggestedMove, suggestion);
+          checkLayout(commentVisible: true);
+          await tester.tap(suggestedMove);
+          await tester.pump();
+          expect(controller.testState.showingSuggestedMove, isNull);
 
-        controller.testState = evaluatingState;
-        await tester.pumpAndSettle();
-        checkLayout(commentVisible: true);
-        controller.testState = evaluatingState.copyWith(isEvaluatingMove: false);
-        await tester.pumpAndSettle();
-        checkLayout(commentVisible: false);
-        await expectLayoutGolden(
-          find.byType(OfflineComputerGameScreen),
-          '../../../build/compact-layout/practice-cleared-${profile.name}',
-        );
-      }, variant: kPlatformVariant);
+          controller.testState = evaluatingState;
+          await tester.pumpAndSettle();
+          checkLayout(commentVisible: true);
+          controller.testState = evaluatingState.copyWith(isEvaluatingMove: false);
+          await tester.pumpAndSettle();
+          checkLayout(commentVisible: false);
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-cleared-${profile.name}-$textScale',
+          );
+        }, variant: kPlatformVariant);
+      }
     }
 
     testWidgets('compact portrait board fills width without overflowing practice controls', (

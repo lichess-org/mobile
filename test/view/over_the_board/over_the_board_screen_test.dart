@@ -144,6 +144,105 @@ void main() {
       }, variant: kPlatformVariant);
     }
 
+    for (final profile in kCompactPortraitProfiles) {
+      testWidgets('compact active game survives rotation ${profile.name}', (tester) async {
+        mockBoardPlatformChannels();
+        await prepareLayoutGolden(tester);
+        await initOverTheBoardGame(
+          tester,
+          const TimeIncrement(60, 5),
+          surfaceSize: profile.surface,
+          devicePixelRatio: 3.0,
+          physicalViewPadding: profile.physicalPadding,
+          failOnOverflow: true,
+        );
+        final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+        final controller = container.read(overTheBoardGameControllerProvider.notifier);
+        final layoutState = tester.state(find.byType(GameLayout));
+        await playMove(tester, 'e2', 'e4');
+        await playMove(tester, 'e7', 'e5');
+        expect(activeClock(tester), Side.white);
+        final whiteTime = findWhiteClock(tester).timeLeft;
+        final blackTime = findBlackClock(tester).timeLeft;
+
+        void checkLayout(Orientation orientation) {
+          expect(MediaQuery.orientationOf(tester.element(find.byType(GameLayout))), orientation);
+          expect(tester.state(find.byType(GameLayout)), same(layoutState));
+          expect(container.read(overTheBoardGameControllerProvider.notifier), same(controller));
+          expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+          expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+          expect(find.byType(Clock), findsNWidgets(2));
+          expectGameControlsVisible(tester, find.byType(Clock));
+          expectGameControlsVisible(tester, find.byType(BottomBarButton));
+          if (orientation == Orientation.portrait) {
+            expectCompactBoardLayout(tester, heightCapped: profile.heightCapped);
+          } else {
+            final layout = tester.getRect(find.byType(GameLayout));
+            final board = tester.getRect(find.byType(Chessboard));
+            expect(board.width, board.height);
+            expect(board.width, greaterThan(0));
+            expect(board.left, greaterThanOrEqualTo(layout.left));
+            expect(board.right, lessThanOrEqualTo(layout.right));
+            expect(board.top, greaterThanOrEqualTo(layout.top));
+            expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+          }
+          expect(tester.takeException(), isNull);
+        }
+
+        checkLayout(Orientation.portrait);
+        await resizeTestSurface(
+          tester,
+          Size(profile.surface.height, profile.surface.width),
+          physicalViewPadding: EdgeInsets.only(
+            left: profile.physicalPadding.top,
+            right: profile.physicalPadding.top,
+            bottom: 63.0,
+          ),
+        );
+        checkLayout(Orientation.landscape);
+        expect(activeClock(tester), Side.white);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findWhiteClock(tester).timeLeft, lessThan(whiteTime));
+        expect(findBlackClock(tester).timeLeft, blackTime);
+        await expectLayoutGolden(
+          find.byType(OverTheBoardScreen),
+          '../../../build/compact-layout/rotation-landscape-${profile.name}',
+        );
+
+        await playMove(tester, 'g1', 'f3');
+        expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+        expect(activeClock(tester), Side.black);
+        await tester.tap(findByTooltip('Pause'));
+        await tester.pump();
+        expect(activeClock(tester), isNull);
+        final pausedTime = findBlackClock(tester).timeLeft;
+        await resizeTestSurface(
+          tester,
+          profile.surface,
+          physicalViewPadding: profile.physicalPadding,
+        );
+        checkLayout(Orientation.portrait);
+        expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+        expect(container.read(overTheBoardGameControllerProvider).game.steps.length, 4);
+        expect(activeClock(tester), isNull);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findBlackClock(tester).timeLeft, pausedTime);
+        await tester.tap(findByTooltip('Resume'));
+        await tester.pump();
+        expect(activeClock(tester), Side.black);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findBlackClock(tester).timeLeft, lessThan(pausedTime));
+        await playMove(tester, 'b8', 'c6');
+        expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isTrue);
+        expect(activeClock(tester), Side.white);
+        checkLayout(Orientation.portrait);
+        await expectLayoutGolden(
+          find.byType(OverTheBoardScreen),
+          '../../../build/compact-layout/rotation-returned-${profile.name}',
+        );
+      }, variant: kPlatformVariant);
+    }
+
     testWidgets('Checkmate and Rematch', (tester) async {
       await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 

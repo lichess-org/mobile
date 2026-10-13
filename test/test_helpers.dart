@@ -58,15 +58,56 @@ const kCompactPortraitProfiles = [
   ),
 ];
 
-/// Allows game state transitions that toggle the native wakelock in a widget test.
-void mockWakelock() {
+/// Allows board focus transitions without native wakelock or Android platform services.
+void mockBoardPlatformChannels() {
   const channel = 'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
   final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+  messenger.setMockMethodCallHandler(const MethodChannel('dev.fluttercommunity.plus/device_info'), (
+    call,
+  ) async {
+    expect(call.method, 'getDeviceInfo');
+    return {
+      'version': {'sdkInt': 35, 'release': '15', 'codename': 'REL', 'incremental': 'test'},
+      for (final field in [
+        'board',
+        'bootloader',
+        'brand',
+        'device',
+        'display',
+        'fingerprint',
+        'hardware',
+        'host',
+        'id',
+        'manufacturer',
+        'model',
+        'product',
+        'tags',
+        'type',
+      ])
+        field: 'test',
+      for (final field in [
+        'time',
+        'freeDiskSize',
+        'totalDiskSize',
+        'physicalRamSize',
+        'availableRamSize',
+      ])
+        field: 0,
+      'isPhysicalDevice': false,
+      'isLowRamDevice': false,
+    };
+  });
+  messenger.setMockMethodCallHandler(const MethodChannel('mobile.lichess.org/gestures_exclusion'), (
+    call,
+  ) async {
+    expect(call.method, 'setSystemGestureExclusionRects');
+    return null;
+  });
   messenger.setMockMessageHandler(
     channel,
     (_) async => const StandardMessageCodec().encodeMessage([null]),
   );
-  addTearDown(() => messenger.setMockMessageHandler(channel, null));
+  // Keep handlers through framework disposal, which can send final focus-loss messages.
 }
 
 /// Checks width-filling or height-capped sizing in a portrait phone game layout.
@@ -74,12 +115,20 @@ void expectCompactBoardLayout(
   WidgetTester tester, {
   required bool heightCapped,
   double heightReserve = 180.0,
+  bool allowTableExpansion = false,
 }) {
   final layout = tester.getRect(find.byType(GameLayout));
   final board = tester.getRect(_anyBoard());
   final heightCap = layout.height - heightReserve;
   expect(heightCap < layout.width, heightCapped);
-  expect(board.size, Size.square(min(layout.width, heightCap)));
+  final maxBoardSize = min(layout.width, heightCap);
+  if (allowTableExpansion) {
+    expect(board.width, greaterThan(0));
+    expect(board.width, lessThanOrEqualTo(maxBoardSize));
+    expect(board.height, board.width);
+  } else {
+    expect(board.size, Size.square(maxBoardSize));
+  }
   expect(board.center.dx, moreOrLessEquals(layout.center.dx));
   expect(board.top, greaterThanOrEqualTo(layout.top));
   expect(board.bottom, lessThanOrEqualTo(layout.bottom));
@@ -119,12 +168,15 @@ Future<void> _loadLayoutGoldenFonts() async {
   }
 }
 
-/// Preloads fonts and pieces before building a game for opt-in visual captures.
-Future<void> prepareLayoutGolden(WidgetTester tester) async {
-  if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+/// Uses real fonts for size-sensitive assertions and preloads pieces for opt-in visual captures.
+Future<void> prepareLayoutGolden(WidgetTester tester, {bool loadFonts = false}) async {
+  const render = bool.fromEnvironment('LAYOUT_GOLDENS');
+  if (loadFonts || render) {
     await tester.runAsync(() async {
       await (_layoutGoldenFonts ??= _loadLayoutGoldenFonts());
-      await ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0);
+      if (render) {
+        await ChessgroundImages.instance.loadAll(PieceSet.cburnett.assets, devicePixelRatio: 3.0);
+      }
     });
   }
 }
@@ -140,16 +192,34 @@ Future<void> expectLayoutGolden(Finder screen, String path) async {
   }
 }
 
-/// Mocks a surface with a given size.
-class const TestSurface({required final Widget child, required final Size size, super.key})
-    extends StatelessWidget {
+/// Follows the test view's size, safe areas, and accessibility settings, including runtime changes.
+class const TestSurface({required final Widget child, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MediaQuery(
-      data: MediaQueryData.fromView(View.of(context)).copyWith(size: size),
-      child: SizedBox(width: size.width, height: size.height, child: child),
+    return MediaQuery.fromView(
+      view: View.of(context),
+      child: SizedBox.expand(child: child),
     );
   }
+}
+
+/// Rotates an already-mounted test app without replacing its providers or game state.
+Future<void> resizeTestSurface(
+  WidgetTester tester,
+  Size size, {
+  required EdgeInsets physicalViewPadding,
+}) async {
+  tester.view.physicalSize = size * tester.view.devicePixelRatio;
+  final padding = FakeViewPadding(
+    left: physicalViewPadding.left,
+    top: physicalViewPadding.top,
+    right: physicalViewPadding.right,
+    bottom: physicalViewPadding.bottom,
+  );
+  tester.view.padding = padding;
+  tester.view.viewPadding = padding;
+  await tester.binding.setSurfaceSize(size);
+  await tester.pump();
 }
 
 /// Mocks an http response
