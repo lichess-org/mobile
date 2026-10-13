@@ -390,10 +390,10 @@ void mockClipboard(String text) {
   );
 }
 
-/// Finds widgets by their tooltip message.
+/// Finds `material_ui` tooltip widgets by their message.
 ///
-/// [CommonFinders.byTooltip] cannot be used, because it only matches the [Tooltip] widget of the
-/// Flutter material library, whereas the app renders the one of the `material_ui` package.
+/// Unlike [CommonFinders.byTooltip], which also matches the underlying [RawTooltip] semantics,
+/// this selects the [Tooltip] itself, including when its message is excluded from semantics.
 Finder findByTooltip(String message, {bool skipOffstage = true}) => find.byWidgetPredicate(
   (widget) => widget is Tooltip && widget.message == message,
   description: 'tooltip "$message"',

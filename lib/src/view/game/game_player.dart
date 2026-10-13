@@ -239,35 +239,41 @@ class const GamePlayer({
     return LayoutBuilder(
       builder: (context, constraints) {
         final textScale = MediaQuery.textScalerOf(context).scale(playerFontSize) / playerFontSize;
-        // Give enlarged player and clock text separate rows in narrow tables.
-        if (clock != null && constraints.maxWidth < 160.0 * textScale) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 8,
-            children: [
-              info,
-              Align(
-                alignment: clockPosition == ClockPosition.left
-                    ? Alignment.centerLeft
-                    : Alignment.centerRight,
-                child: clock,
-              ),
-            ],
-          );
-        }
-        return Row(
+        final stackClock = clock != null && constraints.maxWidth < 160.0 * textScale;
+        final clockWidget = clock == null
+            ? null
+            : Flexible(
+                flex: stackClock ? 0 : 3,
+                child: Align(
+                  widthFactor: 1,
+                  heightFactor: 1,
+                  alignment: clockPosition == ClockPosition.left
+                      ? Alignment.centerLeft
+                      : Alignment.centerRight,
+                  child: clock,
+                ),
+              );
+        // Keep countdown and clock state mounted when changing layout direction.
+        return Flex(
+          direction: stackClock ? Axis.vertical : Axis.horizontal,
+          mainAxisSize: stackClock ? MainAxisSize.min : MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: stackClock ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+          verticalDirection: clockPosition == ClockPosition.left
+              ? VerticalDirection.up
+              : VerticalDirection.down,
+          spacing: stackClock ? 8 : 0,
           children: [
-            if (clock != null && clockPosition == ClockPosition.left)
-              Flexible(flex: 3, child: clock!),
-            Expanded(
-              flex: 7,
-              child: Padding(padding: const EdgeInsets.only(right: 16.0), child: info),
+            if (clockPosition == ClockPosition.left) ?clockWidget,
+            Flexible(
+              flex: stackClock ? 0 : 7,
+              fit: stackClock ? FlexFit.loose : FlexFit.tight,
+              child: Padding(
+                padding: EdgeInsets.only(right: stackClock ? 0 : 16.0),
+                child: info,
+              ),
             ),
-            if (clock != null && clockPosition == ClockPosition.right)
-              Flexible(flex: 3, child: clock!),
+            if (clockPosition == ClockPosition.right) ?clockWidget,
           ],
         );
       },
