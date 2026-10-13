@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoTheme;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
@@ -422,13 +423,14 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                               : Theme.of(context).platform == TargetPlatform.iOS
                               ? AppBarLichessTitle(
                                   iconSize:
-                                      Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                                      CupertinoTheme.of(context)
+                                          .textTheme
+                                          .navLargeTitleTextStyle
+                                          .fontSize ??
+                                      34,
                                 )
                               : const AppBarLichessTitle(),
                           centerTitle: false,
-                          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                              ? Theme.of(context).textTheme.headlineSmall
-                              : null,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
                   body: widget.editModeEnabled

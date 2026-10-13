@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassContainer;
 import 'package:material_ui/material_ui.dart';
@@ -77,4 +78,40 @@ void main() {
     expect(tester.getSize(capsule.first).width, lessThan(100));
     expect(find.text('Title'), findsOneWidget);
   }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  group('iOS app bar title style', () {
+    double titleFontSize(WidgetTester tester) =>
+        DefaultTextStyle.of(tester.element(find.text('Title'))).style.fontSize!;
+
+    testWidgets('is the large title on the root screen of a tab', (tester) async {
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          home: const MainTabScaffoldProperties(
+            extendBody: true,
+            child: PlatformScaffold(
+              appBar: PlatformAppBar(title: Text('Title')),
+              body: SizedBox.shrink(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(titleFontSize(tester), 34.0);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('is the regular title elsewhere', (tester) async {
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          home: const PlatformScaffold(
+            appBar: PlatformAppBar(title: Text('Title')),
+            body: SizedBox.shrink(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(titleFontSize(tester), lessThan(34.0));
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+  });
 }

@@ -87,9 +87,6 @@ class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
         appBar: PlatformAppBar(
           title: Text(context.l10n.watch),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: switch (connectionStatus) {

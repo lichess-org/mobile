@@ -75,9 +75,6 @@ class const _PuzzleTabScaffold({required final Widget body}) extends ConsumerWid
         appBar: PlatformAppBar(
           title: Text(context.l10n.puzzles),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: body,

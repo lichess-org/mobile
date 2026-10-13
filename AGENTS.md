@@ -464,7 +464,8 @@ Android must not change: every glass code path is behind a
   iOS they build a `GlassScaffold` with a `GlassAppBar`, and a plain Material `Scaffold` + `AppBar`
   elsewhere. A screen built with a bare `Scaffold` + `AppBar` keeps the old opaque bar on iOS.
 - **Tab bar**: `MainTabScaffold` (`lib/src/tab_scaffold.dart`) uses `GlassTabBar` on iOS. The
-  root screen of a tab has a non-sticky app bar that scrolls away with the content.
+  root screen of a tab has a non-sticky app bar that scrolls away with the content, with an iOS
+  large title (`PlatformAppBar` styles it automatically: don't pass a `titleTextStyle`).
 - **Floating action buttons**: use `PlatformFloatingActionButton` (a tinted glass capsule on iOS)
   instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
   prefer a nav bar action on iOS.

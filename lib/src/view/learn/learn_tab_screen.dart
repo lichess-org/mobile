@@ -71,9 +71,6 @@ class const LearnTabScreen({super.key}) extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Text(context.l10n.learnMenu),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),

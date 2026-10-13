@@ -369,6 +369,13 @@ class const PlatformAppBar({
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
+      // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
+      final isTabRoot =
+          MainTabScaffoldProperties.hasExtendedBody(context) &&
+          (ModalRoute.of(context)?.isFirst ?? false);
+      final defaultTitleStyle = isTabRoot
+          ? CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
+          : AppBarTheme.of(context).titleTextStyle;
       final parentRoute = ModalRoute.of(context);
       final impliedLeading =
           automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false)
@@ -393,7 +400,7 @@ class const PlatformAppBar({
                 data: IconThemeData(color: colorScheme.onSurface),
                 child: DefaultTextStyle.merge(
                   style: TextStyle(color: colorScheme.onSurface)
-                      .merge(titleTextStyle ?? AppBarTheme.of(context).titleTextStyle),
+                      .merge(titleTextStyle ?? defaultTitleStyle),
                   // GlassAppBar leaves no gap between a centered title and the buttons around it,
                   // unlike a leading aligned one: the same gap is added here.
                   child: centerTitle ?? true
