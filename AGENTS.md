@@ -498,11 +498,15 @@ Android must not change: every glass code path is behind a
 - **`GlassScaffold` does not inset its body**, despite its docs: `PlatformScaffold` and
   `MainTabScaffold` add the bar heights to `MediaQuery.padding` themselves.
 - **Two Cupertino libraries**: the package uses the SDK `flutter/cupertino`, the app uses
-  `cupertino_ui` / `material_ui`. They have different `CupertinoTheme` classes, so glass widgets
-  do not see the app theme: pass colors explicitly (usually from `ColorScheme.of(context)`).
-- **Blue icons**: `GlassScaffold` installs an SDK `CupertinoTheme`, which sets the `IconTheme` to
-  its default blue primary color. `PlatformScaffold` and `MainTabScaffold` restore the app
-  `IconTheme` inside it; any other direct use of `GlassScaffold` must do the same.
+  `cupertino_ui` / `material_ui`. `MaterialApp.builder` (`app.dart`) wraps the app in
+  `MaterialUiCompatibilityBridge` and `CupertinoUiCompatibilityBridge`, which provide the SDK
+  `Theme`, `CupertinoTheme` and localizations from the app ones, so glass widgets (and other
+  unmigrated packages) see the app theme, including its brightness. Don't remove them until every
+  such package is migrated.
+- **Primary colored icons**: an SDK `CupertinoTheme` sets the `IconTheme` to its primary color.
+  The app `IconTheme` is restored inside the bridges, and `GlassScaffold` installs its own
+  `CupertinoTheme`, so `PlatformScaffold` and `MainTabScaffold` restore it again inside it; any
+  other direct use of `GlassScaffold` must do the same.
 - **Material ancestor**: glass bars sit outside any Material `Scaffold`; wrap them in
   `Material(type: MaterialType.transparency)`, or text gets yellow underlines and Material
   `IconButton`s break.

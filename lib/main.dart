@@ -44,8 +44,6 @@ Future<void> main() async {
 
   runApp(
     LiquidGlassWidgets.wrap(
-      // Makes glass widgets follow the app theme mode instead of the system brightness.
-      brightnessResolver: Theme.maybeBrightnessOf,
       child: ProviderScope(
         observers: [ProviderLogger()],
         retry: lichessProviderRetry,

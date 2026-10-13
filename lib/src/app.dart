@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+// ignore: deprecated_member_use
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoUiCompatibilityBridge;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
@@ -254,6 +256,21 @@ class _AppState() extends ConsumerState<Application> {
             : NavigationBarTheme.of(context)
                   .copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
+      // Packages not yet migrated to `material_ui` and `cupertino_ui` (e.g. liquid_glass_widgets,
+      // fl_chart) read the Flutter SDK themes and localizations, which the bridges derive from the
+      // app ones.
+      builder: (context, child) {
+        final iconTheme = IconTheme.of(context);
+        // ignore: deprecated_member_use
+        return MaterialUiCompatibilityBridge(
+          // ignore: deprecated_member_use
+          child: CupertinoUiCompatibilityBridge(
+            // The SDK themes of the bridges set their own icon theme (the Cupertino one with the
+            // primary color): restore the app icon theme.
+            child: IconTheme(data: iconTheme, child: child!),
+          ),
+        );
+      },
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],
     );
