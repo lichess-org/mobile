@@ -451,6 +451,58 @@ Generated files are NOT committed to git.
 - **Brand names**: Don't translate names like "Puzzle Storm" or "Puzzle Streak"
 - **FVM users**: Remember to prefix commands with `fvm` (e.g., `fvm flutter test`)
 
+## iOS Liquid Glass (iOS 26 design)
+
+On iOS the app uses the iOS 26 liquid glass look through the `liquid_glass_widgets` package.
+Android must not change: every glass code path is behind a
+`Theme.of(context).platform == TargetPlatform.iOS` check. The package's own agent skill is in
+`.claude/skills/liquid-glass-widgets/SKILL.md`.
+
+### Where glass comes from
+
+- **Screens**: use `PlatformScaffold` + `PlatformAppBar` (`lib/src/widgets/platform.dart`). On
+  iOS they build a `GlassScaffold` with a `GlassAppBar`, and a plain Material `Scaffold` + `AppBar`
+  elsewhere. A screen built with a bare `Scaffold` + `AppBar` keeps the old opaque bar on iOS.
+- **Tab bar**: `MainTabScaffold` (`lib/src/tab_scaffold.dart`) uses `GlassTabBar` on iOS. The
+  root screen of a tab has a non-sticky app bar that scrolls away with the content.
+- **Floating action buttons**: use `PlatformFloatingActionButton` (a tinted glass capsule on iOS)
+  instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
+  prefer a nav bar action on iOS.
+- Glass is for the navigation and control layer that floats above content (bars, floating
+  buttons, sheets), not for content such as cards or list rows.
+
+### Laying out a body under glass bars
+
+- **The body extends behind the bars**: `MediaQuery.paddingOf(context)` inside a
+  `PlatformScaffold` body includes the status bar, the app bar height (44pt + `bottom`) and, in a
+  tab, the tab bar height. Content must use that padding so that it starts below the bar and
+  scrolls under it.
+- A `ListView` / `CustomScrollView` with no explicit `padding` applies it automatically. With an
+  explicit padding, add the media query padding to it:
+  `padding: Styles.bodyPadding.add(MediaQuery.paddingOf(context))`.
+- **Never wrap a scrolling body in a `SafeArea`**: it shrinks the scroll view to the area below
+  the bar, so the content is clipped at the bar's bottom edge (the bar looks opaque) and above the
+  home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
+  `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
+- A pull-to-refresh indicator needs an `edgeOffset` on iOS, or its spinner appears behind the bar.
+
+### Package caveats
+
+- **`GlassScaffold` does not inset its body**, despite its docs: `PlatformScaffold` and
+  `MainTabScaffold` add the bar heights to `MediaQuery.padding` themselves.
+- **Two Cupertino libraries**: the package uses the SDK `flutter/cupertino`, the app uses
+  `cupertino_ui` / `material_ui`. They have different `CupertinoTheme` classes, so glass widgets
+  do not see the app theme: pass colors explicitly (usually from `ColorScheme.of(context)`).
+- **Blue icons**: `GlassScaffold` installs an SDK `CupertinoTheme`, which sets the `IconTheme` to
+  its default blue primary color. `PlatformScaffold` and `MainTabScaffold` restore the app
+  `IconTheme` inside it; any other direct use of `GlassScaffold` must do the same.
+- **Material ancestor**: glass bars sit outside any Material `Scaffold`; wrap them in
+  `Material(type: MaterialType.transparency)`, or text gets yellow underlines and Material
+  `IconButton`s break.
+- **`GlassAppBar` has its own `SafeArea`**: when it is laid out inside the body, give it the
+  original `MediaQuery` (without the bar height added), or its content is pushed out of its bounds.
+- In widget tests on iOS, `GlassTabBar` renders each tab label twice, so use `findsWidgets`.
+
 ## iOS Home Screen Widgets (WidgetKit Extension)
 
 The app includes a native iOS WidgetKit extension (`ios/LichessWidgets/`) providing home screen widgets. See `ios/EXTENSIONS.md` for contributor setup instructions (requires Apple Developer account configuration).

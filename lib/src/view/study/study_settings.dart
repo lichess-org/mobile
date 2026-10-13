@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -24,8 +25,8 @@ class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidg
 
     final studyPrefs = ref.watch(studyPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           ListSection(

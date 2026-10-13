@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -71,8 +72,8 @@ class _EditProfileScreenState() extends ConsumerState<EditProfileScreen> {
     final account = ref.watch(accountProvider);
     switch (account) {
       case AsyncData(:final value):
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: PopScope(
             canPop: false,
             onPopInvokedWithResult: (bool didPop, _) async {
@@ -110,13 +111,13 @@ class _EditProfileScreenState() extends ConsumerState<EditProfileScreen> {
         );
 
       case AsyncError(:final error):
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: Center(child: Text(error.toString())),
         );
       case _:
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }

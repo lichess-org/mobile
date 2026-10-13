@@ -415,8 +415,8 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.about)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.about)),
       body: ListView(
         children: [
           ListSection(
