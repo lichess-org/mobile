@@ -1,8 +1,16 @@
 import 'dart:math' as math;
 
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassAppBar, GlassContainer, GlassIconButton, GlassScaffold, LiquidRoundedSuperellipse;
+    show
+        GlassAppBar,
+        GlassButton,
+        GlassContainer,
+        GlassIconButton,
+        GlassScaffold,
+        LiquidGlassSettings,
+        LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 
 /// A simple widget that builds different things on different platforms.
@@ -105,6 +113,9 @@ class const PlatformScaffold({
         : 0.0;
     final isTabRoot = hasExtendedBodyParentScaffold && (ModalRoute.of(context)?.isFirst ?? false);
     final stickyAppBar = appBar != null && !isTabRoot;
+    // GlassScaffold installs a CupertinoTheme that sets the icon color to its primary color: the
+    // app icon theme is restored for the app bar and the body.
+    final iconTheme = IconTheme.of(context);
 
     // The app bar is outside of the inner Scaffold: provide a Material for its text and actions.
     return Material(
@@ -119,7 +130,10 @@ class const PlatformScaffold({
         // A progressive blur works over any background, including the user's background image.
         edgeStyle: .blur,
         appBar: stickyAppBar
-            ? PreferredSize(preferredSize: Size.fromHeight(appBarHeight), child: appBar!)
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(appBarHeight),
+                child: IconTheme(data: iconTheme, child: appBar!),
+              )
             : null,
         // Keeps the status bar area blurred when the app bar is part of the body.
         topEdgeFade: true,
@@ -132,13 +146,16 @@ class const PlatformScaffold({
               data: mediaQuery.copyWith(
                 padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + appBarHeight),
               ),
-              child: appBar != null && !stickyAppBar
-                  ? _ScrollAwayAppBar(
-                      // The app bar insets itself with the top padding, without its own height.
-                      appBar: MediaQuery(data: mediaQuery, child: appBar!),
-                      child: scaffold,
-                    )
-                  : scaffold,
+              child: IconTheme(
+                data: iconTheme,
+                child: appBar != null && !stickyAppBar
+                    ? _ScrollAwayAppBar(
+                        // The app bar insets itself with the top padding, without its own height.
+                        appBar: MediaQuery(data: mediaQuery, child: appBar!),
+                        child: scaffold,
+                      )
+                    : scaffold,
+              ),
             );
           },
         ),
@@ -235,10 +252,15 @@ class const PlatformAppBar({
 
       return GlassAppBar(
         title: title != null
-            ? DefaultTextStyle.merge(
-                style: TextStyle(color: colorScheme.onSurface)
-                    .merge(titleTextStyle ?? AppBarTheme.of(context).titleTextStyle),
-                child: title!,
+            ? IconTheme.merge(
+                // Like the Material AppBar, so that icons in the title are not given the primary
+                // color.
+                data: IconThemeData(color: colorScheme.onSurface),
+                child: DefaultTextStyle.merge(
+                  style: TextStyle(color: colorScheme.onSurface)
+                      .merge(titleTextStyle ?? AppBarTheme.of(context).titleTextStyle),
+                  child: title!,
+                ),
               )
             : null,
         centerTitle: centerTitle ?? true,
@@ -248,6 +270,8 @@ class const PlatformAppBar({
             : null,
         bottom: bottom,
         toolbarHeight: _kGlassToolbarHeight,
+        // Aligned with the body content.
+        padding: Styles.horizontalBodyPadding,
       );
     }
 
@@ -261,6 +285,70 @@ class const PlatformAppBar({
       centerTitle: centerTitle,
       automaticallyImplyLeading: automaticallyImplyLeading,
       animateColor: true,
+    );
+  }
+}
+
+const double _kGlassFloatingButtonHeight = 48.0;
+
+/// An extended floating action button, meant to be the [PlatformScaffold.floatingActionButton].
+///
+/// On iOS it is a liquid glass capsule, otherwise a [FloatingActionButton.extended].
+class const PlatformFloatingActionButton({
+  super.key,
+  required final String label,
+  required final VoidCallback onPressed,
+  final Widget? icon,
+  final String? tooltip,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      final colorScheme = ColorScheme.of(context);
+      final fabTheme = FloatingActionButtonTheme.of(context);
+      final foregroundColor = fabTheme.foregroundColor ?? colorScheme.onPrimaryContainer;
+      return GlassButton.custom(
+        onTap: onPressed,
+        label: label,
+        // Tinted to stand out over the content, like an iOS 26 prominent button. The clear body
+        // mode keeps the exact color, with the glass rim and specular highlights.
+        settings: LiquidGlassSettings(
+          glassColor: fabTheme.backgroundColor ?? colorScheme.primaryContainer,
+          bodyMode: .clear,
+        ),
+        height: _kGlassFloatingButtonHeight,
+        shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassFloatingButtonHeight / 2),
+        // Floats alone over the content, there is no parent glass layer to share.
+        useOwnLayer: true,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: IconTheme.merge(
+            data: IconThemeData(color: foregroundColor),
+            child: Row(
+              mainAxisSize: .min,
+              spacing: 8.0,
+              children: [
+                ?icon,
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: foregroundColor,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return FloatingActionButton.extended(
+      onPressed: onPressed,
+      tooltip: tooltip,
+      icon: icon,
+      label: Text(label),
     );
   }
 }

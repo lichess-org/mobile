@@ -77,13 +77,15 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
             // GlassScaffold does not inset the body, so the tab bar height is set as the bottom
             // padding, which the tab screens' [PlatformScaffold] extend their body into.
             body: Builder(
-              builder: (context) {
-                final mediaQuery = MediaQuery.of(context);
+              builder: (innerContext) {
+                final mediaQuery = MediaQuery.of(innerContext);
                 return MediaQuery(
                   data: mediaQuery.copyWith(
                     padding: mediaQuery.padding.copyWith(bottom: tabBar.preferredSize.height),
                   ),
-                  child: body,
+                  // GlassScaffold installs a CupertinoTheme that sets the icon color to its
+                  // primary color: restore the app icon theme.
+                  child: IconTheme(data: IconTheme.of(context), child: body),
                 );
               },
             ),

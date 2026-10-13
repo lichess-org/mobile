@@ -107,7 +107,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
         ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
       ),
       floatingActionButton: authUser != null
-          ? FloatingActionButton.extended(
+          ? PlatformFloatingActionButton(
               onPressed: () => showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
@@ -121,7 +121,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
                 ),
               ),
               icon: const Icon(Symbols.school_rounded),
-              label: Text(context.l10n.studyCreateStudy),
+              label: context.l10n.studyCreateStudy,
             )
           : null,
     );

@@ -81,7 +81,7 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
         final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
         return PlatformScaffold(
           appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: PlatformFloatingActionButton(
             onPressed: () {
               if (authUser == null) {
                 showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
@@ -97,7 +97,7 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
                 ref.invalidate(correspondenceSeeksProvider);
               });
             },
-            label: Text(context.l10n.createAGame),
+            label: context.l10n.createAGame,
             icon: const Icon(Icons.add_circle_outline),
           ),
           body: HapticRefreshIndicator(

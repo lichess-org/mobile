@@ -84,7 +84,7 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
         },
       ),
       floatingActionButton: authUser != null
-          ? FloatingActionButton.extended(
+          ? PlatformFloatingActionButton(
               onPressed: () => showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
@@ -102,7 +102,7 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
                   },
                 ),
               ),
-              label: Text(context.l10n.studyCreateStudy),
+              label: context.l10n.studyCreateStudy,
             )
           : null,
     );
