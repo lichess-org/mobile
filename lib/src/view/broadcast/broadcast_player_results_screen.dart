@@ -121,6 +121,8 @@ class const BroadcastPlayerResultsScreen({
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),

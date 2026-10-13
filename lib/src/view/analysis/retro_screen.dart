@@ -50,6 +50,8 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
         return PlatformScaffold(
           extendBodyBehindAppBar: false,
           appBar: PlatformAppBar(
+            // Like the loaded screen, whose long title is next to the actions.
+            centerTitle: false,
             compactButtons: true,
             title: AppBarTitleText(context.l10n.learnFromYourMistakes),
           ),
@@ -80,6 +82,8 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
         return PlatformScaffold(
           extendBodyBehindAppBar: false,
           appBar: PlatformAppBar(
+            // A long title, next to the actions.
+            centerTitle: false,
             compactButtons: true,
             title: AppBarTitleText(
               '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
@@ -111,6 +115,8 @@ class const _LoadingScreen({final double? serverAnalysisProgress}) extends State
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
+        // Like the loaded screen, whose long title is next to the actions.
+        centerTitle: false,
         compactButtons: true,
         title: AppBarTitleText(context.l10n.learnFromYourMistakes),
       ),

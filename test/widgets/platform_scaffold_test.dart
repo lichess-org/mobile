@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassContainer;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_provider_scope.dart';
@@ -54,4 +55,26 @@ void main() {
       expect(appBarTints(tester), isEmpty);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
   });
+
+  testWidgets('iOS app bar leading capsule is only as wide as its content', (tester) async {
+    await tester.pumpWidget(
+      await makeTestProviderScopeApp(
+        tester,
+        home: PlatformScaffold(
+          appBar: PlatformAppBar(
+            leading: BackButton(onPressed: () {}),
+            title: const Text('Title'),
+          ),
+          body: const SizedBox.shrink(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final capsule = find.ancestor(
+      of: find.byType(BackButton),
+      matching: find.byType(GlassContainer),
+    );
+    expect(tester.getSize(capsule.first).width, lessThan(100));
+    expect(find.text('Title'), findsOneWidget);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 }

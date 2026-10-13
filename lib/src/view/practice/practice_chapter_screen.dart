@@ -39,6 +39,9 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
       child: PlatformScaffold(
         extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(
+          compactButtons: true,
+          // A long title, next to the actions.
+          centerTitle: false,
           title: Text(chapter.name),
           actions: [
             IconButton(

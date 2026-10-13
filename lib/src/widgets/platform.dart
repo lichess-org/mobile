@@ -500,22 +500,29 @@ class const _GlassBarCapsule({required final double height, required final List<
   @override
   Widget build(BuildContext context) {
     final foregroundColor = ColorScheme.of(context).onSurface;
-    return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: height),
-      child: GlassContainer(
-        height: height,
-        shape: LiquidRoundedSuperellipse(borderRadius: height / 2),
-        alignment: Alignment.center,
-        child: IconTheme.merge(
-          data: IconThemeData(color: foregroundColor),
-          child: IconButtonTheme(
-            data: IconButtonThemeData(
-              style: IconButton.styleFrom(foregroundColor: foregroundColor),
+    // GlassAppBar gives the leading slot the full bar width, which an aligned GlassContainer would
+    // fill: the Row makes the capsule only as wide as its content.
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(minWidth: height),
+          child: GlassContainer(
+            height: height,
+            shape: LiquidRoundedSuperellipse(borderRadius: height / 2),
+            alignment: Alignment.center,
+            child: IconTheme.merge(
+              data: IconThemeData(color: foregroundColor),
+              child: IconButtonTheme(
+                data: IconButtonThemeData(
+                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
+                ),
+                child: Row(mainAxisSize: MainAxisSize.min, children: children),
+              ),
             ),
-            child: Row(mainAxisSize: MainAxisSize.min, children: children),
           ),
         ),
-      ),
+      ],
     );
   }
 }

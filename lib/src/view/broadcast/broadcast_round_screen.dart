@@ -196,6 +196,8 @@ class _BroadcastRoundScreenState()
       final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
+          // A long title, next to the actions.
+          centerTitle: false,
           title: AppBarTitleText(
             asyncTournament.value?.data.name ?? widget.broadcast.title,
             maxLines: 2,

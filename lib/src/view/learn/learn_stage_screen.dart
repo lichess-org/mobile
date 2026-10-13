@@ -37,6 +37,7 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
       child: PlatformScaffold(
         extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(
+          compactButtons: true,
           title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
           actions: const [ToggleSoundButton()],
         ),

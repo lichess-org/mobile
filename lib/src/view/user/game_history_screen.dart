@@ -114,7 +114,12 @@ class const GameHistoryScreen({
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
+      appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
+        title: title,
+        actions: [filterBtn, displayModeButton],
+      ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }

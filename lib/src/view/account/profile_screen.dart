@@ -52,6 +52,8 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
     final online = ref.watch(isDeviceOnlineProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         titleSpacing: 0,
         title: account.when(
           data: (user) => user == null

@@ -193,6 +193,8 @@ class const _Body({required final TournamentId id, required final TournamentStat
       child: PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
+          // A long title, next to the actions.
+          centerTitle: false,
           title: _Title(state: state),
           actions: [
             SemanticIconButton(
