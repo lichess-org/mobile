@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -9,7 +11,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassScaffold, GlassTab, GlassTabBar;
+    show GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
@@ -48,7 +50,13 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     // The package default label color: the app Cupertino theme text color (onSurface) has less
     // contrast over the content seen through the glass.
     final tabColor = CupertinoColors.label.resolveFrom(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final tabBar = GlassTabBar.bottom(
+      // Closer to the iOS 26 tab bar than the package defaults.
+      settings: isDark ? _kDarkTabBarGlassSettings : _kTabBarGlassSettings,
+      // A dark selection pill in dark mode, like the Podcasts app (the package default is a light
+      // one).
+      indicatorColor: isDark ? const Color(0x80000000) : null,
       selectedIconColor: tabColor,
       unselectedIconColor: tabColor,
       selectedIndex: currentTab.index,
@@ -401,3 +409,22 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
     return result;
   }
 }
+
+/// The package defaults of the tab bar (`kBottomBarGlassDefaults`, not exported), with less blur and
+/// no desaturation, closer to the iOS 26 tab bar, which keeps the colors of the content behind it.
+const _kTabBarGlassSettings = LiquidGlassSettings(
+  thickness: 30,
+  blur: 1,
+  chromaticAberration: 0.3,
+  lightIntensity: 0.6,
+  refractiveIndex: 1.59,
+  saturation: 1.0,
+  ambientStrength: 1,
+  lightAngle: 0.75 * math.pi,
+  glassColor: Color(0x3DFFFFFF),
+);
+
+/// [_kTabBarGlassSettings] with a lighter white tint, like the Podcasts tab bar in dark mode.
+final _kDarkTabBarGlassSettings = _kTabBarGlassSettings.copyWith(
+  glassColor: const Color(0x30FFFFFF),
+);
