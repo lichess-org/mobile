@@ -18,6 +18,7 @@ class SmallBoardPreview extends ConsumerWidget {
     this.padding,
     this.lastMove,
     this.onTap,
+    this.dimInDarkMode = false,
   }) : _showLoadingPlaceholder = false;
 
   const new loading({this.padding})
@@ -26,6 +27,7 @@ class SmallBoardPreview extends ConsumerWidget {
       lastMove = null,
       description = const SizedBox.shrink(),
       onTap = null,
+      dimInDarkMode = false,
       _showLoadingPlaceholder = true;
 
   /// Side by which the board is oriented.
@@ -43,11 +45,20 @@ class SmallBoardPreview extends ConsumerWidget {
 
   final EdgeInsetsGeometry? padding;
 
+  /// Whether to dim the board in dark mode on iOS, so that the glass tab bar stays legible over it.
+  ///
+  /// A translucent black layer is painted over the board: on an opaque board it darkens like a
+  /// brightness filter, without the offscreen layer of an [Opacity] or a [ColorFiltered], which
+  /// matters in scrolling lists.
+  final bool dimInDarkMode;
+
   final bool _showLoadingPlaceholder;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final theme = Theme.of(context);
+    final isDimmed = dimInDarkMode && theme.platform == .iOS && theme.brightness == .dark;
 
     final content = LayoutBuilder(
       builder: (context, constraints) {
@@ -71,20 +82,27 @@ class SmallBoardPreview extends ConsumerWidget {
                     ),
                   )
                 else
-                  StaticChessboard(
-                    size: boardSize,
-                    fen: fen,
-                    orientation: orientation,
-                    lastMove: lastMove,
-                    settings: StaticChessboardSettings(
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
-                      brightness: boardPrefs.brightness,
-                      hue: boardPrefs.hue,
-                      enableCoordinates: false,
+                  DecoratedBox(
+                    position: .foreground,
+                    decoration: BoxDecoration(
+                      color: isDimmed ? const Color(0x33000000) : null,
                       borderRadius: Styles.boardBorderRadius,
-                      boxShadow: boardShadows,
-                      animationDuration: const Duration(milliseconds: 150),
+                    ),
+                    child: StaticChessboard(
+                      size: boardSize,
+                      fen: fen,
+                      orientation: orientation,
+                      lastMove: lastMove,
+                      settings: StaticChessboardSettings(
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                        brightness: boardPrefs.brightness,
+                        hue: boardPrefs.hue,
+                        enableCoordinates: false,
+                        borderRadius: Styles.boardBorderRadius,
+                        boxShadow: boardShadows,
+                        animationDuration: const Duration(milliseconds: 150),
+                      ),
                     ),
                   ),
                 const SizedBox(width: 10.0),

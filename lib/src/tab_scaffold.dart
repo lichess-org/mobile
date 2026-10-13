@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -44,7 +45,12 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     }
 
     // On iOS the tabs content extends below a floating liquid glass tab bar.
+    // The package default label color: the app Cupertino theme text color (onSurface) has less
+    // contrast over the content seen through the glass.
+    final tabColor = CupertinoColors.label.resolveFrom(context);
     final tabBar = GlassTabBar.bottom(
+      selectedIconColor: tabColor,
+      unselectedIconColor: tabColor,
       selectedIndex: currentTab.index,
       tabs: [
         for (final tab in BottomTab.values)

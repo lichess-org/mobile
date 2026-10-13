@@ -57,6 +57,7 @@ class const OngoingGamePreview({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
+      dimInDarkMode: true,
       padding: padding,
       orientation: game.orientation,
       lastMove: game.lastMove,

@@ -57,6 +57,7 @@ class const OfflineCorrespondenceGamePreview({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
+      dimInDarkMode: true,
       orientation: game.orientation,
       lastMove: game.lastMove,
       fen: game.lastPosition.fen,
