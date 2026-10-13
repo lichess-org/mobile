@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -45,11 +46,9 @@ class SmallBoardPreview extends ConsumerWidget {
 
   final EdgeInsetsGeometry? padding;
 
-  /// Whether to dim the board in dark mode on iOS, so that the glass tab bar stays legible over it.
+  /// Whether to dim the board in dark mode on iOS, for a list under the glass tab bar.
   ///
-  /// A translucent black layer is painted over the board: on an opaque board it darkens like a
-  /// brightness filter, without the offscreen layer of an [Opacity] or a [ColorFiltered], which
-  /// matters in scrolling lists.
+  /// See [BoardDimmer].
   final bool dimInDarkMode;
 
   final bool _showLoadingPlaceholder;
@@ -57,8 +56,6 @@ class SmallBoardPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final theme = Theme.of(context);
-    final isDimmed = dimInDarkMode && theme.platform == .iOS && theme.brightness == .dark;
 
     final content = LayoutBuilder(
       builder: (context, constraints) {
@@ -82,12 +79,9 @@ class SmallBoardPreview extends ConsumerWidget {
                     ),
                   )
                 else
-                  DecoratedBox(
-                    position: .foreground,
-                    decoration: BoxDecoration(
-                      color: isDimmed ? const Color(0x33000000) : null,
-                      borderRadius: Styles.boardBorderRadius,
-                    ),
+                  BoardDimmer(
+                    enabled: dimInDarkMode,
+                    borderRadius: Styles.boardBorderRadius,
                     child: StaticChessboard(
                       size: boardSize,
                       fen: fen,

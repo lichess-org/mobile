@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -82,6 +83,13 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
       ),
     );
 
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return PlatformScaffold(
+        appBar: PlatformAppBar(title: title, actions: [searchButton, filterButton]),
+        body: _Body(filter),
+      );
+    }
+
     final appBarBackground = ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
 
     return Scaffold(
@@ -101,8 +109,18 @@ class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final padding = MediaQuery.paddingOf(context);
+    // On iOS the pinned section headers stick right below the glass app bar, so the list starts
+    // below it: a pinned sliver always sticks to the top of its scroll view. No content would
+    // scroll under the bar anyway, since a pinned header always covers that edge. The headers
+    // have the color of the background behind the bar.
+    final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
+    final sectionHeaderBackground = isIOS
+        ? (scaffoldBackground.a == 0 ? cupertinoBarTint(context) : scaffoldBackground)
+        : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
 
-    return HapticRefreshIndicator(
+    final refreshableList = HapticRefreshIndicator(
       onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
       child: broadcastList.when(
         data: (value) {
@@ -121,45 +139,52 @@ class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
           final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
           final notifier = ref.read(broadcastsPaginatorProvider.notifier);
 
-          return SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                for (final section in sections)
-                  SliverMainAxisGroup(
-                    key: ValueKey(section.$1),
-                    slivers: [
-                      if (section.$3.isNotEmpty)
-                        SliverAppBar(
-                          centerTitle: false,
-                          backgroundColor: ColorScheme.of(context).surfaceContainerHigh
-                              .withValues(alpha: 1),
-                          scrolledUnderElevation: 0,
-                          automaticallyImplyLeading: false,
-                          primary: false,
-                          title: AppBarTitleText(section.$2),
-                          pinned: true,
-                        ),
-                      SliverList.separated(
-                        separatorBuilder: (context, index) => PlatformDivider(
-                          height: 1,
-                          indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
-                        ),
-                        itemCount:
-                            section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
-                        itemBuilder: (context, index) =>
-                            (section.$1 == 'past' && hasMorePages && index == section.$3.length)
-                            ? BroadcastNextPageTile(notifier.next)
-                            : BroadcastListTile(broadcast: section.$3[index]),
+          final scrollView = CustomScrollView(
+            slivers: [
+              for (final section in sections)
+                SliverMainAxisGroup(
+                  key: ValueKey(section.$1),
+                  slivers: [
+                    if (section.$3.isNotEmpty)
+                      SliverAppBar(
+                        centerTitle: false,
+                        backgroundColor: sectionHeaderBackground,
+                        scrolledUnderElevation: 0,
+                        automaticallyImplyLeading: false,
+                        primary: false,
+                        title: AppBarTitleText(section.$2),
+                        pinned: true,
                       ),
-                    ],
-                  ),
-              ],
-            ),
+                    SliverList.separated(
+                      separatorBuilder: (context, index) => PlatformDivider(
+                        height: 1,
+                        indent: BroadcastListTile.thumbnailSize(context) + 16.0 + 10.0,
+                      ),
+                      itemCount: section.$3.length + (section.$1 == 'past' && hasMorePages ? 1 : 0),
+                      itemBuilder: (context, index) =>
+                          (section.$1 == 'past' && hasMorePages && index == section.$3.length)
+                          ? BroadcastNextPageTile(notifier.next)
+                          : BroadcastListTile(broadcast: section.$3[index]),
+                    ),
+                  ],
+                ),
+              // Scrolls above the glass tab bar.
+              if (isIOS) SliverPadding(padding: EdgeInsets.only(bottom: padding.bottom)),
+            ],
           );
+
+          return isIOS ? scrollView : SafeArea(child: scrollView);
         },
         error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       ),
+    );
+
+    if (!isIOS) return refreshableList;
+
+    return Padding(
+      padding: EdgeInsets.only(top: padding.top),
+      child: MediaQuery.removePadding(context: context, removeTop: true, child: refreshableList),
     );
   }
 }

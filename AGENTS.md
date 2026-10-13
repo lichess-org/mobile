@@ -492,6 +492,11 @@ Android must not change: every glass code path is behind a
   the bar, so the content is clipped at the bar's bottom edge (the bar looks opaque) and above the
   home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
   `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
+- **Pinned slivers** (sticky section headers) always stick to the top of their scroll view, which
+  is behind the bar. For such a list, start the scroll view below the bar instead (top padding
+  outside it, `MediaQuery.removePadding(removeTop: true)` inside), and give the headers the
+  background behind the bar: a pinned header always covers that edge, so nothing is lost
+  (`broadcast_list_screen.dart`).
 - A pull-to-refresh indicator needs an `edgeOffset` on iOS, or its spinner appears behind the bar:
   `MediaQuery.paddingOf(context).top`, read from a context inside the body (the screen's own
   `build` context is outside the `PlatformScaffold`, so its top padding lacks the bar height).
