@@ -47,8 +47,9 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(params));
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: VariantAppBarTitle(
           variant: boardEditorState.variant,
           title: context.l10n.boardEditor,

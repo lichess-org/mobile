@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/practice/practice_lesson_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -35,8 +36,9 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
     );
 
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
           title: Text(chapter.name),
           actions: [
             IconButton(

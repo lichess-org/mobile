@@ -42,9 +42,10 @@ class const OpeningExplorerScreen({required final AnalysisOptions options}) exte
       _ => const CenterLoadingIndicator(),
     };
     return WakelockWidget(
-      child: Scaffold(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
         body: body,
-        appBar: AppBar(
+        appBar: PlatformAppBar(
           title: Text(context.l10n.openingExplorer),
           actions: [
             SemanticIconButton(

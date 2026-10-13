@@ -492,6 +492,9 @@ Android must not change: every glass code path is behind a
   the bar, so the content is clipped at the bar's bottom edge (the bar looks opaque) and above the
   home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
   `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
+- **Screens that don't scroll** (board screens) pass `extendBodyBehindAppBar: false` to
+  `PlatformScaffold`: the body is laid out below the glass bar, like in a Material `Scaffold`,
+  and the top edge fade is off. Their bottom toolbar (`BottomBar`) stays a regular bar.
 - **Pinned slivers** (sticky section headers) always stick to the top of their scroll view, which
   is behind the bar. For such a list, start the scroll view below the bar instead (top padding
   outside it, `MediaQuery.removePadding(removeTop: true)` inside), and give the headers the

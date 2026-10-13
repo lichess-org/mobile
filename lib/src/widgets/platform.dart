@@ -75,6 +75,9 @@ Color cupertinoBarTint(BuildContext context) {
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
 
+/// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
+const double _kGlassCompactButtonHeight = 36.0;
+
 /// A wrapper around [Scaffold] that sets properties to handle app bar and bottom navigation bar
 /// transparency on iOS.
 ///
@@ -94,6 +97,15 @@ class const PlatformScaffold({
   final Widget? bottomSheet,
   final Widget? bottomNavigationBar,
   final bool? extendBody,
+
+  /// Whether the body extends behind the glass [appBar] on iOS, so that it scrolls under it.
+  ///
+  /// Defaults to true. When false, the body is laid out below the [appBar], like in a [Scaffold]:
+  /// for screens whose content does not scroll, like board screens.
+  final bool extendBodyBehindAppBar = true,
+
+  /// See [Scaffold.resizeToAvoidBottomInset].
+  final bool? resizeToAvoidBottomInset,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -107,6 +119,7 @@ class const PlatformScaffold({
       // On iOS the background is painted by the GlassScaffold, behind the glass app bar.
       backgroundColor: isIOS ? Colors.transparent : null,
       extendBody: extendBody ?? hasExtendedBodyParentScaffold,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: isIOS ? null : appBar,
       body: body,
       drawer: drawer,
@@ -151,13 +164,24 @@ class const PlatformScaffold({
                 child: IconTheme(data: iconTheme, child: appBar!),
               )
             : null,
-        // Keeps the status bar area blurred when the app bar is part of the body.
-        topEdgeFade: true,
+        // Keeps the status bar area blurred when the app bar is part of the body. Nothing scrolls
+        // under a body laid out below the app bar, whose top would be faded.
+        topEdgeFade: extendBodyBehindAppBar,
         // GlassScaffold does not inset the body, so the app bar height is added to the top padding
         // like Scaffold.extendBodyBehindAppBar does.
         body: Builder(
           builder: (context) {
             final mediaQuery = MediaQuery.of(context);
+            if (!extendBodyBehindAppBar && stickyAppBar) {
+              return Padding(
+                padding: EdgeInsets.only(top: mediaQuery.padding.top + appBarHeight),
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: IconTheme(data: iconTheme, child: scaffold),
+                ),
+              );
+            }
             return MediaQuery(
               data: mediaQuery.copyWith(
                 padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + appBarHeight),
@@ -246,6 +270,12 @@ class const PlatformAppBar({
   ///
   /// Defaults to true when [bottom] is a [TabBar].
   final bool? tintBottom,
+
+  /// Whether the buttons are smaller than the toolbar on iOS, leaving a gap below them.
+  ///
+  /// For screens whose content starts right below the app bar, like the analysis board, which
+  /// would otherwise touch the buttons.
+  final bool compactButtons = false,
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
 }) extends StatelessWidget implements PreferredSizeWidget {
@@ -257,10 +287,12 @@ class const PlatformAppBar({
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
       final colorScheme = ColorScheme.of(context);
+      final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
       final parentRoute = ModalRoute.of(context);
       final impliedLeading =
           automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false)
           ? GlassIconButton(
+              size: buttonHeight,
               icon: Icon(
                 parentRoute is PageRoute && parentRoute.fullscreenDialog
                     ? Icons.close_rounded
@@ -297,9 +329,11 @@ class const PlatformAppBar({
               )
             : null,
         centerTitle: centerTitle ?? true,
-        leading: leading != null ? _GlassBarCapsule(children: [leading!]) : impliedLeading,
+        leading: leading != null
+            ? _GlassBarCapsule(height: buttonHeight, children: [leading!])
+            : impliedLeading,
         actions: actions != null && actions!.isNotEmpty
-            ? [_GlassBarCapsule(children: actions!)]
+            ? [_GlassBarCapsule(height: buttonHeight, children: actions!)]
             : null,
         bottom: bottom,
         toolbarHeight: _kGlassToolbarHeight,
@@ -387,15 +421,16 @@ class const PlatformFloatingActionButton({
 }
 
 /// A liquid glass capsule grouping navigation bar items, like on iOS 26.
-class const _GlassBarCapsule({required final List<Widget> children}) extends StatelessWidget {
+class const _GlassBarCapsule({required final double height, required final List<Widget> children})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foregroundColor = ColorScheme.of(context).onSurface;
     return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: _kGlassToolbarHeight),
+      constraints: BoxConstraints(minWidth: height),
       child: GlassContainer(
-        height: _kGlassToolbarHeight,
-        shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassToolbarHeight / 2),
+        height: height,
+        shape: LiquidRoundedSuperellipse(borderRadius: height / 2),
         alignment: Alignment.center,
         child: IconTheme.merge(
           data: IconThemeData(color: foregroundColor),

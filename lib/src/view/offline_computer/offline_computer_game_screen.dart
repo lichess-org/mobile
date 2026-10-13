@@ -43,6 +43,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -95,8 +96,9 @@ class const OfflineComputerGameScreen({
         ? context.l10n.practiceWithComputer
         : context.l10n.playAgainstComputer;
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: AppBarTitleText(title),
         actions: [
           IconButton(

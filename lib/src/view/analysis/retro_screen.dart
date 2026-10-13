@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -46,8 +47,12 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
     switch (asyncState) {
       case AsyncError(:final error):
         debugPrint('Error loading retro controller for ${options.id}: $error');
-        return Scaffold(
-          appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: PlatformAppBar(
+            compactButtons: true,
+            title: AppBarTitleText(context.l10n.learnFromYourMistakes),
+          ),
           body: switch (error) {
             final ServerAnalysisRequestException refusal => Center(
               child: Padding(
@@ -72,8 +77,10 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
           return _LoadingScreen(serverAnalysisProgress: value.serverAnalysisProgress);
         }
 
-        return Scaffold(
-          appBar: AppBar(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: PlatformAppBar(
+            compactButtons: true,
             title: AppBarTitleText(
               '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
               maxLines: 2,
@@ -101,8 +108,12 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
 class const _LoadingScreen({final double? serverAnalysisProgress}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: AppBarTitleText(context.l10n.learnFromYourMistakes)),
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
+        compactButtons: true,
+        title: AppBarTitleText(context.l10n.learnFromYourMistakes),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

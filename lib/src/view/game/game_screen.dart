@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -110,9 +111,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
 
     switch (ref.watch(gameScreenLoaderProvider(widget.source))) {
       case AsyncData(value: SeekCancelledState()):
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek)),
               _ => null,
@@ -121,9 +123,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           body: const LoadGameError('The game search was cancelled.', showBottomBar: false),
         );
       case AsyncData(value: ChallengeCancelledState()):
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             title: _GameTitle(
               _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
             ),
@@ -135,9 +138,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           response: ChallengeResponseDeclined(:final challenge, :final declineReason),
         ),
       ):
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             title: _GameTitle(
               _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
             ),
@@ -196,9 +200,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           ),
         );
 
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
             title: _GameTitle(
               _StandaloneTitleVariant(id: createdGameId, lastMoveAt: widget.lastMoveAt),
@@ -217,9 +222,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
               : body,
         );
       case AsyncData(value: OpenChallengeCreatedState(:final challenge)):
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             leading: const SocketPingRatingIcon(),
             title: _GameTitle(
               _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
@@ -243,9 +249,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
             ? LoadGameError('Could not create the game: ${e.jsonError?['error']}')
             : const LoadGameError('Sorry, we could not create the game. Please try again later.');
 
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
@@ -274,9 +281,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           ),
         };
 
-        return Scaffold(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+          appBar: PlatformAppBar(
             leading: const SocketPingRatingIcon(),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
