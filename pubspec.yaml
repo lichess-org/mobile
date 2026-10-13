@@ -105,6 +105,8 @@ dependency_overrides:
     path: packages/unifiedpush_linux_stub
 
 flutter:
+  default-flavor: prod
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
