@@ -473,6 +473,9 @@ Android must not change: every glass code path is behind a
   stays a regular field. A search screen is opened by a `SearchHeroButton` in the app bar (not a
   fake search field in the body), as a normal push, and wraps its field in a `SearchFieldHero`
   with the same tag, so that the button morphs into the field.
+- **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
+  `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
+  give an iOS field its own `border` radius.
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, sheets), not for content such as cards or list rows.
 
