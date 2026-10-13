@@ -124,6 +124,8 @@ class const _Body({required final Variant? initialVariant, final String? initial
 
 class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOfflineComputerScreen');
+  // Retain the previous practice comment when rotation or board flipping reparents the player.
+  final _playerKey = GlobalKey(debugLabel: 'offlineComputerPlayer');
 
   @override
   void initState() {
@@ -241,8 +243,14 @@ class _BodyState() extends ConsumerState<_Body> {
                 child: SafeArea(
                   child: GameLayout(
                     key: _boardKey,
-                    topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
-                    bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                    topTable: _Player(
+                      key: isBoardFlipped ? _playerKey : null,
+                      side: isBoardFlipped ? orientation : orientation.opposite,
+                    ),
+                    bottomTable: _Player(
+                      key: isBoardFlipped ? null : _playerKey,
+                      side: isBoardFlipped ? orientation.opposite : orientation,
+                    ),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
                     // Practice feedback needs the extra table space on height-capped displays.
@@ -450,7 +458,7 @@ class IsBoardFlippedNotifier() extends Notifier<bool> {
   }
 }
 
-class const _Player({required final Side side}) extends ConsumerWidget {
+class const _Player({required final Side side, super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(offlineComputerGameControllerProvider);

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
@@ -703,10 +704,10 @@ void main() {
               final cancel = find.byIcon(CupertinoIcons.xmark_rectangle_fill);
               final accept = find.byIcon(CupertinoIcons.checkmark_rectangle_fill);
 
-              void checkLayout({
+              Future<void> checkLayout({
                 required bool pending,
                 Orientation orientation = Orientation.portrait,
-              }) {
+              }) async {
                 expect(tester.state(find.byType(GameLayout)), same(layoutState));
                 expect(container.read(controller.notifier), same(notifier));
                 expect(
@@ -734,13 +735,38 @@ void main() {
                   expect(board.bottom, lessThanOrEqualTo(layout.bottom));
                 }
                 expect(clocks, findsNWidgets(2));
-                expectGameControlsVisible(tester, clocks);
-                expectGameControlsVisible(tester, find.text('Steven'));
+                for (final control in [
+                  clocks.at(0),
+                  clocks.at(1),
+                  find.text('Steven'),
+                  find.byType(BottomBarButton).first,
+                ]) {
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(control);
+                    await tester.pump();
+                  }
+                  expectGameControlsVisible(tester, control);
+                }
+                if (correspondence) {
+                  for (final paragraph in tester.renderObjectList<RenderParagraph>(
+                    find.descendant(of: clocks, matching: find.byType(RichText)),
+                  )) {
+                    expect(paragraph.didExceedMaxLines, isFalse);
+                  }
+                }
                 expectGameControlsVisible(tester, find.byType(BottomBarButton));
                 if (pending) {
                   expect(find.text('Peter'), findsNothing);
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(find.byType(ConfirmMove));
+                    await tester.pump();
+                  }
                   expectGameControlsVisible(tester, find.byType(ConfirmMove));
                   expectGameControlsVisible(tester, find.text('Confirm move'));
+                  final label = tester.renderObject<RenderParagraph>(
+                    find.descendant(of: find.text('Confirm move'), matching: find.byType(RichText)),
+                  );
+                  expect(label.didExceedMaxLines, isFalse);
                   expect(cancel.hitTestable(), findsOneWidget);
                   expect(accept.hitTestable(), findsOneWidget);
                   final confirmation = tester.getRect(find.byType(ConfirmMove));
@@ -749,6 +775,10 @@ void main() {
                   }
                 } else {
                   expect(find.byType(ConfirmMove), findsNothing);
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(find.text('Peter'));
+                    await tester.pump();
+                  }
                   expectGameControlsVisible(tester, find.text('Peter'));
                 }
                 expect(tester.takeException(), isNull);
@@ -758,64 +788,66 @@ void main() {
                 find.byType(GameScreen),
                 '../../../build/compact-layout/confirmation-initial-${profile.name}-$correspondence-$textScale',
               );
-              checkLayout(pending: false);
+              await checkLayout(pending: false);
               if (correspondence) {
                 expect(find.text('One day', findRichText: true), findsOneWidget);
                 expect(find.text('20:05', findRichText: true), findsOneWidget);
                 await tester.pump(const Duration(minutes: 1));
                 expect(find.text('20:04', findRichText: true), findsOneWidget);
-                checkLayout(pending: false);
+                await checkLayout(pending: false);
               }
               await playMove(tester, 'g1', 'f3');
-              checkLayout(pending: true);
+              await checkLayout(pending: true);
               expect(container.read(controller).requireValue.moveToConfirm, isNotNull);
-              if (textScale == 1.0) {
-                final pendingMove = container.read(controller).requireValue.moveToConfirm;
-                await resizeTestSurface(
-                  tester,
-                  Size(profile.surface.height, profile.surface.width),
-                  physicalViewPadding: EdgeInsets.only(
-                    left: profile.physicalPadding.top,
-                    right: profile.physicalPadding.top,
-                    bottom: 63.0,
-                  ),
-                );
-                checkLayout(pending: true, orientation: Orientation.landscape);
-                expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
-                await expectLayoutGolden(
-                  find.byType(GameScreen),
-                  '../../../build/compact-layout/confirmation-rotated-${profile.name}-$correspondence',
-                );
-                await tester.tap(cancel);
-                await tester.pump();
-                checkLayout(pending: false, orientation: Orientation.landscape);
-                expect(container.read(controller).requireValue.moveToConfirm, isNull);
-                expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
-                await playMove(tester, 'g1', 'f3');
-                checkLayout(pending: true, orientation: Orientation.landscape);
-                await resizeTestSurface(
-                  tester,
-                  profile.surface,
-                  physicalViewPadding: profile.physicalPadding,
-                );
-                checkLayout(pending: true);
-                expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
-              }
+              final pendingMove = container.read(controller).requireValue.moveToConfirm;
+              await resizeTestSurface(
+                tester,
+                Size(profile.surface.height, profile.surface.width),
+                physicalViewPadding: EdgeInsets.only(
+                  left: profile.physicalPadding.top,
+                  right: profile.physicalPadding.top,
+                  bottom: 63.0,
+                ),
+              );
+              await checkLayout(pending: true, orientation: Orientation.landscape);
+              expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
+              await tester.pump(const Duration(milliseconds: 100));
+              await tester.pumpAndSettle();
+              expect(cancel.hitTestable(), findsOneWidget);
+              expect(accept.hitTestable(), findsOneWidget);
+              await expectLayoutGolden(
+                find.byType(GameScreen),
+                '../../../build/compact-layout/confirmation-rotated-${profile.name}-$correspondence-$textScale',
+              );
+              await tester.tap(cancel);
+              await tester.pump();
+              await checkLayout(pending: false, orientation: Orientation.landscape);
+              expect(container.read(controller).requireValue.moveToConfirm, isNull);
+              expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+              await playMove(tester, 'g1', 'f3');
+              await checkLayout(pending: true, orientation: Orientation.landscape);
+              await resizeTestSurface(
+                tester,
+                profile.surface,
+                physicalViewPadding: profile.physicalPadding,
+              );
+              await checkLayout(pending: true);
+              expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
               await expectLayoutGolden(
                 find.byType(GameScreen),
                 '../../../build/compact-layout/confirmation-${profile.name}-$correspondence-$textScale',
               );
               await tester.tap(cancel);
               await tester.pump();
-              checkLayout(pending: false);
+              await checkLayout(pending: false);
               expect(container.read(controller).requireValue.moveToConfirm, isNull);
               expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
 
               await playMove(tester, 'g1', 'f3');
-              checkLayout(pending: true);
+              await checkLayout(pending: true);
               await tester.tap(accept);
               await tester.pump();
-              checkLayout(pending: false);
+              await checkLayout(pending: false);
               expect(container.read(controller).requireValue.moveToConfirm, isNull);
               expect(container.read(controller).requireValue.game.sanMoves, 'e4 e5 Nf3');
               expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);

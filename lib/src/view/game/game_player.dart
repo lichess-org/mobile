@@ -213,49 +213,64 @@ class const GamePlayer({
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        if (clock != null && clockPosition == ClockPosition.left) Flexible(flex: 3, child: clock!),
-        if (mePlaying && confirmMoveCallbacks != null && canGoForward == false)
-          Expanded(
-            flex: 7,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: ConfirmMove(
-                onConfirm: confirmMoveCallbacks!.confirm,
-                onCancel: confirmMoveCallbacks!.cancel,
-              ),
-            ),
+    final info = mePlaying && confirmMoveCallbacks != null && canGoForward == false
+        ? ConfirmMove(
+            onConfirm: confirmMoveCallbacks!.confirm,
+            onCancel: confirmMoveCallbacks!.cancel,
           )
-        else
-          Expanded(
-            flex: 7,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: shouldLinkToUserProfile
-                  ? Consumer(
-                      builder: (context, ref, _) {
-                        return GestureDetector(
-                          onTap: player.user != null
-                              ? () {
-                                  if (mePlaying) {
-                                    ref.invalidate(accountProvider);
-                                  }
-                                  Navigator.of(context)
-                                      .push(UserOrProfileScreen.buildRoute(player.user!));
-                                }
-                              : null,
-                          child: playerWidget,
-                        );
-                      },
-                    )
-                  : playerWidget,
+        : shouldLinkToUserProfile
+        ? Consumer(
+            builder: (context, ref, _) {
+              return GestureDetector(
+                onTap: player.user != null
+                    ? () {
+                        if (mePlaying) {
+                          ref.invalidate(accountProvider);
+                        }
+                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user!));
+                      }
+                    : null,
+                child: playerWidget,
+              );
+            },
+          )
+        : playerWidget;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final textScale = MediaQuery.textScalerOf(context).scale(playerFontSize) / playerFontSize;
+        // Give enlarged player and clock text separate rows in narrow tables.
+        if (clock != null && constraints.maxWidth < 160.0 * textScale) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 8,
+            children: [
+              info,
+              Align(
+                alignment: clockPosition == ClockPosition.left
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: clock,
+              ),
+            ],
+          );
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (clock != null && clockPosition == ClockPosition.left)
+              Flexible(flex: 3, child: clock!),
+            Expanded(
+              flex: 7,
+              child: Padding(padding: const EdgeInsets.only(right: 16.0), child: info),
             ),
-          ),
-        if (clock != null && clockPosition == ClockPosition.right) Flexible(flex: 3, child: clock!),
-      ],
+            if (clock != null && clockPosition == ClockPosition.right)
+              Flexible(flex: 3, child: clock!),
+          ],
+        );
+      },
     );
   }
 }
@@ -267,34 +282,52 @@ class const ConfirmMove({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SemanticIconButton(
-          icon: const Icon(CupertinoIcons.xmark_rectangle_fill),
-          color: context.lichessColors.error,
-          iconSize: 35,
-          semanticsLabel: context.l10n.cancel,
-          padding: const EdgeInsets.all(10),
-          onPressed: onCancel,
-        ),
-        Flexible(
-          child: Text(
-            context.l10n.confirmMove,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 2,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        SemanticIconButton(
-          icon: const Icon(CupertinoIcons.checkmark_rectangle_fill),
-          color: context.lichessColors.good,
-          iconSize: 35,
-          semanticsLabel: context.l10n.accept,
-          padding: const EdgeInsets.all(10),
-          onPressed: onConfirm,
-        ),
-      ],
+    final buttons = [
+      SemanticIconButton(
+        icon: const Icon(CupertinoIcons.xmark_rectangle_fill),
+        color: context.lichessColors.error,
+        iconSize: 35,
+        semanticsLabel: context.l10n.cancel,
+        padding: const EdgeInsets.all(10),
+        onPressed: onCancel,
+      ),
+      SemanticIconButton(
+        icon: const Icon(CupertinoIcons.checkmark_rectangle_fill),
+        color: context.lichessColors.good,
+        iconSize: 35,
+        semanticsLabel: context.l10n.accept,
+        padding: const EdgeInsets.all(10),
+        onPressed: onConfirm,
+      ),
+    ];
+    final label = Text(context.l10n.confirmMove, textAlign: TextAlign.center);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final labelPainter = TextPainter(
+          text: TextSpan(text: context.l10n.confirmMove, style: DefaultTextStyle.of(context).style),
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+          maxLines: 2,
+        )..layout(maxWidth: (constraints.maxWidth - 2 * (35 + 20)).clamp(0.0, double.infinity));
+        final stackLabel = labelPainter.didExceedMaxLines;
+        labelPainter.dispose();
+        return stackLabel
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  label,
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buttons.first,
+                  Flexible(child: label),
+                  buttons.last,
+                ],
+              );
+      },
     );
   }
 }

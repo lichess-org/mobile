@@ -77,6 +77,129 @@ void _expectHorizontalInset(Rect inner, Rect outer, double inset) {
 }
 
 void main() {
+  for (final showMoves in [false, true]) {
+    for (final boardPosition in LandscapeBoardPosition.values) {
+      testWidgets('compact post-startup landscape controls scroll without moving the board '
+          'moves=$showMoves board=${boardPosition.name}', (tester) async {
+        await prepareLayoutGolden(tester, loadFonts: true);
+        final tableHeights = ValueNotifier<(double, double)>((32, 32));
+        addTearDown(tableHeights.dispose);
+        const topKey = ValueKey('landscape-top-player');
+        const bottomKey = ValueKey('landscape-bottom-player');
+        var taps = 0;
+        final flutterTestOnError = FlutterError.onError!;
+        final app = await makeTestProviderScope(
+          tester,
+          surfaceSize: const Size(700, 320),
+          devicePixelRatio: 1.0,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults
+                  .copyWith(moveListDisplay: showMoves, landscapeBoardPosition: boardPosition)
+                  .toJson(),
+            ),
+          },
+          child: MaterialApp(
+            home: Material(
+              child: GameLayout(
+                orientation: Side.white,
+                boardParams: const GameBoardParams.readonly(
+                  variant: Variant.standard,
+                  position: Chess.initial,
+                ),
+                moves: const ['e4', 'e5'],
+                topTable: ValueListenableBuilder(
+                  valueListenable: tableHeights,
+                  builder: (_, value, _) => SizedBox(
+                    key: topKey,
+                    height: value.$1,
+                    child: TextButton(onPressed: () => taps++, child: const Text('Top player')),
+                  ),
+                ),
+                bottomTable: ValueListenableBuilder(
+                  valueListenable: tableHeights,
+                  builder: (_, value, _) => SizedBox(
+                    key: bottomKey,
+                    height: value.$2,
+                    child: TextButton(onPressed: () => taps++, child: const Text('Bottom player')),
+                  ),
+                ),
+                userActionsBar: const SizedBox(height: 56, child: Center(child: Text('Actions'))),
+              ),
+            ),
+          ),
+        );
+        FlutterError.onError = flutterTestOnError;
+        addTearDown(() => FlutterError.onError = flutterTestOnError);
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+        final panel = find
+            .descendant(of: find.byType(GameLayout), matching: find.byType(SingleChildScrollView))
+            .first;
+        final scrollable = find.descendant(of: panel, matching: find.byType(Scrollable)).first;
+        final scroll = tester.state<ScrollableState>(scrollable).position;
+        final board = tester.getRect(find.byType(Chessboard));
+        final capturePath =
+            '../../build/compact-layout/landscape-panel-$showMoves-${boardPosition.name}';
+        expect(scroll.maxScrollExtent, 0);
+        expect(find.text('Top player').hitTestable(), findsOneWidget);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-fitting');
+
+        tableHeights.value = (80, 80);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, 0);
+        if (showMoves) {
+          await tester.ensureVisible(find.text('e4'));
+          await tester.pumpAndSettle();
+          expect(find.text('e4').hitTestable(), findsOneWidget);
+        }
+        expect(find.text('Top player').hitTestable(), findsOneWidget);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-tight');
+
+        tableHeights.value = (100, 240);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, greaterThan(0));
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-expanded');
+
+        final viewport = tester.getRect(panel);
+        await tester.dragFrom(Offset(viewport.center.dx, viewport.top + 24), const Offset(0, -600));
+        await tester.pumpAndSettle();
+        expect(scroll.pixels, scroll.maxScrollExtent);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        await tester.tap(find.text('Bottom player'));
+        expect(taps, 1);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-scrolled');
+
+        await tester.dragFrom(
+          Offset(viewport.center.dx, viewport.bottom - 24),
+          const Offset(0, 600),
+        );
+        await tester.pumpAndSettle();
+        expect(scroll.pixels, 0);
+        await tester.tap(find.text('Top player'));
+        expect(taps, 2);
+        if (showMoves) {
+          await tester.ensureVisible(find.byType(MoveList));
+          await tester.pumpAndSettle();
+          expect(tester.getSize(find.byType(MoveList)).height, greaterThan(0));
+          expect(find.text('e4').hitTestable(), findsOneWidget);
+        }
+        tableHeights.value = (32, 32);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, 0);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+      }, variant: kPlatformVariant);
+    }
+  }
+
   for (final profile in [
     (
       name: 'phone',
