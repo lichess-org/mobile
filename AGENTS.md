@@ -489,7 +489,9 @@ Android must not change: every glass code path is behind a
   the bar, so the content is clipped at the bar's bottom edge (the bar looks opaque) and above the
   home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
   `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
-- A pull-to-refresh indicator needs an `edgeOffset` on iOS, or its spinner appears behind the bar.
+- A pull-to-refresh indicator needs an `edgeOffset` on iOS, or its spinner appears behind the bar:
+  `MediaQuery.paddingOf(context).top`, read from a context inside the body (the screen's own
+  `build` context is outside the `PlatformScaffold`, so its top padding lacks the bar height).
 
 ### Package caveats
 

@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -70,12 +71,14 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
     final searchResultsAsync = ref.watch(messageSearchResultsProvider);
     final me = ref.watch(authControllerProvider)?.user;
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.inbox),
+        // The search field stays in the bar, below the title.
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(
-            Theme.of(context).platform == TargetPlatform.iOS ? 52.0 : kToolbarHeight,
+            // The 44pt glass search field and its vertical padding.
+            Theme.of(context).platform == TargetPlatform.iOS ? 60.0 : kToolbarHeight,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -83,6 +86,7 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
               controller: controller,
               focusNode: focusNode,
               hintText: context.l10n.searchOrStartNewDiscussion,
+              inAppBar: true,
               onChanged: (value) {
                 onChangedDebouncer.call(() {
                   ref.read(messageSearchQueryProvider.notifier).state = value;
@@ -111,9 +115,15 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             )
-          : HapticRefreshIndicator(
-              onRefresh: () => ref.refresh(contactsProvider.future),
-              child: ContactsListView(openConvo: pushConversationScreen),
+          : Builder(
+              // The context of the body, whose top padding includes the app bar height on iOS.
+              builder: (context) => HapticRefreshIndicator(
+                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+                    ? MediaQuery.paddingOf(context).top
+                    : 0.0,
+                onRefresh: () => ref.refresh(contactsProvider.future),
+                child: ContactsListView(openConvo: pushConversationScreen),
+              ),
             ),
     );
   }
