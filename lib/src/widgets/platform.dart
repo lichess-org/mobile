@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoDynamicColor, CupertinoTheme;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
@@ -222,6 +223,12 @@ class const PlatformAppBar({
   final TextStyle? titleTextStyle,
   final List<Widget>? actions,
   final PreferredSizeWidget? bottom,
+
+  /// Whether the bar is tinted behind a non-glass [bottom] on iOS, to keep it legible over the
+  /// content.
+  ///
+  /// Defaults to true when [bottom] is a [TabBar].
+  final bool? tintBottom,
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
 }) extends StatelessWidget implements PreferredSizeWidget {
@@ -248,7 +255,26 @@ class const PlatformAppBar({
             )
           : null;
 
+      // A bar with a non-glass bottom (e.g. tabs) is tinted with the iOS default bar background:
+      // the scroll edge effect fades out above the bottom, where the content would show through.
+      // With a background image or color theme (transparent scaffold), the surface color is used
+      // instead, so that the bar is not grey over the background.
+      final Color backgroundColor;
+      if (bottom != null && (tintBottom ?? bottom is TabBar)) {
+        // A material based Cupertino theme does not resolve the default dynamic color.
+        final barTint = CupertinoDynamicColor.resolve(
+          CupertinoTheme.of(context).barBackgroundColor,
+          context,
+        );
+        backgroundColor = Theme.of(context).scaffoldBackgroundColor.a == 0
+            ? colorScheme.surface.withValues(alpha: barTint.a)
+            : barTint;
+      } else {
+        backgroundColor = Colors.transparent;
+      }
+
       return GlassAppBar(
+        backgroundColor: backgroundColor,
         title: title != null
             ? IconTheme.merge(
                 // Like the Material AppBar, so that icons in the title are not given the primary

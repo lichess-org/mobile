@@ -85,6 +85,8 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
             ],
           ),
         ],
+        // The category chips are not glass.
+        tintBottom: true,
         bottom: authUser != null
             ? StudyCategoryChips(
                 categories: StudyCategory.values.lock,
