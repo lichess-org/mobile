@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The engines a game can be played against, in the order the picker presents them: Stockfish
@@ -167,14 +168,11 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
         if (_maiaAvailable)
           Padding(
             padding: Styles.horizontalBodyPadding,
-            child: SegmentedButton<OpponentEngine>(
-              segments: [
-                for (final engine in OpponentEngine.values)
-                  ButtonSegment(value: engine, label: Text(engine.name)),
-              ],
-              selected: {_engine},
+            child: PlatformSegmentedControl<OpponentEngine>(
+              segments: [for (final engine in OpponentEngine.values) (engine, engine.name)],
+              selected: _engine,
               showSelectedIcon: false,
-              onSelectionChanged: (selection) => setState(() => _engine = selection.first),
+              onChanged: (engine) => setState(() => _engine = engine),
             ),
           ),
         Padding(padding: Styles.bodySectionPadding, child: _EngineDescription(_engine)),

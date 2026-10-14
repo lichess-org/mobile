@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
+import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
@@ -79,7 +80,7 @@ void main() {
       await openPicker(tester, variant: Variant.atomic);
 
       // The networks were trained on standard human games, so there is nothing to choose between.
-      expect(find.byType(SegmentedButton<OpponentEngine>), findsNothing);
+      expect(find.byType(PlatformSegmentedControl<OpponentEngine>), findsNothing);
       expect(find.textContaining('trusted by grandmasters'), findsOneWidget);
     });
 
