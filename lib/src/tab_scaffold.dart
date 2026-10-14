@@ -52,12 +52,8 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     final tabColor = CupertinoColors.label.resolveFrom(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final tabBar = GlassTabBar.bottom(
-      // Closer to the iOS 26 tab bar than the package defaults.
       settings: isDark ? _kDarkTabBarGlassSettings : _kTabBarGlassSettings,
-      // A dark selection pill in dark mode, like the Podcasts app (the package default is a light
-      // one).
       indicatorColor: isDark ? const Color(0x80000000) : null,
-      // The selected tab is in the primary color, like in iOS apps.
       selectedIconColor: ColorScheme.of(context).primary,
       unselectedIconColor: tabColor,
       selectedIndex: currentTab.index,
@@ -413,6 +409,8 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
 
 /// The package defaults of the tab bar (`kBottomBarGlassDefaults`, not exported), with less blur and
 /// no desaturation, closer to the iOS 26 tab bar, which keeps the colors of the content behind it.
+/// The tint is more opaque than the package default, so that busy content (boards) seen through the
+/// bar does not compete with the tab labels.
 const _kTabBarGlassSettings = LiquidGlassSettings(
   thickness: 30,
   blur: 1,
@@ -422,10 +420,10 @@ const _kTabBarGlassSettings = LiquidGlassSettings(
   saturation: 1.0,
   ambientStrength: 1,
   lightAngle: 0.75 * math.pi,
-  glassColor: Color(0x3DFFFFFF),
+  glassColor: Color(0x99FFFFFF),
 );
 
-/// [_kTabBarGlassSettings] with a lighter white tint, like the Podcasts tab bar in dark mode.
+/// [_kTabBarGlassSettings] with a dark gray tint, like the iOS tab bar in dark mode.
 final _kDarkTabBarGlassSettings = _kTabBarGlassSettings.copyWith(
-  glassColor: const Color(0x30FFFFFF),
+  glassColor: const Color(0xCC2C2C2E),
 );
