@@ -4,9 +4,11 @@ import 'package:material_ui/material_ui.dart';
 
 /// The rounded liquid glass card of an iOS modal (action sheet, alert dialog).
 ///
-/// Its tint is opaque enough to read the modal over any content.
+/// Its tint is opaque enough to read the modal over most content; raise [tintOpacity] over busy
+/// content such as a board.
 class const GlassModalCard({
   required final Widget child,
+  final double tintOpacity = 0.65,
   final double borderRadius = 26.0,
   final EdgeInsetsGeometry? padding,
   super.key,
@@ -26,7 +28,7 @@ class const GlassModalCard({
         blur: 5,
         refractiveIndex: 1.15,
         saturation: 1.2,
-        glassColor: isDark ? const Color(0xA6000000) : const Color(0xA6FFFFFF),
+        glassColor: (isDark ? Colors.black : Colors.white).withValues(alpha: tintOpacity),
       ),
       child: child,
     );
@@ -36,7 +38,13 @@ class const GlassModalCard({
 /// The iOS frame of a dialog: a [GlassModalCard] centered on the screen.
 ///
 /// Filled buttons in [child] are capsules, like the iOS 26 dialog buttons.
-class const GlassDialogFrame({required final Widget child, super.key}) extends StatelessWidget {
+class const GlassDialogFrame({
+  required final Widget child,
+
+  /// See [GlassModalCard.tintOpacity].
+  final double tintOpacity = 0.65,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,6 +54,7 @@ class const GlassDialogFrame({required final Widget child, super.key}) extends S
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 300),
             child: GlassModalCard(
+              tintOpacity: tintOpacity,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
