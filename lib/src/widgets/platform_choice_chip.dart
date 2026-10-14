@@ -1,5 +1,7 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoDynamicColor;
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, GlassQuality, LiquidRoundedRectangle;
+    show GlassButton, GlassQuality, LiquidGlassSettings, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A chip that can be selected: a Material [ChoiceChip] (or [FilterChip] when [multiple]) on
@@ -45,6 +47,7 @@ class const PlatformChoiceChip({
 
     final colorScheme = ColorScheme.of(context);
     final enabled = onSelected != null;
+    final isOnGlassSheet = GlassSheetScope.isIn(context);
     final chip = Semantics(
       selected: selected,
       enabled: enabled,
@@ -59,6 +62,9 @@ class const PlatformChoiceChip({
               shape: const LiquidRoundedRectangle(borderRadius: 100),
               // On a glass surface there is no parent glass layer to share.
               useOwnLayer: true,
+              // The package default glass, without the light mode drop shadow on a glass sheet: the
+              // chip sits on the sheet, it does not float above it.
+              settings: isOnGlassSheet ? const LiquidGlassSettings(shadowElevation: 0.0) : null,
               quality: GlassQuality.standard,
               interactionScale: 1.03,
               stretch: 0.3,
@@ -67,7 +73,13 @@ class const PlatformChoiceChip({
               height: double.infinity,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: selected ? colorScheme.primary.withValues(alpha: 0.18) : null,
+                  color: selected
+                      ? colorScheme.primary.withValues(alpha: 0.18)
+                      // Without a shadow, a chip on a glass sheet needs a fill to stand out from it,
+                      // like an iOS control in grouped content.
+                      : isOnGlassSheet
+                      ? CupertinoDynamicColor.resolve(CupertinoColors.tertiarySystemFill, context)
+                      : null,
                   borderRadius: const BorderRadius.all(Radius.circular(100)),
                 ),
                 child: Padding(
