@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/glass_toast_host.dart';
 import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
@@ -236,15 +237,74 @@ enum SnackBarType() {
   success,
 }
 
-/// Shows a snackbar with the given message.
-void showSnackBar(BuildContext context, String message, {SnackBarType type = SnackBarType.info}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        message,
-        style: type == SnackBarType.error ? const TextStyle(color: Colors.white) : null,
+/// Shows a snackbar with the given message: a Material [SnackBar] on Android, a liquid glass toast
+/// at the top of the screen on iOS.
+void showSnackBar(
+  BuildContext context,
+  String message, {
+  SnackBarType type = SnackBarType.info,
+  Duration? duration,
+}) {
+  SnackBarPresenter.of(context).show(message, type: type, duration: duration);
+}
+
+/// Shows snackbars like [showSnackBar], without a [BuildContext].
+///
+/// Get it before an async gap that may unmount the context (e.g. a closing bottom sheet).
+sealed class SnackBarPresenter {
+  factory of(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      // The root overlay, above the app bars and the tab bar, and kept when the route is popped.
+      // The context of the root navigator itself (as given by services) is above that overlay.
+      return _GlassToastPresenter(
+        Overlay.maybeOf(context, rootOverlay: true) ?? Navigator.of(context).overlay!,
+      );
+    }
+    return _MaterialSnackBarPresenter(ScaffoldMessenger.of(context), context.lichessColors.error);
+  }
+
+  /// Whether the presenter can still show a snackbar.
+  bool get mounted;
+
+  /// Shows a snackbar with the given message.
+  void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration});
+}
+
+class _MaterialSnackBarPresenter(final ScaffoldMessengerState _messenger, final Color _errorColor)
+    implements SnackBarPresenter {
+  @override
+  bool get mounted => _messenger.mounted;
+
+  @override
+  void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration}) {
+    _messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: type == SnackBarType.error ? const TextStyle(color: Colors.white) : null,
+        ),
+        backgroundColor: type == SnackBarType.error ? _errorColor : null,
+        duration: duration ?? const Duration(milliseconds: 4000),
       ),
-      backgroundColor: type == SnackBarType.error ? context.lichessColors.error : null,
-    ),
-  );
+    );
+  }
+}
+
+class _GlassToastPresenter(final OverlayState _overlay) implements SnackBarPresenter {
+  @override
+  bool get mounted => _overlay.mounted;
+
+  @override
+  void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration}) {
+    showGlassToast(
+      _overlay,
+      message,
+      type: switch (type) {
+        .error => .error,
+        .info => .info,
+        .success => .success,
+      },
+      duration: duration ?? const Duration(seconds: 4),
+    );
+  }
 }

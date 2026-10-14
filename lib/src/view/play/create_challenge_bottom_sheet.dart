@@ -349,7 +349,15 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                               Navigator.of(context)
                                   .popUntil((route) => route is! ModalBottomSheetRoute);
 
-                              if (maybeDeclined != null) {
+                              if (maybeDeclined != null &&
+                                  Theme.of(context).platform == TargetPlatform.iOS) {
+                                // A glass toast holds a text message only.
+                                showSnackBar(
+                                  context,
+                                  '${context.l10n.challengeChallengeDeclined}\n${maybeDeclined.label(context.l10n)}',
+                                  duration: const Duration(seconds: 5),
+                                );
+                              } else if (maybeDeclined != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Column(
@@ -383,9 +391,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   ),
                                 );
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
-                                );
+                                showSnackBar(context, context.l10n.mobileChallengeCreated);
                               }
                             } catch (e) {
                               if (context.mounted) {

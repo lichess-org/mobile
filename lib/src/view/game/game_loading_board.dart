@@ -308,12 +308,9 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                                     .read(challengeRepositoryProvider)
                                     .create(directedChallengeReq);
                                 if (!context.mounted) return;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      context.l10n.mobileChallengeCreated.replaceAll('\\n', '\n'),
-                                    ),
-                                  ),
+                                showSnackBar(
+                                  context,
+                                  context.l10n.mobileChallengeCreated.replaceAll('\\n', '\n'),
                                 );
                                 // Back to home screen
                                 Navigator.of(context).popUntil((route) => route.isFirst);
