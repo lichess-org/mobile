@@ -202,7 +202,8 @@ class _AccountMenuScreenState()
               children: [
                 for (final other in otherAccounts)
                   ListTile(
-                    leading: UserAvatar(other.user),
+                    // Icon sized, to line up with the icons of the other menu entries.
+                    leading: UserAvatar(other.user, radius: 12),
                     title: UserFullNameWidget(user: other.user, showFlair: false),
                     enabled: isOnline && switchAccountState is! MutationPending,
                     onTap: () {
