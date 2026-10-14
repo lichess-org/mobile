@@ -7,17 +7,42 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final _dateFormatter = DateFormat.MMMd();
 
-/// A tab that displays the overview of a broadcast.
-class const BroadcastOverviewTab({
-  required final Broadcast broadcast,
+String _formatDates(BroadcastTournamentDates dates) => dates.endsAt == null
+    ? _dateFormatter.format(dates.startsAt)
+    : '${_dateFormatter.format(dates.startsAt)} - ${_dateFormatter.format(dates.endsAt!)}';
+
+/// The information of a broadcast tournament as text, in the order of the overview sheet cards,
+/// without the links.
+Iterable<String> broadcastInformationTexts(BroadcastTournamentInformation information) => [
+  if (information.dates case final dates?) _formatDates(dates),
+  ?information.format,
+  ?information.timeControl,
+  ?information.location,
+  ?information.players,
+];
+
+/// Shows the overview of a broadcast tournament in an expandable bottom sheet.
+Future<void> showBroadcastOverviewSheet(BuildContext context, BroadcastTournamentId tournamentId) {
+  return showAdaptiveDraggableBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
+    initialChildSize: 0.6,
+    snap: true,
+    builder: (context, scrollController) =>
+        _BroadcastOverview(tournamentId: tournamentId, scrollController: scrollController),
+  );
+}
+
+class const _BroadcastOverview({
   required final BroadcastTournamentId tournamentId,
-  super.key,
+  required final ScrollController scrollController,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,25 +53,22 @@ class const BroadcastOverviewTab({
         final information = tournament.data.information;
         final description = tournament.data.description;
         return ListView(
-          padding: MediaQuery.paddingOf(context).add(Styles.bodyPadding),
+          controller: scrollController,
+          padding: Styles.bodyPadding.add(
+            EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+          ),
           children: [
-            if (tournament.data.imageUrl != null) ...[
-              HttpNetworkImageWidget(
-                tournament.data.imageUrl!,
-                errorBuilder: (context, _, _) => const SizedBox.shrink(),
-              ),
-              const SizedBox(height: 16.0),
-            ],
+            Text(
+              tournament.data.name,
+              style: TextTheme.of(context).titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16.0),
             Wrap(
               alignment: WrapAlignment.center,
               children: [
                 if (information.dates != null)
-                  _BroadcastOverviewCard(
-                    CupertinoIcons.calendar,
-                    information.dates!.endsAt == null
-                        ? _dateFormatter.format(information.dates!.startsAt)
-                        : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
-                  ),
+                  _BroadcastOverviewCard(CupertinoIcons.calendar, _formatDates(information.dates!)),
                 if (information.format != null)
                   _BroadcastOverviewCard(Icons.emoji_events, '${information.format}'),
                 if (information.timeControl != null)

@@ -1,4 +1,9 @@
+import 'dart:math' as math;
+
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -11,7 +16,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_sheet.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
@@ -22,21 +27,21 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
 enum BroadcastRoundTab() {
-  overview,
   boards,
   players,
   teams;
 
   static BroadcastRoundTab? tabOrNullFromString(String tab) {
     return switch (tab) {
-      'overview' => BroadcastRoundTab.overview,
       'boards' => BroadcastRoundTab.boards,
       'players' => BroadcastRoundTab.players,
       'teams' => BroadcastRoundTab.teams,
@@ -110,10 +115,21 @@ class const BroadcastRoundScreen({
   required final Broadcast broadcast,
   final BroadcastRoundTab? initialTab,
   final String? teamFilter,
+
+  /// Whether to show the overview sheet when the screen opens.
+  final bool showOverview = false,
 }) extends ConsumerStatefulWidget {
-  static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
+  static Route<dynamic> buildRoute(
+    Broadcast broadcast, {
+    BroadcastRoundTab? initialTab,
+    bool showOverview = false,
+  }) {
     return buildScreenRoute(
-      screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
+      screen: BroadcastRoundScreen(
+        broadcast: broadcast,
+        initialTab: initialTab,
+        showOverview: showOverview,
+      ),
     );
   }
 
@@ -125,11 +141,14 @@ class _BroadcastRoundScreenState()
     extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+
+  /// The outer scroll controller of the [NestedScrollView], scrolled to its end when the tabs are
+  /// pinned below the app bar.
+  final _scrollController = ScrollController();
+  final _tabsPinned = ValueNotifier(false);
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
   String? _teamFilter;
-
-  bool roundLoaded = false;
 
   _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
@@ -137,7 +156,7 @@ class _BroadcastRoundScreenState()
   void initState() {
     super.initState();
     final hasTeamsTab = widget.broadcast.tour.teamTable == true;
-    final tabCount = hasTeamsTab ? 4 : 3;
+    final tabCount = hasTeamsTab ? 3 : 2;
 
     _tabController = TabController(
       initialIndex: widget.initialTab?.index ?? 0,
@@ -145,17 +164,32 @@ class _BroadcastRoundScreenState()
       vsync: this,
     );
     _tabController.addListener(_onTabChanged);
+    _scrollController.addListener(_onScroll);
 
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
     _teamFilter = widget.teamFilter;
+
+    if (widget.showOverview) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) showBroadcastOverviewSheet(context, _selectedTournamentId);
+      });
+    }
   }
 
   @override
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _tabsPinned.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    final position = _scrollController.position;
+    _tabsPinned.value = position.maxScrollExtent > 0 && position.pixels >= position.maxScrollExtent;
   }
 
   void _onTabChanged() {
@@ -174,7 +208,7 @@ class _BroadcastRoundScreenState()
   }
 
   void setGameFilter(_BroadcastGameFilter filter, String? team) {
-    _tabController.index = 1;
+    _tabController.index = BroadcastRoundTab.boards.index;
     setState(() {
       this.filter = filter;
       _teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
@@ -183,7 +217,6 @@ class _BroadcastRoundScreenState()
 
   void setRoundId(BroadcastRoundId roundId) {
     setState(() {
-      roundLoaded = false;
       _selectedRoundId = roundId;
     });
   }
@@ -196,23 +229,18 @@ class _BroadcastRoundScreenState()
     return switch (roundState) {
       final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        // Tinted like the bottom bar buttons, over the boards.
         appBar: PlatformAppBar(
+          tintedGlass: true,
+          // On iOS the title is in the header of the body, below the image, like the Music app.
+          title: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : AppBarTitleText(
+                  asyncTournament.value?.data.name ?? widget.broadcast.title,
+                  maxLines: 2,
+                ),
           // A long title, next to the actions.
           centerTitle: false,
-          title: AppBarTitleText(
-            asyncTournament.value?.data.name ?? widget.broadcast.title,
-            maxLines: 2,
-          ),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: <Widget>[
-              Tab(text: context.l10n.broadcastOverview),
-              Tab(text: context.l10n.broadcastBoards),
-              Tab(text: context.l10n.players),
-              if (asyncTournament.value?.data.teamTable == true)
-                Tab(text: context.l10n.broadcastTeams),
-            ],
-          ),
           actions: [
             if (roundState.isSubscribed case final isSubscribed?)
               if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
@@ -303,33 +331,60 @@ class _BroadcastRoundScreenState()
             ),
           ],
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
-            switch (asyncTournament) {
-              AsyncData(:final value) => BroadcastBoardsTab(
-                tournamentId: _selectedTournamentId,
-                roundId: _selectedRoundId ?? value.defaultRoundId,
-                tournamentSlug: value.data.slug,
-                showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                teamFilter: _teamFilter,
+        body: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (context, _) => [
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: _RoundHeader(
+                title: Theme.of(context).platform == TargetPlatform.iOS
+                    ? asyncTournament.value?.data.name ?? widget.broadcast.title
+                    : null,
+                imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+                information: asyncTournament.value?.data.information,
+                onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+                tabController: _tabController,
+                tabsPinned: _tabsPinned,
+                tabs: [
+                  context.l10n.broadcastBoards,
+                  context.l10n.players,
+                  if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
+                ],
               ),
-              _ => const SizedBox.shrink(),
-            },
-            BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-            if (asyncTournament.value?.data.teamTable == true) ...[
-              switch (asyncTournament) {
-                AsyncData(:final value) => BroadcastTeamsTab(
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  tournamentId: _selectedTournamentId,
-                  tournamentSlug: value.data.slug,
-                  showTeamScores: value.data.showTeamScores == true,
-                ),
-                _ => const SizedBox.shrink(),
-              },
-            ],
+            ),
           ],
+          // The header is above the tabs, which start below it with a SliverOverlapInjector.
+          body: MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                switch (asyncTournament) {
+                  AsyncData(:final value) => BroadcastBoardsTab(
+                    tournamentId: _selectedTournamentId,
+                    roundId: _selectedRoundId ?? value.defaultRoundId,
+                    tournamentSlug: value.data.slug,
+                    showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                    teamFilter: _teamFilter,
+                  ),
+                  _ => const SizedBox.shrink(),
+                },
+                BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                if (asyncTournament.value?.data.teamTable == true) ...[
+                  switch (asyncTournament) {
+                    AsyncData(:final value) => BroadcastTeamsTab(
+                      roundId: _selectedRoundId ?? value.defaultRoundId,
+                      tournamentId: _selectedTournamentId,
+                      tournamentSlug: value.data.slug,
+                      showTeamScores: value.data.showTeamScores == true,
+                    ),
+                    _ => const SizedBox.shrink(),
+                  },
+                ],
+              ],
+            ),
+          ),
         ),
         bottomNavigationBar: switch (asyncTournament) {
           AsyncData(:final value) => _BottomBar(
@@ -343,7 +398,7 @@ class _BroadcastRoundScreenState()
       ),
       null => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-        appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
+        appBar: const PlatformAppBar(),
         body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
@@ -356,17 +411,6 @@ class _BroadcastRoundScreenState()
     switch (asyncTour) {
       case AsyncData(value: final tournament):
         final roundId = _selectedRoundId ?? tournament.defaultRoundId;
-
-        // Null until the round is loaded, so this fires once when it first loads.
-        ref.listen<bool?>(
-          broadcastRoundControllerProvider(roundId)
-              .select((state) => state.value?.games.isNotEmpty),
-          (_, hasGames) {
-            if (widget.initialTab != null || hasGames == null || roundLoaded) return;
-            roundLoaded = true;
-            if (hasGames) _tabController.index = 1;
-          },
-        );
 
         // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
         final roundState = ref.watch(
@@ -382,6 +426,303 @@ class _BroadcastRoundScreenState()
       case _:
         return _buildContent(context, asyncTour, null);
     }
+  }
+}
+
+/// The header of the round screen, above the tabs: the tournament image, title and a line of its
+/// information that opens the overview sheet, which scroll away, and the tabs, which stay pinned
+/// below the app bar.
+class const _RoundHeader({
+  /// Null when the title is in the app bar (Android).
+  required final String? title,
+  required final String? imageUrl,
+
+  /// Null while the tournament is loading.
+  required final BroadcastTournamentInformation? information,
+  required final VoidCallback onMorePressed,
+  required final TabController tabController,
+
+  /// Whether the tabs are pinned below the app bar.
+  required final ValueListenable<bool> tabsPinned,
+  required final List<String> tabs,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    // The height of the app bar on iOS, where the body extends behind it.
+    final topPadding = MediaQuery.paddingOf(context).top;
+
+    return _SliverPinnedTabsHeader(
+      topInset: topPadding,
+      header: Padding(
+        padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
+        child: Column(
+          children: [
+            if (imageUrl != null)
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  // Broadcast images are cropped to this ratio by the server.
+                  child: AspectRatio(
+                    aspectRatio: 2.0,
+                    child: HttpNetworkImageWidget(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, _, _) =>
+                          ColoredBox(color: ColorScheme.of(context).surfaceContainer),
+                    ),
+                  ),
+                ),
+              ),
+            if (title != null) ...[
+              const SizedBox(height: 16.0),
+              Text(
+                title!,
+                style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ] else
+              const SizedBox(height: 8.0),
+            if (information case final information?)
+              Row(
+                // MORE is at the end of the last line.
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: DefaultTextStyle.merge(
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Up to 2 pieces of information per line, on 2 lines.
+                          for (final line in broadcastInformationTexts(
+                            information,
+                          ).take(4).slices(2))
+                            Text(line.join(' · ')),
+                        ],
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: onMorePressed,
+                    child: Text(
+                      context.l10n.more.toUpperCase(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+      tabs: ValueListenableBuilder(
+        valueListenable: tabsPinned,
+        builder: (context, pinned, child) => AnimatedContainer(
+          duration: kThemeChangeDuration,
+          // On iOS the content scrolls under the glass segmented control. On Android, pinned tabs
+          // have the color of the scrolled under app bar above them.
+          color: isIOS
+              ? Colors.transparent
+              : pinned
+              ? _scrolledUnderAppBarColor(context)
+              : Theme.of(context).scaffoldBackgroundColor,
+          child: child,
+        ),
+        child: PlatformTabBar(
+          tabs: tabs,
+          controller: tabController,
+          inAppBar: false,
+          tintedGlass: true,
+        ),
+      ),
+    );
+  }
+}
+
+/// The color of a Material 3 [AppBar] when content is scrolled under it: its background color with
+/// the surface tint of its scrolled under elevation, as its [Material] paints it.
+Color _scrolledUnderAppBarColor(BuildContext context) {
+  final appBarTheme = AppBarTheme.of(context);
+  final colorScheme = ColorScheme.of(context);
+  return ElevationOverlay.applySurfaceTint(
+    appBarTheme.backgroundColor ?? colorScheme.surfaceContainer,
+    appBarTheme.surfaceTintColor ?? colorScheme.surfaceTint,
+    // The Material 3 default.
+    appBarTheme.scrolledUnderElevation ?? 3.0,
+  );
+}
+
+enum _HeaderSlot() {
+  header,
+  tabs,
+}
+
+/// The header of a [NestedScrollView], in a [SliverOverlapAbsorber]: a [header] that scrolls away,
+/// followed by [tabs] that stay pinned [topInset] below the top of the scroll view.
+///
+/// The scroll view starts at the top of the screen, behind the app bar, and [topInset] is the
+/// height of the app bar: the content starts below it, and scrolls under it. The [header] fades out
+/// as it goes under the app bar, since its bottom stays there when the [tabs] are pinned.
+///
+/// Unlike a [SliverMainAxisGroup] with pinned slivers, the pinned extent is reported in
+/// [SliverGeometry.maxScrollObstructionExtent], which the [SliverOverlapAbsorber] needs to keep the
+/// [tabs] on screen.
+class const _SliverPinnedTabsHeader({
+  required final Widget header,
+  required final Widget tabs,
+  required final double topInset,
+}) extends SlottedMultiChildRenderObjectWidget<_HeaderSlot, RenderBox> {
+  @override
+  Iterable<_HeaderSlot> get slots => _HeaderSlot.values;
+
+  @override
+  Widget childForSlot(_HeaderSlot slot) => switch (slot) {
+    .header => header,
+    .tabs => tabs,
+  };
+
+  @override
+  _RenderSliverPinnedTabsHeader createRenderObject(BuildContext context) =>
+      _RenderSliverPinnedTabsHeader(topInset);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderSliverPinnedTabsHeader renderObject) {
+    renderObject.topInset = topInset;
+  }
+}
+
+class _RenderSliverPinnedTabsHeader(var double _topInset)
+    extends RenderSliver
+    with SlottedContainerRenderObjectMixin<_HeaderSlot, RenderBox>, RenderSliverHelpers {
+  double get topInset => _topInset;
+  set topInset(double value) {
+    if (_topInset == value) return;
+    _topInset = value;
+    markNeedsLayout();
+  }
+
+  RenderBox get _header => childForSlot(_HeaderSlot.header)!;
+  RenderBox get _tabs => childForSlot(_HeaderSlot.tabs)!;
+
+  // Main axis positions of the children, and opacity of the header, set during layout.
+  double _headerPosition = 0.0;
+  double _tabsPosition = 0.0;
+  double _headerOpacity = 1.0;
+
+  final _headerOpacityLayer = LayerHandle<OpacityLayer>();
+
+  @override
+  void performLayout() {
+    assert(constraints.axisDirection == AxisDirection.down);
+    final boxConstraints = constraints.asBoxConstraints();
+    _header.layout(boxConstraints, parentUsesSize: true);
+    _tabs.layout(boxConstraints, parentUsesSize: true);
+    final headerExtent = _header.size.height;
+    final tabsExtent = _tabs.size.height;
+    final scrollExtent = _topInset + headerExtent + tabsExtent;
+    final pinnedExtent = _topInset + tabsExtent;
+    final scrollOffset = constraints.scrollOffset;
+
+    _headerPosition = _topInset - scrollOffset;
+    _tabsPosition = math.max(_topInset + headerExtent - scrollOffset, _topInset);
+    // Fades out while the bottom of the header goes from twice the inset to the inset.
+    _headerOpacity = _topInset == 0.0
+        ? 1.0
+        : clampDouble((headerExtent - scrollOffset) / _topInset, 0.0, 1.0);
+
+    final paintExtent = math.min(
+      math.max(scrollExtent - scrollOffset, pinnedExtent),
+      constraints.remainingPaintExtent,
+    );
+    geometry = SliverGeometry(
+      scrollExtent: scrollExtent,
+      paintExtent: paintExtent,
+      layoutExtent: clampDouble(scrollExtent - scrollOffset, 0.0, paintExtent),
+      maxPaintExtent: scrollExtent,
+      maxScrollObstructionExtent: pinnedExtent,
+      cacheExtent: calculateCacheOffset(constraints, from: 0.0, to: scrollExtent),
+      hasVisualOverflow: true,
+    );
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    if (!geometry!.visible) return;
+    if (_headerOpacity == 0.0) {
+      _headerOpacityLayer.layer = null;
+    } else if (_headerOpacity == 1.0) {
+      _headerOpacityLayer.layer = null;
+      context.paintChild(_header, offset + Offset(0.0, _headerPosition));
+    } else {
+      _headerOpacityLayer.layer = context.pushOpacity(
+        offset + Offset(0.0, _headerPosition),
+        (_headerOpacity * 255).round(),
+        (context, offset) => context.paintChild(_header, offset),
+        oldLayer: _headerOpacityLayer.layer,
+      );
+    }
+    context.paintChild(_tabs, offset + Offset(0.0, _tabsPosition));
+  }
+
+  @override
+  bool hitTestChildren(
+    SliverHitTestResult result, {
+    required double mainAxisPosition,
+    required double crossAxisPosition,
+  }) {
+    final boxResult = BoxHitTestResult.wrap(result);
+    return hitTestBoxChild(
+          boxResult,
+          _tabs,
+          mainAxisPosition: mainAxisPosition,
+          crossAxisPosition: crossAxisPosition,
+        ) ||
+        (_headerOpacity > 0.0 &&
+            hitTestBoxChild(
+              boxResult,
+              _header,
+              mainAxisPosition: mainAxisPosition,
+              crossAxisPosition: crossAxisPosition,
+            ));
+  }
+
+  @override
+  double childMainAxisPosition(RenderBox child) => child == _tabs ? _tabsPosition : _headerPosition;
+
+  @override
+  void applyPaintTransform(RenderBox child, Matrix4 transform) {
+    applyPaintTransformForBoxChild(child, transform);
+  }
+
+  @override
+  void dispose() {
+    _headerOpacityLayer.layer = null;
+    super.dispose();
+  }
+}
+
+/// A non-scrolling content for a tab of the round screen, such as a loading indicator or a message,
+/// centered in the space below the header.
+class const BroadcastRoundTabPlaceholder(final Widget child) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            child: Center(child: child),
+          ),
+        ),
+      ],
+    );
   }
 }
 

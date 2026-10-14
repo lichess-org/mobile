@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
@@ -43,11 +44,43 @@ void main() {
       // Load the round
       await tester.pump();
 
-      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Overview'), findsNothing);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Teams'), findsNothing);
     });
+  });
+
+  testWidgets('The tabs stay pinned below the app bar', variant: kPlatformVariant, (tester) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith(
+          (ref) => LichessClient(_liveBroadcastClient(), ref),
+        ),
+      },
+    );
+
+    await tester.pumpWidget(app);
+    // Load the tournament and the round
+    await tester.pump();
+    await tester.pump();
+
+    final tabs = find.byType(PlatformTabBar);
+    final initialTop = tester.getTopLeft(tabs).dy;
+
+    // Scroll the header away
+    await tester.drag(find.byType(NestedScrollView), const Offset(0, -600));
+    await tester.pump();
+    final pinnedTop = tester.getTopLeft(tabs).dy;
+    expect(pinnedTop, lessThan(initialTop));
+    expect(pinnedTop, greaterThan(0));
+
+    // Scroll the boards under the tabs
+    await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
+    await tester.pump();
+    expect(tester.getTopLeft(tabs).dy, pinnedTop);
   });
 
   group('Test boards tab', () {
@@ -135,7 +168,7 @@ void main() {
       // Load the round
       await tester.pump();
 
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(4));
       // Enter a query that doesn't match any player
       final searchField = find.byType(SearchBar);
       expect(searchField, findsOneWidget);
@@ -155,7 +188,7 @@ void main() {
       await tester.pump();
       // Clear the field -> results restored
       await tester.pump();
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(4));
     });
 
     testWidgets('Test boards tab when filtering by team', variant: kPlatformVariant, (
@@ -267,8 +300,8 @@ void main() {
     });
   });
 
-  group('Test overview tab', () {
-    testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
+  group('Test overview sheet', () {
+    testWidgets('Test overview sheet with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
       final app = await makeTestProviderScopeApp(
@@ -296,8 +329,16 @@ void main() {
       final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
       final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
       final f = DateFormat.MMMd();
+      final dates = '${f.format(startsAt)} - ${f.format(endsAt)}';
 
-      expect(find.text('${f.format(startsAt)} - ${f.format(endsAt)}'), findsOneWidget);
+      // The header shows the first 4 pieces of information, on 2 lines
+      expect(find.text('$dates · 9-round Swiss'), findsOneWidget);
+      expect(find.text('90 min + 30 sec / move · Seville, Spain'), findsOneWidget);
+
+      await tester.tap(find.text('MORE'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(dates), findsOneWidget);
       expect(find.text('9-round Swiss'), findsOneWidget);
       expect(find.text('90 min + 30 sec / move'), findsOneWidget);
       expect(find.text('Seville, Spain'), findsOneWidget);
@@ -413,7 +454,7 @@ void main() {
       await tester.pump();
 
       // Verify tabs
-      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Overview'), findsNothing);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Teams'), findsOneWidget);

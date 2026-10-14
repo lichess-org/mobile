@@ -414,12 +414,10 @@ class const _BroadcastCardContent({
                     icon: Icons.info,
                     label: context.l10n.broadcastOverview,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        BroadcastRoundScreen.buildRoute(
-                          broadcast,
-                          initialTab: BroadcastRoundTab.overview,
-                        ),
-                      );
+                      Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push(BroadcastRoundScreen.buildRoute(broadcast, showOverview: true));
                     },
                   ),
                   ContextMenuAction(

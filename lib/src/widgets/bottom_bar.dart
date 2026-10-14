@@ -1,6 +1,7 @@
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, LiquidGlassSettings, LiquidRoundedRectangle;
+    show GlassButton, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
@@ -110,13 +111,8 @@ class const _GlassBottomBarCapsule({
         child: GlassButton.custom(
           onTap: onTap ?? () {},
           enabled: enabled,
-          // The tint of the tab bar: opaque enough that busy content (boards) seen through the
-          // button does not compete with its label.
-          settings: LiquidGlassSettings(
-            glassColor: Theme.of(context).brightness == Brightness.light
-                ? const Color(0xBFFFFFFF)
-                : const Color(0xCC2C2C2E),
-          ),
+          // Over busy content, like boards.
+          settings: tintedGlassSettings(context),
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.
           useOwnLayer: true,

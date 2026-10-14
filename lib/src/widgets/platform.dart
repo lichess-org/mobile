@@ -88,6 +88,14 @@ const EdgeInsets kGlassAppBarBottomPadding = EdgeInsets.fromLTRB(16.0, 12.0, 16.
 /// Height of a control (segmented control, chips) in the `bottom` of a [PlatformAppBar] on iOS.
 const double kGlassAppBarBottomControlHeight = 36.0;
 
+/// Glass settings tinted like the iOS tab bar, for glass controls over busy content (boards): opaque
+/// enough that what is seen through the glass does not compete with the labels and icons.
+LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSettings(
+  glassColor: Theme.of(context).brightness == Brightness.light
+      ? const Color(0xBFFFFFFF)
+      : const Color(0xCC2C2C2E),
+);
+
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
 
@@ -377,6 +385,10 @@ class const PlatformAppBar({
   final bool compactButtons = false,
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
+
+  /// Whether the glass buttons are tinted on iOS ([tintedGlassSettings]), for a screen whose
+  /// content scrolling under them is busy, like boards.
+  final bool tintedGlass = false,
 }) extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
@@ -387,6 +399,7 @@ class const PlatformAppBar({
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
+      final buttonSettings = tintedGlass ? tintedGlassSettings(context) : null;
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
           MainTabScaffoldProperties.hasExtendedBody(context) &&
@@ -429,12 +442,14 @@ class const PlatformAppBar({
             : null,
         centerTitle: centerTitle ?? true,
         leading: leading != null
-            ? _GlassBarCapsule(height: buttonHeight, children: [leading!])
+            ? _GlassBarCapsule(height: buttonHeight, settings: buttonSettings, children: [leading!])
             : impliedLeading,
         actions: actions != null && actions!.isNotEmpty
-            ? [_GlassBarCapsule(height: buttonHeight, children: actions!)]
+            ? [_GlassBarCapsule(height: buttonHeight, settings: buttonSettings, children: actions!)]
             : null,
         bottom: bottom,
+        // For the implied back button, the capsules are given the settings themselves.
+        buttonSettings: buttonSettings,
         toolbarHeight: _kGlassToolbarHeight,
         // Aligned with the body content.
         padding: Styles.horizontalBodyPadding,
@@ -524,8 +539,11 @@ class const PlatformFloatingActionButton({
 }
 
 /// A liquid glass capsule grouping navigation bar items, like on iOS 26.
-class const _GlassBarCapsule({required final double height, required final List<Widget> children})
-    extends StatelessWidget {
+class const _GlassBarCapsule({
+  required final double height,
+  required final LiquidGlassSettings? settings,
+  required final List<Widget> children,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foregroundColor = ColorScheme.of(context).onSurface;
@@ -539,6 +557,7 @@ class const _GlassBarCapsule({required final double height, required final List<
           child: GlassContainer(
             height: height,
             shape: LiquidRoundedSuperellipse(borderRadius: height / 2),
+            settings: settings,
             alignment: Alignment.center,
             child: IconTheme.merge(
               data: IconThemeData(color: foregroundColor),
