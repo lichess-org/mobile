@@ -115,21 +115,10 @@ class const BroadcastRoundScreen({
   required final Broadcast broadcast,
   final BroadcastRoundTab? initialTab,
   final String? teamFilter,
-
-  /// Whether to show the overview sheet when the screen opens.
-  final bool showOverview = false,
 }) extends ConsumerStatefulWidget {
-  static Route<dynamic> buildRoute(
-    Broadcast broadcast, {
-    BroadcastRoundTab? initialTab,
-    bool showOverview = false,
-  }) {
+  static Route<dynamic> buildRoute(Broadcast broadcast, {BroadcastRoundTab? initialTab}) {
     return buildScreenRoute(
-      screen: BroadcastRoundScreen(
-        broadcast: broadcast,
-        initialTab: initialTab,
-        showOverview: showOverview,
-      ),
+      screen: BroadcastRoundScreen(broadcast: broadcast, initialTab: initialTab),
     );
   }
 
@@ -169,12 +158,6 @@ class _BroadcastRoundScreenState()
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
     _teamFilter = widget.teamFilter;
-
-    if (widget.showOverview) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) showBroadcastOverviewSheet(context, _selectedTournamentId);
-      });
-    }
   }
 
   @override
