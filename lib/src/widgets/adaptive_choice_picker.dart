@@ -1,11 +1,12 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shows a platform adaptive choice picker dialog
 ///
 /// On Android, it shows a dialog with radio buttons.
-/// On iOS, it shows a modal action sheet if the number of choices is less than or equal to 10.
+/// On iOS, it shows a liquid glass action sheet if the number of choices is less than or equal to 10.
 /// Otherwise, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
@@ -62,29 +63,16 @@ Future<void> showChoicePicker<T>(
       );
     case TargetPlatform.iOS:
       if (choices.length <= 10) {
-        return showCupertinoModalPopup<void>(
+        return showCupertinoActionSheet<void>(
           context: context,
-          builder: (context) {
-            return CupertinoActionSheet(
-              title: title,
-              actions: choices.map((value) {
-                return CupertinoActionSheetAction(
-                  onPressed: () {
-                    if (onSelectedItemChanged != null) {
-                      onSelectedItemChanged(value);
-                    }
-                    Navigator.of(context).pop();
-                  },
-                  child: labelBuilder(value),
-                );
-              }).toList(),
-              cancelButton: CupertinoActionSheetAction(
-                isDefaultAction: true,
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(context.l10n.cancel),
+          title: title,
+          actions: [
+            for (final value in choices)
+              BottomSheetAction(
+                makeLabel: (_) => labelBuilder(value),
+                onPressed: () => onSelectedItemChanged?.call(value),
               ),
-            );
-          },
+          ],
         );
       } else {
         return showCupertinoModalPopup<void>(
