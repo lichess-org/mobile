@@ -61,75 +61,66 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
       clipBehavior: Clip.none,
       alignment: Alignment.center,
       children: [
-        SemanticIconButton(
-          semanticsLabel: context.l10n.toggleLocalEvaluation,
-          onPressed: widget.onTap,
-          onLongPress: () {
-            showPopover(
-              context: context,
-              bodyBuilder: (_) {
-                return _EnginePopup(
-                  goDeeper: widget.goDeeper,
-                  filters: widget.filters,
-                  savedEval: widget.savedEval,
-                );
-              },
-              direction: PopoverDirection.top,
-              width: 250,
-              backgroundColor:
-                  DialogTheme.of(context).backgroundColor ??
-                  ColorScheme.of(context).surfaceContainerHigh,
-              transitionDuration: Duration.zero,
-              popoverTransitionBuilder: (_, child) => child,
-            );
-          },
-          icon: Badge(
-            offset: const Offset(4, -7),
-            backgroundColor: ColorScheme.of(context).tertiaryContainer,
-            textColor: ColorScheme.of(context).onTertiaryContainer,
-            label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
-            textStyle: const TextStyle(fontSize: 8),
-            isLabelVisible: prefs.isEnabled && eval is CloudEval,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                TweenAnimationBuilder<Color?>(
-                  curve: Curves.easeInOut,
-                  tween: ColorTween(begin: fromChipColor, end: toChipColor),
-                  duration: const Duration(milliseconds: 300),
-                  builder: (BuildContext context, Color? color, Widget? _) {
-                    return CustomPaint(
-                      size: const Size(microChipSize, microChipSize),
-                      painter: MicroChipPainter(color ?? toChipColor!),
-                    );
-                  },
-                ),
-                SizedBox(
-                  width: microChipSize,
-                  height: microChipSize,
-                  child: RepaintBoundary(
-                    child: Center(
-                      child: prefs.isEnabled
-                          ? eval is CloudEval
-                                ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                                : switch (engine) {
-                                    // No engine has been asked for yet.
-                                    null => Text('-', style: iconTextStyle),
-                                    AsyncError() => Text('!', style: iconTextStyle),
-                                    AsyncValue(isLoading: true) => loadingIndicator,
-                                    _ =>
-                                      eval?.depth != null
-                                          ? Text(
-                                              '${math.min(99, eval!.depth)}',
-                                              style: iconTextStyle,
-                                            )
-                                          : loadingIndicator,
-                                  }
-                          : const SizedBox.shrink(),
+        PlatformPopover(
+          width: 250,
+          direction: PopoverDirection.top,
+          bodyBuilder: (_) => _EnginePopup(
+            goDeeper: widget.goDeeper,
+            filters: widget.filters,
+            savedEval: widget.savedEval,
+          ),
+          triggerBuilder: (context, showPopover) => SemanticIconButton(
+            semanticsLabel: context.l10n.toggleLocalEvaluation,
+            onPressed: widget.onTap,
+            onLongPress: showPopover,
+            icon: Badge(
+              offset: const Offset(4, -7),
+              backgroundColor: ColorScheme.of(context).tertiaryContainer,
+              textColor: ColorScheme.of(context).onTertiaryContainer,
+              label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
+              textStyle: const TextStyle(fontSize: 8),
+              isLabelVisible: prefs.isEnabled && eval is CloudEval,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  TweenAnimationBuilder<Color?>(
+                    curve: Curves.easeInOut,
+                    tween: ColorTween(begin: fromChipColor, end: toChipColor),
+                    duration: const Duration(milliseconds: 300),
+                    builder: (BuildContext context, Color? color, Widget? _) {
+                      return CustomPaint(
+                        size: const Size(microChipSize, microChipSize),
+                        painter: MicroChipPainter(color ?? toChipColor!),
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    width: microChipSize,
+                    height: microChipSize,
+                    child: RepaintBoundary(
+                      child: Center(
+                        child: prefs.isEnabled
+                            ? eval is CloudEval
+                                  ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                                  : switch (engine) {
+                                      // No engine has been asked for yet.
+                                      null => Text('-', style: iconTextStyle),
+                                      AsyncError() => Text('!', style: iconTextStyle),
+                                      AsyncValue(isLoading: true) => loadingIndicator,
+                                      _ =>
+                                        eval?.depth != null
+                                            ? Text(
+                                                '${math.min(99, eval!.depth)}',
+                                                style: iconTextStyle,
+                                              )
+                                            : loadingIndicator,
+                                    }
+                            : const SizedBox.shrink(),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

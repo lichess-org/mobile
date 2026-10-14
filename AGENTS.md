@@ -504,6 +504,8 @@ Android must not change: every glass code path is behind a
   the screen) instead of the call site's. A labelled group of chips is a `Filter`
   (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
   16pt around the content and between groups.
+- **Popovers**: use `PlatformPopover` (`popover.dart`), a `GlassPopover` that morphs out of its
+  trigger on iOS. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, sheets), not for content such as cards or list rows.
 

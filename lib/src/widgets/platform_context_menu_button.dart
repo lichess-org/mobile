@@ -3,7 +3,10 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
 import 'package:material_ui/material_ui.dart';
 
 /// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint.
-const _kLightMenuGlassSettings = LiquidGlassSettings(
+///
+/// The package default glass (white 12%) is too clear over light content: used by the glass menus
+/// and popovers in light mode. Dark mode keeps the default.
+const kLightMenuGlassSettings = LiquidGlassSettings(
   blur: 10,
   thickness: 10,
   glassColor: Color(0x99FFFFFF),
@@ -50,11 +53,7 @@ class const ContextMenuIconButton({
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return GlassMenu(
         menuWidth: 250.0,
-        // The package default glass (white 12%) is too clear over light content. Dark mode keeps
-        // the default.
-        settings: Theme.of(context).brightness == Brightness.light
-            ? _kLightMenuGlassSettings
-            : null,
+        settings: Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null,
         semanticLabel: semanticsLabel,
         // The button is not glass itself: it sits in the glass capsule of the app bar.
         triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
