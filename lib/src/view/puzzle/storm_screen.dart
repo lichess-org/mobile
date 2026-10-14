@@ -391,7 +391,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.aboutX('Puzzle Storm')),
         content: const SingleChildScrollView(
           child: Text.rich(

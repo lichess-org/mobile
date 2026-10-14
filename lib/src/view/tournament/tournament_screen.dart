@@ -49,6 +49,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -1779,7 +1780,7 @@ Future<TeamId?> _showTeamSelectionDialog(BuildContext context, TeamBattleData te
   return showDialog<TeamId>(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.arenaPickYourTeam),
         content: Column(
           mainAxisSize: .min,
@@ -1819,7 +1820,7 @@ Future<String?> _showEntryCodeDialog(BuildContext context) {
   return showDialog<String>(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.tournamentEntryCode),
         content: TextField(controller: controller, autofocus: true),
         actions: [

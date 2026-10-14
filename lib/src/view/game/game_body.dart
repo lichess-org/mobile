@@ -1125,7 +1125,7 @@ class const _GameNegotiationDialog({
       onAccept();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: title,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.accept)),
@@ -1149,7 +1149,7 @@ class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWid
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: content,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),

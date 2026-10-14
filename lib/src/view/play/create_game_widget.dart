@@ -274,7 +274,7 @@ class const CreateGameWidget() extends ConsumerWidget {
   void _showDisabledRatingRangeExplanation(BuildContext context) {
     showAdaptiveDialog<void>(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
+      builder: (context) => PlatformAlertDialog(
         content: Text(context.l10n.cannotFilterByUnstableRating),
         actions: [
           PlatformDialogAction(

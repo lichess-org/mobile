@@ -1,6 +1,7 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shows a platform adaptive choice picker dialog
@@ -121,7 +122,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
     context: context,
     builder: (context) {
       Set<T> items = {...selectedItems};
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         contentPadding: const EdgeInsets.only(top: 12),
         scrollable: true,
         content: StatefulBuilder(
@@ -150,28 +151,17 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
             );
           },
         ),
-        actions: Theme.of(context).platform == TargetPlatform.iOS
-            ? [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ]
-            : [
-                TextButton(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ],
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+          PlatformDialogAction(
+            cupertinoIsDefaultAction: true,
+            onPressed: () => Navigator.of(context).pop(items),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
       );
     },
   );

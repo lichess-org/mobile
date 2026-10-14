@@ -442,7 +442,7 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
         content: SingleChildScrollView(
           child: Text.rich(

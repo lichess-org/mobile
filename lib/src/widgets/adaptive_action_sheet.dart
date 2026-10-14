@@ -4,8 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassContainer, GlassDefaults, LiquidGlassSettings, LiquidRoundedSuperellipse;
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassDefaults;
 import 'package:material_ui/material_ui.dart';
 
 /// A action bottom sheet that adapts to the platform (Android/iOS).
@@ -113,7 +113,7 @@ Future<T?> showCupertinoActionSheet<T>({
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
-                  child: _GlassActionSheetCard(
+                  child: GlassModalCard(
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -160,7 +160,7 @@ Future<T?> showCupertinoActionSheet<T>({
                   ),
                 ),
                 const SizedBox(height: 8),
-                _GlassActionSheetCard(
+                GlassModalCard(
                   child: _GlassActionSheetButton(
                     isDefaultAction: true,
                     onPressed: () => Navigator.of(context).pop(),
@@ -174,29 +174,6 @@ Future<T?> showCupertinoActionSheet<T>({
       );
     },
   );
-}
-
-/// A rounded liquid glass card holding the action sheet's actions or its cancel button.
-class const _GlassActionSheetCard({required final Widget child}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return GlassContainer(
-      useOwnLayer: true,
-      shape: const LiquidRoundedSuperellipse(borderRadius: 26),
-      clipBehavior: Clip.antiAlias,
-      // The package action sheet's glass, with an opaque enough tint to read the actions over any
-      // content.
-      settings: LiquidGlassSettings(
-        thickness: 30,
-        blur: 5,
-        refractiveIndex: 1.15,
-        saturation: 1.2,
-        glassColor: isDark ? const Color(0xA6000000) : const Color(0xA6FFFFFF),
-      ),
-      child: child,
-    );
-  }
 }
 
 /// A full width action sheet row, highlighted while pressed.

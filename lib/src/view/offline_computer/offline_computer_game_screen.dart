@@ -44,6 +44,7 @@ import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -1225,7 +1226,7 @@ class const OfflineComputerGameResultDialog({
       isThreefoldRepetition: game.isThreefoldRepetition,
     );
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       title: Text(title),
       content: Text(subtitle),
       actions: [

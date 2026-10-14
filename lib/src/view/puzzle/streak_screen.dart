@@ -548,7 +548,7 @@ class const _BottomBar({
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
+      builder: (context) => PlatformAlertDialog(
         title: Text(context.l10n.aboutX('Puzzle Streak')),
         content: Text(context.l10n.puzzleStreakDescription),
         actions: [
