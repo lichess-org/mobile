@@ -47,21 +47,21 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     }
 
     // On iOS the tabs content extends below a floating liquid glass tab bar.
-    // Unselected tabs have the package default label color: the app Cupertino theme text color
-    // (onSurface) has less contrast over the content seen through the glass.
+    // The package default label color: the app Cupertino theme text color (onSurface) has less
+    // contrast over the content seen through the glass.
     final tabColor = CupertinoColors.label.resolveFrom(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final tabBar = GlassTabBar.bottom(
       settings: isDark ? _kDarkTabBarGlassSettings : _kTabBarGlassSettings,
       indicatorColor: isDark ? const Color(0x80000000) : null,
-      selectedIconColor: ColorScheme.of(context).primary,
+      selectedIconColor: tabColor,
       unselectedIconColor: tabColor,
       selectedIndex: currentTab.index,
       tabs: [
         for (final tab in BottomTab.values)
           GlassTab(
-            // Filled icons, like the SF Symbols of iOS tab bars.
-            icon: Icon(tab.icon, fill: 1),
+            icon: Icon(tab.icon),
+            activeIcon: Icon(tab.icon, fill: 1),
             label: tab.label(context.l10n),
           ),
       ],
