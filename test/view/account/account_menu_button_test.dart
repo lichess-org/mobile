@@ -83,6 +83,11 @@ Future<void> _swipeDown(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> _swipeUp(WidgetTester tester) async {
+  await tester.fling(find.byType(AccountMenuButton), const Offset(0, -80), 1000);
+  await tester.pumpAndSettle();
+}
+
 void main() {
   testWidgets('swiping down on the avatar switches to the other account', (tester) async {
     await tester.pumpWidget(await _makeApp(tester, others: IList(const [_bobby])));
@@ -95,17 +100,46 @@ void main() {
     expect(await const AuthStorage().readOthers(), IList(const [fakeAuthUser]));
   });
 
-  testWidgets('swiping down again and again goes through all the accounts', (tester) async {
-    await tester.pumpWidget(await _makeApp(tester, others: IList(const [_bobby, _mary])));
+  testWidgets('swiping down again and again goes through all the accounts, by name', (
+    tester,
+  ) async {
+    // Most recently used first, which must not change the order of the accounts.
+    await tester.pumpWidget(await _makeApp(tester, others: IList(const [_mary, _bobby])));
     await tester.pumpAndSettle();
+
+    // Bobby, Mary, testUser: from testUser, the next account is the first one.
+    await _swipeDown(tester);
+    expect(_activeUserId(tester), const UserId('bobby'));
 
     await _swipeDown(tester);
     expect(_activeUserId(tester), const UserId('mary'));
 
     await _swipeDown(tester);
+    expect(_activeUserId(tester), fakeAuthUser.user.id);
+  });
+
+  testWidgets('swiping up goes through the accounts the other way round', (tester) async {
+    await tester.pumpWidget(await _makeApp(tester, others: IList(const [_bobby, _mary])));
+    await tester.pumpAndSettle();
+
+    await _swipeUp(tester);
+    expect(_activeUserId(tester), const UserId('mary'));
+
+    await _swipeUp(tester);
     expect(_activeUserId(tester), const UserId('bobby'));
 
+    await _swipeUp(tester);
+    expect(_activeUserId(tester), fakeAuthUser.user.id);
+  });
+
+  testWidgets('swiping down then up goes back to the first account', (tester) async {
+    await tester.pumpWidget(await _makeApp(tester, others: IList(const [_bobby, _mary])));
+    await tester.pumpAndSettle();
+
     await _swipeDown(tester);
+    expect(_activeUserId(tester), const UserId('bobby'));
+
+    await _swipeUp(tester);
     expect(_activeUserId(tester), fakeAuthUser.user.id);
   });
 
@@ -124,11 +158,15 @@ void main() {
     expect(_activeUserId(tester), const UserId('bobby'));
   });
 
-  testWidgets('swiping up does not switch', (tester) async {
+  testWidgets('a short drag does not switch', (tester) async {
     await tester.pumpWidget(await _makeApp(tester, others: IList(const [_bobby])));
     await tester.pumpAndSettle();
 
-    await tester.fling(find.byType(AccountMenuButton), const Offset(0, -80), 1000);
+    await tester.timedDrag(
+      find.byType(AccountMenuButton),
+      const Offset(0, 30),
+      const Duration(milliseconds: 300),
+    );
     await tester.pumpAndSettle();
 
     expect(_activeUserId(tester), fakeAuthUser.user.id);

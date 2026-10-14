@@ -367,8 +367,8 @@ class _AccountMenuScreenState()
 /// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
 /// nested navigation.
 ///
-/// Swiping down on the avatar switches to another of the accounts the user is signed in to, as a
-/// shortcut to the account menu's "Switch account" list.
+/// Swiping down or up on the avatar switches to the next or previous of the accounts the user is
+/// signed in to, as a shortcut to the account menu's "Switch account" list.
 class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
@@ -380,23 +380,29 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
 
-  /// How far down the avatar must be dragged to switch accounts.
+  /// How far down, or up, the avatar must be dragged to switch accounts.
   static const _switchDragDistance = 24.0;
 
-  /// How far down the avatar has been dragged so far.
+  /// How far down the avatar has been dragged so far, negative when dragged up.
   ///
   /// The distance is used rather than the velocity of the drag, which is zero when the finger stops
   /// before it is lifted.
   double _dragDistance = 0;
 
-  /// Switches to the least recently used of the other accounts, so that swiping again and again
-  /// goes through all of them in turn.
-  Future<void> _switchToNextAccount() async {
+  /// Switches to the account after the active one when [step] is 1, or before it when [step] is -1.
+  ///
+  /// The accounts are in a fixed order, by name, so that swiping again and again in the same
+  /// direction goes through all of them in turn, and swiping the other way goes back.
+  Future<void> _switchAccount({required int step}) async {
+    final active = ref.read(authControllerProvider);
     final others = ref.read(otherAccountsProvider).value;
-    if (others == null || others.isEmpty || !ref.read(isDeviceOnlineProvider)) return;
+    if (active == null || others == null || others.isEmpty) return;
+    if (!ref.read(isDeviceOnlineProvider)) return;
     if (ref.read(switchAccountMutation) is MutationPending) return;
 
-    final next = others.last;
+    final accounts = [active, ...others]
+      ..sort((a, b) => a.user.name.toLowerCase().compareTo(b.user.name.toLowerCase()));
+    final next = accounts[(accounts.indexOf(active) + step) % accounts.length];
     HapticFeedback.selectionClick();
     try {
       await switchAccountMutation.run(ref, (tsx) async {
@@ -481,7 +487,11 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
       onVerticalDragStart: (_) => _dragDistance = 0,
       onVerticalDragUpdate: (details) => _dragDistance += details.delta.dy,
       onVerticalDragEnd: (_) {
-        if (_dragDistance >= _switchDragDistance) _switchToNextAccount();
+        if (_dragDistance >= _switchDragDistance) {
+          _switchAccount(step: 1);
+        } else if (_dragDistance <= -_switchDragDistance) {
+          _switchAccount(step: -1);
+        }
       },
       child: button,
     );
