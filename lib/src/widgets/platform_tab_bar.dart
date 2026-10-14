@@ -6,9 +6,9 @@ import 'package:material_ui/material_ui.dart';
 
 /// Text tabs for the bottom of an app bar, or for a header pinned over scrolling content.
 ///
-/// On iOS, 2 tabs are a liquid glass segmented control, like a UIKit navigation bar. Outside of an
-/// app bar ([inAppBar] false), any number of tabs is a segmented control on iOS. Otherwise, and on
-/// Android, it is a Material [TabBar].
+/// On iOS, 2 or 3 tabs are a liquid glass segmented control, like a UIKit navigation bar: more
+/// labels would be cramped in an app bar. Outside of an app bar ([inAppBar] false), any number of
+/// tabs is a segmented control on iOS. Otherwise, and on Android, it is a Material [TabBar].
 ///
 /// The selected tab is driven by [controller], or the [DefaultTabController] when it is null, like
 /// [TabBar].
@@ -28,7 +28,7 @@ class const PlatformTabBar({
 }) extends StatelessWidget implements PreferredSizeWidget {
   // The app's theme platform is the default target platform.
   bool get _isSegmentedControl =>
-      defaultTargetPlatform == TargetPlatform.iOS && (tabs.length == 2 || !inAppBar);
+      defaultTargetPlatform == TargetPlatform.iOS && (tabs.length <= 3 || !inAppBar);
 
   @override
   Size get preferredSize => Size.fromHeight(

@@ -475,8 +475,8 @@ Android must not change: every glass code path is behind a
   fake search field in the body), as a normal push, and wraps its field in a `SearchFieldHero`
   with the same tag, so that the button morphs into the field.
 - **App bar tabs**: use `PlatformTabBar` (`lib/src/widgets/platform_tab_bar.dart`) as a
-  `PlatformAppBar` `bottom`, not a Material `TabBar`. On iOS, 2 tabs are a glass segmented
-  control (driven by the same `TabController`); 3 tabs or more stay a Material `TabBar`.
+  `PlatformAppBar` `bottom`, not a Material `TabBar`. On iOS, 2 or 3 tabs are a glass
+  segmented control (driven by the same `TabController`); 4 tabs or more stay a Material `TabBar`.
   A control in an app bar `bottom` (segmented control, study chips) uses
   `kGlassAppBarBottomPadding` and `kGlassAppBarBottomControlHeight` (`platform.dart`) on
   iOS, so every bar has the same spacing and height.

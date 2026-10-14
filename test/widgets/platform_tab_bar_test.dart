@@ -19,6 +19,14 @@ Widget _buildApp(List<String> tabs) {
 }
 
 void main() {
+  testWidgets('3 tabs are a segmented control on iOS', variant: kPlatformVariant, (tester) async {
+    await tester.pumpWidget(_buildApp(['First', 'Second', 'Third']));
+
+    final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
+    expect(find.byType(GlassSegmentedControl), isIOS ? findsOneWidget : findsNothing);
+    expect(find.byType(TabBar), isIOS ? findsNothing : findsOneWidget);
+  });
+
   testWidgets('2 tabs are a segmented control on iOS', variant: kPlatformVariant, (tester) async {
     await tester.pumpWidget(_buildApp(['First', 'Second']));
 
@@ -34,7 +42,7 @@ void main() {
   });
 
   testWidgets('more tabs are a tab bar', variant: kPlatformVariant, (tester) async {
-    await tester.pumpWidget(_buildApp(['First', 'Second', 'Third']));
+    await tester.pumpWidget(_buildApp(['First', 'Second', 'Third', 'Fourth']));
 
     expect(find.byType(GlassSegmentedControl), findsNothing);
     expect(find.byType(TabBar), findsOneWidget);
