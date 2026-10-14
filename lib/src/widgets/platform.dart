@@ -59,7 +59,7 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
 }
 
 /// The background of a bar over scrolling content on iOS: behind a [PlatformAppBar] with a title
-/// while content is scrolled under it, and a [BottomBar].
+/// while content is scrolled under it.
 ///
 /// It is a translucent white in light mode and dark grey in dark mode, like the bars of the iOS
 /// apps (the iOS default bar tint, a light grey, looks tinted over the content). With a background
@@ -360,6 +360,10 @@ class _ScrollAwayAppBarState() extends State<_ScrollAwayAppBar> {
 class const PlatformAppBar({
   super.key,
   final Widget? leading,
+
+  /// Passed to [AppBar.leadingWidth] on Android, for a [leading] wider than an icon button. On iOS
+  /// the leading capsule is as wide as its content.
+  final double? leadingWidth,
   final Widget? title,
   final double? titleSpacing,
   final TextStyle? titleTextStyle,
@@ -442,6 +446,7 @@ class const PlatformAppBar({
       title: title,
       titleTextStyle: titleTextStyle,
       leading: leading,
+      leadingWidth: leadingWidth,
       actions: actions,
       bottom: bottom,
       centerTitle: centerTitle,

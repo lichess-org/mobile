@@ -72,7 +72,11 @@ const kColdAppStartsHideCustomizationTipThreshold = 5;
 class const HomeTabScreen({super.key, final bool editModeEnabled = false})
     extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({bool editModeEnabled = false}) {
-    return buildScreenRoute(screen: HomeTabScreen(editModeEnabled: editModeEnabled));
+    return buildScreenRoute(
+      screen: HomeTabScreen(editModeEnabled: editModeEnabled),
+      // Editing the home widgets is a full screen task, closed with its OK button.
+      fullscreenDialog: editModeEnabled,
+    );
   }
 
   @override
@@ -414,7 +418,11 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   appBar: widget.editModeEnabled
                       ? PlatformAppBar(
                           title: Text(context.l10n.mobileSettingsHomeWidgets),
-                          leading: const BackButton(),
+                          leading: TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text(context.l10n.ok),
+                          ),
+                          leadingWidth: 80.0,
                           automaticallyImplyLeading: false,
                         )
                       : PlatformAppBar(
@@ -443,21 +451,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           onRefresh: () => _refreshData(isOnline: isOnline),
                           child: content,
                         ),
-                  bottomNavigationBar: widget.editModeEnabled
-                      ? BottomAppBar(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(context.l10n.ok),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
                   floatingActionButton: widget.editModeEnabled || isTablet
                       ? null
                       : const FloatingPlayButton(),

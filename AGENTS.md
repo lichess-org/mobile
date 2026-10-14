@@ -480,6 +480,9 @@ Android must not change: every glass code path is behind a
   A control in an app bar `bottom` (segmented control, study chips) uses
   `kGlassAppBarBottomPadding` and `kGlassAppBarBottomControlHeight` (`platform.dart`) on
   iOS, so every bar has the same spacing and height.
+- **Bottom bars over scrolling content** (not board toolbars): `BottomBar(cupertinoGlass: true)`
+  has no background on iOS and its `BottomBarButton`s / `BottomBarTextButton`s are glass capsules,
+  as wide as their content and evenly spaced.
 - **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
   `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
   give an iOS field its own `border` radius.

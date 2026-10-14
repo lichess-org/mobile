@@ -266,6 +266,11 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+
+        await tester.tap(find.widgetWithText(TextButton, 'OK'));
+        await tester.pumpAndSettle();
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsNothing);
       });
 
       testWidgets('featured tournaments checkbox is shown when there are some to show', (

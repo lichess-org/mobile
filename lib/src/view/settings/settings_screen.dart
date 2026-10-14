@@ -95,7 +95,10 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(HomeTabScreen.buildRoute(editModeEnabled: true));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
                 },
               ),
               ListTile(

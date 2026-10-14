@@ -237,6 +237,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
           builder: (context, constraints) {
             final isTabletLandscape =
                 constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
+            final listPadding = Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context));
             return Padding(
               padding: Styles.horizontalBodyPadding,
               child: isTabletLandscape
@@ -246,6 +247,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
                         Expanded(
                           flex: 1,
                           child: ListView(
+                            padding: listPadding,
                             children: [
                               _TournamentInfoCard(tournament: state.tournament),
                               const SizedBox(height: 16),
@@ -256,11 +258,15 @@ class const _Body({required final TournamentId id, required final TournamentStat
                         ),
                         Expanded(
                           flex: 2,
-                          child: ListView(children: [...standingWidgets, bottomSheetSpacer]),
+                          child: ListView(
+                            padding: listPadding,
+                            children: [...standingWidgets, bottomSheetSpacer],
+                          ),
                         ),
                       ],
                     )
                   : ListView(
+                      padding: listPadding,
                       children: [
                         _TournamentInfoCard(tournament: state.tournament),
                         const SizedBox(height: 16),
@@ -1200,7 +1206,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
     );
 
     return BottomBar(
-      cupertinoTransparent: true,
+      cupertinoGlass: true,
       children: [
         if (widget.state.chatOptions != null && kidModeAsync.value == false)
           ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),

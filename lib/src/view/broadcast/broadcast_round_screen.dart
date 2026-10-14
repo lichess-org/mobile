@@ -338,7 +338,7 @@ class _BroadcastRoundScreenState()
             setTournamentId: setTournamentId,
             setRoundId: setRoundId,
           ),
-          _ => const BottomBar.empty(),
+          _ => const BottomBar.empty(cupertinoGlass: true),
         },
       ),
       null => PlatformScaffold(
@@ -394,10 +394,10 @@ class const _BottomBar({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
-      cupertinoTransparent: true,
+      cupertinoGlass: true,
       children: [
         if (tournament.group != null)
-          TextButton(
+          BottomBarTextButton(
             onPressed: () => showAdaptiveDraggableBottomSheet<void>(
               context: context,
               showDragHandle: true,
@@ -419,7 +419,7 @@ class const _BottomBar({
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        TextButton(
+        BottomBarTextButton(
           onPressed: () => showAdaptiveDraggableBottomSheet<void>(
             context: context,
             showDragHandle: true,
