@@ -59,7 +59,7 @@ dependencies:
   json_annotation: ^4.12.0
   l10n_esperanto: ^3.0.0
   lc0: ^0.1.0
-  liquid_glass_widgets: ^1.12.0
+  liquid_glass_widgets: ^1.13.0
   logging: ^1.3.0
   material_color_utilities: ^0.13.0
   material_symbols_icons: ^4.2960.0
