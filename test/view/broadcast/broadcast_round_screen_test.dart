@@ -184,12 +184,9 @@ void main() {
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      final filterGames = find.byWidgetPredicate(
-        (widget) => widget is ContextMenuAction && widget.label == 'Filter games',
-      );
-      await tester.tap(filterGames);
+      await tester.tap(find.text('Filter games'));
       await tester.pumpAndSettle();
       final teamChip = find.descendant(of: find.byType(FilterChip), matching: find.text('Team'));
 
@@ -232,8 +229,8 @@ void main() {
       // Clear the filter by opening settings again
       await tester.pump();
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pump();
-      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Filter games'));
       await tester.pumpAndSettle();
 
       // Tap the team filter chip

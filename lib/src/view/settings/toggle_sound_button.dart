@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A button that toggles the sound on and off.
@@ -18,22 +16,6 @@ class const ToggleSoundButton({super.key}) extends ConsumerWidget {
       semanticsLabel: 'Toggle sound',
       onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
       icon: Icon(isSoundEnabled ? Icons.volume_up : Icons.volume_off),
-    );
-  }
-}
-
-/// A menu item button that toggles the sound on and off.
-class const ToggleSoundContextMenuAction({
-  required final bool isEnabled,
-  required final VoidCallback onPressed,
-  super.key,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ContextMenuAction(
-      icon: isEnabled ? Icons.volume_up : Icons.volume_off,
-      label: context.l10n.sound,
-      onPressed: onPressed,
     );
   }
 }

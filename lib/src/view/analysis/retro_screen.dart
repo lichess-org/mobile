@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/view/analysis/retro_settings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -398,8 +397,11 @@ class const _RetroMenu({required final RetroOptions options}) extends ConsumerWi
           onPressed: () =>
               Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
         ),
-        ToggleSoundContextMenuAction(
-          isEnabled: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled)),
+        ContextMenuAction(
+          icon: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled))
+              ? Icons.volume_up
+              : Icons.volume_off,
+          label: context.l10n.sound,
           onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
         ),
       ],
