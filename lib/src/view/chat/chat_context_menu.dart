@@ -17,10 +17,9 @@ class const ChatBubbleContextMenu({
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: () => showModalBottomSheet<void>(
+      onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
         builder: (context) => BottomSheetScrollableContainer(

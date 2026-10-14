@@ -36,8 +36,6 @@ class const GlassModalCard({
 }
 
 /// The iOS frame of a dialog: a [GlassModalCard] centered on the screen.
-///
-/// Filled buttons in [child] are capsules, like the iOS 26 dialog buttons.
 class const GlassDialogFrame({
   required final Widget child,
 
@@ -58,15 +56,7 @@ class const GlassDialogFrame({
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
-              child: Material(
-                type: MaterialType.transparency,
-                child: FilledButtonTheme(
-                  data: FilledButtonThemeData(
-                    style: FilledButton.styleFrom(shape: const StadiumBorder()),
-                  ),
-                  child: child,
-                ),
-              ),
+              child: Material(type: MaterialType.transparency, child: child),
             ),
           ),
         ),

@@ -1,5 +1,7 @@
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassSwitch;
 import 'package:material_ui/material_ui.dart';
 
 const kSettingsTileTitleMaxLines = 3;
@@ -80,11 +82,28 @@ class const SwitchSettingTile({
               child: subtitle!,
             )
           : null,
-      trailing: Switch.adaptive(
-        value: value,
-        onChanged: onChanged,
-        padding: const EdgeInsets.only(left: 8.0),
-      ),
+      trailing: Theme.of(context).platform == TargetPlatform.iOS && GlassSheetScope.isIn(context)
+          // On a glass sheet, the iOS 26 switch with its glass thumb.
+          ? Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Opacity(
+                opacity: onChanged != null ? 1.0 : 0.5,
+                child: IgnorePointer(
+                  ignoring: onChanged == null,
+                  child: GlassSwitch(
+                    value: value,
+                    onChanged: onChanged ?? (_) {},
+                    // On the sheet's glass there is no parent glass layer to share.
+                    useOwnLayer: true,
+                  ),
+                ),
+              ),
+            )
+          : Switch.adaptive(
+              value: value,
+              onChanged: onChanged,
+              padding: const EdgeInsets.only(left: 8.0),
+            ),
     );
   }
 }

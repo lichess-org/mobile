@@ -64,7 +64,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     final sortButton = SemanticIconButton(
       icon: const Icon(Icons.sort),
       semanticsLabel: context.l10n.mobileSortFriends,
-      onPressed: () => showModalBottomSheet<void>(
+      onPressed: () => showAdaptiveBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
@@ -73,10 +73,8 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
             return BottomSheetScrollableContainer(
               padding: const EdgeInsets.all(16.0),
               children: [
-                const SizedBox(height: 16.0),
-                Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
-                const SizedBox(height: 16.0),
                 Filter<FriendListSort>(
+                  filterName: 'Sort by',
                   filterType: FilterType.singleChoice,
                   choices: FriendListSort.values,
                   choiceSelected: (choice) => selectedSort == choice,
@@ -91,7 +89,6 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
                     ref.read(relationPreferencesProvider.notifier).setFriendSort(value);
                   },
                 ),
-                const SizedBox(height: 16.0),
               ],
             );
           },
@@ -200,10 +197,9 @@ class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
             )
           : null,
       onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
-      onLongPress: () => showModalBottomSheet<void>(
+      onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),

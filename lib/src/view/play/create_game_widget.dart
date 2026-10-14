@@ -210,7 +210,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                         ),
                         onPressed: canUseRatingRange
                             ? () {
-                                showModalBottomSheet<void>(
+                                showAdaptiveBottomSheet<void>(
                                   context: context,
                                   constraints: BoxConstraints(
                                     minHeight: MediaQuery.heightOf(context) * 0.4,

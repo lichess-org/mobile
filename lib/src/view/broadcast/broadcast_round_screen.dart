@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
@@ -242,9 +243,8 @@ class _BroadcastRoundScreenState()
                   icon: Icons.settings,
                   label: context.l10n.settingsSettings,
                   onPressed: () {
-                    showModalBottomSheet<void>(
+                    showAdaptiveBottomSheet<void>(
                       context: context,
-                      isDismissible: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => const _BroadcastSettingsBottomSheet(),
@@ -273,9 +273,8 @@ class _BroadcastRoundScreenState()
                         ? uniqueTeams.insert(0, context.l10n.broadcastAllTeams)
                         : null;
 
-                    showModalBottomSheet<void>(
+                    showAdaptiveBottomSheet<void>(
                       context: context,
-                      isDismissible: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => _BroadcastGamesFilterBottomSheet(
@@ -700,43 +699,42 @@ class _BroadcastGamesFilterBottomSheetState()
             : KeyedSubtree(
                 key: const ValueKey('settings'),
                 child: BottomSheetScrollableContainer(
+                  padding: const EdgeInsets.all(16.0),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SettingsSectionTitle(context.l10n.filterGames),
-                          const SizedBox(height: 6),
-                          Filter<_BroadcastGameFilter>(
-                            filterType: FilterType.singleChoice,
-                            choices: _BroadcastGameFilter.values,
-                            choiceSelected: (choice) => filter == choice,
-                            choiceLabel: (category) {
-                              final label = category.l10n(context.l10n);
-                              final count = category == _BroadcastGameFilter.all
-                                  ? widget.allGamesCount
-                                  : widget.ongoingGamesCount;
-                              return Text('$label ($count)');
-                            },
-                            onSelected: (value, selected) {
-                              setState(() => filter = value);
-                              widget.onGameFilterChange.call(value, selectedTeam);
-                            },
-                          ),
-                          if (widget.teams != null)
-                            FilterChip(
-                              label: selectedTeam != null
-                                  ? Text('${context.l10n.teamTeam}: $selectedTeam')
-                                  : Text(context.l10n.teamTeam),
-                              selected: selectedTeam != null,
-                              showCheckmark: selectedTeam != null,
-                              onSelected: (_) => setState(() => showingTeamPicker = true),
-                            ),
-                        ],
-                      ),
+                    Filter<_BroadcastGameFilter>(
+                      filterName: context.l10n.filterGames,
+                      filterType: FilterType.singleChoice,
+                      choices: _BroadcastGameFilter.values,
+                      choiceSelected: (choice) => filter == choice,
+                      choiceLabel: (category) {
+                        final label = category.l10n(context.l10n);
+                        final count = category == _BroadcastGameFilter.all
+                            ? widget.allGamesCount
+                            : widget.ongoingGamesCount;
+                        return Text('$label ($count)');
+                      },
+                      onSelected: (value, selected) {
+                        setState(() => filter = value);
+                        widget.onGameFilterChange.call(value, selectedTeam);
+                      },
                     ),
+                    if (widget.teams != null) ...[
+                      // The same space as between wrapped chips (see [Filter]).
+                      if (Theme.of(context).platform == TargetPlatform.iOS)
+                        const SizedBox(height: 8.0),
+                      Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: PlatformChoiceChip(
+                          label: selectedTeam != null
+                              ? Text('${context.l10n.teamTeam}: $selectedTeam')
+                              : Text(context.l10n.teamTeam),
+                          selected: selectedTeam != null,
+                          multiple: true,
+                          showCheckmark: selectedTeam != null,
+                          onSelected: (_) => setState(() => showingTeamPicker = true),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

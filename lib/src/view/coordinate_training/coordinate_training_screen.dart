@@ -42,7 +42,7 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
               return SemanticIconButton(
                 icon: const Icon(Icons.settings),
                 semanticsLabel: context.l10n.settingsSettings,
-                onPressed: () => showModalBottomSheet<void>(
+                onPressed: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   showDragHandle: true,
                   builder: (BuildContext context) => const _CoordinateTrainingMenu(),
@@ -432,7 +432,7 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
 }
 
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
-  return showModalBottomSheet<void>(
+  return showAdaptiveBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );

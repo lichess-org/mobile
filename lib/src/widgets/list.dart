@@ -1,5 +1,6 @@
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -126,7 +127,9 @@ class ListSection extends StatelessWidget {
                     ListSectionHeader(title: header!, onTap: onHeaderTap, trailing: headerTrailing),
                   (materialFilledCard ? Card.filled : Card.new)(
                     clipBehavior: clipBehavior,
-                    color: backgroundColor,
+                    color:
+                        backgroundColor ??
+                        (GlassSheetScope.isIn(context) ? _glassSheetCardColor(context) : null),
                     margin: EdgeInsets.zero,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,6 +151,13 @@ class ListSection extends StatelessWidget {
             ),
     );
   }
+
+  /// A translucent fill for the section card on a glass sheet, like the grouped cells of an iOS 26
+  /// sheet.
+  static Color _glassSheetCardColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+      ? const Color(0x14FFFFFF)
+      : const Color(0x80FFFFFF);
 
   static Iterable<Widget> _divideTiles({
     required Iterable<Widget> tiles,

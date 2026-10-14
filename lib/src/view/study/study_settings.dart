@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -51,11 +52,10 @@ class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidg
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
-                onTap: () => showModalBottomSheet<void>(
+                onTap: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
                   showDragHandle: true,
-                  isDismissible: true,
                   builder: (_) => const OpeningExplorerSettings(),
                 ),
               ),

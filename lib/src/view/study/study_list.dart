@@ -13,9 +13,9 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassChip;
 import 'package:material_ui/material_ui.dart';
 
 class const StudyList({
@@ -170,10 +170,9 @@ class const StudyListItem({
       subtitle: _StudySubtitle(study: study),
       onTap: () => onTap(context, study),
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           builder: (context) => _ContextMenu(study: study),
@@ -196,7 +195,6 @@ class const StudyCategoryChips({
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    final colorScheme = ColorScheme.of(context);
     return PreferredSize(
       preferredSize: preferredSize,
       child: SizedBox(
@@ -213,27 +211,13 @@ class const StudyCategoryChips({
               children: categories.map((cat) {
                 final isSelected = currentCategory == cat;
                 if (isIOS) {
-                  // Glass pills, like the iOS 26 filter chips; the selected one has a light primary
-                  // tint and a primary label (the package default selection is barely visible in
-                  // light mode).
-                  return Semantics(
+                  return PlatformChoiceChip(
+                    key: isSelected ? currentCategoryKey : null,
+                    label: Text(cat.l10n(context.l10n)),
                     selected: isSelected,
-                    child: GlassChip(
-                      key: isSelected ? currentCategoryKey : null,
-                      label: cat.l10n(context.l10n),
-                      selected: isSelected,
-                      selectedColor: colorScheme.primary.withValues(alpha: 0.18),
-                      labelStyle: TextStyle(
-                        fontSize: 14,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                        color: isSelected ? colorScheme.primary : colorScheme.onSurface,
-                      ),
-                      // The bar's bottom has no glass layer to share.
-                      useOwnLayer: true,
-                      onTap: () {
-                        if (!isSelected) onCategorySelected(cat);
-                      },
-                    ),
+                    onSelected: (_) {
+                      if (!isSelected) onCategorySelected(cat);
+                    },
                   );
                 }
                 return ChoiceChip(

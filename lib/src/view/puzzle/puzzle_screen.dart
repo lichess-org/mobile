@@ -869,9 +869,8 @@ class const _PuzzleSettingsButton(final PuzzleContext initialPuzzleContext)
   @override
   Widget build(BuildContext context) {
     return SemanticIconButton(
-      onPressed: () => showModalBottomSheet<void>(
+      onPressed: () => showAdaptiveBottomSheet<void>(
         context: context,
-        isDismissible: true,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),

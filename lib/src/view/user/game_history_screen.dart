@@ -74,7 +74,7 @@ class const GameHistoryScreen({
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed: () =>
-          showModalBottomSheet<GameFilterState>(
+          showAdaptiveBottomSheet<GameFilterState>(
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
@@ -390,7 +390,7 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
     Perf.racingKings,
     Perf.crazyhouse,
   ];
-  static const filterGroupSpace = SizedBox(height: 10.0);
+  static const filterGroupSpace = SizedBox(height: 12.0);
 
   @override
   Widget build(BuildContext context) {

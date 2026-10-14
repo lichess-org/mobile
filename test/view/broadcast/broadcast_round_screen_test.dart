@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -188,7 +189,10 @@ void main() {
 
       await tester.tap(find.text('Filter games'));
       await tester.pumpAndSettle();
-      final teamChip = find.descendant(of: find.byType(FilterChip), matching: find.text('Team'));
+      final teamChip = find.descendant(
+        of: find.byType(PlatformChoiceChip),
+        matching: find.text('Team'),
+      );
 
       expect(teamChip, findsOneWidget);
 
@@ -235,7 +239,7 @@ void main() {
 
       // Tap the team filter chip
       final teamFilterChip = find.descendant(
-        of: find.byType(FilterChip),
+        of: find.byType(PlatformChoiceChip),
         matching: find.byWidgetPredicate((widget) {
           if (widget is Text) {
             final text = widget.data;

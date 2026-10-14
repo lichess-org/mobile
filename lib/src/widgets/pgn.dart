@@ -1202,9 +1202,8 @@ class const InlineMove({
       onTap: params.notifier != null ? () => params.notifier?.userJump(path) : null,
       onLongPress: params.notifier != null
           ? () {
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
-                isDismissible: true,
                 isScrollControlled: true,
                 showDragHandle: true,
                 builder: (context) => _MoveContextMenu(

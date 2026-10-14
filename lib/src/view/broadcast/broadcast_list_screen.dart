@@ -55,7 +55,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',
-      onPressed: () => showModalBottomSheet<void>(
+      onPressed: () => showAdaptiveBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
@@ -64,7 +64,6 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
             return BottomSheetScrollableContainer(
               padding: const EdgeInsets.all(16.0),
               children: [
-                const SizedBox(height: 16.0),
                 Filter<_BroadcastFilter>(
                   filterType: FilterType.singleChoice,
                   choices: _BroadcastFilter.values,
@@ -75,7 +74,6 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
                     setState(() => filter = value);
                   },
                 ),
-                const SizedBox(height: 16.0),
               ],
             );
           },

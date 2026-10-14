@@ -290,20 +290,13 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
+/// Capsule buttons, like the iOS 26 buttons.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(

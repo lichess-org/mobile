@@ -313,9 +313,8 @@ class const BroadcastPlayerRow({
 
     final BroadcastPlayerWithOverallResult(:player, :score, :played) = playerWithOverallResult;
 
-    showModalBottomSheet<void>(
+    showAdaptiveBottomSheet<void>(
       context: context,
-      isDismissible: true,
       isScrollControlled: true,
       builder: (context) {
         return BottomSheetScrollableContainer(

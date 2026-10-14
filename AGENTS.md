@@ -482,6 +482,17 @@ Android must not change: every glass code path is behind a
   UIKit navigation bar), detected from the body's vertical scroll notifications. Bars without a
   title (or with a search field as title), board screens and tab root headers are never tinted.
   Don't pass a placeholder title (`SizedBox.shrink()`): leave it null.
+- **Bottom sheets**: use `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS a
+  Material modal sheet whose content sits in a glass card (`GlassBottomSheetFrame`). Inside it
+  (`GlassSheetScope`), `ListSection` cards turn translucent, `SwitchSettingTile` and
+  `NonLinearSlider` become glass controls. Filled and outlined buttons are capsules on iOS
+  (app theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass capsule
+  on a glass sheet). Selectable chips use
+  `PlatformChoiceChip` (a glass pill on iOS); give their `Wrap` an iOS `runSpacing`, glass chips
+  have no tap target margin. The iOS sheet doesn't expand: no drag handle, and a shared minimum
+  height (`kGlassBottomSheetMinHeightFraction`, 45% of the screen) instead of the call site's.
+  A labelled group of chips is a `Filter` (`widgets/filter.dart`), or starts with a
+  `FilterTitle`: same title and spacing in every sheet, 16pt around the content and between groups.
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, sheets), not for content such as cards or list rows.
 
