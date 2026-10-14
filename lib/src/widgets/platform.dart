@@ -80,6 +80,13 @@ const double _kGlassToolbarHeight = 44.0;
 /// Height of the tint of a [PlatformAppBar] below its buttons, when it has no bottom.
 const double _kGlassBarTintBottomPadding = 8.0;
 
+/// Space around a control (segmented control, chips) in the `bottom` of a [PlatformAppBar] on iOS:
+/// a gap below the app bar buttons, and the body's side padding.
+const EdgeInsets kGlassAppBarBottomPadding = EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0);
+
+/// Height of a control (segmented control, chips) in the `bottom` of a [PlatformAppBar] on iOS.
+const double kGlassAppBarBottomControlHeight = 36.0;
+
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
 

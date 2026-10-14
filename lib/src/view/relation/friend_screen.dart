@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -100,11 +101,11 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
-        bottom: TabBar(
+        bottom: PlatformTabBar(
           controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.nbFriendsOnline(onlineFriendsCount)),
-            Tab(text: context.l10n.nbFollowing(followingCount)),
+          tabs: [
+            context.l10n.nbFriendsOnline(onlineFriendsCount),
+            context.l10n.nbFollowing(followingCount),
           ],
         ),
       ),

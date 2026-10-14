@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -189,8 +191,13 @@ class const StudyCategoryChips({
   required final void Function(StudyCategory) onCategorySelected,
   super.key,
 }) extends StatelessWidget implements PreferredSizeWidget {
+  // The app's theme platform is the default target platform.
   @override
-  Size get preferredSize => const Size.fromHeight(50.0);
+  Size get preferredSize => Size.fromHeight(
+    defaultTargetPlatform == TargetPlatform.iOS
+        ? kGlassAppBarBottomControlHeight + kGlassAppBarBottomPadding.vertical
+        : 50.0,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -200,9 +207,13 @@ class const StudyCategoryChips({
       child: SizedBox(
         height: preferredSize.height,
         child: Padding(
-          // The glass chips are taller than the Material ones, and the glass bar's toolbar has no
-          // bottom margin: give them space below the title.
-          padding: EdgeInsets.only(top: isIOS ? 8.0 : 0.0, bottom: 6.0),
+          // On iOS, the same space as the other controls in the app bar bottom.
+          padding: isIOS
+              ? EdgeInsets.only(
+                  top: kGlassAppBarBottomPadding.top,
+                  bottom: kGlassAppBarBottomPadding.bottom,
+                )
+              : const EdgeInsets.only(bottom: 6.0),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
