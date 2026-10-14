@@ -420,7 +420,7 @@ const _kTabBarGlassSettings = LiquidGlassSettings(
   saturation: 1.0,
   ambientStrength: 1,
   lightAngle: 0.75 * math.pi,
-  glassColor: Color(0x99FFFFFF),
+  glassColor: Color(0xBFFFFFFF),
 );
 
 /// [_kTabBarGlassSettings] with a dark gray tint, like the iOS tab bar in dark mode.
