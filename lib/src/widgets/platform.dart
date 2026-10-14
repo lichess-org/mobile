@@ -458,10 +458,13 @@ class const PlatformFloatingActionButton({
       return GlassButton.custom(
         onTap: onPressed,
         label: label,
-        // Tinted to stand out over the content, like an iOS 26 prominent button. The clear body
-        // mode keeps the exact color, with the glass rim and specular highlights.
+        // Tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
+        // to let the content show through. The clear body mode keeps the exact color, with the
+        // glass rim and specular highlights.
         settings: LiquidGlassSettings(
-          glassColor: fabTheme.backgroundColor ?? colorScheme.primaryContainer,
+          glassColor: (fabTheme.backgroundColor ?? colorScheme.primaryContainer).withValues(
+            alpha: 0.8,
+          ),
           bodyMode: .clear,
         ),
         height: _kGlassFloatingButtonHeight,
