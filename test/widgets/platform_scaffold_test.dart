@@ -6,14 +6,10 @@ import 'package:material_ui/material_ui.dart';
 
 import '../test_provider_scope.dart';
 
-/// The app bar tint layers: an [AnimatedOpacity] over a [DecoratedBox] with a hairline border.
-Iterable<AnimatedOpacity> appBarTints(WidgetTester tester) => tester
-    .widgetList<AnimatedOpacity>(find.byType(AnimatedOpacity))
-    .where(
-      (w) =>
-          w.child is DecoratedBox &&
-          ((w.child! as DecoratedBox).decoration as BoxDecoration).border != null,
-    );
+/// The app bar tint layers: an [AnimatedOpacity] over a blur ([BackdropFilter]).
+Iterable<AnimatedOpacity> appBarTints(WidgetTester tester) => tester.widgetList<AnimatedOpacity>(
+  find.ancestor(of: find.byType(BackdropFilter), matching: find.byType(AnimatedOpacity)),
+);
 
 Widget makeScreen({bool reverse = false, Widget? title = const Text('Title')}) => PlatformScaffold(
   appBar: PlatformAppBar(title: title),

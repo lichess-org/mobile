@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' show ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
@@ -60,18 +61,18 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
 /// The background of a bar over scrolling content on iOS: behind a [PlatformAppBar] with a title
 /// while content is scrolled under it, and a [BottomBar].
 ///
-/// It is the iOS default bar tint, or with a background image or color theme (transparent
-/// scaffold), the surface color with the same opacity, so that the bar is not grey over the
-/// background.
+/// It is a translucent white in light mode and dark grey in dark mode, like the bars of the iOS
+/// apps (the iOS default bar tint, a light grey, looks tinted over the content). With a background
+/// image or color theme (transparent scaffold), it is the surface color with the same opacity, so
+/// that the bar is not grey over the background.
 Color cupertinoBarTint(BuildContext context) {
-  // A material based Cupertino theme does not resolve the default dynamic color.
-  final barTint = CupertinoDynamicColor.resolve(
-    CupertinoTheme.of(context).barBackgroundColor,
-    context,
-  );
-  return Theme.of(context).scaffoldBackgroundColor.a == 0
-      ? ColorScheme.of(context).surface.withValues(alpha: barTint.a)
-      : barTint;
+  const opacity = 0.8;
+  if (Theme.of(context).scaffoldBackgroundColor.a == 0) {
+    return ColorScheme.of(context).surface.withValues(alpha: opacity);
+  }
+  return Theme.of(context).brightness == Brightness.light
+      ? Colors.white.withValues(alpha: opacity)
+      : const Color(0xFF1D1D1D).withValues(alpha: opacity);
 }
 
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
@@ -236,7 +237,7 @@ class const PlatformScaffold({
   }
 }
 
-/// Paints the iOS bar tint ([cupertinoBarTint]) and a hairline behind a glass app bar, over the top
+/// Paints the iOS bar tint ([cupertinoBarTint]) over a blur, and a hairline behind a glass app bar, over the top
 /// [height] of [child], while the content of its vertical scroll view is scrolled under it.
 class const _ScrollEdgeTint({required final double height, required final Widget child})
     extends StatefulWidget {
@@ -279,13 +280,19 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
             child: AnimatedOpacity(
               opacity: _isScrolledUnder ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 150),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: cupertinoBarTint(context),
-                  border: Border(
-                    bottom: BorderSide(
-                      color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
-                      width: 0.0,
+              // The content under the translucent tint is blurred, like a UIKit navigation bar.
+              child: ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: cupertinoBarTint(context),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
+                          width: 0.0,
+                        ),
+                      ),
                     ),
                   ),
                 ),
