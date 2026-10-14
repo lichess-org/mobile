@@ -329,7 +329,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                               type: SnackBarType.error,
                             );
                           }
-                          showModalBottomSheet<void>(
+                          showAdaptiveBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,

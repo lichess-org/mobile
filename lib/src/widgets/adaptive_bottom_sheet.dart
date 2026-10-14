@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -15,9 +16,11 @@ const kGlassBottomSheetMinHeightFraction = 0.45;
 /// background. Through the [GlassSheetScope] the frame sets, [ListSection]s get translucent
 /// section cards, and setting switches and [NonLinearSlider]s become glass controls.
 ///
-/// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), and its
+/// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), its
 /// minimum height is [kGlassBottomSheetMinHeightFraction] of the screen height, replacing the
-/// minimum height of [constraints].
+/// minimum height of [constraints], and it stays below the status bar.
+///
+/// Sheets that expand are opaque: use [showAdaptiveDraggableBottomSheet] for them.
 Future<T?> showAdaptiveBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -25,6 +28,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
   bool isScrollControlled = false,
   bool useRootNavigator = false,
   bool showDragHandle = false,
+  bool useSafeArea = false,
   BoxConstraints? constraints,
 }) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -33,11 +37,57 @@ Future<T?> showAdaptiveBottomSheet<T>({
     isDismissible: isDismissible,
     isScrollControlled: isScrollControlled,
     useRootNavigator: useRootNavigator,
+    // A floating glass card must not grow under the status bar.
+    useSafeArea: isIOS || useSafeArea,
     constraints: isIOS ? _glassSheetConstraints(context, constraints) : constraints,
     showDragHandle: !isIOS && showDragHandle,
     backgroundColor: isIOS ? Colors.transparent : null,
     elevation: isIOS ? 0 : null,
     builder: isIOS ? (context) => GlassBottomSheetFrame(child: builder(context)) : builder,
+  );
+}
+
+/// Shows a modal bottom sheet that expands: a [DraggableScrollableSheet] that the user drags
+/// between [minChildSize] and [maxChildSize], and that is dismissed by dragging it down.
+///
+/// [builder] gets the sheet's scroll controller, to give to the scroll view of the content.
+///
+/// On iOS the sheet has the frame of the glass sheets ([showAdaptiveBottomSheet]) with a drag
+/// handle, but is opaque: a long list that fills the screen stays readable. [showDragHandle] is
+/// Android only.
+Future<T?> showAdaptiveDraggableBottomSheet<T>({
+  required BuildContext context,
+  required ScrollableWidgetBuilder builder,
+  double initialChildSize = 0.5,
+  double minChildSize = 0.25,
+  double maxChildSize = 1.0,
+  bool snap = false,
+  bool useRootNavigator = false,
+  bool showDragHandle = false,
+  BoxConstraints? constraints,
+}) {
+  final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+  return showModalBottomSheet<T>(
+    context: context,
+    isScrollControlled: true,
+    useRootNavigator: useRootNavigator,
+    // A floating card must not grow under the status bar.
+    useSafeArea: isIOS,
+    constraints: constraints,
+    showDragHandle: !isIOS && showDragHandle,
+    backgroundColor: isIOS ? Colors.transparent : null,
+    elevation: isIOS ? 0 : null,
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: initialChildSize,
+      minChildSize: minChildSize,
+      maxChildSize: maxChildSize,
+      snap: snap,
+      expand: false,
+      builder: isIOS
+          ? (context, scrollController) =>
+                GlassBottomSheetFrame(expandable: true, child: builder(context, scrollController))
+          : builder,
+    ),
   );
 }
 
@@ -55,8 +105,14 @@ BoxConstraints _glassSheetConstraints(BuildContext context, BoxConstraints? cons
 }
 
 /// The iOS frame of a bottom sheet: a glass card inset from the screen edges.
-class const GlassBottomSheetFrame({required final Widget child, super.key})
-    extends StatelessWidget {
+class const GlassBottomSheetFrame({
+  required final Widget child,
+
+  /// Whether the sheet expands ([showAdaptiveDraggableBottomSheet]): the card is then opaque, has a
+  /// drag handle, and [child] fills it.
+  final bool expandable = false,
+  super.key,
+}) extends StatelessWidget {
   static const _margin = 8.0;
 
   @override
@@ -64,6 +120,11 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
     return Padding(
       padding: const EdgeInsets.all(_margin),
       child: GlassModalCard(
+        // Opaque, in the color of the Material sheets.
+        color: expandable
+            ? Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
+                  ColorScheme.of(context).surfaceContainerLow
+            : null,
         // Concentric with the screen corners, at [_margin] from them.
         borderRadius: 38.0,
         // The card ends just above the home indicator: the content needs no bottom safe area.
@@ -71,10 +132,34 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
           context: context,
           removeBottom: true,
           child: GlassSheetScope(
-            child: Material(
-              type: MaterialType.transparency,
-              // At the sheet's minimum height, short content stays at the top.
-              child: Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
+            child: Theme(
+              // Translucent cards, like the grouped cells of an iOS 26 sheet.
+              data: Theme.of(context).copyWith(
+                cardTheme: Theme.of(context).cardTheme
+                    .copyWith(color: GlassSheetScope.fillColor(context)),
+              ),
+              child: Material(
+                type: MaterialType.transparency,
+                child: expandable
+                    ? Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Container(
+                              width: 36,
+                              height: 5,
+                              decoration: BoxDecoration(
+                                color: CupertinoColors.tertiaryLabel.resolveFrom(context),
+                                borderRadius: const BorderRadius.all(Radius.circular(2.5)),
+                              ),
+                            ),
+                          ),
+                          Expanded(child: child),
+                        ],
+                      )
+                    // At the sheet's minimum height, short content stays at the top.
+                    : Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
+              ),
             ),
           ),
         ),
@@ -84,11 +169,17 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
 }
 
 /// Tells the content of a sheet that it is laid out on a glass background, so that it can drop
-/// its opaque backgrounds (see [ListSection]).
+/// its opaque backgrounds ([fillColor]) and use glass controls.
 class const GlassSheetScope({required super.child, super.key}) extends InheritedWidget {
   /// Whether [context] is inside a glass sheet.
   static bool isIn(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<GlassSheetScope>() != null;
+
+  /// The translucent fill of the cards and other surfaces of a glass sheet, in place of their
+  /// opaque surface colors.
+  static Color fillColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
+      ? const Color(0x14FFFFFF)
+      : const Color(0x80FFFFFF);
 
   @override
   bool updateShouldNotify(GlassSheetScope oldWidget) => false;

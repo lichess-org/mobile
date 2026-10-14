@@ -11,7 +11,7 @@ class const FloatingPlayButton({super.key}) extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformFloatingActionButton(
       onPressed: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
           isScrollControlled: true,

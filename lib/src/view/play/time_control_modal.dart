@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -198,7 +199,7 @@ class const TimeControlModal({
                                   },
                                 ),
                               ),
-                              FilledButton(
+                              PlatformFilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
                                 child: Text(context.l10n.mobileOkButton, style: Styles.bold),
                               ),
@@ -279,6 +280,8 @@ class const _ChoiceChip({
       decoration: BoxDecoration(
         color: selected
             ? ColorScheme.of(context).secondaryContainer
+            : GlassSheetScope.isIn(context)
+            ? GlassSheetScope.fillColor(context)
             : ColorScheme.of(context).surfaceContainerLow,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: Border.fromBorderSide(

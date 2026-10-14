@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -55,15 +56,54 @@ void main() {
     }
 
     // On the glass sheet, the section card is translucent.
-    final card = tester.widget<Card>(
-      find.descendant(of: find.byType(ListSection), matching: find.byType(Card)),
+    final cardMaterial = tester.widget<Material>(
+      find.descendant(of: find.byType(ListSection), matching: find.byType(Material)).first,
     );
-    expect(card.color != null && card.color!.a < 1, isIOS);
+    expect(cardMaterial.color!.a < 1, isIOS);
 
     // On the glass sheet, the switch and the slider are glass controls.
     expect(find.byType(GlassSwitch), isIOS ? findsOneWidget : findsNothing);
     expect(find.byType(GlassSlider), isIOS ? findsOneWidget : findsNothing);
     expect(find.byType(Switch), isIOS ? findsNothing : findsOneWidget);
     expect(find.byType(Slider), isIOS ? findsNothing : findsOneWidget);
+  });
+
+  testWidgets('shows an opaque expandable sheet', variant: kPlatformVariant, (tester) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => Center(
+            child: ElevatedButton(
+              onPressed: () => showAdaptiveDraggableBottomSheet<void>(
+                context: context,
+                builder: (_, scrollController) => ListView(
+                  controller: scrollController,
+                  children: [for (var i = 0; i < 50; i++) ListTile(title: Text('Row $i'))],
+                ),
+              ),
+              child: const Text('Show'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(app);
+    await tester.tap(find.text('Show'));
+    await tester.pumpAndSettle();
+
+    final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
+    expect(find.byType(DraggableScrollableSheet), findsOneWidget);
+    expect(find.byType(GlassBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
+    if (isIOS) {
+      final card = tester.widget<GlassModalCard>(find.byType(GlassModalCard));
+      expect(card.color?.a, 1.0);
+    }
+
+    // Scrolling the list up expands the sheet.
+    final heightBefore = tester.getSize(find.byType(DraggableScrollableSheet)).height;
+    await tester.drag(find.text('Row 1'), const Offset(0, -200));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(DraggableScrollableSheet)).height, greaterThan(heightBefore));
   });
 }

@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -135,7 +136,7 @@ class const _SectionChoices({
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
                 onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
-                        showModalBottomSheet<void>(
+                        showAdaptiveBottomSheet<void>(
                           context: context,
                           useRootNavigator: true,
                           isScrollControlled: true,

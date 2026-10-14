@@ -151,7 +151,7 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
   if (isOddBot) {
     Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(bot.lightUser));
   } else {
-    showModalBottomSheet<void>(
+    showAdaptiveBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,

@@ -13,12 +13,17 @@ const double _kGlassButtonHeight = 50.0;
 class const PlatformFilledButton({
   required final VoidCallback? onPressed,
   required final Widget child,
+
+  /// An icon before [child].
+  final Widget? icon,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform != TargetPlatform.iOS || !GlassSheetScope.isIn(context)) {
-      return FilledButton(onPressed: onPressed, child: child);
+      return icon != null
+          ? FilledButton.icon(onPressed: onPressed, icon: icon, label: child)
+          : FilledButton(onPressed: onPressed, child: child);
     }
 
     final colorScheme = ColorScheme.of(context);
@@ -52,7 +57,16 @@ class const PlatformFilledButton({
               ),
               child: IconTheme.merge(
                 data: IconThemeData(color: colorScheme.onPrimary),
-                child: child,
+                child: icon != null
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 8.0,
+                        children: [
+                          icon!,
+                          Flexible(child: child),
+                        ],
+                      )
+                    : child,
               ),
             ),
           ),

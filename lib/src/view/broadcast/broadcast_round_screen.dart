@@ -398,25 +398,20 @@ class const _BottomBar({
       children: [
         if (tournament.group != null)
           TextButton(
-            onPressed: () => showModalBottomSheet<void>(
+            onPressed: () => showAdaptiveDraggableBottomSheet<void>(
               context: context,
               showDragHandle: true,
-              isScrollControlled: true,
-              isDismissible: true,
               constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-              builder: (_) => DraggableScrollableSheet(
-                initialChildSize: 0.4,
-                snap: true,
-                expand: false,
-                builder: (context, scrollController) {
-                  return _TournamentSelectorMenu(
-                    tournament: tournament,
-                    group: tournament.group!,
-                    scrollController: scrollController,
-                    setTournamentId: setTournamentId,
-                  );
-                },
-              ),
+              initialChildSize: 0.4,
+              snap: true,
+              builder: (context, scrollController) {
+                return _TournamentSelectorMenu(
+                  tournament: tournament,
+                  group: tournament.group!,
+                  scrollController: scrollController,
+                  setTournamentId: setTournamentId,
+                );
+              },
             ),
             child: Text(
               tournament.group!.firstWhere((g) => g.id == tournament.data.id).name,
@@ -425,25 +420,20 @@ class const _BottomBar({
             ),
           ),
         TextButton(
-          onPressed: () => showModalBottomSheet<void>(
+          onPressed: () => showAdaptiveDraggableBottomSheet<void>(
             context: context,
             showDragHandle: true,
-            isScrollControlled: true,
-            isDismissible: true,
             constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-            builder: (_) => DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              snap: true,
-              expand: false,
-              builder: (context, scrollController) {
-                return _RoundSelectorMenu(
-                  selectedRoundId: roundId,
-                  rounds: tournament.rounds,
-                  scrollController: scrollController,
-                  setRoundId: setRoundId,
-                );
-              },
-            ),
+            initialChildSize: 0.6,
+            snap: true,
+            builder: (context, scrollController) {
+              return _RoundSelectorMenu(
+                selectedRoundId: roundId,
+                rounds: tournament.rounds,
+                scrollController: scrollController,
+                setRoundId: setRoundId,
+              );
+            },
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

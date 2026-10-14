@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -1318,33 +1319,25 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
 }
 
 void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
-  showModalBottomSheet<void>(
+  showAdaptiveDraggableBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    builder: (context) {
-      return DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.3,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) {
-          return Consumer(
-            builder: (context, ref, child) {
-              final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
+    initialChildSize: 0.6,
+    minChildSize: 0.3,
+    maxChildSize: 0.9,
+    builder: (context, scrollController) {
+      return Consumer(
+        builder: (context, ref, child) {
+          final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
 
-              return switch (playerAsync) {
-                AsyncData(value: final player) => _TournamentPlayerDetails(
-                  player: player,
-                  tournamentId: tournamentId,
-                  scrollController: scrollController,
-                ),
-                AsyncError(:final error) => Center(
-                  child: Text('Error loading player data: $error'),
-                ),
-                _ => const Center(child: CircularProgressIndicator.adaptive()),
-              };
-            },
-          );
+          return switch (playerAsync) {
+            AsyncData(value: final player) => _TournamentPlayerDetails(
+              player: player,
+              tournamentId: tournamentId,
+              scrollController: scrollController,
+            ),
+            AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
+            _ => const Center(child: CircularProgressIndicator.adaptive()),
+          };
         },
       );
     },
@@ -1598,31 +1591,25 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
 }
 
 void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
-  showModalBottomSheet<void>(
+  showAdaptiveDraggableBottomSheet<void>(
     context: context,
-    isScrollControlled: true,
-    builder: (context) {
-      return DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.3,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) {
-          return Consumer(
-            builder: (context, ref, child) {
-              final teamAsync = ref.watch(tournamentTeamProvider((tournamentId, teamId)));
+    initialChildSize: 0.6,
+    minChildSize: 0.3,
+    maxChildSize: 0.9,
+    builder: (context, scrollController) {
+      return Consumer(
+        builder: (context, ref, child) {
+          final teamAsync = ref.watch(tournamentTeamProvider((tournamentId, teamId)));
 
-              return switch (teamAsync) {
-                AsyncData(value: final team) => _TournamentTeamDetails(
-                  team: team,
-                  tournamentId: tournamentId,
-                  scrollController: scrollController,
-                ),
-                AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
-                _ => const Center(child: CircularProgressIndicator.adaptive()),
-              };
-            },
-          );
+          return switch (teamAsync) {
+            AsyncData(value: final team) => _TournamentTeamDetails(
+              team: team,
+              tournamentId: tournamentId,
+              scrollController: scrollController,
+            ),
+            AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
+            _ => const Center(child: CircularProgressIndicator.adaptive()),
+          };
         },
       );
     },

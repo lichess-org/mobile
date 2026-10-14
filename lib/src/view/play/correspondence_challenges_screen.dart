@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -90,7 +91,7 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
                 showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                 return;
               }
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 builder: (BuildContext context) {

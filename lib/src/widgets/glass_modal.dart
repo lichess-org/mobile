@@ -9,6 +9,9 @@ import 'package:material_ui/material_ui.dart';
 class const GlassModalCard({
   required final Widget child,
   final double tintOpacity = 0.65,
+
+  /// The tint of the glass, in place of black or white at [tintOpacity].
+  final Color? color,
   final double borderRadius = 26.0,
   final EdgeInsetsGeometry? padding,
   super.key,
@@ -28,7 +31,7 @@ class const GlassModalCard({
         blur: 5,
         refractiveIndex: 1.15,
         saturation: 1.2,
-        glassColor: (isDark ? Colors.black : Colors.white).withValues(alpha: tintOpacity),
+        glassColor: color ?? (isDark ? Colors.black : Colors.white).withValues(alpha: tintOpacity),
       ),
       child: child,
     );

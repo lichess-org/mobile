@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -55,7 +56,7 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
         category: category,
         order: StudyListOrder.updated,
         onStudyTap: (context, study) {
-          showModalBottomSheet<void>(
+          showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
             useRootNavigator: true,
@@ -85,7 +86,7 @@ class _AddPgnToStudyScreenState() extends ConsumerState<AddPgnToStudyScreen> {
       ),
       floatingActionButton: authUser != null
           ? PlatformFloatingActionButton(
-              onPressed: () => showModalBottomSheet<void>(
+              onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,

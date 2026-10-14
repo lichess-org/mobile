@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -404,10 +405,14 @@ class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget
             onPressed: () {
               final s = ref.read(gameControllerProvider(gameId)).value;
               if (s == null) return;
-              showModalBottomSheet<void>(
+              showAdaptiveDraggableBottomSheet<void>(
                 context: context,
-                builder: (_) =>
-                    WatcherListBottomSheet(nbWatchers: s.nbWatchers, watcherNames: s.watcherNames),
+                showDragHandle: true,
+                builder: (_, scrollController) => WatcherListBottomSheet(
+                  nbWatchers: s.nbWatchers,
+                  watcherNames: s.watcherNames,
+                  scrollController: scrollController,
+                ),
               );
             },
           ),
