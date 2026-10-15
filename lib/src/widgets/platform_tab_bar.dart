@@ -55,8 +55,9 @@ class const PlatformTabBar({
         height: kGlassAppBarBottomControlHeight,
         shape: const LiquidRoundedSuperellipse(borderRadius: kGlassAppBarBottomControlHeight / 2),
         settings: tintedGlass ? tintedGlassSettings(context) : null,
-        // Outside of an app bar, there is no parent glass layer to share.
-        useOwnLayer: !inAppBar,
+        // Outside of an app bar, there is no parent glass layer to share. In an app bar, which is
+        // isolated, its glass gets its own layer anyway.
+        useOwnLayer: true,
         child: ListenableBuilder(
           listenable: tabController,
           builder: (context, _) => GlassSegmentedControl(

@@ -608,6 +608,9 @@ class const _GlassBarCapsule({
             height: height,
             shape: LiquidRoundedSuperellipse(borderRadius: height / 2),
             settings: settings,
+            // The app bar is isolated, so its glass gets its own layer anyway: this only states it,
+            // for the package, which otherwise warns that per-widget settings are ignored.
+            useOwnLayer: true,
             alignment: Alignment.center,
             child: IconTheme.merge(
               data: IconThemeData(color: foregroundColor),
