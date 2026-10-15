@@ -49,6 +49,57 @@ void main() {
   });
 
   group('Analysis Screen', () {
+    testWidgets('offers local computer analysis for a PGN when engine analysis is allowed', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('local_game_review'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Computer analysis'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Analyze game'), findsOneWidget);
+      expect(find.textContaining('Stockfish will review every position'), findsOneWidget);
+    });
+
+    testWidgets('reviews every PGN move with the local engine', (tester) async {
+      final engine = LegalMoveEngine();
+      await makeEngineTestApp(
+        tester,
+        pgn: '1. e4 e5 *',
+        isCloudEvalEnabled: false,
+        stockfish: engine,
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Analyze game'));
+      for (var i = 0; i < 50; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pumpAndSettle();
+
+      expect(find.text('1. e4'), findsOneWidget);
+      expect(find.text('1... e5'), findsOneWidget);
+      expect(find.textContaining('good moves'), findsOneWidget);
+    });
+
     testWidgets('displays correct move and position', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

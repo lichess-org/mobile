@@ -354,21 +354,20 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
             isDismissible: true,
           ),
         ),
-        if (gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.analysis),
-            onPressed: () => Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: const StringId('otb_finished_game_analysis'),
-                  orientation: Side.white,
-                  pgn: gameState.game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: gameState.game.meta.variant,
-                ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.analysis),
+          onPressed: () => Navigator.of(context).push(
+            AnalysisScreen.buildRoute(
+              AnalysisOptions.pgn(
+                id: const StringId('otb_finished_game_analysis'),
+                orientation: Side.white,
+                pgn: gameState.game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: gameState.game.meta.variant,
               ),
             ),
           ),
+        ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: onFlipBoard,

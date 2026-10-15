@@ -55,6 +55,21 @@ void main() {
   registerFallbackValue(const TimeIncrement(0, 0));
 
   group('Playing over the board (offline)', () {
+    testWidgets('Can open full-game analysis while the game is in progress', (tester) async {
+      await initOverTheBoardGame(tester, const TimeIncrement(0, 0));
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Analysis board'), findsOneWidget);
+
+      await tester.tap(find.text('Analysis board'));
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Opening explorer & tablebase'), findsOneWidget);
+      expect(find.byTooltip('Moves played'), findsOneWidget);
+    });
+
     testWidgets('Checkmate and Rematch', (tester) async {
       await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 

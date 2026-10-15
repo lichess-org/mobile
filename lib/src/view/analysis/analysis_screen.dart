@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -129,7 +130,8 @@ class _TabbedBodyState() extends State<_TabbedBody> with SingleTickerProviderSta
     tabs = [
       AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options case ArchivedGame()) AnalysisTab.summary,
+      if (widget.options case ArchivedGame() || Pgn(isComputerAnalysisAllowed: true))
+        AnalysisTab.summary,
       if (widget.showMoveTimes) AnalysisTab.moveTimes,
       if (widget.options case ActiveCorrespondenceGame()) AnalysisTab.conditionalPremoves,
     ];
@@ -295,6 +297,8 @@ class const _Body({
                   : null,
               onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
             ),
+          if (options case Pgn(isComputerAnalysisAllowed: true))
+            LocalGameAnalysis(options: options, root: analysisState.root),
           if (tabs.contains(AnalysisTab.moveTimes))
             ListView(
               children: [
