@@ -33,7 +33,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAppLogs => 'App Logs';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
   String get mobileAmoledBlack => 'Czysta czerń';
 
   @override
@@ -104,7 +103,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
   String get mobileDangerZone => 'Strefa zagrożenia';
 
   @override
@@ -163,7 +161,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileHomeTab => 'Start';
 
   @override
-  String get mobileHttpLogs => 'HTTP logs';
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

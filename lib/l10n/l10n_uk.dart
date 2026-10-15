@@ -33,7 +33,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAppLogs => 'App Logs';
 
   @override
-  String get mobileAmoledBlack => 'Темна AMOLED';
   String get mobileAmoledBlack => 'Темна aMOLED';
 
   @override
@@ -104,7 +103,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
   String get mobileDangerZone => 'Небезпечна зона';
 
   @override
@@ -163,7 +161,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileHomeTab => 'Головна';
 
   @override
-  String get mobileHttpLogs => 'HTTP logs';
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

@@ -103,7 +103,6 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
   String get mobileDangerZone => 'Farezone';
 
   @override
@@ -162,7 +161,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileHomeTab => 'Hjem';
 
   @override
-  String get mobileHttpLogs => 'HTTP logs';
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

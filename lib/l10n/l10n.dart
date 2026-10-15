@@ -487,7 +487,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileHttpLogs.
   ///
   /// In en, this message translates to:
-  /// **'HTTP logs'**
+  /// **'Network logs'**
   String get mobileHttpLogs;
 
   /// No description provided for @mobileIfAccountMatchesCodeSent.

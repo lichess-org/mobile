@@ -161,7 +161,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get mobileHomeTab => 'Почетна';
 
   @override
-  String get mobileHttpLogs => 'HTTP logs';
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {

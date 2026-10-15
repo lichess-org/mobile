@@ -161,7 +161,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileHomeTab => 'Գլխավոր էջ';
 
   @override
-  String get mobileHttpLogs => 'HTTP logs';
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
