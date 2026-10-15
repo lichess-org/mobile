@@ -491,6 +491,10 @@ Android must not change: every glass code path is behind a
   UIKit navigation bar), detected from the body's vertical scroll notifications. Bars without a
   title (or with a search field as title), board screens and tab root headers are never tinted.
   Don't pass a placeholder title (`SizedBox.shrink()`): leave it null.
+- **Glass tint**: the package's dark glass is nearly clear, so over busy content (boards) or a
+  background image or color theme, glass controls use `tintedGlassSettings` (`platform.dart`).
+  `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
+  theme.
 - **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands uses
   `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`; on iOS the same inset card,
   opaque, with a drag handle); every other sheet uses `showAdaptiveBottomSheet`

@@ -67,13 +67,16 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
 /// that the bar is not grey over the background.
 Color cupertinoBarTint(BuildContext context) {
   const opacity = 0.8;
-  if (Theme.of(context).scaffoldBackgroundColor.a == 0) {
+  if (_hasBackgroundTheme(context)) {
     return ColorScheme.of(context).surface.withValues(alpha: opacity);
   }
   return Theme.of(context).brightness == Brightness.light
       ? Colors.white.withValues(alpha: opacity)
       : const Color(0xFF1D1D1D).withValues(alpha: opacity);
 }
+
+/// Whether a background image or color theme is set: the scaffolds are transparent to show it.
+bool _hasBackgroundTheme(BuildContext context) => Theme.of(context).scaffoldBackgroundColor.a == 0;
 
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
@@ -387,7 +390,7 @@ class const PlatformAppBar({
   final bool automaticallyImplyLeading = true,
 
   /// Whether the glass buttons are tinted on iOS ([tintedGlassSettings]), for a screen whose
-  /// content scrolling under them is busy, like boards.
+  /// content scrolling under them is busy, like boards. They always are with a background theme.
   final bool tintedGlass = false,
 }) extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -399,7 +402,10 @@ class const PlatformAppBar({
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
-      final buttonSettings = tintedGlass ? tintedGlassSettings(context) : null;
+      // With a background theme, the barely tinted dark glass would show the image brightly.
+      final buttonSettings = tintedGlass || _hasBackgroundTheme(context)
+          ? tintedGlassSettings(context)
+          : null;
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
           MainTabScaffoldProperties.hasExtendedBody(context) &&
