@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:logging/logging.dart';
@@ -49,7 +50,7 @@ class SharedPgnService(final Ref ref) {
   void _handlePgn(String pgnText) {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
-    ImportPgnScreen.handlePgnText(context, pgnText);
+    ImportPgnScreen.handlePgnText(context, pgnText, isLoggedIn: ref.read(isLoggedInProvider));
   }
 
   void dispose() {

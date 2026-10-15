@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
+import 'package:lichess_mobile/src/view/study/add_pgn_to_study_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -38,7 +41,7 @@ final class _FakePlatformFile({
   int? lengthSync() => fileBytes.length;
 }
 
-Future<Widget> _makeApp(WidgetTester tester, {PlatformFile? pickResult}) =>
+Future<Widget> _makeApp(WidgetTester tester, {PlatformFile? pickResult, AuthUser? authUser}) =>
     makeTestProviderScopeApp(
       tester,
       home: const ImportPgnScreen(),
@@ -50,6 +53,7 @@ Future<Widget> _makeApp(WidgetTester tester, {PlatformFile? pickResult}) =>
           EngineEvaluationPrefState.defaults.copyWith(isEnabled: false).toJson(),
         ),
       },
+      authUser: authUser,
     );
 
 void main() {
@@ -61,7 +65,9 @@ void main() {
   });
 
   group('Clipboard paste', () {
-    testWidgets('Valid single-game PGN navigates to analysis screen immediately', (tester) async {
+    testWidgets('Valid single-game PGN navigates to analysis screen immediately if not logged in', (
+      tester,
+    ) async {
       const pgn = '[White "A"]\n[Black "B"]\n\n1. e4 e5 *';
       mockClipboard(pgn);
 
@@ -74,6 +80,28 @@ void main() {
       // Text field is not populated — we navigated away
       expect(find.text(pgn), findsNothing);
       expect(find.byType(ImportPgnScreen), findsNothing);
+    });
+
+    testWidgets('Valid PGN can be imported to study if user is logged in', (tester) async {
+      const pgn = '[White "A"]\n[Black "B"]\n\n1. e4 e5 *';
+      mockClipboard(pgn);
+
+      final app = await _makeApp(tester, authUser: fakeAuthUser);
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.byIcon(Icons.paste));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Select import mode'), findsOneWidget);
+      expect(find.byType(ImportPgnScreen), findsOneWidget);
+
+      await tester.tap(find.text('Add to study'));
+      await tester.pumpAndSettle();
+
+      // Text field is not populated — we navigated away
+      expect(find.text(pgn), findsNothing);
+      expect(find.byType(ImportPgnScreen), findsNothing);
+      expect(find.byType(AddPgnToStudyScreen), findsOneWidget);
     });
 
     testWidgets('Tapping the text field also pastes and navigates for valid PGN', (tester) async {
