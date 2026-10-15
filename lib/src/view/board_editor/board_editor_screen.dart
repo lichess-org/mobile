@@ -72,9 +72,16 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
           builder: (context, constraints) {
             final aspectRatio = constraints.biggest.aspectRatio;
 
-            final defaultBoardSize = constraints.biggest.shortestSide;
             final isTablet = isTabletOrLarger(context);
-            final boardSize = defaultBoardSize;
+            // The board and the two piece menus (one square thick each) must fit along the main
+            // axis, so the board can take at most 8/10 of the longest side.
+            final maxBoardSize = math.min(
+              constraints.biggest.shortestSide,
+              constraints.biggest.longestSide * 8 / 10,
+            );
+            final boardSize = isTablet
+                ? maxBoardSize - kTabletBoardTableSidePadding * 2
+                : maxBoardSize;
 
             final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 

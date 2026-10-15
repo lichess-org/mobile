@@ -350,11 +350,13 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
         ),
         BottomBar(
           children: [
-            BottomBarButton(
-              label: context.l10n.mobileShareChallengeUrl,
-              onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
-              showLabel: true,
-              icon: Icons.share,
+            Builder(
+              builder: (context) => BottomBarButton(
+                label: context.l10n.mobileShareChallengeUrl,
+                onTap: () => launchShareDialog(context, ShareParams(text: challengeLink)),
+                showLabel: true,
+                icon: Icons.share,
+              ),
             ),
             FutureBuilder(
               future: _cancelChallengeFuture,

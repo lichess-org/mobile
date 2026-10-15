@@ -284,6 +284,66 @@ void main() {
         );
       });
     }
+
+    testWidgets('anchors the open challenge share sheet to the share button', (
+      WidgetTester tester,
+    ) async {
+      const challengeRequest = ChallengeRequest(
+        destUser: null,
+        variant: Variant.standard,
+        timeControl: ChallengeTimeControlType.clock,
+        rated: true,
+        sideChoice: SideChoice.white,
+      );
+      final challenge = Challenge(
+        sideChoice: challengeRequest.sideChoice,
+        id: const ChallengeId('challengeId'),
+        variant: challengeRequest.variant,
+        timeControl: challengeRequest.timeControl,
+        rated: challengeRequest.rated,
+        speed: Speed.blitz,
+        status: ChallengeStatus.created,
+      );
+
+      final createGameService = MockCreateGameService();
+      when(() => createGameService.newOpenOrRealTimeChallenge(challengeRequest))
+          .thenAnswer((_) async => challenge);
+      when(() => createGameService.waitForChallengeResponse(challenge))
+          .thenAnswer((_) => Completer<ChallengeResponse>().future);
+
+      Rect? shareOrigin;
+      const shareChannel = MethodChannel('dev.fluttercommunity.plus/share');
+      final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(shareChannel, (methodCall) async {
+        final arguments = methodCall.arguments as Map<Object?, Object?>;
+        shareOrigin = Rect.fromLTWH(
+          arguments['originX']! as double,
+          arguments['originY']! as double,
+          arguments['originWidth']! as double,
+          arguments['originHeight']! as double,
+        );
+        return 'dev.fluttercommunity.plus/share/unavailable';
+      });
+      addTearDown(() => messenger.setMockMethodCallHandler(shareChannel, null));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const GameScreen(source: UserChallengeSource(challengeRequest)),
+        overrides: {
+          createGameServiceProvider: createGameServiceProvider.overrideWith(
+            (_) => createGameService,
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final shareButton = find.widgetWithText(BottomBarButton, 'Share challenge URL');
+      await tester.tap(shareButton);
+      await tester.pump();
+
+      expect(shareOrigin, tester.getRect(shareButton));
+    });
   });
 
   group('Reconnecting title', () {
