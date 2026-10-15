@@ -20,7 +20,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@drawable/ic_stat_lichess_notification"
-            android:contentDescription="@string/widget_broadcast_title"
+            android:contentDescription="@string/broadcast_title"
             android:tint="@color/widget_text_primary" />
 
         <TextView
@@ -33,21 +33,22 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/broadcast_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
+  <LinearLayout
+    android:id="@+id/broadcast_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" />
 
-    <TextView
+  <TextView
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="20dp"
         android:gravity="center"
-        android:text="@string/widget_no_broadcasts"
+        android:text="@string/no_broadcasts"
         android:textColor="@color/widget_text_secondary"
         android:textSize="14sp"
         android:visibility="gone" />
 
 </LinearLayout>
+
