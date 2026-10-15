@@ -384,7 +384,8 @@ class const _LargeTitleScrollOffset({
 
 /// The large title of a [PlatformAppBar] with [PlatformAppBar.largeTitle], below the app bar whose
 /// bottom is at [top]: it moves with the content, which leaves room for it, as if it were part of
-/// it, and is clipped at the bottom of the app bar.
+/// it. It is not clipped: it scrolls under the app bar buttons, until it is scrolled away and
+/// collapses into the app bar title.
 class const _LargeTitle({required final double top, required final Widget title})
     extends StatelessWidget {
   @override
@@ -396,29 +397,30 @@ class const _LargeTitle({required final double top, required final Widget title}
       right: 0,
       bottom: 0,
       child: IgnorePointer(
-        child: ClipRect(
-          child: ValueListenableBuilder(
-            valueListenable: offset,
-            // Not clamped below 0, so that the title follows the content when it overscrolls.
-            builder: (context, offset, child) =>
-                Transform.translate(offset: Offset(0, -offset), child: child),
-            child: Align(
-              alignment: .topLeft,
-              child: SizedBox(
-                height: _kLargeTitleHeight,
-                child: Padding(
-                  padding: Styles.horizontalBodyPadding.copyWith(bottom: 6.0),
-                  child: Align(
-                    alignment: .bottomLeft,
-                    child: Semantics(
-                      header: true,
-                      child: DefaultTextStyle.merge(
-                        style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
-                            .copyWith(color: ColorScheme.of(context).onSurface),
-                        maxLines: 1,
-                        overflow: .ellipsis,
-                        child: title,
-                      ),
+        child: ValueListenableBuilder(
+          valueListenable: offset,
+          // Not clamped below 0, so that the title follows the content when it overscrolls. Hidden
+          // once collapsed into the app bar title, when the app bar tint would show it blurred.
+          builder: (context, offset, child) => Opacity(
+            opacity: offset >= _kLargeTitleHeight ? 0.0 : 1.0,
+            child: Transform.translate(offset: Offset(0, -offset), child: child),
+          ),
+          child: Align(
+            alignment: .topLeft,
+            child: SizedBox(
+              height: _kLargeTitleHeight,
+              child: Padding(
+                padding: Styles.horizontalBodyPadding.copyWith(bottom: 6.0),
+                child: Align(
+                  alignment: .bottomLeft,
+                  child: Semantics(
+                    header: true,
+                    child: DefaultTextStyle.merge(
+                      style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
+                          .copyWith(color: ColorScheme.of(context).onSurface),
+                      maxLines: 1,
+                      overflow: .ellipsis,
+                      child: title,
                     ),
                   ),
                 ),

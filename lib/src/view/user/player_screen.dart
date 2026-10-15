@@ -34,6 +34,7 @@ class const PlayerScreen({super.key}) extends ConsumerWidget {
       child: PlatformScaffold(
         appBar: PlatformAppBar(
           title: Text(context.l10n.players),
+          largeTitle: true,
           actions: [
             SearchHeroButton(
               heroTag: SearchScreen.heroTag,

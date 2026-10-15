@@ -25,7 +25,7 @@ class const LeaderboardScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.leaderboard)),
+      appBar: PlatformAppBar(title: Text(context.l10n.leaderboard), largeTitle: true),
       body: const _Body(),
     );
   }

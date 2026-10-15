@@ -28,7 +28,7 @@ class const OnlineBotsScreen() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.onlineBots)),
+      appBar: PlatformAppBar(title: Text(context.l10n.onlineBots), largeTitle: true),
       body: const _Body(),
     );
   }
