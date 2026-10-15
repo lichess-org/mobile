@@ -389,8 +389,10 @@ CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness b
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
       ),
+      // Smaller than the iOS large title (34pt), so that longer (translated) titles fit on one line.
       navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
+        fontSize: 29.0,
       ),
     ),
     brightness: brightness,

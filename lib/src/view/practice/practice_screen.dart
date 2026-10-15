@@ -29,6 +29,7 @@ class const PracticeScreen({super.key}) extends ConsumerWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.practice),
+        largeTitle: true,
         actions: [
           if (progress case AsyncData(value: final progress) when !progress.isEmpty)
             ContextMenuIconButton(

@@ -46,7 +46,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings), largeTitle: true),
       body: ListView(
         children: [
           if (authUser != null)

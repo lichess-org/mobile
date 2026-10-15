@@ -29,7 +29,7 @@ class const LiveTvChannelsScreen({super.key}) extends ConsumerWidget {
         }
       },
       child: const PlatformScaffold(
-        appBar: PlatformAppBar(title: Text('Lichess TV')),
+        appBar: PlatformAppBar(title: Text('Lichess TV'), largeTitle: true),
         body: _Body(),
       ),
     );

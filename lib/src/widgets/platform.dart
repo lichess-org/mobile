@@ -3,6 +3,7 @@ import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
+import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -80,6 +81,10 @@ bool _hasBackgroundTheme(BuildContext context) => Theme.of(context).scaffoldBack
 
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
+
+/// Height of the large title of a [PlatformAppBar] with [PlatformAppBar.largeTitle] on iOS, below
+/// the toolbar, like the iOS navigation bar large title, with a gap above the title.
+const double _kLargeTitleHeight = 52.0;
 
 /// Strongest blur of the content scrolling under the status bar, at the top of the screen.
 const double _kStatusBarBlurMaxSigma = 8.0;
@@ -173,9 +178,6 @@ class const PlatformScaffold({
 
     if (!isIOS) return scaffold;
 
-    final appBarHeight = appBar != null
-        ? _kGlassToolbarHeight + (appBar!.bottom?.preferredSize.height ?? 0)
-        : 0.0;
     final isTabRoot = hasExtendedBodyParentScaffold && (ModalRoute.of(context)?.isFirst ?? false);
     final stickyAppBar = appBar != null && !isTabRoot;
     // A sticky app bar with a title, over scrolling content, is tinted while content is scrolled
@@ -188,12 +190,19 @@ class const PlatformScaffold({
         title != null &&
         title is! SearchFieldHero &&
         title is! PlatformSearchBar;
+    final hasLargeTitle = hasTintedAppBar && appBar!.largeTitle;
+    final largeTitleHeight = hasLargeTitle ? _kLargeTitleHeight : 0.0;
+    final bottomHeight = appBar?.bottom?.preferredSize.height ?? 0.0;
+    // With a large title, the bottom of the app bar is below the large title, in the body.
+    final appBarHeight = appBar != null
+        ? _kGlassToolbarHeight + (hasLargeTitle ? 0.0 : bottomHeight)
+        : 0.0;
     // GlassScaffold installs a CupertinoTheme that sets the icon color to its primary color: the
     // app icon theme is restored for the app bar and the body.
     final iconTheme = IconTheme.of(context);
 
     // The app bar is outside of the inner Scaffold: provide a Material for its text and actions.
-    return Material(
+    final glassScaffold = Material(
       type: MaterialType.transparency,
       child: GlassScaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -227,9 +236,12 @@ class const PlatformScaffold({
                 ),
               );
             }
+            final appBarBottom = mediaQuery.padding.top + appBarHeight;
             final body = MediaQuery(
               data: mediaQuery.copyWith(
-                padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + appBarHeight),
+                padding: mediaQuery.padding.copyWith(
+                  top: appBarBottom + largeTitleHeight + (hasLargeTitle ? bottomHeight : 0.0),
+                ),
               ),
               child: IconTheme(
                 data: iconTheme,
@@ -240,13 +252,35 @@ class const PlatformScaffold({
                         child: scaffold,
                       )
                     : hasTintedAppBar
-                    ? _ScrollEdgeTint(
-                        // Leaves a gap below the buttons, unless a bottom (e.g. tabs) is there.
-                        height:
-                            mediaQuery.padding.top +
-                            appBarHeight +
-                            (appBar!.bottom == null ? _kGlassBarTintBottomPadding : 0.0),
-                        child: scaffold,
+                    ? Stack(
+                        children: [
+                          _ScrollEdgeTint(
+                            // Leaves a gap below the buttons, unless a bottom (e.g. tabs) is there,
+                            // which a large title's bottom is once it sticks below the buttons.
+                            height:
+                                mediaQuery.padding.top +
+                                _kGlassToolbarHeight +
+                                (appBar!.bottom == null
+                                    ? _kGlassBarTintBottomPadding
+                                    : bottomHeight),
+                            // A large title is not content: the bar is tinted once it is scrolled
+                            // away.
+                            scrolledUnderOffset: largeTitleHeight,
+                            child: hasLargeTitle
+                                ? Stack(
+                                    children: [
+                                      scaffold,
+                                      _LargeTitle(top: appBarBottom, title: title),
+                                    ],
+                                  )
+                                : scaffold,
+                          ),
+                          if (hasLargeTitle && appBar!.bottom != null)
+                            _LargeTitleBottom(
+                              top: appBarBottom + largeTitleHeight,
+                              bottom: appBar!.bottom!,
+                            ),
+                        ],
                       )
                     : scaffold,
               ),
@@ -266,13 +300,146 @@ class const PlatformScaffold({
         ),
       ),
     );
+
+    return hasLargeTitle ? _LargeTitleScrollScope(child: glassScaffold) : glassScaffold;
+  }
+}
+
+/// The [bottom] of a [PlatformAppBar] with a large title, at [top], below the large title: it moves
+/// up with the content until it sticks below the app bar buttons, once the large title is scrolled
+/// away, like a UIKit navigation bar search field.
+class const _LargeTitleBottom({required final double top, required final Widget bottom})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: top,
+      left: 0,
+      right: 0,
+      child: ValueListenableBuilder(
+        valueListenable: _LargeTitleScrollScope.maybeOf(context)!,
+        // Not clamped below 0, so that it follows the content when it overscrolls.
+        builder: (context, offset, child) => Transform.translate(
+          offset: Offset(0, -math.min(offset, _kLargeTitleHeight)),
+          child: child,
+        ),
+        child: bottom,
+      ),
+    );
+  }
+}
+
+/// Tracks the scroll offset of the main vertical scroll view of [child], for a [PlatformScaffold]
+/// with a large title: the [_LargeTitle] scrolls with it, and the [PlatformAppBar] shows its title
+/// once the large title is scrolled away.
+class const _LargeTitleScrollScope({required final Widget child}) extends StatefulWidget {
+  /// The scroll offset tracked by the closest [_LargeTitleScrollScope], if any.
+  static ValueListenable<double>? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_LargeTitleScrollOffset>()?.offset;
+
+  @override
+  State<_LargeTitleScrollScope> createState() => _LargeTitleScrollScopeState();
+}
+
+class _LargeTitleScrollScopeState() extends State<_LargeTitleScrollScope> {
+  final ValueNotifier<double> _offset = ValueNotifier(0);
+
+  @override
+  void dispose() {
+    _offset.dispose();
+    super.dispose();
+  }
+
+  bool _onScrollMetrics(int depth, ScrollMetrics metrics) {
+    if (depth == 0 && metrics.axis == Axis.vertical) {
+      _offset.value = metrics.pixels;
+    }
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _LargeTitleScrollOffset(
+      offset: _offset,
+      child: NotificationListener<ScrollMetricsNotification>(
+        onNotification: (notification) =>
+            _onScrollMetrics(notification.depth, notification.metrics),
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (notification) =>
+              _onScrollMetrics(notification.depth, notification.metrics),
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}
+
+class const _LargeTitleScrollOffset({
+  required final ValueNotifier<double> offset,
+  required super.child,
+}) extends InheritedWidget {
+  @override
+  bool updateShouldNotify(_LargeTitleScrollOffset oldWidget) => offset != oldWidget.offset;
+}
+
+/// The large title of a [PlatformAppBar] with [PlatformAppBar.largeTitle], below the app bar whose
+/// bottom is at [top]: it moves with the content, which leaves room for it, as if it were part of
+/// it, and is clipped at the bottom of the app bar.
+class const _LargeTitle({required final double top, required final Widget title})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final offset = _LargeTitleScrollScope.maybeOf(context)!;
+    return Positioned(
+      top: top,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: IgnorePointer(
+        child: ClipRect(
+          child: ValueListenableBuilder(
+            valueListenable: offset,
+            // Not clamped below 0, so that the title follows the content when it overscrolls.
+            builder: (context, offset, child) =>
+                Transform.translate(offset: Offset(0, -offset), child: child),
+            child: Align(
+              alignment: .topLeft,
+              child: SizedBox(
+                height: _kLargeTitleHeight,
+                child: Padding(
+                  padding: Styles.horizontalBodyPadding.copyWith(bottom: 6.0),
+                  child: Align(
+                    alignment: .bottomLeft,
+                    child: Semantics(
+                      header: true,
+                      child: DefaultTextStyle.merge(
+                        style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
+                            .copyWith(color: ColorScheme.of(context).onSurface),
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                        child: title,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
 /// Paints the iOS bar tint ([cupertinoBarTint]) over a blur, and a hairline behind a glass app bar, over the top
 /// [height] of [child], while the content of its vertical scroll view is scrolled under it.
-class const _ScrollEdgeTint({required final double height, required final Widget child})
-    extends StatefulWidget {
+class const _ScrollEdgeTint({
+  required final double height,
+  required final Widget child,
+
+  /// How far the content scrolls before it is under the app bar.
+  final double scrolledUnderOffset = 0.0,
+}) extends StatefulWidget {
   @override
   State<_ScrollEdgeTint> createState() => _ScrollEdgeTintState();
 }
@@ -284,7 +451,7 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
     if (metrics.axis != Axis.vertical) return false;
     // In a reversed scroll view (e.g. a chat), the content under the app bar is after the viewport.
     final isScrolledUnder = metrics.axisDirection == AxisDirection.down
-        ? metrics.extentBefore > 0
+        ? metrics.extentBefore > widget.scrolledUnderOffset
         : metrics.extentAfter > 0;
     if (isScrolledUnder != _isScrolledUnder) {
       setState(() => _isScrolledUnder = isScrolledUnder);
@@ -436,6 +603,14 @@ class const PlatformAppBar({
   /// Whether the glass buttons are tinted on iOS ([tintedGlassSettings]), for a screen whose
   /// content scrolling under them is busy, like boards. They always are with a background theme.
   final bool tintedGlass = false,
+
+  /// Whether the [title] is an iOS large title, at the top of the body of a [PlatformScaffold], and
+  /// shown in the app bar once it is scrolled away, like a UIKit navigation bar large title.
+  ///
+  /// iOS only, for a pushed screen whose body is a vertical scroll view. The body top padding of the
+  /// [MediaQuery] leaves room for the large title. The [bottom] (e.g. a search field) is below the
+  /// large title, and sticks below the app bar buttons once the large title is scrolled away.
+  final bool largeTitle = false,
 }) extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
@@ -475,9 +650,21 @@ class const PlatformAppBar({
               onPressed: () => Navigator.maybePop(context),
             )
           : null;
+      final largeTitleOffset = largeTitle ? _LargeTitleScrollScope.maybeOf(context) : null;
+      final inlineTitle = largeTitleOffset != null && title != null
+          ? ValueListenableBuilder(
+              valueListenable: largeTitleOffset,
+              builder: (context, offset, child) => AnimatedOpacity(
+                opacity: offset >= _kLargeTitleHeight ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 150),
+                child: child,
+              ),
+              child: title,
+            )
+          : title;
 
       return GlassAppBar(
-        title: title != null
+        title: inlineTitle != null
             ? IconTheme.merge(
                 // Like the Material AppBar, so that icons in the title are not given the primary
                 // color.
@@ -488,8 +675,11 @@ class const PlatformAppBar({
                   // GlassAppBar leaves no gap between a centered title and the buttons around it,
                   // unlike a leading aligned one: the same gap is added here.
                   child: centerTitle ?? true
-                      ? Padding(padding: const EdgeInsets.symmetric(horizontal: 8.0), child: title)
-                      : title!,
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: inlineTitle,
+                        )
+                      : inlineTitle,
                 ),
               )
             : null,
@@ -500,7 +690,8 @@ class const PlatformAppBar({
         actions: actions != null && actions!.isNotEmpty
             ? [_GlassBarCapsule(height: buttonHeight, settings: buttonSettings, children: actions!)]
             : null,
-        bottom: bottom,
+        // With a large title, the bottom is laid out by [PlatformScaffold], below the large title.
+        bottom: largeTitleOffset != null ? null : bottom,
         // For the implied back button, the capsules are given the settings themselves.
         buttonSettings: buttonSettings,
         toolbarHeight: _kGlassToolbarHeight,

@@ -494,6 +494,12 @@ Android must not change: every glass code path is behind a
   UIKit navigation bar), detected from the body's vertical scroll notifications. Bars without a
   title (or with a search field as title), board screens and tab root headers are never tinted.
   Don't pass a placeholder title (`SizedBox.shrink()`): leave it null.
+- **Large titles on pushed screens**: `PlatformAppBar(largeTitle: true)` shows the title as an iOS
+  large title at the top of the body, which collapses into the bar once scrolled away (the bar is
+  tinted from then on). For a pushed list screen whose body is one vertical scroll view (not in a
+  `TabBarView`) using `MediaQuery.paddingOf(context)` (it gets the large title height)
+  (e.g. `puzzle_history_screen.dart`). Its `bottom`, such as a glass search field, is below the
+  large title and sticks below the bar buttons once scrolled (`puzzle_themes_screen.dart`).
 - **Glass tint**: the package's dark glass is nearly clear, so over busy content (boards) or a
   background image or color theme, glass controls use `tintedGlassSettings` (`platform.dart`).
   `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
