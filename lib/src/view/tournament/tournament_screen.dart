@@ -153,6 +153,8 @@ class const _Body({required final TournamentId id, required final TournamentStat
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
+    // On iOS the app bar actions leave too little room for the title, so it heads the body.
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final timeLeft = state.tournament.timeToStart ?? state.tournament.timeToFinish;
     final showPairingStatus =
         authUser != null &&
@@ -193,11 +195,11 @@ class const _Body({required final TournamentId id, required final TournamentStat
         }
       },
       child: PlatformScaffold(
-        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        extendBody: isIOS,
         appBar: PlatformAppBar(
           // A long title, next to the actions.
           centerTitle: false,
-          title: _Title(state: state),
+          title: isIOS ? null : _Title(state: state),
           actions: [
             SemanticIconButton(
               icon: const PlatformShareIcon(),
@@ -249,6 +251,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
                           child: ListView(
                             padding: listPadding,
                             children: [
+                              if (isIOS) _BodyTitle(state: state),
                               _TournamentInfoCard(tournament: state.tournament),
                               const SizedBox(height: 16),
                               ...tournamentSecondaryInfoWidgets,
@@ -268,6 +271,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
                   : ListView(
                       padding: listPadding,
                       children: [
+                        if (isIOS) _BodyTitle(state: state),
                         _TournamentInfoCard(tournament: state.tournament),
                         const SizedBox(height: 16),
                         ...standingWidgets,
@@ -352,6 +356,21 @@ class const _Title({required final TournamentState state}) extends StatelessWidg
   @override
   Widget build(BuildContext context) {
     return AppBarTitleText(state.tournament.meta.fullName, maxLines: 2);
+  }
+}
+
+class const _BodyTitle({required final TournamentState state}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Text(
+        state.tournament.meta.fullName,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: Styles.title,
+      ),
+    );
   }
 }
 
@@ -1219,6 +1238,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
               label: widget.state.joined ? context.l10n.pause : context.l10n.join,
               icon: widget.state.joined ? Icons.pause : Icons.play_arrow,
               showLabel: true,
+              prominent: !widget.state.joined,
               onTap: widget.state.canJoin
                   ? () async {
                       final teamBattle = widget.state.tournament.meta.teamBattle;

@@ -99,11 +99,14 @@ class const _GlassBottomBarScope({required super.child}) extends InheritedWidget
 class const _GlassBottomBarCapsule({
   required final VoidCallback? onTap,
   required final Widget child,
+  final bool prominent = false,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final foregroundColor = ColorScheme.of(context).onSurface;
+    final colorScheme = ColorScheme.of(context);
+    final foregroundColor = prominent ? colorScheme.primary : colorScheme.onSurface;
+    final glassSettings = tintedGlassSettings(context);
     // As wide as its content, within the width the bar gives it.
     return IntrinsicWidth(
       child: Opacity(
@@ -111,8 +114,19 @@ class const _GlassBottomBarCapsule({
         child: GlassButton.custom(
           onTap: onTap ?? () {},
           enabled: enabled,
-          // Over busy content, like boards.
-          settings: tintedGlassSettings(context),
+          // Tinted for busy content, like boards. A prominent button gets a light wash of the theme
+          // color, with a label in that color, like an iOS tinted button.
+          settings: prominent
+              ? glassSettings.copyWith(
+                  glassColor: Color.alphaBlend(
+                    // A wash that shows on the light glass as well as on the dark one.
+                    colorScheme.primary.withValues(
+                      alpha: Theme.of(context).brightness == Brightness.light ? 0.3 : 0.15,
+                    ),
+                    glassSettings.glassColor,
+                  ),
+                )
+              : glassSettings,
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.
           useOwnLayer: true,
@@ -147,6 +161,10 @@ class const BottomBarButton({
   final bool showTooltip = true,
   final bool blink = false,
 
+  /// Whether the button is the main action of the bar: on iOS, in a [BottomBar] with
+  /// [BottomBar.cupertinoGlass], its glass capsule is tinted with the theme color.
+  final bool prominent = false,
+
   /// In case we want to override the tooltip message. If null, the [label] will
   /// be used.
   final String? tooltip,
@@ -175,6 +193,7 @@ class const BottomBarButton({
         excludeSemantics: true,
         child: _GlassBottomBarCapsule(
           onTap: onTap,
+          prominent: prominent,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             // The badge sticks out to the right of the icon.
