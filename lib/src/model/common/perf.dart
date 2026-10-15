@@ -177,7 +177,7 @@ extension PerfExtension on Pick {
         return perf;
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to Perf");
+    throw PickException.fromPick(this, "can't be casted to Perf");
   }
 
   Perf? asPerfOrNull() {
