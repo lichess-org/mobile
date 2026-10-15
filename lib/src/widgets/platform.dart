@@ -13,6 +13,7 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
         GlassContainer,
         GlassIconButton,
         GlassScaffold,
+        GlassScrollEdgeEffect,
         LiquidGlassSettings,
         LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
@@ -80,6 +81,9 @@ bool _hasBackgroundTheme(BuildContext context) => Theme.of(context).scaffoldBack
 
 /// Height of the toolbar row of a [PlatformAppBar] on iOS, matching the iOS navigation bar.
 const double _kGlassToolbarHeight = 44.0;
+
+/// Strongest blur of the content scrolling under the status bar, at the top of the screen.
+const double _kStatusBarBlurMaxSigma = 8.0;
 
 /// Height of the tint of a [PlatformAppBar] below its buttons, when it has no bottom.
 const double _kGlassBarTintBottomPadding = 8.0;
@@ -198,10 +202,10 @@ class const PlatformScaffold({
                 child: IconTheme(data: iconTheme, child: appBar!),
               )
             : null,
-        // Keeps the status bar area blurred when the app bar is part of the body. Nothing scrolls
-        // under a body laid out below the app bar, whose top would be faded. A tinted app bar
-        // replaces the fade.
-        topEdgeFade: extendBodyBehindAppBar && !hasTintedAppBar,
+        // The status bar area is blurred below instead: the package fade also covers the app bar,
+        // and is a fade to the background color, invisible in dark mode and with a background
+        // theme.
+        topEdgeFade: false,
         // GlassScaffold does not inset the body, so the app bar height is added to the top padding
         // like Scaffold.extendBodyBehindAppBar does.
         body: Builder(
@@ -217,7 +221,7 @@ class const PlatformScaffold({
                 ),
               );
             }
-            return MediaQuery(
+            final body = MediaQuery(
               data: mediaQuery.copyWith(
                 padding: mediaQuery.padding.copyWith(top: mediaQuery.padding.top + appBarHeight),
               ),
@@ -241,6 +245,17 @@ class const PlatformScaffold({
                     : scaffold,
               ),
             );
+            // Content scrolling under the status bar is blurred, like in iOS apps. A tinted app
+            // bar has its own blur.
+            return hasTintedAppBar || !extendBodyBehindAppBar
+                ? body
+                : GlassScrollEdgeEffect(
+                    style: .blur,
+                    maxSigma: _kStatusBarBlurMaxSigma,
+                    topFadeHeight: mediaQuery.padding.top,
+                    fadeBottom: false,
+                    child: body,
+                  );
           },
         ),
       ),

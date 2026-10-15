@@ -557,9 +557,12 @@ Android must not change: every glass code path is behind a
   `IconButton`s break.
 - **`GlassAppBar` has its own `SafeArea`**: when it is laid out inside the body, give it the
   original `MediaQuery` (without the bar height added), or its content is pushed out of its bounds.
-- **Glass look**: use the package's default glass settings and the default `soft` scroll edge
-  effect of `GlassScaffold`. Don't pass `edgeStyle: .blur` (it adds a heavy progressive blur under
-  the bars) or app-wide glass overrides without a design decision.
+- **Glass look**: use the package's default glass settings. Don't use `GlassScaffold`'s top edge
+  effect: `PlatformScaffold` turns it off and blurs only the status bar area itself (a
+  `GlassScrollEdgeEffect`, `.blur` style, sigma 8, top only), where nothing else covers it (no
+  tinted app bar). The `soft` fade is invisible in dark mode and with background themes, and the
+  package's blur covers the whole app bar (too heavy). No bottom edge effect. Don't add app-wide
+  glass overrides without a design decision.
 - In widget tests on iOS, `GlassTabBar` renders each tab label twice, so use `findsWidgets`.
 
 ## iOS Home Screen Widgets (WidgetKit Extension)
