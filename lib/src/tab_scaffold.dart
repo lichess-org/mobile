@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show tintedGlassSettings;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
@@ -52,7 +53,10 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     final tabColor = CupertinoColors.label.resolveFrom(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final tabBar = GlassTabBar.bottom(
-      settings: isDark ? _kDarkTabBarGlassSettings : _kTabBarGlassSettings,
+      settings: isDark
+          // Tinted like the other glass controls ([tintedGlassSettings]): a theme surface color.
+          ? _kTabBarGlassSettings.copyWith(glassColor: tintedGlassSettings(context).glassColor)
+          : _kTabBarGlassSettings,
       indicatorColor: isDark ? const Color(0x80000000) : null,
       selectedIconColor: tabColor,
       unselectedIconColor: tabColor,
@@ -421,9 +425,4 @@ const _kTabBarGlassSettings = LiquidGlassSettings(
   ambientStrength: 1,
   lightAngle: 0.75 * math.pi,
   glassColor: Color(0xBFFFFFFF),
-);
-
-/// [_kTabBarGlassSettings] with a dark gray tint, like the iOS tab bar in dark mode.
-final _kDarkTabBarGlassSettings = _kTabBarGlassSettings.copyWith(
-  glassColor: const Color(0xCC2C2C2E),
 );
