@@ -1,10 +1,16 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassSearchBar;
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Displays a [SearchBar] with platform adaptations.
 ///
-/// On iOS, a search bar placed in the app bar ([inAppBar]) is a liquid glass search field.
+/// On iOS, a search bar placed in the app bar ([inAppBar]) is a liquid glass search field, and a
+/// search bar in the content is flat, like the iOS controls there: the same field, on a
+/// [GlassControlBackground]. The `bottom` of an app bar with a large title is in the content until
+/// it sticks below the app bar buttons ([AppBarBottomGlassScope]).
+///
+/// On iOS, the clear button clears the text, then calls [onChanged] and [onClear].
 class const PlatformSearchBar({
   /// See [SearchBar.controller].
   final TextEditingController? controller,
@@ -39,8 +45,8 @@ class const PlatformSearchBar({
 
   /// Whether the search bar is placed in the app bar, like in its `bottom`.
   ///
-  /// On iOS it is then a liquid glass search field, part of the glass navigation bar. That field
-  /// has no [onTap], and calls [onClear] whenever its text becomes empty, after [onChanged].
+  /// On iOS it is then a liquid glass search field, part of the glass navigation bar, which calls
+  /// [onClear] whenever its text becomes empty, after [onChanged].
   final bool inAppBar = false,
 }) extends StatefulWidget {
   @override
@@ -66,19 +72,43 @@ class _PlatformSearchBarState() extends State<PlatformSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.inAppBar && Theme.of(context).platform == TargetPlatform.iOS) {
-      return GlassSearchBar(
-        controller: widget.controller,
-        focusNode: widget.focusNode,
-        placeholder: widget.hintText ?? MaterialLocalizations.of(context).searchFieldLabel,
-        autofocus: widget.autoFocus,
-        onSubmitted: widget.onSubmitted,
-        onChanged: (term) {
-          widget.onChanged?.call(term);
-          if (term.isEmpty) widget.onClear?.call();
-        },
-        // Floats alone in the app bar, there is no parent glass layer to share.
-        useOwnLayer: true,
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      // The glass search field of the iOS navigation bar is taller than the theme's search bar.
+      final height = widget.inAppBar ? 44.0 : 40.0;
+      final iconColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.6);
+      return GlassControlBackground(
+        glass: widget.inAppBar && (AppBarBottomGlassScope.maybeOf(context) ?? true),
+        height: height,
+        child: SearchBar(
+          backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+          constraints: BoxConstraints(minHeight: height, maxHeight: height),
+          controller: widget.controller,
+          leading: Icon(CupertinoIcons.search, size: 20, color: iconColor),
+          trailing: [
+            if (widget.controller?.text.isNotEmpty == true)
+              IconButton(
+                onPressed: () {
+                  widget.controller?.clear();
+                  widget.onChanged?.call('');
+                  widget.onClear?.call();
+                },
+                tooltip: 'Clear',
+                icon: Icon(CupertinoIcons.clear_circled_solid, size: 18, color: iconColor),
+              ),
+          ],
+          onTap: widget.onTap,
+          onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+          focusNode: widget.focusNode,
+          onSubmitted: widget.onSubmitted,
+          onChanged: (term) {
+            widget.onChanged?.call(term);
+            if (widget.inAppBar && term.isEmpty) widget.onClear?.call();
+          },
+          hintText: widget.hintText ?? MaterialLocalizations.of(context).searchFieldLabel,
+          autoFocus: widget.autoFocus,
+          textInputAction: TextInputAction.search,
+        ),
       );
     }
 

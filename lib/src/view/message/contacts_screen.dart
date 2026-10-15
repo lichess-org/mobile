@@ -71,17 +71,23 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
     final searchResultsAsync = ref.watch(messageSearchResultsProvider);
     final me = ref.watch(authControllerProvider)?.user;
 
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.inbox),
-        // The search field stays in the bar, below the title.
+        // On iOS, the search field is below the large title, and sticks below the bar buttons once
+        // the large title is scrolled away.
+        largeTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(
             // The 44pt glass search field and its vertical padding.
-            Theme.of(context).platform == TargetPlatform.iOS ? 60.0 : kToolbarHeight,
+            isIOS ? kGlassAppBarBottomPadding.vertical + 44.0 : kToolbarHeight,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: isIOS
+                ? kGlassAppBarBottomPadding
+                : const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: controller,
               focusNode: focusNode,

@@ -470,10 +470,11 @@ Android must not change: every glass code path is behind a
   instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
   prefer a nav bar action on iOS.
 - **Search fields**: a `PlatformSearchBar` placed in an app bar (e.g. its `bottom`) takes
-  `inAppBar: true`, which makes it a `GlassSearchBar` on iOS. A search field inside the body
-  stays a regular field. A search screen is opened by a `SearchHeroButton` in the app bar (not a
-  fake search field in the body), as a normal push, and wraps its field in a `SearchFieldHero`
-  with the same tag, so that the button morphs into the field.
+  `inAppBar: true`, which makes it a glass search field on iOS. A search field inside the body is
+  the same field, flat (`GlassControlBackground`, `platform.dart`). A search screen is opened by
+  a `SearchHeroButton` in the app bar (not a fake search field in the body), as a normal push,
+  and wraps its field in a `SearchFieldHero` with the same tag, so that the button morphs into
+  the field.
 - **App bar tabs**: use `PlatformTabBar` (`lib/src/widgets/platform_tab_bar.dart`) as a
   `PlatformAppBar` `bottom`, not a Material `TabBar`. On iOS, 2 or 3 tabs are a glass
   segmented control (driven by the same `TabController`); 4 tabs or more stay a Material `TabBar`.
@@ -482,7 +483,9 @@ Android must not change: every glass code path is behind a
   iOS, so every bar has the same spacing and height.
   A segmented control in the content (e.g. a header not pinned yet) is flat, not glass:
   `PlatformTabBar(glass: false)`, the same control with its glass faded out (settings
-  `visibility`) on the text field fill; glass is for bars only.
+  `visibility`) on the text field fill (`GlassControlBackground`); glass is for bars only. The
+  `bottom` of a large title app bar is in the content until it sticks below the bar buttons: its
+  `PlatformTabBar` / `PlatformSearchBar` follow that automatically (`AppBarBottomGlassScope`).
 - **Bottom bars over scrolling content** (not board toolbars): `BottomBar(cupertinoGlass: true)`
   has no background on iOS and its `BottomBarButton`s / `BottomBarTextButton`s are glass capsules,
   as wide as their content and evenly spaced.

@@ -110,6 +110,82 @@ LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSett
       : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 0.8),
 );
 
+/// The capsule background of an iOS control (segmented control, search field) that is liquid glass
+/// in a bar floating over the content, and flat in the content, like the iOS controls there.
+///
+/// It is the same [child], glass or flat: the glass capsule behind it fades out (its visibility
+/// scales every glass effect) as the flat text field fill fades in. The capsule is a background,
+/// not the control's parent: a glass container hides its child along with its glass. Changes of
+/// [glass] are animated.
+class const GlassControlBackground({
+  super.key,
+
+  /// Whether the background is liquid glass, or the flat text field fill.
+  required final bool glass,
+
+  /// The height of the control, which the capsule is rounded to.
+  required final double height,
+
+  /// The glass settings, or the default ones when null.
+  final LiquidGlassSettings? settings,
+  required final Widget child,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final flatFill = Theme.of(context).inputDecorationTheme.fillColor ?? Colors.transparent;
+    final borderRadius = height / 2;
+    return SizedBox(
+      height: height,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(end: glass ? 1.0 : 0.0),
+        duration: const Duration(milliseconds: 200),
+        builder: (context, visibility, child) => Stack(
+          children: [
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: flatFill.withValues(alpha: flatFill.a * (1.0 - visibility)),
+                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+                ),
+              ),
+            ),
+            // A glass capsule like the app bar buttons, instead of the control's own background.
+            Positioned.fill(
+              child: GlassContainer(
+                shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
+                settings: visibility == 1.0
+                    ? settings
+                    : (settings ?? const LiquidGlassSettings()).copyWith(visibility: visibility),
+                // Outside of an app bar, there is no parent glass layer to share. In an app bar,
+                // which is isolated, its glass gets its own layer anyway.
+                useOwnLayer: true,
+                child: const SizedBox.expand(),
+              ),
+            ),
+            child!,
+          ],
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+/// Whether the controls of the `bottom` of a [PlatformAppBar] with a large title are liquid glass:
+/// while the large title is shown, the bottom is in the content, below it, and its controls are
+/// flat; once it sticks below the app bar buttons, they are glass.
+///
+/// [PlatformTabBar] and [PlatformSearchBar] follow it, unless told otherwise.
+class const AppBarBottomGlassScope({required final bool glass, required super.child})
+    extends InheritedWidget {
+  /// Whether the controls are glass, or null outside of the bottom of a large title app bar.
+  static bool? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<AppBarBottomGlassScope>()?.glass;
+
+  @override
+  bool updateShouldNotify(AppBarBottomGlassScope oldWidget) => glass != oldWidget.glass;
+}
+
 /// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS
 /// navigation bar buttons (the package's light glass is nearly clear).
 const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x80FFFFFF));
@@ -321,7 +397,8 @@ class const _LargeTitleBottom({required final double top, required final Widget 
         // Not clamped below 0, so that it follows the content when it overscrolls.
         builder: (context, offset, child) => Transform.translate(
           offset: Offset(0, -math.min(offset, _kLargeTitleHeight)),
-          child: child,
+          // Its controls are flat in the content, and glass once it sticks to the app bar.
+          child: AppBarBottomGlassScope(glass: offset >= _kLargeTitleHeight, child: child!),
         ),
         child: bottom,
       ),
