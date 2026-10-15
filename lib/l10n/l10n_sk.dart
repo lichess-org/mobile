@@ -163,9 +163,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Vysielajúci strímeri';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override

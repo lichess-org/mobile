@@ -163,9 +163,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Αυτός ο κωδικός δεν είναι έγκυρος ή έχει λήξει.';
 
   @override
-  String get mobileLiveStreamers => 'Streamers ζωντανά αυτή τη στιγμή';
-
-  @override
   String get mobileLocalDatabaseSize => 'Μέγεθος τοπικής βάσης δεδομένων';
 
   @override

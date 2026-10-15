@@ -163,9 +163,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Vivaj filmprezentistoj';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override

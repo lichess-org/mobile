@@ -163,9 +163,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Deze code is ongeldig of is verlopen.';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
   String get mobileLocalDatabaseSize => 'Grootte van lokale databank';
 
   @override

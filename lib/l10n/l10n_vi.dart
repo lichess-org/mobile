@@ -163,9 +163,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Mã này không hợp lệ hoặc đã hết hạn.';
 
   @override
-  String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
-
-  @override
   String get mobileLocalDatabaseSize => 'Kích thước CSDL cục bộ';
 
   @override

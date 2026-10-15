@@ -163,9 +163,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Streamers em direto';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -7899,9 +7896,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'Este código é inválido ou expirou.';
-
-  @override
-  String get mobileLiveStreamers => 'Streamer do Lichess';
 
   @override
   String get mobileLocalDatabaseSize => 'Tamanho do banco de dados local';

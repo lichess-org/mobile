@@ -163,9 +163,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override

@@ -163,9 +163,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Transmetues drejtpërsëdrejti';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override

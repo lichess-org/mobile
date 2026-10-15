@@ -163,9 +163,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Lichess-közvetítések';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override

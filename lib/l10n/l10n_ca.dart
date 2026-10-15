@@ -163,9 +163,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'El codi és invàlid o ha caducat.';
 
   @override
-  String get mobileLiveStreamers => 'Retransmissors en directe';
-
-  @override
   String get mobileLocalDatabaseSize => 'Mida de la base de dades local';
 
   @override

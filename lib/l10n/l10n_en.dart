@@ -163,9 +163,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -7816,9 +7813,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get mobileHomeTab => 'Home';
-
-  @override
-  String get mobileLiveStreamers => 'Live streamers';
 
   @override
   String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
