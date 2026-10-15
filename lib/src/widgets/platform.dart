@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'dart:ui' show ImageFilter;
+import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
@@ -66,8 +66,7 @@ class const PlatformAppBarLoadingIndicator({super.key}) extends StatelessWidget 
 /// apps (the iOS default bar tint, a light grey, looks tinted over the content). With a background
 /// image or color theme (transparent scaffold), it is the surface color with the same opacity, so
 /// that the bar is not grey over the background.
-Color cupertinoBarTint(BuildContext context) {
-  const opacity = 0.8;
+Color cupertinoBarTint(BuildContext context, {double opacity = 0.8}) {
   if (_hasBackgroundTheme(context)) {
     return ColorScheme.of(context).surface.withValues(alpha: opacity);
   }
@@ -102,6 +101,10 @@ LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSett
       ? const Color(0xBFFFFFFF)
       : const Color(0xCC2C2C2E),
 );
+
+/// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS
+/// navigation bar buttons (the package's light glass is nearly clear).
+const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x80FFFFFF));
 
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
@@ -309,14 +312,16 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
               // The content under the translucent tint is blurred, like a UIKit navigation bar.
               child: ClipRect(
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                  filter: _barTintFilter(context),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: cupertinoBarTint(context),
+                      color: cupertinoBarTint(context, opacity: 0.4),
+                      // A hairline of one physical pixel, inside the box: a zero width border is
+                      // centered on the edge, and the clip would cut half of it.
                       border: Border(
                         bottom: BorderSide(
                           color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
-                          width: 0.0,
+                          width: 1.0 / MediaQuery.devicePixelRatioOf(context),
                         ),
                       ),
                     ),
@@ -329,6 +334,27 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
       ],
     );
   }
+}
+
+/// The blur under the scroll tint of a [PlatformAppBar].
+///
+/// In light mode, the colors of the content are saturated, like a UIKit bar material, so that they
+/// show through the white tint.
+ImageFilter _barTintFilter(BuildContext context) {
+  final blur = ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0);
+  if (Theme.of(context).brightness != Brightness.light || _hasBackgroundTheme(context)) {
+    return blur;
+  }
+  const s = 1.8;
+  return ImageFilter.compose(
+    outer: const ColorFilter.matrix([
+      0.2126 + 0.7874 * s, 0.7152 - 0.7152 * s, 0.0722 - 0.0722 * s, 0, 0, //
+      0.2126 - 0.2126 * s, 0.7152 + 0.2848 * s, 0.0722 - 0.0722 * s, 0, 0, //
+      0.2126 - 0.2126 * s, 0.7152 - 0.7152 * s, 0.0722 + 0.9278 * s, 0, 0, //
+      0, 0, 0, 1, 0,
+    ]),
+    inner: blur,
+  );
 }
 
 /// Places [appBar] above [child], and moves it up as the main scroll view of [child] scrolls.
@@ -417,9 +443,12 @@ class const PlatformAppBar({
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
-      // With a background theme, the barely tinted dark glass would show the image brightly.
+      // With a background theme, the barely tinted dark glass would show the image brightly. In
+      // light mode, the buttons are white like the iOS navigation bar buttons.
       final buttonSettings = tintedGlass || _hasBackgroundTheme(context)
           ? tintedGlassSettings(context)
+          : Theme.of(context).brightness == Brightness.light
+          ? _kLightAppBarButtonSettings
           : null;
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
