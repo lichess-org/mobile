@@ -11,6 +11,8 @@ const _kTeamUpdatesCacheDuration = Duration(minutes: 1);
 
 /// A provider that fetches team updates (channels overview)
 final teamUpdatesProvider = FutureProvider.autoDispose<TeamUpdates>((ref) {
+  // The updates are those of the signed in account: fetch them again when it changes.
+  ref.watch(authControllerProvider.select((authUser) => authUser?.user.id));
   return ref.withClientCacheFor(
     (client) => ref.read(teamRepositoryProvider).getTeamUpdates(),
     _kTeamUpdatesCacheDuration,
@@ -20,6 +22,7 @@ final teamUpdatesProvider = FutureProvider.autoDispose<TeamUpdates>((ref) {
 /// A provider that fetches channel-specific updates page
 final teamUpdatesOfTeamProvider = FutureProvider.autoDispose
     .family<TeamUpdatesOfTeam, (TeamId, int)>((ref, params) {
+      ref.watch(authControllerProvider.select((authUser) => authUser?.user.id));
       return ref.withClientCacheFor(
         (client) =>
             ref.read(teamRepositoryProvider).getTeamUpdatesOfTeam(params.$1, page: params.$2),
