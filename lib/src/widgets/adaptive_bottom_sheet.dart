@@ -1,5 +1,6 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
 import 'package:material_ui/material_ui.dart';
 
 /// The minimum height of a glass bottom sheet, as a fraction of the screen height.
@@ -52,9 +53,8 @@ Future<T?> showAdaptiveBottomSheet<T>({
 ///
 /// [builder] gets the sheet's scroll controller, to give to the scroll view of the content.
 ///
-/// On iOS the sheet has the frame of the glass sheets ([showAdaptiveBottomSheet]) with a drag
-/// handle, but is opaque: a long list that fills the screen stays readable. [showDragHandle] is
-/// Android only.
+/// It always has a drag handle. On iOS the sheet has the frame of the glass sheets
+/// ([showAdaptiveBottomSheet]), but is opaque: a long list that fills the screen stays readable.
 Future<T?> showAdaptiveDraggableBottomSheet<T>({
   required BuildContext context,
   required ScrollableWidgetBuilder builder,
@@ -63,7 +63,6 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
   double maxChildSize = 1.0,
   bool snap = false,
   bool useRootNavigator = false,
-  bool showDragHandle = false,
   BoxConstraints? constraints,
 }) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -74,7 +73,8 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
     // A floating card must not grow under the status bar.
     useSafeArea: isIOS,
     constraints: constraints,
-    showDragHandle: !isIOS && showDragHandle,
+    // The iOS frame draws its own handle.
+    showDragHandle: !isIOS,
     backgroundColor: isIOS ? Colors.transparent : null,
     elevation: isIOS ? 0 : null,
     builder: (context) => DraggableScrollableSheet(
@@ -183,6 +183,50 @@ class const GlassSheetScope({required super.child, super.key}) extends Inherited
 
   @override
   bool updateShouldNotify(GlassSheetScope oldWidget) => false;
+}
+
+/// The action of a [SheetHeaderButton].
+enum SheetHeaderAction() {
+  close,
+  back,
+}
+
+/// A button in the header of a bottom sheet, that closes the sheet or goes back in it: an
+/// [IconButton] on Android, a round liquid glass button on iOS, like the buttons of an iOS 26
+/// sheet.
+class const SheetHeaderButton({
+  required final SheetHeaderAction action,
+  required final VoidCallback onPressed,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final localizations = MaterialLocalizations.of(context);
+    final tooltip = switch (action) {
+      .close => localizations.closeButtonTooltip,
+      .back => localizations.backButtonTooltip,
+    };
+    if (Theme.of(context).platform != TargetPlatform.iOS) {
+      return IconButton(
+        icon: Icon(switch (action) {
+          .close => Icons.close,
+          .back => Icons.arrow_back,
+        }),
+        tooltip: tooltip,
+        onPressed: onPressed,
+      );
+    }
+    return GlassIconButton(
+      icon: Icon(switch (action) {
+        .close => Icons.close_rounded,
+        .back => Icons.arrow_back_ios_new_rounded,
+      }, color: ColorScheme.of(context).onSurface),
+      semanticLabel: tooltip,
+      onPressed: onPressed,
+      // The sheet has no glass layer to share.
+      useOwnLayer: true,
+    );
+  }
 }
 
 /// A modal bottom sheet container that adapts to the content size.

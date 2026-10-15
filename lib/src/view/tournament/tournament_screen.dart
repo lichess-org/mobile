@@ -1364,7 +1364,13 @@ class const _TournamentPlayerDetails({
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+          // The Material close button has its own inset, the glass one doesn't.
+          padding: EdgeInsets.fromLTRB(
+            16,
+            8,
+            Theme.of(context).platform == TargetPlatform.iOS ? 16 : 8,
+            8,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -1388,7 +1394,7 @@ class const _TournamentPlayerDetails({
                   ],
                 ),
               ),
-              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+              SheetHeaderButton(action: .close, onPressed: () => Navigator.pop(context)),
             ],
           ),
         ),
@@ -1636,7 +1642,13 @@ class const _TournamentTeamDetails({
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+          // The Material close button has its own inset, the glass one doesn't.
+          padding: EdgeInsets.fromLTRB(
+            16,
+            8,
+            Theme.of(context).platform == TargetPlatform.iOS ? 16 : 8,
+            8,
+          ),
           child: Row(
             mainAxisAlignment: .spaceBetween,
             children: [
@@ -1664,7 +1676,7 @@ class const _TournamentTeamDetails({
                   ],
                 ),
               ),
-              IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)),
+              SheetHeaderButton(action: .close, onPressed: () => Navigator.pop(context)),
             ],
           ),
         ),

@@ -724,7 +724,6 @@ class const _BottomBar({
           BottomBarTextButton(
             onPressed: () => showAdaptiveDraggableBottomSheet<void>(
               context: context,
-              showDragHandle: true,
               constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
               initialChildSize: 0.4,
               snap: true,
@@ -746,7 +745,6 @@ class const _BottomBar({
         BottomBarTextButton(
           onPressed: () => showAdaptiveDraggableBottomSheet<void>(
             context: context,
-            showDragHandle: true,
             constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
             initialChildSize: 0.6,
             snap: true,
@@ -978,9 +976,8 @@ class _BroadcastGamesFilterBottomSheetState()
                   child: Column(
                     children: [
                       ListTile(
-                        leading: IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          tooltip: context.l10n.cancel,
+                        leading: SheetHeaderButton(
+                          action: .back,
                           onPressed: () => setState(() => showingTeamPicker = false),
                         ),
                         title: Text(context.l10n.teamTeam),

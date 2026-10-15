@@ -407,7 +407,6 @@ class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget
               if (s == null) return;
               showAdaptiveDraggableBottomSheet<void>(
                 context: context,
-                showDragHandle: true,
                 builder: (_, scrollController) => WatcherListBottomSheet(
                   nbWatchers: s.nbWatchers,
                   watcherNames: s.watcherNames,

@@ -31,7 +31,6 @@ Iterable<String> broadcastInformationTexts(BroadcastTournamentInformation inform
 Future<void> showBroadcastOverviewSheet(BuildContext context, BroadcastTournamentId tournamentId) {
   return showAdaptiveDraggableBottomSheet<void>(
     context: context,
-    showDragHandle: true,
     constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
     initialChildSize: 0.6,
     snap: true,

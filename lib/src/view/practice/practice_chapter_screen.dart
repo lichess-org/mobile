@@ -49,7 +49,6 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
               tooltip: context.l10n.studyNbChapters(nbChapters),
               onPressed: () => showAdaptiveDraggableBottomSheet<void>(
                 context: context,
-                showDragHandle: true,
                 constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
                 initialChildSize: 0.6,
                 snap: true,

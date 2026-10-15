@@ -496,8 +496,8 @@ Android must not change: every glass code path is behind a
   `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
   theme.
 - **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands uses
-  `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`; on iOS the same inset card,
-  opaque, with a drag handle); every other sheet uses `showAdaptiveBottomSheet`
+  `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`, always with a drag handle; on
+  iOS the same inset card, opaque); every other sheet uses `showAdaptiveBottomSheet`
   (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose content sits in a glass card
   (`GlassBottomSheetFrame`). Inside it (`GlassSheetScope`), cards turn translucent, `PlatformSwitch`
   / `SwitchSettingTile` and `NonLinearSlider` become glass controls. Filled and outlined buttons are
