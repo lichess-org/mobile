@@ -26,6 +26,9 @@ class const PlatformSwitch({
           child: GlassSwitch(
             value: value,
             onChanged: onChanged ?? (_) {},
+            // Like the adaptive switch, which uses the theme primary color instead of the iOS green
+            // (the app Cupertino theme applies to all widgets).
+            activeColor: ColorScheme.of(context).primary,
             // On the sheet's glass there is no parent glass layer to share.
             useOwnLayer: true,
           ),

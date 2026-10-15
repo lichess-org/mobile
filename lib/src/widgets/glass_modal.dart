@@ -44,6 +44,9 @@ class const GlassDialogFrame({
 
   /// See [GlassModalCard.tintOpacity].
   final double tintOpacity = 0.65,
+
+  /// The width of an alert dialog by default.
+  final double maxWidth = 300.0,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -53,7 +56,7 @@ class const GlassDialogFrame({
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
+            constraints: BoxConstraints(maxWidth: maxWidth),
             child: GlassModalCard(
               tintOpacity: tintOpacity,
               borderRadius: 34.0,

@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -193,72 +194,55 @@ class _EditProfileFormState() extends ConsumerState<_EditProfileForm> {
                                 final flairListAsync = ref.watch(flairListProvider);
                                 switch (flairListAsync) {
                                   case AsyncData(:final value):
-                                    return SafeArea(
-                                      child: Dialog(
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.heightOf(context) * 0.5,
-                                            maxWidth: MediaQuery.widthOf(context) * 0.9,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                    vertical: 12.0,
-                                                    horizontal: 4.0,
-                                                  ),
-                                                  child: EmojiPicker(
-                                                    emojiData: value,
-                                                    itemBuilder:
-                                                        (context, emojiId, emoji, callback) {
-                                                          return EmojiItem(
-                                                            onTap: () {
-                                                              callback(emojiId, emoji);
-                                                            },
-                                                            emoji: emoji,
-                                                          );
-                                                        },
-                                                    onEmojiSelected: (emojiId, emoji) {
-                                                      Navigator.of(context).pop(emojiId);
-                                                    },
-                                                  ),
-                                                ),
+                                    return _FlairDialog(
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                vertical: 12.0,
+                                                horizontal: 4.0,
                                               ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop('__clear__');
+                                              child: EmojiPicker(
+                                                emojiData: value,
+                                                itemBuilder: (context, emojiId, emoji, callback) {
+                                                  return EmojiItem(
+                                                    onTap: () {
+                                                      callback(emojiId, emoji);
                                                     },
-                                                    child: Text(context.l10n.mobileClearButton),
-                                                  ),
-                                                  const SizedBox(width: 8.0),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: Text(context.l10n.cancel),
-                                                  ),
-                                                ],
+                                                    emoji: emoji,
+                                                  );
+                                                },
+                                                onEmojiSelected: (emojiId, emoji) {
+                                                  Navigator.of(context).pop(emojiId);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop('__clear__');
+                                                },
+                                                child: Text(context.l10n.mobileClearButton),
+                                              ),
+                                              const SizedBox(width: 8.0),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(context.l10n.cancel),
                                               ),
                                             ],
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     );
                                   case _:
-                                    return Dialog(
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.heightOf(context) * 0.5,
-                                          maxWidth: MediaQuery.widthOf(context) * 0.9,
-                                        ),
-                                        child: const Center(
-                                          child: CircularProgressIndicator.adaptive(),
-                                        ),
-                                      ),
+                                    return const _FlairDialog(
+                                      child: Center(child: CircularProgressIndicator.adaptive()),
                                     );
                                 }
                               },
@@ -624,6 +608,29 @@ class __TextFieldState() extends State<_TextField> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+/// The frame of the flair picker dialog: a wide glass dialog on iOS.
+class const _FlairDialog({required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.heightOf(context) * 0.5;
+    final maxWidth = MediaQuery.widthOf(context) * 0.9;
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return GlassDialogFrame(
+        maxWidth: maxWidth,
+        child: SizedBox(height: height, child: child),
+      );
+    }
+    return SafeArea(
+      child: Dialog(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: height, maxWidth: maxWidth),
+          child: child,
+        ),
       ),
     );
   }

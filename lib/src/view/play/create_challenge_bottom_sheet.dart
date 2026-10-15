@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
@@ -284,7 +285,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
             if (account != null)
               ListTile(
                 title: Text(context.l10n.rated),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: preferences.isRatedAllowed && preferences.rated,
                   onChanged: preferences.isRatedAllowed
                       ? (bool value) {
