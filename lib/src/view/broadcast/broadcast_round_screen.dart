@@ -505,7 +505,7 @@ class const _RoundHeader({
       ),
       tabs: ValueListenableBuilder(
         valueListenable: tabsPinned,
-        builder: (context, pinned, child) => AnimatedContainer(
+        builder: (context, pinned, _) => AnimatedContainer(
           duration: kThemeChangeDuration,
           // On iOS the content scrolls under the glass segmented control. On Android, pinned tabs
           // have the color of the scrolled under app bar above them.
@@ -514,13 +514,14 @@ class const _RoundHeader({
               : pinned
               ? _scrolledUnderAppBarColor(context)
               : Theme.of(context).scaffoldBackgroundColor,
-          child: child,
-        ),
-        child: PlatformTabBar(
-          tabs: tabs,
-          controller: tabController,
-          inAppBar: false,
-          tintedGlass: true,
+          child: PlatformTabBar(
+            tabs: tabs,
+            controller: tabController,
+            inAppBar: false,
+            tintedGlass: true,
+            // Flat in the header, glass once pinned under the app bar, over the content.
+            glass: pinned,
+          ),
         ),
       ),
     );

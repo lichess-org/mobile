@@ -96,10 +96,13 @@ const double kGlassAppBarBottomControlHeight = 36.0;
 
 /// Glass settings tinted like the iOS tab bar, for glass controls over busy content (boards): opaque
 /// enough that what is seen through the glass does not compete with the labels and icons.
+///
+/// In dark mode the tint is a theme surface color, so that the controls match the other surfaces
+/// of the screen (search fields, cards) instead of a fixed grey.
 LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSettings(
   glassColor: Theme.of(context).brightness == Brightness.light
       ? const Color(0xBFFFFFFF)
-      : const Color(0xCC2C2C2E),
+      : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 0.8),
 );
 
 /// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS

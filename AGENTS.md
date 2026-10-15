@@ -480,6 +480,9 @@ Android must not change: every glass code path is behind a
   A control in an app bar `bottom` (segmented control, study chips) uses
   `kGlassAppBarBottomPadding` and `kGlassAppBarBottomControlHeight` (`platform.dart`) on
   iOS, so every bar has the same spacing and height.
+  A segmented control in the content (e.g. a header not pinned yet) is flat, not glass:
+  `PlatformTabBar(glass: false)`, the same control with its glass faded out (settings
+  `visibility`) on the text field fill; glass is for bars only.
 - **Bottom bars over scrolling content** (not board toolbars): `BottomBar(cupertinoGlass: true)`
   has no background on iOS and its `BottomBarButton`s / `BottomBarTextButton`s are glass capsules,
   as wide as their content and evenly spaced.
