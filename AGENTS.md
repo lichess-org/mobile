@@ -509,9 +509,13 @@ Android must not change: every glass code path is behind a
   theme.
 - **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands uses
   `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`, always with a drag handle; on
-  iOS the same inset card, opaque); every other sheet uses `showAdaptiveBottomSheet`
-  (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose content sits in a glass card
-  (`GlassBottomSheetFrame`). Inside it (`GlassSheetScope`), cards turn translucent, `PlatformSwitch`
+  iOS the same inset card, but opaque and flat: `OpaqueBottomSheetFrame`); an information sheet
+  whose content may be long uses `showAdaptiveFullHeightBottomSheet` (always at full height, a
+  close button and a title in its header, scrollable content; on iOS an opaque, flat edge to edge
+  card, like an iOS 26 sheet at its large detent, e.g. the broadcast overview). The content of
+  these two opaque sheets is opaque too (no glass controls). Every other sheet uses
+  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose
+  content sits in a glass card (`GlassBottomSheetFrame`). Inside it (`GlassSheetScope`), cards turn translucent, `PlatformSwitch`
   / `SwitchSettingTile` and `NonLinearSlider` become glass controls. Filled and outlined buttons are
   capsules on iOS (app theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass
   capsule on a glass sheet). Selectable chips use `PlatformChoiceChip` (a glass pill on iOS); give

@@ -1,4 +1,4 @@
-import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
 import 'package:material_ui/material_ui.dart';
@@ -53,8 +53,9 @@ Future<T?> showAdaptiveBottomSheet<T>({
 ///
 /// [builder] gets the sheet's scroll controller, to give to the scroll view of the content.
 ///
-/// It always has a drag handle. On iOS the sheet has the frame of the glass sheets
-/// ([showAdaptiveBottomSheet]), but is opaque: a long list that fills the screen stays readable.
+/// It always has a drag handle. On iOS the sheet is inset like the glass sheets
+/// ([showAdaptiveBottomSheet]), but is an opaque, flat card ([OpaqueBottomSheetFrame]): a long list
+/// that fills the screen stays readable.
 Future<T?> showAdaptiveDraggableBottomSheet<T>({
   required BuildContext context,
   required ScrollableWidgetBuilder builder,
@@ -85,10 +86,159 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
       expand: false,
       builder: isIOS
           ? (context, scrollController) =>
-                GlassBottomSheetFrame(expandable: true, child: builder(context, scrollController))
+                OpaqueBottomSheetFrame(child: builder(context, scrollController))
           : builder,
     ),
   );
+}
+
+/// Shows a modal bottom sheet that always opens at the full height of the screen, with a header
+/// made of a close button and a [title], above the content: for information that may be long.
+///
+/// [builder] builds the content below the header, which fills the rest of the sheet: a scroll view
+/// using the scroll controller it gets, which needs no bottom padding of its own (the sheet goes
+/// down to the bottom of the screen, its media query padding is applied). The content scrolls while
+/// it can; dragged down from its top, or when it has nothing to scroll, it drags the sheet, which
+/// is dismissed past half of its height, like an iOS sheet.
+///
+/// Content that loads should switch from its loading state with [WhenRouteSettled], so that it does
+/// not change while the sheet is opening.
+///
+/// On iOS the sheet is like an iOS 26 sheet at its large detent: an opaque, flat card, edge to edge
+/// ([OpaqueBottomSheetFrame]), with a glass close button and a centered title. On Android
+/// it is a Material sheet with a close button and a title, like a full screen dialog.
+Future<T?> showAdaptiveFullHeightBottomSheet<T>({
+  required BuildContext context,
+  required Widget title,
+  required ScrollableWidgetBuilder builder,
+  bool useRootNavigator = false,
+}) {
+  final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+  return showModalBottomSheet<T>(
+    context: context,
+    isScrollControlled: true,
+    useRootNavigator: useRootNavigator,
+    // The sheet stops below the status bar.
+    useSafeArea: true,
+    backgroundColor: isIOS ? Colors.transparent : null,
+    elevation: isIOS ? 0 : null,
+    // Snaps back to the full height, or down to nothing: the modal sheet is dismissed once the
+    // sheet reaches its minimum size.
+    builder: (context) => LayoutBuilder(
+      builder: (context, constraints) => DraggableScrollableSheet(
+        initialChildSize: 1.0,
+        minChildSize: 0.0,
+        snap: true,
+        expand: false,
+        builder: (context, scrollController) {
+          // Dragged down, the sheet gets shorter: its content keeps the full height and is cut at
+          // the bottom of the screen, so that the sheet looks moved down, not squeezed.
+          final content = ClipRect(
+            child: OverflowBox(
+              alignment: Alignment.topCenter,
+              minHeight: constraints.maxHeight,
+              maxHeight: constraints.maxHeight,
+              child: Column(
+                children: [
+                  _FullHeightSheetHeader(title: title),
+                  Expanded(child: builder(context, scrollController)),
+                ],
+              ),
+            ),
+          );
+          return isIOS ? OpaqueBottomSheetFrame(fullHeight: true, child: content) : content;
+        },
+      ),
+    ),
+  );
+}
+
+/// Shows [placeholder] until [ready], and never switches to the content while the enclosing route
+/// (e.g. a bottom sheet) is animating in: building new content during the transition makes it
+/// stutter.
+///
+/// Content that is [ready] when this widget is first built is shown at once, during the transition.
+/// Content that becomes ready during the transition is shown once it is over.
+class const WhenRouteSettled({
+  required final bool ready,
+  required final WidgetBuilder builder,
+  required final Widget placeholder,
+  super.key,
+}) extends StatefulWidget {
+  @override
+  State<WhenRouteSettled> createState() => _WhenRouteSettledState();
+}
+
+class _WhenRouteSettledState() extends State<WhenRouteSettled> {
+  late final bool _readyAtStart;
+  Animation<double>? _routeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _readyAtStart = widget.ready;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final animation = ModalRoute.of(context)?.animation;
+    if (animation != _routeAnimation) {
+      _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
+      _routeAnimation = animation?..addStatusListener(_onRouteAnimationStatus);
+    }
+  }
+
+  @override
+  void dispose() {
+    _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
+    super.dispose();
+  }
+
+  void _onRouteAnimationStatus(AnimationStatus status) {
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isOpening = _routeAnimation?.status == AnimationStatus.forward;
+    return widget.ready && (_readyAtStart || !isOpening)
+        ? widget.builder(context)
+        : widget.placeholder;
+  }
+}
+
+/// The header of a [showAdaptiveFullHeightBottomSheet] sheet: a close button and a title, centered
+/// on iOS.
+class const _FullHeightSheetHeader({required final Widget title}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    return Padding(
+      padding: isIOS
+          ? const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0)
+          : const EdgeInsets.fromLTRB(4.0, 4.0, 16.0, 0.0),
+      child: SizedBox(
+        height: isIOS ? 44.0 : kToolbarHeight,
+        child: NavigationToolbar(
+          leading: SheetHeaderButton(action: .close, onPressed: () => Navigator.of(context).pop()),
+          middle: Semantics(
+            header: true,
+            child: DefaultTextStyle.merge(
+              style: isIOS
+                  ? CupertinoTheme.of(context).textTheme.navTitleTextStyle
+                        .copyWith(color: ColorScheme.of(context).onSurface)
+                  : TextTheme.of(context).titleLarge,
+              maxLines: 1,
+              overflow: .ellipsis,
+              child: title,
+            ),
+          ),
+          centerMiddle: isIOS,
+        ),
+      ),
+    );
+  }
 }
 
 BoxConstraints _glassSheetConstraints(BuildContext context, BoxConstraints? constraints) {
@@ -104,29 +254,23 @@ BoxConstraints _glassSheetConstraints(BuildContext context, BoxConstraints? cons
   );
 }
 
-/// The iOS frame of a bottom sheet: a glass card inset from the screen edges.
-class const GlassBottomSheetFrame({
-  required final Widget child,
+/// Corner radius of the iOS sheets: concentric with the screen corners, at the inset of the cards
+/// from them.
+const _kSheetBorderRadius = 38.0;
 
-  /// Whether the sheet expands ([showAdaptiveDraggableBottomSheet]): the card is then opaque, has a
-  /// drag handle, and [child] fills it.
-  final bool expandable = false,
-  super.key,
-}) extends StatelessWidget {
-  static const _margin = 8.0;
+/// Inset of the iOS sheet cards from the screen edges.
+const _kSheetMargin = 8.0;
 
+/// The iOS frame of a bottom sheet ([showAdaptiveBottomSheet]): a glass card inset from the screen
+/// edges.
+class const GlassBottomSheetFrame({required final Widget child, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(_margin),
+      padding: const EdgeInsets.all(_kSheetMargin),
       child: GlassModalCard(
-        // Opaque, in the color of the Material sheets.
-        color: expandable
-            ? Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
-                  ColorScheme.of(context).surfaceContainerLow
-            : null,
-        // Concentric with the screen corners, at [_margin] from them.
-        borderRadius: 38.0,
+        borderRadius: _kSheetBorderRadius,
         // The card ends just above the home indicator: the content needs no bottom safe area.
         child: MediaQuery.removePadding(
           context: context,
@@ -140,28 +284,66 @@ class const GlassBottomSheetFrame({
               ),
               child: Material(
                 type: MaterialType.transparency,
-                child: expandable
-                    ? Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Container(
-                              width: 36,
-                              height: 5,
-                              decoration: BoxDecoration(
-                                color: CupertinoColors.tertiaryLabel.resolveFrom(context),
-                                borderRadius: const BorderRadius.all(Radius.circular(2.5)),
-                              ),
-                            ),
-                          ),
-                          Expanded(child: child),
-                        ],
-                      )
-                    // At the sheet's minimum height, short content stays at the top.
-                    : Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
+                // At the sheet's minimum height, short content stays at the top.
+                child: Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The iOS frame of a sheet that expands ([showAdaptiveDraggableBottomSheet]) or fills the screen
+/// ([showAdaptiveFullHeightBottomSheet]): an opaque, flat card, like the iOS sheets at their large
+/// detent, with the corners of the glass sheets. Its content is opaque too: it is not in a
+/// [GlassSheetScope].
+class const OpaqueBottomSheetFrame({
+  required final Widget child,
+
+  /// Whether the sheet is at the full height of the screen: the card is then edge to edge, down to
+  /// the bottom of the screen, without a drag handle. Otherwise it is inset from the screen edges,
+  /// like the glass sheets, with a drag handle. [child] fills the card.
+  final bool fullHeight = false,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: fullHeight ? EdgeInsets.zero : const EdgeInsets.all(_kSheetMargin),
+      child: Material(
+        // The color of the Material sheets.
+        color:
+            Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
+            ColorScheme.of(context).surfaceContainerLow,
+        shape: const RoundedSuperellipseBorder(
+          borderRadius: BorderRadius.all(Radius.circular(_kSheetBorderRadius)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        // An inset card ends just above the home indicator: the content needs no bottom safe area.
+        // A full height card goes down to the bottom of the screen.
+        child: MediaQuery.removePadding(
+          context: context,
+          removeBottom: !fullHeight,
+          child: fullHeight
+              ? child
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Container(
+                        width: 36,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.tertiaryLabel.resolveFrom(context),
+                          borderRadius: const BorderRadius.all(Radius.circular(2.5)),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: child),
+                  ],
+                ),
         ),
       ),
     );

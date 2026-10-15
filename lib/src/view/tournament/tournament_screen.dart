@@ -1345,29 +1345,66 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
 }
 
 void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
-  showAdaptiveDraggableBottomSheet<void>(
+  showAdaptiveFullHeightBottomSheet<void>(
     context: context,
-    initialChildSize: 0.6,
-    minChildSize: 0.3,
-    maxChildSize: 0.9,
+    title: _TournamentPlayerDetailsTitle(tournamentId: tournamentId, userId: userId),
     builder: (context, scrollController) {
       return Consumer(
         builder: (context, ref, child) {
           final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
 
-          return switch (playerAsync) {
-            AsyncData(value: final player) => _TournamentPlayerDetails(
-              player: player,
-              tournamentId: tournamentId,
-              scrollController: scrollController,
-            ),
-            AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
-            _ => const Center(child: CircularProgressIndicator.adaptive()),
-          };
+          return WhenRouteSettled(
+            ready: playerAsync.hasValue || playerAsync.hasError,
+            placeholder: const Center(child: CircularProgressIndicator.adaptive()),
+            builder: (context) => switch (playerAsync) {
+              AsyncData(value: final player) => _TournamentPlayerDetails(
+                player: player,
+                tournamentId: tournamentId,
+                scrollController: scrollController,
+              ),
+              AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
+              _ => const Center(child: CircularProgressIndicator.adaptive()),
+            },
+          );
         },
       );
     },
   );
+}
+
+/// The title of the player details sheet: the rank and name of the player, once loaded and the
+/// sheet open.
+class const _TournamentPlayerDetailsTitle({
+  required final TournamentId tournamentId,
+  required final UserId userId,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(tournamentPlayerProvider((tournamentId, userId))).value;
+    final isSpectator = ref.watch(
+      tournamentControllerProvider(tournamentId).select((s) => s.value?.isSpectator == true),
+    );
+    return WhenRouteSettled(
+      ready: player != null,
+      placeholder: const SizedBox.shrink(),
+      builder: (context) => Row(
+        mainAxisSize: .min,
+        children: [
+          Text('#${player!.rank}'),
+          const SizedBox(width: 8),
+          Flexible(
+            child: UserFullNameWidget(
+              user: player.user,
+              rating: player.rating,
+              onTap: isSpectator
+                  ? () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(player.user))
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class const _TournamentPlayerDetails({
@@ -1383,41 +1420,6 @@ class const _TournamentPlayerDetails({
         : null;
     return Column(
       children: [
-        Padding(
-          // The Material close button has its own inset, the glass one doesn't.
-          padding: EdgeInsets.fromLTRB(
-            16,
-            8,
-            Theme.of(context).platform == TargetPlatform.iOS ? 16 : 8,
-            8,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    Text('#${player.rank}', style: const TextStyle(fontSize: 20)),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: UserFullNameWidget(
-                        user: player.user,
-                        rating: player.rating,
-                        style: Styles.title,
-                        onTap: tournamentState.value?.isSpectator == true
-                            ? () =>
-                                  Navigator.of(context)
-                                      .push(UserOrProfileScreen.buildRoute(player.user))
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SheetHeaderButton(action: .close, onPressed: () => Navigator.pop(context)),
-            ],
-          ),
-        ),
         if (teamInfo != null)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -1440,7 +1442,8 @@ class const _TournamentPlayerDetails({
         Expanded(
           child: ListView(
             controller: scrollController,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16)
+                .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
             children: [
               Card(
                 child: Padding(
@@ -1623,29 +1626,60 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
 }
 
 void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
-  showAdaptiveDraggableBottomSheet<void>(
+  showAdaptiveFullHeightBottomSheet<void>(
     context: context,
-    initialChildSize: 0.6,
-    minChildSize: 0.3,
-    maxChildSize: 0.9,
+    title: _TournamentTeamDetailsTitle(tournamentId: tournamentId, teamId: teamId),
     builder: (context, scrollController) {
       return Consumer(
         builder: (context, ref, child) {
           final teamAsync = ref.watch(tournamentTeamProvider((tournamentId, teamId)));
 
-          return switch (teamAsync) {
-            AsyncData(value: final team) => _TournamentTeamDetails(
-              team: team,
-              tournamentId: tournamentId,
-              scrollController: scrollController,
-            ),
-            AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
-            _ => const Center(child: CircularProgressIndicator.adaptive()),
-          };
+          return WhenRouteSettled(
+            ready: teamAsync.hasValue || teamAsync.hasError,
+            placeholder: const Center(child: CircularProgressIndicator.adaptive()),
+            builder: (context) => switch (teamAsync) {
+              AsyncData(value: final team) => _TournamentTeamDetails(
+                team: team,
+                tournamentId: tournamentId,
+                scrollController: scrollController,
+              ),
+              AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
+              _ => const Center(child: CircularProgressIndicator.adaptive()),
+            },
+          );
         },
       );
     },
   );
+}
+
+/// The title of the team details sheet: the name and flair of the team.
+class const _TournamentTeamDetailsTitle({
+  required final TournamentId tournamentId,
+  required final TeamId teamId,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final teamInfo = ref.watch(
+      tournamentControllerProvider(tournamentId)
+          .select((s) => s.value?.tournament.meta.teamBattle?.teams[teamId]),
+    );
+    return Row(
+      mainAxisSize: .min,
+      children: [
+        Flexible(child: Text(teamInfo?.name ?? teamId.value, overflow: .ellipsis)),
+        if (teamInfo?.flair != null) ...[
+          const SizedBox(width: 8),
+          HttpNetworkImageWidget(
+            lichessFlairSrc(teamInfo!.flair!),
+            errorBuilder: (_, _, _) => kEmptyWidget,
+            width: 24.0,
+            height: 24.0,
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 class const _TournamentTeamDetails({
@@ -1656,96 +1690,51 @@ class const _TournamentTeamDetails({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournamentState = ref.watch(tournamentControllerProvider(tournamentId));
-    final teamInfo = tournamentState.value?.tournament.meta.teamBattle?.teams[team.id];
     final nbLeaders = tournamentState.value?.tournament.meta.teamBattle?.nbLeaders;
 
-    return Column(
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.all(16)
+          .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
       children: [
-        Padding(
-          // The Material close button has its own inset, the glass one doesn't.
-          padding: EdgeInsets.fromLTRB(
-            16,
-            8,
-            Theme.of(context).platform == TargetPlatform.iOS ? 16 : 8,
-            8,
-          ),
-          child: Row(
-            mainAxisAlignment: .spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  children: [
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        teamInfo?.name ?? team.id.value,
-                        style: Styles.title,
-                        overflow: .ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    if (teamInfo?.flair != null) ...[
-                      HttpNetworkImageWidget(
-                        lichessFlairSrc(teamInfo!.flair!),
-                        errorBuilder: (_, _, _) => kEmptyWidget,
-                        width: 24.0,
-                        height: 24.0,
-                      ),
-                      const SizedBox(width: 8.0),
-                    ],
-                  ],
-                ),
-              ),
-              SheetHeaderButton(action: .close, onPressed: () => Navigator.pop(context)),
-            ],
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            child: Column(
+              children: [
+                _StatRow(label: context.l10n.players, value: '${team.nbPlayers}'),
+
+                _StatRow(label: context.l10n.averageElo, value: '${team.rating}'),
+                if (team.performance != null)
+                  _StatRow(
+                    label: context.l10n.arenaAveragePerformance,
+                    value: '${team.performance}',
+                  ),
+                _StatRow(label: context.l10n.arenaAverageScore, value: '${team.score}'),
+              ],
+            ),
           ),
         ),
-        Expanded(
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.all(16),
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _StatRow(label: context.l10n.players, value: '${team.nbPlayers}'),
-
-                      _StatRow(label: context.l10n.averageElo, value: '${team.rating}'),
-                      if (team.performance != null)
-                        _StatRow(
-                          label: context.l10n.arenaAveragePerformance,
-                          value: '${team.performance}',
-                        ),
-                      _StatRow(label: context.l10n.arenaAverageScore, value: '${team.score}'),
-                    ],
-                  ),
-                ),
-              ),
-              if (team.topPlayers.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                Text(context.l10n.players, style: Styles.sectionTitle),
-                const SizedBox(height: 8),
-                Card(
-                  clipBehavior: .hardEdge,
-                  child: Column(
-                    children: [
-                      ...team.topPlayers.asMap().entries.map(
-                        (entry) => _TeamPlayerTile(
-                          player: entry.value,
-                          index: entry.key,
-                          tournamentId: tournamentId,
-                          nbLeaders: nbLeaders,
-                        ),
-                      ),
-                    ],
+        if (team.topPlayers.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text(context.l10n.players, style: Styles.sectionTitle),
+          const SizedBox(height: 8),
+          Card(
+            clipBehavior: .hardEdge,
+            child: Column(
+              children: [
+                ...team.topPlayers.asMap().entries.map(
+                  (entry) => _TeamPlayerTile(
+                    player: entry.value,
+                    index: entry.key,
+                    tournamentId: tournamentId,
+                    nbLeaders: nbLeaders,
                   ),
                 ),
               ],
-            ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

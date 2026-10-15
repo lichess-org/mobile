@@ -27,16 +27,29 @@ Iterable<String> broadcastInformationTexts(BroadcastTournamentInformation inform
   ?information.players,
 ];
 
-/// Shows the overview of a broadcast tournament in an expandable bottom sheet.
+/// Shows the overview of a broadcast tournament in a full height bottom sheet.
 Future<void> showBroadcastOverviewSheet(BuildContext context, BroadcastTournamentId tournamentId) {
-  return showAdaptiveDraggableBottomSheet<void>(
+  return showAdaptiveFullHeightBottomSheet<void>(
     context: context,
-    constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-    initialChildSize: 0.6,
-    snap: true,
+    title: _BroadcastOverviewTitle(tournamentId: tournamentId),
     builder: (context, scrollController) =>
         _BroadcastOverview(tournamentId: tournamentId, scrollController: scrollController),
   );
+}
+
+class const _BroadcastOverviewTitle({required final BroadcastTournamentId tournamentId})
+    extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final name = ref.watch(
+      broadcastTournamentProvider(tournamentId).select((t) => t.value?.data.name),
+    );
+    return WhenRouteSettled(
+      ready: name != null,
+      placeholder: const SizedBox.shrink(),
+      builder: (context) => Text(name!),
+    );
+  }
 }
 
 class const _BroadcastOverview({
@@ -47,70 +60,73 @@ class const _BroadcastOverview({
   Widget build(BuildContext context, WidgetRef ref) {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
 
-    switch (tournament) {
-      case AsyncData(value: final tournament):
-        final information = tournament.data.information;
-        final description = tournament.data.description;
-        return ListView(
-          controller: scrollController,
-          padding: Styles.bodyPadding.add(
-            EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-          ),
-          children: [
-            Text(
-              tournament.data.name,
-              style: TextTheme.of(context).titleLarge,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16.0),
-            Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                if (information.dates != null)
-                  _BroadcastOverviewCard(CupertinoIcons.calendar, _formatDates(information.dates!)),
-                if (information.format != null)
-                  _BroadcastOverviewCard(Icons.emoji_events, '${information.format}'),
-                if (information.timeControl != null)
-                  _BroadcastOverviewCard(
-                    CupertinoIcons.stopwatch_fill,
-                    '${information.timeControl}',
-                  ),
-                if (information.location != null)
-                  _BroadcastOverviewCard(Icons.public, '${information.location}'),
-                if (information.players != null)
-                  _BroadcastOverviewCard(Icons.person, '${information.players}'),
-                if (information.website != null)
-                  _BroadcastOverviewCard(
-                    Icons.link,
-                    context.l10n.broadcastOfficialWebsite,
-                    information.website,
-                  ),
-                if (information.standings != null)
-                  _BroadcastOverviewCard(
-                    Icons.link,
-                    context.l10n.broadcastOfficialStandings,
-                    information.standings,
-                  ),
-              ],
-            ),
-            if (description != null) ...[
-              const SizedBox(height: 16),
-              MarkdownBody(
-                data: description,
-                onTapLink: (text, url, title) {
-                  if (url == null) return;
-                  launchUrl(Uri.https('lichess.org').resolve(url));
-                },
-                softLineBreak: true,
+    return WhenRouteSettled(
+      ready: tournament.hasValue || tournament.hasError,
+      placeholder: const Center(child: CircularProgressIndicator.adaptive()),
+      builder: (context) {
+        switch (tournament) {
+          case AsyncData(value: final tournament):
+            final information = tournament.data.information;
+            final description = tournament.data.description;
+            return ListView(
+              controller: scrollController,
+              padding: Styles.bodyPadding.add(
+                EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
               ),
-            ],
-          ],
-        );
-      case AsyncError(:final error):
-        return Center(child: Text('Cannot load broadcast data: $error'));
-      case _:
-        return const Center(child: CircularProgressIndicator.adaptive());
-    }
+              children: [
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    if (information.dates != null)
+                      _BroadcastOverviewCard(
+                        CupertinoIcons.calendar,
+                        _formatDates(information.dates!),
+                      ),
+                    if (information.format != null)
+                      _BroadcastOverviewCard(Icons.emoji_events, '${information.format}'),
+                    if (information.timeControl != null)
+                      _BroadcastOverviewCard(
+                        CupertinoIcons.stopwatch_fill,
+                        '${information.timeControl}',
+                      ),
+                    if (information.location != null)
+                      _BroadcastOverviewCard(Icons.public, '${information.location}'),
+                    if (information.players != null)
+                      _BroadcastOverviewCard(Icons.person, '${information.players}'),
+                    if (information.website != null)
+                      _BroadcastOverviewCard(
+                        Icons.link,
+                        context.l10n.broadcastOfficialWebsite,
+                        information.website,
+                      ),
+                    if (information.standings != null)
+                      _BroadcastOverviewCard(
+                        Icons.link,
+                        context.l10n.broadcastOfficialStandings,
+                        information.standings,
+                      ),
+                  ],
+                ),
+                if (description != null) ...[
+                  const SizedBox(height: 16),
+                  MarkdownBody(
+                    data: description,
+                    onTapLink: (text, url, title) {
+                      if (url == null) return;
+                      launchUrl(Uri.https('lichess.org').resolve(url));
+                    },
+                    softLineBreak: true,
+                  ),
+                ],
+              ],
+            );
+          case AsyncError(:final error):
+            return Center(child: Text('Cannot load broadcast data: $error'));
+          case _:
+            return const Center(child: CircularProgressIndicator.adaptive());
+        }
+      },
+    );
   }
 }
 
