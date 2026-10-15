@@ -115,15 +115,9 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             )
-          : Builder(
-              // The context of the body, whose top padding includes the app bar height on iOS.
-              builder: (context) => HapticRefreshIndicator(
-                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top
-                    : 0.0,
-                onRefresh: () => ref.refresh(contactsProvider.future),
-                child: ContactsListView(openConvo: pushConversationScreen),
-              ),
+          : HapticRefreshIndicator(
+              onRefresh: () => ref.refresh(contactsProvider.future),
+              child: ContactsListView(openConvo: pushConversationScreen),
             ),
     );
   }

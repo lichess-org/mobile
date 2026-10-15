@@ -534,9 +534,8 @@ Android must not change: every glass code path is behind a
   outside it, `MediaQuery.removePadding(removeTop: true)` inside), and give the headers the
   background behind the bar: a pinned header always covers that edge, so nothing is lost
   (`broadcast_list_screen.dart`).
-- A pull-to-refresh indicator needs an `edgeOffset` on iOS, or its spinner appears behind the bar:
-  `MediaQuery.paddingOf(context).top`, read from a context inside the body (the screen's own
-  `build` context is outside the `PlatformScaffold`, so its top padding lacks the bar height).
+- A pull-to-refresh indicator is a `HapticRefreshIndicator`: on iOS it sets its own `edgeOffset`
+  from its top padding, so that its spinner appears below the bar, not behind it.
 
 ### Package caveats
 

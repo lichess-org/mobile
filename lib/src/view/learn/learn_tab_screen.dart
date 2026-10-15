@@ -105,9 +105,6 @@ class const _Body() extends ConsumerWidget {
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
       child: HapticRefreshIndicator(
-        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-            ? MediaQuery.paddingOf(context).top + kToolbarHeight
-            : 0.0,
         onRefresh: () => _refreshData(ref),
         child: ListView(
           controller: learnScrollController,

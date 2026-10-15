@@ -444,9 +444,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   body: widget.editModeEnabled
                       ? content
                       : HapticRefreshIndicator(
-                          edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
                           key: _refreshKey,
                           onRefresh: () => _refreshData(isOnline: isOnline),
                           child: content,

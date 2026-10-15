@@ -131,10 +131,6 @@ class _HttpLogListState() extends ConsumerState<_HttpLogList> {
       );
     }
     return HapticRefreshIndicator(
-      // On iOS the list extends behind the glass app bar, whose height is in the top padding.
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top
-          : 0.0,
       key: widget.refreshIndicatorKey,
       onRefresh: widget.onRefresh,
       child: ListView.separated(

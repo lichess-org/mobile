@@ -217,9 +217,6 @@ class _TournamentListBodyState() extends ConsumerState<_TournamentListBody> {
     ];
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => await ref.refresh(tournamentsProvider),
       child: ListView.separated(

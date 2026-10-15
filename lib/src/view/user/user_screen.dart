@@ -182,9 +182,6 @@ class const _UserProfileListView(
     }
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       onRefresh: onRefresh,
       child: ListView(
         children: [

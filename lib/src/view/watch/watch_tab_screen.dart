@@ -93,9 +93,6 @@ class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
           LichessConnectionStatus.online => OrientationBuilder(
             builder: (context, orientation) {
               return HapticRefreshIndicator(
-                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                    : 0.0,
                 key: _androidRefreshKey,
                 onRefresh: _refreshData,
                 child: _Body(orientation),
@@ -110,9 +107,6 @@ class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
           // the requests it makes update the server status on their own.
           LichessConnectionStatus.serverMaintenance ||
           LichessConnectionStatus.serverDown => HapticRefreshIndicator(
-            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                : 0.0,
             onRefresh: _refreshData,
             child: const CustomScrollView(
               physics: AlwaysScrollableScrollPhysics(),
