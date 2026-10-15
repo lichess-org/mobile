@@ -528,12 +528,12 @@ Android must not change: every glass code path is behind a
   `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
 - **Screens that don't scroll** (board screens) pass `extendBodyBehindAppBar: false` to
   `PlatformScaffold`: the body is laid out below the glass bar, like in a Material `Scaffold`,
-  and the top edge fade is off. Their bottom toolbar (`BottomBar`) stays a regular bar.
+  and the status bar blur is off. Their bottom toolbar (`BottomBar`) stays a regular bar.
 - **Pinned slivers** (sticky section headers) always stick to the top of their scroll view, which
-  is behind the bar. For such a list, start the scroll view below the bar instead (top padding
-  outside it, `MediaQuery.removePadding(removeTop: true)` inside), and give the headers the
-  background behind the bar: a pinned header always covers that edge, so nothing is lost
-  (`broadcast_list_screen.dart`).
+  is behind the bar. For such a list, lay the body out below the bar instead
+  (`PlatformScaffold(extendBodyBehindAppBar: false)`, which also keeps the bar untinted), and give
+  the headers the background behind the bar: a pinned header always covers that edge, so nothing
+  is lost (`broadcast_list_screen.dart`).
 - A pull-to-refresh indicator is a `HapticRefreshIndicator`: on iOS it sets its own `edgeOffset`
   from its top padding, so that its spinner appears below the bar, not behind it.
 

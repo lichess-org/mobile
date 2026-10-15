@@ -83,6 +83,11 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
 
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return PlatformScaffold(
+        // The pinned section headers stick right below the glass app bar, so the list starts below
+        // it: a pinned sliver always sticks to the top of its scroll view. No content would scroll
+        // under the bar anyway, since a pinned header always covers that edge, so the bar is never
+        // tinted.
+        extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(title: title, actions: [searchButton, filterButton]),
         body: _Body(filter),
       );
@@ -109,16 +114,13 @@ class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     final padding = MediaQuery.paddingOf(context);
-    // On iOS the pinned section headers stick right below the glass app bar, so the list starts
-    // below it: a pinned sliver always sticks to the top of its scroll view. No content would
-    // scroll under the bar anyway, since a pinned header always covers that edge. The headers
-    // have the color of the background behind the bar.
+    // On iOS the headers have the color of the background behind the glass app bar.
     final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
     final sectionHeaderBackground = isIOS
         ? (scaffoldBackground.a == 0 ? cupertinoBarTint(context) : scaffoldBackground)
         : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
 
-    final refreshableList = HapticRefreshIndicator(
+    return HapticRefreshIndicator(
       onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
       child: broadcastList.when(
         data: (value) {
@@ -176,13 +178,6 @@ class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
         error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
         loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       ),
-    );
-
-    if (!isIOS) return refreshableList;
-
-    return Padding(
-      padding: EdgeInsets.only(top: padding.top),
-      child: MediaQuery.removePadding(context: context, removeTop: true, child: refreshableList),
     );
   }
 }
