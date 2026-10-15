@@ -113,10 +113,10 @@ LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSett
 /// The capsule background of an iOS control (segmented control, search field) that is liquid glass
 /// in a bar floating over the content, and flat in the content, like the iOS controls there.
 ///
-/// It is the same [child], glass or flat: the glass capsule behind it fades out (its visibility
-/// scales every glass effect) as the flat text field fill fades in. The capsule is a background,
-/// not the control's parent: a glass container hides its child along with its glass. Changes of
-/// [glass] are animated.
+/// It is the same [child], glass or flat: the glass capsule behind it is hidden (its visibility
+/// scales every glass effect) and the flat text field fill is shown instead. The capsule is a
+/// background, not the control's parent: a glass container hides its child along with its glass.
+/// Changes of [glass] are instant, like the iOS controls.
 class const GlassControlBackground({
   super.key,
 
@@ -132,40 +132,36 @@ class const GlassControlBackground({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final flatFill = Theme.of(context).inputDecorationTheme.fillColor ?? Colors.transparent;
     final borderRadius = height / 2;
     return SizedBox(
       height: height,
-      child: TweenAnimationBuilder<double>(
-        tween: Tween(end: glass ? 1.0 : 0.0),
-        duration: const Duration(milliseconds: 200),
-        builder: (context, visibility, child) => Stack(
-          children: [
-            Positioned.fill(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: flatFill.withValues(alpha: flatFill.a * (1.0 - visibility)),
-                  borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
-                ),
+      // The capsule stays in the tree while flat, so that the child is never rebuilt (e.g. a
+      // focused search field).
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: glass ? null : Theme.of(context).inputDecorationTheme.fillColor,
+                borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
               ),
             ),
-            // A glass capsule like the app bar buttons, instead of the control's own background.
-            Positioned.fill(
-              child: GlassContainer(
-                shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
-                settings: visibility == 1.0
-                    ? settings
-                    : (settings ?? const LiquidGlassSettings()).copyWith(visibility: visibility),
-                // Outside of an app bar, there is no parent glass layer to share. In an app bar,
-                // which is isolated, its glass gets its own layer anyway.
-                useOwnLayer: true,
-                child: const SizedBox.expand(),
-              ),
+          ),
+          // A glass capsule like the app bar buttons, instead of the control's own background.
+          Positioned.fill(
+            child: GlassContainer(
+              shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
+              settings: glass
+                  ? settings
+                  : (settings ?? const LiquidGlassSettings()).copyWith(visibility: 0.0),
+              // Outside of an app bar, there is no parent glass layer to share. In an app bar,
+              // which is isolated, its glass gets its own layer anyway.
+              useOwnLayer: true,
+              child: const SizedBox.expand(),
             ),
-            child!,
-          ],
-        ),
-        child: child,
+          ),
+          child,
+        ],
       ),
     );
   }
