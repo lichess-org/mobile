@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -95,7 +96,13 @@ void main() {
       }
       await tester.pumpAndSettle();
 
+      expect(find.byType(AcplChart), findsOneWidget);
       expect(find.text('1. e4'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('1... e5'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
       expect(find.text('1... e5'), findsOneWidget);
       expect(find.textContaining('good moves'), findsOneWidget);
     });

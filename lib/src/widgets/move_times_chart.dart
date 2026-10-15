@@ -303,7 +303,7 @@ class _MoveTimesPainter({
     if (division.middlegame != null) {
       if (division.middlegame! > 0) {
         phaseLine(0, divisionLabels.opening);
-        phaseLine(division.middlegame! - 1, divisionLabels.middlegame);
+        phaseLine(division.middlegame! - 1 - params.rootPly, divisionLabels.middlegame);
       } else {
         phaseLine(0, divisionLabels.middlegame);
       }
@@ -311,7 +311,7 @@ class _MoveTimesPainter({
 
     if (division.endgame != null) {
       if (division.endgame! > 0) {
-        phaseLine(division.endgame! - 1, divisionLabels.endgame);
+        phaseLine(division.endgame! - 1 - params.rootPly, divisionLabels.endgame);
       } else {
         phaseLine(0, divisionLabels.endgame);
       }

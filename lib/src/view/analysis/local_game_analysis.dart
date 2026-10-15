@@ -5,19 +5,28 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
+import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart' hide Step;
 
 const _localReviewSearchTime = Duration(seconds: 1);
+
+final _localGameAnalysisSessionProvider =
+    NotifierProvider.family<_LocalGameAnalysisSession, IList<LocalEval>?, String>(
+      _LocalGameAnalysisSession.new,
+    );
 
 enum _LocalReviewStatus { ready, running, complete, error }
 
@@ -41,6 +50,22 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
   PositionEvaluator? _evaluator;
   EvalWork? _activeWork;
   bool _isReviewing = false;
+  IList<LocalEval> _evaluations = const IListConst([]);
+
+  String get _sessionKey =>
+      '${widget.options.contextId.value}:${widget.root.position.fen}:'
+      '${widget.root.mainline.map((branch) => branch.id).join()}';
+
+  @override
+  void initState() {
+    super.initState();
+    final cached = ref.read(_localGameAnalysisSessionProvider(_sessionKey));
+    if (cached != null && cached.length == widget.root.mainline.length + 1) {
+      _evaluations = cached;
+      _reviews = _makeReviews(cached);
+      _status = .complete;
+    }
+  }
 
   @override
   void dispose() {
@@ -92,9 +117,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: FilledButton.icon(
-            onPressed: engineEnabled && moves > 0 && !_isReviewing
-                ? _startReview
-                : null,
+            onPressed: engineEnabled && moves > 0 && !_isReviewing ? _startReview : null,
             icon: const Icon(Icons.play_arrow),
             label: const Text('Analyze game'),
           ),
@@ -128,6 +151,25 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       children: [
+        if (_evaluations.length > 1)
+          AcplChart(
+            params: (
+              acplChartData: IList(
+                _evaluations.skip(1).map((eval) => ExternalEval(cp: eval.cp, mate: eval.mate)),
+              ),
+              division: inferLocalGameDivision(widget.root),
+              rootPly: widget.root.position.ply,
+              currentNodePly: ref
+                  .watch(analysisControllerProvider(widget.options))
+                  .requireValue
+                  .currentPosition
+                  .ply,
+              isOnMainline: true,
+              onJumpToNode: (index) => ref
+                  .read(analysisControllerProvider(widget.options).notifier)
+                  .jumpToNthNodeOnMainline(index),
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Text(
@@ -147,8 +189,9 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
               title: Text(review.moveLabel),
               subtitle: Text(review.evalLabel),
               trailing: review.verdict != null ? Text(review.verdict!.label(context)) : null,
-              onTap: () =>
-                  ref.read(analysisControllerProvider(widget.options).notifier).userJump(review.path),
+              onTap: () => ref
+                  .read(analysisControllerProvider(widget.options).notifier)
+                  .userJump(review.path),
             ),
           ),
         Padding(
@@ -185,7 +228,12 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     _cancelSignal = signal;
     final ctrl = ref.read(analysisControllerProvider(widget.options).notifier);
     final analysis = ref.read(analysisControllerProvider(widget.options)).requireValue;
-    final evaluator = ref.read(positionEvaluatorProvider(analysis.evaluationContext).notifier);
+    final reviewContext = EvaluationContext(
+      id: StringId('local-review-${analysis.evaluationContext.id.value}'),
+      variant: analysis.variant,
+      initialPosition: widget.root.position,
+    );
+    final evaluator = ref.read(positionEvaluatorProvider(reviewContext).notifier);
     final enginePreferences = ref.read(engineEvaluationPreferencesProvider);
     final engineBudget = ref.read(engineBudgetProvider);
     final root = widget.root;
@@ -208,7 +256,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         _ensureActive(runId);
         final path = UciPath.fromIds(branches.take(ply).map((branch) => branch.id));
         final work = EvalWork(
-          id: analysis.evaluationContext.id,
+          id: reviewContext.id,
           variant: analysis.variant,
           threads: engineBudget.analysisThreads(enginePreferences.numEngineCores),
           path: path,
@@ -229,21 +277,15 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         setState(() => _positionsAnalyzed = ply + 1);
       }
 
-      final reviews = [
-        for (final (index, branch) in branches.indexed)
-          _makeReview(
-            branch: branch,
-            before: evaluations[index],
-            after: evaluations[index + 1],
-            path: UciPath.fromIds(branches.take(index + 1).map((move) => move.id)),
-          ),
-      ];
+      final reviews = [..._makeReviews(evaluations.lock)];
 
       if (!mounted || runId != _runId) return;
       setState(() {
         _status = .complete;
+        _evaluations = evaluations.lock;
         _reviews = reviews;
       });
+      ref.read(_localGameAnalysisSessionProvider(_sessionKey).notifier).evaluations = _evaluations;
     } on _LocalReviewCancelled {
       return;
     } on Object catch (error, stackTrace) {
@@ -355,9 +397,31 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
       path: path,
     );
   }
+
+  List<_MoveReview> _makeReviews(IList<LocalEval> evaluations) {
+    final branches = widget.root.mainline;
+    return [
+      for (final (index, branch) in branches.indexed)
+        _makeReview(
+          branch: branch,
+          before: evaluations[index],
+          after: evaluations[index + 1],
+          path: UciPath.fromIds(branches.take(index + 1).map((move) => move.id)),
+        ),
+    ];
+  }
 }
 
 final _logger = Logger('LocalGameAnalysis');
+
+class _LocalGameAnalysisSession(final String sessionKey) extends Notifier<IList<LocalEval>?> {
+  @override
+  IList<LocalEval>? build() => null;
+
+  IList<LocalEval>? get evaluations => state;
+
+  set evaluations(IList<LocalEval> evaluations) => state = evaluations;
+}
 
 class const _MoveReview({
   required this.moveLabel,
