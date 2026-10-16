@@ -163,9 +163,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Codul este invalid sau a expirat.';
 
   @override
-  String get mobileLiveStreamers => 'Fluxuri live';
-
-  @override
   String get mobileLocalDatabaseSize => 'Dimensiunea bazei de date locale';
 
   @override

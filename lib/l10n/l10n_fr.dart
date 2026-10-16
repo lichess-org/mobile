@@ -163,9 +163,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Ce code est invalide ou a expiré.';
 
   @override
-  String get mobileLiveStreamers => 'Diffuseurs en direct';
-
-  @override
   String get mobileLocalDatabaseSize => 'Taille de la base de parties locale';
 
   @override

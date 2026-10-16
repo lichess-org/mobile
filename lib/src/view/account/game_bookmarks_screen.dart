@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const GameBookmarksScreen({required final int nbBookmarks, super.key})
@@ -20,8 +21,8 @@ class const GameBookmarksScreen({required final int nbBookmarks, super.key})
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
       body: const _Body(),
     );
   }

@@ -163,9 +163,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Koodi ei kelpaa tai on vanhentunut.';
 
   @override
-  String get mobileLiveStreamers => 'Live-striimaajat';
-
-  @override
   String get mobileLocalDatabaseSize => 'Paikallisen tietokannan koko';
 
   @override

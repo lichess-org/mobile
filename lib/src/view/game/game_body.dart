@@ -34,10 +34,12 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -857,9 +859,8 @@ class const _GameBottomBar({
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () => showModalBottomSheet<void>(
+          onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            isDismissible: true,
             isScrollControlled: true,
             builder: (_) => GameSettings(id: id),
           ),
@@ -963,14 +964,12 @@ class const _GameBottomBar({
             isDestructiveAction: true,
             onPressed: () async {
               // dismissOnPress unmounts this context before the request
-              // completes, so capture the messenger now.
-              final messenger = ScaffoldMessenger.of(context);
+              // completes, so capture the snackbar presenter now.
+              final snackBar = SnackBarPresenter.of(context);
               try {
                 await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
               } catch (_) {
-                messenger.showSnackBar(
-                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
-                );
+                snackBar.show('Could not cancel the rematch challenge');
               }
             },
           )
@@ -992,14 +991,12 @@ class const _GameBottomBar({
             dismissOnPress: true,
             onPressed: () async {
               // dismissOnPress unmounts this context before the request
-              // completes, so capture the messenger now.
-              final messenger = ScaffoldMessenger.of(context);
+              // completes, so capture the snackbar presenter now.
+              final snackBar = SnackBarPresenter.of(context);
               try {
                 await ref.read(gameControllerProvider(id).notifier).challengeRematch();
               } catch (_) {
-                messenger.showSnackBar(
-                  const SnackBar(content: Text('Could not send the rematch challenge')),
-                );
+                snackBar.show('Could not send the rematch challenge');
               }
             },
           ),
@@ -1125,7 +1122,7 @@ class const _GameNegotiationDialog({
       onAccept();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: title,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.accept)),
@@ -1149,7 +1146,7 @@ class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWid
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: content,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),

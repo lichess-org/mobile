@@ -163,9 +163,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Este código no es válido o ha caducado.';
 
   @override
-  String get mobileLiveStreamers => 'Presentadores en vivo';
-
-  @override
   String get mobileLocalDatabaseSize => 'Tamaño de base de datos local';
 
   @override

@@ -1,20 +1,35 @@
-import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:lichess_mobile/src/widgets/popover.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
+    show GlassDefaults, GlassMenu, GlassMenuItem, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
 
-const Color _kBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xFFA9A9AF),
-  darkColor: Color(0xFF57585A),
+/// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint.
+///
+/// The package default glass (white 12%) is too clear over light content: used by the glass menus
+/// and popovers in light mode. Dark mode keeps the default.
+const kLightMenuGlassSettings = LiquidGlassSettings(
+  blur: 10,
+  thickness: 10,
+  glassColor: Color(0x99FFFFFF),
+  lightAngle: GlassDefaults.lightAngle,
+  lightIntensity: 0.7,
+  ambientStrength: 0.4,
+  saturation: 1.2,
+  refractiveIndex: 0.7,
+  chromaticAberration: 0.0,
 );
 
 /// A platform agnostic context menu icon button.
 ///
 /// Typically used in the [AppBar] to show a context menu.
+///
+/// On iOS 26 and later, the menu is a liquid glass menu that morphs out of the button. Elsewhere it
+/// is a Material menu.
 class const ContextMenuIconButton({
   required final Widget icon,
   final Color? color,
   required final String semanticsLabel,
-  required final List<Widget> actions,
+  required final List<ContextMenuAction> actions,
 
   /// Whether to consume taps outside the menu to close it (only on Android).
   final bool consumeOutsideTap = false,
@@ -23,81 +38,36 @@ class const ContextMenuIconButton({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return IconButton(
-        icon: icon,
-        iconSize: isCompact ? 20.0 : null,
-        color: color,
-        tooltip: semanticsLabel,
-        style: isCompact
-            ? IconButton.styleFrom(
-                visualDensity: VisualDensity.compact,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              )
-            : null,
-        onPressed: () {
-          showPopover(
-            context: context,
-            barrierColor: Colors.transparent,
-            shadow: const [],
-            bodyBuilder: (context) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.heightOf(context) * 0.8,
-                    minWidth: MediaQuery.widthOf(context) * 0.4,
-                    maxWidth: MediaQuery.widthOf(context) * 0.6,
-                  ),
-                  child: IntrinsicHeight(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(13.0)),
-                      child: ColoredBox(
-                        color:
-                            MenuTheme.of(context).style?.backgroundColor
-                                ?.resolve({WidgetState.focused}) ??
-                            ColorScheme.of(context).surfaceContainer,
-                        child: ScrollConfiguration(
-                          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                          child: CupertinoScrollbar(
-                            child: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  actions.first,
-                                  for (final Widget action in actions.skip(1))
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: CupertinoDynamicColor.resolve(
-                                              _kBorderColor,
-                                              context,
-                                            ),
-                                            width: 0.4,
-                                          ),
-                                        ),
-                                      ),
-                                      position: DecorationPosition.foreground,
-                                      child: action,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-            arrowWidth: 0.0,
-            arrowHeight: 0.0,
-            direction: PopoverDirection.bottom,
-            backgroundColor: Colors.transparent,
-          );
-        },
+    Widget buildButton(VoidCallback onPressed) => IconButton(
+      onPressed: onPressed,
+      tooltip: semanticsLabel,
+      color: color,
+      icon: icon,
+      iconSize: isCompact ? 20.0 : null,
+      style: isCompact
+          ? IconButton.styleFrom(
+              visualDensity: VisualDensity.compact,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            )
+          : null,
+    );
+
+    if (useLiquidGlass(context)) {
+      return GlassMenu(
+        menuWidth: 250.0,
+        settings: Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null,
+        semanticLabel: semanticsLabel,
+        // The button is not glass itself: it sits in the glass capsule of the app bar.
+        triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
+        items: [
+          for (final action in actions)
+            GlassMenuItem(
+              title: action.label,
+              icon: action.icon != null ? Icon(action.icon) : null,
+              enabled: action.onPressed != null,
+              onTap: action.onPressed ?? () {},
+            ),
+        ],
       );
     }
 
@@ -111,187 +81,41 @@ class const ContextMenuIconButton({
       ),
       menuChildren: actions,
       builder: (BuildContext context, MenuController controller, Widget? child) {
-        return IconButton(
-          onPressed: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          tooltip: semanticsLabel,
-          color: color,
-          icon: icon,
-          iconSize: isCompact ? 20.0 : null,
-          style: isCompact
-              ? IconButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                )
-              : null,
-        );
+        return buildButton(() {
+          if (controller.isOpen) {
+            controller.close();
+          } else {
+            controller.open();
+          }
+        });
       },
     );
   }
 }
 
+/// An action of a [ContextMenuIconButton].
+///
+/// On iOS 26 and later, it is turned into a [GlassMenuItem] by the [ContextMenuIconButton] and never
+/// built.
 class const ContextMenuAction({
   final IconData? icon,
   required final String label,
   required final VoidCallback? onPressed,
 
-  /// Whether the modal should be dismissed when an action is pressed.
+  /// Whether the menu should be closed when an action is pressed (only on Android: an iOS menu
+  /// item always closes the menu).
   ///
   /// Default to true.
   final bool dismissOnPress = true,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? _CupertinoContextMenuAction(
-            trailingIcon: icon,
-            onPressed: () {
-              if (dismissOnPress) {
-                Navigator.of(context).pop();
-              }
-              onPressed?.call();
-            },
-            // trailingIcon: icon,
-            child: Text(label),
-          )
-        : MenuItemButton(
-            closeOnActivate: dismissOnPress,
-            leadingIcon: Icon(icon),
-            semanticsLabel: label,
-            onPressed: onPressed,
-            child: Text(label),
-          );
-  }
-}
-
-// --
-// Copied from: https://github.com/flutter/flutter/blob/stable/packages/flutter/lib/src/cupertino/context_menu_action.dart
-// and adapted to use with lichess colors.
-
-/// A button in a _ContextMenuSheet.
-///
-/// A typical use case is to pass a [Text] as the [child] here, but be sure to
-/// use [TextOverflow.ellipsis] for the [Text.overflow] field if the text may be
-/// long, as without it the text will wrap to the next line.
-class const _CupertinoContextMenuAction({
-  // ignore: unused_element_parameter
-  super.key,
-
-  /// The widget that will be placed inside the action.
-  required final Widget child,
-
-  /// Indicates whether this action should receive the style of an emphasized,
-  /// default action.
-  // ignore: unused_element_parameter
-  final bool isDefaultAction = false,
-
-  /// Indicates whether this action should receive the style of a destructive
-  /// action.
-  // ignore: unused_element_parameter
-  final bool isDestructiveAction = false,
-
-  /// Called when the action is pressed.
-  final VoidCallback? onPressed,
-
-  /// An optional icon to display to the right of the child.
-  ///
-  /// Will be colored in the same way as the [TextStyle] used for [child] (for
-  /// example, if using [isDestructiveAction]).
-  final IconData? trailingIcon,
-}) extends StatefulWidget {
-  /// Construct a _CupertinoContextMenuAction.
-  this;
-
-  @override
-  State<_CupertinoContextMenuAction> createState() => _CupertinoContextMenuActionState();
-}
-
-class _CupertinoContextMenuActionState() extends State<_CupertinoContextMenuAction> {
-  static const double _kButtonHeight = 43;
-  static const TextStyle _kActionSheetActionStyle = TextStyle(
-    fontFamily: 'CupertinoSystemText',
-    inherit: false,
-    fontSize: 16.0,
-    fontWeight: FontWeight.w400,
-    color: CupertinoColors.black,
-    textBaseline: TextBaseline.alphabetic,
-  );
-
-  final GlobalKey _globalKey = GlobalKey();
-  bool _isPressed = false;
-
-  void onTapDown(TapDownDetails details) {
-    setState(() {
-      _isPressed = true;
-    });
-  }
-
-  void onTapUp(TapUpDetails details) {
-    setState(() {
-      _isPressed = false;
-    });
-  }
-
-  void onTapCancel() {
-    setState(() {
-      _isPressed = false;
-    });
-  }
-
-  TextStyle get _textStyle {
-    if (widget.isDefaultAction) {
-      return _kActionSheetActionStyle.copyWith(
-        color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-        fontWeight: FontWeight.w600,
-      );
-    }
-    if (widget.isDestructiveAction) {
-      return _kActionSheetActionStyle.copyWith(color: CupertinoColors.destructiveRed);
-    }
-    return _kActionSheetActionStyle.copyWith(
-      color: CupertinoDynamicColor.resolve(CupertinoColors.label, context),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      key: _globalKey,
-      onTapDown: onTapDown,
-      onTapUp: onTapUp,
-      onTapCancel: onTapCancel,
-      onTap: widget.onPressed,
-      behavior: HitTestBehavior.opaque,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: _kButtonHeight),
-        child: Semantics(
-          button: true,
-          child: ColoredBox(
-            color: _isPressed
-                ? ColorScheme.of(context).surfaceContainerHighest
-                : ColorScheme.of(context).surfaceContainer,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15.5, 8.0, 17.5, 8.0),
-              child: DefaultTextStyle(
-                style: _textStyle,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Flexible(child: widget.child),
-                    if (widget.trailingIcon != null)
-                      Icon(widget.trailingIcon, color: _textStyle.color, size: 21.0),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+    return MenuItemButton(
+      closeOnActivate: dismissOnPress,
+      leadingIcon: Icon(icon),
+      semanticsLabel: label,
+      onPressed: onPressed,
+      child: Text(label),
     );
   }
 }

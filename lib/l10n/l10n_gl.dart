@@ -163,9 +163,6 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'O código é incorrecto ou caducou.';
 
   @override
-  String get mobileLiveStreamers => 'Presentadores en directo';
-
-  @override
   String get mobileLocalDatabaseSize => 'Tamaño da base de datos local';
 
   @override

@@ -163,9 +163,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '유효하지 않거나 만료된 코드입니다.';
 
   @override
-  String get mobileLiveStreamers => '방송 중인 스트리머';
-
-  @override
   String get mobileLocalDatabaseSize => '로컬 데이터베이스 크기';
 
   @override

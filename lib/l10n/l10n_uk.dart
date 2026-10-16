@@ -163,9 +163,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Цей код недійсний або його термін дії закінчився.';
 
   @override
-  String get mobileLiveStreamers => 'Стримери в прямому етері';
-
-  @override
   String get mobileLocalDatabaseSize => 'Розмір локальної бази даних';
 
   @override

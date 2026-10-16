@@ -163,9 +163,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Bu kod geçersiz veya süresi dolmuş.';
 
   @override
-  String get mobileLiveStreamers => 'Canlı yayıncılar';
-
-  @override
   String get mobileLocalDatabaseSize => 'Yerel veritabanı boyutu';
 
   @override

@@ -163,9 +163,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'هذا الرمز غير صالح أو انتهت صلاحيته.';
 
   @override
-  String get mobileLiveStreamers => 'البثوث المباشرة';
-
-  @override
   String get mobileLocalDatabaseSize => 'حجم قاعدة البيانات المحلية';
 
   @override

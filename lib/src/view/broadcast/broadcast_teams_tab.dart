@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
@@ -49,8 +50,10 @@ class const BroadcastTeamsTab({
         tournamentSlug,
         showTeamScores,
       ),
-      AsyncError(:final error) => Center(child: Text('Cannot load teams data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load teams data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -72,6 +75,7 @@ class const BroadcastTeamsList(
     return switch (round) {
       AsyncData(:final value) => CustomScrollView(
         slivers: [
+          SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
           if (showTeamScores)
             SliverSafeArea(
               bottom: false,
@@ -99,8 +103,10 @@ class const BroadcastTeamsList(
           ),
         ],
       ),
-      AsyncError(:final error) => Center(child: Text('Cannot load games data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load games data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }

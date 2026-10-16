@@ -451,6 +451,164 @@ Generated files are NOT committed to git.
 - **Brand names**: Don't translate names like "Puzzle Storm" or "Puzzle Streak"
 - **FVM users**: Remember to prefix commands with `fvm` (e.g., `fvm flutter test`)
 
+## iOS Liquid Glass (iOS 26 design)
+
+On iOS the app uses the iOS 26 liquid glass look through the `liquid_glass_widgets` package.
+Android must not change: every glass code path is behind a
+`Theme.of(context).platform == TargetPlatform.iOS` check. The package's own agent skill is in
+`.claude/skills/liquid-glass-widgets/SKILL.md`.
+
+### Before iOS 26 (temporary fallback)
+
+Glass is for iOS 26 and later only. Before iOS 26, the app keeps the same layouts (body behind the
+bars, large titles, scroll-aware bar tint, inset sheets) with plain controls and opaque surfaces:
+every glass widget is built only when `useLiquidGlass(context)` (`platform.dart`) is true, with a
+non-glass fallback (`BlurredBarBackground` bars, `_BlurredTabBar`, an opaque `GlassModalCard`, no
+`GlassSheetScope`, `CupertinoSlidingSegmentedControl`, the `popover` popover and Material menu).
+Run with `--dart-define=NO_LIQUID_GLASS=true` to see that look on an iOS 26 device.
+
+The fallback is meant to be deleted once iOS < 26 is no longer supported, and to cost as little as
+possible until then. Rules:
+
+- **Contained**: fallback code lives in the shared widgets (`lib/src/widgets/`,
+  `tab_scaffold.dart`), next to the glass code it replaces. Screens don't branch on it; the only
+  exception is the broadcast round pinned tabs (`broadcast_round_screen.dart`, with
+  `PlatformAppBar.scrolledUnderTint`, which exists for it). Add a screen exception only when there
+  is no shared widget to put it in.
+- **Greppable**: every fallback branch is an `if (!useLiquidGlass(context))` (or a ternary on it)
+  that can be deleted on its own, keeping the glass branch. Removing the fallback means deleting
+  those branches and the helpers only they use (`_BlurredTabBar`, `scrolledUnderTint`), then
+  `useLiquidGlass` itself.
+- **Cheap**: a fallback reuses what exists (the Android/Material path, the flat mode of a control,
+  `BlurredBarBackground`, `opaqueModalColor`), with no design work of its own. Never change the
+  glass code or a layout to accommodate it.
+- **No tests**: tests only cover glass (in tests `useLiquidGlass` is true on iOS). Check the
+  fallback on an iOS 18 simulator or with the dart define above.
+- **New glass code**: a new glass widget gets a fallback in the same shared widget, following
+  these rules. If a plain or opaque equivalent isn't trivial, ask before adding one.
+
+### Where glass comes from
+
+- **Screens**: use `PlatformScaffold` + `PlatformAppBar` (`lib/src/widgets/platform.dart`). On
+  iOS they build a `GlassScaffold` with a `GlassAppBar`, and a plain Material `Scaffold` + `AppBar`
+  elsewhere. A screen built with a bare `Scaffold` + `AppBar` keeps the old opaque bar on iOS.
+- **Tab bar**: `MainTabScaffold` (`lib/src/tab_scaffold.dart`) uses `GlassTabBar` on iOS. The
+  root screen of a tab has a non-sticky app bar that scrolls away with the content, with an iOS
+  large title (`PlatformAppBar` styles it automatically: don't pass a `titleTextStyle`).
+- **Floating action buttons**: use `PlatformFloatingActionButton` (a tinted glass capsule on iOS)
+  instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
+  prefer a nav bar action on iOS.
+- **Search fields**: a `PlatformSearchBar` placed in an app bar (e.g. its `bottom`) takes
+  `inAppBar: true`, which makes it a glass search field on iOS. A search field inside the body is
+  the same field, flat (`GlassControlBackground`, `platform.dart`). A search screen is opened by
+  a `SearchHeroButton` in the app bar (not a fake search field in the body), as a normal push,
+  and wraps its field in a `SearchFieldHero` with the same tag, so that the button morphs into
+  the field.
+- **App bar tabs**: use `PlatformTabBar` (`lib/src/widgets/platform_tab_bar.dart`) as a
+  `PlatformAppBar` `bottom`, not a Material `TabBar`. On iOS, 2 or 3 tabs are a glass
+  segmented control (driven by the same `TabController`); 4 tabs or more stay a Material `TabBar`.
+  A control in an app bar `bottom` (segmented control, study chips) uses
+  `kGlassAppBarBottomPadding` and `kGlassAppBarBottomControlHeight` (`platform.dart`) on
+  iOS, so every bar has the same spacing and height.
+  A segmented control in the content (e.g. a header not pinned yet) is flat, not glass:
+  `PlatformTabBar(glass: false)`, the same control with its glass faded out (settings
+  `visibility`) on the text field fill (`GlassControlBackground`); glass is for bars only. The
+  `bottom` of a large title app bar is in the content until it sticks below the bar buttons: its
+  `PlatformTabBar` / `PlatformSearchBar` follow that automatically (`AppBarBottomGlassScope`).
+- **Bottom bars over scrolling content** (not board toolbars): `BottomBar(cupertinoGlass: true)`
+  has no background on iOS and its `BottomBarButton`s / `BottomBarTextButton`s are glass capsules,
+  as wide as their content and evenly spaced.
+- **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
+  `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
+  give an iOS field its own `border` radius.
+- **Bar tint**: `PlatformScaffold` tints a sticky `PlatformAppBar` that has a title with the iOS
+  bar tint (`cupertinoBarTint`) and a hairline, only while content is scrolled under it (like a
+  UIKit navigation bar), detected from the body's vertical scroll notifications. Bars without a
+  title (or with a search field as title), board screens and tab root headers are never tinted.
+  Don't pass a placeholder title (`SizedBox.shrink()`): leave it null.
+- **Large titles on pushed screens**: `PlatformAppBar(largeTitle: true)` shows the title as an iOS
+  large title at the top of the body, which collapses into the bar once scrolled away (the bar is
+  tinted from then on). For a pushed list screen whose body is one vertical scroll view (not in a
+  `TabBarView`) using `MediaQuery.paddingOf(context)` (it gets the large title height)
+  (e.g. `puzzle_history_screen.dart`). Its `bottom`, such as a glass search field, is below the
+  large title and sticks below the bar buttons once scrolled (`puzzle_themes_screen.dart`).
+- **Glass tint**: the package's dark glass is nearly clear, so over busy content (boards) or a
+  background image or color theme, glass controls use `tintedGlassSettings` (`platform.dart`).
+  `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
+  theme.
+- **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands uses
+  `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`, always with a drag handle; on
+  iOS the same inset card, but opaque and flat: `OpaqueBottomSheetFrame`); an information sheet
+  whose content may be long uses `showAdaptiveFullHeightBottomSheet` (always at full height, a
+  close button and a title in its header, scrollable content; on iOS an opaque, flat edge to edge
+  card, like an iOS 26 sheet at its large detent, e.g. the broadcast overview). The content of
+  these two opaque sheets is opaque too (no glass controls). Every other sheet uses
+  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose
+  content sits in a glass card (`GlassBottomSheetFrame`). Inside it (`GlassSheetScope`), cards turn translucent, `PlatformSwitch`
+  / `SwitchSettingTile` and `NonLinearSlider` become glass controls. Filled and outlined buttons are
+  capsules on iOS (app theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass
+  capsule on a glass sheet). Selectable chips use `PlatformChoiceChip` (a glass pill on iOS); give
+  their `Wrap` an iOS `runSpacing`, glass chips have no tap target margin. The iOS sheet doesn't
+  expand: no drag handle, and a shared minimum height (`kGlassBottomSheetMinHeightFraction`, 45% of
+  the screen) instead of the call site's. A labelled group of chips is a `Filter`
+  (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
+  16pt around the content and between groups.
+- **Popovers**: use `PlatformPopover` (`popover.dart`), a `GlassPopover` that morphs out of its
+  trigger on iOS. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
+- Glass is for the navigation and control layer that floats above content (bars, floating
+  buttons, sheets), not for content such as cards or list rows.
+
+### Laying out a body under glass bars
+
+- **The body extends behind the bars**: `MediaQuery.paddingOf(context)` inside a
+  `PlatformScaffold` body includes the status bar, the app bar height (44pt + `bottom`) and, in a
+  tab, the tab bar height. Content must use that padding so that it starts below the bar and
+  scrolls under it.
+- A `ListView` / `CustomScrollView` with no explicit `padding` applies it automatically. With an
+  explicit padding, add the media query padding to it:
+  `padding: Styles.bodyPadding.add(MediaQuery.paddingOf(context))`.
+- **Never wrap a scrolling body in a `SafeArea`**: it shrinks the scroll view to the area below
+  the bar, so the content is clipped at the bar's bottom edge (the bar looks opaque) and above the
+  home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
+  `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
+- **Screens that don't scroll** (board screens) pass `extendBodyBehindAppBar: false` to
+  `PlatformScaffold`: the body is laid out below the glass bar, like in a Material `Scaffold`,
+  and the status bar blur is off. Their bottom toolbar (`BottomBar`) stays a regular bar.
+- **Pinned slivers** (sticky section headers) always stick to the top of their scroll view, which
+  is behind the bar. For such a list, lay the body out below the bar instead
+  (`PlatformScaffold(extendBodyBehindAppBar: false)`, which also keeps the bar untinted), and give
+  the headers the background behind the bar: a pinned header always covers that edge, so nothing
+  is lost (`broadcast_list_screen.dart`).
+- A pull-to-refresh indicator is a `HapticRefreshIndicator`: on iOS it sets its own `edgeOffset`
+  from its top padding, so that its spinner appears below the bar, not behind it.
+
+### Package caveats
+
+- **`GlassScaffold` does not inset its body**, despite its docs: `PlatformScaffold` and
+  `MainTabScaffold` add the bar heights to `MediaQuery.padding` themselves.
+- **Two Cupertino libraries**: the package uses the SDK `flutter/cupertino`, the app uses
+  `cupertino_ui` / `material_ui`. `MaterialApp.builder` (`app.dart`) wraps the app in
+  `MaterialUiCompatibilityBridge` and `CupertinoUiCompatibilityBridge`, which provide the SDK
+  `Theme`, `CupertinoTheme` and localizations from the app ones, so glass widgets (and other
+  unmigrated packages) see the app theme, including its brightness. Don't remove them until every
+  such package is migrated.
+- **Primary colored icons**: an SDK `CupertinoTheme` sets the `IconTheme` to its primary color.
+  The app `IconTheme` is restored inside the bridges, and `GlassScaffold` installs its own
+  `CupertinoTheme`, so `PlatformScaffold` and `MainTabScaffold` restore it again inside it; any
+  other direct use of `GlassScaffold` must do the same.
+- **Material ancestor**: glass bars sit outside any Material `Scaffold`; wrap them in
+  `Material(type: MaterialType.transparency)`, or text gets yellow underlines and Material
+  `IconButton`s break.
+- **`GlassAppBar` has its own `SafeArea`**: when it is laid out inside the body, give it the
+  original `MediaQuery` (without the bar height added), or its content is pushed out of its bounds.
+- **Glass look**: use the package's default glass settings. Don't use `GlassScaffold`'s top edge
+  effect: `PlatformScaffold` turns it off and blurs only the status bar area itself (a
+  `GlassScrollEdgeEffect`, `.blur` style, sigma 8, top only), where nothing else covers it (no
+  tinted app bar). The `soft` fade is invisible in dark mode and with background themes, and the
+  package's blur covers the whole app bar (too heavy). No bottom edge effect. Don't add app-wide
+  glass overrides without a design decision.
+- In widget tests on iOS, `GlassTabBar` renders each tab label twice, so use `findsWidgets`.
+
 ## iOS Home Screen Widgets (WidgetKit Extension)
 
 The app includes a native iOS WidgetKit extension (`ios/LichessWidgets/`) providing home screen widgets. See `ios/EXTENSIONS.md` for contributor setup instructions (requires Apple Developer account configuration).

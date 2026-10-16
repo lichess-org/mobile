@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dar
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -47,8 +48,9 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(params));
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: VariantAppBarTitle(
           variant: boardEditorState.variant,
           title: context.l10n.boardEditor,
@@ -334,7 +336,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                               type: SnackBarType.error,
                             );
                           }
-                          showModalBottomSheet<void>(
+                          showAdaptiveBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,
@@ -411,7 +413,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
         ),
         BottomBarButton(
           label: context.l10n.mobileFilters,
-          onTap: () => showModalBottomSheet<void>(
+          onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,

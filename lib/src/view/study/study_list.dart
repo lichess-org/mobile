@@ -1,4 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -13,6 +14,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -169,10 +172,9 @@ class const StudyListItem({
       subtitle: _StudySubtitle(study: study),
       onTap: () => onTap(context, study),
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
           builder: (context) => _ContextMenu(study: study),
@@ -189,30 +191,53 @@ class const StudyCategoryChips({
   required final void Function(StudyCategory) onCategorySelected,
   super.key,
 }) extends StatelessWidget implements PreferredSizeWidget {
+  // The app's theme platform is the default target platform.
   @override
-  Size get preferredSize => const Size.fromHeight(50.0);
+  Size get preferredSize => Size.fromHeight(
+    defaultTargetPlatform == TargetPlatform.iOS
+        ? kGlassAppBarBottomControlHeight + kGlassAppBarBottomPadding.vertical
+        : 50.0,
+  );
 
   @override
   Widget build(BuildContext context) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     return PreferredSize(
       preferredSize: preferredSize,
       child: SizedBox(
         height: preferredSize.height,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 6.0),
+          // On iOS, the same space as the other controls in the app bar bottom.
+          padding: isIOS
+              ? EdgeInsets.only(
+                  top: kGlassAppBarBottomPadding.top,
+                  bottom: kGlassAppBarBottomPadding.bottom,
+                )
+              : const EdgeInsets.only(bottom: 6.0),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
               spacing: 8.0,
               children: categories.map((cat) {
+                final isSelected = currentCategory == cat;
+                if (isIOS) {
+                  return PlatformChoiceChip(
+                    key: isSelected ? currentCategoryKey : null,
+                    label: Text(cat.l10n(context.l10n)),
+                    selected: isSelected,
+                    onSelected: (_) {
+                      if (!isSelected) onCategorySelected(cat);
+                    },
+                  );
+                }
                 return ChoiceChip(
                   key: cat == currentCategory ? currentCategoryKey : null,
                   showCheckmark: false,
                   label: Text(cat.l10n(context.l10n)),
                   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                  selected: currentCategory == cat,
+                  selected: isSelected,
                   onSelected: (selected) {
                     if (selected) {
                       onCategorySelected(cat);

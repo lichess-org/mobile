@@ -163,9 +163,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'コードが無効か期限切れです。';
 
   @override
-  String get mobileLiveStreamers => 'ライブ配信者';
-
-  @override
   String get mobileLocalDatabaseSize => 'ローカルデータベース容量';
 
   @override

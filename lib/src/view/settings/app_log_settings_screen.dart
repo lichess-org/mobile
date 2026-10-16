@@ -107,6 +107,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     hintText: context.l10n.searchSearch,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;
