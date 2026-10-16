@@ -30,7 +30,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -288,7 +288,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Apakah anda ingin menghentikan permainan ini?';

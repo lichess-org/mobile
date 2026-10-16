@@ -30,7 +30,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Salli siirron peruutukset ja vihjeet';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled-musta';
@@ -288,7 +288,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePreviousPage => 'Edellinen';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';

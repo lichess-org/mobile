@@ -30,7 +30,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Темна aMOLED';
@@ -288,7 +288,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobilePreviousPage => 'Попередня';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Ви хочете закінчити цю серію?';

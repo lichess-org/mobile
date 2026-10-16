@@ -30,7 +30,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '수 무르기와 힌트 허용';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'AMOLED 블랙';
@@ -288,7 +288,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePreviousPage => '이전';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';

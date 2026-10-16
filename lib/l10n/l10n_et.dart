@@ -30,7 +30,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Luba tagasivõtmised ja vihjed';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -288,7 +288,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePreviousPage => 'Eelmine';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Kas soovid partii lõpetada?';

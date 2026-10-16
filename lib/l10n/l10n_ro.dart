@@ -30,7 +30,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permite datul înapoi și sugestii';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Negru Amoled';
@@ -288,7 +288,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePreviousPage => 'Înapoi';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';

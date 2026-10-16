@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '允许悔棋和提示';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled 纯黑';
@@ -288,7 +288,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePreviousPage => '上一页';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';

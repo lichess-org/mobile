@@ -30,7 +30,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Cho phép đi lại và xem gợi ý';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -288,7 +288,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trước đó';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';

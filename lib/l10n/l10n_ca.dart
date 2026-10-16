@@ -30,7 +30,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permetre desfer els moviments i les pistes';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Negre amoled';
@@ -288,7 +288,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Voleu acabar aquesta ronda?';

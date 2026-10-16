@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'AMOLED用ブラック';
@@ -288,7 +288,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePreviousPage => '前';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';

@@ -30,7 +30,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permettre les reprises de coups et les indices';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Noir Amoled';
@@ -288,7 +288,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobilePreviousPage => 'Précédent';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Voulez-vous mettre fin à cette série ?';

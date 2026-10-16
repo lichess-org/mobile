@@ -30,7 +30,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Hamleyi geri almaya ve ipuçlarına izin verir';
 
   @override
-  String get mobileAppLogs => 'App Logs';
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled siyah';
@@ -288,7 +288,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePreviousPage => 'Önceki';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';

@@ -241,7 +241,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobileAppLogs.
   ///
   /// In en, this message translates to:
-  /// **'App Logs'**
+  /// **'App logs'**
   String get mobileAppLogs;
 
   /// No description provided for @mobileAmoledBlack.
@@ -733,7 +733,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobilePuzzleHistoryDescription.
   ///
   /// In en, this message translates to:
-  /// **'Review your past puzzle attempts.'**
+  /// **'Review your past puzzle attempts'**
   String get mobilePuzzleHistoryDescription;
 
   /// No description provided for @mobilePuzzleStormConfirmEndRun.
