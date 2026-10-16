@@ -193,7 +193,13 @@ sealed class const PracticeGamebookState._() with _$PracticeGamebookState {
 
   /// The comment to show: the author's on the current move, or on why a wrong move is wrong.
   String? get comment {
-    final authored = _currentComments.map((comment) => comment.text).nonNulls.join('\n');
+    final authored = _currentComments
+        .map((comment) {
+          final text = comment.text;
+          return text == null ? null : withoutLichessAuthorAnnotations(text);
+        })
+        .nonNulls
+        .join('\n');
     if (authored.isNotEmpty) return authored;
     if (wrongMove == null) return null;
     // A deviation comment is kept on the authored move the wrong one was played instead of.
