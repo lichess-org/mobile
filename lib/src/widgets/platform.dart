@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'dart:math' as math;
 import 'dart:ui' show ColorFilter, ImageFilter;
 
@@ -18,6 +19,26 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
         LiquidGlassSettings,
         LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
+
+/// Whether the iOS 26 liquid glass design is used: on iOS 26 and later.
+///
+/// Older iOS versions get the same layouts (large titles, scroll-aware bar tint, inset sheets...),
+/// with plain controls and opaque surfaces instead of glass ones.
+bool useLiquidGlass(BuildContext context) =>
+    Theme.of(context).platform == TargetPlatform.iOS && _isLiquidGlassSupported;
+
+/// Whether the device runs iOS 26 or later, unless turned off with
+/// `--dart-define=NO_LIQUID_GLASS=true` (to check the older iOS design on an iOS 26 device).
+///
+/// Always true on other platforms, where the theme platform is iOS only in tests.
+final bool _isLiquidGlassSupported =
+    !const bool.fromEnvironment('NO_LIQUID_GLASS') && (!Platform.isIOS || _iosMajorVersion() >= 26);
+
+int _iosMajorVersion() {
+  // For example "Version 18.2 (Build 22C150)".
+  final match = RegExp(r'\d+').firstMatch(Platform.operatingSystemVersion);
+  return match != null ? int.parse(match.group(0)!) : 26;
+}
 
 /// A simple widget that builds different things on different platforms.
 class const PlatformWidget({
@@ -120,7 +141,8 @@ LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSett
 class const GlassControlBackground({
   super.key,
 
-  /// Whether the background is liquid glass, or the flat text field fill.
+  /// Whether the background is liquid glass, or the flat text field fill. It is always flat before
+  /// iOS 26 ([useLiquidGlass]).
   required final bool glass,
 
   /// The height of the control, which the capsule is rounded to.
@@ -133,6 +155,7 @@ class const GlassControlBackground({
   @override
   Widget build(BuildContext context) {
     final borderRadius = height / 2;
+    final glass = this.glass && useLiquidGlass(context);
     return SizedBox(
       height: height,
       // The capsule stays in the tree while flat, so that the child is never rebuilt (e.g. a
@@ -254,15 +277,15 @@ class const PlatformScaffold({
     final stickyAppBar = appBar != null && !isTabRoot;
     // A sticky app bar with a title, over scrolling content, is tinted while content is scrolled
     // under it, like a UIKit navigation bar. A search field is glass, so it does not count as a
-    // title.
+    // title. Before iOS 26, the buttons are not glass either: every sticky app bar is tinted.
     final title = appBar?.title;
     final hasTintedAppBar =
         stickyAppBar &&
         extendBodyBehindAppBar &&
-        title != null &&
-        title is! SearchFieldHero &&
-        title is! PlatformSearchBar;
-    final hasLargeTitle = hasTintedAppBar && appBar!.largeTitle;
+        appBar!.scrolledUnderTint &&
+        (!useLiquidGlass(context) ||
+            (title != null && title is! SearchFieldHero && title is! PlatformSearchBar));
+    final hasLargeTitle = hasTintedAppBar && title != null && appBar!.largeTitle;
     final largeTitleHeight = hasLargeTitle ? _kLargeTitleHeight : 0.0;
     final bottomHeight = appBar?.bottom?.preferredSize.height ?? 0.0;
     // With a large title, the bottom of the app bar is below the large title, in the body.
@@ -506,8 +529,8 @@ class const _LargeTitle({required final double top, required final Widget title}
   }
 }
 
-/// Paints the iOS bar tint ([cupertinoBarTint]) over a blur, and a hairline behind a glass app bar, over the top
-/// [height] of [child], while the content of its vertical scroll view is scrolled under it.
+/// Paints a [BlurredBarBackground] behind an app bar, over the top [height] of [child], while the
+/// content of its vertical scroll view is scrolled under it.
 class const _ScrollEdgeTint({
   required final double height,
   required final Widget child,
@@ -554,25 +577,7 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
             child: AnimatedOpacity(
               opacity: _isScrolledUnder ? 1.0 : 0.0,
               duration: const Duration(milliseconds: 150),
-              // The content under the translucent tint is blurred, like a UIKit navigation bar.
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: _barTintFilter(context),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: cupertinoBarTint(context, opacity: 0.4),
-                      // A hairline of one physical pixel, inside the box: a zero width border is
-                      // centered on the edge, and the clip would cut half of it.
-                      border: Border(
-                        bottom: BorderSide(
-                          color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
-                          width: 1.0 / MediaQuery.devicePixelRatioOf(context),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              child: const BlurredBarBackground(),
             ),
           ),
         ),
@@ -581,7 +586,41 @@ class _ScrollEdgeTintState() extends State<_ScrollEdgeTint> {
   }
 }
 
-/// The blur under the scroll tint of a [PlatformAppBar].
+/// The background of an iOS bar over scrolling content: the bar tint ([cupertinoBarTint]) over a
+/// blur of the content under it, like a UIKit bar, with a hairline on the edge facing the content.
+///
+/// Behind a [PlatformAppBar] while content is scrolled under it, and before iOS 26
+/// ([useLiquidGlass]) behind the bottom bars, in place of their glass.
+class const BlurredBarBackground({
+  /// Whether the bar is at the bottom of the screen: the hairline is then on its top edge.
+  final bool atBottom = false,
+  final Widget? child,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // A hairline of one physical pixel, inside the box: a zero width border is centered on the
+    // edge, and the clip would cut half of it.
+    final hairline = BorderSide(
+      color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
+      width: 1.0 / MediaQuery.devicePixelRatioOf(context),
+    );
+    return ClipRect(
+      child: BackdropFilter(
+        filter: _barTintFilter(context),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: cupertinoBarTint(context, opacity: 0.4),
+            border: atBottom ? Border(top: hairline) : Border(bottom: hairline),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+/// The blur under the tint of a [BlurredBarBackground].
 ///
 /// In light mode, the colors of the content are saturated, like a UIKit bar material, so that they
 /// show through the white tint.
@@ -679,6 +718,11 @@ class const PlatformAppBar({
   /// content scrolling under them is busy, like boards. They always are with a background theme.
   final bool tintedGlass = false,
 
+  /// Whether the app bar is tinted on iOS while content is scrolled under it (see
+  /// [PlatformScaffold]). False for a screen whose pinned header paints the bar background itself
+  /// (e.g. pinned tabs before iOS 26).
+  final bool scrolledUnderTint = true,
+
   /// Whether the [title] is an iOS large title, at the top of the body of a [PlatformScaffold], and
   /// shown in the app bar once it is scrolled away, like a UIKit navigation bar large title.
   ///
@@ -693,7 +737,9 @@ class const PlatformAppBar({
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold].
+      // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold]. Before iOS
+      // 26, the same bar with plain buttons.
+      final glass = useLiquidGlass(context);
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
       // With a background theme, the barely tinted dark glass would show the image brightly. In
@@ -711,19 +757,26 @@ class const PlatformAppBar({
           ? CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
           : AppBarTheme.of(context).titleTextStyle;
       final parentRoute = ModalRoute.of(context);
+      final impliedLeadingIcon = Icon(
+        parentRoute is PageRoute && parentRoute.fullscreenDialog
+            ? Icons.close_rounded
+            : Icons.arrow_back_ios_new_rounded,
+        color: colorScheme.onSurface,
+      );
       final impliedLeading =
           automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false)
-          ? GlassIconButton(
-              size: buttonHeight,
-              icon: Icon(
-                parentRoute is PageRoute && parentRoute.fullscreenDialog
-                    ? Icons.close_rounded
-                    : Icons.arrow_back_ios_new_rounded,
-                color: colorScheme.onSurface,
-              ),
-              semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
-              onPressed: () => Navigator.maybePop(context),
-            )
+          ? glass
+                ? GlassIconButton(
+                    size: buttonHeight,
+                    icon: impliedLeadingIcon,
+                    semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
+                    onPressed: () => Navigator.maybePop(context),
+                  )
+                : IconButton(
+                    icon: impliedLeadingIcon,
+                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+                    onPressed: () => Navigator.maybePop(context),
+                  )
           : null;
       final largeTitleOffset = largeTitle ? _LargeTitleScrollScope.maybeOf(context) : null;
       final inlineTitle = largeTitleOffset != null && title != null
@@ -760,15 +813,27 @@ class const PlatformAppBar({
             : null,
         centerTitle: centerTitle ?? true,
         leading: leading != null
-            ? _GlassBarCapsule(height: buttonHeight, settings: buttonSettings, children: [leading!])
+            ? _GlassBarCapsule(
+                height: buttonHeight,
+                glass: glass,
+                settings: buttonSettings,
+                children: [leading!],
+              )
             : impliedLeading,
         actions: actions != null && actions!.isNotEmpty
-            ? [_GlassBarCapsule(height: buttonHeight, settings: buttonSettings, children: actions!)]
+            ? [
+                _GlassBarCapsule(
+                  height: buttonHeight,
+                  glass: glass,
+                  settings: buttonSettings,
+                  children: actions!,
+                ),
+              ]
             : null,
         // With a large title, the bottom is laid out by [PlatformScaffold], below the large title.
         bottom: largeTitleOffset != null ? null : bottom,
         // For the implied back button, the capsules are given the settings themselves.
-        buttonSettings: buttonSettings,
+        buttonSettings: glass ? buttonSettings : null,
         toolbarHeight: _kGlassToolbarHeight,
         // Aligned with the body content.
         padding: Styles.horizontalBodyPadding,
@@ -794,7 +859,7 @@ const double _kGlassFloatingButtonHeight = 48.0;
 
 /// An extended floating action button, meant to be the [PlatformScaffold.floatingActionButton].
 ///
-/// On iOS it is a liquid glass capsule, otherwise a [FloatingActionButton.extended].
+/// On iOS 26 and later it is a liquid glass capsule, otherwise a [FloatingActionButton.extended].
 class const PlatformFloatingActionButton({
   super.key,
   required final String label,
@@ -804,7 +869,7 @@ class const PlatformFloatingActionButton({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (useLiquidGlass(context)) {
       final colorScheme = ColorScheme.of(context);
       final fabTheme = FloatingActionButtonTheme.of(context);
       final foregroundColor = fabTheme.foregroundColor ?? colorScheme.onPrimaryContainer;
@@ -857,15 +922,30 @@ class const PlatformFloatingActionButton({
   }
 }
 
-/// A liquid glass capsule grouping navigation bar items, like on iOS 26.
+/// A liquid glass capsule grouping navigation bar items, like on iOS 26. Without [glass] (before
+/// iOS 26), the same items without the capsule.
 class const _GlassBarCapsule({
   required final double height,
+  required final bool glass,
   required final LiquidGlassSettings? settings,
   required final List<Widget> children,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foregroundColor = ColorScheme.of(context).onSurface;
+    final items = IconTheme.merge(
+      data: IconThemeData(color: foregroundColor),
+      child: IconButtonTheme(
+        data: IconButtonThemeData(style: IconButton.styleFrom(foregroundColor: foregroundColor)),
+        child: Row(mainAxisSize: MainAxisSize.min, children: children),
+      ),
+    );
+    if (!glass) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [SizedBox(height: height, child: items)],
+      );
+    }
     // GlassAppBar gives the leading slot the full bar width, which an aligned GlassContainer would
     // fill: the Row makes the capsule only as wide as its content.
     return Row(
@@ -881,15 +961,7 @@ class const _GlassBarCapsule({
             // for the package, which otherwise warns that per-widget settings are ignored.
             useOwnLayer: true,
             alignment: Alignment.center,
-            child: IconTheme.merge(
-              data: IconThemeData(color: foregroundColor),
-              child: IconButtonTheme(
-                data: IconButtonThemeData(
-                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
-                ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: children),
-              ),
-            ),
+            child: items,
           ),
         ),
       ],

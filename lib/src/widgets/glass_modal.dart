@@ -1,11 +1,20 @@
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassContainer, LiquidGlassSettings, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 
-/// The rounded liquid glass card of an iOS modal (action sheet, alert dialog).
+/// The color of the opaque iOS modals: the color of the Material sheets, without their
+/// translucency.
+Color opaqueModalColor(BuildContext context) =>
+    Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
+    ColorScheme.of(context).surfaceContainerLow;
+
+/// The rounded liquid glass card of an iOS modal (action sheet, alert dialog, bottom sheet).
 ///
 /// Its tint is opaque enough to read the modal over most content; raise [tintOpacity] over busy
 /// content such as a board.
+///
+/// Before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of the same shape.
 class const GlassModalCard({
   required final Widget child,
   final double tintOpacity = 0.65,
@@ -18,6 +27,17 @@ class const GlassModalCard({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (!useLiquidGlass(context)) {
+      return Material(
+        color: opaqueModalColor(context),
+        shape: RoundedSuperellipseBorder(
+          borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: padding != null ? Padding(padding: padding!, child: child) : child,
+      );
+    }
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return GlassContainer(
       // A modal floats alone over the content, there is no parent glass layer to share.

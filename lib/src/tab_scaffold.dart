@@ -10,7 +10,8 @@ import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart' show tintedGlassSettings;
+import 'package:lichess_mobile/src/widgets/platform.dart'
+    show BlurredBarBackground, tintedGlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
@@ -47,30 +48,39 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
       );
     }
 
-    // On iOS the tabs content extends below a floating liquid glass tab bar.
+    // On iOS the tabs content extends below a floating liquid glass tab bar, or before iOS 26 a
+    // docked translucent one.
     // The package default label color: the app Cupertino theme text color (onSurface) has less
     // contrast over the content seen through the glass.
     final tabColor = CupertinoColors.label.resolveFrom(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final tabBar = GlassTabBar.bottom(
-      settings: isDark
-          // Tinted like the other glass controls ([tintedGlassSettings]): a theme surface color.
-          ? _kTabBarGlassSettings.copyWith(glassColor: tintedGlassSettings(context).glassColor)
-          : _kTabBarGlassSettings,
-      indicatorColor: isDark ? const Color(0x80000000) : null,
-      selectedIconColor: tabColor,
-      unselectedIconColor: tabColor,
-      selectedIndex: currentTab.index,
-      tabs: [
-        for (final tab in BottomTab.values)
-          GlassTab(
-            icon: Icon(tab.icon),
-            activeIcon: Icon(tab.icon, fill: 1),
-            label: tab.label(context.l10n),
-          ),
-      ],
-      onTabSelected: (i) => _onItemTapped(ref, i),
-    );
+    final PreferredSizeWidget tabBar = !useLiquidGlass(context)
+        ? _BlurredTabBar(
+            currentTab: currentTab,
+            onTap: (i) => _onItemTapped(ref, i),
+            bottomPadding: MediaQuery.paddingOf(context).bottom,
+          )
+        : GlassTabBar.bottom(
+            settings: isDark
+                // Tinted like the other glass controls ([tintedGlassSettings]): a theme surface color.
+                ? _kTabBarGlassSettings.copyWith(
+                    glassColor: tintedGlassSettings(context).glassColor,
+                  )
+                : _kTabBarGlassSettings,
+            indicatorColor: isDark ? const Color(0x80000000) : null,
+            selectedIconColor: tabColor,
+            unselectedIconColor: tabColor,
+            selectedIndex: currentTab.index,
+            tabs: [
+              for (final tab in BottomTab.values)
+                GlassTab(
+                  icon: Icon(tab.icon),
+                  activeIcon: Icon(tab.icon, fill: 1),
+                  label: tab.label(context.l10n),
+                ),
+            ],
+            onTabSelected: (i) => _onItemTapped(ref, i),
+          );
 
     return FullScreenBackground(
       child: MainTabScaffoldProperties(
@@ -426,3 +436,73 @@ const _kTabBarGlassSettings = LiquidGlassSettings(
   lightAngle: 0.75 * math.pi,
   glassColor: Color(0xBFFFFFFF),
 );
+
+/// Height of the [_BlurredTabBar], above the bottom safe area, like the iOS 18 tab bar.
+const double _kBlurredTabBarHeight = 50.0;
+
+/// The tab bar before iOS 26 ([useLiquidGlass]), in place of the glass one: docked at the bottom of
+/// the screen on a [BlurredBarBackground], like the iOS 18 tab bar.
+class const _BlurredTabBar({
+  required final BottomTab currentTab,
+  required final ValueChanged<int> onTap,
+
+  /// The bottom safe area, which the bar extends into.
+  required final double bottomPadding,
+}) extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => Size.fromHeight(_kBlurredTabBarHeight + bottomPadding);
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = ColorScheme.of(context).onSurface;
+    final inactiveColor = CupertinoColors.inactiveGray.resolveFrom(context);
+    // Like the iOS tab bar, the labels are not scaled.
+    return MediaQuery.withNoTextScaling(
+      child: BlurredBarBackground(
+        atBottom: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: SizedBox(
+            height: _kBlurredTabBarHeight,
+            child: Row(
+              children: [
+                for (final tab in BottomTab.values)
+                  Expanded(
+                    child: Semantics(
+                      button: true,
+                      selected: tab == currentTab,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => onTap(tab.index),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 2.0,
+                          children: [
+                            Icon(
+                              tab.icon,
+                              fill: tab == currentTab ? 1 : 0,
+                              color: tab == currentTab ? activeColor : inactiveColor,
+                            ),
+                            Text(
+                              tab.label(context.l10n),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.w500,
+                                color: tab == currentTab ? activeColor : inactiveColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

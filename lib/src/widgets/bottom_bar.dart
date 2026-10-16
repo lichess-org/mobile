@@ -32,18 +32,20 @@ class BottomBar extends StatelessWidget {
 
   /// Whether the bar has no background on iOS: its buttons ([BottomBarTextButton],
   /// [BottomBarButton]) are glass capsules that float over the content, evenly spaced and as wide as
-  /// their label. Defaults to false.
+  /// their label. Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
+  /// ([BlurredBarBackground]), with plain buttons. Defaults to false.
   final bool cupertinoGlass;
 
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final glass = cupertinoGlass && useLiquidGlass(context);
     final bar = BottomAppBar(
       color: isIOS && cupertinoGlass ? Colors.transparent : null,
       elevation: isIOS && cupertinoGlass ? 0.0 : null,
       height: kBottomBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: isIOS && cupertinoGlass
+      child: glass
           // Glass buttons are as wide as their label, and only shrink when they don't fit.
           ? _GlassBottomBarScope(
               child: Row(
@@ -60,12 +62,17 @@ class BottomBar extends StatelessWidget {
             ),
     );
 
-    return MediaQuery.withClampedTextScaling(maxScaleFactor: 1.4, child: bar);
+    return MediaQuery.withClampedTextScaling(
+      maxScaleFactor: 1.4,
+      child: isIOS && cupertinoGlass && !glass
+          ? BlurredBarBackground(atBottom: true, child: bar)
+          : bar,
+    );
   }
 }
 
-/// A text button in a [BottomBar]: a [TextButton] on Android, and a liquid glass capsule on iOS,
-/// for a bar with [BottomBar.cupertinoGlass].
+/// A text button in a [BottomBar]: a [TextButton] on Android and before iOS 26, and a liquid glass
+/// capsule on iOS, for a bar with [BottomBar.cupertinoGlass].
 class const BottomBarTextButton({
   required final VoidCallback? onPressed,
   required final Widget child,
@@ -73,7 +80,7 @@ class const BottomBarTextButton({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform != TargetPlatform.iOS) {
+    if (!useLiquidGlass(context)) {
       return TextButton(onPressed: onPressed, child: child);
     }
 

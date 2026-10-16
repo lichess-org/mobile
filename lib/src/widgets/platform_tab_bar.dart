@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoSlidingSegmentedControl;
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
@@ -6,8 +7,8 @@ import 'package:material_ui/material_ui.dart';
 
 /// Text tabs for the bottom of an app bar, or for a header pinned over scrolling content.
 ///
-/// On iOS, 2 or 3 tabs are a liquid glass segmented control, like a UIKit navigation bar: more
-/// labels would be cramped in an app bar. Outside of an app bar ([inAppBar] false), any number of
+/// On iOS, 2 or 3 tabs are a liquid glass segmented control (a plain one before iOS 26), like a UIKit
+/// navigation bar: more labels would be cramped in an app bar. Outside of an app bar ([inAppBar] false), any number of
 /// tabs is a segmented control on iOS. Otherwise, and on Android, it is a Material [TabBar].
 ///
 /// The selected tab is driven by [controller], or the [DefaultTabController] when it is null, like
@@ -55,10 +56,32 @@ class const PlatformTabBar({
     }
 
     final tabController = controller ?? DefaultTabController.of(context);
+    final isGlass = glass ?? AppBarBottomGlassScope.maybeOf(context) ?? true;
+    if (!useLiquidGlass(context)) {
+      final control = SizedBox(
+        height: kGlassAppBarBottomControlHeight,
+        width: double.infinity,
+        child: ListenableBuilder(
+          listenable: tabController,
+          builder: (context, _) => CupertinoSlidingSegmentedControl<int>(
+            groupValue: tabController.index,
+            children: {
+              for (final (index, label) in tabs.indexed)
+                index: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+            },
+            onValueChanged: (index) {
+              if (index != null) tabController.animateTo(index);
+            },
+          ),
+        ),
+      );
+      return Padding(padding: kGlassAppBarBottomPadding, child: control);
+    }
+
     return Padding(
       padding: kGlassAppBarBottomPadding,
       child: GlassControlBackground(
-        glass: glass ?? AppBarBottomGlassScope.maybeOf(context) ?? true,
+        glass: isGlass,
         height: kGlassAppBarBottomControlHeight,
         settings: tintedGlass ? tintedGlassSettings(context) : null,
         child: ListenableBuilder(

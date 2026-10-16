@@ -1,3 +1,4 @@
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassDefaults, GlassMenu, GlassMenuItem, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
@@ -22,7 +23,8 @@ const kLightMenuGlassSettings = LiquidGlassSettings(
 ///
 /// Typically used in the [AppBar] to show a context menu.
 ///
-/// On iOS, the menu is a liquid glass menu that morphs out of the button, like on iOS 26.
+/// On iOS 26 and later, the menu is a liquid glass menu that morphs out of the button. Elsewhere it
+/// is a Material menu.
 class const ContextMenuIconButton({
   required final Widget icon,
   final Color? color,
@@ -50,7 +52,7 @@ class const ContextMenuIconButton({
           : null,
     );
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: 250.0,
         settings: Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null,
@@ -93,7 +95,8 @@ class const ContextMenuIconButton({
 
 /// An action of a [ContextMenuIconButton].
 ///
-/// On iOS, it is turned into a [GlassMenuItem] by the [ContextMenuIconButton] and never built.
+/// On iOS 26 and later, it is turned into a [GlassMenuItem] by the [ContextMenuIconButton] and never
+/// built.
 class const ContextMenuAction({
   final IconData? icon,
   required final String label,

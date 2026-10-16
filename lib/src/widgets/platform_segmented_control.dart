@@ -1,9 +1,11 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoSlidingSegmentedControl;
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassSegment, GlassSegmentedControl;
 import 'package:material_ui/material_ui.dart';
 
 /// A single choice segmented control: a Material [SegmentedButton] on Android, a liquid glass
-/// segmented control on iOS.
+/// segmented control on iOS (a plain one before iOS 26).
 class const PlatformSegmentedControl<T extends Object>({
   super.key,
 
@@ -25,6 +27,25 @@ class const PlatformSegmentedControl<T extends Object>({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS && !useLiquidGlass(context)) {
+      return Padding(
+        padding: expandedInsets ?? EdgeInsets.zero,
+        child: SizedBox(
+          width: double.infinity,
+          child: CupertinoSlidingSegmentedControl<T>(
+            groupValue: selected,
+            children: {
+              for (final (value, label) in segments)
+                value: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+            },
+            onValueChanged: (value) {
+              if (value != null) onChanged(value);
+            },
+          ),
+        ),
+      );
+    }
+
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return Padding(
         padding: expandedInsets ?? EdgeInsets.zero,

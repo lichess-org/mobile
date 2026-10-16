@@ -458,6 +458,35 @@ Android must not change: every glass code path is behind a
 `Theme.of(context).platform == TargetPlatform.iOS` check. The package's own agent skill is in
 `.claude/skills/liquid-glass-widgets/SKILL.md`.
 
+### Before iOS 26 (temporary fallback)
+
+Glass is for iOS 26 and later only. Before iOS 26, the app keeps the same layouts (body behind the
+bars, large titles, scroll-aware bar tint, inset sheets) with plain controls and opaque surfaces:
+every glass widget is built only when `useLiquidGlass(context)` (`platform.dart`) is true, with a
+non-glass fallback (`BlurredBarBackground` bars, `_BlurredTabBar`, an opaque `GlassModalCard`, no
+`GlassSheetScope`, `CupertinoSlidingSegmentedControl`, the `popover` popover and Material menu).
+Run with `--dart-define=NO_LIQUID_GLASS=true` to see that look on an iOS 26 device.
+
+The fallback is meant to be deleted once iOS < 26 is no longer supported, and to cost as little as
+possible until then. Rules:
+
+- **Contained**: fallback code lives in the shared widgets (`lib/src/widgets/`,
+  `tab_scaffold.dart`), next to the glass code it replaces. Screens don't branch on it; the only
+  exceptions are the home greeting (`home_tab_screen.dart`) and the broadcast round pinned tabs
+  (`broadcast_round_screen.dart`, with `PlatformAppBar.scrolledUnderTint`, which exists for it).
+  Add a screen exception only when there is no shared widget to put it in.
+- **Greppable**: every fallback branch is an `if (!useLiquidGlass(context))` (or a ternary on it)
+  that can be deleted on its own, keeping the glass branch. Removing the fallback means deleting
+  those branches and the helpers only they use (`_BlurredTabBar`, `scrolledUnderTint`), then
+  `useLiquidGlass` itself.
+- **Cheap**: a fallback reuses what exists (the Android/Material path, the flat mode of a control,
+  `BlurredBarBackground`, `opaqueModalColor`), with no design work of its own. Never change the
+  glass code or a layout to accommodate it.
+- **No tests**: tests only cover glass (in tests `useLiquidGlass` is true on iOS). Check the
+  fallback on an iOS 18 simulator or with the dart define above.
+- **New glass code**: a new glass widget gets a fallback in the same shared widget, following
+  these rules. If a plain or opaque equivalent isn't trivial, ask before adding one.
+
 ### Where glass comes from
 
 - **Screens**: use `PlatformScaffold` + `PlatformAppBar` (`lib/src/widgets/platform.dart`). On

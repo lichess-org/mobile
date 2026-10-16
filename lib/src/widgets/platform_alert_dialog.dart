@@ -1,5 +1,6 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassButton, LiquidGlassSettings, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
@@ -100,7 +101,7 @@ class const PlatformAlertDialog({
 }
 
 /// An action of a [PlatformAlertDialog]: a [TextButton] on Android, a liquid glass capsule button
-/// on iOS.
+/// on iOS (a flat one before iOS 26).
 class const PlatformDialogAction({
   super.key,
 
@@ -125,6 +126,37 @@ class const PlatformDialogAction({
     final color = cupertinoIsDestructiveAction
         ? CupertinoColors.destructiveRed
         : CupertinoColors.label.resolveFrom(context);
+    final label = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: onPressed != null ? color : color.withValues(alpha: 0.4),
+          fontSize: 17,
+          fontWeight: cupertinoIsDefaultAction ? FontWeight.w600 : FontWeight.w500,
+        ),
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        child: child,
+      ),
+    );
+
+    if (!useLiquidGlass(context)) {
+      // The same capsule on the control fill.
+      return Material(
+        color: CupertinoColors.tertiarySystemFill.resolveFrom(context),
+        shape: const StadiumBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onPressed,
+          child: SizedBox(
+            height: _kGlassDialogButtonHeight,
+            child: Center(widthFactor: 1.0, child: label),
+          ),
+        ),
+      );
+    }
+
     return GlassButton.custom(
       onTap: onPressed ?? () {},
       enabled: onPressed != null,
@@ -133,20 +165,7 @@ class const PlatformDialogAction({
       // Over the dialog card, which has its own glass layer.
       useOwnLayer: true,
       settings: const LiquidGlassSettings(),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: DefaultTextStyle(
-          style: TextStyle(
-            color: onPressed != null ? color : color.withValues(alpha: 0.4),
-            fontSize: 17,
-            fontWeight: cupertinoIsDefaultAction ? FontWeight.w600 : FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          child: child,
-        ),
-      ),
+      child: label,
     );
   }
 }

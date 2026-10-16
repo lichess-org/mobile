@@ -640,11 +640,20 @@ class const _GreetingWidget(final LightUser user) extends ConsumerWidget {
       Navigator.of(context).push(ProfileScreen.buildRoute());
     }
 
-    if (Theme.of(context).platform != TargetPlatform.iOS) {
+    if (!useLiquidGlass(context)) {
       return InkWell(
         onTap: openProfile,
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        child: Text(greeting, maxLines: 1, overflow: TextOverflow.ellipsis),
+        child: Text(
+          greeting,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          // Before iOS 26, without a glass button: bigger than the button label, smaller than the
+          // large title of the other tabs.
+          style: Theme.of(context).platform == TargetPlatform.iOS
+              ? TextTheme.of(context).titleLarge
+              : null,
+        ),
       );
     }
 

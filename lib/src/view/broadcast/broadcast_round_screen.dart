@@ -215,6 +215,8 @@ class _BroadcastRoundScreenState()
         // Tinted like the bottom bar buttons, over the boards.
         appBar: PlatformAppBar(
           tintedGlass: true,
+          // Before iOS 26, the pinned tabs paint the bar background ([_RoundHeader]).
+          scrolledUnderTint: false,
           // On iOS the title is in the header of the body, below the image, like the Music app.
           title: Theme.of(context).platform == TargetPlatform.iOS
               ? null
@@ -505,24 +507,48 @@ class const _RoundHeader({
       ),
       tabs: ValueListenableBuilder(
         valueListenable: tabsPinned,
-        builder: (context, pinned, _) => AnimatedContainer(
-          duration: kThemeChangeDuration,
-          // On iOS the content scrolls under the glass segmented control. On Android, pinned tabs
-          // have the color of the scrolled under app bar above them.
-          color: isIOS
-              ? Colors.transparent
-              : pinned
-              ? _scrolledUnderAppBarColor(context)
-              : Theme.of(context).scaffoldBackgroundColor,
-          child: PlatformTabBar(
-            tabs: tabs,
-            controller: tabController,
-            inAppBar: false,
-            tintedGlass: true,
-            // Flat in the header, glass once pinned under the app bar, over the content.
-            glass: pinned,
-          ),
-        ),
+        builder: (context, pinned, _) {
+          final tabBar = AnimatedContainer(
+            duration: kThemeChangeDuration,
+            // On iOS the content scrolls under the glass segmented control. On Android, pinned
+            // tabs have the color of the scrolled under app bar above them.
+            color: isIOS
+                ? Colors.transparent
+                : pinned
+                ? _scrolledUnderAppBarColor(context)
+                : Theme.of(context).scaffoldBackgroundColor,
+            child: PlatformTabBar(
+              tabs: tabs,
+              controller: tabController,
+              inAppBar: false,
+              tintedGlass: true,
+              // Flat in the header, glass once pinned under the app bar, over the content.
+              glass: pinned,
+            ),
+          );
+          if (!isIOS || useLiquidGlass(context)) return tabBar;
+          // Before iOS 26, pinned tabs are the bottom of the app bar: one bar background behind
+          // the status bar, the app bar (which has no tint of its own) and the tabs.
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                top: -topPadding,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: IgnorePointer(
+                  child: AnimatedOpacity(
+                    opacity: pinned ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 150),
+                    child: const BlurredBarBackground(),
+                  ),
+                ),
+              ),
+              tabBar,
+            ],
+          );
+        },
       ),
     );
   }

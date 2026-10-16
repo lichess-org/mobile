@@ -1,5 +1,6 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
 import 'package:material_ui/material_ui.dart';
 
@@ -263,10 +264,18 @@ const _kSheetMargin = 8.0;
 
 /// The iOS frame of a bottom sheet ([showAdaptiveBottomSheet]): a glass card inset from the screen
 /// edges.
+///
+/// Before iOS 26 ([useLiquidGlass]), the card is opaque, and so is its content: it is not in a
+/// [GlassSheetScope].
 class const GlassBottomSheetFrame({required final Widget child, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // At the sheet's minimum height, short content stays at the top.
+    final content = Material(
+      type: MaterialType.transparency,
+      child: Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
+    );
     return Padding(
       padding: const EdgeInsets.all(_kSheetMargin),
       child: GlassModalCard(
@@ -275,20 +284,18 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
         child: MediaQuery.removePadding(
           context: context,
           removeBottom: true,
-          child: GlassSheetScope(
-            child: Theme(
-              // Translucent cards, like the grouped cells of an iOS 26 sheet.
-              data: Theme.of(context).copyWith(
-                cardTheme: Theme.of(context).cardTheme
-                    .copyWith(color: GlassSheetScope.fillColor(context)),
-              ),
-              child: Material(
-                type: MaterialType.transparency,
-                // At the sheet's minimum height, short content stays at the top.
-                child: Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
-              ),
-            ),
-          ),
+          child: useLiquidGlass(context)
+              ? GlassSheetScope(
+                  child: Theme(
+                    // Translucent cards, like the grouped cells of an iOS 26 sheet.
+                    data: Theme.of(context).copyWith(
+                      cardTheme: Theme.of(context).cardTheme
+                          .copyWith(color: GlassSheetScope.fillColor(context)),
+                    ),
+                    child: content,
+                  ),
+                )
+              : content,
         ),
       ),
     );
@@ -313,10 +320,7 @@ class const OpaqueBottomSheetFrame({
     return Padding(
       padding: fullHeight ? EdgeInsets.zero : const EdgeInsets.all(_kSheetMargin),
       child: Material(
-        // The color of the Material sheets.
-        color:
-            Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
-            ColorScheme.of(context).surfaceContainerLow,
+        color: opaqueModalColor(context),
         shape: const RoundedSuperellipseBorder(
           borderRadius: BorderRadius.all(Radius.circular(_kSheetBorderRadius)),
         ),
@@ -375,7 +379,7 @@ enum SheetHeaderAction() {
 
 /// A button in the header of a bottom sheet, that closes the sheet or goes back in it: an
 /// [IconButton] on Android, a round liquid glass button on iOS, like the buttons of an iOS 26
-/// sheet.
+/// sheet (a flat one before iOS 26).
 class const SheetHeaderButton({
   required final SheetHeaderAction action,
   required final VoidCallback onPressed,
@@ -398,11 +402,23 @@ class const SheetHeaderButton({
         onPressed: onPressed,
       );
     }
+    final icon = Icon(switch (action) {
+      .close => Icons.close_rounded,
+      .back => Icons.arrow_back_ios_new_rounded,
+    }, color: ColorScheme.of(context).onSurface);
+    if (!useLiquidGlass(context)) {
+      // A round button on the control fill, like the buttons of an iOS 18 sheet.
+      return IconButton(
+        icon: icon,
+        tooltip: tooltip,
+        onPressed: onPressed,
+        style: IconButton.styleFrom(
+          backgroundColor: CupertinoColors.tertiarySystemFill.resolveFrom(context),
+        ),
+      );
+    }
     return GlassIconButton(
-      icon: Icon(switch (action) {
-        .close => Icons.close_rounded,
-        .back => Icons.arrow_back_ios_new_rounded,
-      }, color: ColorScheme.of(context).onSurface),
+      icon: icon,
       semanticLabel: tooltip,
       onPressed: onPressed,
       // The sheet has no glass layer to share.

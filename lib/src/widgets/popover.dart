@@ -1,3 +1,4 @@
+import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
 import 'package:material_ui/material_ui.dart';
@@ -44,24 +45,24 @@ Future<T?> _showPopover<T extends Object?>({
 }
 
 /// A widget that shows a popover anchored to it: a liquid glass popover that morphs out of the
-/// trigger on iOS, like on iOS 26, and a `popover` popover elsewhere.
+/// trigger on iOS 26 and later, and an opaque `popover` popover elsewhere.
 class const PlatformPopover({
   /// Builds the trigger, which calls `showPopover` to show the popover.
   required final Widget Function(BuildContext context, VoidCallback showPopover) triggerBuilder,
   required final WidgetBuilder bodyBuilder,
 
-  /// The width of the popover. On Android it defaults to the width of the body; on iOS, where the
-  /// glass popover needs a fixed width, to a small popover.
+  /// The width of the popover. It defaults to the width of the body, except for the glass popover
+  /// (iOS 26 and later), which needs a fixed width: a small popover.
   final double? width,
 
-  /// Where the popover is shown on Android. On iOS its position is chosen from the trigger's
-  /// position on screen.
+  /// Where the popover is shown. The glass popover (iOS 26 and later) chooses its position from the
+  /// trigger's position on screen.
   final popover.PopoverDirection direction = popover.PopoverDirection.bottom,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (useLiquidGlass(context)) {
       return GlassPopover(
         popoverWidth: width ?? 180.0,
         settings: Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null,
