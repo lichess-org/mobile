@@ -32,7 +32,7 @@ void openGameScreen(
   DateTime? lastMoveAt,
 }) {
   if (game.variant.isReadSupported) {
-    Navigator.of(context, rootNavigator: true).push(
+    Navigator.of(context).push(
       game.fullId != null
           ? GameScreen.buildRoute(
               source: ExistingGameSource(game.fullId!),

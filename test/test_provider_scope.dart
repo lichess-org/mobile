@@ -29,7 +29,8 @@ import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show rootNavRouteStackObserver, tabNavigatorObservers;
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -165,6 +166,14 @@ Future<Widget> makeTestProviderScope(
 
   rootNavRouteStackObserver.clear();
   addTearDown(rootNavRouteStackObserver.clear);
+  void clearTabNavigatorObservers() {
+    for (final observer in tabNavigatorObservers.values) {
+      observer.clear();
+    }
+  }
+
+  clearTabNavigatorObservers();
+  addTearDown(clearTabNavigatorObservers);
 
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() {

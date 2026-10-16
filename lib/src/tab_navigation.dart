@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -132,6 +135,257 @@ class RouteStackObserver() extends NavigatorObserver {
       if (oldRoute != null) _stack.remove(oldRoute);
       if (newRoute != null) _stack.add(newRoute);
     }
+  }
+}
+
+/// A route that can hide the tab bar of the main tab scaffold.
+///
+/// Pushed in a tab navigator, a route that [hidesTabBar] fades the tab bar out, and the routes
+/// pushed above it keep it hidden until it is popped. Its page is laid out over the whole screen,
+/// as if there was no tab bar. On the root navigator it has no effect.
+abstract interface class TabBarHidingRoute() {
+  bool get hidesTabBar;
+}
+
+bool _hidesTabBar(Route<dynamic> route) => switch (route) {
+  TabBarHidingRoute(hidesTabBar: true) => true,
+  _ => false,
+};
+
+Animation<double>? _animationOf(Route<dynamic> route) =>
+    route is TransitionRoute ? route.animation : null;
+
+/// A [NavigatorObserver] of a tab navigator that tracks the routes hiding the tab bar (see
+/// [TabBarHidingRoute]).
+///
+/// It notifies its listeners when [hasTabBarHidingRoute] may have changed.
+class TabNavigatorObserver() extends NavigatorObserver with ChangeNotifier {
+  final List<Route<dynamic>> _stack = [];
+
+  final ProxyAnimation _tabBarVisibility = ProxyAnimation(kAlwaysCompleteAnimation);
+
+  /// The lowest route of the stack hiding the tab bar, or the last one popped while it is
+  /// animating out.
+  Route<dynamic>? _hidingRoute;
+
+  /// The visibility of the tab bar, from 0 (hidden) to 1 (visible).
+  ///
+  /// Like the iOS tab bar, the tab bar is hidden as soon as a route hiding it starts being pushed,
+  /// and fades back in with the animation of that route while it is popped, including during a
+  /// back swipe.
+  Animation<double> get tabBarVisibility => _tabBarVisibility;
+
+  /// Whether a route of the stack hides the tab bar.
+  ///
+  /// It is false as soon as the last route hiding the tab bar starts being popped.
+  bool get hasTabBarHidingRoute => _stack.any(_hidesTabBar);
+
+  /// Whether [route] is in the stack.
+  bool contains(Route<dynamic> route) => _stack.contains(route);
+
+  /// Whether the tab bar is hidden while [route] is shown: [route] hides it, or is above a route
+  /// hiding it.
+  bool routeHidesTabBar(Route<dynamic> route) {
+    final index = _stack.indexOf(route);
+    if (index < 0) return _hidesTabBar(route);
+    return _stack.take(index + 1).any(_hidesTabBar);
+  }
+
+  /// Clears the tracked stack. Only useful in tests, where the global instances are shared across
+  /// test cases.
+  @visibleForTesting
+  void clear() {
+    _stack.clear();
+    _hidingRoute = null;
+    _notifiedHasTabBarHidingRoute = false;
+    _tabBarVisibility.parent = kAlwaysCompleteAnimation;
+  }
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.add(route);
+    _update();
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.remove(route);
+    _update(popped: route);
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _stack.remove(route);
+    _update();
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    final index = oldRoute != null ? _stack.indexOf(oldRoute) : -1;
+    if (index >= 0 && newRoute != null) {
+      _stack[index] = newRoute;
+    } else {
+      if (oldRoute != null) _stack.remove(oldRoute);
+      if (newRoute != null) _stack.add(newRoute);
+    }
+    _update();
+  }
+
+  void _update({Route<dynamic>? popped}) {
+    final lowest = _stack.where(_hidesTabBar).firstOrNull;
+    if (lowest != null) {
+      if (lowest != _hidingRoute) {
+        _hidingRoute = lowest;
+        _hideTabBar(lowest);
+      }
+    } else if (popped != null && popped == _hidingRoute && _animationOf(popped) != null) {
+      // The tab bar fades in while the last route hiding it is popped.
+      final animation = _animationOf(popped)!;
+      _tabBarVisibility.parent = ReverseAnimation(animation);
+      if (animation.isDismissed) {
+        _showTabBar();
+      } else {
+        void listener(AnimationStatus status) {
+          if (status != AnimationStatus.dismissed) return;
+          animation.removeStatusListener(listener);
+          if (_hidingRoute == popped) _showTabBar();
+        }
+
+        animation.addStatusListener(listener);
+      }
+    } else {
+      _showTabBar();
+    }
+    _notifyIfChanged();
+  }
+
+  bool _notifiedHasTabBarHidingRoute = false;
+
+  /// Notifies the listeners if [hasTabBarHidingRoute] changed, after the build phase if a route was
+  /// pushed while building (e.g. the initial route).
+  void _notifyIfChanged() {
+    if (hasTabBarHidingRoute == _notifiedHasTabBarHidingRoute) return;
+    _notifiedHasTabBarHidingRoute = hasTabBarHidingRoute;
+    if (SchedulerBinding.instance.schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback((_) => notifyListeners());
+    } else {
+      notifyListeners();
+    }
+  }
+
+  void _showTabBar() {
+    _hidingRoute = null;
+    _tabBarVisibility.parent = kAlwaysCompleteAnimation;
+  }
+
+  /// Hides the tab bar for [route], and makes it follow the animation of [route] once it is in, so
+  /// that a back swipe fades it in.
+  void _hideTabBar(Route<dynamic> route) {
+    _tabBarVisibility.parent = kAlwaysDismissedAnimation;
+    final animation = _animationOf(route);
+    if (animation == null) return;
+    if (animation.isCompleted) {
+      _tabBarVisibility.parent = ReverseAnimation(animation);
+      return;
+    }
+    // The status of a replacing route can be completed for a moment before it comes in, so the
+    // route is followed until it is no longer the one hiding the tab bar: the tab bar is hidden
+    // again whenever the route goes forward on its own, but not when a back swipe is abandoned,
+    // which fades it out.
+    void listener(AnimationStatus status) {
+      if (_hidingRoute != route) {
+        animation.removeStatusListener(listener);
+      } else if (status == AnimationStatus.completed) {
+        _tabBarVisibility.parent = ReverseAnimation(animation);
+      } else if (status == AnimationStatus.forward &&
+          !(route.navigator?.userGestureInProgress ?? false)) {
+        _tabBarVisibility.parent = kAlwaysDismissedAnimation;
+      }
+    }
+
+    animation.addStatusListener(listener);
+  }
+}
+
+final Map<BottomTab, TabNavigatorObserver> tabNavigatorObservers = {
+  for (final tab in BottomTab.values) tab: TabNavigatorObserver(),
+};
+
+/// The layout that the main tab scaffold gives to the routes of a tab navigator, read by
+/// [TabRoutePage].
+class const TabNavigatorScope({
+  required final TabNavigatorObserver observer,
+
+  /// The [MediaQueryData] around the tab navigator, without the tab bar.
+  required final MediaQueryData mediaQuery,
+
+  /// The height of the tab bar, including the bottom safe area.
+  required final double tabBarHeight,
+
+  /// Whether the routes extend their body behind the tab bar (iOS), instead of being laid out above
+  /// it (Android).
+  required final bool extendBody,
+  required super.child,
+  super.key,
+}) extends InheritedWidget {
+  static TabNavigatorScope? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<TabNavigatorScope>();
+  }
+
+  /// The [MediaQueryData] of the routes that are shown with the tab bar.
+  MediaQueryData get tabBarMediaQuery => extendBody
+      ? mediaQuery.copyWith(padding: mediaQuery.padding.copyWith(bottom: tabBarHeight))
+      : mediaQuery.removePadding(removeBottom: true).removeViewInsets(removeBottom: true);
+
+  /// The space below the routes that are shown with the tab bar, when they are laid out above it.
+  double get tabBarBottomInset =>
+      extendBody ? 0.0 : math.max(tabBarHeight, mediaQuery.viewInsets.bottom);
+
+  @override
+  bool updateShouldNotify(TabNavigatorScope oldWidget) {
+    return observer != oldWidget.observer ||
+        mediaQuery != oldWidget.mediaQuery ||
+        tabBarHeight != oldWidget.tabBarHeight ||
+        extendBody != oldWidget.extendBody;
+  }
+}
+
+/// Lays out the page of a route of a tab navigator for the tab bar: with the tab bar, the page
+/// extends behind it (iOS) or is laid out above it (Android); without it (see
+/// [TabBarHidingRoute]), the page covers the whole screen, like on the root navigator.
+///
+/// On the root navigator, it returns [child] unchanged.
+class const TabRoutePage({required final Widget child, super.key}) extends StatefulWidget {
+  @override
+  State<TabRoutePage> createState() => _TabRoutePageState();
+}
+
+class _TabRoutePageState() extends State<TabRoutePage> {
+  /// Whether the tab bar is hidden while the route is shown, which does not change during the
+  /// lifetime of the route: cached, so that a route popped above a route hiding the tab bar keeps
+  /// its layout while it animates out, once it is no longer in the stack.
+  bool? _hidesTabBar;
+
+  @override
+  Widget build(BuildContext context) {
+    final scope = TabNavigatorScope.maybeOf(context);
+    final route = ModalRoute.of(context);
+    if (scope == null || route == null) return widget.child;
+
+    final hidesTabBar = _hidesTabBar ??= scope.observer.contains(route)
+        ? scope.observer.routeHidesTabBar(route)
+        : null;
+    if (hidesTabBar ?? scope.observer.routeHidesTabBar(route)) {
+      return MediaQuery(data: scope.mediaQuery, child: widget.child);
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: scope.tabBarBottomInset),
+      child: MediaQuery(
+        data: scope.tabBarMediaQuery,
+        child: MainTabScaffoldProperties(extendBody: scope.extendBody, child: widget.child),
+      ),
+    );
   }
 }
 

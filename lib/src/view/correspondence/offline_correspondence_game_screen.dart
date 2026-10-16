@@ -33,7 +33,10 @@ class const OfflineCorrespondenceGameScreen({
   super.key,
 }) extends StatefulWidget {
   static Route<dynamic> buildRoute({required (DateTime, OfflineCorrespondenceGame) initialGame}) {
-    return buildScreenRoute(screen: OfflineCorrespondenceGameScreen(initialGame: initialGame));
+    return buildScreenRoute(
+      screen: OfflineCorrespondenceGameScreen(initialGame: initialGame),
+      hidesTabBar: true,
+    );
   }
 
   @override

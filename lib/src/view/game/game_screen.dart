@@ -54,6 +54,7 @@ class const GameScreen({
   }) {
     return buildScreenRoute(
       screen: GameScreen(source: source, loadingPosition: loadingPosition, lastMoveAt: lastMoveAt),
+      hidesTabBar: true,
     );
   }
 

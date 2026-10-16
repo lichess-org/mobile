@@ -50,7 +50,7 @@ final _logger = Logger('AnalysisScreen');
 class const AnalysisScreen({required final AnalysisOptions options, super.key})
     extends StatelessWidget {
   static Route<dynamic> buildRoute(AnalysisOptions options) {
-    return buildScreenRoute(screen: AnalysisScreen(options: options));
+    return buildScreenRoute(screen: AnalysisScreen(options: options), hidesTabBar: true);
   }
 
   @override
