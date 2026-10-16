@@ -276,6 +276,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Ĉu vi volas fini ĉi tiun kuron?';
 
   @override
