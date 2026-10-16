@@ -154,4 +154,6 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Watch</string>
   <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">We will email you a code to sign in with.</string>
   <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">You cannot challenge yourself</string>
+  <string name="teamUpdatesEmptyDescription" comment="Empty state subtitle on the Team updates screen when the user is not a member of any team.">Updates from teams you join will appear here.</string>
+  <string name="joinTeams" comment="Button label on the Team updates empty state that opens the /team/all page.">Join teams</string>
 </resources>

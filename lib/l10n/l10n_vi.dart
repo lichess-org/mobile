@@ -485,6 +485,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Bạn không thể tự thách đấu chính mình';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from teams you join will appear here.';
+
+  @override
+  String get mobileJoinTeams => 'Join teams';
+
+  @override
   String get activityActivity => 'Hoạt động';
 
   @override

@@ -205,6 +205,8 @@
   "mobileWatchTab": "Watch",
   "mobileWeWillEmailYouCode": "We will email you a code to sign in with.",
   "mobileYouCannotChallengeYourself": "You cannot challenge yourself",
+  "mobileTeamUpdatesEmptyDescription": "Updates from teams you join will appear here.",
+  "mobileJoinTeams": "Join teams",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
