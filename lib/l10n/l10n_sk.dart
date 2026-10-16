@@ -435,6 +435,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Došlo k chybe.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1396,6 +1399,63 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Alebo pozvite používateľa Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess tréneri';
+
+  @override
+  String get coachLocation => 'Poloha';
+
+  @override
+  String get coachLanguages => 'Jazyky';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Hodinová sadzba';
+
+  @override
+  String get coachAvailability => 'Dostupnosť';
+
+  @override
+  String get coachAccepting => 'Prijíma študentov';
+
+  @override
+  String get coachNotAccepting => 'Momentálne neprijíma študentov';
+
+  @override
+  String get coachAboutMe => 'O mne';
+
+  @override
+  String get coachPlayingExperience => 'Hráčske skúsenosti';
+
+  @override
+  String get coachTeachingExperience => 'Skúsenosti s učením';
+
+  @override
+  String get coachOtherExperiences => 'Iné skúsenosti';
+
+  @override
+  String get coachBestSkills => 'Najlepšie schopnosti';
+
+  @override
+  String get coachTeachingMethod => 'Metodológia výučby';
+
+  @override
+  String get coachPublicStudies => 'Verejné štúdie';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videá';
+
+  @override
+  String get coachAllCountries => 'Všetky krajiny';
+
+  @override
+  String get coachLastLogin => 'Posledné prihlásenie';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
 
   @override
   String get contactContact => 'Kontakt';

@@ -435,6 +435,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Ceva nu a mers bine.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sortați prietenii';
 
   @override
@@ -1374,6 +1377,63 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Sau invitați un utilizator Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Antrenori Lichess';
+
+  @override
+  String get coachLocation => 'Locație';
+
+  @override
+  String get coachLanguages => 'Limbi';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Rata pe oră';
+
+  @override
+  String get coachAvailability => 'Disponibilitate';
+
+  @override
+  String get coachAccepting => 'Acceptă cursanți';
+
+  @override
+  String get coachNotAccepting => 'Nu acceptă studenți momentan';
+
+  @override
+  String get coachAboutMe => 'Despre mine';
+
+  @override
+  String get coachPlayingExperience => 'Experiență';
+
+  @override
+  String get coachTeachingExperience => 'Experiență de predare';
+
+  @override
+  String get coachOtherExperiences => 'Alte experiențe';
+
+  @override
+  String get coachBestSkills => 'Cele mai bune abilități';
+
+  @override
+  String get coachTeachingMethod => 'Metodologia de predare';
+
+  @override
+  String get coachPublicStudies => 'Studii publice';
+
+  @override
+  String get coachYoutubeVideos => 'Videoclipuri pe YouTube';
+
+  @override
+  String get coachAllCountries => 'Orice țară';
+
+  @override
+  String get coachLastLogin => 'Ultima autentificare';
+
+  @override
+  String get coachLichessRating => 'Rating lichess';
 
   @override
   String get contactContact => 'Contact';

@@ -435,6 +435,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSomethingWentWrong => '문제가 발생했습니다.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => '친구 정렬';
 
   @override
@@ -1330,6 +1333,63 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => '또는 Lichess 사용자를 초대합니다:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess 코치들';
+
+  @override
+  String get coachLocation => '지역';
+
+  @override
+  String get coachLanguages => '언어';
+
+  @override
+  String get coachRating => '레이팅';
+
+  @override
+  String get coachHourlyRate => '시간당 비용';
+
+  @override
+  String get coachAvailability => '신청 가능';
+
+  @override
+  String get coachAccepting => '학생을 받는 중';
+
+  @override
+  String get coachNotAccepting => '지금은 학생을 받고 있지 않음';
+
+  @override
+  String get coachAboutMe => '자기소개';
+
+  @override
+  String get coachPlayingExperience => '플레이 경험';
+
+  @override
+  String get coachTeachingExperience => '교습 경험';
+
+  @override
+  String get coachOtherExperiences => '또 다른 경력';
+
+  @override
+  String get coachBestSkills => '최고의 기술';
+
+  @override
+  String get coachTeachingMethod => '교육 방법론';
+
+  @override
+  String get coachPublicStudies => '공개한 연구';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube 동영상';
+
+  @override
+  String get coachAllCountries => '모든 국가';
+
+  @override
+  String get coachLastLogin => '마지막 로그인';
+
+  @override
+  String get coachLichessRating => 'Lichess 레이팅';
 
   @override
   String get contactContact => '문의';

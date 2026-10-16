@@ -435,6 +435,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1330,6 +1333,63 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Hoặc mời một người dùng Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Huấn luyện viên Lichess';
+
+  @override
+  String get coachLocation => 'Địa điểm';
+
+  @override
+  String get coachLanguages => 'Ngôn ngữ';
+
+  @override
+  String get coachRating => 'Hệ số';
+
+  @override
+  String get coachHourlyRate => 'Mức giá theo giờ';
+
+  @override
+  String get coachAvailability => 'Sẵn sàng';
+
+  @override
+  String get coachAccepting => 'Đang nhận học viên';
+
+  @override
+  String get coachNotAccepting => 'Hiện tại không nhận học viên';
+
+  @override
+  String get coachAboutMe => 'Giới thiệu và các thông tin về tôi';
+
+  @override
+  String get coachPlayingExperience => 'Kinh nghiệm chơi cờ';
+
+  @override
+  String get coachTeachingExperience => 'Kinh nghiệm dạy cờ';
+
+  @override
+  String get coachOtherExperiences => 'Kinh nghiệm khác';
+
+  @override
+  String get coachBestSkills => 'Những kỹ năng tốt nhất';
+
+  @override
+  String get coachTeachingMethod => 'Phương pháp giảng dạy';
+
+  @override
+  String get coachPublicStudies => 'Nghiên cứu công khai';
+
+  @override
+  String get coachYoutubeVideos => 'Các thước phim trên YouTube';
+
+  @override
+  String get coachAllCountries => 'Tất cả quốc gia';
+
+  @override
+  String get coachLastLogin => 'Lần đăng nhập cuối';
+
+  @override
+  String get coachLichessRating => 'Hệ số Lichess';
 
   @override
   String get contactContact => 'Liên hệ';

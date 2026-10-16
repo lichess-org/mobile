@@ -435,6 +435,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Ақау туындады.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1352,6 +1355,63 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Не Личес ойыншысын шақыру:';
+
+  @override
+  String get coachLichessCoaches => 'Личес бапкерлері';
+
+  @override
+  String get coachLocation => 'Мекен';
+
+  @override
+  String get coachLanguages => 'Тілдер';
+
+  @override
+  String get coachRating => 'Рейтинг';
+
+  @override
+  String get coachHourlyRate => 'Бір сағаттық ақы';
+
+  @override
+  String get coachAvailability => 'Есігіңіз ашық';
+
+  @override
+  String get coachAccepting => 'Шәкірттерді қабылдау';
+
+  @override
+  String get coachNotAccepting => 'Әзірге шәкірттерді қабылдау жоқ';
+
+  @override
+  String get coachAboutMe => 'Өзім туралы';
+
+  @override
+  String get coachPlayingExperience => 'Шахмат тәжірибем';
+
+  @override
+  String get coachTeachingExperience => 'Жаттықтыру тәжірибем';
+
+  @override
+  String get coachOtherExperiences => 'Басқа тәжірибем';
+
+  @override
+  String get coachBestSkills => 'Озық қабілеттерім';
+
+  @override
+  String get coachTeachingMethod => 'Жаттықтыру әдістемем';
+
+  @override
+  String get coachPublicStudies => 'Жалпыға ашық зерттеулер';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube видеолар';
+
+  @override
+  String get coachAllCountries => 'All countries';
+
+  @override
+  String get coachLastLogin => 'Last login';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
 
   @override
   String get contactContact => 'Байланыс';

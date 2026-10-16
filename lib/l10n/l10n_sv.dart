@@ -435,6 +435,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Något gick fel.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1352,6 +1355,63 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Eller bjud in en Lichess-användare:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess-tränare';
+
+  @override
+  String get coachLocation => 'Plats';
+
+  @override
+  String get coachLanguages => 'Språk';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Timtaxa';
+
+  @override
+  String get coachAvailability => 'Tillgänglighet';
+
+  @override
+  String get coachAccepting => 'Accepterar studenter';
+
+  @override
+  String get coachNotAccepting => 'Tar inte emot studenter just nu';
+
+  @override
+  String get coachAboutMe => 'Om mig';
+
+  @override
+  String get coachPlayingExperience => 'Schack-erfarenhet';
+
+  @override
+  String get coachTeachingExperience => 'Erfarenhet av undervisning';
+
+  @override
+  String get coachOtherExperiences => 'Andra erfarenheter';
+
+  @override
+  String get coachBestSkills => 'Främsta färdigheter';
+
+  @override
+  String get coachTeachingMethod => 'Metod för undervisning';
+
+  @override
+  String get coachPublicStudies => 'Offentliga studier';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube-videor';
+
+  @override
+  String get coachAllCountries => 'Alla länder';
+
+  @override
+  String get coachLastLogin => 'Senaste inloggning';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
 
   @override
   String get contactContact => 'Kontakt';

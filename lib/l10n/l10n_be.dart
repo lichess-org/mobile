@@ -435,6 +435,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Нешта пайшло не так.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1392,6 +1395,63 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Ці запрасіце карыстальніка Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Трэнеры на Lichess';
+
+  @override
+  String get coachLocation => 'Месцазнаходжання';
+
+  @override
+  String get coachLanguages => 'Мовы';
+
+  @override
+  String get coachRating => 'Рэйтынг';
+
+  @override
+  String get coachHourlyRate => 'Аплата за гадзіну';
+
+  @override
+  String get coachAvailability => 'Даступны';
+
+  @override
+  String get coachAccepting => 'Набірае студэнтаў';
+
+  @override
+  String get coachNotAccepting => 'Не набірае студэнтаў на дадзены момант';
+
+  @override
+  String get coachAboutMe => 'Пра сябе';
+
+  @override
+  String get coachPlayingExperience => 'Досвед гульні';
+
+  @override
+  String get coachTeachingExperience => 'Досвед выкладання';
+
+  @override
+  String get coachOtherExperiences => 'Іншыя досведы';
+
+  @override
+  String get coachBestSkills => 'Галоўныя навычкі';
+
+  @override
+  String get coachTeachingMethod => 'Методыка выкладання';
+
+  @override
+  String get coachPublicStudies => 'Даступныя ўсім уроки';
+
+  @override
+  String get coachYoutubeVideos => 'Відэа YouTube';
+
+  @override
+  String get coachAllCountries => 'Усі краіны';
+
+  @override
+  String get coachLastLogin => 'Апошні ўваход';
+
+  @override
+  String get coachLichessRating => 'Рэйтынг Lichess';
 
   @override
   String get contactContact => 'Звязацца';

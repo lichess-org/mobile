@@ -435,6 +435,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Si è verificato un errore.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1352,6 +1355,63 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Oppure invita un utente di Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Allenatori di lichess';
+
+  @override
+  String get coachLocation => 'Località';
+
+  @override
+  String get coachLanguages => 'Lingue';
+
+  @override
+  String get coachRating => 'Punteggio';
+
+  @override
+  String get coachHourlyRate => 'Tariffa oraria';
+
+  @override
+  String get coachAvailability => 'Disponibilità';
+
+  @override
+  String get coachAccepting => 'Si accettano studenti';
+
+  @override
+  String get coachNotAccepting => 'Al momento non si accettano studenti';
+
+  @override
+  String get coachAboutMe => 'Chi sono';
+
+  @override
+  String get coachPlayingExperience => 'Esperienza di gioco';
+
+  @override
+  String get coachTeachingExperience => 'Esperienza di insegnamento';
+
+  @override
+  String get coachOtherExperiences => 'Altre esperienze';
+
+  @override
+  String get coachBestSkills => 'Migliori abilità';
+
+  @override
+  String get coachTeachingMethod => 'Metodo di insegnamento';
+
+  @override
+  String get coachPublicStudies => 'I miei studi';
+
+  @override
+  String get coachYoutubeVideos => 'Video di YouTube';
+
+  @override
+  String get coachAllCountries => 'Tutti i Paesi';
+
+  @override
+  String get coachLastLogin => 'Ultimo accesso';
+
+  @override
+  String get coachLichessRating => 'Punteggio Lichess';
 
   @override
   String get contactContact => 'Contattaci';

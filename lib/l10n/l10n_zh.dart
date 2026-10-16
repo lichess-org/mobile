@@ -435,6 +435,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSomethingWentWrong => '出现错误';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => '好友排序';
 
   @override
@@ -1330,6 +1333,63 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => '或邀请一位 Lichess 用户：';
+
+  @override
+  String get coachLichessCoaches => 'Lichess 教练';
+
+  @override
+  String get coachLocation => '所在地区';
+
+  @override
+  String get coachLanguages => '语言';
+
+  @override
+  String get coachRating => '等级分';
+
+  @override
+  String get coachHourlyRate => '每小时费用';
+
+  @override
+  String get coachAvailability => '是否接受新学生';
+
+  @override
+  String get coachAccepting => '接收学生';
+
+  @override
+  String get coachNotAccepting => '目前不接收学生';
+
+  @override
+  String get coachAboutMe => '自我介绍';
+
+  @override
+  String get coachPlayingExperience => '对弈经验';
+
+  @override
+  String get coachTeachingExperience => '教学经验';
+
+  @override
+  String get coachOtherExperiences => '其他经验';
+
+  @override
+  String get coachBestSkills => '最擅长的技能';
+
+  @override
+  String get coachTeachingMethod => '教学方法';
+
+  @override
+  String get coachPublicStudies => '公开研习';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube 视频';
+
+  @override
+  String get coachAllCountries => '所有国家/地区';
+
+  @override
+  String get coachLastLogin => '最后登录';
+
+  @override
+  String get coachLichessRating => 'Lichess 等级分';
 
   @override
   String get contactContact => '联系我们';
@@ -8628,6 +8688,60 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get challengeInviteLichessUser => '或邀請一位 Lichess 用户：';
+
+  @override
+  String get coachLichessCoaches => 'Lichess 的教練們';
+
+  @override
+  String get coachLocation => '所在地';
+
+  @override
+  String get coachLanguages => '語言';
+
+  @override
+  String get coachRating => '評分';
+
+  @override
+  String get coachHourlyRate => '每小時費用：';
+
+  @override
+  String get coachAvailability => '忙碌狀態';
+
+  @override
+  String get coachAccepting => '接受學生';
+
+  @override
+  String get coachNotAccepting => '目前不接受新學生';
+
+  @override
+  String get coachAboutMe => '關於我';
+
+  @override
+  String get coachPlayingExperience => '奕棋經驗';
+
+  @override
+  String get coachTeachingExperience => '教學經驗';
+
+  @override
+  String get coachOtherExperiences => '其他經驗';
+
+  @override
+  String get coachBestSkills => '最佳技能';
+
+  @override
+  String get coachTeachingMethod => '教學方法';
+
+  @override
+  String get coachPublicStudies => '公開研究';
+
+  @override
+  String get coachYoutubeVideos => '在 Youtube 上的影片';
+
+  @override
+  String get coachAllCountries => '所有國家和地區';
+
+  @override
+  String get coachLichessRating => 'Lichess 評分';
 
   @override
   String get contactContact => '聯繫我們';

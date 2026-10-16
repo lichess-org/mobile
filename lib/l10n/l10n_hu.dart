@@ -435,6 +435,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Hiba történt.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1352,6 +1355,63 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Vagy hívj meg egy Lichess -felhasználót:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess edzők';
+
+  @override
+  String get coachLocation => 'Hely';
+
+  @override
+  String get coachLanguages => 'Nyelvek';
+
+  @override
+  String get coachRating => 'Értékszám';
+
+  @override
+  String get coachHourlyRate => 'Óradíj';
+
+  @override
+  String get coachAvailability => 'Rendelkezésre állás';
+
+  @override
+  String get coachAccepting => 'Fogad tanulókat';
+
+  @override
+  String get coachNotAccepting => 'Jelenleg nem fogad tanulókat';
+
+  @override
+  String get coachAboutMe => 'Rólam';
+
+  @override
+  String get coachPlayingExperience => 'Játéktapasztalat';
+
+  @override
+  String get coachTeachingExperience => 'Oktatói tapasztalat';
+
+  @override
+  String get coachOtherExperiences => 'Egyéb tapasztalat';
+
+  @override
+  String get coachBestSkills => 'Legjobb képességek';
+
+  @override
+  String get coachTeachingMethod => 'Oktatói módszertan';
+
+  @override
+  String get coachPublicStudies => 'Nyilvános tanulmányok';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videók';
+
+  @override
+  String get coachAllCountries => 'Az összes ország';
+
+  @override
+  String get coachLastLogin => 'Utolsó bejelentkezés';
+
+  @override
+  String get coachLichessRating => 'Lichess értékszám';
 
   @override
   String get contactContact => 'Kapcsolat';

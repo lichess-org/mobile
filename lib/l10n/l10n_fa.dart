@@ -435,6 +435,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSomethingWentWrong => 'مشکلی پیش آمد.';
 
   @override
+  String get mobileSortBy => 'Sort by';
+
+  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -1352,6 +1355,63 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'یا یک کاربر Lichess را دعوت کنید:';
+
+  @override
+  String get coachLichessCoaches => 'مربیان Lichess';
+
+  @override
+  String get coachLocation => 'موقعیت مکانی';
+
+  @override
+  String get coachLanguages => 'زبان‌ ها';
+
+  @override
+  String get coachRating => 'درجه‌بندی';
+
+  @override
+  String get coachHourlyRate => 'نرخ ساعتی';
+
+  @override
+  String get coachAvailability => 'دسترس‌پذیری';
+
+  @override
+  String get coachAccepting => 'دانشجوها را قبول می‌کنم';
+
+  @override
+  String get coachNotAccepting => 'در حال حاضر پذیرای دانشجویان نیستم';
+
+  @override
+  String get coachAboutMe => 'درباره من';
+
+  @override
+  String get coachPlayingExperience => 'سابقه بازی';
+
+  @override
+  String get coachTeachingExperience => 'سابقه تدریس';
+
+  @override
+  String get coachOtherExperiences => 'دیگر تجارب';
+
+  @override
+  String get coachBestSkills => 'بیشترین مهارت ها';
+
+  @override
+  String get coachTeachingMethod => 'شیوه آموزش';
+
+  @override
+  String get coachPublicStudies => 'مطالعه‌های همگانی';
+
+  @override
+  String get coachYoutubeVideos => 'ویدیو های یوتیوب';
+
+  @override
+  String get coachAllCountries => 'تمام کشورها';
+
+  @override
+  String get coachLastLogin => 'آخرین ورود';
+
+  @override
+  String get coachLichessRating => 'درجه‌بندی Lichess';
 
   @override
   String get contactContact => 'ارتباط با ما';
