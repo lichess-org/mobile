@@ -558,6 +558,12 @@ possible until then. Rules:
   45% of the screen) instead of the call site's. A labelled group of chips is a `Filter`
   (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
   16pt around the content and between groups.
+- **Context menus**: a menu of actions is never a bottom sheet. From a button, use
+  `ContextMenuIconButton`; on a long press of an item (e.g. a chat message), wrap it in a
+  `ContextMenuRegion`, which opens the menu at the press point (both in
+  `platform_context_menu_button.dart`, with `ContextMenuAction`s). On iOS 26 it is a `GlassMenu`
+  (from the button, or blooming from the press point with slide-to-select), a Material menu
+  elsewhere.
 - **Popovers**: use `PlatformPopover` (`popover.dart`), a `GlassPopover` that morphs out of its
   trigger on iOS. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
 - Glass is for the navigation and control layer that floats above content (bars, floating
