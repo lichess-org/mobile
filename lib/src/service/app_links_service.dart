@@ -175,7 +175,13 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
         return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
         final id = appLinkUri.pathSegments[1];
-        return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
+        return [
+          PuzzleScreen.buildRoute(
+            angle: PuzzleAngle.fromKey('mix'),
+            puzzleId: PuzzleId(id),
+            openCasual: true,
+          ),
+        ];
       case 'editor':
         final orientation = appLinkUri.queryParameters['color'] == 'black'
             ? Side.black

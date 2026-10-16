@@ -333,7 +333,9 @@ void main() {
       await tester.pumpAndSettle(); // Wait puzzle screen to load
       expect(
         tester.widget(find.byType(PuzzleScreen)),
-        isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', '61044'),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzleId, 'id', '61044')
+            .having((s) => s.openCasual, 'openCasual', true),
       );
     });
 
