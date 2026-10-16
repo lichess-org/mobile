@@ -1698,6 +1698,28 @@ void main() {
       expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
     });
 
+    testWidgets('follows the time given to a player', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // the user gives 15 s to the opponent
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "clockInc", "v": 1, "d": {"color": "black", "time": 15, "total": 19500}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).state!.blackClock, const Duration(seconds: 195));
+    });
+
     testWidgets('reports the game socket connection state', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       FakeWebSocketChannel? gameSocket;
