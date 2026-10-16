@@ -209,6 +209,19 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
 /// navigation bar buttons (the package's light glass is nearly clear).
 const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x80FFFFFF));
 
+/// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
+/// laid out inside it (the search field below a large title), so that they look the same.
+///
+/// With a background theme, or when [tinted] (`PlatformAppBar.tintedGlass`), it is
+/// [tintedGlassSettings]: the barely tinted dark glass would show the image brightly. In light mode,
+/// the buttons are white like the iOS navigation bar buttons. Otherwise, the package default.
+LiquidGlassSettings? appBarButtonGlassSettings(BuildContext context, {bool tinted = false}) =>
+    tinted || _hasBackgroundTheme(context)
+    ? tintedGlassSettings(context)
+    : Theme.of(context).brightness == Brightness.light
+    ? _kLightAppBarButtonSettings
+    : null;
+
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
 
@@ -742,13 +755,7 @@ class const PlatformAppBar({
       final glass = useLiquidGlass(context);
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
-      // With a background theme, the barely tinted dark glass would show the image brightly. In
-      // light mode, the buttons are white like the iOS navigation bar buttons.
-      final buttonSettings = tintedGlass || _hasBackgroundTheme(context)
-          ? tintedGlassSettings(context)
-          : Theme.of(context).brightness == Brightness.light
-          ? _kLightAppBarButtonSettings
-          : null;
+      final buttonSettings = appBarButtonGlassSettings(context, tinted: tintedGlass);
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
           MainTabScaffoldProperties.hasExtendedBody(context) &&
