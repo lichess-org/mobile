@@ -47,9 +47,9 @@ Future<T?> showAdaptiveBottomSheet<T>({
     context: context,
     isDismissible: isDismissible,
     isScrollControlled: isScrollControlled,
-    // A screen covering the tab bar presents its sheets on the root navigator, over the whole
-    // screen, like the screens of the root navigator.
-    useRootNavigator: useRootNavigator || isTabBarHiddenAt(context),
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // A floating glass card must not grow under the status bar.
     useSafeArea: isIOS || useSafeArea,
     constraints: isIOS ? _glassSheetConstraints(context, constraints) : constraints,
@@ -85,9 +85,9 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
-    // A screen covering the tab bar presents its sheets on the root navigator, over the whole
-    // screen, like the screens of the root navigator.
-    useRootNavigator: useRootNavigator || isTabBarHiddenAt(context),
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // A floating card must not grow under the status bar.
     useSafeArea: isIOS,
     constraints: constraints,
@@ -136,9 +136,9 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
-    // A screen covering the tab bar presents its sheets on the root navigator, over the whole
-    // screen, like the screens of the root navigator.
-    useRootNavigator: useRootNavigator || isTabBarHiddenAt(context),
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // The sheet stops below the status bar.
     useSafeArea: true,
     backgroundColor: isIOS ? Colors.transparent : null,
@@ -496,7 +496,7 @@ class const BottomSheetContextMenuAction({
       title: child,
       onTap: () {
         if (closeOnPressed) {
-          Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pop();
         }
         onPressed?.call();
       },

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart' show isTabBarHiddenAt;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassDefaults;
@@ -100,6 +101,9 @@ Future<T?> showCupertinoActionSheet<T>({
 }) {
   return showCupertinoModalPopup(
     context: context,
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // action sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: !isTabBarHiddenAt(context),
     barrierDismissible: isDismissible,
     barrierColor: GlassDefaults.barrierColor,
     builder: (BuildContext context) {
@@ -248,6 +252,8 @@ Future<T?> showMaterialActionSheet<T>({
   final screenWidth = MediaQuery.widthOf(context);
   return showDialog<T>(
     context: context,
+    // See showCupertinoActionSheet.
+    useRootNavigator: !isTabBarHiddenAt(context),
     barrierDismissible: isDismissible,
     builder: (BuildContext context) {
       return Dialog(

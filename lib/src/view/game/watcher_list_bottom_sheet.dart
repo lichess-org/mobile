@@ -36,7 +36,7 @@ class const WatcherListBottomSheet({
             leading: const Icon(Icons.person_outline, size: 20),
             title: Text(name),
             onTap: () {
-              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.of(context).pop();
               Navigator.of(context).pushHidingTabBar(
                 UserOrProfileScreen.buildRoute(
                   LightUser(id: UserId(name.toLowerCase()), name: name),

@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
@@ -27,6 +26,12 @@ class const GameResultDialog({
 
   /// Callback to navigate back to the tournament of the game, once the dialog is closed.
   required final void Function(TournamentId tournamentId) onBackToTournamentCallback,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysisCallback,
   super.key,
 }) extends ConsumerStatefulWidget {
   @override
@@ -230,7 +235,8 @@ class _GameResultDialogState() extends ConsumerState<GameResultDialog> {
             if (value.game.userAnalysable)
               FilledButton.tonal(
                 onPressed: () {
-                  Navigator.of(context).push(AnalysisScreen.buildRoute(value.analysisOptions));
+                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
+                  widget.onAnalysisCallback(value.analysisOptions);
                 },
                 child: Text(context.l10n.analysis, textAlign: TextAlign.center),
               ),
@@ -246,6 +252,12 @@ class const OverTheBoardGameResultDialog({
   super.key,
   required final OverTheBoardGame game,
   required final void Function() onRematch,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysis,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -260,15 +272,14 @@ class const OverTheBoardGameResultDialog({
         ),
         FilledButton.tonal(
           onPressed: () {
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: const StringId('otb_finished_game_analysis'),
-                  orientation: Side.white,
-                  pgn: game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: game.meta.variant,
-                ),
+            Navigator.pop(context);
+            onAnalysis(
+              AnalysisOptions.pgn(
+                id: const StringId('otb_finished_game_analysis'),
+                orientation: Side.white,
+                pgn: game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: game.meta.variant,
               ),
             );
           },

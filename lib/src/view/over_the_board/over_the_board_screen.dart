@@ -158,6 +158,8 @@ class _BodyState() extends ConsumerState<_Body> {
                     Navigator.pop(context);
                   });
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );

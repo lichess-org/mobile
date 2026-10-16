@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
@@ -109,6 +110,78 @@ void main() {
       await tester.pumpAndSettle();
       expect(observer.tabBarVisibility.value, 1.0);
       expect(observer.hasTabBarHidingRoute, isFalse);
+    });
+  });
+
+  group('showAdaptiveBottomSheet in a tab navigator', () {
+    late TabNavigatorObserver observer;
+    final tabNavigatorKey = GlobalKey<NavigatorState>();
+
+    /// Pushes a screen in a tab navigator, with [hidesTabBar], shows a sheet over it on the root
+    /// navigator if it is needed to cover the tab bar, and returns the navigator of the sheet.
+    Future<NavigatorState> showSheetOverScreen(
+      WidgetTester tester, {
+      required bool hidesTabBar,
+    }) async {
+      observer = TabNavigatorObserver();
+      addTearDown(observer.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          home: TabNavigatorScope(
+            observer: observer,
+            mediaQuery: const MediaQueryData(),
+            tabBarHeight: 80,
+            extendBody: false,
+            child: Navigator(
+              key: tabNavigatorKey,
+              observers: [observer],
+              onGenerateRoute: (_) => _TestRoute(const Text('tab root')),
+            ),
+          ),
+        ),
+      );
+
+      NavigatorState? sheetNavigator;
+      final screenRoute = _TestRoute(
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              useRootNavigator: true,
+              builder: (sheetContext) {
+                sheetNavigator = Navigator.of(sheetContext);
+                return const Text('sheet');
+              },
+            ),
+            child: const Text('show sheet'),
+          ),
+        ),
+      );
+      if (hidesTabBar) {
+        tabNavigatorKey.currentState!.pushHidingTabBar(screenRoute);
+      } else {
+        tabNavigatorKey.currentState!.push(screenRoute);
+      }
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('show sheet'));
+      await tester.pumpAndSettle();
+      expect(find.text('sheet'), findsOneWidget);
+      return sheetNavigator!;
+    }
+
+    testWidgets('over a screen hiding the tab bar, the sheet is in the tab navigator', (
+      tester,
+    ) async {
+      final sheetNavigator = await showSheetOverScreen(tester, hidesTabBar: true);
+      expect(sheetNavigator, tabNavigatorKey.currentState);
+    });
+
+    testWidgets('over a screen shown with the tab bar, the sheet is on the root navigator', (
+      tester,
+    ) async {
+      final sheetNavigator = await showSheetOverScreen(tester, hidesTabBar: false);
+      expect(sheetNavigator, isNot(tabNavigatorKey.currentState));
     });
   });
 }

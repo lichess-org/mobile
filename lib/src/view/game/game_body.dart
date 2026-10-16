@@ -190,6 +190,8 @@ class const GameBody({
                   id: gameId,
                   onNewOpponentCallback: onNewOpponentCallback,
                   onBackToTournamentCallback: (id) => _backToTournament(context, id),
+                  onAnalysisCallback: (options) =>
+                      Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
                 ),
                 barrierDismissible: true,
               );
@@ -216,9 +218,10 @@ class const GameBody({
 
     if (prev?.hasValue == true && state.hasValue) {
       if (state.requireValue.redirectGameId != null) {
-        // Be sure to pop any dialogs that might be on top of the game screen: they are on the root
-        // navigator.
+        // Be sure to pop any dialogs and sheets that might be on top of the game screen: the
+        // dialogs are on the root navigator, the sheets on the game screen's.
         Navigator.of(context, rootNavigator: true).popUntil((route) => route is! PopupRoute);
+        Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
     }
@@ -829,6 +832,8 @@ class const _GameBottomBar({
                   onNewOpponentCallback: onNewOpponentCallback,
                   onBackToTournamentCallback: (tournamentId) =>
                       _backToTournament(context, tournamentId),
+                  onAnalysisCallback: (options) =>
+                      Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
                 ),
                 barrierDismissible: true,
               );
