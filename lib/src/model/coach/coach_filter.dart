@@ -1,3 +1,5 @@
+import 'package:lichess_mobile/l10n/l10n.dart';
+
 enum CoachOrder(final String key) {
   login('login'),
   rating('rating'),
@@ -6,10 +8,10 @@ enum CoachOrder(final String key) {
   static CoachOrder fromKey(String key) =>
       CoachOrder.values.firstWhere((order) => order.key == key, orElse: () => CoachOrder.login);
 
-  String get label => switch (this) {
-    CoachOrder.login => 'Last login',
-    CoachOrder.rating => 'Lichess rating',
-    CoachOrder.alphabetical => 'Alphabetical',
+  String l10n(AppLocalizations l10n) => switch (this) {
+    CoachOrder.login => l10n.coachLastLogin,
+    CoachOrder.rating => l10n.coachLichessRating,
+    CoachOrder.alphabetical => l10n.studyAlphabetical,
   };
 }
 

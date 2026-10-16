@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
 import 'package:lichess_mobile/src/model/coach/coach_list_controller.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -67,7 +68,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
 
     final languages = [kAllCoachesFilter, ...?page?.languages];
     final countries = [
-      const CoachFilterOption(code: kAllCoachesFilter, name: 'All countries'),
+      CoachFilterOption(code: kAllCoachesFilter, name: context.l10n.coachAllCountries),
       ...?page?.countries,
     ];
 
@@ -80,11 +81,11 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
           padding: const EdgeInsets.all(16.0),
           children: [
             Filter<CoachOrder>(
-              filterName: 'Sort by',
+              filterName: context.l10n.mobileSortBy,
               filterType: FilterType.singleChoice,
               choices: CoachOrder.values,
               choiceSelected: (choice) => newOrder == choice,
-              choiceLabel: (choice) => Text(choice.label),
+              choiceLabel: (choice) => Text(choice.l10n(context.l10n)),
               onSelected: (value, selected) {
                 if (selected) {
                   setSheetState(() => newOrder = value);
@@ -92,7 +93,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               },
             ),
             const SizedBox(height: 16.0),
-            const Text('Language', style: TextStyle(fontSize: 18)),
+            Text(context.l10n.language, style: const TextStyle(fontSize: 18)),
             RadioGroup<String>(
               groupValue: newLanguage,
               onChanged: (value) {
@@ -104,14 +105,16 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
                 children: [
                   for (final code in languages)
                     RadioListTile<String>(
-                      title: Text(code == kAllCoachesFilter ? 'All languages' : languageName(code)),
+                      title: Text(
+                        code == kAllCoachesFilter ? context.l10n.allLanguages : languageName(code),
+                      ),
                       value: code,
                     ),
                 ],
               ),
             ),
             const SizedBox(height: 16.0),
-            const Text('Country', style: TextStyle(fontSize: 18)),
+            Text(context.l10n.countryRegion, style: const TextStyle(fontSize: 18)),
             RadioGroup<String>(
               groupValue: newCountry,
               onChanged: (value) {
@@ -136,7 +139,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
                 });
                 Navigator.of(context).pop();
               },
-              child: const Text('Apply'),
+              child: Text(context.l10n.done),
             ),
             const SizedBox(height: 16.0),
           ],
@@ -163,11 +166,11 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('Coaches'),
+        title: Text(context.l10n.coachLichessCoaches),
         actions: [
           SemanticIconButton(
             icon: const Icon(Icons.filter_list),
-            semanticsLabel: 'Filter coaches',
+            semanticsLabel: context.l10n.mobileFilters,
             onPressed: () => _openFilterSheet(page.value),
           ),
         ],
@@ -175,7 +178,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
       body: switch (page) {
         AsyncData(:final value) =>
           value.coaches.isEmpty
-              ? const Center(child: Text('No coaches found'))
+              ? Center(child: Text(context.l10n.mobileNoSearchResults))
               : HapticRefreshIndicator(
                   onRefresh: () =>
                       ref.refresh(coachListControllerProvider(_filters).future).then((_) {}),

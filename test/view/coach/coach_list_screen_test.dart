@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
-import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
@@ -162,13 +161,13 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      await tester.tap(findByTooltip('Filter coaches'));
+      await tester.tap(findByTooltip('Filters'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text(CoachOrder.rating.label));
+      await tester.tap(find.text('Lichess rating'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Apply'));
+      await tester.tap(find.text('Done'));
       await tester.pumpAndSettle();
 
       expect(requestedOrders, ['login', 'rating']);

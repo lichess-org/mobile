@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
@@ -89,35 +90,38 @@ class const _Body({required final CoachProfile profile}) extends StatelessWidget
           hasLeading: true,
           children: [
             if (profile.languages.isNotEmpty)
-              _InfoRow(label: 'Languages', value: profile.languages.join(', ')),
+              _InfoRow(label: context.l10n.coachLanguages, value: profile.languages.join(', ')),
             if (profile.rating != null)
-              _InfoRow(label: 'Lichess rating', value: profile.rating.toString()),
+              _InfoRow(label: context.l10n.coachLichessRating, value: profile.rating.toString()),
             _InfoRow(
-              label: 'Availability',
-              value: profile.available ? 'Accepting students' : 'Not accepting students',
+              label: context.l10n.coachAvailability,
+              value: profile.available
+                  ? context.l10n.coachAccepting
+                  : context.l10n.coachNotAccepting,
             ),
           ],
         ),
         if (profile.description case final description?)
-          _TextSection(title: 'About me', body: description),
+          _TextSection(title: context.l10n.coachAboutMe, body: description),
         if (profile.playingExperience case final experience?)
-          _TextSection(title: 'Playing experience', body: experience),
+          _TextSection(title: context.l10n.coachPlayingExperience, body: experience),
         if (profile.teachingExperience case final experience?)
-          _TextSection(title: 'Teaching experience', body: experience),
+          _TextSection(title: context.l10n.coachTeachingExperience, body: experience),
         if (profile.otherExperience case final experience?)
-          _TextSection(title: 'Other experience', body: experience),
-        if (profile.skills case final skills?) _TextSection(title: 'Best skills', body: skills),
+          _TextSection(title: context.l10n.coachOtherExperiences, body: experience),
+        if (profile.skills case final skills?)
+          _TextSection(title: context.l10n.coachBestSkills, body: skills),
         if (profile.methodology case final methodology?)
-          _TextSection(title: 'Teaching methodology', body: methodology),
+          _TextSection(title: context.l10n.coachTeachingMethod, body: methodology),
         if (profile.youtubeChannel != null || profile.youtubeVideos.isNotEmpty)
           ListSection(
-            header: const Text('Videos'),
+            header: Text(context.l10n.coachYoutubeVideos),
             hasLeading: true,
             children: [
               if (profile.youtubeChannel case final channel?)
                 ListTile(
                   leading: const Icon(Icons.play_arrow),
-                  title: const Text('YouTube channel'),
+                  title: Text(channel, maxLines: 1, overflow: TextOverflow.ellipsis),
                   onTap: () => launchUrlString(channel),
                 ),
               for (final video in profile.youtubeVideos)
@@ -130,7 +134,7 @@ class const _Body({required final CoachProfile profile}) extends StatelessWidget
           ),
         if (profile.studies.isNotEmpty)
           ListSection(
-            header: const Text('Public studies'),
+            header: Text(context.l10n.coachPublicStudies),
             hasLeading: true,
             children: [
               for (final studyId in profile.studies)
