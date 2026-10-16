@@ -173,6 +173,39 @@ void main() {
       expect(requestedOrders, ['login', 'rating']);
     });
 
+    testWidgets('failed load shows a blue refresh icon next to retry', (tester) async {
+      var requestCount = 0;
+      final client = MockClient((request) async {
+        requestCount++;
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final icon = tester.widget<Icon>(find.byIcon(Icons.refresh));
+      expect(icon.color, ColorScheme.of(tester.element(find.byIcon(Icons.refresh))).primary);
+      expect(
+        tester.getCenter(find.byIcon(Icons.refresh)).dx,
+        lessThan(tester.getCenter(find.text('Retry')).dx),
+      );
+
+      await tester.tap(find.text('Retry'));
+      await tester.pumpAndSettle();
+
+      expect(requestCount, greaterThanOrEqualTo(2));
+    });
+
     testWidgets('learn tab shows a Coaches entry', (tester) async {
       final client = MockClient((request) async {
         return http.Response('', 404);

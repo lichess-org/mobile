@@ -2,13 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
 import 'package:lichess_mobile/src/model/coach/coach_list_controller.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -188,11 +188,33 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
                     itemBuilder: (context, index) => CoachListTile(coach: value.coaches[index]),
                   ),
                 ),
-        AsyncError() => FullScreenRetryRequest(
+        AsyncError() => _CoachErrorView(
           onRetry: () => ref.invalidate(coachListControllerProvider(_filters)),
         ),
         _ => const Center(child: CircularProgressIndicator.adaptive()),
       },
+    );
+  }
+}
+
+class const _CoachErrorView({required final VoidCallback onRetry}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(context.l10n.mobileSomethingWentWrong, style: Styles.sectionTitle),
+          const SizedBox(height: 10),
+          FilledButton.tonalIcon(
+            onPressed: onRetry,
+            icon: Icon(Icons.refresh, color: ColorScheme.of(context).primary),
+            label: Text(context.l10n.retry),
+          ),
+        ],
+      ),
     );
   }
 }
