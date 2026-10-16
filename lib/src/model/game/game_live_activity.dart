@@ -137,12 +137,12 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
   /// the [claimGrace], so that the warning still comes before the claim if the grace is halved
   /// meanwhile (e.g. the opponent captures a piece).
   ///
-  /// Null to warn as soon as the app stops running: when no claim is possible, and in bullet, where
-  /// the grace is too short to wait for.
+  /// Null to warn as soon as the app stops running: when no claim is possible, and in bullet and
+  /// blitz, where the grace is too short to wait for.
   static Duration? leftWarningDelayOf(PlayableGame game) {
     if (!isClaimable(game)) return null;
     return switch (game.meta.speed) {
-      .blitz || .rapid || .classical => claimGrace(game) ~/ 2,
+      .rapid || .classical => claimGrace(game) ~/ 2,
       _ => null,
     };
   }
