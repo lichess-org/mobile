@@ -1670,6 +1670,7 @@ void main() {
       expect(start.state!.clockRunning, isTrue);
       // blitz: warns as soon as the app stops running
       expect(start.state!.leftWarningDelay, isNull);
+      expect(start.state!.result, isNull);
 
       // our move, played on the board
       await playMove(tester, 'd2', 'd4');
@@ -1803,7 +1804,7 @@ void main() {
       expect(channel.calls.single.state!.leftWarningDelay, isNull);
     });
 
-    testWidgets('ends at once when the game is over', (tester) async {
+    testWidgets('ends with the result when the game is over', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(
         tester,
@@ -1823,6 +1824,9 @@ void main() {
 
       final end = lastCall(channel);
       expect(end.method, 'end');
+      expect(end.state!.result, GameLiveActivityResult.whiteWins);
+      expect(end.state!.clockRunning, isFalse);
+      expect(end.dismissAfter, const Duration(seconds: 15));
 
       // let the game-over popup and the dong play
       await tester.pump(const Duration(seconds: 1));
