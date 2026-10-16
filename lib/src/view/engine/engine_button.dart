@@ -64,6 +64,8 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
         PlatformPopover(
           width: 250,
           direction: PopoverDirection.top,
+          // The engine details are content, hard to read on glass over the board.
+          opaque: true,
           bodyBuilder: (_) => _EnginePopup(
             goDeeper: widget.goDeeper,
             filters: widget.filters,

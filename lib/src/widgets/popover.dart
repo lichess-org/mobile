@@ -1,3 +1,4 @@
+import 'package:lichess_mobile/src/widgets/glass_modal.dart' show opaqueModalColor;
 import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
@@ -58,6 +59,11 @@ class const PlatformPopover({
   /// Where the popover is shown. The glass popover (iOS 26 and later) chooses its position from the
   /// trigger's position on screen.
   final popover.PopoverDirection direction = popover.PopoverDirection.bottom,
+
+  /// Whether the glass popover (iOS 26 and later) has an opaque fill ([opaqueModalColor]), for a
+  /// body that would be hard to read on glass over busy content. It keeps the glass shape and its
+  /// morph out of the trigger. The other popovers are always opaque.
+  final bool opaque = false,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -65,7 +71,12 @@ class const PlatformPopover({
     if (useLiquidGlass(context)) {
       return GlassPopover(
         popoverWidth: width ?? 180.0,
-        settings: Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null,
+        settings: opaque
+            // The package default popover glass (as [kLightMenuGlassSettings]), with an opaque fill.
+            ? kLightMenuGlassSettings.copyWith(glassColor: opaqueModalColor(context))
+            : Theme.of(context).brightness == Brightness.light
+            ? kLightMenuGlassSettings
+            : null,
         // The trigger is not glass itself (e.g. it sits in the glass capsule of the app bar).
         triggerBuilder: triggerBuilder,
         // The glass popover is outside of any Material.

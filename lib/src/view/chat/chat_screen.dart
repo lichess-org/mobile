@@ -10,11 +10,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/message_input.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -204,7 +204,9 @@ class const _MessageBubble({
       message: message.message,
       actions: [
         if (you == false && message.user != null)
-          BottomSheetContextMenuAction(
+          ContextMenuAction(
+            icon: Icons.report_problem_outlined,
+            label: 'Report',
             onPressed: () async {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
@@ -220,8 +222,6 @@ class const _MessageBubble({
                 ref.read(chatNotifierProvider(options)).reportMessage(message);
               }
             },
-            icon: Icons.report_problem_outlined,
-            child: const Text('Report'),
           ),
       ],
       child: FractionallySizedBox(
