@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -634,7 +635,7 @@ class const _GameListWidget({
               final list = await ref.read(gameRepositoryProvider).getGamesByIds(gameIds);
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.archivedGame(
                       orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,

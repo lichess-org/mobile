@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -50,7 +51,7 @@ final _logger = Logger('AnalysisScreen');
 class const AnalysisScreen({required final AnalysisOptions options, super.key})
     extends StatelessWidget {
   static Route<dynamic> buildRoute(AnalysisOptions options) {
-    return buildScreenRoute(screen: AnalysisScreen(options: options), hidesTabBar: true);
+    return buildScreenRoute(screen: AnalysisScreen(options: options));
   }
 
   @override
@@ -444,7 +445,7 @@ class const _BottomBar({
                     ref
                         .read(analysisControllerProvider(options).notifier)
                         .clearSavedStandaloneAnalysis();
-                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                    Navigator.of(context).pushReplacementHidingTabBar(
                       buildScreenRoute<dynamic>(
                         screen: AnalysisScreen(
                           options: (options as Standalone).copyWith(variant: variant),

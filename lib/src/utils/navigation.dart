@@ -22,8 +22,7 @@ class MaterialScreenRoute<T extends Object?>({
   super.fullscreenDialog,
   super.allowSnapshotting,
   final Duration? overrideTransitionDuration,
-  @override final bool hidesTabBar = false,
-}) extends MaterialPageRoute<T> implements ScreenRoute<T>, TabBarHidingRoute {
+}) extends MaterialPageRoute<T> implements ScreenRoute<T> {
   this
     : super(
         builder: (_) => TabRoutePage(child: FullScreenBackground(child: screen)),
@@ -37,20 +36,15 @@ class MaterialScreenRoute<T extends Object?>({
 ///
 /// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
 /// is always filled with the configured app's background color or image.
-///
-/// With [hidesTabBar], the tab bar is hidden while the route is shown in a tab navigator (see
-/// [TabBarHidingRoute]).
 Route<T> buildScreenRoute<T>({
   required Widget screen,
   bool fullscreenDialog = false,
-  bool hidesTabBar = false,
   RouteSettings? settings,
   Duration? transitionDuration,
 }) {
   return MaterialScreenRoute<T>(
     screen: screen,
     fullscreenDialog: fullscreenDialog,
-    hidesTabBar: hidesTabBar,
     settings: settings,
     overrideTransitionDuration: transitionDuration,
   );

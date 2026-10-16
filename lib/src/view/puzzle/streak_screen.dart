@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -502,7 +503,7 @@ class const _BottomBar({
         if (streak.finished)
           BottomBarButton(
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pushHidingTabBar(
                 AnalysisScreen.buildRoute(
                   AnalysisOptions.pgn(
                     id: puzzleState.puzzle.puzzle.id,

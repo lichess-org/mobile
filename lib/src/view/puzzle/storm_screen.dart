@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -718,10 +719,9 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
             icon: Icons.history,
             label: context.l10n.stormHighscores,
             showLabel: true,
-            onTap: () => Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(StormDashboardModal.buildRoute(authUser.user)),
+            onTap: () =>
+                Navigator.of(context)
+                    .pushHidingTabBar(StormDashboardModal.buildRoute(authUser.user)),
           ),
       ],
     );

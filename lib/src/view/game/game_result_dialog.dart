@@ -12,11 +12,9 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:material_ui/material_ui.dart';
@@ -26,6 +24,9 @@ class const GameResultDialog({
 
   /// Callback to load a new opponent.
   required final void Function(PlayableGame game) onNewOpponentCallback,
+
+  /// Callback to navigate back to the tournament of the game, once the dialog is closed.
+  required final void Function(TournamentId tournamentId) onBackToTournamentCallback,
   super.key,
 }) extends ConsumerStatefulWidget {
   @override
@@ -82,29 +83,9 @@ class _GameResultDialogState() extends ConsumerState<GameResultDialog> {
     return null;
   }
 
-  /// Navigates back to the tournament this game belongs to.
-  ///
-  /// If we came from the tournament screen (the usual case: we were on the
-  /// tournament, the game was pushed on top and we played it), it is still in
-  /// the navigation stack, so we close the dialog and pop back to it. Otherwise
-  /// (e.g. the game was opened from the home recent games list) there is no
-  /// tournament screen to go back to, so we push a fresh one.
   void _backToTournament(TournamentId tournamentId) {
-    final navigator = Navigator.of(context);
-    if (rootNavRouteStackObserver.containsRoute(
-      TournamentScreen.routeName,
-      arguments: tournamentId.value,
-    )) {
-      navigator.popUntil(
-        (route) =>
-            route.settings.name == TournamentScreen.routeName &&
-            route.settings.arguments == tournamentId.value,
-      );
-    } else {
-      // Close the dialog first, then push the tournament screen.
-      navigator.popUntil((route) => route is! PopupRoute);
-      navigator.push(TournamentScreen.buildRoute(tournamentId));
-    }
+    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+    widget.onBackToTournamentCallback(tournamentId);
   }
 
   @override

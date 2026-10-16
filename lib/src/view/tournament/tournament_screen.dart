@@ -76,6 +76,8 @@ class const TournamentScreen({required final TournamentId id, final UserId? init
 }
 
 class _TournamentScreenState() extends ConsumerState<TournamentScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   @override
   void initState() {
     super.initState();
@@ -93,13 +95,13 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
   }
 
@@ -121,12 +123,12 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
       tournamentControllerProvider(widget.id).select((value) => value.value?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
+          // The dialogs over the game (e.g. its result) are on the root navigator.
+          Navigator.of(context, rootNavigator: true).popUntil((route) => route is! PopupRoute);
           Navigator.of(context)
               .popUntil((route) => route.settings.name == TournamentScreen.routeName);
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
+          Navigator.of(context)
+              .pushHidingTabBar(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
         }
       },
     );
@@ -954,7 +956,7 @@ class const _FeaturedGame(final FeaturedGame featuredGame, final bool isSpectato
               ? () {
                   // If game is finished, go to analysis board
                   if (!featuredGame.active) {
-                    Navigator.of(context, rootNavigator: true).push(
+                    Navigator.of(context).pushHidingTabBar(
                       AnalysisScreen.buildRoute(
                         AnalysisOptions.archivedGame(
                           orientation: featuredGame.orientation,
@@ -964,7 +966,7 @@ class const _FeaturedGame(final FeaturedGame featuredGame, final bool isSpectato
                     );
                   } else {
                     // If game is still in progress, go to TV view
-                    Navigator.of(context, rootNavigator: true).push(
+                    Navigator.of(context).pushHidingTabBar(
                       TvScreen.buildRoute(
                         gameId: featuredGame.id,
                         orientation: featuredGame.orientation,
@@ -1567,7 +1569,7 @@ class const _PairingTile({
           ? () {
               // If game is finished (status neither started nor created), go to analysis board
               if (pairing.status != GameStatus.started && pairing.status != GameStatus.created) {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.archivedGame(
                       orientation: pairing.color,
@@ -1577,7 +1579,7 @@ class const _PairingTile({
                 );
               } else {
                 // If game is still in progress, go to TV view
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   TvScreen.buildRoute(
                     gameId: pairing.gameId,
                     orientation: pairing.color,

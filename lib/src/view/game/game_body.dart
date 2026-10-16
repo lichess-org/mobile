@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -185,8 +186,11 @@ class const GameBody({
             if (context.mounted) {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
+                builder: (_) => GameResultDialog(
+                  id: gameId,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                  onBackToTournamentCallback: (id) => _backToTournament(context, id),
+                ),
                 barrierDismissible: true,
               );
             }
@@ -212,8 +216,9 @@ class const GameBody({
 
     if (prev?.hasValue == true && state.hasValue) {
       if (state.requireValue.redirectGameId != null) {
-        // Be sure to pop any dialogs that might be on top of the game screen.
-        Navigator.of(context).popUntil((route) => route is! PopupRoute);
+        // Be sure to pop any dialogs that might be on top of the game screen: they are on the root
+        // navigator.
+        Navigator.of(context, rootNavigator: true).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
     }
@@ -819,8 +824,12 @@ class const _GameBottomBar({
             onTap: () {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                builder: (_) => GameResultDialog(
+                  id: id,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                  onBackToTournamentCallback: (tournamentId) =>
+                      _backToTournament(context, tournamentId),
+                ),
                 barrierDismissible: true,
               );
             },
@@ -1153,5 +1162,26 @@ class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWid
         PlatformDialogAction(onPressed: decline, child: Text(context.l10n.cancel)),
       ],
     );
+  }
+}
+
+/// Navigates back to the tournament of the game shown with [context].
+///
+/// If we came from the tournament screen (the usual case: we were on the tournament, the game was
+/// pushed on top and we played it), it is still in the navigation stack, so we pop back to it.
+/// Otherwise (e.g. the game was opened from the home recent games list) there is no tournament
+/// screen to go back to, so we push a fresh one.
+void _backToTournament(BuildContext context, TournamentId tournamentId) {
+  final navigator = Navigator.of(context);
+  if (routeStackObserverOf(navigator)
+          ?.containsRoute(TournamentScreen.routeName, arguments: tournamentId.value) ??
+      false) {
+    navigator.popUntil(
+      (route) =>
+          route.settings.name == TournamentScreen.routeName &&
+          route.settings.arguments == tournamentId.value,
+    );
+  } else {
+    navigator.pushHidingTabBar(TournamentScreen.buildRoute(tournamentId));
   }
 }

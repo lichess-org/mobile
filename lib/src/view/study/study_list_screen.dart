@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
@@ -102,10 +103,9 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
       body: StudyList(
         category: category,
         order: order,
-        onStudyTap: (context, study) => Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+        onStudyTap: (context, study) =>
+            Navigator.of(context)
+                .pushHidingTabBar(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
       ),
       floatingActionButton: authUser != null
           ? PlatformFloatingActionButton(
@@ -117,8 +117,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
                   user: authUser,
                   onStudyCreated: (context, studyId) => Navigator.of(
                     context,
-                    rootNavigator: true,
-                  ).push(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
+                  ).pushHidingTabBar(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
                 ),
               ),
               icon: const Icon(Symbols.school_rounded),

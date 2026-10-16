@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -54,7 +55,6 @@ class const GameScreen({
   }) {
     return buildScreenRoute(
       screen: GameScreen(source: source, loadingPosition: loadingPosition, lastMoveAt: lastMoveAt),
-      hidesTabBar: true,
     );
   }
 
@@ -191,7 +191,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                   ref.read(gameScreenLoaderProvider(widget.source).notifier).newOpponent();
                 } else {
                   final savedSetup = ref.read(gameSetupPreferencesProvider);
-                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                  Navigator.of(context).pushReplacementHidingTabBar(
                     GameScreen.buildRoute(
                       source: LobbySource(GameSeek.newOpponentFromGame(game, savedSetup)),
                     ),

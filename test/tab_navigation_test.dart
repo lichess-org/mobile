@@ -24,7 +24,7 @@ void main() {
       expect(observer.tabBarVisibility.value, 1.0);
       expect(observer.hasTabBarHidingRoute, isFalse);
 
-      navigatorKey.currentState!.push(_TestRoute(const Text('game'), hidesTabBar: true));
+      navigatorKey.currentState!.pushHidingTabBar(_TestRoute(const Text('game')));
       await tester.pump();
       expect(observer.hasTabBarHidingRoute, isTrue);
       expect(observer.tabBarVisibility.value, 0.0);
@@ -47,8 +47,8 @@ void main() {
     testWidgets('a route pushed above a route hiding the tab bar keeps it hidden', (tester) async {
       await pumpNavigator(tester);
 
-      final gameRoute = _TestRoute(const Text('game'), hidesTabBar: true);
-      navigatorKey.currentState!.push(gameRoute);
+      final gameRoute = _TestRoute(const Text('game'));
+      navigatorKey.currentState!.pushHidingTabBar(gameRoute);
       await tester.pumpAndSettle();
 
       final profileRoute = _TestRoute(const Text('profile'));
@@ -70,12 +70,10 @@ void main() {
     testWidgets('a route replacing a route hiding the tab bar keeps it hidden', (tester) async {
       await pumpNavigator(tester);
 
-      navigatorKey.currentState!.push(_TestRoute(const Text('game 1'), hidesTabBar: true));
+      navigatorKey.currentState!.pushHidingTabBar(_TestRoute(const Text('game 1')));
       await tester.pumpAndSettle();
 
-      navigatorKey.currentState!.pushReplacement(
-        _TestRoute(const Text('game 2'), hidesTabBar: true),
-      );
+      navigatorKey.currentState!.pushReplacementHidingTabBar(_TestRoute(const Text('game 2')));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 100));
       expect(observer.tabBarVisibility.value, 0.0);
@@ -91,7 +89,7 @@ void main() {
     testWidgets('popping everything down to the root shows the tab bar', (tester) async {
       await pumpNavigator(tester);
 
-      navigatorKey.currentState!.push(_TestRoute(const Text('game'), hidesTabBar: true));
+      navigatorKey.currentState!.pushHidingTabBar(_TestRoute(const Text('game')));
       navigatorKey.currentState!.push(_TestRoute(const Text('profile')));
       await tester.pumpAndSettle();
 
@@ -115,8 +113,6 @@ void main() {
   });
 }
 
-class _TestRoute(final Widget page, {@override final bool hidesTabBar = false})
-    extends MaterialPageRoute<void>
-    implements TabBarHidingRoute {
+class _TestRoute(final Widget page) extends MaterialPageRoute<void> {
   this : super(builder: (_) => page);
 }

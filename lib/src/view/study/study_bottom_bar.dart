@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -164,7 +165,7 @@ class const _GamebookBottomBar({required final StudyOptions options}) extends Co
             ),
             if (!state.isIntroductoryChapter)
               BottomBarButton(
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                onTap: () => Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.pgn(
                       id: options.id,
