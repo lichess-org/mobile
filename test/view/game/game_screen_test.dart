@@ -1668,8 +1668,9 @@ void main() {
       expect(start.state!.lastSan, 'e5');
       expect(start.state!.claimable, isTrue);
       expect(start.state!.clockRunning, isTrue);
-      // half the 60 s grace of a blitz game
-      expect(start.state!.leftWarningDelay, const Duration(seconds: 30));
+      // blitz: warns as soon as the app stops running
+      expect(start.state!.leftWarningDelay, isNull);
+      expect(start.state!.result, isNull);
 
       // our move, played on the board
       await playMove(tester, 'd2', 'd4');
@@ -1695,6 +1696,28 @@ void main() {
       expect(lastCall(channel).state!.turn, Side.white);
       expect(lastCall(channel).state!.lastMove, 'd7d5');
       expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
+    });
+
+    testWidgets('follows the time given to a player', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // the user gives 15 s to the opponent
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t": "clockInc", "v": 1, "d": {"color": "black", "time": 15, "total": 19500}}',
+      ]);
+      await tester.pump();
+      expect(lastCall(channel).method, 'update');
+      expect(lastCall(channel).state!.blackClock, const Duration(seconds: 195));
     });
 
     testWidgets('reports the game socket connection state', (tester) async {
@@ -1733,6 +1756,14 @@ void main() {
       await createTestGame(
         tester,
         pgn: 'e4 e5 Qh5 Nc6 Qxf7+ Kxf7',
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 10),
+          increment: Duration.zero,
+          white: Duration(minutes: 10),
+          black: Duration(minutes: 10),
+          emerg: Duration(seconds: 30),
+        ),
         overrides: {
           gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
             channel,
@@ -1741,8 +1772,33 @@ void main() {
       );
       await tester.pump();
 
-      // down 8 points: lila halves the grace
-      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 15));
+      // down 8 points: lila halves the 120 s grace of a rapid game
+      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 30));
+    });
+
+    testWidgets('warns half-way through the grace in rapid', (tester) async {
+      final channel = FakeGameLiveActivityChannel();
+      await createTestGame(
+        tester,
+        pgn: 'e4 e5',
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 10),
+          increment: Duration.zero,
+          white: Duration(minutes: 10),
+          black: Duration(minutes: 10),
+          emerg: Duration(seconds: 30),
+        ),
+        overrides: {
+          gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+            channel,
+          ),
+        },
+      );
+      await tester.pump();
+
+      // half the 120 s grace of a rapid game
+      expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 60));
     });
 
     testWidgets('warns as soon as the app stops running in bullet', (tester) async {
@@ -1770,7 +1826,7 @@ void main() {
       expect(channel.calls.single.state!.leftWarningDelay, isNull);
     });
 
-    testWidgets('ends at once when the game is over', (tester) async {
+    testWidgets('ends with the result when the game is over', (tester) async {
       final channel = FakeGameLiveActivityChannel();
       await createTestGame(
         tester,
@@ -1790,6 +1846,9 @@ void main() {
 
       final end = lastCall(channel);
       expect(end.method, 'end');
+      expect(end.state!.result, GameLiveActivityResult.whiteWins);
+      expect(end.state!.clockRunning, isFalse);
+      expect(end.dismissAfter, const Duration(seconds: 15));
 
       // let the game-over popup and the dong play
       await tester.pump(const Duration(seconds: 1));
