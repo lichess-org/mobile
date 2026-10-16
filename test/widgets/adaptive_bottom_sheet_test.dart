@@ -21,6 +21,7 @@ void main() {
             child: ElevatedButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
+                glass: true,
                 builder: (_) => BottomSheetScrollableContainer(
                   children: [
                     const ListSection(
@@ -66,6 +67,66 @@ void main() {
     expect(find.byType(GlassSlider), isIOS ? findsOneWidget : findsNothing);
     expect(find.byType(Switch), isIOS ? findsNothing : findsOneWidget);
     expect(find.byType(Slider), isIOS ? findsNothing : findsOneWidget);
+  });
+
+  testWidgets('shows an opaque sheet by default', variant: kPlatformVariant, (tester) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => Center(
+            child: ElevatedButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                builder: (_) => BottomSheetScrollableContainer(
+                  children: [
+                    const ListSection(
+                      children: [
+                        ListTile(title: Text('Row')),
+                        SwitchSettingTile(title: Text('Switch'), value: true),
+                      ],
+                    ),
+                    NonLinearSlider(value: 2, values: const [1, 2, 3]),
+                  ],
+                ),
+              ),
+              child: const Text('Show'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(app);
+    await tester.tap(find.text('Show'));
+    await tester.pumpAndSettle();
+
+    final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
+    expect(find.text('Row'), findsOneWidget);
+    expect(find.byType(GlassBottomSheetFrame), findsNothing);
+    expect(find.byType(GlassSheetScope), findsNothing);
+    expect(find.byType(OpaqueBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
+    if (isIOS) {
+      // The short content opens at the shared minimum height.
+      final screenHeight = tester.view.physicalSize.height / tester.view.devicePixelRatio;
+      expect(
+        tester.getSize(find.byType(OpaqueBottomSheetFrame)).height,
+        moreOrLessEquals(screenHeight * kGlassBottomSheetMinHeightFraction),
+      );
+      final frameMaterial = tester.widget<Material>(
+        find
+            .descendant(of: find.byType(OpaqueBottomSheetFrame), matching: find.byType(Material))
+            .first,
+      );
+      expect(frameMaterial.color!.a, 1.0);
+    }
+
+    // The section card is opaque, the switch and the slider are not glass controls.
+    final cardMaterial = tester.widget<Material>(
+      find.descendant(of: find.byType(ListSection), matching: find.byType(Material)).first,
+    );
+    expect(cardMaterial.color!.a, 1.0);
+    expect(find.byType(GlassSwitch), findsNothing);
+    expect(find.byType(GlassSlider), findsNothing);
   });
 
   testWidgets('shows an opaque expandable sheet', variant: kPlatformVariant, (tester) async {

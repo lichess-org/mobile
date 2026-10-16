@@ -544,19 +544,29 @@ possible until then. Rules:
   card, like an iOS 26 sheet at its large detent, e.g. the broadcast overview). The content of
   these two opaque sheets is opaque too (no glass controls). Every other sheet uses
   `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose
-  content sits in a glass card (`GlassBottomSheetFrame`). Inside it (`GlassSheetScope`), cards turn translucent, `PlatformSwitch`
-  / `SwitchSettingTile` and `NonLinearSlider` become glass controls. Filled and outlined buttons are
-  capsules on iOS (app theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass
-  capsule on a glass sheet). Selectable chips use `PlatformChoiceChip` (a glass pill on iOS); give
-  their `Wrap` an iOS `runSpacing`, glass chips have no tap target margin. The iOS sheet doesn't
-  expand: no drag handle, and a shared minimum height (`kGlassBottomSheetMinHeightFraction`, 45% of
-  the screen) instead of the call site's. A labelled group of chips is a `Filter`
+  content sits in an inset card. Glass is never for content, in a sheet as on a screen: the card
+  is opaque and flat (`OpaqueBottomSheetFrame`) with opaque content (settings, forms, filters,
+  details...). Only a sheet made of navigation items and actions alone (a menu) passes
+  `glass: true`: its content sits in a glass card (`GlassBottomSheetFrame`). Inside it
+  (`GlassSheetScope`), cards turn translucent, `PlatformSwitch` / `SwitchSettingTile` and
+  `NonLinearSlider` become glass controls. Filled and outlined buttons are capsules on iOS (app
+  theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass capsule on a glass
+  sheet). Selectable chips use `PlatformChoiceChip` (on iOS a flat pill, a glass pill on a glass
+  sheet or with `inAppBar: true`); give their `Wrap` an iOS `runSpacing`, glass chips have no tap
+  target margin. `PlatformSegmentedControl` is likewise flat outside a glass sheet. The iOS sheet
+  doesn't expand: no drag handle, and a shared minimum height (`kGlassBottomSheetMinHeightFraction`,
+  45% of the screen) instead of the call site's. A labelled group of chips is a `Filter`
   (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
   16pt around the content and between groups.
 - **Popovers**: use `PlatformPopover` (`popover.dart`), a `GlassPopover` that morphs out of its
   trigger on iOS. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
 - Glass is for the navigation and control layer that floats above content (bars, floating
-  buttons, sheets), not for content such as cards or list rows.
+  buttons, menus, popovers), never for content such as cards, list rows, forms or settings,
+  whether on a screen or in a sheet (Apple's "Adopting Liquid Glass" guide).
+- Never glass on top of glass ("avoid layering Liquid Glass elements on top of each other",
+  Apple's "Adopting Liquid Glass" guide): no glass element floating over another glass element.
+  Controls embedded in a glass surface (the glass controls of a glass sheet, dialog buttons) are
+  part of it, not on top of it.
 
 ### Laying out a body under glass bars
 

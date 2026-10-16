@@ -224,6 +224,7 @@ class const StudyCategoryChips({
                 if (isIOS) {
                   return PlatformChoiceChip(
                     key: isSelected ? currentCategoryKey : null,
+                    inAppBar: true,
                     label: Text(cat.l10n(context.l10n)),
                     selected: isSelected,
                     onSelected: (_) {

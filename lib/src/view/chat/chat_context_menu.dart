@@ -19,6 +19,7 @@ class const ChatBubbleContextMenu({
     return GestureDetector(
       onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
+        glass: true,
         useRootNavigator: true,
         isScrollControlled: true,
         showDragHandle: true,

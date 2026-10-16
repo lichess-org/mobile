@@ -4,28 +4,36 @@ import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
 import 'package:material_ui/material_ui.dart';
 
-/// The minimum height of a glass bottom sheet, as a fraction of the screen height.
+/// The minimum height of an iOS bottom sheet that doesn't expand ([showAdaptiveBottomSheet]), as a
+/// fraction of the screen height.
 ///
 /// The same for every sheet, so that short sheets (menus, filters, settings) open at the same
 /// height whatever their content.
 const kGlassBottomSheetMinHeightFraction = 0.45;
 
-/// Shows a modal bottom sheet: a Material bottom sheet on Android, a liquid glass sheet on iOS.
+/// Shows a modal bottom sheet: a Material bottom sheet on Android, an inset card on iOS.
 ///
 /// The iOS sheet is still a Material modal bottom sheet (drag to dismiss, keyboard, constraints
-/// work as usual), with a transparent background and the content in a [GlassBottomSheetFrame]:
-/// like an iOS 26 sheet at a partial height, it floats inset from the screen edges on a glass
-/// background. Through the [GlassSheetScope] the frame sets, [ListSection]s get translucent
-/// section cards, and setting switches and [NonLinearSlider]s become glass controls.
+/// work as usual), with a transparent background and the content in a card that floats inset from
+/// the screen edges, like an iOS 26 sheet at a partial height.
+///
+/// Glass is for navigation and controls, never for content: the card is opaque and flat
+/// ([OpaqueBottomSheetFrame]), with opaque content, unless [glass]. Only a sheet made of navigation
+/// items and actions alone (a menu) is [glass]: its content is then in a [GlassBottomSheetFrame],
+/// on a glass background. Through the [GlassSheetScope] the frame sets, [ListSection]s get
+/// translucent section cards, and setting switches and [NonLinearSlider]s become glass controls.
 ///
 /// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), its
 /// minimum height is [kGlassBottomSheetMinHeightFraction] of the screen height, replacing the
 /// minimum height of [constraints], and it stays below the status bar.
 ///
-/// Sheets that expand are opaque: use [showAdaptiveDraggableBottomSheet] for them.
+/// For sheets that expand, use [showAdaptiveDraggableBottomSheet].
 Future<T?> showAdaptiveBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
+
+  /// Whether the iOS sheet is glass: only for a sheet of navigation items and actions alone.
+  bool glass = false,
   bool isDismissible = true,
   bool isScrollControlled = false,
   bool useRootNavigator = false,
@@ -45,7 +53,11 @@ Future<T?> showAdaptiveBottomSheet<T>({
     showDragHandle: !isIOS && showDragHandle,
     backgroundColor: isIOS ? Colors.transparent : null,
     elevation: isIOS ? 0 : null,
-    builder: isIOS ? (context) => GlassBottomSheetFrame(child: builder(context)) : builder,
+    builder: isIOS
+        ? (context) => glass
+              ? GlassBottomSheetFrame(child: builder(context))
+              : OpaqueBottomSheetFrame(layout: .fixed, child: builder(context))
+        : builder,
   );
 }
 
@@ -54,9 +66,8 @@ Future<T?> showAdaptiveBottomSheet<T>({
 ///
 /// [builder] gets the sheet's scroll controller, to give to the scroll view of the content.
 ///
-/// It always has a drag handle. On iOS the sheet is inset like the glass sheets
-/// ([showAdaptiveBottomSheet]), but is an opaque, flat card ([OpaqueBottomSheetFrame]): a long list
-/// that fills the screen stays readable.
+/// It always has a drag handle. On iOS the sheet is inset like the other sheets
+/// ([showAdaptiveBottomSheet]), an opaque, flat card ([OpaqueBottomSheetFrame]).
 Future<T?> showAdaptiveDraggableBottomSheet<T>({
   required BuildContext context,
   required ScrollableWidgetBuilder builder,
@@ -86,8 +97,10 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
       snap: snap,
       expand: false,
       builder: isIOS
-          ? (context, scrollController) =>
-                OpaqueBottomSheetFrame(child: builder(context, scrollController))
+          ? (context, scrollController) => OpaqueBottomSheetFrame(
+              layout: .draggable,
+              child: builder(context, scrollController),
+            )
           : builder,
     ),
   );
@@ -147,7 +160,7 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
               ),
             ),
           );
-          return isIOS ? OpaqueBottomSheetFrame(fullHeight: true, child: content) : content;
+          return isIOS ? OpaqueBottomSheetFrame(layout: .fullHeight, child: content) : content;
         },
       ),
     ),
@@ -262,8 +275,8 @@ const _kSheetBorderRadius = 38.0;
 /// Inset of the iOS sheet cards from the screen edges.
 const _kSheetMargin = 8.0;
 
-/// The iOS frame of a bottom sheet ([showAdaptiveBottomSheet]): a glass card inset from the screen
-/// edges.
+/// The iOS frame of a glass bottom sheet ([showAdaptiveBottomSheet] with `glass`): a glass card
+/// inset from the screen edges.
 ///
 /// Before iOS 26 ([useLiquidGlass]), the card is opaque, and so is its content: it is not in a
 /// [GlassSheetScope].
@@ -302,21 +315,31 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
   }
 }
 
-/// The iOS frame of a sheet that expands ([showAdaptiveDraggableBottomSheet]) or fills the screen
-/// ([showAdaptiveFullHeightBottomSheet]): an opaque, flat card, like the iOS sheets at their large
-/// detent, with the corners of the glass sheets. Its content is opaque too: it is not in a
-/// [GlassSheetScope].
+/// How an [OpaqueBottomSheetFrame] lays out its sheet.
+enum OpaqueSheetLayout() {
+  /// A sheet that doesn't expand ([showAdaptiveBottomSheet]): inset from the screen edges, without
+  /// a drag handle, short content at the top.
+  fixed,
+
+  /// A sheet that expands ([showAdaptiveDraggableBottomSheet]): inset from the screen edges, with a
+  /// drag handle, the content filling the card.
+  draggable,
+
+  /// A sheet at the full height of the screen ([showAdaptiveFullHeightBottomSheet]): edge to edge,
+  /// down to the bottom of the screen, without a drag handle, the content filling the card.
+  fullHeight,
+}
+
+/// The iOS frame of an opaque bottom sheet: an opaque, flat card, with the corners of the glass
+/// sheets. Its content is opaque too: it is not in a [GlassSheetScope].
 class const OpaqueBottomSheetFrame({
   required final Widget child,
-
-  /// Whether the sheet is at the full height of the screen: the card is then edge to edge, down to
-  /// the bottom of the screen, without a drag handle. Otherwise it is inset from the screen edges,
-  /// like the glass sheets, with a drag handle. [child] fills the card.
-  final bool fullHeight = false,
+  required final OpaqueSheetLayout layout,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final fullHeight = layout == .fullHeight;
     return Padding(
       padding: fullHeight ? EdgeInsets.zero : const EdgeInsets.all(_kSheetMargin),
       child: Material(
@@ -330,24 +353,27 @@ class const OpaqueBottomSheetFrame({
         child: MediaQuery.removePadding(
           context: context,
           removeBottom: !fullHeight,
-          child: fullHeight
-              ? child
-              : Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6.0),
-                      child: Container(
-                        width: 36,
-                        height: 5,
-                        decoration: BoxDecoration(
-                          color: CupertinoColors.tertiaryLabel.resolveFrom(context),
-                          borderRadius: const BorderRadius.all(Radius.circular(2.5)),
-                        ),
-                      ),
+          child: switch (layout) {
+            // At the sheet's minimum height, short content stays at the top.
+            .fixed => Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
+            .draggable => Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Container(
+                    width: 36,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.tertiaryLabel.resolveFrom(context),
+                      borderRadius: const BorderRadius.all(Radius.circular(2.5)),
                     ),
-                    Expanded(child: child),
-                  ],
+                  ),
                 ),
+                Expanded(child: child),
+              ],
+            ),
+            .fullHeight => child,
+          },
         ),
       ),
     );

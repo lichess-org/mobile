@@ -6,12 +6,13 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
 import 'package:material_ui/material_ui.dart';
 
 /// A chip that can be selected: a Material [ChoiceChip] (or [FilterChip] when [multiple]) on
-/// Android, a liquid glass pill on iOS.
+/// Android, a pill on iOS.
 ///
-/// The glass pill is a control floating on its own layer, for chips placed on a glass surface (a
-/// glass sheet, an app bar). Its selected state is a light primary tint with a primary label (the
-/// package `GlassChip` default selection is barely visible in light mode). Before iOS 26
-/// ([useLiquidGlass]), it is the same pill, flat, on the control fill.
+/// The iOS pill is liquid glass on a glass surface ([inAppBar], or a glass sheet), as a control
+/// floating on its own layer. Anywhere else, such as in an opaque sheet, it is the same pill, flat,
+/// on the control fill, like the iOS controls in content; and always before iOS 26
+/// ([useLiquidGlass]). Its selected state is a light primary tint with a primary label (the package
+/// `GlassChip` default selection is barely visible in light mode).
 class const PlatformChoiceChip({
   required final Widget label,
   required final bool selected,
@@ -25,6 +26,9 @@ class const PlatformChoiceChip({
   /// Whether the Material chip shows a checkmark when selected. The glass chip never does.
   final bool showCheckmark = true,
   final String? tooltip,
+
+  /// Whether the chip is a control of an app bar, which makes it glass on iOS.
+  final bool inAppBar = false,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -49,8 +53,8 @@ class const PlatformChoiceChip({
 
     final colorScheme = ColorScheme.of(context);
     final enabled = onSelected != null;
-    final glass = useLiquidGlass(context);
     final isOnGlassSheet = GlassSheetScope.isIn(context);
+    final glass = useLiquidGlass(context) && (inAppBar || isOnGlassSheet);
     final pill = DecoratedBox(
       decoration: BoxDecoration(
         color: selected
