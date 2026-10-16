@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
@@ -44,6 +45,51 @@ void main() {
       final page2 = await storage.page(userId: userId, max: 10, until: page1.last.lastModified);
       expect(page2.length, 10);
       expect(page2.last.game.id, const GameId('game0080'));
+    });
+
+    test('filters stored games by analysis', () async {
+      final container = await makeContainer();
+
+      final storage = await container.read(gameStorageProvider.future);
+
+      // a game with a stored player analysis summary is an analysed game
+      const analysedGame = PlayerAnalysis(inaccuracies: 1, mistakes: 0, blunders: 0);
+      const analysedId = GameId('anlz0001');
+      const notAnalysedId = GameId('none0001');
+      await storage.save(
+        game.copyWith(
+          id: analysedId,
+          data: game.data.copyWith(
+            id: analysedId,
+            white: game.data.white.copyWith(analysis: analysedGame),
+          ),
+        ),
+      );
+      await storage.save(
+        game.copyWith(
+          id: notAnalysedId,
+          data: game.data.copyWith(
+            id: notAnalysedId,
+            white: game.data.white.copyWith(analysis: null),
+            black: game.data.black.copyWith(analysis: null),
+          ),
+        ),
+      );
+
+      final analysed = await storage.page(
+        userId: const UserId('whiteId'),
+        filter: const GameFilterState(analysis: GameAnalysisFilter.analysed),
+      );
+      expect(analysed.map((e) => e.game.id), [analysedId]);
+
+      final notAnalysed = await storage.page(
+        userId: const UserId('whiteId'),
+        filter: const GameFilterState(analysis: GameAnalysisFilter.notAnalysed),
+      );
+      expect(notAnalysed.map((e) => e.game.id), [notAnalysedId]);
+
+      final all = await storage.page(userId: const UserId('whiteId'));
+      expect(all, hasLength(2));
     });
   });
 }

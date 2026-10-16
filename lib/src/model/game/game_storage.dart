@@ -57,8 +57,23 @@ class const GameStorage(final Database _db) {
         })
         .where((e) => filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf))
         .where((e) => filter.side == null || filter.side == e.game.youAre)
+        // server-side this is the `analysed` query parameter on
+        // `GET /api/games/user/:username`: only games with a stored computer
+        // analysis are returned
+        .where(
+          (e) => switch (filter.analysis) {
+            null => true,
+            GameAnalysisFilter.analysed => _isAnalysed(e.game),
+            GameAnalysisFilter.notAnalysed => !_isAnalysed(e.game),
+          },
+        )
         .toIList();
   }
+
+  /// Whether the game carries a computer analysis, inferred from the stored
+  /// player analysis summaries (which only exist for analysed games).
+  static bool _isAnalysed(ExportedGame game) =>
+      game.data.white.analysis != null || game.data.black.analysis != null;
 
   Future<ExportedGame?> fetch({required GameId gameId}) {
     return _db.fetchJsonRow(

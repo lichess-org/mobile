@@ -13,21 +13,49 @@ const kAggregationInterval = Duration(milliseconds: 5);
 final Uri _homeUri = Uri(path: '/api/mobile/home');
 final Uri _watchUri = Uri(path: '/api/mobile/watch');
 
+/// An endpoint key in an aggregated payload, and the client-side uris it can answer.
+///
+/// [queryParams] lists the query parameters that the aggregated response still
+/// represents. A client-side uri carrying any other parameter cannot be served
+/// from the aggregated payload, because that payload would silently ignore the
+/// parameter, so such a uri must not join the group.
+typedef _AggregatedEndpoint = ({String key, RegExp pathRegexp, Set<String> queryParams});
+
+/// Whether [endpoint] can answer a request for [uri].
+///
+/// The path must match, and the uri must not carry a query parameter that
+/// [endpoint]'s aggregated payload does not represent.
+bool _represents(_AggregatedEndpoint endpoint, Uri uri) =>
+    endpoint.pathRegexp.hasMatch(uri.path) &&
+    uri.queryParameters.keys.every(endpoint.queryParams.contains);
+
 /// Map of target URIs to their grouped client-side URIs and JSON keys.
-final Map<Uri, ISet<({String key, RegExp pathRegexp})>> _targetUris = {
+final Map<Uri, ISet<_AggregatedEndpoint>> _targetUris = {
   _homeUri: ISet({
-    (key: 'account', pathRegexp: RegExp(r'^\/api\/account$')),
-    (key: 'recentGames', pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$')),
-    (key: 'ongoingGames', pathRegexp: RegExp(r'^\/api\/account\/playing$')),
-    (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$')),
-    (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$')),
-    (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$')),
-    (key: 'friends', pathRegexp: RegExp(r'^\/api\/mobile\/following$')),
+    (key: 'account', pathRegexp: RegExp(r'^\/api\/account$'), queryParams: const {'playban'}),
+    (
+      key: 'recentGames',
+      pathRegexp: RegExp(r'^\/api\/games\/user\/[\w-]+$'),
+      // the aggregated payload is the last 10 games of the logged in user, with
+      // moves, lastFen, accuracy and opening: the game history filters
+      // (perfType, color, vs, wonBy, lostBy, analysed, until, ...) are all
+      // outside this set and must be fetched on their own
+      queryParams: const {'max', 'moves', 'lastFen', 'accuracy', 'opening'},
+    ),
+    (
+      key: 'ongoingGames',
+      pathRegexp: RegExp(r'^\/api\/account\/playing$'),
+      queryParams: const {'nb'},
+    ),
+    (key: 'challenges', pathRegexp: RegExp(r'^\/api\/challenge$'), queryParams: const {}),
+    (key: 'tournaments', pathRegexp: RegExp(r'^\/tournament\/featured$'), queryParams: const {}),
+    (key: 'inbox', pathRegexp: RegExp(r'^\/inbox\/unread-count$'), queryParams: const {}),
+    (key: 'friends', pathRegexp: RegExp(r'^\/api\/mobile\/following$'), queryParams: const {'nb'}),
   }),
   _watchUri: ISet({
-    (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$')),
-    (key: 'tv', pathRegexp: RegExp(r'^\/api\/tv\/channels$')),
-    (key: 'streamers', pathRegexp: RegExp(r'^\/api\/streamer\/live$')),
+    (key: 'broadcast', pathRegexp: RegExp(r'^\/api\/broadcast\/top$'), queryParams: const {'page'}),
+    (key: 'tv', pathRegexp: RegExp(r'^\/api\/tv\/channels$'), queryParams: const {}),
+    (key: 'streamers', pathRegexp: RegExp(r'^\/api\/streamer\/live$'), queryParams: const {}),
   }),
 };
 
@@ -134,8 +162,11 @@ class Aggregator(
         // No point in making an aggregated request if we don't have enough accumulated URIs
         final hasEnoughUris = uris.length >= group.value.length / 2;
         if (hasEnoughUris &&
-            // test that list of uris matches all the group uris
-            uris.every((e) => group.value.any((g) => g.pathRegexp.hasMatch(e.path)))) {
+            // test that list of uris matches all the group uris, and that the aggregated
+            // payload still represents them: a uri carrying a query parameter the group
+            // does not reproduce (e.g. `analysed` on the game history) must not be
+            // grouped, otherwise it would later be served an unfiltered response
+            uris.every((e) => group.value.any((g) => _represents(g, e)))) {
           _groupRequests.putIfAbsent(
             uris,
             () => (targetGroupUri: group.key, future: client.readJson(group.key, mapper: (x) => x)),
@@ -145,12 +176,15 @@ class Aggregator(
       }
     }
 
-    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.any((e) => e.path == uri.path));
+    // only a uri that took part in the group may be served from the aggregated
+    // response: a uri with different query parameters (e.g. `analysed` on the game
+    // history) must hit the network, as the aggregated payload does not apply them
+    final uris = _groupRequests.keys.firstWhereOrNull((key) => key.contains(uri));
     if (uris != null) {
       final entry = _groupRequests[uris]!;
       final aggregated = await entry.future;
       final group = _targetUris[entry.targetGroupUri]!;
-      final jsonKey = group.firstWhere((e) => e.pathRegexp.hasMatch(uri.path)).key;
+      final jsonKey = group.firstWhere((e) => _represents(e, uri)).key;
       final result = aggregated[jsonKey] as Object;
 
       return mapper(result);

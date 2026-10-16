@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -260,8 +261,172 @@ void main() {
       expect(tournaments, isA<IList<LightTournament>>());
       expect(inbox, isA<UnreadMessages>());
     });
+
+    test('aggregates the home endpoint with the query parameters the repositories send', () async {
+      int requestsCount = 0;
+
+      final mockClient = MockClient((request) {
+        requestsCount++;
+        if (request.url.path == '/api/mobile/home') {
+          return mockResponse(homeEndpointResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final aggregator = await mockClientAggregator(mockClient);
+
+      final results = await Future.wait(homeEndpointRequests(aggregator));
+
+      expect(requestsCount, 1);
+      expect(results, everyElement(isNotNull));
+    });
+
+    test(
+      'a game history request carrying a filter is not served the aggregated recent games',
+      () async {
+        int requestsCount = 0;
+        final requestedGameUris = <Uri>[];
+
+        final mockClient = MockClient((request) {
+          requestsCount++;
+          if (request.url.path == '/api/mobile/home') {
+            return mockResponse(homeEndpointResponse, 200);
+          }
+          if (request.url.path == '/api/games/user/testuser') {
+            requestedGameUris.add(request.url);
+            return mockResponse(filteredGamesResponse, 200);
+          }
+          return mockResponse('', 404);
+        });
+
+        final aggregator = await mockClientAggregator(mockClient);
+
+        // the home tab aggregates its requests into a single one
+        await Future.wait(homeEndpointRequests(aggregator));
+        expect(requestsCount, 1);
+
+        // a filtered request must not be answered with that aggregated response
+        final [_, filtered] = await Future.wait([
+          aggregator.readNdJsonList(
+            Uri(path: '/api/games/user/testuser', queryParameters: kRecentGamesQuery),
+            mapper: LightExportedGame.fromServerJson,
+          ),
+          aggregator.readNdJsonList(
+            Uri(
+              path: '/api/games/user/testuser',
+              queryParameters: {...kRecentGamesQuery, 'analysed': 'true'},
+            ),
+            mapper: LightExportedGame.fromServerJson,
+          ),
+        ]);
+
+        expect(requestedGameUris, hasLength(1));
+        expect(requestedGameUris.single.queryParameters['analysed'], 'true');
+        expect(filtered.map((g) => g.id), [const GameId('ANLZ1234')]);
+      },
+    );
+
+    test(
+      'a request carrying an unrepresented query parameter keeps the group from forming',
+      () async {
+        final requestedUris = <Uri>[];
+
+        final mockClient = MockClient((request) {
+          requestedUris.add(request.url);
+          return switch (request.url.path) {
+            '/api/mobile/home' => mockResponse(homeEndpointResponse, 200),
+            '/api/account' => mockResponse(accountResponse, 200),
+            '/api/account/playing' => mockResponse(ongoingGameResponse, 200),
+            '/api/games/user/testuser' => mockResponse(filteredGamesResponse, 200),
+            '/api/challenge' => mockResponse('{"in":[],"out":[]}', 200),
+            '/tournament/featured' => mockResponse('{"featured":[]}', 200),
+            '/inbox/unread-count' => mockResponse('{"unread":5}', 200),
+            _ => mockResponse('', 404),
+          };
+        });
+
+        final aggregator = await mockClientAggregator(mockClient);
+
+        // the filtered request rides along with the home requests
+        final results = await Future.wait<Object?>([
+          ...homeEndpointRequests(aggregator),
+          aggregator.readNdJsonList(
+            Uri(
+              path: '/api/games/user/testuser',
+              queryParameters: {...kRecentGamesQuery, 'analysed': 'true'},
+            ),
+            mapper: LightExportedGame.fromServerJson,
+          ),
+        ]);
+
+        // every request was made on its own: the aggregated home payload does not
+        // represent `analysed`, so it must not be used for the whole group
+        expect(requestedUris, hasLength(7));
+        expect(requestedUris.any((u) => u.path == '/api/mobile/home'), isFalse);
+        expect(
+          requestedUris.singleWhere((u) => u.queryParameters['analysed'] == 'true').path,
+          '/api/games/user/testuser',
+        );
+        expect(results, everyElement(isNotNull));
+      },
+    );
   });
 }
+
+/// The query parameters the home screen sends to fetch the recent games, as built
+/// by `GameRepository.getUserGames`.
+const kRecentGamesQuery = {
+  'max': '10',
+  'moves': 'false',
+  'lastFen': 'true',
+  'accuracy': 'true',
+  'opening': 'true',
+};
+
+/// Starts the requests the home screen makes, with the exact uris and query
+/// parameters the repositories send.
+List<Future<Object?>> homeEndpointRequests(Aggregator aggregator) => [
+  aggregator.readJson(
+    Uri(path: '/api/account', queryParameters: {'playban': '1'}),
+    atomicMapper: User.fromServerJson,
+    aggregatedMapper: (json) => User.fromServerJson(json as Map<String, dynamic>),
+  ),
+  aggregator.readJson(
+    Uri(path: '/api/account/playing', queryParameters: {'nb': '50'}),
+    atomicMapper: ongoingGamesFromServerJson,
+    aggregatedMapper: (json) {
+      if (json is! List<dynamic>) {
+        throw Exception('Could not read json object as {nowPlaying: []}');
+      }
+      return json
+          .map((e) => OngoingGame.fromServerJson(e as Map<String, dynamic>))
+          .where((e) => e.variant.isPlaySupported)
+          .toIList();
+    },
+  ),
+  aggregator.readNdJsonList(
+    Uri(path: '/api/games/user/testuser', queryParameters: kRecentGamesQuery),
+    mapper: LightExportedGame.fromServerJson,
+  ),
+  aggregator.readJson<Map<String, dynamic>>(
+    Uri(path: '/api/challenge'),
+    atomicMapper: (json) => json,
+  ),
+  aggregator.readJson<Map<String, dynamic>>(
+    Uri(path: '/tournament/featured'),
+    atomicMapper: (json) => json,
+  ),
+  aggregator.readJson<Map<String, dynamic>>(
+    Uri(path: '/inbox/unread-count'),
+    atomicMapper: (json) => json,
+  ),
+];
+
+/// Response of `GET /api/games/user/testuser?analysed=true`: a single game, so that
+/// a test can tell a filtered response from the aggregated recent games.
+const filteredGamesResponse = '''
+{"id":"ANLZ1234","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Thibault","id":"thibault"},"rating":1772},"black":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806}},"winner":"white","lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
+''';
 
 const watchEndpointResponse = '''
 {
