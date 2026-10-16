@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:math' as math;
 
-import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoTheme;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
@@ -61,8 +59,6 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -426,18 +422,8 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           automaticallyImplyLeading: false,
                         )
                       : PlatformAppBar(
-                          title: authUser != null
-                              ? _GreetingWidget(authUser.user)
-                              : Theme.of(context).platform == TargetPlatform.iOS
-                              ? AppBarLichessTitle(
-                                  iconSize:
-                                      CupertinoTheme.of(context)
-                                          .textTheme
-                                          .navLargeTitleTextStyle
-                                          .fontSize ??
-                                      34,
-                                )
-                              : const AppBarLichessTitle(),
+                          // A greeting without a name when logged out.
+                          title: _GreetingWidget(authUser?.user),
                           centerTitle: false,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
@@ -625,73 +611,38 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   name: '_isDayTimeProvider',
 );
 
-/// The greeting of the logged in user, as the app bar title, which opens the profile.
-///
-/// On iOS it is a glass button.
-class const _GreetingWidget(final LightUser user) extends ConsumerWidget {
+/// The greeting of the user, as the app bar title, which opens the profile when logged in.
+class const _GreetingWidget(
+  /// Null when logged out: the greeting has no name.
+  final LightUser? user,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDayTime = ref.watch(_isDayTimeProvider);
-    final greeting =
-        '${isDayTime ? '☀️' : '🌙'} ${(isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening)(user.name)}';
+    final user = this.user;
+    final text = user != null
+        ? (isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening)(user.name)
+        : isDayTime
+        ? context.l10n.mobileGoodDayWithoutName
+        : context.l10n.mobileGoodEveningWithoutName;
+    final greeting = '${isDayTime ? '☀️' : '🌙'} $text';
 
     void openProfile() {
       ref.invalidate(accountProvider);
       Navigator.of(context).push(ProfileScreen.buildRoute());
     }
 
-    if (!useLiquidGlass(context)) {
-      return InkWell(
-        onTap: openProfile,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        child: Text(
-          greeting,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          // Before iOS 26, without a glass button: bigger than the button label, smaller than the
-          // large title of the other tabs.
-          style: Theme.of(context).platform == TargetPlatform.iOS
-              ? TextTheme.of(context).titleLarge
-              : null,
-        ),
-      );
-    }
-
-    final style = TextTheme.of(context).bodyLarge;
-    const horizontalPadding = 16.0;
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.3,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          // The Row lets the button be only as wide as its content (it would otherwise fill the
-          // title width), which is limited to the title width.
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              GlassButton.custom(
-                onTap: openProfile,
-                label: greeting,
-                // Like the app bar buttons.
-                height: 44.0,
-                shape: const LiquidRoundedSuperellipse(borderRadius: 22.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: horizontalPadding),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: math.max(0.0, constraints.maxWidth - 2 * horizontalPadding),
-                    ),
-                    child: Text(
-                      greeting,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: style,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+    return InkWell(
+      onTap: user != null ? openProfile : null,
+      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      child: Text(
+        greeting,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
+        style: Theme.of(context).platform == TargetPlatform.iOS
+            ? TextTheme.of(context).titleLarge
+            : null,
       ),
     );
   }

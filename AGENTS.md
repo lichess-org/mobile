@@ -472,9 +472,9 @@ possible until then. Rules:
 
 - **Contained**: fallback code lives in the shared widgets (`lib/src/widgets/`,
   `tab_scaffold.dart`), next to the glass code it replaces. Screens don't branch on it; the only
-  exceptions are the home greeting (`home_tab_screen.dart`) and the broadcast round pinned tabs
-  (`broadcast_round_screen.dart`, with `PlatformAppBar.scrolledUnderTint`, which exists for it).
-  Add a screen exception only when there is no shared widget to put it in.
+  exception is the broadcast round pinned tabs (`broadcast_round_screen.dart`, with
+  `PlatformAppBar.scrolledUnderTint`, which exists for it). Add a screen exception only when there
+  is no shared widget to put it in.
 - **Greppable**: every fallback branch is an `if (!useLiquidGlass(context))` (or a ternary on it)
   that can be deleted on its own, keeping the glass branch. Removing the fallback means deleting
   those branches and the helpers only they use (`_BlurredTabBar`, `scrolledUnderTint`), then

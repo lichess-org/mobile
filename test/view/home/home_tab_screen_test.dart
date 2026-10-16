@@ -444,7 +444,8 @@ void main() {
         await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle(); // wait for home screen to re-appear
 
-        expect(find.byIcon(LichessIcons.logo_lichess), findsOneWidget); // we're back on home
+        // we're back on home
+        expect(find.textContaining(RegExp(r'^\S+ Good (day|evening)$')), findsOneWidget);
 
         expect(find.text(customizeTip), findsNothing);
       });
@@ -631,16 +632,25 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('logged in, iOS: is a glass button in the app bar only', (tester) async {
+    testWidgets('logged in, iOS: is the app bar title only, without a glass button', (
+      tester,
+    ) async {
       await pumpLoggedIn(tester);
 
       expect(find.textContaining(fakeAuthUser.user.name), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(fakeAuthUser.user.name),
+        ),
+        findsOneWidget,
+      );
       expect(
         find.ancestor(
           of: find.textContaining(fakeAuthUser.user.name),
           matching: find.byType(GlassButton),
         ),
-        findsOneWidget,
+        findsNothing,
       );
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
@@ -657,13 +667,18 @@ void main() {
       );
     }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
-    testWidgets('logged out: is not shown', (tester) async {
+    testWidgets('logged out: is shown without a name in the app bar', (tester) async {
       final app = await makeTestProviderScope(tester, child: const Application());
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Good day'), findsNothing);
-      expect(find.textContaining('Good evening'), findsNothing);
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(RegExp(r'^\S+ Good (day|evening)$')),
+        ),
+        findsOneWidget,
+      );
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS, TargetPlatform.android}));
   });
 }
