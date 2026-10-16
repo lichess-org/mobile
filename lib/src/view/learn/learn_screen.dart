@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/learn/learn_progress_gate.dart';
 import 'package:lichess_mobile/src/view/learn/learn_stage_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -43,11 +44,7 @@ class const LearnScreen({super.key}) extends ConsumerWidget {
             ),
         ],
       ),
-      body: switch (progress) {
-        AsyncData(:final value) => _Body(progress: value),
-        AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
+      body: LearnProgressGate(builder: (context, progress) => _Body(progress: progress)),
     );
   }
 
