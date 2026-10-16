@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
@@ -70,6 +71,10 @@ class MockSoundService() extends Mock implements SoundService;
 
 class MockCreateGameService() extends Mock implements CreateGameService;
 
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
+
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
   final testGameSocketUri = GameController.socketUri(testGameFullId);
@@ -102,6 +107,33 @@ void main() {
   });
 
   group('Loading', () {
+    testWidgets('compact portrait board fills width with game controls visible', (tester) async {
+      await createTestGame(
+        tester,
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+        failOnOverflow: true,
+      );
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.size, const Size.square(320.0));
+      expect(find.text('Peter'), findsOneWidget);
+      expect(find.text('Steven'), findsOneWidget);
+      expect(find.byType(Clock), findsNWidgets(2));
+      expect(find.byType(BottomBar), findsOneWidget);
+      for (final controls in [
+        find.text('Peter'),
+        find.text('Steven'),
+        find.byType(Clock),
+        find.byType(BottomBarButton),
+      ]) {
+        expectGameControlsVisible(tester, controls);
+      }
+    }, variant: kPlatformVariant);
+
     testWidgets('a game directly with initialGameId', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
@@ -680,6 +712,215 @@ void main() {
 
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
     });
+
+    for (final profile in kCompactPortraitProfiles) {
+      for (final textScale in [1.0, 1.3, 2.0]) {
+        for (final correspondence in [false, true]) {
+          testWidgets(
+            'compact post-startup confirmation ${profile.name} correspondence=$correspondence textScale=$textScale',
+            (tester) async {
+              mockBoardPlatformChannels();
+              tester.platformDispatcher.textScaleFactorTestValue = textScale;
+              addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+              await prepareLayoutGolden(tester, loadFonts: true);
+              await createTestGame(
+                tester,
+                pgn: 'e4 e5',
+                clock: correspondence
+                    ? null
+                    : const (
+                        running: true,
+                        initial: Duration(minutes: 1),
+                        increment: Duration.zero,
+                        white: Duration(seconds: 58),
+                        black: Duration(seconds: 54),
+                        emerg: Duration(seconds: 10),
+                      ),
+                correspondenceClock: correspondence
+                    ? const (
+                        white: Duration(hours: 20, minutes: 5),
+                        black: Duration(days: 1),
+                        daysPerTurn: 1,
+                      )
+                    : null,
+                serverPrefs: const ServerGamePrefs(
+                  showRatings: true,
+                  enablePremove: true,
+                  autoQueen: AutoQueen.always,
+                  confirmResign: true,
+                  submitMove: true,
+                  zenMode: Zen.no,
+                ),
+                surfaceSize: profile.surface,
+                devicePixelRatio: 3.0,
+                physicalViewPadding: profile.physicalPadding,
+                failOnOverflow: true,
+              );
+              final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+              final controller = gameControllerProvider(testGameFullId);
+              final notifier = container.read(controller.notifier);
+              final layoutState = tester.state(find.byType(GameLayout));
+              final clocks = correspondence ? find.byType(CorrespondenceClock) : find.byType(Clock);
+              final cancel = find.byIcon(CupertinoIcons.xmark_rectangle_fill);
+              final accept = find.byIcon(CupertinoIcons.checkmark_rectangle_fill);
+
+              Future<void> checkLayout({
+                required bool pending,
+                Orientation orientation = Orientation.portrait,
+              }) async {
+                expect(tester.state(find.byType(GameLayout)), same(layoutState));
+                expect(container.read(controller.notifier), same(notifier));
+                expect(
+                  MediaQuery.orientationOf(tester.element(find.byType(GameLayout))),
+                  orientation,
+                );
+                expect(
+                  MediaQuery.textScalerOf(tester.element(find.byType(GameLayout))).scale(16.0),
+                  16.0 * textScale,
+                );
+                if (orientation == Orientation.portrait) {
+                  expectCompactBoardLayout(
+                    tester,
+                    heightCapped: profile.heightCapped,
+                    allowTableExpansion: textScale > 1.0,
+                  );
+                } else {
+                  final layout = tester.getRect(find.byType(GameLayout));
+                  final board = tester.getRect(find.byType(Chessboard));
+                  expect(board.width, board.height);
+                  expect(board.width, greaterThan(0));
+                  expect(board.left, greaterThanOrEqualTo(layout.left));
+                  expect(board.right, lessThanOrEqualTo(layout.right));
+                  expect(board.top, greaterThanOrEqualTo(layout.top));
+                  expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+                }
+                expect(clocks, findsNWidgets(2));
+                for (final control in [
+                  clocks.at(0),
+                  clocks.at(1),
+                  find.text('Steven'),
+                  find.byType(BottomBarButton).first,
+                ]) {
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(control);
+                    await tester.pump();
+                  }
+                  expectGameControlsVisible(tester, control);
+                }
+                if (correspondence) {
+                  for (final paragraph in tester.renderObjectList<RenderParagraph>(
+                    find.descendant(of: clocks, matching: find.byType(RichText)),
+                  )) {
+                    expect(paragraph.didExceedMaxLines, isFalse);
+                  }
+                }
+                expectGameControlsVisible(tester, find.byType(BottomBarButton));
+                if (pending) {
+                  expect(find.text('Peter'), findsNothing);
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(find.byType(ConfirmMove));
+                    await tester.pump();
+                  }
+                  expectGameControlsVisible(tester, find.byType(ConfirmMove));
+                  expectGameControlsVisible(tester, find.text('Confirm move'));
+                  final label = tester.renderObject<RenderParagraph>(
+                    find.descendant(of: find.text('Confirm move'), matching: find.byType(RichText)),
+                  );
+                  expect(label.didExceedMaxLines, isFalse);
+                  expect(cancel.hitTestable(), findsOneWidget);
+                  expect(accept.hitTestable(), findsOneWidget);
+                  final confirmation = tester.getRect(find.byType(ConfirmMove));
+                  for (var index = 0; index < 2; index++) {
+                    expect(confirmation.overlaps(tester.getRect(clocks.at(index))), isFalse);
+                  }
+                } else {
+                  expect(find.byType(ConfirmMove), findsNothing);
+                  if (orientation == Orientation.landscape) {
+                    await tester.ensureVisible(find.text('Peter'));
+                    await tester.pump();
+                  }
+                  expectGameControlsVisible(tester, find.text('Peter'));
+                }
+                expect(tester.takeException(), isNull);
+              }
+
+              await expectLayoutGolden(
+                find.byType(GameScreen),
+                '../../../build/compact-layout/confirmation-initial-${profile.name}-$correspondence-$textScale',
+              );
+              await checkLayout(pending: false);
+              if (correspondence) {
+                expect(find.text('One day', findRichText: true), findsOneWidget);
+                expect(find.text('20:05', findRichText: true), findsOneWidget);
+                await tester.pump(const Duration(minutes: 1));
+                expect(find.text('20:04', findRichText: true), findsOneWidget);
+                await checkLayout(pending: false);
+              }
+              await playMove(tester, 'g1', 'f3');
+              await checkLayout(pending: true);
+              expect(container.read(controller).requireValue.moveToConfirm, isNotNull);
+              final pendingMove = container.read(controller).requireValue.moveToConfirm;
+              await resizeTestSurface(
+                tester,
+                Size(profile.surface.height, profile.surface.width),
+                physicalViewPadding: EdgeInsets.only(
+                  left: profile.physicalPadding.top,
+                  right: profile.physicalPadding.top,
+                  bottom: 63.0,
+                ),
+              );
+              await checkLayout(pending: true, orientation: Orientation.landscape);
+              expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
+              await tester.pump(const Duration(milliseconds: 100));
+              await tester.pumpAndSettle();
+              expect(cancel.hitTestable(), findsOneWidget);
+              expect(accept.hitTestable(), findsOneWidget);
+              await expectLayoutGolden(
+                find.byType(GameScreen),
+                '../../../build/compact-layout/confirmation-rotated-${profile.name}-$correspondence-$textScale',
+              );
+              await tester.tap(cancel);
+              await tester.pump();
+              await checkLayout(pending: false, orientation: Orientation.landscape);
+              expect(container.read(controller).requireValue.moveToConfirm, isNull);
+              expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+              await playMove(tester, 'g1', 'f3');
+              await checkLayout(pending: true, orientation: Orientation.landscape);
+              await resizeTestSurface(
+                tester,
+                profile.surface,
+                physicalViewPadding: profile.physicalPadding,
+              );
+              await checkLayout(pending: true);
+              expect(container.read(controller).requireValue.moveToConfirm, pendingMove);
+              await expectLayoutGolden(
+                find.byType(GameScreen),
+                '../../../build/compact-layout/confirmation-${profile.name}-$correspondence-$textScale',
+              );
+              await tester.tap(cancel);
+              await tester.pump();
+              await checkLayout(pending: false);
+              expect(container.read(controller).requireValue.moveToConfirm, isNull);
+              expect(boardHasPiece(tester, Square.g1, Piece.whiteKnight), isTrue);
+
+              await playMove(tester, 'g1', 'f3');
+              await checkLayout(pending: true);
+              await tester.tap(accept);
+              await tester.pump();
+              await checkLayout(pending: false);
+              expect(container.read(controller).requireValue.moveToConfirm, isNull);
+              expect(container.read(controller).requireValue.game.sanMoves, 'e4 e5 Nf3');
+              expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+              await expectLayoutGolden(
+                find.byType(GameScreen),
+                '../../../build/compact-layout/confirmation-accepted-${profile.name}-$correspondence-$textScale',
+              );
+            },
+            variant: kPlatformVariant,
+          );
+        }
+      }
+    }
 
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
@@ -3182,11 +3423,16 @@ Future<void> createTestGame(
   Map<ProviderOrFamily, Override>? overrides,
   TournamentMeta? tournament,
   ServerGamePrefs? serverPrefs,
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
 
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
   ListenableFakeWebSocketChannelFactory? socketFactory,
 }) async {
+  final flutterTestOnError = FlutterError.onError!;
   const gameFullId = GameFullId('qVChCOTcHSeW');
   final app = await makeTestProviderScopeApp(
     tester,
@@ -3203,7 +3449,16 @@ Future<void> createTestGame(
         }),
       ...?overrides,
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
   await tester.pump(const Duration(milliseconds: 10));
 

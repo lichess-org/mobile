@@ -77,35 +77,40 @@ class const Clock({
             padding: padding,
             child: MediaQuery.withClampedTextScaling(
               maxScaleFactor: kMaxClockTextScaleFactor,
-              child: Text.rich(
-                TextSpan(
-                  text: hours > 0
-                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                      : '$minsDisplay:$secs',
-                  style: TextStyle(
-                    color: timeLeft > Duration.zero
-                        ? active
-                              ? isEmergency
-                                    ? effectiveClockStyle.emergencyTextColor
-                                    : effectiveClockStyle.activeTextColor
-                              : effectiveClockStyle.textColor
-                        : effectiveClockStyle.emergencyTextColor,
-                    fontSize: _kClockFontSize * fontScaleFactor,
-                    height: isShortVerticalScreen(context) ? 1.0 : null,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text.rich(
+                  TextSpan(
+                    text: hours > 0
+                        ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                        : '$minsDisplay:$secs',
+                    style: TextStyle(
+                      color: timeLeft > Duration.zero
+                          ? active
+                                ? isEmergency
+                                      ? effectiveClockStyle.emergencyTextColor
+                                      : effectiveClockStyle.activeTextColor
+                                : effectiveClockStyle.textColor
+                          : effectiveClockStyle.emergencyTextColor,
+                      fontSize: _kClockFontSize * fontScaleFactor,
+                      height: isShortVerticalScreen(context) ? 1.0 : null,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                    children: [
+                      if (showTenths)
+                        TextSpan(
+                          text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                          style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
+                        ),
+                      if (!active && timeLeft < const Duration(seconds: 1))
+                        TextSpan(
+                          text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                          style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
+                        ),
+                    ],
                   ),
-                  children: [
-                    if (showTenths)
-                      TextSpan(
-                        text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                        style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
-                      ),
-                    if (!active && timeLeft < const Duration(seconds: 1))
-                      TextSpan(
-                        text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                        style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
-                      ),
-                  ],
+                  maxLines: 1,
+                  softWrap: false,
                 ),
               ),
             ),
