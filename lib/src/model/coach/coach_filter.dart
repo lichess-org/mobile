@@ -5,6 +5,12 @@ enum CoachOrder(final String key) {
 
   static CoachOrder fromKey(String key) =>
       CoachOrder.values.firstWhere((order) => order.key == key, orElse: () => CoachOrder.login);
+
+  String get label => switch (this) {
+    CoachOrder.login => 'Last login',
+    CoachOrder.rating => 'Lichess rating',
+    CoachOrder.alphabetical => 'Alphabetical',
+  };
 }
 
 typedef CoachFilters = ({String language, String country, CoachOrder order});

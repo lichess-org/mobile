@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
@@ -214,6 +215,22 @@ class const _Body() extends ConsumerWidget {
                       ),
                   ],
                 ),
+              ListSection(
+                hasLeading: true,
+                children: [
+                  ListTile(
+                    leading: const Icon(Symbols.school_rounded),
+                    trailing: Theme.of(context).platform == TargetPlatform.iOS
+                        ? const CupertinoListTileChevron()
+                        : null,
+                    title: const Text('Coaches'),
+                    onTap: () => Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(CoachListScreen.buildRoute()),
+                  ),
+                ],
+              ),
             ],
           ],
         ),
