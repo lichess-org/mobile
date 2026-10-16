@@ -3,6 +3,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 
+/// Every recognizer in the rendered tree, paired with the text of the span holding it.
+List<(String, GestureRecognizer)> _linksUnder(InlineSpan span) {
+  final links = <(String, GestureRecognizer)>[];
+  if (span is! TextSpan) return links;
+  final recognizer = span.recognizer;
+  if (recognizer != null) links.add((span.text ?? '', recognizer));
+  for (final child in span.children ?? const <InlineSpan>[]) {
+    links.addAll(_linksUnder(child));
+  }
+  return links;
+}
+
+List<GestureRecognizer> _linkRecognizers(WidgetTester tester) {
+  final links = <(String, GestureRecognizer)>[];
+  for (final richText in tester.widgetList<RichText>(find.byType(RichText))) {
+    links.addAll(_linksUnder(richText.text));
+  }
+  return links.map((entry) => entry.$2).toList();
+}
+
+void _noop(LinkableElement _) {}
+
+/// Every leaf [TextSpan] in the rendered tree.
+List<TextSpan> _allSpans(WidgetTester tester) {
+  final spans = <TextSpan>[];
+  void visit(InlineSpan span) {
+    if (span is! TextSpan) return;
+    if (span.children == null) {
+      spans.add(span);
+      return;
+    }
+    span.children!.forEach(visit);
+  }
+
+  for (final richText in tester.widgetList<RichText>(find.byType(RichText))) {
+    visit(richText.text);
+  }
+  return spans;
+}
+
 void main() {
   group('linkify', () {
     test('returns empty list for empty string', () {
@@ -165,61 +205,6 @@ void main() {
     });
   });
 
-  group('buildTextSpan', () {
-    test('returns TextSpan with children for links and text', () {
-      final elements = linkify('hello https://example.com world');
-      final span = buildTextSpan(elements);
-      expect(span.children, isNotNull);
-      expect(span.children!.length, greaterThan(1));
-    });
-
-    test('applies linkStyle to link spans', () {
-      const linkStyle = TextStyle(color: Colors.red, fontWeight: FontWeight.bold);
-      final elements = linkify('hello https://example.com');
-      final span = buildTextSpan(elements, linkStyle: linkStyle, onOpen: (_) {});
-
-      final linkSpan =
-          span.children!.firstWhere((c) => (c as TextSpan).recognizer != null) as TextSpan;
-      expect(linkSpan.style, linkStyle);
-    });
-
-    test('applies style to text spans', () {
-      const style = TextStyle(color: Colors.green);
-      final elements = linkify('hello world');
-      final span = buildTextSpan(elements, style: style);
-
-      final textSpan =
-          span.children!.firstWhere((c) => c is TextSpan && c.recognizer == null) as TextSpan;
-      expect(textSpan.style, style);
-    });
-
-    test('onOpen adds TapGestureRecognizer to links', () {
-      LinkableElement? tappedLink;
-      final elements = linkify('hello https://example.com');
-      final span = buildTextSpan(elements, onOpen: (link) => tappedLink = link);
-
-      final linkSpan =
-          span.children!.firstWhere((c) => (c as TextSpan).recognizer != null) as TextSpan;
-      expect(linkSpan.recognizer, isA<TapGestureRecognizer>());
-      final tapRecognizer = linkSpan.recognizer! as TapGestureRecognizer;
-      expect(tapRecognizer, isNotNull);
-      tapRecognizer.onTap!();
-      expect(tappedLink, isNotNull);
-      expect(tappedLink!.url, 'https://example.com');
-    });
-
-    test('elements without links have no recognizer', () {
-      final elements = linkify('hello world');
-      final span = buildTextSpan(elements);
-
-      for (final child in span.children ?? <InlineSpan>[]) {
-        if (child is TextSpan) {
-          expect(child.recognizer, isNull);
-        }
-      }
-    });
-  });
-
   group('RichLinkText widget', () {
     testWidgets('renders plain text', (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(home: RichLinkText(text: 'hello world')));
@@ -302,6 +287,109 @@ void main() {
       expect(inner.children, isNotEmpty);
       final child = inner.children!.first as TextSpan;
       expect(child.style, isNotNull);
+    });
+
+    testWidgets('keeps its recognizers when only onOpen changes identity', (
+      WidgetTester tester,
+    ) async {
+      // Every caller passes an inline closure, so a new one arrives on every parent rebuild.
+      // Relinking then throws away three regex passes and a recognizer per link for nothing.
+      Future<void> pumpWith(LinkCallback onOpen) => tester.pumpWidget(
+        MaterialApp(
+          home: RichLinkText(text: 'see https://example.com now', onOpen: onOpen),
+        ),
+      );
+
+      await pumpWith((_) {});
+      final before = _linkRecognizers(tester);
+      expect(before, hasLength(1));
+
+      await pumpWith((_) {});
+
+      expect(_linkRecognizers(tester), orderedEquals(before));
+    });
+
+    testWidgets('applies linkStyle to tappable spans only', (WidgetTester tester) async {
+      const linkStyle = TextStyle(color: Colors.red, fontWeight: FontWeight.bold);
+      const style = TextStyle(color: Colors.green);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RichLinkText(
+            text: 'hello https://example.com',
+            style: style,
+            linkStyle: linkStyle,
+            onOpen: _noop,
+          ),
+        ),
+      );
+
+      final links = _allSpans(tester);
+      final link = links.firstWhere((span) => span.recognizer != null);
+      final plain = links.firstWhere((span) => span.recognizer == null && span.text!.isNotEmpty);
+
+      expect(link.style, linkStyle);
+      expect(plain.style, style);
+    });
+
+    testWidgets('gives plain text no recognizer', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RichLinkText(text: 'hello world', onOpen: _noop),
+        ),
+      );
+
+      for (final span in _allSpans(tester)) {
+        expect(span.recognizer, isNull);
+      }
+    });
+
+    testWidgets('appends trailing span after the text in the same paragraph', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: RichLinkText(
+            text: 'https://example.com',
+            trailing: WidgetSpan(
+              alignment: PlaceholderAlignment.baseline,
+              baseline: TextBaseline.alphabetic,
+              child: Text('12:00', key: Key('timestamp')),
+            ),
+          ),
+        ),
+      );
+
+      // The trailing Text renders a RichText of its own, so take the first.
+      final richText = tester.widget<RichText>(find.byType(RichText).first);
+      // U+FFFC is the placeholder toPlainText substitutes for an inline widget, so this is the
+      // trailing span sitting after the text rather than in a paragraph of its own.
+      expect(richText.text.toPlainText(), 'example.com\uFFFC');
+      expect(find.byKey(const Key('timestamp')), findsOneWidget);
+    });
+
+    testWidgets('calls the latest onOpen after it changes identity', (WidgetTester tester) async {
+      LinkableElement? firstTapped;
+      LinkableElement? secondTapped;
+
+      Future<void> pumpWith(LinkCallback onOpen) => tester.pumpWidget(
+        MaterialApp(
+          home: Center(
+            child: IntrinsicWidth(
+              child: RichLinkText(text: 'https://example.com', onOpen: onOpen),
+            ),
+          ),
+        ),
+      );
+
+      await pumpWith((link) => firstTapped = link);
+      await pumpWith((link) => secondTapped = link);
+
+      // A reused recognizer must still reach the callback the widget currently holds.
+      await tester.tap(find.text('example.com'));
+
+      expect(firstTapped, isNull);
+      expect(secondTapped?.url, 'https://example.com');
     });
   });
 }
