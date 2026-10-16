@@ -565,7 +565,8 @@ possible until then. Rules:
   (from the button, or blooming from the press point with slide-to-select), a Material menu
   elsewhere.
 - **Popovers**: use `PlatformPopover` (`popover.dart`), a `GlassPopover` that morphs out of its
-  trigger on iOS. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
+  trigger on iOS. A popover whose content would be hard to read on glass (e.g. the engine
+  details over the board) passes `opaque: true`: same glass shape and morph, opaque fill. Wheel pickers stay `cupertino_ui` wheels (the package has no glass wheel).
 - Glass is for the navigation and control layer that floats above content (bars, floating
   buttons, menus, popovers), never for content such as cards, list rows, forms or settings,
   whether on a screen or in a sheet (Apple's "Adopting Liquid Glass" guide).

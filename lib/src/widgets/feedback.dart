@@ -4,9 +4,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/glass_toast_host.dart';
-import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,38 +18,15 @@ class const SocketPingRatingIcon({final Uri? socketUri, super.key}) extends Cons
   Widget build(BuildContext context, WidgetRef ref) {
     final ping = ref.watch(socketPingProvider(socketUri));
 
-    return PlatformPopover(
-      triggerBuilder: (context, showPopover) => SemanticIconButton(
-        semanticsLabel: 'PING: ${ping.averageLag.inMilliseconds}ms',
-        icon: LagIndicator(lagRating: ping.rating, isActive: ping.isActive, size: 24.0),
-        onPressed: showPopover,
+    // The lag is told by the tooltip, shown on long press.
+    return Tooltip(
+      message: 'PING: ${ping.averageLag.inMilliseconds}ms',
+      child: SizedBox.square(
+        dimension: kMinInteractiveDimension,
+        child: Center(
+          child: LagIndicator(lagRating: ping.rating, isActive: ping.isActive, size: 24.0),
+        ),
       ),
-      bodyBuilder: (_) {
-        return Consumer(
-          builder: (_, ref, _) {
-            final p = ref.watch(socketPingProvider(socketUri));
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Text.rich(
-                TextSpan(
-                  text: 'PING: ',
-                  children: [
-                    TextSpan(
-                      text: p.averageLag > Duration.zero ? '${p.averageLag.inMilliseconds}' : '?',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: ' ms',
-                      style: TextStyle(color: ColorScheme.of(context).onSurface),
-                    ),
-                  ],
-                ),
-                style: TextStyle(color: ColorScheme.of(context).onSurface),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }
