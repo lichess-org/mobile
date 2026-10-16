@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
@@ -100,14 +101,7 @@ class const _Body({required final AnalysisOptions options, required final Analys
                     ? Orientation.landscape
                     : Orientation.portrait;
                 if (orientation == Orientation.landscape) {
-                  final sideWidth =
-                      constraints.biggest.longestSide - constraints.biggest.shortestSide;
-                  final defaultBoardSize =
-                      constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                  final boardSize = sideWidth >= 250
-                      ? defaultBoardSize
-                      : constraints.biggest.longestSide / kGoldenRatio -
-                            (kTabletBoardTableSidePadding * 2);
+                  final boardSize = landscapeBoardSizeConstraints(constraints);
                   return Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
