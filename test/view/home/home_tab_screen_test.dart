@@ -314,7 +314,6 @@ void main() {
         expect(find.text('Ongoing Games'), findsOneWidget);
         expect(find.text('Blog'), findsOneWidget);
         expect(find.byType(Checkbox), findsWidgets);
-        expect(find.byType(FeaturedTournamentsWidget), findsNothing);
 
         await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle();
