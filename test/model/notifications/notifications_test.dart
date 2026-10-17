@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -17,21 +16,21 @@ class MockAppLocalizations() extends Mock implements AppLocalizations;
 /// See `modules/relay/src/main/RelayNotifier.scala`: the URL is the relative round path
 /// `/broadcast/<tourSlug>/<roundSlug>/<roundId>`, with the chapter id appended and a `pov` query
 /// parameter added when a followed player starts a game.
-RemoteMessage broadcastMessage(String? url) => RemoteMessage(
+PushMessage broadcastMessage(String? url) => PushMessage(
   data: {'lichess.type': 'broadcast', 'lichess.url': ?url},
-  notification: const RemoteNotification(title: 'Tata Steel Masters', body: 'Round 3 has begun'),
+  notification: const PushNotification(title: 'Tata Steel Masters', body: 'Round 3 has begun'),
 );
 
 void main() {
   group('Broadcast FCM message parsing:', () {
     test('a round path is parsed as a round message', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L'),
       );
 
       expect(
         message,
-        isA<BroadcastRoundFcmMessage>().having(
+        isA<BroadcastRoundPushMessage>().having(
           (m) => m.roundId,
           'roundId',
           const BroadcastRoundId('RAIoMC7L'),
@@ -41,13 +40,13 @@ void main() {
 
     test('a round path with a dash as round slug is parsed as a round message', () {
       // lila substitutes '-' for the round slug when it is the same as the tournament slug.
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters/-/RAIoMC7L'),
       );
 
       expect(
         message,
-        isA<BroadcastRoundFcmMessage>().having(
+        isA<BroadcastRoundPushMessage>().having(
           (m) => m.roundId,
           'roundId',
           const BroadcastRoundId('RAIoMC7L'),
@@ -56,13 +55,13 @@ void main() {
     });
 
     test('an absolute round URL is parsed as a round message', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('https://lichess.org/broadcast/tata-steel-masters/round-3/RAIoMC7L'),
       );
 
       expect(
         message,
-        isA<BroadcastRoundFcmMessage>().having(
+        isA<BroadcastRoundPushMessage>().having(
           (m) => m.roundId,
           'roundId',
           const BroadcastRoundId('RAIoMC7L'),
@@ -72,7 +71,7 @@ void main() {
 
     test('a game path with a pov is parsed as a player follow message', () {
       for (final pov in Side.values) {
-        final message = FcmMessage.fromRemoteMessage(
+        final message = ParsedPushMessage.fromPushMessage(
           broadcastMessage(
             '/broadcast/tata-steel-masters/round-3/RAIoMC7L/G2LUflKg?pov=${pov.name}',
           ),
@@ -80,7 +79,7 @@ void main() {
 
         expect(
           message,
-          isA<BroadcastPlayerFollowFcmMessage>()
+          isA<BroadcastPlayerFollowPushMessage>()
               .having((m) => m.roundId, 'roundId', const BroadcastRoundId('RAIoMC7L'))
               .having((m) => m.gameId, 'gameId', const BroadcastGameId('G2LUflKg'))
               .having((m) => m.pov, 'pov', pov),
@@ -89,40 +88,43 @@ void main() {
     });
 
     test('a game path without a pov is malformed', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L/G2LUflKg'),
       );
 
-      expect(message, isA<MalformedFcmMessage>());
+      expect(message, isA<MalformedPushMessage>());
     });
 
     test('a game path with an unknown pov is malformed', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L/G2LUflKg?pov=green'),
       );
 
-      expect(message, isA<MalformedFcmMessage>());
+      expect(message, isA<MalformedPushMessage>());
     });
 
     test('a path with too few segments is malformed', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters'),
       );
 
-      expect(message, isA<MalformedFcmMessage>());
+      expect(message, isA<MalformedPushMessage>());
     });
 
     test('a message without a URL is malformed', () {
-      expect(FcmMessage.fromRemoteMessage(broadcastMessage(null)), isA<MalformedFcmMessage>());
+      expect(
+        ParsedPushMessage.fromPushMessage(broadcastMessage(null)),
+        isA<MalformedPushMessage>(),
+      );
     });
 
     test('a title and body are taken from the notification', () {
-      final message = FcmMessage.fromRemoteMessage(
+      final message = ParsedPushMessage.fromPushMessage(
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L'),
       );
 
-      final notification = BroadcastRoundNotification.fromFcmMessage(
-        message as BroadcastRoundFcmMessage,
+      final notification = BroadcastRoundNotification.fromPushMessage(
+        message as BroadcastRoundPushMessage,
       );
 
       expect(notification.title(MockAppLocalizations()), 'Tata Steel Masters');
@@ -192,23 +194,23 @@ void main() {
   });
 
   group('FCM message to local notification mapping:', () {
-    final displayable = <(RemoteMessage, Type)>[
+    final displayable = <(PushMessage, Type)>[
       (
-        const RemoteMessage(data: {'lichess.type': 'newMessage', 'lichess.threadId': 'thethread'}),
+        const PushMessage(data: {'lichess.type': 'newMessage', 'lichess.threadId': 'thethread'}),
         NewMessageNotification,
       ),
       (
-        const RemoteMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'}),
+        const PushMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': '9wlmxmibr9gh'}),
         CorresGameUpdateNotification,
       ),
       (
-        const RemoteMessage(
+        const PushMessage(
           data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
         ),
         ChallengeCreatedNotification,
       ),
       (
-        const RemoteMessage(
+        const PushMessage(
           data: {
             'lichess.type': 'challengeAccept',
             'lichess.challengeId': 'challenging',
@@ -226,7 +228,7 @@ void main() {
         BroadcastPlayerFollowNotification,
       ),
       (
-        const RemoteMessage(data: {'lichess.type': 'recap', 'lichess.year': '2025'}),
+        const PushMessage(data: {'lichess.type': 'recap', 'lichess.year': '2025'}),
         RecapNotification,
       ),
     ];
@@ -234,7 +236,7 @@ void main() {
     test('each displayable message maps to its local notification', () {
       for (final (message, expectedType) in displayable) {
         expect(
-          FcmMessage.fromRemoteMessage(message).toLocalNotification().runtimeType,
+          ParsedPushMessage.fromPushMessage(message).toLocalNotification().runtimeType,
           expectedType,
           reason: 'for $message',
         );
@@ -242,11 +244,11 @@ void main() {
     });
 
     test('unhandled and malformed messages have no local notification', () {
-      final messages = <FcmMessage>[
-        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {'lichess.type': 'unknown'})),
-        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {})),
+      final messages = <ParsedPushMessage>[
+        ParsedPushMessage.fromPushMessage(const PushMessage(data: {'lichess.type': 'unknown'})),
+        ParsedPushMessage.fromPushMessage(const PushMessage(data: {})),
         // a correspondence update without a game id cannot be parsed
-        FcmMessage.fromRemoteMessage(const RemoteMessage(data: {'lichess.type': 'gameMove'})),
+        ParsedPushMessage.fromPushMessage(const PushMessage(data: {'lichess.type': 'gameMove'})),
       ];
 
       for (final message in messages) {
