@@ -194,10 +194,10 @@ class _BroadcastRoundScreenState()
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    ({BroadcastRound round, bool? isSubscribed})? roundState,
+    AsyncValue<({BroadcastRound round, bool? isSubscribed})>? roundState,
   ) {
     return switch (roundState) {
-      final roundState? => PlatformScaffold(
+      AsyncData(value: (:final round, isSubscribed: final subscription)) => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         // Tinted like the bottom bar buttons, over the boards.
         appBar: PlatformAppBar(
@@ -213,6 +213,7 @@ class _BroadcastRoundScreenState()
                 ),
           // A long title, next to the actions.
           centerTitle: false,
+<<<<<<< HEAD
           actionsBuilder: (context, ref) {
             final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
             final showEvalBar = ref.watch(
@@ -263,6 +264,26 @@ class _BroadcastRoundScreenState()
                             type: SnackBarType.error,
                           );
                         }
+=======
+          actions: [
+            if (subscription case final isSubscribed?)
+              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
+                SemanticIconButton(
+                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
+                  onPressed: () async {
+                    try {
+                      await ref
+                          .read(broadcastRoundControllerProvider(roundId).notifier)
+                          .setSubscribed(_selectedTournamentId, !isSubscribed);
+                    } catch (_) {
+                      if (context.mounted) {
+                        showSnackBar(
+                          context,
+                          'Could not update the subscription',
+                          type: SnackBarType.error,
+                        );
+>>>>>>> 2371aa30e (Fix broken merge in broadcast round screen)
                       }
                     },
                   ),
@@ -284,6 +305,7 @@ class _BroadcastRoundScreenState()
                         selected: filter == .all,
                         onPressed: () => setGameFilter(.all, _teamFilter),
                       ),
+<<<<<<< HEAD
                       ContextMenuAction(
                         label: '${context.l10n.broadcastOngoing} (${games?.ongoing ?? 0})',
                         selected: filter == .ongoing,
@@ -316,6 +338,20 @@ class _BroadcastRoundScreenState()
                       asyncTournament.value?.data ?? widget.broadcast.tour,
                       roundState.round,
                     ),
+=======
+                    );
+                  },
+                ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share_outlined
+                      : Icons.share_outlined,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => showBroadcastShareMenu(
+                    context,
+                    asyncTournament.value?.data ?? widget.broadcast.tour,
+                    round,
+>>>>>>> 2371aa30e (Fix broken merge in broadcast round screen)
                   ),
                 ],
               ),
@@ -395,7 +431,28 @@ class _BroadcastRoundScreenState()
           _ => const BottomBar.empty(cupertinoGlass: true),
         },
       ),
-      null => PlatformScaffold(
+      AsyncError() => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: const PlatformAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Cannot load broadcast round'),
+              TextButton(
+                onPressed: () {
+                  final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                  if (roundId != null) {
+                    ref.invalidate(broadcastRoundControllerProvider(roundId));
+                  }
+                },
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      _ => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: const PlatformAppBar(),
         body: const Center(child: CircularProgressIndicator.adaptive()),
