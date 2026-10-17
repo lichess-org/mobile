@@ -58,12 +58,9 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
   @override
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.mobileHttpLogs),
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('HTTP logs'),
+        title: Text(context.l10n.mobileHttpLogs),
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
