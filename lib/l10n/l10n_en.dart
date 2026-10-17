@@ -163,9 +163,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -7818,9 +7815,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get mobileHomeTab => 'Home';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
-
-  @override
   String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
 
   @override
@@ -12093,9 +12087,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get reason => 'Reason';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Cheat';
 
   @override
@@ -12112,9 +12103,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -12233,6 +12221,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get never => 'Never';
+
+  @override
+  String get drawAndDefeat => 'Draw and Defeat';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -12417,7 +12408,13 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get really => 'really';
 
   @override
+  String get lichessUpdates => 'Lichess updates';
+
+  @override
   String get contribute => 'Contribute';
+
+  @override
+  String get changelog => 'Changelog';
 
   @override
   String get termsOfService => 'Terms of Service';

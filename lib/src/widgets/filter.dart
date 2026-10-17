@@ -1,15 +1,18 @@
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:material_ui/material_ui.dart';
 
 enum FilterType() {
-  /// Only one choice is intended to be selected at a time. Uses [ChoiceChip] to display choices.
+  /// Only one choice is intended to be selected at a time ([ChoiceChip] on Android).
   singleChoice,
 
-  /// Multiple choices can be selected at the same time. Uses [FilterChip] to display choices.
+  /// Multiple choices can be selected at the same time ([FilterChip] on Android).
   multipleChoice,
 }
 
-/// Displays a row of choices that can be selected or deselected.
-class const Filter<T extends Enum>({
+/// Displays a group of choices that can be selected or deselected, under an optional title.
+///
+/// This is the layout of every group of chips in a sheet: [FilterTitle], then the chips.
+class const Filter<T>({
   /// Will be displayed above the choices as a title.
   final String? filterName,
 
@@ -28,6 +31,9 @@ class const Filter<T extends Enum>({
   /// Determines label to display for the given choice.
   required final Widget Function(T choice) choiceLabel,
 
+  /// Determines the tooltip of the given choice, if any.
+  final String? Function(T choice)? choiceTooltip,
+
   /// Called when a choice is selected or deselected.
   required final void Function(T value, bool selected) onSelected,
 }) extends StatelessWidget {
@@ -36,35 +42,39 @@ class const Filter<T extends Enum>({
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (filterName != null) ...[
-          Text(filterName!, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 10),
-        ],
+        if (filterName != null) FilterTitle(filterName!),
         SizedBox(
           width: double.infinity,
           child: Wrap(
             spacing: 8.0,
+            // The glass chips have no tap target margin, unlike the Material ones.
+            runSpacing: Theme.of(context).platform == TargetPlatform.iOS ? 8.0 : 0.0,
             children: choices
                 .map(
-                  (choice) => switch (filterType) {
-                    FilterType.singleChoice => ChoiceChip(
-                      label: choiceLabel(choice),
-                      selected: choiceSelected(choice),
-                      onSelected: (value) => onSelected(choice, value),
-                      showCheckmark: showCheckmark,
-                    ),
-                    FilterType.multipleChoice => FilterChip(
-                      label: choiceLabel(choice),
-                      selected: choiceSelected(choice),
-                      onSelected: (value) => onSelected(choice, value),
-                      showCheckmark: showCheckmark,
-                    ),
-                  },
+                  (choice) => PlatformChoiceChip(
+                    label: choiceLabel(choice),
+                    selected: choiceSelected(choice),
+                    onSelected: (value) => onSelected(choice, value),
+                    multiple: filterType == FilterType.multipleChoice,
+                    showCheckmark: showCheckmark,
+                    tooltip: choiceTooltip?.call(choice),
+                  ),
                 )
                 .toList(growable: false),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The title of a group of chips (see [Filter]), for groups that don't fit in a [Filter].
+class const FilterTitle(final String title, {super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Text(title, style: const TextStyle(fontSize: 18)),
     );
   }
 }

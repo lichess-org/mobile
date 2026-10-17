@@ -17,13 +17,13 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
@@ -47,6 +47,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
@@ -317,8 +318,9 @@ class const _PuzzleScaffold({
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
           leading: BackButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -867,9 +869,8 @@ class const _PuzzleSettingsButton(final PuzzleContext initialPuzzleContext)
   @override
   Widget build(BuildContext context) {
     return SemanticIconButton(
-      onPressed: () => showModalBottomSheet<void>(
+      onPressed: () => showAdaptiveBottomSheet<void>(
         context: context,
-        isDismissible: true,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),

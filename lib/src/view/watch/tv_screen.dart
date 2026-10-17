@@ -27,6 +27,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -86,8 +87,9 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
         }
       },
       child: WakelockWidget(
-        child: Scaffold(
-          appBar: AppBar(
+        child: PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: PlatformAppBar(
             title: widget.channel != null
                 ? Text('${widget.channel!.label(context.l10n)} TV')
                 : Row(

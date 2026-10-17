@@ -163,9 +163,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Streameři';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4841,7 +4838,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reason => 'Důvod';
 
   @override
-  String get whatIsIheMatter => 'Co se stalo?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Podvod';
@@ -4862,7 +4859,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get processReportFasterInEnglish => 'Vaše hlášení můžeme zpracovat rychleji, pokud jej napíšete anglicky.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Prosím, uveďte alespoň jeden link na partii, ve které se podvádělo.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

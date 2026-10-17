@@ -8,10 +8,10 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -75,9 +75,6 @@ class const _PuzzleTabScaffold({required final Widget body}) extends ConsumerWid
         appBar: PlatformAppBar(
           title: Text(context.l10n.puzzles),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: body,
@@ -394,6 +391,7 @@ class const DailyPuzzle({super.key}) extends ConsumerWidget {
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
         return SmallBoardPreview(
+          dimInDarkMode: true,
           orientation: preview.orientation,
           fen: preview.initialFen,
           lastMove: preview.initialMove,
@@ -505,6 +503,7 @@ class const PuzzleAnglePreview({
                 ],
               ),
               child: SmallBoardPreview(
+                dimInDarkMode: true,
                 orientation: preview?.orientation ?? Side.white,
                 fen: preview?.initialFen ?? kEmptyFEN,
                 lastMove: preview?.initialMove,
