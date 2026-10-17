@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart'
     show BlurredBarBackground, tintedGlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
@@ -21,6 +23,7 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
+    final isOnline = ref.watch(isDeviceOnlineProvider);
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
@@ -37,7 +40,10 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
               destinations: [
                 for (final tab in BottomTab.values)
                   NavigationDestination(
-                    icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+                    icon: Icon(
+                      tab == BottomTab.watch && !isOnline ? Symbols.tv_off_rounded : tab.icon,
+                      fill: tab == currentTab ? 1 : 0,
+                    ),
                     label: tab.label(context.l10n),
                   ),
               ],
@@ -57,6 +63,7 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     final PreferredSizeWidget tabBar = !useLiquidGlass(context)
         ? _BlurredTabBar(
             currentTab: currentTab,
+            isOnline: isOnline,
             onTap: (i) => _onItemTapped(ref, i),
             bottomPadding: MediaQuery.paddingOf(context).bottom,
           )
@@ -74,8 +81,13 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
             tabs: [
               for (final tab in BottomTab.values)
                 GlassTab(
-                  icon: Icon(tab.icon),
-                  activeIcon: Icon(tab.icon, fill: 1),
+                  icon: Icon(
+                    tab == BottomTab.watch && !isOnline ? Symbols.tv_off_rounded : tab.icon,
+                  ),
+                  activeIcon: Icon(
+                    tab == BottomTab.watch && !isOnline ? Symbols.tv_off_rounded : tab.icon,
+                    fill: 1,
+                  ),
                   label: tab.label(context.l10n),
                 ),
             ],
@@ -444,6 +456,7 @@ const double _kBlurredTabBarHeight = 50.0;
 /// the screen on a [BlurredBarBackground], like the iOS 18 tab bar.
 class const _BlurredTabBar({
   required final BottomTab currentTab,
+  required final bool isOnline,
   required final ValueChanged<int> onTap,
 
   /// The bottom safe area, which the bar extends into.
@@ -479,7 +492,9 @@ class const _BlurredTabBar({
                           spacing: 2.0,
                           children: [
                             Icon(
-                              tab.icon,
+                              tab == BottomTab.watch && !isOnline
+                                  ? Symbols.tv_off_rounded
+                                  : tab.icon,
                               fill: tab == currentTab ? 1 : 0,
                               color: tab == currentTab ? activeColor : inactiveColor,
                             ),
