@@ -484,12 +484,6 @@ abstract class AppLocalizations {
   /// **'This code is invalid or has expired.'**
   String get mobileInvalidOrExpiredLoginCode;
 
-  /// No description provided for @mobileLiveStreamers.
-  ///
-  /// In en, this message translates to:
-  /// **'Live streamers'**
-  String get mobileLiveStreamers;
-
   /// No description provided for @mobileLocalDatabaseSize.
   ///
   /// In en, this message translates to:
@@ -10150,6 +10144,12 @@ abstract class AppLocalizations {
   /// **'Security'**
   String get security;
 
+  /// No description provided for @activeSessionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'{param1}\'>check your recovery email address</a> and <a href=\'{param2}\'>change your password</a>.'**
+  String activeSessionsDescription(String param1, String param2);
+
   /// No description provided for @sessions.
   ///
   /// In en, this message translates to:
@@ -10185,6 +10185,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No challenges.'**
   String get noChallenges;
+
+  /// No description provided for @browserNotificationsDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification popups disabled by browser setting'**
+  String get browserNotificationsDenied;
 
   /// No description provided for @xHostsY.
   ///
@@ -11535,6 +11541,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preview'**
   String get preview;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
 
   /// No description provided for @opponentLeftCounter.
   ///

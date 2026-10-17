@@ -163,9 +163,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Стрымеры ў эфіры';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4837,7 +4834,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reason => 'Прычына';
 
   @override
-  String get whatIsIheMatter => 'Што здарылася?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Несумленная гульня';
@@ -4858,7 +4855,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Калі ласка, дадайце спасылку хаця б на адну гульню, дзе былі парушаны правілы.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5500,6 +5497,11 @@ class AppLocalizationsBe extends AppLocalizations {
   String get security => 'Бяспека';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Сэсіі';
 
   @override
@@ -5516,6 +5518,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get noChallenges => 'Няма выклікаў.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -5805,7 +5810,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Выклікаў $param';
+    return 'Выклікаць $param';
   }
 
   @override
@@ -6257,6 +6262,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

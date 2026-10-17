@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 
 typedef FullEventTestClock = ({
@@ -36,6 +37,9 @@ String makeFullEvent(
   ServerGamePrefs? serverPrefs,
 }) {
   final youAreStr = youAre != null ? '"youAre": "${youAre.name}",' : '';
+  final speed = clock != null
+      ? Speed.fromTimeIncrement(.fromDurations(clock.initial, clock.increment)).name
+      : 'correspondence';
   final clockStr = clock != null
       ? '''
     "clock": {
@@ -96,8 +100,8 @@ String makeFullEvent(
           "name": "${variant?.pgnName ?? 'Standard'}",
           "short": "${variant?.pgnName ?? 'Std'}"
         },
-        "speed": "${clock != null ? 'blitz' : 'correspondence'}",
-        "perf": "${clock != null ? 'blitz' : 'correspondence'}",
+        "speed": "$speed",
+        "perf": "$speed",
         "rated": false,
         "source": "lobby",
         "status": {

@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/chat/chat_providers.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -10,9 +10,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/message_input.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -100,8 +102,8 @@ class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
         }
       },
       child: switch (chatState) {
-        AsyncValue(:final value?, hasValue: true) => Scaffold(
-          appBar: AppBar(
+        AsyncValue(:final value?, hasValue: true) => PlatformScaffold(
+          appBar: PlatformAppBar(
             title: widget.options is TvChatOptions
                 ? Text(context.l10n.spectatorRoom)
                 : widget.options.isPublic
@@ -111,52 +113,72 @@ class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
                 : UserFullNameWidget(user: widget.options.opponent),
             centerTitle: true,
           ),
-          body: Column(
-            children: [
-              // Display error if there is one, but still show the messages if they are available
-              if (chatState.hasError)
-                Material(
-                  color: Theme.of(context).colorScheme.errorContainer,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      chatState.error.toString(),
-                      style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
-                      textAlign: TextAlign.center,
+          // The context of the body, whose padding includes the glass app bar on iOS.
+          body: Builder(
+            builder: (context) {
+              final padding = MediaQuery.paddingOf(context);
+              return Column(
+                children: [
+                  // Display error if there is one, but still show the messages if they are
+                  // available
+                  if (chatState.hasError)
+                    Padding(
+                      padding: EdgeInsets.only(top: padding.top),
+                      child: Material(
+                        color: Theme.of(context).colorScheme.errorContainer,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            chatState.error.toString(),
+                            style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => FocusScope.of(context).unfocus(),
+                      // remove the automatic bottom padding of the ListView which is here taken
+                      // care of by the _ChatBottomBar; the top padding is taken by the error, if
+                      // any
+                      child: ListView.builder(
+                        padding: padding.copyWith(
+                          top: chatState.hasError ? 0 : padding.top,
+                          bottom: 0,
+                        ),
+                        reverse: true,
+                        itemCount: value.messages.length,
+                        itemBuilder: (context, index) {
+                          final message = value.messages[value.messages.length - index - 1];
+                          return (message.username == 'lichess')
+                              ? _MessageAction(message: message.message)
+                              : (message.username == authUser?.user.name)
+                              ? _MessageBubble(options: widget.options, you: true, message: message)
+                              : _MessageBubble(
+                                  options: widget.options,
+                                  you: false,
+                                  message: message,
+                                  showUsername: widget.options.isPublic,
+                                );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => FocusScope.of(context).unfocus(),
-                  // remove the automatic bottom padding of the ListView which is here taken care
-                  // of by the _ChatBottomBar
-                  child: ListView.builder(
-                    padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
-                    reverse: true,
-                    itemCount: value.messages.length,
-                    itemBuilder: (context, index) {
-                      final message = value.messages[value.messages.length - index - 1];
-                      return (message.username == 'lichess')
-                          ? _MessageAction(message: message.message)
-                          : (message.username == authUser?.user.name)
-                          ? _MessageBubble(options: widget.options, you: true, message: message)
-                          : _MessageBubble(
-                              options: widget.options,
-                              you: false,
-                              message: message,
-                              showUsername: widget.options.isPublic,
-                            );
-                    },
-                  ),
-                ),
-              ),
-              if (widget.options.writeable) _ChatBottomBar(options: widget.options),
-            ],
+                  if (widget.options.writeable) _ChatBottomBar(options: widget.options),
+                ],
+              );
+            },
           ),
         ),
-        AsyncValue(:final error?) => Scaffold(body: Center(child: Text(error.toString()))),
-        _ => const Scaffold(body: Center(child: CircularProgressIndicator.adaptive())),
+        AsyncValue(:final error?) => PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.chatRoom)),
+          body: Center(child: Text(error.toString())),
+        ),
+        _ => PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.chatRoom)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        ),
       },
     );
   }
@@ -180,7 +202,9 @@ class const _MessageBubble({
       message: message.message,
       actions: [
         if (you == false && message.user != null)
-          BottomSheetContextMenuAction(
+          ContextMenuAction(
+            icon: Icons.report_problem_outlined,
+            label: 'Report',
             onPressed: () async {
               final result = await showAdaptiveDialog<bool>(
                 context: context,
@@ -196,8 +220,6 @@ class const _MessageBubble({
                 ref.read(chatNotifierProvider(options)).reportMessage(message);
               }
             },
-            icon: Icons.report_problem_outlined,
-            child: const Text('Report'),
           ),
       ],
       child: FractionallySizedBox(
@@ -303,12 +325,14 @@ class _ChatBottomBarState() extends ConsumerState<_ChatBottomBar> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: messageInputVerticalPadding(context, fallback: 8.0),
+        ),
         child: TextField(
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+          decoration: messageInputDecoration(
+            context,
             suffixIcon: sendButton,
-            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: placeholder,
           ),
           controller: _textController,

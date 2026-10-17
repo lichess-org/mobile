@@ -163,9 +163,6 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -3559,7 +3556,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get toggleLocalEvaluation => 'स्थानीय मूल्यांकन को टॉगल करें';
 
   @override
-  String get promoteVariation => 'विविधता को बढ़ावा दें';
+  String get promoteVariation => 'वैकल्पिक चालक्रम का स्तर बढ़ाएँ';
 
   @override
   String get makeMainLine => 'मुख्य लाइन बनाएं';
@@ -3568,10 +3565,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get deleteFromHere => 'यहां से हटाओ';
 
   @override
-  String get collapseVariations => 'विविधताओं को मिटाये';
+  String get collapseVariations => 'वैकल्पिक चालक्रम समेटें';
 
   @override
-  String get expandVariations => 'विविधताओं का विस्तार करें';
+  String get expandVariations => 'वैकल्पिक चालक्रम दिखाएँ';
 
   @override
   String get forceVariation => 'बल भिन्नता';
@@ -4375,7 +4372,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get orUploadPgnFile => 'या PGN अपलोड करे|';
 
   @override
-  String get continueFromHere => 'यहा से जारी करें';
+  String get continueFromHere => 'यहाँ से जारी करें';
 
   @override
   String get toStudy => 'पढ़े';
@@ -4597,7 +4594,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get startPosition => 'शुरू करने की स्थिति:';
 
   @override
-  String get clearBoard => 'बोर्ड सॉफ करें';
+  String get clearBoard => 'बोर्ड साफ़ करें';
 
   @override
   String get loadPosition => 'इस स्थिति से चालू करें';
@@ -4783,7 +4780,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get reason => 'कारण';
 
   @override
-  String get whatIsIheMatter => 'बात क्या है?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'धोखेबाज़ी';
@@ -4804,7 +4801,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'कृपया ठगे गए खेल के लिए कम से कम एक लिंक प्रदान करें।';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5446,6 +5443,11 @@ class AppLocalizationsHi extends AppLocalizations {
   String get security => 'सुरक्षा';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'सत्र';
 
   @override
@@ -5462,6 +5464,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noChallenges => 'No challenges.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6203,6 +6208,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

@@ -27,6 +27,8 @@ final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser
   return ref.watch(relationRepositoryProvider).getRecentFollowing();
 }, name: 'FollowingCarouselProvider');
 
+const _kFollowingCarouselHeight = 110.0;
+
 /// A carousel widget that displays a list of users that the current user is following.
 class const FollowingCarousel(final AsyncValue<IList<FollowingUser>> followingAsync, {super.key})
     extends ConsumerStatefulWidget {
@@ -60,7 +62,7 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
                 ),
               ),
               SizedBox(
-                height: 110,
+                height: _kFollowingCarouselHeight,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
@@ -199,7 +201,7 @@ Widget _buildLoadingSkeleton(BuildContext context) {
           child: ShimmerLoading(
             isLoading: true,
             child: SizedBox(
-              height: 120,
+              height: _kFollowingCarouselHeight,
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,

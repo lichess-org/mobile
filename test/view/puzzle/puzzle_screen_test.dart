@@ -14,11 +14,11 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -408,7 +408,7 @@ void main() {
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.tapAt(squareOffset(Square.g4, boardRect, orientation: Side.black));
       await tester.pump();
-      expect(find.byKey(const Key('g4-selected')), findsNothing);
+      expect(getBoardSelectedSquare(tester), isNull);
 
       const orientation = Side.black;
 

@@ -6,21 +6,18 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Sigurado ka ba?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Mga setting sa tabla</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Kanselahin ang alok ng takeback</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">I-clear</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">I-clear</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">I-clear ang na-save na tira</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Sumali sa isang laro</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
-  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi, %s</string>
-  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang araw, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang araw</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Itago ang baryasyon</string>
+  <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi, %s</string>
+  <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Simula</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Mga live na streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Kailangang naka-log-in ka para matingnan ito.</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walang mga resulta</string>
-  <string name="notAllFeaturesAreAvailable" comment="This is shown in the welcome message when the app is first installed">Pakitandaan na hindi lahat ng tampok mula sa lumang app o website ay kasalukuyang magagamit, ngunit kami ay dagdagan ng mga tampok sa lahat ng pagkakataon.</string>
-  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Sa board</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga manlalaro na may \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kaliwa</string>
@@ -30,11 +27,10 @@
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Walang maipakita, mangyari kang baguhin ang mga filter</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Walang maipakita. Maglaro ng mga takbo sa Puzzle Storm.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lutasin ang maraming palaisipan hangga\'t maaari sa loob ng 3 minuto.</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Mawawala ang iyong kasalukuyang streak at mase-save ang iyong iskor.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Maglaro ng mga palaisipan mula sa iyong mga paboritong pagbubukas, o pumili ng tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Palaisipan</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Mga nakaraang mga searches</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space in constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Alisin ang bookmark</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Alisin ang bookmark</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Pagsusuri ng server</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posisyon ng orasan</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Mga preset</string>
@@ -45,9 +41,9 @@
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Itago ang sistemang UI habang naglalaro. Gamitin ito kung naaabala ka sa mga kumpas ng nabigasyon ng sistema sa mga gilid ng screen. Na-aapply sa mga screen ng laro at palaisipan.</string>
   <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Mga nakaing piyesa</string>
-  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick and image from the image library as app custom background.">Pumili ng larawan</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Gumagana lamang ang custom na background sa dark mode. Inirerekomenda and maitim na larawan.</string>
+  <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Pumili ng larawan</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">I-blur ang larawan</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Gumagana lamang ang custom na background sa dark mode. Inirerekomenda and maitim na larawan.</string>
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Itago ang tabla</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Ipakita ang tabla</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">I-swipe upang ipakita ang iba bang mga background</string>
@@ -58,20 +54,16 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ipakita ang gilid</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Mag-feedback kapag pumindot</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kapag naka-enable, magba-vibrate ang device kapag tumira o kumain ng piyesa.</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Setting</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ibahagi ang PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ibahagi ang larong URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Ibahagi ang posisyon bilang FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ibahagi ang palaisipang ito</string>
   <string name="showComments" comment="Shown in the analysis screen.">Ipakita ang mga komento</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ipakita ang resulta</string>
-  <string name="showVariations" comment="Shown in the analysis screen.">Ipakita ang mga baryasyon</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">May maling nangyari.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Mga kulay ng sistema</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Kagamitan</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ang baryanteng %s ay hindi suportado sa bersyong ito.</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Naghihintay na sumali ang kalaban...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Manood</string>
-  <string name="welcomeToLichessApp" comment="A welcome message shown only the first time the app is installed.">Maligayang pagdating sa Lichess app!</string>
 </resources>

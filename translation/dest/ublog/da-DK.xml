@@ -2,6 +2,8 @@
 <resources>
   <string name="community">Fællesskab</string>
   <string name="communityBlogs">Blogs fra fællesskabet</string>
+  <string name="best">Bedste</string>
+  <string name="all">Alle</string>
   <string name="byMonth">Efter måned</string>
   <string name="byTopic">Efter emne</string>
   <string name="byLichess">Af Lichess</string>
@@ -53,6 +55,7 @@
   </plurals>
   <string name="imageAlt">Billede alternativ tekst</string>
   <string name="imageCredit">Billedkreditering</string>
+  <string name="coverImage">Coverbillede</string>
   <string name="deleteBlog">Slet dette blogindlæg for altid</string>
   <string name="freeImagesComplyWithLicensing" comment="safeToUseImages&#10;&#10;This is mentioned because the images there are royalty-free, so there is no risk of copyright infringement.">Følgende websteder tilbyder billeder gratis. Sørg for at overholde licensbetingelserne for det billede, du bruger.</string>
   <string name="selectPostTopics">Vælg de emner dit indlæg handler om</string>

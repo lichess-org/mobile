@@ -163,9 +163,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Canlı yayımçılar';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4783,7 +4780,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get reason => 'Səbəb';
 
   @override
-  String get whatIsIheMatter => 'Problem nədir?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Hiylə';
@@ -4804,7 +4801,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Lütfən ən azı bir hiyləli oyun linki daxil edin.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5446,6 +5443,11 @@ class AppLocalizationsAz extends AppLocalizations {
   String get security => 'Təhlükəsizlik';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+  }
+
+  @override
   String get sessions => 'Sessions';
 
   @override
@@ -5462,6 +5464,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get noChallenges => 'No challenges.';
+
+  @override
+  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6203,6 +6208,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get preview => 'Preview';
+
+  @override
+  String get done => 'Done';
 
   @override
   String opponentLeftCounter(int count) {

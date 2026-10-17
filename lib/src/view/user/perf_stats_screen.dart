@@ -27,6 +27,8 @@ import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
@@ -50,8 +52,8 @@ class const PerfStatsScreen({required final User user, required final Perf perf,
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: _Title(user: user, perf: perf),
       ),
       body: _Body(user: user, perf: perf),
@@ -81,9 +83,10 @@ class const _Title({required final User user, required final Perf perf}) extends
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(perf.icon),
-            Text(
-              ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
-              overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: AppBarTitleText(
+                ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
+              ),
             ),
             const Icon(Icons.arrow_drop_down),
           ],

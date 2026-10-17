@@ -37,7 +37,7 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Er du sikker på du vil downloade NNUE filen ($param)?';
   }
 
   @override
@@ -74,15 +74,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'Kode';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'Koden er $param tegn lang.';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'Kopieret.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Ryd gemt træk';
@@ -97,10 +97,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Afvis';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => 'Farezone';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Slet din konto';
 
   @override
   String get mobileDisplayModeCompact => 'Kompakt';
@@ -109,16 +109,16 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detaljeret';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Do you accept the challenge?';
+  String get mobileDoYouAcceptChallenge => 'Accepterer du udfordringen?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Download mine partier';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'Filtre';
 
   @override
   String get mobileFlipClock => 'Flip clock';
@@ -149,7 +149,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileGoodMoveButThereIsBetter => 'Godt træk, men der findes et bedre';
 
   @override
-  String get mobileHello => 'Hello';
+  String get mobileHello => 'Hej';
 
   @override
   String get mobileHomeTab => 'Hjem';
@@ -161,9 +161,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Live-streamere';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -297,7 +294,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePuzzlesTab => 'Opgaver';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'Bedøm denne app';
 
   @override
   String get mobileRecentSearches => 'Seneste søgninger';
@@ -306,10 +303,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Fjern bogmærke';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Vælg et studie';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'Send mig en kode';
 
   @override
   String get mobileServerAnalysis => 'Server-analyse';
@@ -482,7 +479,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Du kan ikke udfordre dig selv';
 
   @override
   String get activityActivity => 'Aktivitet';
@@ -2383,7 +2380,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Bekræft træk';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Flere valg. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan deaktiveres i løbet af et parti med brætmenuen';
@@ -2530,7 +2527,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesHoverOverSettingLabelsForHelp => 'Hold markøren over indstillingsetiketter for hjælp';
 
   @override
-  String get preferencesNetwork => 'Network';
+  String get preferencesNetwork => 'Netværk';
 
   @override
   String get preferencesYouAreCurrentlyUsingDirectRouting => 'You are currently using direct routing.';
@@ -4785,7 +4782,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reason => 'Årsag';
 
   @override
-  String get whatIsIheMatter => 'Hvad drejer henvendelsen sig om?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Snyd';
@@ -4806,7 +4803,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get processReportFasterInEnglish => 'Vi kan behandle din anmeldelse hurtigere, hvis du skriver på engelsk.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Angiv mindst ét link til et parti med snyd.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5448,6 +5445,11 @@ class AppLocalizationsDa extends AppLocalizations {
   String get security => 'Sikkerhed';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'Dette er en liste over enheder og applikationer, der er logget ind på din konto. Hvis du bemærker mistænkelig aktivitet, skal du sørge for at <a href=\'$param1\'>tjekke din e-mailadresse til gendannelse</a> and <a href=\'$param2\'>ændre din adgangskode</a>.';
+  }
+
+  @override
   String get sessions => 'Sessioner';
 
   @override
@@ -5464,6 +5466,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get noChallenges => 'Ingen udfordringer.';
+
+  @override
+  String get browserNotificationsDenied => 'Notifikationspop-vinduer deaktiveret af browserindstilling';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6205,6 +6210,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preview => 'Forhåndsvisning';
+
+  @override
+  String get done => 'Færdig';
 
   @override
   String opponentLeftCounter(int count) {

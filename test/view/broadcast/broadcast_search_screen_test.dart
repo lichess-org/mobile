@@ -3,6 +3,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
@@ -38,7 +39,10 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = find.byType(SearchBar);
+      final textFieldFinder = find.descendant(
+        of: find.byType(PlatformSearchBar),
+        matching: find.byType(EditableText),
+      );
 
       await tester.enterText(textFieldFinder, 'world championship');
       await tester.testTextInput.receiveAction(TextInputAction.done);
@@ -66,7 +70,10 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      final textFieldFinder = find.byType(SearchBar);
+      final textFieldFinder = find.descendant(
+        of: find.byType(PlatformSearchBar),
+        matching: find.byType(EditableText),
+      );
 
       await tester.enterText(textFieldFinder, 'azerty');
       await tester.testTextInput.receiveAction(TextInputAction.done);

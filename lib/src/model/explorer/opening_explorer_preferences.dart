@@ -36,8 +36,11 @@ class OpeningExplorerPreferences()
 
   Future<void> setDatabase(OpeningDatabase db) => save(state.copyWith(db: db));
 
-  Future<void> setMasterDbSince(int year) =>
-      save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
+  Future<void> setMasterDbDates({DateTime? since, DateTime? until}) => save(
+    state.copyWith(
+      masterDb: state.masterDb.copyWith(since: since, until: until),
+    ),
+  );
 
   Future<void> toggleLichessDbSpeed(Speed speed) => save(
     state.copyWith(
@@ -59,8 +62,11 @@ class OpeningExplorerPreferences()
     ),
   );
 
-  Future<void> setLichessDbSince(DateTime since) =>
-      save(state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)));
+  Future<void> setLichessDbDates({DateTime? since, DateTime? until}) => save(
+    state.copyWith(
+      lichessDb: state.lichessDb.copyWith(since: since, until: until),
+    ),
+  );
 
   Future<void> setPlayerDbUsernameOrId(String username) =>
       save(state.copyWith(playerDb: state.playerDb.copyWith(username: username)));
@@ -88,8 +94,11 @@ class OpeningExplorerPreferences()
     ),
   );
 
-  Future<void> setPlayerDbSince(DateTime since) =>
-      save(state.copyWith(playerDb: state.playerDb.copyWith(since: since)));
+  Future<void> setPlayerDbDates({DateTime? since, DateTime? until}) => save(
+    state.copyWith(
+      playerDb: state.playerDb.copyWith(since: since, until: until),
+    ),
+  );
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -115,17 +124,12 @@ sealed class const OpeningExplorerPrefs._() with _$OpeningExplorerPrefs implemen
 
 @Freezed(fromJson: true, toJson: true)
 sealed class const MasterDb._() with _$MasterDb {
-  const factory({required int sinceYear}) = _MasterDb;
+  /// Year range of the games, both ends inclusive. Only the year of each date is used. A null bound
+  /// means unbounded.
+  const factory({DateTime? since, DateTime? until}) = _MasterDb;
 
-  static const kEarliestYear = 1952;
-  static final now = DateTime.now();
-  static final datesMap = {
-    'Last 3 years': now.year - 3,
-    'Last 10 years': now.year - 10,
-    'Last 20 years': now.year - 20,
-    'All time': kEarliestYear,
-  };
-  static const defaults = MasterDb(sinceYear: kEarliestYear);
+  static final earliestDate = DateTime.utc(1952);
+  static const defaults = MasterDb();
 
   factory fromJson(Map<String, dynamic> json) {
     return _$MasterDbFromJson(json);
@@ -137,7 +141,10 @@ sealed class const LichessDb._() with _$LichessDb {
   const factory({
     required ISet<Speed> speeds,
     required ISet<int> ratings,
-    required DateTime since,
+
+    /// Month range of the games, both ends inclusive. A null bound means unbounded.
+    DateTime? since,
+    DateTime? until,
   }) = _LichessDb;
 
   static const kAvailableSpeeds = ISetConst({
@@ -150,17 +157,9 @@ sealed class const LichessDb._() with _$LichessDb {
   });
   static const kAvailableRatings = ISetConst({400, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500});
   static final earliestDate = DateTime.utc(2012, 12);
-  static final now = DateTime.now();
-  static const kDaysInAYear = 365;
-  static final datesMap = {
-    'Last year': now.subtract(const Duration(days: kDaysInAYear)),
-    'Last 5 years': now.subtract(const Duration(days: kDaysInAYear * 5)),
-    'All time': earliestDate,
-  };
   static final defaults = LichessDb(
     speeds: kAvailableSpeeds.remove(Speed.ultraBullet),
     ratings: kAvailableRatings.remove(400),
-    since: earliestDate,
   );
 
   factory fromJson(Map<String, dynamic> json) {
@@ -175,7 +174,10 @@ sealed class const PlayerDb._() with _$PlayerDb {
     required Side side,
     required ISet<Speed> speeds,
     required ISet<GameMode> gameModes,
-    required DateTime since,
+
+    /// Month range of the games, both ends inclusive. A null bound means unbounded.
+    DateTime? since,
+    DateTime? until,
   }) = _PlayerDb;
 
   static const kAvailableSpeeds = ISetConst({
@@ -187,20 +189,11 @@ sealed class const PlayerDb._() with _$PlayerDb {
     Speed.correspondence,
   });
   static final earliestDate = DateTime.utc(2012, 12);
-  static final now = DateTime.now();
-  static final datesMap = {
-    'This month': now,
-    'Last month': now.subtract(const Duration(days: 32)),
-    'Last 6 months': now.subtract(const Duration(days: 183)),
-    'Last year': now.subtract(const Duration(days: 365)),
-    'All time': earliestDate,
-  };
   factory defaults({LightUser? user}) => PlayerDb(
     username: user?.name,
     side: Side.white,
     speeds: kAvailableSpeeds,
     gameModes: GameMode.values.toISet(),
-    since: earliestDate,
   );
 
   factory fromJson(Map<String, dynamic> json) {

@@ -105,6 +105,11 @@ Set<Square> getBoardValidMoves(WidgetTester tester) {
   return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
 }
 
+/// Returns the square of the currently selected piece, or null if no piece is selected.
+Square? getBoardSelectedSquare(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.selected;
+}
+
 /// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.
 Move? getBoardLastMove(WidgetTester tester) {
   return findBoardHighlightPainter(tester).interactionNotifier.lastMove;

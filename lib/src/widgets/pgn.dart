@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -376,6 +377,11 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
   }
 
   List<_CachedRenderedSubtree> _buildChangedSubtrees({required bool fullRebuild}) {
+    // Depends only on the root and the current path, so it must not be recomputed per part:
+    // each call walks the whole mainline and allocates a few strings per node.
+    final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
+    final currentMoveIsOnMainline = mainlinePartOfCurrentPath == widget.params.pathToCurrentMove;
+
     var path = UciPath.empty;
     return mainlineParts
         .mapIndexed((i, mainlineNodes) {
@@ -392,10 +398,6 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
           if (mainlineNodes.last.children.isNotEmpty) {
             path = path + mainlineNodes.last.children.first.id;
           }
-
-          final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
-          final currentMoveIsOnMainline =
-              mainlinePartOfCurrentPath == widget.params.pathToCurrentMove;
 
           final containsCurrentMove = currentMoveIsOnMainline
               ? mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
@@ -1200,9 +1202,9 @@ class const InlineMove({
       onTap: params.notifier != null ? () => params.notifier?.userJump(path) : null,
       onLongPress: params.notifier != null
           ? () {
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
-                isDismissible: true,
+                glass: true,
                 isScrollControlled: true,
                 showDragHandle: true,
                 builder: (context) => _MoveContextMenu(
@@ -1347,11 +1349,11 @@ class const _MoveContextMenu({
             // The result token and trailing newline belong in a PGN file, not on the clipboard.
             final line = pgn.trimRight().replaceFirst(RegExp(r'\s*\*$'), '');
             // The bottom sheet can be disposed before the clipboard write completes.
-            final messenger = ScaffoldMessenger.of(context);
+            final snackBar = SnackBarPresenter.of(context);
             final copiedMessage = context.l10n.mobilePgnCopied;
             await Clipboard.setData(ClipboardData(text: line));
-            if (!messenger.mounted) return;
-            messenger.showSnackBar(SnackBar(content: Text(copiedMessage)));
+            if (!snackBar.mounted) return;
+            snackBar.show(copiedMessage);
           },
         ),
         BottomSheetContextMenuAction(
