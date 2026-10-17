@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassButton;
 import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
@@ -265,6 +266,11 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+
+        await tester.tap(find.widgetWithText(TextButton, 'OK'));
+        await tester.pumpAndSettle();
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsNothing);
       });
 
       testWidgets('featured tournaments checkbox is shown when there are some to show', (
@@ -438,7 +444,8 @@ void main() {
         await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle(); // wait for home screen to re-appear
 
-        expect(find.byIcon(LichessIcons.logo_lichess), findsOneWidget); // we're back on home
+        // we're back on home
+        expect(find.textContaining(RegExp(r'^\S+ Good (day|evening)$')), findsOneWidget);
 
         expect(find.text(customizeTip), findsNothing);
       });
@@ -600,5 +607,78 @@ void main() {
 
       expect(find.text('Something went wrong.'), findsNothing);
     });
+  });
+
+  group('greeting', () {
+    Future<void> pumpLoggedIn(WidgetTester tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/tournament/featured') {
+                  return mockResponse('{"featured":[]}', 200);
+                }
+                return mockResponse('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('logged in, iOS: is the app bar title only, without a glass button', (
+      tester,
+    ) async {
+      await pumpLoggedIn(tester);
+
+      expect(find.textContaining(fakeAuthUser.user.name), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(fakeAuthUser.user.name),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.ancestor(
+          of: find.textContaining(fakeAuthUser.user.name),
+          matching: find.byType(GlassButton),
+        ),
+        findsNothing,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('logged in, Android: is the app bar title only', (tester) async {
+      await pumpLoggedIn(tester);
+
+      expect(find.textContaining(fakeAuthUser.user.name), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.textContaining(fakeAuthUser.user.name),
+        ),
+        findsOneWidget,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
+    testWidgets('logged out: is shown without a name in the app bar', (tester) async {
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(RegExp(r'^\S+ Good (day|evening)$')),
+        ),
+        findsOneWidget,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS, TargetPlatform.android}));
   });
 }

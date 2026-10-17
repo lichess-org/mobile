@@ -166,9 +166,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '验证码无效或已过期！';
 
   @override
-  String get mobileLiveStreamers => '主播';
-
-  @override
   String get mobileLocalDatabaseSize => '本地数据库大小';
 
   @override
@@ -7779,9 +7776,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get mobileHomeTab => '首頁';
-
-  @override
-  String get mobileLiveStreamers => 'Lichess 實況主';
 
   @override
   String get mobileMustBeLoggedIn => '您必須登入才能查看此頁面。';

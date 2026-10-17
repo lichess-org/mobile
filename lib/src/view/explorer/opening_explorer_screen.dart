@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -42,9 +43,10 @@ class const OpeningExplorerScreen({required final AnalysisOptions options}) exte
       _ => const CenterLoadingIndicator(),
     };
     return WakelockWidget(
-      child: Scaffold(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
         body: body,
-        appBar: AppBar(
+        appBar: PlatformAppBar(
           title: Text(context.l10n.openingExplorer),
           actions: [
             SemanticIconButton(
@@ -255,11 +257,10 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
         BottomBarButton(
           label: dbLabel,
           showLabel: true,
-          onTap: () => showModalBottomSheet<void>(
+          onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
             isScrollControlled: true,
             showDragHandle: true,
-            isDismissible: true,
             builder: (_) => const OpeningExplorerSettings(),
           ),
           icon: Icons.tune,

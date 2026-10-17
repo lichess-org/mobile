@@ -290,20 +290,13 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
+/// Capsule buttons, like the iOS 26 buttons.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
@@ -344,37 +337,41 @@ const _kCupertinoCardTheme = CardThemeData(
 
 const _kCupertinoSearchBarTheme = SearchBarThemeData(
   elevation: WidgetStatePropertyAll(0),
-  shape: WidgetStatePropertyAll(
-    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-  ),
+  shape: WidgetStatePropertyAll(StadiumBorder()),
   constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
   padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 7)),
 );
+
+/// The corner radius of text fields on iOS.
+///
+/// A radius is clamped to half the height of the field: a single line field is a capsule, like the
+/// iOS 26 search and message fields, and a multiline one a rounded rectangle.
+const _kCupertinoInputBorderRadius = BorderRadius.all(Radius.circular(28));
 
 InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
   return InputDecorationTheme(
     filled: true,
     fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
-    border: const OutlineInputBorder(),
+    border: const OutlineInputBorder(borderRadius: _kCupertinoInputBorderRadius),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
   );
 }
@@ -392,8 +389,10 @@ CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness b
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
       ),
+      // Smaller than the iOS large title (34pt), so that longer (translated) titles fit on one line.
       navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
+        fontSize: 29.0,
       ),
     ),
     brightness: brightness,

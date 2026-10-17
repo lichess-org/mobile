@@ -166,9 +166,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'See kood on vigane või aegunud.';
 
   @override
-  String get mobileLiveStreamers => 'Reaalajas striimijad';
-
-  @override
   String get mobileLocalDatabaseSize => 'Kohaliku andmebaasi suurus';
 
   @override

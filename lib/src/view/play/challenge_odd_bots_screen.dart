@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget {
@@ -24,8 +25,8 @@ class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
       body: _ChallengeBody(bot),
     );
   }

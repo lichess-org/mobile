@@ -32,6 +32,7 @@ import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
@@ -61,8 +62,9 @@ class const _StudyScreenLoader({required final StudyOptions options}) extends Co
         return _StudyScreen(options: options, studyState: value);
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study:', error, stackTrace);
-        return Scaffold(
-          appBar: AppBar(title: const Text('')),
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: const PlatformAppBar(compactButtons: true, title: Text('')),
           body: DefaultTabController(
             length: 1,
             child: AnalysisLayout(
@@ -87,8 +89,10 @@ class const _StudyScreenLoader({required final StudyOptions options}) extends Co
           ),
         );
       case _:
-        return Scaffold(
-          appBar: AppBar(
+        return PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: PlatformAppBar(
+            compactButtons: true,
             title: Shimmer(
               child: ShimmerLoading(
                 isLoading: true,
@@ -184,8 +188,10 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
   @override
   Widget build(BuildContext context) {
     final variant = widget.studyState.variant;
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
+        compactButtons: true,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

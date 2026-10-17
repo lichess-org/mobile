@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -22,8 +23,8 @@ class const AnalysisShareScreen({required final AnalysisOptions options}) extend
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.studyShareAndExport)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.studyShareAndExport)),
       body: _EditPgnTagsForm(options),
     );
   }
@@ -104,85 +105,79 @@ class _EditPgnTagsFormState() extends ConsumerState<_EditPgnTagsForm> {
     }
 
     return switch (showRatingAsync) {
-      AsyncData(:final value) => SafeArea(
-        child: Padding(
-          padding: Styles.verticalBodyPadding,
-          child: ListView(
-            children: [
-              Column(
-                children: pgnHeaders.entries
-                    .where((e) => value != ShowRatings.no || !_ratingHeaders.contains(e.key))
-                    .mapIndexed((index, e) {
-                      return _EditablePgnField(
-                        entry: e,
-                        controller: _controllers[e.key]!,
-                        focusNode: _focusNodes[e.key]!,
-                        onTap: () {
-                          _controllers[e.key]!.selection = TextSelection(
-                            baseOffset: 0,
-                            extentOffset: _controllers[e.key]!.text.length,
-                          );
-                          if (e.key == 'Result') {
-                            _showResultChoicePicker(
-                              e,
-                              context: context,
-                              onEntryChanged: () {
-                                focusAndSelectNextField(index, pgnHeaders);
-                              },
-                            );
-                          } else if (e.key == 'Date') {
-                            _showDatePicker(
-                              e,
-                              context: context,
-                              onEntryChanged: () {
-                                focusAndSelectNextField(index, pgnHeaders);
-                              },
-                            );
-                          }
-                        },
-                        onSubmitted: (value) {
-                          ref.read(ctrlProvider.notifier).updatePgnHeader(e.key, value);
-                          focusAndSelectNextField(index, pgnHeaders);
-                        },
+      AsyncData(:final value) => ListView(
+        padding: Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context)),
+        children: [
+          Column(
+            children: pgnHeaders.entries
+                .where((e) => value != ShowRatings.no || !_ratingHeaders.contains(e.key))
+                .mapIndexed((index, e) {
+                  return _EditablePgnField(
+                    entry: e,
+                    controller: _controllers[e.key]!,
+                    focusNode: _focusNodes[e.key]!,
+                    onTap: () {
+                      _controllers[e.key]!.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: _controllers[e.key]!.text.length,
                       );
-                    })
-                    .toList(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Builder(
-                  builder: (context) {
-                    return FilledButton(
-                      onPressed: () {
-                        // Flush all text field values into state before
-                        // generating the PGN. We can't rely on unfocus
-                        // alone because the focus listener may not fire
-                        // synchronously or may not fire at all if focus
-                        // was already lost.
-                        final notifier = ref.read(
-                          analysisControllerProvider(widget.options).notifier,
+                      if (e.key == 'Result') {
+                        _showResultChoicePicker(
+                          e,
+                          context: context,
+                          onEntryChanged: () {
+                            focusAndSelectNextField(index, pgnHeaders);
+                          },
                         );
-                        for (final entry in _controllers.entries) {
-                          notifier.updatePgnHeader(entry.key, entry.value.text);
-                        }
-                        FocusScope.of(context).unfocus();
-                        launchShareDialog(
-                          context,
-                          ShareParams(
-                            text: ref
-                                .read(analysisControllerProvider(widget.options).notifier)
-                                .makeExportPgn(),
-                          ),
+                      } else if (e.key == 'Date') {
+                        _showDatePicker(
+                          e,
+                          context: context,
+                          onEntryChanged: () {
+                            focusAndSelectNextField(index, pgnHeaders);
+                          },
                         );
-                      },
-                      child: Text(context.l10n.mobileShareGamePGN),
+                      }
+                    },
+                    onSubmitted: (value) {
+                      ref.read(ctrlProvider.notifier).updatePgnHeader(e.key, value);
+                      focusAndSelectNextField(index, pgnHeaders);
+                    },
+                  );
+                })
+                .toList(),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Builder(
+              builder: (context) {
+                return FilledButton(
+                  onPressed: () {
+                    // Flush all text field values into state before
+                    // generating the PGN. We can't rely on unfocus
+                    // alone because the focus listener may not fire
+                    // synchronously or may not fire at all if focus
+                    // was already lost.
+                    final notifier = ref.read(analysisControllerProvider(widget.options).notifier);
+                    for (final entry in _controllers.entries) {
+                      notifier.updatePgnHeader(entry.key, entry.value.text);
+                    }
+                    FocusScope.of(context).unfocus();
+                    launchShareDialog(
+                      context,
+                      ShareParams(
+                        text: ref
+                            .read(analysisControllerProvider(widget.options).notifier)
+                            .makeExportPgn(),
+                      ),
                     );
                   },
-                ),
-              ),
-            ],
+                  child: Text(context.l10n.mobileShareGamePGN),
+                );
+              },
+            ),
           ),
-        ),
+        ],
       ),
       _ => const SizedBox.shrink(),
     };

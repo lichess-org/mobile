@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/play/challenge_odd_bots_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -27,7 +28,7 @@ class const OnlineBotsScreen() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.onlineBots)),
+      appBar: PlatformAppBar(title: Text(context.l10n.onlineBots), largeTitle: true),
       body: const _Body(),
     );
   }
@@ -54,10 +55,9 @@ class const OnlineBotsWidget({required final AsyncValue<IList<User>> onlineBots,
                 subtitle: (bot.perfs[Perf.blitz]?.games ?? 0) > 0 ? _BotRatings(bot: bot) : null,
                 onTap: () => _challengeBot(bot, context: context, ref: ref),
                 onLongPress: () {
-                  showModalBottomSheet<void>(
+                  showAdaptiveBottomSheet<void>(
                     context: context,
                     useRootNavigator: true,
-                    isDismissible: true,
                     isScrollControlled: true,
                     showDragHandle: true,
                     builder: (context) => UserContextMenu(user: bot),
@@ -121,10 +121,9 @@ class const _Body() extends ConsumerWidget {
               _challengeBot(bot, context: context, ref: ref);
             },
             onLongPress: () {
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
                 useRootNavigator: true,
-                isDismissible: true,
                 isScrollControlled: true,
                 showDragHandle: true,
                 builder: (context) => UserContextMenu(user: bot),
@@ -152,7 +151,7 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
   if (isOddBot) {
     Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(bot.lightUser));
   } else {
-    showModalBottomSheet<void>(
+    showAdaptiveBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,

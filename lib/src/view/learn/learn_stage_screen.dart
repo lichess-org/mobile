@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -33,8 +34,10 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
   Widget build(BuildContext context, WidgetRef ref) {
     final stageNumber = learnStages.indexOf(stage) + 1;
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
+          compactButtons: true,
           title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
           actions: const [ToggleSoundButton()],
         ),
