@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
@@ -47,20 +48,24 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
           return const SizedBox.shrink();
         }
 
+        // In edit mode the row already shows the widget's stable label.
+        final isEditing = IsEditingHome.isEditing(context);
+
         return Padding(
           padding: Styles.verticalBodyPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: Styles.horizontalBodyPadding,
-                child: ListSectionHeader(
-                  title: Text(context.l10n.friends),
-                  onTap: () {
-                    Navigator.of(context).push(FriendScreen.buildRoute());
-                  },
+              if (!isEditing)
+                Padding(
+                  padding: Styles.horizontalBodyPadding,
+                  child: ListSectionHeader(
+                    title: Text(context.l10n.friends),
+                    onTap: () {
+                      Navigator.of(context).push(FriendScreen.buildRoute());
+                    },
+                  ),
                 ),
-              ),
               SizedBox(
                 height: _kFollowingCarouselHeight,
                 child: ListView.separated(
@@ -183,20 +188,24 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
 }
 
 Widget _buildLoadingSkeleton(BuildContext context) {
+  // In edit mode the row already shows the widget's stable label.
+  final isEditing = IsEditingHome.isEditing(context);
+
   return Padding(
     padding: Styles.verticalBodyPadding,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: ListSectionHeader(
-            title: Text(context.l10n.friends),
-            onTap: () {
-              Navigator.of(context).push(FriendScreen.buildRoute());
-            },
+        if (!isEditing)
+          Padding(
+            padding: Styles.horizontalBodyPadding,
+            child: ListSectionHeader(
+              title: Text(context.l10n.friends),
+              onTap: () {
+                Navigator.of(context).push(FriendScreen.buildRoute());
+              },
+            ),
           ),
-        ),
         Shimmer(
           child: ShimmerLoading(
             isLoading: true,
