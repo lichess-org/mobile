@@ -11,9 +11,9 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart'
-    show BlurredBarBackground, tintedGlassSettings, useLiquidGlass;
+    show BlurredBarBackground, tintedGlassSettings, useLiquidGlass, usePinnedNavBar;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
+    show GlassNavigationShell, GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
@@ -361,12 +361,16 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
             }
           : null,
       enabled: enablePopHandler,
-      child: Navigator(
-        key: widget.navigatorKey,
-        onGenerateRoute: _onGenerateRoute,
-        onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers,
-        restorationScopeId: widget.restorationScopeId,
+      // One shell per navigator: it ranks the routes of a single navigator.
+      child: GlassNavigationShell(
+        enabled: usePinnedNavBar(context),
+        child: Navigator(
+          key: widget.navigatorKey,
+          onGenerateRoute: _onGenerateRoute,
+          onUnknownRoute: _onUnknownRoute,
+          observers: _navigatorObservers,
+          restorationScopeId: widget.restorationScopeId,
+        ),
       ),
     );
   }

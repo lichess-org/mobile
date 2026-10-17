@@ -11,9 +11,11 @@ import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassAppBar,
+        GlassBarItem,
         GlassButton,
         GlassContainer,
         GlassIconButton,
+        GlassPinnedBarChrome,
         GlassScaffold,
         GlassScrollEdgeEffect,
         LiquidGlassSettings,
@@ -33,6 +35,9 @@ bool useLiquidGlass(BuildContext context) =>
 /// Always true on other platforms, where the theme platform is iOS only in tests.
 final bool _isLiquidGlassSupported =
     !const bool.fromEnvironment('NO_LIQUID_GLASS') && (!Platform.isIOS || _iosMajorVersion() >= 26);
+
+/// Whether app bar buttons are pinned above the navigator on iOS 26 and morph between routes
+bool usePinnedNavBar(BuildContext context) => useLiquidGlass(context);
 
 int _iosMajorVersion() {
   // For example "Version 18.2 (Build 22C150)".
@@ -225,6 +230,10 @@ LiquidGlassSettings? appBarButtonGlassSettings(BuildContext context, {bool tinte
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
 
+/// Gap below the buttons of a pinned [PlatformAppBar] with `compactButtons` and no `bottom`: its
+/// buttons have the shell's full toolbar height (see [usePinnedNavBar]).
+const double _kPinnedCompactButtonsGap = 6.0;
+
 /// A wrapper around [Scaffold] that sets properties to handle app bar and bottom navigation bar
 /// transparency on iOS.
 ///
@@ -300,7 +309,11 @@ class const PlatformScaffold({
             (title != null && title is! SearchFieldHero && title is! PlatformSearchBar));
     final hasLargeTitle = hasTintedAppBar && title != null && appBar!.largeTitle;
     final largeTitleHeight = hasLargeTitle ? _kLargeTitleHeight : 0.0;
-    final bottomHeight = appBar?.bottom?.preferredSize.height ?? 0.0;
+    final bottomHeight =
+        appBar?.bottom?.preferredSize.height ??
+        ((appBar?.compactButtons ?? false) && usePinnedNavBar(context)
+            ? _kPinnedCompactButtonsGap
+            : 0.0);
     // With a large title, the bottom of the app bar is below the large title, in the body.
     final appBarHeight = appBar != null
         ? _kGlassToolbarHeight + (hasLargeTitle ? 0.0 : bottomHeight)
@@ -797,27 +810,89 @@ class const PlatformAppBar({
               child: title,
             )
           : title;
+      final appBarTitle = inlineTitle != null
+          ? IconTheme.merge(
+              // Like the Material AppBar, so that icons in the title are not given the primary
+              // color.
+              data: IconThemeData(color: colorScheme.onSurface),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(color: colorScheme.onSurface)
+                    .merge(titleTextStyle ?? defaultTitleStyle),
+                // GlassAppBar leaves no gap between a centered title and the buttons around it,
+                // unlike a leading aligned one: the same gap is added here.
+                child: centerTitle ?? true
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: inlineTitle,
+                      )
+                    : inlineTitle,
+              ),
+            )
+          : null;
+
+      // The buttons are pinned above the navigator by its GlassNavigationShell, which morphs them
+      // into the next route's buttons. Not for a tab root, whose header scrolls away. Compact
+      // buttons are pinned too, at the shell's size (open question B of the spike).
+      if (usePinnedNavBar(context) && !isTabRoot) {
+        final foregroundColor = colorScheme.onSurface;
+        // The shell builds the items in its own context: they get the themes of the screen.
+        GlassBarItem hoisted(Widget child) => GlassBarItem.custom(
+          child: InheritedTheme.captureAll(
+            context,
+            IconTheme.merge(
+              data: IconThemeData(color: foregroundColor),
+              child: IconButtonTheme(
+                data: IconButtonThemeData(
+                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
+                ),
+                child: child,
+              ),
+            ),
+          ),
+        );
+        final isFullscreenDialog = parentRoute is PageRoute && parentRoute.fullscreenDialog;
+        final impliesLeading =
+            automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false);
+        return GlassPinnedBarChrome(
+          leading: [
+            if (leading != null)
+              hoisted(leading!)
+            else if (impliesLeading && isFullscreenDialog)
+              GlassBarItem.icon(
+                icon: const Icon(Icons.close_rounded),
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                onTap: () => Navigator.maybePop(context),
+              ),
+          ],
+          actions: [for (final action in actions ?? const <Widget>[]) hoisted(action)],
+          backButton: automaticallyImplyLeading && !isFullscreenDialog,
+          buttonSettings: buttonSettings,
+          horizontalInset: Styles.horizontalBodyPadding.left,
+          builder: (context, chrome) => GlassAppBar(
+            title: appBarTitle,
+            centerTitle: centerTitle ?? true,
+            leading: chrome.leading != null
+                ? Row(mainAxisSize: .min, children: [chrome.leading!])
+                : null,
+            actions: chrome.actions.isNotEmpty ? chrome.actions : null,
+            bottom: largeTitleOffset != null
+                ? null
+                : bottom ??
+                      (compactButtons
+                          ? const PreferredSize(
+                              preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
+                              child: SizedBox.shrink(),
+                            )
+                          : null),
+            buttonSettings: buttonSettings,
+            toolbarHeight: _kGlassToolbarHeight,
+            padding: Styles.horizontalBodyPadding,
+          ),
+        );
+      }
 
       return GlassAppBar(
-        title: inlineTitle != null
-            ? IconTheme.merge(
-                // Like the Material AppBar, so that icons in the title are not given the primary
-                // color.
-                data: IconThemeData(color: colorScheme.onSurface),
-                child: DefaultTextStyle.merge(
-                  style: TextStyle(color: colorScheme.onSurface)
-                      .merge(titleTextStyle ?? defaultTitleStyle),
-                  // GlassAppBar leaves no gap between a centered title and the buttons around it,
-                  // unlike a leading aligned one: the same gap is added here.
-                  child: centerTitle ?? true
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: inlineTitle,
-                        )
-                      : inlineTitle,
-                ),
-              )
-            : null,
+        title: appBarTitle,
         centerTitle: centerTitle ?? true,
         leading: leading != null
             ? _GlassBarCapsule(
