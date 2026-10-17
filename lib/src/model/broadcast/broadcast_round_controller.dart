@@ -305,7 +305,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
   /// The observed set is maintained by the widgets showing the games, so it may briefly hold ids of
   /// games that the round no longer has: those are skipped.
   void _sendEvalMultiGet() {
-    // Supersedes any pending debounced request, since this one reads the latest observed set.
     _evalRequestDebouncer.cancel();
     if (!state.hasValue) return;
     final games = state.requireValue.games;

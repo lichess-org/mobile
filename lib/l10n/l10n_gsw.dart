@@ -53,6 +53,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Zugsrücknahms-Offerte zruggzieh';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Useforderig isch gmacht: Du wirsch avisiert, wänn\'s Schpiel afangt. Du chasch\'s au uf de \"Home-Site\" ufrüefe.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Vegrösserig vu de zogene Figur';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Vorher';
@@ -447,6 +459,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileTheme => 'Farbschema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return 'Variante $param wird in dere Version nöd underschtützt.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => 'Use symmetric pieces';

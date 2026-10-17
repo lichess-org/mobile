@@ -53,6 +53,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Ακύρωση προσφοράς ανάκλησης κίνησης';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Η πρόσκληση δημιουργήθηκε: Θα ειδοποιηθείτε μόλις ξεκινήσει η παρτίδα.\nΜπορείτε να έχετε πρόσβαση από την αρχική καρτέλα.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileNextMistake => 'Επόμενο λάθος';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Δε βρέθηκαν αποτελέσματα';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Μεγέθυνση του επιλεγμένου κομματιού';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Προηγούμενη';
@@ -447,6 +459,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileTheme => 'Εμφάνιση';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
   String get mobileTooManyLoginAttempts => 'Πάρα πολλές προσπάθειες. Δοκιμάστε ξανά αργότερα.';
 
   @override
@@ -461,6 +477,10 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
+
+  @override
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
   String get mobileUseSymmetricPieces => 'Χρήση συμμετρικών κομματιών';
 
   @override

@@ -3,6 +3,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -50,6 +51,13 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
       onPressed: () {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
+    );
+    final calendarButton = SemanticIconButton(
+      icon: const Icon(Icons.calendar_month),
+      onPressed: () {
+        Navigator.of(context).push(BroadcastCalendarScreen.buildRoute());
+      },
+      semanticsLabel: context.l10n.broadcastBroadcastCalendar,
     );
     final filterButton = SemanticIconButton(
       icon: const Icon(Icons.filter_list),
@@ -102,7 +110,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         title: title,
-        actions: [searchButton, filterButton],
+        actions: [searchButton, calendarButton, filterButton],
       ),
     );
   }

@@ -53,6 +53,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Výzva vytvorená: Budete upozornení po začatí partie.\nPrístup k nej nájdete na domovskej karte.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Nič sa nenašlo';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Zväčšiť uchopenú figúrku';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Predchádzajúca';
@@ -447,6 +459,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileTheme => 'Vzhľad';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return 'Variant $param nie je podporovaný v tejto verzií.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => 'Use symmetric pieces';

@@ -78,7 +78,7 @@ void main() {
         requests.first,
         isA<http.BaseRequest>()
             .having((r) => r.url.path, 'path', '/test')
-            .having((r) => r.url.host, 'host', 'lichess.dev')
+            .having((r) => r.url.host, 'host', 'lichess.org')
             .having((r) => r.url.scheme, 'scheme', 'https'),
       );
     });

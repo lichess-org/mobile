@@ -53,6 +53,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Haaste esitetty. Saat ilmoituksen, kun peli alkaa.\nNäet sen etusivulla.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileNextMistake => 'Seuraava virhe';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Ei hakutuloksia';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Suurenna vedettävä nappula';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Edellinen';
@@ -447,6 +459,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileTheme => 'Teema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
+  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
   String get mobileTooManyLoginAttempts => 'Liian monta yritystä. Yritä myöhemmin uudelleen.';
 
   @override
@@ -461,6 +477,10 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
+
+  @override
+  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
   String get mobileUseSymmetricPieces => 'Käytä symmetrisiä nappuloita';
 
   @override

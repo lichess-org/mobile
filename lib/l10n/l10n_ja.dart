@@ -53,6 +53,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileNextMistake => '次の悪手';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => '検索結果なし';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => '前';
@@ -447,6 +459,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileTheme => 'テーマ';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '試行回数が多すぎます。また後でどうぞ。';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return '$param はこのバージョンでは対応していません.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => '上下対称デザインの駒';

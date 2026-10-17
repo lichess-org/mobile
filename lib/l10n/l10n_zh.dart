@@ -53,6 +53,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => '挑战已创建：对局开始时您将收到通知。\n您可以在首页选项卡中访问它。';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileNextMistake => '下一个错着';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => '无结果';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '放大拖动的棋子';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => '上一页';
@@ -447,6 +459,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileTheme => '主题';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '尝试次数过多，请稍后重试。';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return '此版本不支持 $param 变体';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => '使用对称的棋子';

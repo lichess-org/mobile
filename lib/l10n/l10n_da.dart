@@ -53,6 +53,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Annuller tilbud om tilbagetagelse';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Ingen resultater';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Forstør brik, som trækkes';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Forrige';
@@ -447,6 +459,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return 'Variant $param er ikke understøttet i denne version.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => 'Use symmetric pieces';

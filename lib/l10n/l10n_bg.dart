@@ -53,6 +53,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Отмени предложението за връщане на хода';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Предизвикателството е създадено: Ще получите известие, когато партията започне.\nМожете да го отворите от началния раздел.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileNextMistake => 'Next mistake';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Няма резултати';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Увеличаване на местената фигура';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Предишна';
@@ -447,6 +459,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileTheme => 'Тема';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return 'Вариант $param не се поддържа в тази версия.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => 'Use symmetric pieces';

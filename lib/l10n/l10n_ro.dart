@@ -53,6 +53,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Anulați propunerea de revanșă';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => 'Provocare creată: Vei fi notificat când începe jocul.\nO poți accesa din pagina principală.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileNextMistake => 'Următoarea greșeală';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => 'Niciun rezultat';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => 'Mărește piesa trasă';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => 'Înapoi';
@@ -447,6 +459,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Prea multe încercări. Te invităm să revii mai târziu.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return 'Varianta $param nu este suportată în această versiune.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => 'Folosește piese simetrice';

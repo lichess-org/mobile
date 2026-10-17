@@ -53,6 +53,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
+  String get mobileCannotLoadBroadcastCalendar => 'Cannot load broadcast calendar';
+
+  @override
   String get mobileChallengeCreated => '도전이 생성되었습니다. 게임이 시작하면 알림을 받습니다.\n홈 탭에서 들어갈 수 있습니다.';
 
   @override
@@ -184,6 +187,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileNextMistake => '다음 실수';
 
   @override
+  String get mobileNextMonth => 'Next month';
+
+  @override
+  String get mobileNoBroadcastsThisMonth => 'No broadcasts this month';
+
+  @override
   String get mobileNoSearchResults => '결과 없음';
 
   @override
@@ -271,6 +280,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobilePrefMagnifyDraggedPiece => '드래그 중 기물 확대';
+
+  @override
+  String get mobilePreviousMonth => 'Previous month';
 
   @override
   String get mobilePreviousPage => '이전';
@@ -447,6 +459,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileTheme => '테마';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '시도 횟수가 너무 많습니다. 나중에 다시 시도해 주세요.';
 
   @override
@@ -459,6 +474,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String mobileUnsupportedVariant(String param) {
     return '$param 변형 게임은 이 버전에서 지원되지 않습니다.';
   }
+
+  @override
+  String get mobileUpcomingAndPastTournaments => 'Upcoming and past tournaments';
 
   @override
   String get mobileUseSymmetricPieces => '대칭 디자인의 기물 사용';

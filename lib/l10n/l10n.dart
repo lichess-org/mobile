@@ -280,6 +280,12 @@ abstract class AppLocalizations {
   /// **'Cancel takeback offer'**
   String get mobileCancelTakebackOffer;
 
+  /// No description provided for @mobileCannotLoadBroadcastCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load broadcast calendar'**
+  String get mobileCannotLoadBroadcastCalendar;
+
   /// No description provided for @mobileChallengeCreated.
   ///
   /// In en, this message translates to:
@@ -526,6 +532,18 @@ abstract class AppLocalizations {
   /// **'Next mistake'**
   String get mobileNextMistake;
 
+  /// No description provided for @mobileNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get mobileNextMonth;
+
+  /// No description provided for @mobileNoBroadcastsThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'No broadcasts this month'**
+  String get mobileNoBroadcastsThisMonth;
+
   /// No description provided for @mobileNoSearchResults.
   ///
   /// In en, this message translates to:
@@ -699,6 +717,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Magnify dragged piece'**
   String get mobilePrefMagnifyDraggedPiece;
+
+  /// No description provided for @mobilePreviousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get mobilePreviousMonth;
 
   /// No description provided for @mobilePreviousPage.
   ///
@@ -1048,6 +1072,12 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get mobileTheme;
 
+  /// No description provided for @mobileToBeAnnounced.
+  ///
+  /// In en, this message translates to:
+  /// **'To be announced'**
+  String get mobileToBeAnnounced;
+
   /// No description provided for @mobileTooManyLoginAttempts.
   ///
   /// In en, this message translates to:
@@ -1071,6 +1101,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Variant {param} is not supported in this version.'**
   String mobileUnsupportedVariant(String param);
+
+  /// No description provided for @mobileUpcomingAndPastTournaments.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming and past tournaments'**
+  String get mobileUpcomingAndPastTournaments;
 
   /// No description provided for @mobileUseSymmetricPieces.
   ///
