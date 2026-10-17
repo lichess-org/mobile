@@ -20,6 +20,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.lastMove,
     this.onTap,
     this.animationDuration = const Duration(milliseconds: 200),
+    this.dimInDarkMode = false,
   });
 
   const new loading({
@@ -32,7 +33,8 @@ class BoardThumbnail extends ConsumerStatefulWidget {
        fen = kInitialFEN,
        lastMove = null,
        animationDuration = const Duration(milliseconds: 200),
-       onTap = null;
+       onTap = null,
+       dimInDarkMode = false;
 
   /// Size of the board.
   final double size;
@@ -63,6 +65,11 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   /// Animate changes to the board by the specified duration.
   final Duration animationDuration;
 
+  /// Whether to dim the board in dark mode on iOS, for a list under the glass tab bar.
+  ///
+  /// See [BoardDimmer].
+  final bool dimInDarkMode;
+
   @override
   _BoardThumbnailState createState() => _BoardThumbnailState();
 }
@@ -84,22 +91,28 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final board = StaticChessboard(
-      size: widget.size,
-      fen: widget.fen,
-      orientation: widget.orientation,
-      lastMove: widget.lastMove,
-      settings: StaticChessboardSettings(
-        enableCoordinates: false,
-        borderRadius: (widget.showEvaluationGauge)
-            ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-            : Styles.boardBorderRadius,
-        boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
-        pieceAssets: boardPrefs.pieceSet.assets,
-        colorScheme: boardPrefs.boardTheme.colors,
-        animationDuration: widget.animationDuration,
-        hue: boardPrefs.hue,
-        brightness: boardPrefs.brightness,
+    final borderRadius = widget.showEvaluationGauge
+        ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+        : Styles.boardBorderRadius;
+
+    final board = BoardDimmer(
+      enabled: widget.dimInDarkMode,
+      borderRadius: borderRadius,
+      child: StaticChessboard(
+        size: widget.size,
+        fen: widget.fen,
+        orientation: widget.orientation,
+        lastMove: widget.lastMove,
+        settings: StaticChessboardSettings(
+          enableCoordinates: false,
+          borderRadius: borderRadius,
+          boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
+          pieceAssets: boardPrefs.pieceSet.assets,
+          colorScheme: boardPrefs.boardTheme.colors,
+          animationDuration: widget.animationDuration,
+          hue: boardPrefs.hue,
+          brightness: boardPrefs.brightness,
+        ),
       ),
     );
 
@@ -156,6 +169,32 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
             ],
           )
         : maybeTappableBoard;
+  }
+}
+
+/// Dims a board in dark mode on iOS when [enabled], so that the glass tab bar floating over a list
+/// of boards stays legible.
+///
+/// A translucent black layer is painted over the board: on an opaque board it darkens like a
+/// brightness filter, without the offscreen layer of an [Opacity] or a [ColorFiltered], which
+/// matters in scrolling lists.
+class const BoardDimmer({
+  required final bool enabled,
+  required final BorderRadius borderRadius,
+  required final Widget child,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDimmed = enabled && theme.platform == .iOS && theme.brightness == .dark;
+    return DecoratedBox(
+      position: .foreground,
+      decoration: BoxDecoration(
+        color: isDimmed ? const Color(0x33000000) : null,
+        borderRadius: borderRadius,
+      ),
+      child: child,
+    );
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const BoardEditorPositionsScreen({
@@ -27,12 +28,6 @@ class const BoardEditorPositionsScreen({
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tabBar = TabBar(
-      tabs: [
-        Tab(text: context.l10n.openings),
-        Tab(text: context.l10n.endgamePositions),
-      ],
-    );
     final tabBarView = TabBarView(
       children: [
         _OpeningsTab(onPositionSelected: onPositionSelected),
@@ -55,7 +50,7 @@ class const BoardEditorPositionsScreen({
             ),
           ],
           title: Text(context.l10n.loadPosition),
-          bottom: tabBar,
+          bottom: PlatformTabBar(tabs: [context.l10n.openings, context.l10n.endgamePositions]),
         ),
         body: tabBarView,
       ),

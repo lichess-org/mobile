@@ -138,7 +138,7 @@ class _BoardFromImageDialogState() extends ConsumerState<_BoardFromImageDialog> 
   Widget build(BuildContext context) {
     final service = ref.watch(boardVisionServiceProvider);
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
 import 'package:material_ui/material_ui.dart';
 
 import '../../model/engine/fake_engine.dart';
@@ -69,4 +70,13 @@ void main() {
       findsOne,
     );
   });
+
+  testWidgets('The engine popup is an opaque glass popover on iOS', (tester) async {
+    await makeEngineTestApp(tester, isCloudEvalEnabled: false, gameId: const GameId('xze7RH66'));
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
+
+    final popover = tester.widget<GlassPopover>(find.byType(GlassPopover));
+    expect(popover.settings?.glassColor.a, 1.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 }

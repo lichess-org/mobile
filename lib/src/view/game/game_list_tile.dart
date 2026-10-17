@@ -90,10 +90,9 @@ class const GameListTile({
         lastMoveAt: game.lastMoveAt,
       ),
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           builder: (context) =>
               GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
@@ -298,7 +297,7 @@ class const GameContextMenu({
                 icon: Icons.gif,
                 child: Text(context.l10n.gameAsGIF),
                 onPressed: () {
-                  showModalBottomSheet<GifExportOptions>(
+                  showAdaptiveBottomSheet<GifExportOptions>(
                     context: context,
                     builder: (_) => GifExport(gameId: game.id, orientation: orientation),
                   );

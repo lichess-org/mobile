@@ -172,9 +172,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Ten kod jest nieprawidłowy lub wygasł.';
 
   @override
-  String get mobileLiveStreamers => 'Aktywni streamerzy';
-
-  @override
   String get mobileLocalDatabaseSize => 'Rozmiar lokalnej bazy danych';
 
   @override

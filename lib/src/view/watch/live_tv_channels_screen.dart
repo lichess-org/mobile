@@ -29,7 +29,7 @@ class const LiveTvChannelsScreen({super.key}) extends ConsumerWidget {
         }
       },
       child: const PlatformScaffold(
-        appBar: PlatformAppBar(title: Text('Lichess TV')),
+        appBar: PlatformAppBar(title: Text('Lichess TV'), largeTitle: true),
         body: _Body(),
       ),
     );
@@ -51,6 +51,7 @@ class const _Body() extends ConsumerWidget {
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
+              dimInDarkMode: true,
               onTap: () {
                 Navigator.of(context, rootNavigator: true).push(
                   TvScreen.buildRoute(

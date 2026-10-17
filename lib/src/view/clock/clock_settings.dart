@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/clock/clock_tool_settings_modal.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _iconSize = 38.0;
@@ -56,7 +57,7 @@ class const ClockSettings({required final Orientation orientation, super.key})
               onPressed: buttonsEnabled
                   ? () {
                       final double screenHeight = MediaQuery.heightOf(context);
-                      showModalBottomSheet<void>(
+                      showAdaptiveBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
                         constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),

@@ -28,6 +28,7 @@ import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dar
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -47,8 +48,9 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(params));
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: VariantAppBarTitle(
           variant: boardEditorState.variant,
           title: context.l10n.boardEditor,
@@ -70,9 +72,16 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
           builder: (context, constraints) {
             final aspectRatio = constraints.biggest.aspectRatio;
 
-            final defaultBoardSize = constraints.biggest.shortestSide;
             final isTablet = isTabletOrLarger(context);
-            final boardSize = defaultBoardSize;
+            // The board and the two piece menus (one square thick each) must fit along the main
+            // axis, so the board can take at most 8/10 of the longest side.
+            final maxBoardSize = math.min(
+              constraints.biggest.shortestSide,
+              constraints.biggest.longestSide * 8 / 10,
+            );
+            final boardSize = isTablet
+                ? maxBoardSize - kTabletBoardTableSidePadding * 2
+                : maxBoardSize;
 
             final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
@@ -327,7 +336,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                               type: SnackBarType.error,
                             );
                           }
-                          showModalBottomSheet<void>(
+                          showAdaptiveBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,
@@ -404,7 +413,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
         ),
         BottomBarButton(
           label: context.l10n.mobileFilters,
-          onTap: () => showModalBottomSheet<void>(
+          onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,

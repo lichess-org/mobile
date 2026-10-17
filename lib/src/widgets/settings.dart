@@ -1,5 +1,6 @@
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:material_ui/material_ui.dart';
 
 const kSettingsTileTitleMaxLines = 3;
@@ -80,7 +81,7 @@ class const SwitchSettingTile({
               child: subtitle!,
             )
           : null,
-      trailing: Switch.adaptive(
+      trailing: PlatformSwitch(
         value: value,
         onChanged: onChanged,
         padding: const EdgeInsets.only(left: 8.0),
