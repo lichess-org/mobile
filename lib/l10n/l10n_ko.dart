@@ -30,6 +30,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '수 무르기와 힌트 허용';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'AMOLED 블랙';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '무시';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => '위험 구역';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileHomeTab => '홈';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => '이전';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';

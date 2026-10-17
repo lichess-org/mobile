@@ -30,6 +30,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Cho phép đi lại và xem gợi ý';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Bỏ qua';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Khu vực nguy hiểm';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Trang chủ';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Trước đó';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';

@@ -30,6 +30,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'AMOLED用ブラック';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '使わない';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => '要注意の操作';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'ホーム';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => '前';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';

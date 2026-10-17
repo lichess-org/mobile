@@ -30,6 +30,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Zezwalaj na cofanie ruchów i podpowiedzi';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Czysta czerń';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Strefa zagrożenia';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Start';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Wróć';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';

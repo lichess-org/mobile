@@ -30,6 +30,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Темна aMOLED';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Прибрати';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Небезпечна зона';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Головна';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Попередня';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Ви хочете закінчити цю серію?';
