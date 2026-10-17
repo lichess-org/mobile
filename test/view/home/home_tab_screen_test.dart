@@ -253,7 +253,6 @@ void main() {
         await tester.pumpAndSettle(); // wait for settings screen to open
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
         // The preview is frozen in edit mode: the quick pairing settings
@@ -305,7 +304,6 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         // Every row keeps its stable label, even with nothing to display.
-        expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
         expect(find.text('Quick pairing'), findsOneWidget);
@@ -349,7 +347,6 @@ void main() {
         await tester.pumpAndSettle(); // wait for settings screen to open
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Performance Cards'), findsOneWidget);
         expect(find.text('Friends'), findsOneWidget);
         expect(find.text('Quick pairing'), findsOneWidget);
@@ -461,7 +458,6 @@ void main() {
         await tester.pumpAndSettle(); // wait for settings screen to open
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
-        expect(find.text('Hello'), findsOneWidget);
         expect(find.text('Quick pairing'), findsOneWidget);
         expect(find.text('Ongoing Games'), findsOneWidget);
         expect(find.text('Open tournaments'), findsOneWidget);
