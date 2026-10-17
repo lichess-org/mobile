@@ -7805,6 +7805,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tfaTwoFactorAuth => 'التوثيق الثنائي';
 
   @override
+  String get tfaAuthenticationCode => 'رمز التحقق';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'افتح تطبيق التوثيق ذو العاملين على جهازك لعرض رمز التوثيق الخاص بك والتحقق من هويتك.';
+
+  @override
   String get timeagoJustNow => 'الآن';
 
   @override

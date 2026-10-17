@@ -7497,6 +7497,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
 
   @override
+  String get tfaAuthenticationCode => 'کد هویت‌سنجی';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'بَرکِ راستین‌آزمایی دوعاملی را در اَفزاره‌تان باز کنید تا کد راستین‌آزمایی را ببینید و هویت‌تان را تایید کنید.';
+
+  @override
   String get timeagoJustNow => 'چند لحظه پیش';
 
   @override

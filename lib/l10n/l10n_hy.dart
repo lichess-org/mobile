@@ -7497,6 +7497,12 @@ class AppLocalizationsHy extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Երկգործոն նույնականացում';
 
   @override
+  String get tfaAuthenticationCode => 'Նույնականացման կոդ';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.';
+
+  @override
   String get timeagoJustNow => 'հենց հիմա';
 
   @override

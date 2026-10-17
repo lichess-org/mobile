@@ -1753,6 +1753,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{{count} komandų mūšis} few{{count} komandų mūšis} many{{count} komandų mūšis} other{{count} komandų mūšis}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Vienas lyderis komandoje} few{{count} lyderiai komandoje} many{{count} lyderių komandoje} other{{count} lyderių komandoje}}",
   "tfaTwoFactorAuth": "Dviejų lygių tapatumo nustatymas",
+  "tfaAuthenticationCode": "Tapatumo nustatymo kodas",
+  "tfaOpenTwoFactorApp": "Norėdami pamatyti autentikacijos kodą ir patvirtinti savo tapatybę, savo įrenginyje atverkite dviejų-faktorių autentikacijos programėlę.",
   "timeagoJustNow": "ką tik",
   "timeagoRightNow": "dabar",
   "timeagoCompleted": "užbaigta",

@@ -1921,6 +1921,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{{count} csapat csatája} other{Ez {count} csapat csatája}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Egy vezető csapatonként} other{{count} vezető csapatonként}}",
   "tfaTwoFactorAuth": "Kétlépcsős azonosítás",
+  "tfaAuthenticationCode": "Hitelesítő kód",
+  "tfaOpenTwoFactorApp": "Nyisd meg a kétlépcsős azonosítási alkalmazást az eszközödön az azonosító kódért, és igazold a személyazonosságod.",
   "timeagoJustNow": "épp most",
   "timeagoRightNow": "épp most",
   "timeagoCompleted": "befejeződött",

@@ -1788,6 +1788,8 @@
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Aseta oma PGN tekst siia, kuni {count} mäng} other{Aseta oma PGN tekst siia, kuni {count} mängu}}",
   "teamTeam": "Võistkond",
   "tfaTwoFactorAuth": "Kaheastmeline autentimine",
+  "tfaAuthenticationCode": "Autentimise kood",
+  "tfaOpenTwoFactorApp": "Ava kaheastmelise autentimise äpp oma seadmes, et näha autentimiskoodi ja kinnitada oma isikut.",
   "timeagoJustNow": "äsja",
   "timeagoRightNow": "praegu",
   "timeagoCompleted": "lõppenud",

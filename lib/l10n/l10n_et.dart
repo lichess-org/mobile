@@ -7497,6 +7497,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Kaheastmeline autentimine';
 
   @override
+  String get tfaAuthenticationCode => 'Autentimise kood';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ava kaheastmelise autentimise äpp oma seadmes, et näha autentimiskoodi ja kinnitada oma isikut.';
+
+  @override
   String get timeagoJustNow => 'äsja';
 
   @override

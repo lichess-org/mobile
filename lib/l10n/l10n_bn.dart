@@ -7497,6 +7497,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get tfaTwoFactorAuth => 'টু-ফ্যাক্টর অথেন্টিকেশন';
 
   @override
+  String get tfaAuthenticationCode => 'অথেনটিকেশন কোড';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'অথেন্টিকেশন কোড দেখতে আপনার ডিভাইসে টু-ফ্যাক্টর অথেন্টিকেশন অ্যাপ চালু করুন এবং আপনার পরিচয় নিশ্চিত করুন।';
+
+  @override
   String get timeagoJustNow => 'এখনই';
 
   @override

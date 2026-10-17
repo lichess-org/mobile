@@ -1810,6 +1810,8 @@
   "teamIncorrectEntryCode": "Netočan ulazni kod.",
   "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} ekipe} few{BItka {count} ekipe} other{Bitka {count} ekipa}}",
   "tfaTwoFactorAuth": "Dvofaktorska provjera autentičnosti",
+  "tfaAuthenticationCode": "Kôd za provjeru autentičnosti",
+  "tfaOpenTwoFactorApp": "Otvori aplikaciju dvofaktorske autentifikacije na svom uređaju da bi mogli vidjeti svoj autentifikacijski kod i potvrditi svoj identitet.",
   "timeagoJustNow": "upravo sada",
   "timeagoRightNow": "upravo sada",
   "timeagoCompleted": "završeno",

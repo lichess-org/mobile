@@ -7572,6 +7572,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get tfaTwoFactorAuth => 'אימות דו־שלבי';
 
   @override
+  String get tfaAuthenticationCode => 'קוד אימות';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'פתחו את אפליקציית האימות הדו־שלבי שברשותכם להצגת קוד האימות ואמתו את זהותכם.';
+
+  @override
   String get timeagoJustNow => 'בדיוק עכשיו';
 
   @override

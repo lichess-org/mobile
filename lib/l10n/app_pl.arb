@@ -2182,6 +2182,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Bitwa {count} drużyny} few{Bitwa {count} drużyn} many{Bitwa {count} drużyn} other{Bitwa {count} drużyn}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Lider na drużynę} few{{count} liderów na drużynę} many{{count} liderów na drużynę} other{{count} liderów na drużynę}}",
   "tfaTwoFactorAuth": "Uwierzytelnianie dwuskładnikowe",
+  "tfaAuthenticationCode": "Kod uwierzytelniający",
+  "tfaOpenTwoFactorApp": "Otwórz aplikację do uwierzytelniania dwuskładnikowego na swoim urządzeniu, aby wyświetlić kod uwierzytelniający i zweryfikować swoją tożsamość.",
   "timeagoJustNow": "właśnie teraz",
   "timeagoRightNow": "w tej chwili",
   "timeagoCompleted": "ukończone",

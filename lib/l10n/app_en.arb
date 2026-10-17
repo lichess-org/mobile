@@ -4048,6 +4048,8 @@
     }
   },
   "tfaTwoFactorAuth": "Two-factor authentication",
+  "tfaAuthenticationCode": "Authentication code",
+  "tfaOpenTwoFactorApp": "Open the two-factor authentication app on your device to view your authentication code and verify your identity.",
   "timeagoJustNow": "just now",
   "timeagoRightNow": "right now",
   "timeagoCompleted": "completed",

@@ -7574,6 +7574,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Autentificare în doi pași';
 
   @override
+  String get tfaAuthenticationCode => 'Cod de autentificare';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Deschideți aplicația de autentificare cu doi factori de pe dispozitivul dvs pentru a vedea codul de autentificare și a verifica identitatea dvs.';
+
+  @override
   String get timeagoJustNow => 'chiar acum';
 
   @override

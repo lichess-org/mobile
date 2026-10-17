@@ -2182,6 +2182,8 @@
   "teamBattleOfNbTeams": "{count, plural, other{{count} 个团队的对战}}",
   "teamNbLeadersPerTeam": "{count, plural, other{每个团队 {count} 名领导}}",
   "tfaTwoFactorAuth": "双重认证",
+  "tfaAuthenticationCode": "身份验证码",
+  "tfaOpenTwoFactorApp": "请在您的设备上打开双重认证应用，查看您的身份验证码以验证身份。",
   "timeagoJustNow": "即将开始",
   "timeagoRightNow": "正在进行",
   "timeagoCompleted": "已完成",

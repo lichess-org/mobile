@@ -7651,6 +7651,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
 
   @override
+  String get tfaAuthenticationCode => 'Kod uwierzytelniający';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Otwórz aplikację do uwierzytelniania dwuskładnikowego na swoim urządzeniu, aby wyświetlić kod uwierzytelniający i zweryfikować swoją tożsamość.';
+
+  @override
   String get timeagoJustNow => 'właśnie teraz';
 
   @override

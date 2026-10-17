@@ -1951,6 +1951,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Turnaj {count} tímu} few{Turnaj {count} tímov} many{Turnaj {count} tímov} other{Turnaj {count} tímov}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Jeden líder na tím} few{{count} lídri na tím} many{{count} lídrov na tím} other{{count} lídrov na tím}}",
   "tfaTwoFactorAuth": "Dvojstupňové overenie",
+  "tfaAuthenticationCode": "Overovací kód",
+  "tfaOpenTwoFactorApp": "Otvorte aplikáciu na dvojstupňové overenie na Vašom zariadení, a zistite Váš overovací kód na overenie Vašej identity.",
   "timeagoJustNow": "práve teraz",
   "timeagoRightNow": "práve teraz",
   "timeagoCompleted": "ukončené",

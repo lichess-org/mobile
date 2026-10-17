@@ -2013,6 +2013,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Schlacht mit {count} Team} other{Schlacht mit {count} Teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Ein Leader pro Team} other{{count} Leader pro Team}}",
   "tfaTwoFactorAuth": "Zwei-Faktor-Autentifizierig",
+  "tfaAuthenticationCode": "Authentifizierigscode",
+  "tfaOpenTwoFactorApp": "Mach d'App für d'Zwei-Faktor-Authentifizierig uf, det findsch de Code, wo dini Identität beschtätigt.",
   "timeagoJustNow": "grad jetzt",
   "timeagoRightNow": "genau jetzt",
   "timeagoCompleted": "beändet",

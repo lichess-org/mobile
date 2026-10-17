@@ -2124,6 +2124,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{{count} ta jamoa jangi} other{{count} ta jamoa jangi}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Har bir bitta jamoadan bitta peshqadam} other{Har bir bitta jamoadan {count} ta peshqadam}}",
   "tfaTwoFactorAuth": "Ikki bosqishli autentifikatsiya",
+  "tfaAuthenticationCode": "Autentifikatsiya kodi",
+  "tfaOpenTwoFactorApp": "Autentifikatsiya kodini koʻrish va shaxsingizni tasdiqlash uchun qurilmangizdagi ikki bosqichli autentifikatsiya ilovasini oching.",
   "timeagoJustNow": "hozir",
   "timeagoRightNow": "hozirgina",
   "timeagoCompleted": "tugagan",

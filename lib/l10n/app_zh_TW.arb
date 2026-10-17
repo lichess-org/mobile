@@ -1912,6 +1912,8 @@
   "teamBattleOfNbTeams": "{count, plural, other{{count} 隊之間的戰鬥}}",
   "teamNbLeadersPerTeam": "{count, plural, other{每隊 {count} 個隊長}}",
   "tfaTwoFactorAuth": "兩步驟驗證",
+  "tfaAuthenticationCode": "驗證碼",
+  "tfaOpenTwoFactorApp": "開啟您裝置上的雙重要素驗證應用程式，即可檢視驗證碼並驗證您的帳號",
   "timeagoJustNow": "剛剛",
   "timeagoRightNow": "正在進行",
   "timeagoCompleted": "已結束",

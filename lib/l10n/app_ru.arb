@@ -2032,6 +2032,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Турнир на {count} команду} few{Турнир на {count} команды} many{Турнир на {count} команд} other{Турнир на {count} команд}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{{count} лидер на клуб} few{{count} лидера на клуб} many{{count} лидеров на клуб} other{{count} лидеров на клуб}}",
   "tfaTwoFactorAuth": "Двухфакторная аутентификация",
+  "tfaAuthenticationCode": "Код аутентификации",
+  "tfaOpenTwoFactorApp": "Откройте приложение для двухфакторной аутентификации на вашем устройстве, чтобы просмотреть код аутентификации и подтвердить свою личность.",
   "timeagoJustNow": "только что",
   "timeagoRightNow": "прямо сейчас",
   "timeagoCompleted": "завершено",

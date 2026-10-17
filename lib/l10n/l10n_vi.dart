@@ -7420,6 +7420,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Xác thực 2 bước';
 
   @override
+  String get tfaAuthenticationCode => 'Mã xác thực';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Mở ứng dụng xác minh 2 bước trên thiết bị của bạn để xem mã xác minh của bạn và xác nhận danh tính.';
+
+  @override
   String get timeagoJustNow => 'vừa mới đây';
 
   @override

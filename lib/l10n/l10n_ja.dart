@@ -7420,6 +7420,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tfaTwoFactorAuth => '2 要素認証';
 
   @override
+  String get tfaAuthenticationCode => '認証コード';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'デバイスで 2 要素認証アプリを開き、認証コードを表示して確認してださい。';
+
+  @override
   String get timeagoJustNow => 'たった今';
 
   @override

@@ -1929,6 +1929,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Битка между {count} отбор} other{Битка между {count} отбора}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Един лидер на отбор} other{{count} лидери на отбор}}",
   "tfaTwoFactorAuth": "Двуфакторно удостоверяване",
+  "tfaAuthenticationCode": "Код за удостоверяване",
+  "tfaOpenTwoFactorApp": "Отворете приложението за двуфакторно удостоверяване на устройството Ви за да намерите кода за удостоверяване и да потвърдите самоличността си.",
   "timeagoJustNow": "току що",
   "timeagoRightNow": "точно сега",
   "timeagoCompleted": "завършено",

@@ -1223,6 +1223,8 @@
   "studyBlunder": "Глупа грешка",
   "teamTeam": "Тим",
   "tfaTwoFactorAuth": "Двофакторна автентикација",
+  "tfaAuthenticationCode": "Код за автентикација",
+  "tfaOpenTwoFactorApp": "Отворете ја апликацијата со двофакторна автентикација на вашиот уред, за да го видите вашиот код за автентикација и да го потврдите вашиот идентитет.",
   "timeagoJustNow": "тукушто",
   "timeagoRightNow": "Тукушто",
   "timeagoCompleted": "завршено",

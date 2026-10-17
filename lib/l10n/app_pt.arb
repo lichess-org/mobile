@@ -2018,6 +2018,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Batalha de {count} equipa} other{Batalha de {count} equipas}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Um líder por equipa} other{{count} líderes por equipa}}",
   "tfaTwoFactorAuth": "Autenticação de dois fatores",
+  "tfaAuthenticationCode": "Código de autenticação",
+  "tfaOpenTwoFactorApp": "Abre a aplicação de autenticação de dois fatores no teu dispositivo para veres o código de autenticação e verificares a tua identidade.",
   "timeagoJustNow": "agora mesmo",
   "timeagoRightNow": "agora mesmo",
   "timeagoCompleted": "concluído",

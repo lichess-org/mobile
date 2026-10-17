@@ -7649,6 +7649,12 @@ class AppLocalizationsLt extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Dviejų lygių tapatumo nustatymas';
 
   @override
+  String get tfaAuthenticationCode => 'Tapatumo nustatymo kodas';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Norėdami pamatyti autentikacijos kodą ir patvirtinti savo tapatybę, savo įrenginyje atverkite dviejų-faktorių autentikacijos programėlę.';
+
+  @override
   String get timeagoJustNow => 'ką tik';
 
   @override

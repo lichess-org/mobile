@@ -7651,6 +7651,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Dvoufázové ověření';
 
   @override
+  String get tfaAuthenticationCode => 'Ověřovací kód';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Otevřete aplikaci pro dvoufázové ověřování na vašem zařízení a najděte svůj ověřovací kód.';
+
+  @override
   String get timeagoJustNow => 'právě teď';
 
   @override
