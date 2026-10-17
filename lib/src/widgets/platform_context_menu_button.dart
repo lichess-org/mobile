@@ -21,14 +21,14 @@ const kLightMenuGlassSettings = LiquidGlassSettings(
 );
 
 /// Width of the liquid glass context menus.
-const _kGlassMenuWidth = 250.0;
+const kGlassMenuWidth = 250.0;
 
 /// The glass of the liquid glass context menus.
 LiquidGlassSettings? _glassMenuSettings(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null;
 
 /// The items of a liquid glass context menu, one per action.
-List<GlassMenuItem> _glassMenuItems(List<ContextMenuAction> actions) => [
+List<GlassMenuItem> glassMenuItems(List<ContextMenuAction> actions) => [
   for (final action in actions)
     GlassMenuItem(
       title: action.label,
@@ -73,12 +73,12 @@ class const ContextMenuIconButton({
 
     if (useLiquidGlass(context)) {
       return GlassMenu(
-        menuWidth: _kGlassMenuWidth,
+        menuWidth: kGlassMenuWidth,
         settings: _glassMenuSettings(context),
         semanticLabel: semanticsLabel,
         // The button is not glass itself: it sits in the glass capsule of the app bar.
         triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
-        items: _glassMenuItems(actions),
+        items: glassMenuItems(actions),
       );
     }
 
@@ -168,9 +168,9 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
               trigger: const SizedBox.shrink(),
               morphFromZero: true,
               autoAdjustToScreen: true,
-              menuWidth: _kGlassMenuWidth,
+              menuWidth: kGlassMenuWidth,
               settings: _glassMenuSettings(context),
-              items: _glassMenuItems(widget.actions),
+              items: glassMenuItems(widget.actions),
             ),
           ),
       ],

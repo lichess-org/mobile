@@ -273,17 +273,19 @@ class const PuzzleChart(final List<PuzzleDashboardData> puzzleData) extends Stat
 class const DaysSelector() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     final authUser = ref.watch(authControllerProvider);
     final day = ref.watch(daysProvider);
     return authUser != null
         ? TextButton(
             onPressed: () => showChoicePicker(
-              context,
+              screenContext,
               choices: Days.values,
               selectedItem: day,
               labelBuilder: (t) => Text(_daysL10n(context, t)),
               onSelectedItemChanged: (newDay) {
-                ref.read(daysProvider.notifier).state = newDay;
+                screenRef.read(daysProvider.notifier).state = newDay;
               },
             ),
             child: Text(_daysL10n(context, day)),

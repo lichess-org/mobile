@@ -391,6 +391,8 @@ class const _ExportedGameTitle({required final GameFullId id, final DateTime? la
 class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     final gameState = ref.watch(gameControllerProvider(gameId)).value;
     if (gameState == null) return const SizedBox.shrink();
 
@@ -403,10 +405,10 @@ class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget
             icon: Icons.person_outline,
             label: 'Spectators (${gameState.nbWatchers})',
             onPressed: () {
-              final s = ref.read(gameControllerProvider(gameId)).value;
+              final s = screenRef.read(gameControllerProvider(gameId)).value;
               if (s == null) return;
               showAdaptiveDraggableBottomSheet<void>(
-                context: context,
+                context: screenContext,
                 builder: (_, scrollController) => WatcherListBottomSheet(
                   nbWatchers: s.nbWatchers,
                   watcherNames: s.watcherNames,
@@ -422,7 +424,7 @@ class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget
           label: gameState.game.bookmarked == true
               ? context.l10n.mobileRemoveBookmark
               : context.l10n.bookmarkThisGame,
-          onPressed: () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
+          onPressed: () => screenRef.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
         ),
         ContextMenuAction(
           icon: Theme.of(context).platform == TargetPlatform.iOS
@@ -430,10 +432,10 @@ class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget
               : Icons.share_outlined,
           label: context.l10n.studyShareAndExport,
           onPressed: () => showAdaptiveActionSheet<void>(
-            context: context,
+            context: screenContext,
             actions: makeFinishedGameShareBottomSheetActions(
-              context,
-              ref,
+              screenContext,
+              screenRef,
               gameId: gameId.gameId,
               orientation: gameState.game.youAre ?? Side.white,
               finished: gameState.game.finished,

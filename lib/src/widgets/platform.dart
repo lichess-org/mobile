@@ -3,10 +3,14 @@ import 'dart:math' as math;
 import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
-    show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
+    show CupertinoColors, CupertinoDynamicColor, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer, ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
+    show ContextMenuIconButton, glassMenuItems, kGlassMenuWidth;
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
@@ -14,7 +18,6 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
         GlassBarItem,
         GlassButton,
         GlassContainer,
-        GlassIconButton,
         GlassPinnedBarChrome,
         GlassScaffold,
         GlassScrollEdgeEffect,
@@ -36,8 +39,55 @@ bool useLiquidGlass(BuildContext context) =>
 final bool _isLiquidGlassSupported =
     !const bool.fromEnvironment('NO_LIQUID_GLASS') && (!Platform.isIOS || _iosMajorVersion() >= 26);
 
-/// Whether app bar buttons are pinned above the navigator on iOS 26 and morph between routes
+/// Whether the [PlatformAppBar] buttons are pinned above the navigator, and morph into the next
+/// route's buttons during a push or pop, like a UIKit navigation bar: on iOS 26 and later.
+///
+/// Each navigator is wrapped in a `GlassNavigationShell` (the root one in `app.dart`, the tab ones
+/// in `tab_scaffold.dart`), which draws the pinned buttons. See [appBarActionContext].
 bool usePinnedNavBar(BuildContext context) => useLiquidGlass(context);
+
+/// The context to navigate or present from, for a widget in the `actions` or `leading` of a
+/// [PlatformAppBar]: the app bar's context.
+///
+/// The buttons pinned by [usePinnedNavBar] are built by the `GlassNavigationShell`, above the
+/// navigator, out of the screen's route: `Navigator.of` with their own context finds the navigator
+/// above the shell, or none. An action widget that pushes a screen, or shows a sheet, a dialog or a
+/// snackbar, uses this context instead. Elsewhere it is [context] itself.
+///
+/// For the same reason (see [appBarActionRef]), an action widget keeps no state that must survive
+/// in its [State]: it would be lost at every rebuild of the pinned copy.
+BuildContext appBarActionContext(BuildContext context) =>
+    context.getInheritedWidgetOfExactType<_AppBarActionScope>()?.screenContext ?? context;
+
+/// The ref to read or modify providers with, from a callback of a [ConsumerWidget] in the
+/// `actions` or `leading` of a [PlatformAppBar]: the app bar's ref.
+///
+/// The pinned copy of an action widget (see [appBarActionContext]) is disposed and built again
+/// whenever the shell gives the buttons back to the screen (while a sheet or a dialog is presented
+/// over it) or takes them again, and when another screen is pushed over it: its own [ref] can't be
+/// used once disposed, for example in the actions of a sheet the widget shows. Its callbacks use
+/// this ref instead. Elsewhere it is [ref] itself. The build method still watches providers with
+/// its own [ref].
+WidgetRef appBarActionRef(BuildContext context, WidgetRef ref) =>
+    context.getInheritedWidgetOfExactType<_AppBarActionScope>()?.screenRef ?? ref;
+
+/// Whether an icon button has a long press action, which a [GlassBarItem.icon] doesn't support.
+bool _hasLongPress(Widget button) => switch (button) {
+  IconButton(:final onLongPress) || SemanticIconButton(:final onLongPress) => onLongPress != null,
+  _ => false,
+};
+
+/// Gives the pinned buttons of a [PlatformAppBar] the context and the ref of its screen, see
+/// [appBarActionContext] and [appBarActionRef].
+class const _AppBarActionScope({
+  required final BuildContext screenContext,
+  required final WidgetRef screenRef,
+  required super.child,
+}) extends InheritedWidget {
+  @override
+  bool updateShouldNotify(_AppBarActionScope oldWidget) =>
+      screenContext != oldWidget.screenContext || screenRef != oldWidget.screenRef;
+}
 
 int _iosMajorVersion() {
   // For example "Version 18.2 (Build 22C150)".
@@ -777,27 +827,9 @@ class const PlatformAppBar({
           ? CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
           : AppBarTheme.of(context).titleTextStyle;
       final parentRoute = ModalRoute.of(context);
-      final impliedLeadingIcon = Icon(
-        parentRoute is PageRoute && parentRoute.fullscreenDialog
-            ? Icons.close_rounded
-            : Icons.arrow_back_ios_new_rounded,
-        color: colorScheme.onSurface,
-      );
-      final impliedLeading =
-          automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false)
-          ? glass
-                ? GlassIconButton(
-                    size: buttonHeight,
-                    icon: impliedLeadingIcon,
-                    semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: () => Navigator.maybePop(context),
-                  )
-                : IconButton(
-                    icon: impliedLeadingIcon,
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: () => Navigator.maybePop(context),
-                  )
-          : null;
+      final isFullscreenDialog = parentRoute is PageRoute && parentRoute.fullscreenDialog;
+      final impliesLeading =
+          automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false);
       final largeTitleOffset = largeTitle ? _LargeTitleScrollScope.maybeOf(context) : null;
       final inlineTitle = largeTitleOffset != null && title != null
           ? ValueListenableBuilder(
@@ -831,66 +863,119 @@ class const PlatformAppBar({
           : null;
 
       // The buttons are pinned above the navigator by its GlassNavigationShell, which morphs them
-      // into the next route's buttons. Not for a tab root, whose header scrolls away. Compact
-      // buttons are pinned too, at the shell's size (open question B of the spike).
+      // into the next route's buttons (see [usePinnedNavBar]). Not for a tab root, whose header
+      // scrolls away. Compact buttons get the shell's size, with a gap below them instead.
       if (usePinnedNavBar(context) && !isTabRoot) {
-        final foregroundColor = colorScheme.onSurface;
-        // The shell builds the items in its own context: they get the themes of the screen.
-        GlassBarItem hoisted(Widget child) => GlassBarItem.custom(
-          child: InheritedTheme.captureAll(
-            context,
-            IconTheme.merge(
-              data: IconThemeData(color: foregroundColor),
-              child: IconButtonTheme(
-                data: IconButtonThemeData(
-                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
+        // A Consumer, whose ref outlives the pinned copies of the actions (see [appBarActionRef]).
+        return Consumer(
+          builder: (context, ref, _) {
+            final foregroundColor = colorScheme.onSurface;
+            // The shell builds the items in its own context: they get the themes, the context and
+            // the ref of the screen (see [appBarActionContext]), and the icon color of the bar.
+            Widget captured(Widget child) => InheritedTheme.captureAll(
+              context,
+              _AppBarActionScope(
+                screenContext: context,
+                screenRef: ref,
+                child: IconTheme.merge(
+                  data: IconThemeData(color: foregroundColor),
+                  child: child,
                 ),
-                child: child,
               ),
-            ),
-          ),
-        );
-        final isFullscreenDialog = parentRoute is PageRoute && parentRoute.fullscreenDialog;
-        final impliesLeading =
-            automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false);
-        return GlassPinnedBarChrome(
-          leading: [
-            if (leading != null)
-              hoisted(leading!)
-            else if (impliesLeading && isFullscreenDialog)
-              GlassBarItem.icon(
-                icon: const Icon(Icons.close_rounded),
-                label: MaterialLocalizations.of(context).closeButtonTooltip,
-                onTap: () => Navigator.maybePop(context),
+            );
+            // The glyph of an icon or menu item, sized by the shell (no captured icon theme).
+            Widget glyph(Widget icon, Color? color) => IconTheme.merge(
+              data: IconThemeData(color: color ?? foregroundColor),
+              child: icon,
+            );
+            // Icon buttons and context menu buttons become the shell's own items, whose glyphs
+            // morph and whose capsule morphs into the menu. Anything else is a custom item, which
+            // cross-fades.
+            GlassBarItem barItem(Widget action) => switch (action) {
+              IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
+              SemanticIconButton(
+                :final icon,
+                :final onPressed,
+                semanticsLabel: final String? tooltip,
+                :final color,
+              ) when !_hasLongPress(action) => GlassBarItem.icon(
+                icon: glyph(icon, color),
+                onTap: onPressed ?? () {},
+                enabled: onPressed != null,
+                label: tooltip,
               ),
-          ],
-          actions: [for (final action in actions ?? const <Widget>[]) hoisted(action)],
-          backButton: automaticallyImplyLeading && !isFullscreenDialog,
-          buttonSettings: buttonSettings,
-          horizontalInset: Styles.horizontalBodyPadding.left,
-          builder: (context, chrome) => GlassAppBar(
-            title: appBarTitle,
-            centerTitle: centerTitle ?? true,
-            leading: chrome.leading != null
-                ? Row(mainAxisSize: .min, children: [chrome.leading!])
-                : null,
-            actions: chrome.actions.isNotEmpty ? chrome.actions : null,
-            bottom: largeTitleOffset != null
-                ? null
-                : bottom ??
-                      (compactButtons
-                          ? const PreferredSize(
-                              preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
-                              child: SizedBox.shrink(),
-                            )
-                          : null),
-            buttonSettings: buttonSettings,
-            toolbarHeight: _kGlassToolbarHeight,
-            padding: Styles.horizontalBodyPadding,
-          ),
+              ContextMenuIconButton(
+                :final icon,
+                :final color,
+                :final semanticsLabel,
+                :final actions,
+              ) =>
+                GlassBarItem.menu(
+                  icon: glyph(icon, color),
+                  menuItems: glassMenuItems(actions),
+                  menuWidth: kGlassMenuWidth,
+                  label: semanticsLabel,
+                ),
+              _ => GlassBarItem.custom(
+                child: captured(
+                  IconButtonTheme(
+                    data: IconButtonThemeData(
+                      style: IconButton.styleFrom(foregroundColor: foregroundColor),
+                    ),
+                    child: action,
+                  ),
+                ),
+              ),
+            };
+            // A back button with an action of its own is the shell's back button.
+            final backButtonLeading = switch (leading) {
+              final BackButton button when parentRoute?.impliesAppBarDismissal ?? false => button,
+              _ => null,
+            };
+            return GlassPinnedBarChrome(
+              leading: [
+                if (leading != null && backButtonLeading == null)
+                  barItem(leading!)
+                else if (impliesLeading && isFullscreenDialog)
+                  GlassBarItem.icon(
+                    icon: const Icon(Icons.close_rounded),
+                    label: MaterialLocalizations.of(context).closeButtonTooltip,
+                    onTap: () => Navigator.maybePop(context),
+                  ),
+              ],
+              actions: [for (final action in actions ?? const <Widget>[]) barItem(action)],
+              backButton:
+                  backButtonLeading != null || (automaticallyImplyLeading && !isFullscreenDialog),
+              onBack: backButtonLeading?.onPressed,
+              buttonSettings: buttonSettings,
+              horizontalInset: Styles.horizontalBodyPadding.left,
+              builder: (context, chrome) => GlassAppBar(
+                title: appBarTitle,
+                centerTitle: centerTitle ?? true,
+                leading: chrome.leading != null
+                    ? Row(mainAxisSize: .min, children: [chrome.leading!])
+                    : null,
+                actions: chrome.actions.isNotEmpty ? chrome.actions : null,
+                bottom: largeTitleOffset != null
+                    ? null
+                    : bottom ??
+                          (compactButtons
+                              ? const PreferredSize(
+                                  preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
+                                  child: SizedBox.shrink(),
+                                )
+                              : null),
+                buttonSettings: buttonSettings,
+                toolbarHeight: _kGlassToolbarHeight,
+                padding: Styles.horizontalBodyPadding,
+              ),
+            );
+          },
         );
       }
 
+      // A tab root on iOS 26, which has no implied leading (it is the first route), or any screen
+      // before iOS 26. The implied back button has the pinned one's icon.
       return GlassAppBar(
         title: appBarTitle,
         centerTitle: centerTitle ?? true,
@@ -901,7 +986,18 @@ class const PlatformAppBar({
                 settings: buttonSettings,
                 children: [leading!],
               )
-            : impliedLeading,
+            : impliesLeading
+            ? IconButton(
+                icon: Icon(
+                  isFullscreenDialog ? Icons.close_rounded : CupertinoIcons.back,
+                  color: colorScheme.onSurface,
+                ),
+                tooltip: isFullscreenDialog
+                    ? MaterialLocalizations.of(context).closeButtonTooltip
+                    : MaterialLocalizations.of(context).backButtonTooltip,
+                onPressed: () => Navigator.maybePop(context),
+              )
+            : null,
         actions: actions != null && actions!.isNotEmpty
             ? [
                 _GlassBarCapsule(

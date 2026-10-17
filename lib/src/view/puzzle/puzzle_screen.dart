@@ -868,9 +868,10 @@ class const _PuzzleSettingsButton(final PuzzleContext initialPuzzleContext)
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final screenContext = appBarActionContext(context);
     return SemanticIconButton(
       onPressed: () => showAdaptiveBottomSheet<void>(
-        context: context,
+        context: screenContext,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
         builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),

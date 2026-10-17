@@ -39,7 +39,7 @@ void main() {
 
     expect(find.text('Settings'), findsNothing);
 
-    await tester.tap(find.byIcon(Icons.more_horiz));
+    await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
     await tester.pumpAndSettle();
 
     expect(find.text('Settings'), findsOneWidget);

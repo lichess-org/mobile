@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -217,7 +216,9 @@ void main() {
 
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
-      await tester.tap(find.byType(ContextMenuIconButton));
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
       await tester.pumpAndSettle();
 
       await tester.tap(find.text('Filter games'));
@@ -265,7 +266,7 @@ void main() {
 
       // Clear the filter by opening settings again
       await tester.pump();
-      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
       await tester.pumpAndSettle();
       await tester.tap(find.text('Filter games'));
       await tester.pumpAndSettle();
@@ -572,6 +573,8 @@ void main() {
       await tester.pump();
       // Load the round
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
     }
 
     testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
@@ -588,12 +591,13 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: false, recordedRequests: requests);
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.method, 'POST');
@@ -606,10 +610,11 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: true, recordedRequests: requests);
 
-      await tester.tap(find.byIcon(Icons.notifications));
+      await tester.tap(find.byIcon(Icons.notifications).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.url.queryParameters['set'], 'false');
@@ -638,18 +643,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
       // Toggled right away, while the request is still in flight...
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 1));
       await tester.pump();
+      await tester.pump();
 
       // ...then reverted once the request failed.
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
     });
   });
 }

@@ -387,6 +387,8 @@ String _branchMoveToString(ViewBranch branch) {
 class const _RetroMenu({required final RetroOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
@@ -395,14 +397,14 @@ class const _RetroMenu({required final RetroOptions options}) extends ConsumerWi
           icon: Icons.settings,
           label: context.l10n.settingsSettings,
           onPressed: () =>
-              Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
+              Navigator.of(screenContext).push(RetroSettingsScreen.buildRoute(options: options)),
         ),
         ContextMenuAction(
           icon: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled))
               ? Icons.volume_up
               : Icons.volume_off,
           label: context.l10n.sound,
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+          onPressed: () => screenRef.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
         ),
       ],
     );

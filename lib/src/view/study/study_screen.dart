@@ -212,6 +212,8 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
 class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     final authUser = ref.watch(authControllerProvider);
     final state = ref.watch(studyControllerProvider(options)).requireValue;
 
@@ -224,7 +226,7 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
             icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
             label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
             onPressed: () {
-              ref.read(studyControllerProvider(options).notifier).toggleLike();
+              screenRef.read(studyControllerProvider(options).notifier).toggleLike();
             },
           ),
         ContextMenuAction(
@@ -232,13 +234,13 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
           label: context.l10n.studyShareAndExport,
           onPressed: () {
             showAdaptiveActionSheet<void>(
-              context: context,
+              context: screenContext,
               actions: [
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.studyStudyUrl),
                   onPressed: () {
                     launchShareDialog(
-                      context,
+                      screenContext,
                       ShareParams(uri: lichessUri('/study/${state.study.id}')),
                     );
                   },
@@ -247,7 +249,7 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                   makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
                   onPressed: () {
                     launchShareDialog(
-                      context,
+                      screenContext,
                       ShareParams(
                         uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
                       ),
@@ -259,15 +261,19 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                     makeLabel: (context) => Text(context.l10n.studyStudyPgn),
                     onPressed: () async {
                       try {
-                        final pgn = await ref
+                        final pgn = await screenRef
                             .read(studyRepositoryProvider)
                             .getStudyPgn(state.study.id);
-                        if (context.mounted) {
-                          launchShareDialog(context, ShareParams(text: pgn));
+                        if (screenContext.mounted) {
+                          launchShareDialog(screenContext, ShareParams(text: pgn));
                         }
                       } catch (e) {
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                        if (screenContext.mounted) {
+                          showSnackBar(
+                            screenContext,
+                            'Failed to get PGN',
+                            type: SnackBarType.error,
+                          );
                         }
                       }
                     },
@@ -275,7 +281,7 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                   BottomSheetAction(
                     makeLabel: (context) => Text(context.l10n.studyChapterPgn),
                     onPressed: () {
-                      launchShareDialog(context, ShareParams(text: state.pgn));
+                      launchShareDialog(screenContext, ShareParams(text: state.pgn));
                     },
                   ),
                   if (state.currentPosition != null)
@@ -283,27 +289,31 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                       makeLabel: (context) => Text(context.l10n.positionAsImage),
                       onPressed: () async {
                         try {
-                          final image = await ref
+                          final image = await screenRef
                               .read(gameShareServiceProvider)
                               .screenshotPosition(
                                 state.pov,
                                 state.currentPosition!.fen,
                                 state.lastMove,
                               );
-                          if (context.mounted) {
+                          if (screenContext.mounted) {
                             launchShareDialog(
-                              context,
+                              screenContext,
                               ShareParams(
                                 files: [image],
-                                subject: context.l10n.puzzleFromGameLink(
+                                subject: screenContext.l10n.puzzleFromGameLink(
                                   lichessUri('/study/${state.study.id}').toString(),
                                 ),
                               ),
                             );
                           }
                         } catch (e) {
-                          if (context.mounted) {
-                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                          if (screenContext.mounted) {
+                            showSnackBar(
+                              screenContext,
+                              'Failed to get GIF',
+                              type: SnackBarType.error,
+                            );
                           }
                         }
                       },
@@ -312,15 +322,15 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                     makeLabel: (context) => const Text('GIF'),
                     onPressed: () async {
                       try {
-                        final gif = await ref
+                        final gif = await screenRef
                             .read(gameShareServiceProvider)
                             .chapterGif(state.study.id, state.study.chapter.id);
-                        if (context.mounted) {
+                        if (screenContext.mounted) {
                           launchShareDialog(
-                            context,
+                            screenContext,
                             ShareParams(
                               files: [gif],
-                              subject: context.l10n.studyChapterX(
+                              subject: screenContext.l10n.studyChapterX(
                                 state.study.currentChapterMeta.name,
                               ),
                             ),
@@ -328,8 +338,12 @@ class const _StudyMenu({required final StudyOptions options}) extends ConsumerWi
                         }
                       } catch (e) {
                         debugPrint(e.toString());
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                        if (screenContext.mounted) {
+                          showSnackBar(
+                            screenContext,
+                            'Failed to get GIF',
+                            type: SnackBarType.error,
+                          );
                         }
                       }
                     },

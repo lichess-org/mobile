@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_vision.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
@@ -46,21 +47,22 @@ class const BoardFromImageButton({super.key, required final void Function(String
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
     final reader = ref.watch(boardReaderProvider);
 
     return IconButton(
       icon: const Icon(Icons.photo_camera_outlined),
       tooltip: 'Camera',
       onPressed: () => showAdaptiveActionSheet<void>(
-        context: context,
+        context: screenContext,
         actions: [
           BottomSheetAction(
             makeLabel: (context) => const Text('Take a photo'),
-            onPressed: () => _readFrom(context, reader, ImageSource.camera),
+            onPressed: () => _readFrom(screenContext, reader, ImageSource.camera),
           ),
           BottomSheetAction(
             makeLabel: (context) => const Text('Choose a photo'),
-            onPressed: () => _readFrom(context, reader, ImageSource.gallery),
+            onPressed: () => _readFrom(screenContext, reader, ImageSource.gallery),
           ),
         ],
       ),

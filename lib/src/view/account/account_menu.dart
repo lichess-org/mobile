@@ -340,6 +340,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
 
   @override
   Widget build(BuildContext context) {
+    final screenContext = appBarActionContext(context);
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
@@ -347,7 +348,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     void openMenu() {
-      Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
+      Navigator.of(screenContext).push(AccountMenuScreen.buildRoute(screenContext));
     }
 
     return switch (account) {

@@ -170,6 +170,8 @@ class const _BroadcastGameMenu({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     return ContextMenuIconButton(
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
@@ -181,7 +183,7 @@ class const _BroadcastGameMenu({
           label: context.l10n.mobileShareGameURL,
           onPressed: () {
             launchShareDialog(
-              context,
+              screenContext,
               ShareParams(
                 uri: lichessUri(
                   '/broadcast/${tournamentSlug ?? '-'}/${roundSlug ?? '-'}/$roundId/$gameId',
@@ -195,15 +197,15 @@ class const _BroadcastGameMenu({
           label: context.l10n.mobileShareGamePGN,
           onPressed: () async {
             try {
-              final pgnOnly = await ref
+              final pgnOnly = await screenRef
                   .read(broadcastRepositoryProvider)
                   .getGamePgn(roundId, gameId, withAnalysisSummary: false);
-              if (context.mounted) {
-                launchShareDialog(context, ShareParams(text: pgnOnly.pgn));
+              if (screenContext.mounted) {
+                launchShareDialog(screenContext, ShareParams(text: pgnOnly.pgn));
               }
             } catch (e) {
-              if (context.mounted) {
-                showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+              if (screenContext.mounted) {
+                showSnackBar(screenContext, 'Failed to get PGN', type: SnackBarType.error);
               }
             }
           },
@@ -213,17 +215,19 @@ class const _BroadcastGameMenu({
           label: context.l10n.gameAsGIF,
           onPressed: () async {
             try {
-              final gif = await ref.read(gameShareServiceProvider).chapterGif(roundId, gameId);
-              if (context.mounted) {
+              final gif = await screenRef
+                  .read(gameShareServiceProvider)
+                  .chapterGif(roundId, gameId);
+              if (screenContext.mounted) {
                 launchShareDialog(
-                  context,
+                  screenContext,
                   ShareParams(fileNameOverrides: ['$gameId.gif'], files: [gif]),
                 );
               }
             } catch (e) {
               debugPrint(e.toString());
-              if (context.mounted) {
-                showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+              if (screenContext.mounted) {
+                showSnackBar(screenContext, 'Failed to get GIF', type: SnackBarType.error);
               }
             }
           },

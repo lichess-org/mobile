@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
@@ -117,7 +118,11 @@ class const BroadcastPlayerResultsScreen({
 
     final playerResults = asyncData.value?.$1;
     final fideId = playerResults?.playerWithOverallResult.player.fideId;
-    final isFollowing = playerResults?.isFollowing;
+    // Kept alive by the screen: the app bar button is rebuilt when its pinned copy is (see
+    // [appBarActionRef]).
+    final isFollowing = fideId != null
+        ? ref.watch(_followingOverrideProvider(fideId)) ?? playerResults?.isFollowing
+        : null;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -159,40 +164,36 @@ class const BroadcastPlayerResultsScreen({
 ///
 /// The toggled value is kept locally so the button reacts immediately, without refetching the
 /// player. It is reverted if the request fails.
+/// The follow status of a player set from the app bar, until the screen is closed.
+final _followingOverrideProvider = StateProvider.autoDispose.family<bool?, FideId>(
+  (ref, _) => null,
+);
+
 class const _FollowPlayerButton({required final FideId fideId, required final bool isFollowing})
-    extends ConsumerStatefulWidget {
+    extends ConsumerWidget {
   @override
-  ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
-}
-
-class _FollowPlayerButtonState() extends ConsumerState<_FollowPlayerButton> {
-  bool? _isFollowing;
-
-  bool get _value => _isFollowing ?? widget.isFollowing;
-
-  Future<void> _toggle() async {
-    final newValue = !_value;
-    setState(() {
-      _isFollowing = newValue;
-    });
-
-    try {
-      await ref.read(broadcastRepositoryProvider).setFollowingPlayer(widget.fideId, newValue);
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _isFollowing = !newValue;
-      });
-      showSnackBar(context, 'Could not update the follow status', type: SnackBarType.error);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     return SemanticIconButton(
-      icon: Icon(_value ? Icons.star : Icons.star_border),
-      semanticsLabel: _value ? context.l10n.unfollow : context.l10n.follow,
-      onPressed: _toggle,
+      icon: Icon(isFollowing ? Icons.star : Icons.star_border),
+      semanticsLabel: isFollowing ? context.l10n.unfollow : context.l10n.follow,
+      onPressed: () async {
+        final newValue = !isFollowing;
+        final override = screenRef.read(_followingOverrideProvider(fideId).notifier);
+        override.state = newValue;
+        try {
+          await screenRef.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
+        } catch (_) {
+          if (!screenContext.mounted) return;
+          override.state = !newValue;
+          showSnackBar(
+            screenContext,
+            'Could not update the follow status',
+            type: SnackBarType.error,
+          );
+        }
+      },
     );
   }
 }

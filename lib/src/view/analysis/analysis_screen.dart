@@ -555,6 +555,8 @@ class const _BottomBar({
 class const _AnalysisMenu({required final AnalysisOptions options}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final screenContext = appBarActionContext(context);
+    final screenRef = appBarActionRef(context, ref);
     final analysisState = ref.watch(analysisControllerProvider(options)).value;
     if (analysisState == null) return const SizedBox.shrink();
 
@@ -573,7 +575,7 @@ class const _AnalysisMenu({required final AnalysisOptions options}) extends Cons
                 ? context.l10n.mobileRemoveBookmark
                 : context.l10n.bookmarkThisGame,
             onPressed: () =>
-                ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
+                screenRef.read(analysisControllerProvider(options).notifier).toggleBookmark(),
           ),
         if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
           ContextMenuAction(
@@ -581,7 +583,7 @@ class const _AnalysisMenu({required final AnalysisOptions options}) extends Cons
                 ? Icons.ios_share_outlined
                 : Icons.share_outlined,
             label: context.l10n.studyShareAndExport,
-            onPressed: () => _showShareMenu(context, ref),
+            onPressed: () => _showShareMenu(screenContext, screenRef),
           ),
       ],
     );
