@@ -276,6 +276,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePreviousPage => 'السابق';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'هل تريد إنهاء هذه الجولة؟';
 
   @override

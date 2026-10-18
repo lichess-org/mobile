@@ -276,6 +276,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobilePreviousPage => 'Előző';
 
   @override
+  String get mobilePuzzleHistorySubtitle => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Befejezed ezt a menetet?';
 
   @override
