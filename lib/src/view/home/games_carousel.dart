@@ -237,6 +237,7 @@ class _BoardCarouselItem extends ConsumerWidget {
                     topRight: Radius.circular(10.0),
                   ),
                   pieceAssets: boardPrefs.pieceSet.assets,
+                  enable3dAssets:boardPrefs.enable3dAssets,
                   colorScheme: isRealTimeGame
                       ? realTimeColors(context)
                       : boardPrefs.boardTheme.colors,
