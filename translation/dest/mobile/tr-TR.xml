@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ana sayfa</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Eğer bir hesap %1$s ile eşleşirse, o hesaba %2$s karakter uzunluğunda bir kod gönderilecektir. Gelen kutunuzu kontrol edin ve aşağıya kodu girin.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Bu kod geçersiz veya süresi dolmuş.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Canlı yayıncılar</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Yerel veritabanı boyutu</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Bırakınca hamle yap</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Bir taşı dokunarak hareket ettirirken, parmağınızı kaldırdığınızda hamle gerçekleştirilir; böylece parmağınızı kaydırarak hedef kareyi değiştirebilirsiniz.</string>

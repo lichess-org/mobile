@@ -47,7 +47,6 @@
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hallo</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startscherm</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Deze code is ongeldig of is verlopen.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Grootte van lokale databank</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Zetten bij loslaten</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Bij tikken om te zetten, wordt de zet gedaan als je vinger loslaat, zodat je van bestemmingsvakje kan wisselen.</string>

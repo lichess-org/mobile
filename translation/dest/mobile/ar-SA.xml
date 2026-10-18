@@ -49,7 +49,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الرئيسية</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">إذا كان هناك حساب يطابق %1$s، فقد أُرسل إليه رمز مكوّن من %2$s أحرف. تحقّق من صندوق الوارد وأدخل الرمز أدناه.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">هذا الرمز غير صالح أو انتهت صلاحيته.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">البثوث المباشرة</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">حجم قاعدة البيانات المحلية</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">تنفيذ النقلة عند الإفلات</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">عند تحريك قطعة بالنقر، تُنفَّذ النقلة عند رفع إصبعك، مما يتيح لك تحريك إصبعك لتغيير مربع الوصول.</string>

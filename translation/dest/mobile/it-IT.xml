@@ -24,7 +24,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Buonasera</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Buona mossa, ma c\'è di meglio</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamer in diretta</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Devi aver effettuato l\'accesso per visualizzare questa pagina.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Puzzle offline</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nuova partita</string>

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">സമനില സ്വീകരിക്കണോ?</string>
   <string name="account" comment="The account screen title.">അക്കൌണ്ട്</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">അക്കൗണ്ടു മുൻഗണനകൾ</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ഈ മുൻഗണനകൾ നിങ്ങളുടെ Lichess അക്കൗണ്ടിൽ പ്രയോഗിക്കുകയും എല്ലാ ഉപകരണങ്ങളിലും ഉപയോഗിക്കുകയും ചെയ്യും.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">പഠിക്കാൻ ചേർക്കുക</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാ കളികൾ</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">തിരിച്ചെടുക്കലുകളും സൂചനകളും അനുവദിക്കുക</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">താങ്ങൾക്ക് ഉറപ്പാണോ?</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">കള ക്രമീകരണങ്ങൾ</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">തിരിച്ചെടുക്കൽ നിർദേശം കളയുക</string>
@@ -18,7 +22,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">നമസ്കാരം</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">നല്ല നീക്കം എന്നാൽ ഇതിനെക്കാളും നല്ലൊരു നീക്കമുണ്ടു്</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ആമുഖം</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">തൽസമയ പ്രവാഹക്കാർ</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">ഈ താളിനു് കാണുകാൻ താങ്ങൾ പ്രവേശപെട്ടിരിക്കണം.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">പുതിയ കളി</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ഫലങ്ങളൊന്നുമില്ല</string>
