@@ -429,7 +429,7 @@
   <string name="reconnecting">重新连接中</string>
   <string name="noNetwork">离线</string>
   <plurals name="nbFriendsOnline">
-    <item quantity="other">有 %s 位好友在线</item>
+    <item quantity="other">%s 好友在线</item>
   </plurals>
   <string name="friendsOnlineAndPlaying">在线好友：%1$s
 在弈好友：%2$s</string>
