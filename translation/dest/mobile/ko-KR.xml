@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">홈</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">만약 %1$s 주소와 일치하는 계정이 있다면, 이메일로 길이 %2$s의 문자열 코드가 보내졌습니다. 수신함을 확인하고 아래에 코드를 입력하세요.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">유효하지 않거나 만료된 코드입니다.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">로컬 데이터베이스 크기</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">손가락을 뗄 때 수 두기</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">수를 탭해서 둘 때, 손가락을 움직여서 도착 지점을 바꿀 수 있도록 손가락을 뗄 때 수를 둡니다.</string>

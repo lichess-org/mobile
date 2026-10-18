@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ホーム</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">アカウントが %1$s と一致していれば %2$s 文字のコードが送られています。受信箱を確認し、以下にコードを入力してください。</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">コードが無効か期限切れです。</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ライブ配信者</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">ローカルデータベース容量</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">指を離すと手が確定</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">このページを見るにはログインが必要です。</string>

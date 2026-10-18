@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Start</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Jeśli konto pasuje do %1$s, kod %2$s został do niego wysłany. Sprawdź swoją skrzynkę odbiorczą i wprowadź kod poniżej.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Ten kod jest nieprawidłowy lub wygasł.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Aktywni streamerzy</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Rozmiar lokalnej bazy danych</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Rusz po uniesieniu</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Podczas poruszania kawałkiem przez stuknięcie, ruch wykonywany jest po podniesieniu palca, pozwalając przesuwać palec, aby zmienić docelowe pole.</string>

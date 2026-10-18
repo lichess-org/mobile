@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Start</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Falls ein Benutzerkonto mit %1$s übereinstimmt, wurde ein %2$s Zeichencode dahin gesendet. Überprüfe deinen Posteingang und gib den Code unten ein.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Dieser Code ist ungültig oder abgelaufen.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Lokale Datenbankgröße</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Zug bei Loslassen</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Beim Ziehen einer Figur durch Loslassen der Figur wird der Zug ausgeführt, wenn du den Finger hebst, während du durch Ziehen das Zielfeld ändern kannst.</string>

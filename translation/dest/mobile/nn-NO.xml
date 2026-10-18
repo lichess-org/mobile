@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startside</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dersom ein konto samsvarar med %1$s, vart det sendt ein %2$s teiknkode til den. Sjekk innboksen og skriv inn koden nedanfor.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Denne koden er ugyldig eller er utløpt.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Direkte strøymarar</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Lokal databasestorleik</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Trekk ved slepp</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Når du trykkjer på ei brikke og held fingeren på den kan du skyve brikka for å endre målfeltet. Trekket vert då utført når du lyfter fingeren frå brikka.</string>

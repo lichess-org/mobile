@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Si una cuenta coincide con %1$s, se te envió un código de %2$s caracteres. Verifica tu bandeja de entrada e ingresa el siguiente código.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Este código no es válido o ha caducado.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en vivo</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño de base de datos local</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mover al soltar</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Al mover una pieza al toque, el movimiento se realiza al levantar el dedo, permitiéndote deslizar para cambiar la casilla de destino.</string>

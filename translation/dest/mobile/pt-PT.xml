@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Aceitar empate?</string>
   <string name="account" comment="The account screen title.">Conta</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Preferências da conta</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Estas preferências são aplicadas à tua conta Lichess e serão usadas em todos os dispositivos.</string>
@@ -22,7 +23,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Boa noite</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Boa jogada, mas há melhor</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Início</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers em direto</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Tens de iniciar sessão para visualizar esta página.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Problemas offline</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Novo jogo</string>
