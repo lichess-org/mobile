@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassModalSheetScaffold, GlassSlider, GlassSwitch;
+    show GlassModalSheetScaffold, GlassMorphTrigger, GlassSlider, GlassSwitch;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_helpers.dart';
@@ -47,8 +47,9 @@ void main() {
 
     final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
     expect(find.text('Row'), findsOneWidget);
-    // On iOS 26, a liquid glass modal sheet.
-    expect(find.byType(GlassModalSheetScaffold), isIOS ? findsOneWidget : findsNothing);
+    // On iOS, a Material sheet with a glass card: only a sheet that morphs is a glass modal sheet.
+    expect(find.byType(GlassBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
+    expect(find.byType(GlassModalSheetScaffold), findsNothing);
 
     // On the glass sheet, the section card is translucent.
     final cardMaterial = tester.widget<Material>(
@@ -63,17 +64,48 @@ void main() {
     expect(find.byType(Slider), isIOS ? findsNothing : findsOneWidget);
   });
 
-  testWidgets('glass sheets have the same space above their content', (tester) async {
+  testWidgets('a glass sheet that morphs out of its trigger is a glass modal sheet', (
+    tester,
+  ) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: Scaffold(
+        body: Center(
+          child: GlassMorphTrigger(
+            builder: (context, anchor) => ElevatedButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                glass: true,
+                morphFrom: anchor,
+                builder: (_) => const BottomSheetScrollableContainer(children: [Text('Content')]),
+              ),
+              child: const Text('Show'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpWidget(app);
+    await tester.tap(find.text('Show'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Content'), findsOneWidget);
+    expect(find.byType(GlassModalSheetScaffold), findsOneWidget);
+    expect(find.byType(GlassBottomSheetFrame), findsNothing);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('glass modal sheets have the same space above their content', (tester) async {
     Future<double> contentTop(EdgeInsetsGeometry padding) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: Scaffold(
-          body: Builder(
-            builder: (context) => Center(
-              child: ElevatedButton(
+          body: Center(
+            child: GlassMorphTrigger(
+              builder: (context, anchor) => ElevatedButton(
                 onPressed: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   glass: true,
+                  morphFrom: anchor,
                   builder: (_) => BottomSheetScrollableContainer(
                     padding: padding,
                     children: const [Text('Content')],

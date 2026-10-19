@@ -34,9 +34,9 @@ const kGlassBottomSheetMinHeightFraction = 0.45;
 /// then in a [GlassSheetScope], on a glass background, where [ListSection]s get translucent section
 /// cards, and setting switches and [NonLinearSlider]s become glass controls.
 ///
-/// On iOS 26 a [glass] sheet is a [GlassModalSheet] at half height, which morphs out of
-/// [morphFrom] when given (the anchor of a [SheetIconButton] or a [SheetFloatingActionButton]).
-/// Before iOS 26 it is in a [GlassBottomSheetFrame].
+/// A [glass] sheet is in a [GlassBottomSheetFrame], a Material modal bottom sheet that opens like
+/// the opaque ones. On iOS 26, one that morphs out of [morphFrom] (the anchor of a
+/// [SheetIconButton]) is a [GlassModalSheet] at half height instead: the morph only exists for it.
 ///
 /// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), its
 /// minimum height is [kGlassBottomSheetMinHeightFraction] of the screen height, replacing the
@@ -60,7 +60,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
   bool useSafeArea = false,
   BoxConstraints? constraints,
 }) {
-  if (glass && useLiquidGlass(context)) {
+  if (glass && morphFrom != null && useLiquidGlass(context)) {
     return _showGlassModalSheet(
       context: context,
       detents: const {GlassSheetDetent.medium},
@@ -337,12 +337,7 @@ Future<T?> _showGlassModalSheet<T>({
     showDragIndicator: detents.length > 1,
     // The package's sheet glass is nearly clear: the glass of the other modals, more opaque in light
     // mode, where a sheet is often over a board.
-    settings: glassModalSettings(
-      context,
-      tintOpacity: Theme.of(context).brightness == Brightness.light
-          ? _kLightGlassSheetTintOpacity
-          : _kGlassSheetTintOpacity,
-    ),
+    settings: glassModalSettings(context, tintOpacity: _glassSheetTintOpacity(context)),
     expandedColor: opaqueModalColor(context),
     // The corners of the other sheets: concentric with the screen corners, inset at half height,
     // edge to edge at full height.
@@ -360,10 +355,16 @@ Future<T?> _showGlassModalSheet<T>({
   );
 }
 
-/// The tint opacity of a [GlassModalSheet] in dark mode: the other modals' ([glassModalSettings]).
+/// The tint opacity of the glass sheets: the other modals' glass, more opaque in light mode.
+double _glassSheetTintOpacity(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? _kLightGlassSheetTintOpacity
+    : _kGlassSheetTintOpacity;
+
+/// The tint opacity of a glass sheet in dark mode: the other modals' ([glassModalSettings]).
 const _kGlassSheetTintOpacity = 0.65;
 
-/// The tint opacity of a [GlassModalSheet] in light mode, higher than the other modals', to keep
+/// The tint opacity of a glass sheet in light mode, higher than the other modals', to keep
 /// the content readable over a board.
 const _kLightGlassSheetTintOpacity = 0.8;
 
@@ -479,8 +480,8 @@ double _screenCornerRadius(BuildContext context) {
   return size.longestSide >= 900 ? 54.0 : 46.0;
 }
 
-/// The iOS frame of a glass bottom sheet ([showAdaptiveBottomSheet] with `glass`): a glass card
-/// inset from the screen edges.
+/// The iOS frame of a glass bottom sheet ([showAdaptiveBottomSheet] with `glass`, unless it
+/// morphs): a glass card inset from the screen edges, with the glass of the [GlassModalSheet]s.
 ///
 /// Before iOS 26 ([useLiquidGlass]), the card is opaque, and so is its content: it is not in a
 /// [GlassSheetScope].
@@ -497,6 +498,7 @@ class const GlassBottomSheetFrame({required final Widget child, super.key})
       padding: const EdgeInsets.all(_kSheetMargin),
       child: GlassModalCard(
         borderRadius: _sheetCornerRadius(context),
+        tintOpacity: _glassSheetTintOpacity(context),
         // The card ends just above the home indicator: the content needs no bottom safe area.
         child: MediaQuery.removePadding(
           context: context,

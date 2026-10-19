@@ -19,8 +19,6 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
         GlassBarItemBackground,
         GlassButton,
         GlassContainer,
-        GlassMorphAnchor,
-        GlassMorphTrigger,
         GlassPinnedBarChrome,
         GlassScaffold,
         GlassScrollEdgeEffect,
@@ -1099,38 +1097,6 @@ class const PlatformFloatingActionButton({
       tooltip: tooltip,
       icon: icon,
       label: Text(label),
-    );
-  }
-}
-
-/// A [PlatformFloatingActionButton] that presents a sheet, which morphs out of the button on iOS 26.
-///
-/// [onPressed] gets the anchor to present the sheet with (`showAdaptiveBottomSheet`'s
-/// `morphFrom`), null before iOS 26 ([useLiquidGlass]) and on Android.
-class const SheetFloatingActionButton({
-  required final String label,
-  required final void Function(GlassMorphAnchor? anchor) onPressed,
-  final Widget? icon,
-  final String? tooltip,
-  super.key,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    if (!useLiquidGlass(context)) {
-      return PlatformFloatingActionButton(
-        label: label,
-        onPressed: () => onPressed(null),
-        icon: icon,
-        tooltip: tooltip,
-      );
-    }
-    return GlassMorphTrigger(
-      builder: (context, anchor) => PlatformFloatingActionButton(
-        label: label,
-        onPressed: () => onPressed(anchor),
-        icon: icon,
-        tooltip: tooltip,
-      ),
     );
   }
 }
