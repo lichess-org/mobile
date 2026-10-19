@@ -24,13 +24,13 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -390,57 +390,52 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 }
 
-Future<void> _stormInfoDialogBuilder(BuildContext context) {
-  return showAdaptiveDialog(
+Future<void> _showStormInfo(BuildContext context) {
+  return showAdaptiveFullHeightBottomSheet<void>(
     context: context,
-    builder: (context) {
-      return PlatformAlertDialog(
-        title: Text(context.l10n.aboutX('Puzzle Storm')),
-        content: const SingleChildScrollView(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
-                TextSpan(
-                  text: 'Each correct ',
-                  children: [
-                    TextSpan(
-                      text: 'move',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
-                    ),
-                  ],
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Bonus values:\n'),
-                TextSpan(text: '• 5 moves: +3s\n'),
-                TextSpan(text: '• 12 moves: +5s\n'),
-                TextSpan(text: '• 20 moves: +7s\n'),
-                TextSpan(text: '• 30 moves: +10s\n'),
-                TextSpan(text: '• Then +10s every 10 other moves.\n'),
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
-                ),
-              ],
-            ),
+    title: Text(context.l10n.aboutX('Puzzle Storm')),
+    builder: (context, scrollController) => ListView(
+      controller: scrollController,
+      padding: Styles.bodyPadding.add(
+        EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+      ),
+      children: const [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(
+                text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+              ),
+              TextSpan(text: '\n\n'),
+              TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
+              TextSpan(
+                text: 'Each correct ',
+                children: [
+                  TextSpan(
+                    text: 'move',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                  ),
+                ],
+              ),
+              TextSpan(text: '\n\n'),
+              TextSpan(text: 'Bonus values:\n'),
+              TextSpan(text: '• 5 moves: +3s\n'),
+              TextSpan(text: '• 12 moves: +5s\n'),
+              TextSpan(text: '• 20 moves: +7s\n'),
+              TextSpan(text: '• 30 moves: +10s\n'),
+              TextSpan(text: '• Then +10s every 10 other moves.\n'),
+              TextSpan(text: '\n'),
+              TextSpan(
+                text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+              ),
+            ],
           ),
         ),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
-        ],
-      );
-    },
+      ],
+    ),
   );
 }
 
@@ -688,7 +683,7 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Storm'),
             showLabel: true,
-            onTap: () => _stormInfoDialogBuilder(context),
+            onTap: () => _showStormInfo(context),
           ),
         BottomBarButton(
           icon: Icons.delete,

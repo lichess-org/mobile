@@ -26,11 +26,11 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -472,7 +472,7 @@ class const _BottomBar({
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Streak'),
             showLabel: true,
-            onTap: () => _streakInfoDialogBuilder(context),
+            onTap: () => _showStreakInfo(context),
           ),
         if (!streak.finished)
           BottomBarButton(
@@ -545,18 +545,16 @@ class const _BottomBar({
     );
   }
 
-  Future<void> _streakInfoDialogBuilder(BuildContext context) {
-    return showAdaptiveDialog(
+  Future<void> _showStreakInfo(BuildContext context) {
+    return showAdaptiveFullHeightBottomSheet<void>(
       context: context,
-      builder: (context) => PlatformAlertDialog(
-        title: Text(context.l10n.aboutX('Puzzle Streak')),
-        content: Text(context.l10n.puzzleStreakDescription),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
-        ],
+      title: Text(context.l10n.aboutX('Puzzle Streak')),
+      builder: (context, scrollController) => ListView(
+        controller: scrollController,
+        padding: Styles.bodyPadding.add(
+          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+        ),
+        children: [Text(context.l10n.puzzleStreakDescription)],
       ),
     );
   }

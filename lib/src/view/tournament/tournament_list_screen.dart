@@ -86,7 +86,7 @@ class _TournamentListScreenState()
             IconButton(
               icon: const Icon(Icons.help_outline),
               tooltip: context.l10n.tournamentFAQ,
-              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
+              onPressed: () => showTournamentFaqSheet(context),
             ),
           ],
           bottom: PlatformTabBar(

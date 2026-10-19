@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -191,7 +190,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 BottomBarButton(
                   icon: Icons.info_outline,
                   label: context.l10n.aboutX('Coordinate Training'),
-                  onTap: () => _coordinateTrainingInfoDialogBuilder(context),
+                  onTap: () => _showCoordinateTrainingInfo(context),
                 ),
               ],
             ),
@@ -437,40 +436,34 @@ Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
   );
 }
 
-Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
-  return showAdaptiveDialog(
+Future<void> _showCoordinateTrainingInfo(BuildContext context) {
+  return showAdaptiveFullHeightBottomSheet<void>(
     context: context,
-    builder: (context) {
-      return PlatformAlertDialog(
-        title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
-        content: SingleChildScrollView(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
-                TextSpan(
-                  text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
-                ),
-                const TextSpan(text: '\n'),
-                TextSpan(
-                  text: '${context.l10n.coordinatesFindSquare}\n',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
-                TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
-              ],
-            ),
+    title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
+    builder: (context, scrollController) => ListView(
+      controller: scrollController,
+      padding: Styles.bodyPadding.add(
+        EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+      ),
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
+              TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
+              TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
+              TextSpan(text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n'),
+              const TextSpan(text: '\n'),
+              TextSpan(
+                text: '${context.l10n.coordinatesFindSquare}\n',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
+              TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
+            ],
           ),
         ),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
-        ],
-      );
-    },
+      ],
+    ),
   );
 }
