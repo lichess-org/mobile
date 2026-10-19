@@ -907,7 +907,8 @@ class const PlatformAppBar({
                 data: IconButtonThemeData(
                   style: IconButton.styleFrom(foregroundColor: foregroundColor),
                 ),
-                child: action,
+                // Centered in the capsule, like the other items, whatever its height (e.g. text).
+                child: Center(child: action),
               ),
             ),
           ),
