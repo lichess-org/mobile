@@ -29,9 +29,9 @@ dependencies:
   dynamic_system_colors: ^1.9.0
   fast_immutable_collections: ^12.0.0
   file_picker: ^13.1.0
-  firebase_core: ^4.13.0
-  firebase_crashlytics: ^5.2.7
-  firebase_messaging: ^16.5.0
+  firebase_core: ^5.0.0
+  firebase_crashlytics: ^6.0.0
+  firebase_messaging: ^17.0.0
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
