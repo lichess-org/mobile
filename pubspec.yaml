@@ -69,7 +69,7 @@ dependencies:
   package_info_plus: ^10.2.1
   path: ^1.9.1
   path_provider: ^2.1.6
-  popover: ^0.4.0
+  popover: ^0.5.1
   pub_semver: ^2.2.0
   qr_flutter: ^4.1.0
   quick_actions: ^1.1.0
