@@ -15,11 +15,10 @@ import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -61,43 +60,22 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     final sort = ref.watch(
       relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
     );
-    var selectedSort = sort;
-
-    final sortButton = SheetIconButton(
+    final sortButton = ContextMenuIconButton(
       icon: const Icon(Icons.sort),
       semanticsLabel: context.l10n.mobileSortFriends,
-      onPressed: (anchor) => showAdaptiveBottomSheet<void>(
-        context: context,
-        glass: true,
-        morphFrom: anchor,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
-        builder: (_) => StatefulBuilder(
-          builder: (context, setLocalState) {
-            return BottomSheetScrollableContainer(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                Filter<FriendListSort>(
-                  filterName: 'Sort by',
-                  filterType: FilterType.singleChoice,
-                  choices: FriendListSort.values,
-                  choiceSelected: (choice) => selectedSort == choice,
-                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                  onSelected: (value, selected) {
-                    if (_tabController.index == 0) {
-                      _tabController.animateTo(1, duration: kTabScrollDuration);
-                    }
-                    setLocalState(() {
-                      selectedSort = value;
-                    });
-                    ref.read(relationPreferencesProvider.notifier).setFriendSort(value);
-                  },
-                ),
-              ],
-            );
-          },
-        ),
-      ),
+      actions: [
+        for (final choice in FriendListSort.values)
+          ContextMenuAction(
+            label: choice.l10n(context.l10n),
+            selected: choice == sort,
+            onPressed: () {
+              if (_tabController.index == 0) {
+                _tabController.animateTo(1, duration: kTabScrollDuration);
+              }
+              ref.read(relationPreferencesProvider.notifier).setFriendSort(choice);
+            },
+          ),
+      ],
     );
 
     return PlatformScaffold(
