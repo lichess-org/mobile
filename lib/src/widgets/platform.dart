@@ -235,7 +235,10 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
 
 /// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS
 /// navigation bar buttons (the package's light glass is nearly clear).
-const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x80FFFFFF));
+///
+/// The menus of the pinned bar buttons get the glass of the buttons (the package has no setting of
+/// their own): opaque enough to read them over the content.
+const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x99FFFFFF));
 
 /// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
 /// laid out inside it (the search field below a large title), so that they look the same.
