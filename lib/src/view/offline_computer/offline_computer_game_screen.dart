@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -102,12 +103,14 @@ class const OfflineComputerGameScreen({
       appBar: PlatformAppBar(
         title: AppBarTitleText(title),
         actions: [
-          IconButton(
+          SheetIconButton(
             icon: const Icon(Icons.settings),
-            tooltip: context.l10n.settingsSettings,
-            onPressed: () {
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: (anchor) {
               showAdaptiveBottomSheet<void>(
                 context: context,
+                glass: true,
+                morphFrom: anchor,
                 builder: (_) => const _OfflineComputerGameSettingsSheet(),
               );
             },

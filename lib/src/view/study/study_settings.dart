@@ -54,6 +54,7 @@ class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidg
                 title: Text(context.l10n.openingExplorer),
                 onTap: () => showAdaptiveBottomSheet<void>(
                   context: context,
+                  glass: true,
                   isScrollControlled: true,
                   showDragHandle: true,
                   builder: (_) => const OpeningExplorerSettings(),

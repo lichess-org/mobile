@@ -295,6 +295,7 @@ class _ClockTileState() extends ConsumerState<ClockTile> with SingleTickerProvid
                                 ? null
                                 : () => showAdaptiveBottomSheet<void>(
                                     context: context,
+                                    glass: true,
                                     builder: (BuildContext context) => CustomClockSettings(
                                       clockType: clockState.options.type,
                                       clock: playerType == ClockSide.top

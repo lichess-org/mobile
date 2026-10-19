@@ -313,6 +313,7 @@ class _ConfigureOverTheBoardGameSheetState()
 void showConfigureDisplaySettings(BuildContext context) {
   showAdaptiveBottomSheet<void>(
     context: context,
+    glass: true,
     showDragHandle: true,
     builder: (BuildContext context) {
       return const OverTheBoardDisplaySettings();

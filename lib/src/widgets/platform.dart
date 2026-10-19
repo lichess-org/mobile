@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
+import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton, SheetIconButton;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
     show ContextMenuIconButton, glassMenuItems, kGlassMenuWidth;
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -743,8 +743,8 @@ class const PlatformAppBar({
   final double? titleSpacing,
   final TextStyle? titleTextStyle,
 
-  /// The buttons at the end of the bar: [IconButton]s, [SemanticIconButton]s and
-  /// [ContextMenuIconButton]s created in the screen's build method, whose callbacks use the
+  /// The buttons at the end of the bar: [IconButton]s, [SemanticIconButton]s, [SheetIconButton]s
+  /// and [ContextMenuIconButton]s created in the screen's build method, whose callbacks use the
   /// screen's context and ref.
   ///
   /// Use [actionsBuilder] instead when a button watches providers that the screen doesn't watch
@@ -871,9 +871,9 @@ class const PlatformAppBar({
           data: IconThemeData(color: color ?? foregroundColor),
           child: icon,
         );
-        // Icon buttons and context menu buttons become the shell's own items, whose glyphs
-        // morph and whose capsule morphs into the menu. Anything else is a custom item, which
-        // cross-fades.
+        // Icon buttons, sheet buttons and context menu buttons become the shell's own items, whose
+        // glyphs morph and whose capsule morphs into the sheet or the menu. Anything else is a
+        // custom item, which cross-fades.
         GlassBarItem barItem(Widget action) => switch (action) {
           IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
           SemanticIconButton(
@@ -887,6 +887,13 @@ class const PlatformAppBar({
             enabled: onPressed != null,
             label: tooltip,
           ),
+          SheetIconButton(:final icon, :final onPressed, :final semanticsLabel) =>
+            GlassBarItem.sheet(
+              icon: glyph(icon, null),
+              onPresent: onPressed ?? (_) {},
+              enabled: onPressed != null,
+              label: semanticsLabel,
+            ),
           ContextMenuIconButton(:final icon, :final color, :final semanticsLabel, :final actions) =>
             GlassBarItem.menu(
               icon: glyph(icon, color),

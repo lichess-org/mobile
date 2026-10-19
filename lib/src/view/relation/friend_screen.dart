@@ -62,11 +62,13 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     );
     var selectedSort = sort;
 
-    final sortButton = SemanticIconButton(
+    final sortButton = SheetIconButton(
       icon: const Icon(Icons.sort),
       semanticsLabel: context.l10n.mobileSortFriends,
-      onPressed: () => showAdaptiveBottomSheet<void>(
+      onPressed: (anchor) => showAdaptiveBottomSheet<void>(
         context: context,
+        glass: true,
+        morphFrom: anchor,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
         builder: (_) => StatefulBuilder(

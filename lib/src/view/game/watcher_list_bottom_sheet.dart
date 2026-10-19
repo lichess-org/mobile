@@ -21,7 +21,7 @@ class const WatcherListBottomSheet({
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 16).add(MediaQuery.paddingOf(context)),
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),

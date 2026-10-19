@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassContainer, GlassNavigationShell;
+    show GlassContainer, GlassMorphAnchor, GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_provider_scope.dart';
@@ -287,6 +288,34 @@ void main() {
       expect(backs, 1);
       // Its own action, instead of popping.
       expect(find.text('Title'), findsWidgets);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('gives a pinned sheet button the anchor to morph a sheet from', (tester) async {
+      GlassMorphAnchor? anchor;
+      var presented = false;
+      await pushScreen(
+        tester,
+        PlatformAppBar(
+          title: const Text('Title'),
+          actions: [
+            SheetIconButton(
+              icon: const Icon(Icons.tune),
+              semanticsLabel: 'Settings',
+              onPressed: (a) {
+                anchor = a;
+                presented = true;
+              },
+            ),
+          ],
+        ),
+      );
+
+      // A shell item, not the button itself.
+      expect(find.byType(IconButton), findsNothing);
+      await tester.tap(find.byIcon(Icons.tune).hitTestable());
+      await tester.pump();
+      expect(presented, isTrue);
+      expect(anchor, isNotNull);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
     testWidgets('does not pin the actions of a tab root', (tester) async {

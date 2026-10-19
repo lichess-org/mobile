@@ -51,12 +51,14 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
     );
-    final filterButton = SemanticIconButton(
+    final filterButton = SheetIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',
-      onPressed: () => showAdaptiveBottomSheet<void>(
+      onPressed: (anchor) => showAdaptiveBottomSheet<void>(
         context: context,
+        glass: true,
+        morphFrom: anchor,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
         builder: (_) => StatefulBuilder(

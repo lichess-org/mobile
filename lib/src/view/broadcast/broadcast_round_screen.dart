@@ -258,6 +258,7 @@ class _BroadcastRoundScreenState()
                   onPressed: () {
                     showAdaptiveBottomSheet<void>(
                       context: context,
+                      glass: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => const _BroadcastSettingsBottomSheet(),
@@ -288,6 +289,7 @@ class _BroadcastRoundScreenState()
 
                     showAdaptiveBottomSheet<void>(
                       context: context,
+                      glass: true,
                       isScrollControlled: true,
                       constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
                       builder: (_) => _BroadcastGamesFilterBottomSheet(

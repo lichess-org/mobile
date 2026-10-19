@@ -546,26 +546,35 @@ possible until then. Rules:
   background image or color theme, glass controls use `tintedGlassSettings` (`platform.dart`).
   `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
   theme.
-- **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands uses
-  `showAdaptiveDraggableBottomSheet` (a `DraggableScrollableSheet`, always with a drag handle; on
-  iOS the same inset card, but opaque and flat: `OpaqueBottomSheetFrame`); an information sheet
-  whose content may be long uses `showAdaptiveFullHeightBottomSheet` (always at full height, a
-  close button and a title in its header, scrollable content; on iOS an opaque, flat edge to edge
-  card, like an iOS 26 sheet at its large detent, e.g. the broadcast overview). The content of
-  these two opaque sheets is opaque too (no glass controls). Every other sheet uses
-  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS a Material modal sheet whose
-  content sits in an inset card. Glass is never for content, in a sheet as on a screen: the card
-  is opaque and flat (`OpaqueBottomSheetFrame`) with opaque content (settings, forms, filters,
-  details...). Only a sheet made of navigation items and actions alone (a menu) passes
-  `glass: true`: its content sits in a glass card (`GlassBottomSheetFrame`). Inside it
-  (`GlassSheetScope`), cards turn translucent, `PlatformSwitch` / `SwitchSettingTile` and
-  `NonLinearSlider` become glass controls. Filled and outlined buttons are capsules on iOS (app
-  theme). A sheet's main action is a `PlatformFilledButton` (a tinted glass capsule on a glass
-  sheet). Selectable chips use `PlatformChoiceChip` (on iOS a flat pill, a glass pill on a glass
-  sheet or with `inAppBar: true`); give their `Wrap` an iOS `runSpacing`, glass chips have no tap
-  target margin. `PlatformSegmentedControl` is likewise flat outside a glass sheet. The iOS sheet
-  doesn't expand: no drag handle, and a shared minimum height (`kGlassBottomSheetMinHeightFraction`,
-  45% of the screen) instead of the call site's. A labelled group of chips is a `Filter`
+- **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet that expands (a long
+  list) uses `showAdaptiveDraggableBottomSheet`: on iOS 26 a package `GlassModalSheet`, glass at
+  half height and opaque once expanded, like a native iOS 26 sheet, with opaque content (no glass
+  controls). An information sheet whose content may be long uses
+  `showAdaptiveFullHeightBottomSheet` (always at full height, a close button and a title in its
+  header, scrollable content; on iOS an opaque, flat edge to edge card, like an iOS 26 sheet at its
+  large detent, e.g. the broadcast overview), with opaque content. Every other sheet uses
+  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`). Glass is never for content, in a sheet
+  as on a screen: by default the iOS sheet is an opaque, flat inset card (`OpaqueBottomSheetFrame`)
+  with opaque content (forms, details, and menus that open with a details header, like the user /
+  game / study long press menus). Only a sheet of settings or filters, or a pure menu of navigation
+  items and actions, passes `glass: true`: on iOS 26 a
+  half height `GlassModalSheet` that doesn't expand, its content in a `GlassSheetScope`, where cards
+  turn translucent, `PlatformSwitch` / `SwitchSettingTile` and `NonLinearSlider` become glass
+  controls. Opened from an app bar button, that button is a `SheetIconButton`, whose `onPressed`
+  anchor goes to `morphFrom`: the sheet morphs out of the bar capsule (`GlassBarItem.sheet`). The
+  content of a `GlassModalSheet` starts at the same distance below the sheet's top edge in every
+  sheet, with or without a title, even scrolled: the sheet owns that space
+  (`BottomSheetScrollableContainer` drops the top of its padding there; don't add top padding of
+  your own). Its bottom padding (above the home indicator, the part below the screen once expanded)
+  comes through the media query: its scroll view applies it (`BottomSheetScrollableContainer` does;
+  a `ListView` with an explicit padding adds `MediaQuery.paddingOf(context)`). Every iOS sheet's corners are concentric with the screen
+  corners. Filled and outlined buttons are capsules on iOS (app theme). A sheet's main action is a
+  `PlatformFilledButton` (a tinted glass capsule on a glass sheet). Selectable chips use
+  `PlatformChoiceChip` (on iOS a flat pill, a glass pill on a glass sheet or with
+  `inAppBar: true`); give their `Wrap` an iOS `runSpacing`, glass chips have no tap target margin.
+  `PlatformSegmentedControl` is likewise flat outside a glass sheet. A sheet that doesn't expand has
+  no drag handle on iOS, and a shared height (`kGlassBottomSheetMinHeightFraction`, 45% of the
+  screen) instead of the call site's. A labelled group of chips is a `Filter`
   (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
   16pt around the content and between groups.
 - **Context menus**: a menu of actions is never a bottom sheet. From a button, use

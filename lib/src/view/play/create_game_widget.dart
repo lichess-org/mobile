@@ -62,6 +62,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                         final double screenHeight = MediaQuery.heightOf(context);
                         showAdaptiveBottomSheet<void>(
                           context: context,
+                          glass: true,
                           isScrollControlled: true,
                           constraints: BoxConstraints(
                             maxHeight: screenHeight - (screenHeight / 10),
@@ -213,6 +214,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                             ? () {
                                 showAdaptiveBottomSheet<void>(
                                   context: context,
+                                  glass: true,
                                   constraints: BoxConstraints(
                                     minHeight: MediaQuery.heightOf(context) * 0.4,
                                   ),
