@@ -77,16 +77,39 @@ void main() {
     await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
     await tester.pumpAndSettle();
 
-    expect(find.byIcon(Icons.check), findsOneWidget);
-    // After the label of the selected action.
-    expect(
-      tester.getCenter(find.byIcon(Icons.check)).dx,
-      greaterThan(tester.getCenter(find.text('One week')).dx),
-    );
-    expect(
-      tester.getCenter(find.byIcon(Icons.check)).dy,
-      moreOrLessEquals(tester.getCenter(find.text('One week')).dy, epsilon: 1.0),
-    );
+    if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+      // Before the label of each action, visible on the selected one only.
+      final checks = find.byIcon(Icons.check);
+      expect(checks, findsNWidgets(2));
+      final selectedCheck = find.byWidgetPredicate(
+        (widget) => widget is Icon && widget.icon == Icons.check && widget.color == null,
+      );
+      expect(selectedCheck, findsOneWidget);
+      expect(
+        tester.getCenter(selectedCheck).dx,
+        lessThan(tester.getTopLeft(find.text('One week')).dx),
+      );
+      expect(
+        tester.getCenter(selectedCheck).dy,
+        moreOrLessEquals(tester.getCenter(find.text('One week')).dy, epsilon: 1.0),
+      );
+      // The invisible check keeps the labels aligned.
+      expect(
+        tester.getTopLeft(find.text('One day')).dx,
+        tester.getTopLeft(find.text('One week')).dx,
+      );
+    } else {
+      expect(find.byIcon(Icons.check), findsOneWidget);
+      // After the label of the selected action.
+      expect(
+        tester.getCenter(find.byIcon(Icons.check)).dx,
+        greaterThan(tester.getCenter(find.text('One week')).dx),
+      );
+      expect(
+        tester.getCenter(find.byIcon(Icons.check)).dy,
+        moreOrLessEquals(tester.getCenter(find.text('One week')).dy, epsilon: 1.0),
+      );
+    }
   });
 
   group('ContextMenuRegion', () {

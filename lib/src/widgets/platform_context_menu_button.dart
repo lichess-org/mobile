@@ -28,16 +28,26 @@ LiquidGlassSettings? _glassMenuSettings(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null;
 
 /// The items of a liquid glass context menu, one per action.
-List<GlassMenuItem> glassMenuItems(List<ContextMenuAction> actions) => [
-  for (final action in actions)
-    GlassMenuItem(
-      title: action.label,
-      icon: action.icon != null ? Icon(action.icon) : null,
-      trailing: action.selected ? const Icon(Icons.check, size: 20.0) : null,
-      enabled: action.onPressed != null,
-      onTap: action.onPressed ?? () {},
-    ),
-];
+///
+/// In a menu of choices (one of the actions is [ContextMenuAction.selected]), the current choice
+/// has a check mark on the leading edge, like an iOS menu.
+List<GlassMenuItem> glassMenuItems(List<ContextMenuAction> actions) {
+  final isChoiceMenu = actions.any((action) => action.selected);
+  return [
+    for (final action in actions)
+      GlassMenuItem(
+        title: action.label,
+        icon: isChoiceMenu
+            ? Icon(Icons.check, color: action.selected ? null : Colors.transparent)
+            : action.icon != null
+            ? Icon(action.icon)
+            : null,
+        trailing: isChoiceMenu && action.icon != null ? Icon(action.icon, size: 20.0) : null,
+        enabled: action.onPressed != null,
+        onTap: action.onPressed ?? () {},
+      ),
+  ];
+}
 
 /// A platform agnostic context menu icon button.
 ///
@@ -193,8 +203,8 @@ class const ContextMenuAction({
   /// Default to true.
   final bool dismissOnPress = true,
 
-  /// Whether this is the current choice of a menu of choices, shown with a check mark after the
-  /// label.
+  /// Whether this is the current choice of a menu of choices, shown with a check mark: before the
+  /// label in an iOS 26 menu ([glassMenuItems]), after it in a Material menu.
   final bool selected = false,
 }) extends StatelessWidget {
   @override
