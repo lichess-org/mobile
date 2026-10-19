@@ -206,7 +206,9 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
+            leading: isRealTimePlayingGame
+                ? AppBarIndicator(child: SocketPingRatingIcon(socketUri: socketUri))
+                : null,
             title: _GameTitle(
               _StandaloneTitleVariant(id: createdGameId, lastMoveAt: widget.lastMoveAt),
               monitorSocket: isRealTimePlayingGame,
@@ -280,7 +282,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: _GameTitle(
               _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
               monitorSocket: true,
@@ -307,7 +309,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
               UserChallengeSource(:final challengeRequest) => _GameTitle(
@@ -339,7 +341,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
               UserChallengeSource(:final challengeRequest) when challengeRequest.destUser != null =>

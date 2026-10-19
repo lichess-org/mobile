@@ -78,6 +78,7 @@ class _LobbyScreenLoadingContentState() extends State<LobbyScreenLoadingContent>
           ),
         ),
         userActionsBar: BottomBar(
+          cupertinoGlass: true,
           children: [
             FutureBuilder(
               future: _cancelGameCreationFuture,
@@ -154,6 +155,7 @@ class _UserChallengeLoadingContentState() extends State<UserChallengeLoadingCont
           ),
         ),
         userActionsBar: BottomBar(
+          cupertinoGlass: true,
           children: [
             FutureBuilder(
               future: _cancelChallengeFuture,
@@ -350,6 +352,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
           ),
         ),
         BottomBar(
+          cupertinoGlass: true,
           children: [
             Builder(
               builder: (context) => BottomBarButton(
@@ -545,6 +548,7 @@ class const LoadGameError(final String errorMessage, {final bool showBottomBar =
           ),
         ),
         BottomBar(
+          cupertinoGlass: true,
           children: [
             if (showBottomBar)
               BottomBarButton(
@@ -616,6 +620,7 @@ class const ChallengeDeclinedBoard({
           ),
         ),
         BottomBar(
+          cupertinoGlass: true,
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),

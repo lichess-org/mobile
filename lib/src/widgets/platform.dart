@@ -16,6 +16,7 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassAppBar,
         GlassBarItem,
+        GlassBarItemBackground,
         GlassButton,
         GlassContainer,
         GlassPinnedBarChrome,
@@ -51,6 +52,15 @@ bool _hasLongPress(Widget button) => switch (button) {
   IconButton(:final onLongPress) || SemanticIconButton(:final onLongPress) => onLongPress != null,
   _ => false,
 };
+
+/// A non-interactive item of a [PlatformAppBar], such as a status indicator, as its leading.
+///
+/// On iOS it has no glass capsule around it, since it is not a button. Elsewhere it is [child] as
+/// is.
+class const AppBarIndicator({required final Widget child, super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => child;
+}
 
 int _iosMajorVersion() {
   // For example "Version 18.2 (Build 22C150)".
@@ -901,6 +911,10 @@ class const PlatformAppBar({
               menuWidth: kGlassMenuWidth,
               label: semanticsLabel,
             ),
+          AppBarIndicator() => GlassBarItem.custom(
+            background: GlassBarItemBackground.none,
+            child: captured(Center(child: action)),
+          ),
           _ => GlassBarItem.custom(
             child: captured(
               IconButtonTheme(
@@ -963,7 +977,10 @@ class const PlatformAppBar({
       return GlassAppBar(
         title: appBarTitle,
         centerTitle: centerTitle ?? true,
-        leading: leading != null
+        leading: leading is AppBarIndicator
+            // Only as wide as its content: GlassAppBar gives the leading slot the full bar width.
+            ? Row(mainAxisSize: .min, children: [leading!])
+            : leading != null
             ? _GlassBarCapsule(
                 height: buttonHeight,
                 glass: glass,

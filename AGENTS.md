@@ -538,7 +538,8 @@ possible until then. Rules:
   action takes callbacks instead. Why: on iOS 26 the buttons of a pushed screen are pinned above
   the navigator and morph into the next screen's ones; any other widget is a custom item, built by
   the shell out of the screen's route (wrong navigator), disposed while a sheet is shown (dead
-  ref), and it only cross-fades.
+  ref), and it only cross-fades. A leading that is not a button (e.g. the ping indicator of the
+  game screen) is wrapped in an `AppBarIndicator`: no glass capsule around it on iOS.
 - **Tab bar**: `MainTabScaffold` (`lib/src/tab_scaffold.dart`) uses `GlassTabBar` on iOS. The
   root screen of a tab has a non-sticky app bar that scrolls away with the content, with an iOS
   large title (`PlatformAppBar` styles it automatically: don't pass a `titleTextStyle`).
