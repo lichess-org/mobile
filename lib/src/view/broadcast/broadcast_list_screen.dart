@@ -57,6 +57,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
       semanticsLabel: 'Filter broadcasts',
       onPressed: (anchor) => showAdaptiveBottomSheet<void>(
         context: context,
+        useRootNavigator: true,
         glass: true,
         morphFrom: anchor,
         isScrollControlled: true,
