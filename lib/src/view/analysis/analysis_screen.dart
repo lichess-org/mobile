@@ -89,7 +89,32 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
             appBar: PlatformAppBar(
               compactButtons: true,
               title: appBarTitle,
-              actions: [_AnalysisMenu(options: widget.options)],
+              actions: [
+                ContextMenuIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  actions: [
+                    if (value.archivedGame case final archivedGame?)
+                      ContextMenuAction(
+                        icon: archivedGame.data.bookmarked == true
+                            ? Icons.bookmark_remove_outlined
+                            : Icons.bookmark_add_outlined,
+                        label: archivedGame.data.bookmarked == true
+                            ? context.l10n.mobileRemoveBookmark
+                            : context.l10n.bookmarkThisGame,
+                        onPressed: () => ref.read(ctrlProvider.notifier).toggleBookmark(),
+                      ),
+                    if (value.gameId != null || value.isComputerAnalysisAllowed)
+                      ContextMenuAction(
+                        icon: Theme.of(context).platform == TargetPlatform.iOS
+                            ? Icons.ios_share_outlined
+                            : Icons.share_outlined,
+                        label: context.l10n.studyShareAndExport,
+                        onPressed: _showShareMenu,
+                      ),
+                  ],
+                ),
+              ],
             ),
             body: _TabbedBody(
               options: widget.options,
@@ -109,6 +134,45 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
           body: Center(child: CircularProgressIndicator.adaptive()),
         );
     }
+  }
+
+  Future<void> _showShareMenu() {
+    final analysisState = ref.read(analysisControllerProvider(widget.options)).requireValue;
+    final archivedGame = analysisState.archivedGame;
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        // Share the original game from the server: URL, GIF and PGN downloads.
+        if (archivedGame != null)
+          ...makeFinishedGameShareBottomSheetActions(
+            context,
+            ref,
+            gameId: archivedGame.id,
+            orientation: analysisState.pov,
+            finished: archivedGame.finished,
+          ),
+        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
+            onPressed: () {
+              final currentState = ref
+                  .read(analysisControllerProvider(widget.options))
+                  .requireValue;
+              launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
+            },
+          ),
+        // Shares the current PGN, including local analysis and edited tags. Can be
+        // used to quickly analyze a position, so the engine must be allowed to access.
+        if (analysisState.isComputerAnalysisAllowed)
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
+            onPressed: () {
+              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: widget.options));
+            },
+          ),
+      ],
+    );
   }
 }
 
@@ -546,82 +610,6 @@ class const _BottomBar({
               ),
             ),
         ],
-      ],
-    );
-  }
-}
-
-/// App bar menu holding the game actions: bookmark, share and export.
-class const _AnalysisMenu({required final AnalysisOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    final analysisState = ref.watch(analysisControllerProvider(options)).value;
-    if (analysisState == null) return const SizedBox.shrink();
-
-    final archivedGame = analysisState.archivedGame;
-
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        if (archivedGame != null)
-          ContextMenuAction(
-            icon: archivedGame.data.bookmarked == true
-                ? Icons.bookmark_remove_outlined
-                : Icons.bookmark_add_outlined,
-            label: archivedGame.data.bookmarked == true
-                ? context.l10n.mobileRemoveBookmark
-                : context.l10n.bookmarkThisGame,
-            onPressed: () =>
-                screenRef.read(analysisControllerProvider(options).notifier).toggleBookmark(),
-          ),
-        if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
-          ContextMenuAction(
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? Icons.ios_share_outlined
-                : Icons.share_outlined,
-            label: context.l10n.studyShareAndExport,
-            onPressed: () => _showShareMenu(screenContext, screenRef),
-          ),
-      ],
-    );
-  }
-
-  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final archivedGame = analysisState.archivedGame;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        // Share the original game from the server: URL, GIF and PGN downloads.
-        if (archivedGame != null)
-          ...makeFinishedGameShareBottomSheetActions(
-            context,
-            ref,
-            gameId: archivedGame.id,
-            orientation: analysisState.pov,
-            finished: archivedGame.finished,
-          ),
-        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-            onPressed: () {
-              final currentState = ref.read(analysisControllerProvider(options)).requireValue;
-              launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
-            },
-          ),
-        // Shares the current PGN, including local analysis and edited tags. Can be
-        // used to quickly analyze a position, so the engine must be allowed to access.
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
-            },
-          ),
       ],
     );
   }

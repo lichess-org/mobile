@@ -326,7 +326,19 @@ class const _PuzzleScaffold({
               Navigator.of(context).pop();
             },
           ),
-          actions: [if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!)],
+          actions: [
+            if (initialPuzzleContext case final initialPuzzleContext?)
+              SemanticIconButton(
+                onPressed: () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  isScrollControlled: true,
+                  constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
+                  builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
+                ),
+                semanticsLabel: context.l10n.settingsSettings,
+                icon: const Icon(Icons.settings),
+              ),
+          ],
           title: _Title(angle: angle, initialPuzzleContext: initialPuzzleContext),
         ),
         body: body,
@@ -861,24 +873,6 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
 
   void _moveBackward(WidgetRef ref) {
     ref.read(puzzleControllerProvider(widget.initialPuzzleContext).notifier).userPrevious();
-  }
-}
-
-class const _PuzzleSettingsButton(final PuzzleContext initialPuzzleContext)
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final screenContext = appBarActionContext(context);
-    return SemanticIconButton(
-      onPressed: () => showAdaptiveBottomSheet<void>(
-        context: screenContext,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
-        builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
-      ),
-      semanticsLabel: context.l10n.settingsSettings,
-      icon: const Icon(Icons.settings),
-    );
   }
 }
 

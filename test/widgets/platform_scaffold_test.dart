@@ -317,7 +317,9 @@ void main() {
       expect(find.byType(IconButton), findsOneWidget);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
-    testWidgets('a pinned action navigates on the navigator of its screen', (tester) async {
+    testWidgets('a pinned action from actionsBuilder navigates on the navigator of its screen', (
+      tester,
+    ) async {
       final tabNavigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(
         await makeTestProviderScopeApp(
@@ -327,9 +329,19 @@ void main() {
             child: Navigator(
               key: tabNavigatorKey,
               onGenerateRoute: (_) => MaterialPageRoute<void>(
-                builder: (_) => const PlatformScaffold(
-                  appBar: PlatformAppBar(title: Text('Title'), actions: [_PushButton()]),
-                  body: SizedBox.shrink(),
+                builder: (_) => PlatformScaffold(
+                  appBar: PlatformAppBar(
+                    title: const Text('Title'),
+                    // A custom item, built by the shell, out of the screen's route.
+                    actionsBuilder: (context, ref) => [
+                      TextButton(
+                        onPressed: () => Navigator.of(context)
+                            .push(MaterialPageRoute<void>(builder: (_) => const Text('Pushed'))),
+                        child: const Text('Push'),
+                      ),
+                    ],
+                  ),
+                  body: const SizedBox.shrink(),
                 ),
               ),
             ),
@@ -338,68 +350,50 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.add).hitTestable());
+      await tester.tap(find.text('Push').hitTestable());
       await tester.pumpAndSettle();
 
       expect(find.text('Pushed'), findsOneWidget);
       expect(tabNavigatorKey.currentState!.canPop(), isTrue);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
-    testWidgets('a pinned action reads providers once its pinned copy is gone', (tester) async {
-      int? value;
-      await pushScreen(
-        tester,
-        PlatformAppBar(
-          title: const Text('Title'),
-          actions: [_SheetButton(onRead: (v) => value = v)],
-        ),
-      );
+    testWidgets(
+      'a pinned action from actionsBuilder reads providers once its pinned copy is gone',
+      (tester) async {
+        int? value;
+        await pushScreen(
+          tester,
+          PlatformAppBar(
+            title: const Text('Title'),
+            // A custom item, disposed by the shell while the sheet is shown.
+            actionsBuilder: (context, ref) => [
+              TextButton(
+                onPressed: () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  builder: (_) => TextButton(
+                    onPressed: () => value = ref.read(_valueProvider),
+                    child: const Text('Read'),
+                  ),
+                ),
+                child: const Text('Share'),
+              ),
+            ],
+          ),
+        );
 
-      await tester.tap(find.byIcon(Icons.share).hitTestable());
-      await tester.pumpAndSettle();
-      // The shell gave the buttons back to the screen under the sheet: the pinned copy of the
-      // action is disposed.
-      expect(find.byIcon(Icons.share).hitTestable(), findsNothing);
+        await tester.tap(find.text('Share').hitTestable());
+        await tester.pumpAndSettle();
+        // The shell gave the buttons back to the screen under the sheet: the pinned copy of the
+        // action is disposed.
+        expect(find.text('Share').hitTestable(), findsNothing);
 
-      await tester.tap(find.text('Read'));
-      await tester.pumpAndSettle();
-      expect(value, 42);
-    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+        await tester.tap(find.text('Read'));
+        await tester.pumpAndSettle();
+        expect(value, 42);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+    );
   });
 }
 
 final _valueProvider = Provider<int>((ref) => 42);
-
-/// An app bar action pushing a screen with its own context.
-class const _PushButton() extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.add),
-      tooltip: 'Push',
-      onPressed: () =>
-          Navigator.of(appBarActionContext(context))
-              .push(MaterialPageRoute<void>(builder: (_) => const Text('Pushed'))),
-    );
-  }
-}
-
-/// An app bar action showing a sheet, whose button reads a provider.
-class const _SheetButton({required final void Function(int) onRead}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    return IconButton(
-      icon: const Icon(Icons.share),
-      tooltip: 'Share',
-      onPressed: () => showAdaptiveBottomSheet<void>(
-        context: screenContext,
-        builder: (_) => TextButton(
-          onPressed: () => onRead(screenRef.read(_valueProvider)),
-          child: const Text('Read'),
-        ),
-      ),
-    );
-  }
-}

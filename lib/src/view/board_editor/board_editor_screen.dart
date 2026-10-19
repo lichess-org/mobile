@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
+import 'package:lichess_mobile/src/model/board_editor/board_vision.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -47,6 +48,7 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(params));
+    final boardReader = ref.watch(boardReaderProvider);
 
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
@@ -56,9 +58,15 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
           title: context.l10n.boardEditor,
         ),
         actions: [
-          BoardFromImageButton(
-            onPlacementRead: (placement) =>
-                ref.read(boardEditorControllerProvider(params).notifier).loadFen(placement),
+          IconButton(
+            icon: const Icon(Icons.photo_camera_outlined),
+            tooltip: 'Camera',
+            onPressed: () => showBoardFromImageSheet(
+              context,
+              boardReader,
+              onPlacementRead: (placement) =>
+                  ref.read(boardEditorControllerProvider(params).notifier).loadFen(placement),
+            ),
           ),
           SemanticIconButton(
             semanticsLabel: context.l10n.mobileSharePositionAsFEN,

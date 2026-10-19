@@ -211,7 +211,59 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            actions: [_GameMenu(gameId: createdGameId)],
+            // The menu is rebuilt with the game state, not the whole screen.
+            actionsBuilder: (context, ref) => [
+              if (ref.watch(gameControllerProvider(createdGameId)).value case final gameState?)
+                ContextMenuIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  actions: [
+                    if (gameState.nbWatchers > 0)
+                      ContextMenuAction(
+                        icon: Icons.person_outline,
+                        label: 'Spectators (${gameState.nbWatchers})',
+                        onPressed: () {
+                          final s = ref.read(gameControllerProvider(createdGameId)).value;
+                          if (s == null) return;
+                          showAdaptiveDraggableBottomSheet<void>(
+                            context: context,
+                            builder: (_, scrollController) => WatcherListBottomSheet(
+                              nbWatchers: s.nbWatchers,
+                              watcherNames: s.watcherNames,
+                              scrollController: scrollController,
+                            ),
+                          );
+                        },
+                      ),
+                    ContextMenuAction(
+                      icon: gameState.game.bookmarked == true
+                          ? Icons.bookmark_remove_outlined
+                          : Icons.bookmark_add_outlined,
+                      label: gameState.game.bookmarked == true
+                          ? context.l10n.mobileRemoveBookmark
+                          : context.l10n.bookmarkThisGame,
+                      onPressed: () =>
+                          ref.read(gameControllerProvider(createdGameId).notifier).toggleBookmark(),
+                    ),
+                    ContextMenuAction(
+                      icon: Theme.of(context).platform == TargetPlatform.iOS
+                          ? Icons.ios_share_outlined
+                          : Icons.share_outlined,
+                      label: context.l10n.studyShareAndExport,
+                      onPressed: () => showAdaptiveActionSheet<void>(
+                        context: context,
+                        actions: makeFinishedGameShareBottomSheetActions(
+                          context,
+                          ref,
+                          gameId: createdGameId.gameId,
+                          orientation: gameState.game.youAre ?? Side.white,
+                          finished: gameState.game.finished,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidGesturesExclusionWidget(
@@ -383,66 +435,6 @@ class const _ExportedGameTitle({required final GameFullId id, final DateTime? la
       data: (meta) => ExportedGameTitle(meta: meta, lastMoveAt: lastMoveAt),
       loading: () => const ExportedGameTitleLoading(),
       error: (error, _) => const SizedBox.shrink(),
-    );
-  }
-}
-
-/// App bar menu holding the game actions: spectators, bookmark, share and export.
-class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    final gameState = ref.watch(gameControllerProvider(gameId)).value;
-    if (gameState == null) return const SizedBox.shrink();
-
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        if (gameState.nbWatchers > 0)
-          ContextMenuAction(
-            icon: Icons.person_outline,
-            label: 'Spectators (${gameState.nbWatchers})',
-            onPressed: () {
-              final s = screenRef.read(gameControllerProvider(gameId)).value;
-              if (s == null) return;
-              showAdaptiveDraggableBottomSheet<void>(
-                context: screenContext,
-                builder: (_, scrollController) => WatcherListBottomSheet(
-                  nbWatchers: s.nbWatchers,
-                  watcherNames: s.watcherNames,
-                  scrollController: scrollController,
-                ),
-              );
-            },
-          ),
-        ContextMenuAction(
-          icon: gameState.game.bookmarked == true
-              ? Icons.bookmark_remove_outlined
-              : Icons.bookmark_add_outlined,
-          label: gameState.game.bookmarked == true
-              ? context.l10n.mobileRemoveBookmark
-              : context.l10n.bookmarkThisGame,
-          onPressed: () => screenRef.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-        ),
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS
-              ? Icons.ios_share_outlined
-              : Icons.share_outlined,
-          label: context.l10n.studyShareAndExport,
-          onPressed: () => showAdaptiveActionSheet<void>(
-            context: screenContext,
-            actions: makeFinishedGameShareBottomSheetActions(
-              screenContext,
-              screenRef,
-              gameId: gameId.gameId,
-              orientation: gameState.game.youAre ?? Side.white,
-              finished: gameState.game.finished,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

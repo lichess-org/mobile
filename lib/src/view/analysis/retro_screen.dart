@@ -42,6 +42,9 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
   Widget build(BuildContext context, WidgetRef ref) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final asyncState = ref.watch(retroControllerProvider(options));
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
+    );
 
     switch (asyncState) {
       case AsyncError(:final error):
@@ -97,7 +100,25 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
                       .read(retroControllerProvider(options).notifier)
                       .requestEval(goDeeper: true),
                 ),
-              _RetroMenu(options: options),
+              ContextMenuIconButton(
+                icon: const Icon(Icons.more_horiz),
+                semanticsLabel: context.l10n.menu,
+                actions: [
+                  ContextMenuAction(
+                    icon: Icons.settings,
+                    label: context.l10n.settingsSettings,
+                    onPressed: () =>
+                        Navigator.of(context)
+                            .push(RetroSettingsScreen.buildRoute(options: options)),
+                  ),
+                  ContextMenuAction(
+                    icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+                    label: context.l10n.sound,
+                    onPressed: () =>
+                        ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+                  ),
+                ],
+              ),
             ],
           ),
           body: DefaultTabController(length: 1, child: _RetroScreen(options)),
@@ -382,31 +403,4 @@ class const _FeedbackWidget(final RetroOptions options) extends ConsumerWidget {
 String _branchMoveToString(ViewBranch branch) {
   final nag = moveAnnotationChar(branch.nags ?? []);
   return '${(branch.position.ply / 2).ceil()}${branch.position.turn == Side.black ? '.' : '...'} ${branch.sanMove.san}$nag';
-}
-
-class const _RetroMenu({required final RetroOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () =>
-              Navigator.of(screenContext).push(RetroSettingsScreen.buildRoute(options: options)),
-        ),
-        ContextMenuAction(
-          icon: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled))
-              ? Icons.volume_up
-              : Icons.volume_off,
-          label: context.l10n.sound,
-          onPressed: () => screenRef.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-      ],
-    );
-  }
 }

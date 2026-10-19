@@ -118,8 +118,6 @@ class const BroadcastPlayerResultsScreen({
 
     final playerResults = asyncData.value?.$1;
     final fideId = playerResults?.playerWithOverallResult.player.fideId;
-    // Kept alive by the screen: the app bar button is rebuilt when its pinned copy is (see
-    // [appBarActionRef]).
     final isFollowing = fideId != null
         ? ref.watch(_followingOverrideProvider(fideId)) ?? playerResults?.isFollowing
         : null;
@@ -133,7 +131,26 @@ class const BroadcastPlayerResultsScreen({
             : const SizedBox.shrink(),
         actions: [
           if (fideId != null && isFollowing != null)
-            _FollowPlayerButton(fideId: fideId, isFollowing: isFollowing),
+            SemanticIconButton(
+              icon: Icon(isFollowing ? Icons.star : Icons.star_border),
+              semanticsLabel: isFollowing ? context.l10n.unfollow : context.l10n.follow,
+              onPressed: () async {
+                final newValue = !isFollowing;
+                final override = ref.read(_followingOverrideProvider(fideId).notifier);
+                override.state = newValue;
+                try {
+                  await ref.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
+                } catch (_) {
+                  if (!context.mounted) return;
+                  override.state = !newValue;
+                  showSnackBar(
+                    context,
+                    'Could not update the follow status',
+                    type: SnackBarType.error,
+                  );
+                }
+              },
+            ),
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
@@ -160,43 +177,13 @@ class const BroadcastPlayerResultsScreen({
   }
 }
 
-/// App bar button to follow or unfollow a FIDE player.
-///
-/// The toggled value is kept locally so the button reacts immediately, without refetching the
-/// player. It is reverted if the request fails.
 /// The follow status of a player set from the app bar, until the screen is closed.
+///
+/// The button reacts immediately, without refetching the player. The status is reverted if the
+/// request fails.
 final _followingOverrideProvider = StateProvider.autoDispose.family<bool?, FideId>(
   (ref, _) => null,
 );
-
-class const _FollowPlayerButton({required final FideId fideId, required final bool isFollowing})
-    extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    return SemanticIconButton(
-      icon: Icon(isFollowing ? Icons.star : Icons.star_border),
-      semanticsLabel: isFollowing ? context.l10n.unfollow : context.l10n.follow,
-      onPressed: () async {
-        final newValue = !isFollowing;
-        final override = screenRef.read(_followingOverrideProvider(fideId).notifier);
-        override.state = newValue;
-        try {
-          await screenRef.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
-        } catch (_) {
-          if (!screenContext.mounted) return;
-          override.state = !newValue;
-          showSnackBar(
-            screenContext,
-            'Could not update the follow status',
-            type: SnackBarType.error,
-          );
-        }
-      },
-    );
-  }
-}
 
 final _playerAndTournamentProvider = FutureProvider.autoDispose
     .family<

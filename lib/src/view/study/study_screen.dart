@@ -188,6 +188,7 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
   @override
   Widget build(BuildContext context) {
     final variant = widget.studyState.variant;
+    final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
@@ -202,157 +203,127 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
             Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
           ],
         ),
-        actions: [_StudyMenu(options: widget.options)],
+        actions: [
+          ContextMenuIconButton(
+            semanticsLabel: 'Study menu',
+            icon: const Icon(Icons.more_horiz),
+            actions: [
+              if (isLoggedIn)
+                ContextMenuAction(
+                  icon: widget.studyState.study.liked ? Icons.favorite : Icons.favorite_border,
+                  label: widget.studyState.study.liked ? 'Stop liking' : context.l10n.studyLike,
+                  onPressed: () {
+                    ref.read(studyControllerProvider(widget.options).notifier).toggleLike();
+                  },
+                ),
+              ContextMenuAction(
+                icon: Theme.of(context).platform == TargetPlatform.iOS
+                    ? Icons.ios_share
+                    : Icons.share,
+                label: context.l10n.studyShareAndExport,
+                onPressed: _showShareMenu,
+              ),
+            ],
+          ),
+        ],
       ),
       body: _Body(options: widget.options, tabController: _tabController, tabs: tabs),
     );
   }
-}
 
-class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
-    final authUser = ref.watch(authControllerProvider);
-    final state = ref.watch(studyControllerProvider(options)).requireValue;
-
-    return ContextMenuIconButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
+  void _showShareMenu() {
+    final state = widget.studyState;
+    showAdaptiveActionSheet<void>(
+      context: context,
       actions: [
-        if (authUser != null)
-          ContextMenuAction(
-            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
-            onPressed: () {
-              screenRef.read(studyControllerProvider(options).notifier).toggleLike();
-            },
-          ),
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
-          label: context.l10n.studyShareAndExport,
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.studyStudyUrl),
           onPressed: () {
-            showAdaptiveActionSheet<void>(
-              context: screenContext,
-              actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      screenContext,
-                      ShareParams(uri: lichessUri('/study/${state.study.id}')),
-                    );
-                  },
-                ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      screenContext,
-                      ShareParams(
-                        uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
-                      ),
-                    );
-                  },
-                ),
-                if (!state.gamebookActive) ...[
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: () async {
-                      try {
-                        final pgn = await screenRef
-                            .read(studyRepositoryProvider)
-                            .getStudyPgn(state.study.id);
-                        if (screenContext.mounted) {
-                          launchShareDialog(screenContext, ShareParams(text: pgn));
-                        }
-                      } catch (e) {
-                        if (screenContext.mounted) {
-                          showSnackBar(
-                            screenContext,
-                            'Failed to get PGN',
-                            type: SnackBarType.error,
-                          );
-                        }
-                      }
-                    },
-                  ),
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () {
-                      launchShareDialog(screenContext, ShareParams(text: state.pgn));
-                    },
-                  ),
-                  if (state.currentPosition != null)
-                    BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.positionAsImage),
-                      onPressed: () async {
-                        try {
-                          final image = await screenRef
-                              .read(gameShareServiceProvider)
-                              .screenshotPosition(
-                                state.pov,
-                                state.currentPosition!.fen,
-                                state.lastMove,
-                              );
-                          if (screenContext.mounted) {
-                            launchShareDialog(
-                              screenContext,
-                              ShareParams(
-                                files: [image],
-                                subject: screenContext.l10n.puzzleFromGameLink(
-                                  lichessUri('/study/${state.study.id}').toString(),
-                                ),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (screenContext.mounted) {
-                            showSnackBar(
-                              screenContext,
-                              'Failed to get GIF',
-                              type: SnackBarType.error,
-                            );
-                          }
-                        }
-                      },
-                    ),
-                  BottomSheetAction(
-                    makeLabel: (context) => const Text('GIF'),
-                    onPressed: () async {
-                      try {
-                        final gif = await screenRef
-                            .read(gameShareServiceProvider)
-                            .chapterGif(state.study.id, state.study.chapter.id);
-                        if (screenContext.mounted) {
-                          launchShareDialog(
-                            screenContext,
-                            ShareParams(
-                              files: [gif],
-                              subject: screenContext.l10n.studyChapterX(
-                                state.study.currentChapterMeta.name,
-                              ),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        if (screenContext.mounted) {
-                          showSnackBar(
-                            screenContext,
-                            'Failed to get GIF',
-                            type: SnackBarType.error,
-                          );
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ],
+            launchShareDialog(context, ShareParams(uri: lichessUri('/study/${state.study.id}')));
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
+          onPressed: () {
+            launchShareDialog(
+              context,
+              ShareParams(uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}')),
             );
           },
         ),
+        if (!state.gamebookActive) ...[
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.studyStudyPgn),
+            onPressed: () async {
+              try {
+                final pgn = await ref.read(studyRepositoryProvider).getStudyPgn(state.study.id);
+                if (mounted) {
+                  launchShareDialog(context, ShareParams(text: pgn));
+                }
+              } catch (e) {
+                if (mounted) {
+                  showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => Text(context.l10n.studyChapterPgn),
+            onPressed: () {
+              launchShareDialog(context, ShareParams(text: state.pgn));
+            },
+          ),
+          if (state.currentPosition != null)
+            BottomSheetAction(
+              makeLabel: (context) => Text(context.l10n.positionAsImage),
+              onPressed: () async {
+                try {
+                  final image = await ref
+                      .read(gameShareServiceProvider)
+                      .screenshotPosition(state.pov, state.currentPosition!.fen, state.lastMove);
+                  if (mounted) {
+                    launchShareDialog(
+                      context,
+                      ShareParams(
+                        files: [image],
+                        subject: context.l10n.puzzleFromGameLink(
+                          lichessUri('/study/${state.study.id}').toString(),
+                        ),
+                      ),
+                    );
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                  }
+                }
+              },
+            ),
+          BottomSheetAction(
+            makeLabel: (context) => const Text('GIF'),
+            onPressed: () async {
+              try {
+                final gif = await ref
+                    .read(gameShareServiceProvider)
+                    .chapterGif(state.study.id, state.study.chapter.id);
+                if (mounted) {
+                  launchShareDialog(
+                    context,
+                    ShareParams(
+                      files: [gif],
+                      subject: context.l10n.studyChapterX(state.study.currentChapterMeta.name),
+                    ),
+                  );
+                }
+              } catch (e) {
+                debugPrint(e.toString());
+                if (mounted) {
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                }
+              }
+            },
+          ),
+        ],
       ],
     );
   }

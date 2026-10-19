@@ -865,8 +865,6 @@ class const PreviewGameList<T>({
 class const _ChallengeScreenButton() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final screenContext = appBarActionContext(context);
-    final screenRef = appBarActionRef(context, ref);
     final authUser = ref.watch(authControllerProvider);
     if (authUser == null) {
       return const SizedBox.shrink();
@@ -893,8 +891,8 @@ class const _ChallengeScreenButton() extends ConsumerWidget {
       onPressed: connectionStatus != LichessConnectionStatus.online
           ? null
           : () {
-              screenRef.invalidate(challengesProvider);
-              Navigator.of(screenContext).push(ChallengeRequestsScreen.buildRoute());
+              ref.invalidate(challengesProvider);
+              Navigator.of(context).push(ChallengeRequestsScreen.buildRoute());
             },
     );
   }

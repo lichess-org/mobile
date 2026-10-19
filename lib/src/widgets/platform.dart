@@ -5,7 +5,7 @@ import 'dart:ui' show ColorFilter, ImageFilter;
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/foundation.dart' show ValueListenable;
-import 'package:flutter_riverpod/flutter_riverpod.dart' show Consumer, ConsumerWidget, WidgetRef;
+import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
@@ -43,51 +43,14 @@ final bool _isLiquidGlassSupported =
 /// route's buttons during a push or pop, like a UIKit navigation bar: on iOS 26 and later.
 ///
 /// Each navigator is wrapped in a `GlassNavigationShell` (the root one in `app.dart`, the tab ones
-/// in `tab_scaffold.dart`), which draws the pinned buttons. See [appBarActionContext].
+/// in `tab_scaffold.dart`), which draws the pinned buttons. See [PlatformAppBar.actions].
 bool usePinnedNavBar(BuildContext context) => useLiquidGlass(context);
-
-/// The context to navigate or present from, for a widget in the `actions` or `leading` of a
-/// [PlatformAppBar]: the app bar's context.
-///
-/// The buttons pinned by [usePinnedNavBar] are built by the `GlassNavigationShell`, above the
-/// navigator, out of the screen's route: `Navigator.of` with their own context finds the navigator
-/// above the shell, or none. An action widget that pushes a screen, or shows a sheet, a dialog or a
-/// snackbar, uses this context instead. Elsewhere it is [context] itself.
-///
-/// For the same reason (see [appBarActionRef]), an action widget keeps no state that must survive
-/// in its [State]: it would be lost at every rebuild of the pinned copy.
-BuildContext appBarActionContext(BuildContext context) =>
-    context.getInheritedWidgetOfExactType<_AppBarActionScope>()?.screenContext ?? context;
-
-/// The ref to read or modify providers with, from a callback of a [ConsumerWidget] in the
-/// `actions` or `leading` of a [PlatformAppBar]: the app bar's ref.
-///
-/// The pinned copy of an action widget (see [appBarActionContext]) is disposed and built again
-/// whenever the shell gives the buttons back to the screen (while a sheet or a dialog is presented
-/// over it) or takes them again, and when another screen is pushed over it: its own [ref] can't be
-/// used once disposed, for example in the actions of a sheet the widget shows. Its callbacks use
-/// this ref instead. Elsewhere it is [ref] itself. The build method still watches providers with
-/// its own [ref].
-WidgetRef appBarActionRef(BuildContext context, WidgetRef ref) =>
-    context.getInheritedWidgetOfExactType<_AppBarActionScope>()?.screenRef ?? ref;
 
 /// Whether an icon button has a long press action, which a [GlassBarItem.icon] doesn't support.
 bool _hasLongPress(Widget button) => switch (button) {
   IconButton(:final onLongPress) || SemanticIconButton(:final onLongPress) => onLongPress != null,
   _ => false,
 };
-
-/// Gives the pinned buttons of a [PlatformAppBar] the context and the ref of its screen, see
-/// [appBarActionContext] and [appBarActionRef].
-class const _AppBarActionScope({
-  required final BuildContext screenContext,
-  required final WidgetRef screenRef,
-  required super.child,
-}) extends InheritedWidget {
-  @override
-  bool updateShouldNotify(_AppBarActionScope oldWidget) =>
-      screenContext != oldWidget.screenContext || screenRef != oldWidget.screenRef;
-}
 
 int _iosMajorVersion() {
   // For example "Version 18.2 (Build 22C150)".
@@ -779,7 +742,32 @@ class const PlatformAppBar({
   final Widget? title,
   final double? titleSpacing,
   final TextStyle? titleTextStyle,
+
+  /// The buttons at the end of the bar: [IconButton]s, [SemanticIconButton]s and
+  /// [ContextMenuIconButton]s created in the screen's build method, whose callbacks use the
+  /// screen's context and ref.
+  ///
+  /// Use [actionsBuilder] instead when a button watches providers that the screen doesn't watch
+  /// (only the app bar is rebuilt), or when a callback needs a ref that the screen doesn't have (a
+  /// [StatelessWidget]). Don't wrap a button in a widget class of its own for that. A widget class
+  /// that must be an action (e.g. a text button) takes its callbacks as parameters, created with
+  /// the screen's context and ref, instead of navigating, presenting or reading providers with its
+  /// own.
+  ///
+  /// Why: on iOS 26 and later, the buttons of a pushed screen (and its [leading]) are pinned above
+  /// the navigator, and morph into the next screen's buttons (see [usePinnedNavBar]). The button
+  /// types above become items of the shell, whose glyph morphs. Any other widget is a custom item,
+  /// which only cross-fades: the shell builds it out of the screen's route, where its own context
+  /// finds the wrong navigator, and disposes it while a sheet or a dialog is shown, so its own ref
+  /// can't be used in a callback.
   final List<Widget>? actions,
+
+  /// Builds the [actions], in place of [actions], with the context and the ref of the app bar,
+  /// which belong to the screen: callbacks navigate, present and read providers with them.
+  ///
+  /// For buttons that watch providers the screen doesn't watch, or when the screen has no ref (see
+  /// [actions]).
+  final List<Widget> Function(BuildContext context, WidgetRef ref)? actionsBuilder,
   final PreferredSizeWidget? bottom,
 
   /// Whether the buttons are smaller than the toolbar on iOS, leaving a gap below them.
@@ -806,12 +794,14 @@ class const PlatformAppBar({
   /// [MediaQuery] leaves room for the large title. The [bottom] (e.g. a search field) is below the
   /// large title, and sticks below the app bar buttons once the large title is scrolled away.
   final bool largeTitle = false,
-}) extends StatelessWidget implements PreferredSizeWidget {
+}) extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    assert(this.actions == null || actionsBuilder == null);
+    final actions = actionsBuilder?.call(context, ref) ?? this.actions;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold]. Before iOS
       // 26, the same bar with plain buttons.
@@ -866,111 +856,97 @@ class const PlatformAppBar({
       // into the next route's buttons (see [usePinnedNavBar]). Not for a tab root, whose header
       // scrolls away. Compact buttons get the shell's size, with a gap below them instead.
       if (usePinnedNavBar(context) && !isTabRoot) {
-        // A Consumer, whose ref outlives the pinned copies of the actions (see [appBarActionRef]).
-        return Consumer(
-          builder: (context, ref, _) {
-            final foregroundColor = colorScheme.onSurface;
-            // The shell builds the items in its own context: they get the themes, the context and
-            // the ref of the screen (see [appBarActionContext]), and the icon color of the bar.
-            Widget captured(Widget child) => InheritedTheme.captureAll(
-              context,
-              _AppBarActionScope(
-                screenContext: context,
-                screenRef: ref,
-                child: IconTheme.merge(
-                  data: IconThemeData(color: foregroundColor),
-                  child: child,
+        final foregroundColor = colorScheme.onSurface;
+        // The shell builds the items in its own context: they get the themes of the screen and
+        // the icon color of the bar.
+        Widget captured(Widget child) => InheritedTheme.captureAll(
+          context,
+          IconTheme.merge(
+            data: IconThemeData(color: foregroundColor),
+            child: child,
+          ),
+        );
+        // The glyph of an icon or menu item, sized by the shell (no captured icon theme).
+        Widget glyph(Widget icon, Color? color) => IconTheme.merge(
+          data: IconThemeData(color: color ?? foregroundColor),
+          child: icon,
+        );
+        // Icon buttons and context menu buttons become the shell's own items, whose glyphs
+        // morph and whose capsule morphs into the menu. Anything else is a custom item, which
+        // cross-fades.
+        GlassBarItem barItem(Widget action) => switch (action) {
+          IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
+          SemanticIconButton(
+            :final icon,
+            :final onPressed,
+            semanticsLabel: final String? tooltip,
+            :final color,
+          ) when !_hasLongPress(action) => GlassBarItem.icon(
+            icon: glyph(icon, color),
+            onTap: onPressed ?? () {},
+            enabled: onPressed != null,
+            label: tooltip,
+          ),
+          ContextMenuIconButton(:final icon, :final color, :final semanticsLabel, :final actions) =>
+            GlassBarItem.menu(
+              icon: glyph(icon, color),
+              menuItems: glassMenuItems(actions),
+              menuWidth: kGlassMenuWidth,
+              label: semanticsLabel,
+            ),
+          _ => GlassBarItem.custom(
+            child: captured(
+              IconButtonTheme(
+                data: IconButtonThemeData(
+                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
                 ),
+                child: action,
               ),
-            );
-            // The glyph of an icon or menu item, sized by the shell (no captured icon theme).
-            Widget glyph(Widget icon, Color? color) => IconTheme.merge(
-              data: IconThemeData(color: color ?? foregroundColor),
-              child: icon,
-            );
-            // Icon buttons and context menu buttons become the shell's own items, whose glyphs
-            // morph and whose capsule morphs into the menu. Anything else is a custom item, which
-            // cross-fades.
-            GlassBarItem barItem(Widget action) => switch (action) {
-              IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
-              SemanticIconButton(
-                :final icon,
-                :final onPressed,
-                semanticsLabel: final String? tooltip,
-                :final color,
-              ) when !_hasLongPress(action) => GlassBarItem.icon(
-                icon: glyph(icon, color),
-                onTap: onPressed ?? () {},
-                enabled: onPressed != null,
-                label: tooltip,
+            ),
+          ),
+        };
+        // A back button with an action of its own is the shell's back button.
+        final backButtonLeading = switch (leading) {
+          final BackButton button when parentRoute?.impliesAppBarDismissal ?? false => button,
+          _ => null,
+        };
+        return GlassPinnedBarChrome(
+          leading: [
+            if (leading != null && backButtonLeading == null)
+              barItem(leading!)
+            else if (impliesLeading && isFullscreenDialog)
+              GlassBarItem.icon(
+                icon: const Icon(Icons.close_rounded),
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                onTap: () => Navigator.maybePop(context),
               ),
-              ContextMenuIconButton(
-                :final icon,
-                :final color,
-                :final semanticsLabel,
-                :final actions,
-              ) =>
-                GlassBarItem.menu(
-                  icon: glyph(icon, color),
-                  menuItems: glassMenuItems(actions),
-                  menuWidth: kGlassMenuWidth,
-                  label: semanticsLabel,
-                ),
-              _ => GlassBarItem.custom(
-                child: captured(
-                  IconButtonTheme(
-                    data: IconButtonThemeData(
-                      style: IconButton.styleFrom(foregroundColor: foregroundColor),
-                    ),
-                    child: action,
-                  ),
-                ),
-              ),
-            };
-            // A back button with an action of its own is the shell's back button.
-            final backButtonLeading = switch (leading) {
-              final BackButton button when parentRoute?.impliesAppBarDismissal ?? false => button,
-              _ => null,
-            };
-            return GlassPinnedBarChrome(
-              leading: [
-                if (leading != null && backButtonLeading == null)
-                  barItem(leading!)
-                else if (impliesLeading && isFullscreenDialog)
-                  GlassBarItem.icon(
-                    icon: const Icon(Icons.close_rounded),
-                    label: MaterialLocalizations.of(context).closeButtonTooltip,
-                    onTap: () => Navigator.maybePop(context),
-                  ),
-              ],
-              actions: [for (final action in actions ?? const <Widget>[]) barItem(action)],
-              backButton:
-                  backButtonLeading != null || (automaticallyImplyLeading && !isFullscreenDialog),
-              onBack: backButtonLeading?.onPressed,
-              buttonSettings: buttonSettings,
-              horizontalInset: Styles.horizontalBodyPadding.left,
-              builder: (context, chrome) => GlassAppBar(
-                title: appBarTitle,
-                centerTitle: centerTitle ?? true,
-                leading: chrome.leading != null
-                    ? Row(mainAxisSize: .min, children: [chrome.leading!])
-                    : null,
-                actions: chrome.actions.isNotEmpty ? chrome.actions : null,
-                bottom: largeTitleOffset != null
-                    ? null
-                    : bottom ??
-                          (compactButtons
-                              ? const PreferredSize(
-                                  preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
-                                  child: SizedBox.shrink(),
-                                )
-                              : null),
-                buttonSettings: buttonSettings,
-                toolbarHeight: _kGlassToolbarHeight,
-                padding: Styles.horizontalBodyPadding,
-              ),
-            );
-          },
+          ],
+          actions: [for (final action in actions ?? const <Widget>[]) barItem(action)],
+          backButton:
+              backButtonLeading != null || (automaticallyImplyLeading && !isFullscreenDialog),
+          onBack: backButtonLeading?.onPressed,
+          buttonSettings: buttonSettings,
+          horizontalInset: Styles.horizontalBodyPadding.left,
+          builder: (context, chrome) => GlassAppBar(
+            title: appBarTitle,
+            centerTitle: centerTitle ?? true,
+            leading: chrome.leading != null
+                ? Row(mainAxisSize: .min, children: [chrome.leading!])
+                : null,
+            actions: chrome.actions.isNotEmpty ? chrome.actions : null,
+            bottom: largeTitleOffset != null
+                ? null
+                : bottom ??
+                      (compactButtons
+                          ? const PreferredSize(
+                              preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
+                              child: SizedBox.shrink(),
+                            )
+                          : null),
+            buttonSettings: buttonSettings,
+            toolbarHeight: _kGlassToolbarHeight,
+            padding: Styles.horizontalBodyPadding,
+          ),
         );
       }
 
@@ -998,13 +974,13 @@ class const PlatformAppBar({
                 onPressed: () => Navigator.maybePop(context),
               )
             : null,
-        actions: actions != null && actions!.isNotEmpty
+        actions: actions != null && actions.isNotEmpty
             ? [
                 _GlassBarCapsule(
                   height: buttonHeight,
                   glass: glass,
                   settings: buttonSettings,
-                  children: actions!,
+                  children: actions,
                 ),
               ]
             : null,
