@@ -464,7 +464,8 @@ Glass is for iOS 26 and later only. Before iOS 26, the app keeps the same layout
 bars, large titles, scroll-aware bar tint, inset sheets) with plain controls and opaque surfaces:
 every glass widget is built only when `useLiquidGlass(context)` (`platform.dart`) is true, with a
 non-glass fallback (`BlurredBarBackground` bars, `_BlurredTabBar`, an opaque `GlassModalCard`, no
-`GlassSheetScope`, `CupertinoSlidingSegmentedControl`, the `popover` popover and Material menu).
+`GlassSheetScope`, `CupertinoSlidingSegmentedControl`, the `popover` popover and Material menu,
+bar buttons drawn by their route, not pinned).
 Run with `--dart-define=NO_LIQUID_GLASS=true` to see that look on an iOS 26 device.
 
 The fallback is meant to be deleted once iOS < 26 is no longer supported, and to cost as little as
@@ -492,6 +493,18 @@ possible until then. Rules:
 - **Screens**: use `PlatformScaffold` + `PlatformAppBar` (`lib/src/widgets/platform.dart`). On
   iOS they build a `GlassScaffold` with a `GlassAppBar`, and a plain Material `Scaffold` + `AppBar`
   elsewhere. A screen built with a bare `Scaffold` + `AppBar` keeps the old opaque bar on iOS.
+- **Pinned bar buttons (navigation morph)**: on iOS 26 (`usePinnedNavBar`, true with
+  `useLiquidGlass`), every navigator is wrapped in a `GlassNavigationShell`: the root one in
+  `app.dart`, each tab's in `tab_scaffold.dart`. One shell per navigator: a new navigator whose
+  screens use `PlatformAppBar` gets its own. The leading and actions of a pushed screen's
+  `PlatformAppBar` are drawn by the shell above the navigator (`GlassPinnedBarChrome`) and morph
+  into the next route's on push and pop, like a UIKit navigation bar: icon buttons morph their
+  glyph, a `ContextMenuIconButton` its capsule into the menu, a `SheetIconButton` its capsule into
+  the sheet, anything else cross-fades. The back button is the shell's (a `BackButton(onPressed:)`
+  leading keeps its action). Tab roots are not pinned (their header scrolls away). A
+  `compactButtons` screen gets 44pt buttons, with a 6pt gap below them. While a sheet or a dialog
+  is over the screen, the shell gives the buttons back to the route: the pinned copies are disposed
+  and built again (see the next rule).
 - **App bar actions**: pass `IconButton` / `SemanticIconButton` / `ContextMenuIconButton` built in
   the screen's build method to `PlatformAppBar.actions`, with callbacks using the screen's context
   and ref. When a button watches providers that the screen doesn't (only the bar rebuilds), or the
@@ -644,6 +657,13 @@ possible until then. Rules:
   package's blur covers the whole app bar (too heavy). No bottom edge effect. Don't add app-wide
   glass overrides without a design decision.
 - In widget tests on iOS, `GlassTabBar` renders each tab label twice, so use `findsWidgets`.
+- **Pinned bar in tests**: tests run pinned like production (`_FakeApp` in
+  `test/test_provider_scope.dart` has a root `GlassNavigationShell`). A pushed screen's app bar
+  button is in the tree twice (an unpainted placeholder in the route and the pinned copy): tap and
+  expect it with `.hitTestable()`, and `pump()` once more after its actions change (the pinned copy
+  is redrawn a frame later). Custom bar items are not reachable by accessibility checks
+  (https://github.com/sdegenaar/liquid_glass_widgets/issues/432): the puzzle, storm and streak
+  a11y tests run on Android only until it is fixed.
 
 ## iOS Home Screen Widgets (WidgetKit Extension)
 
