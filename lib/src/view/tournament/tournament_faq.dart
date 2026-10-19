@@ -8,6 +8,7 @@ import 'package:material_ui/material_ui.dart';
 Future<void> showTournamentFaqSheet(BuildContext context) {
   return showAdaptiveFullHeightBottomSheet<void>(
     context: context,
+    useRootNavigator: true,
     title: Text(context.l10n.tournamentFAQ),
     builder: (context, scrollController) => _TournamentFaq(scrollController: scrollController),
   );
