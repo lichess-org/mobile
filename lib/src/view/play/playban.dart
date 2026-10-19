@@ -10,7 +10,7 @@ void showPlaybanDialog(BuildContext context, TemporaryBan playban) {
     context: context,
     barrierDismissible: true,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         content: PlaybanMessage(playban: playban, centerText: true),
         actions: [
           PlatformDialogAction(

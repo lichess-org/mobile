@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:logging/logging.dart';
-import 'package:material_ui/material_ui.dart' show AlertDialog, Navigator, Text, showAdaptiveDialog;
+import 'package:material_ui/material_ui.dart' show Navigator, Text, showAdaptiveDialog;
 import 'package:multistockfish/multistockfish.dart';
 
 final _logger = Logger('EngineWeightsService');
@@ -177,7 +177,7 @@ class StockfishNnueService(final Ref _ref) {
             context: context,
             barrierDismissible: true,
             builder: (context) {
-              return AlertDialog.adaptive(
+              return PlatformAlertDialog(
                 content: Text(context.l10n.mobileAreYouSureDownloadNnue(nnueDownloadSizeMB)),
                 actions: [
                   PlatformDialogAction(

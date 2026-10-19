@@ -163,9 +163,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Стрымеры ў эфіры';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4837,7 +4834,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reason => 'Прычына';
 
   @override
-  String get whatIsIheMatter => 'Што здарылася?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Несумленная гульня';
@@ -4858,7 +4855,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Калі ласка, дадайце спасылку хаця б на адну гульню, дзе былі парушаны правілы.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5813,7 +5810,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Выклікаў $param';
+    return 'Выклікаць $param';
   }
 
   @override

@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
@@ -41,8 +42,9 @@ class const StreakScreen({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
           leading: BackButton(
             onPressed: () {
               Navigator.of(context).pop();
@@ -546,7 +548,7 @@ class const _BottomBar({
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
+      builder: (context) => PlatformAlertDialog(
         title: Text(context.l10n.aboutX('Puzzle Streak')),
         content: Text(context.l10n.puzzleStreakDescription),
         actions: [

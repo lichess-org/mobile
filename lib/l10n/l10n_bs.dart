@@ -163,9 +163,6 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Uživo prenosioci';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4813,7 +4810,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get reason => 'Razlog';
 
   @override
-  String get whatIsIheMatter => 'U čemu je problem?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Varanje';
@@ -4834,7 +4831,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get processReportFasterInEnglish => 'Možemo procesirati vaš izvještaj brže ako ga napišete na engleskom.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Molimo navedite barem jedan link na partiju u kojoj je igrač varao.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

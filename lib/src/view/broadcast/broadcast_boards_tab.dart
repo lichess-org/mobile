@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -62,21 +63,22 @@ class const BroadcastBoardsTab({
     return switch (boards) {
       AsyncData(value: (:final hasGames, :final gameIds)) =>
         gameIds.isEmpty
-            ? Padding(
-                padding: Styles.bodyPadding,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.info, size: 30),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      hasGames
-                          ? 'No games matching filter criteria.'
-                          : context.l10n.broadcastNoBoardsYet,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+            ? BroadcastRoundTabPlaceholder(
+                Padding(
+                  padding: Styles.bodyPadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.info, size: 30),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        hasGames
+                            ? 'No games matching filter criteria.'
+                            : context.l10n.broadcastNoBoardsYet,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               )
             : BroadcastPreview(
@@ -86,8 +88,10 @@ class const BroadcastBoardsTab({
                 tournamentSlug: tournamentSlug,
                 teamFilter: teamFilter,
               ),
-      AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Could not load broadcast: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -179,6 +183,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 
     return CustomScrollView(
       slivers: [
+        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         if (hasComment)
           SliverSafeArea(
             bottom: false,
@@ -193,9 +198,11 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
             top: !hasComment,
             bottom: false,
             sliver: SliverPadding(
-              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              // Closer to the tabs above it.
+              padding: Styles.bodyPadding.copyWith(top: hasComment ? null : 8.0, bottom: 0.0),
               sliver: SliverToBoxAdapter(
                 child: PlatformSearchBar(
+                  hintText: context.l10n.searchSearch,
                   controller: _searchController,
                   onChanged: (value) {
                     setState(() {

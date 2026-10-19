@@ -85,7 +85,6 @@
     }
   },
   "mobileInvalidOrExpiredLoginCode": "This code is invalid or has expired.",
-  "mobileLiveStreamers": "Live streamers",
   "mobileLocalDatabaseSize": "Local database size",
   "mobileMoveOnRelease": "Move on release",
   "mobileMoveOnReleaseSubtitle": "When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.",

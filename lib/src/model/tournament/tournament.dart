@@ -385,7 +385,7 @@ extension TournamentExtension on Pick {
       final freq = TournamentFreq.nameMap[value];
       if (freq != null) return freq;
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to TournamentFreq");
+    throw PickException.fromPick(this, "can't be casted to TournamentFreq");
   }
 
   IList<LightTournament> asTournamentListOrThrow() =>

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -88,13 +89,9 @@ class _TournamentListScreenState()
               onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
             ),
           ],
-          bottom: TabBar(
+          bottom: PlatformTabBar(
             controller: _tabController,
-            tabs: <Widget>[
-              Tab(text: _ViewMode.completed.l10n(context)),
-              Tab(text: _ViewMode.ongoing.l10n(context)),
-              Tab(text: _ViewMode.upcoming.l10n(context)),
-            ],
+            tabs: [for (final mode in _ViewMode.values) mode.l10n(context)],
           ),
         ),
         body: switch (tournamentAsync) {
@@ -220,9 +217,6 @@ class _TournamentListBodyState() extends ConsumerState<_TournamentListBody> {
     ];
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       key: _refreshIndicatorKey,
       onRefresh: () async => await ref.refresh(tournamentsProvider),
       child: ListView.separated(

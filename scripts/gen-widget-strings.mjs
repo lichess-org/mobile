@@ -39,6 +39,14 @@ const WIDGET_KEYS = {
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
   'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'broadcast_title' },
+  'Your turn': { arbKey: 'yourTurn', fallback: 'Your turn' },
+  'Waiting for opponent': { arbKey: 'waitingForOpponent', fallback: 'Waiting for opponent' },
+  'Reconnecting': { arbKey: 'reconnecting', fallback: 'Reconnecting' },
+  'Game Over': { arbKey: 'gameOver', fallback: 'Game Over' },
+  'Victory': { arbKey: 'victory', fallback: 'Victory' },
+  'Defeat': { arbKey: 'defeat', fallback: 'Defeat' },
+  'Draw': { arbKey: 'draw', fallback: 'Draw' },
+  'Game aborted': { arbKey: 'gameAborted', fallback: 'Game aborted' },
 };
 
 

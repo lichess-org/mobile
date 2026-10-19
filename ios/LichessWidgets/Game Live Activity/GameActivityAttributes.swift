@@ -13,6 +13,19 @@ struct GameActivityAttributes: ActivityAttributes {
         var opposite: Side { self == .white ? .black : .white }
     }
 
+    /// The result of a finished game.
+    enum Result: String, Codable, Hashable {
+        case whiteWins
+        case blackWins
+        case draw
+        case aborted
+
+        /// Whether `side` won the game.
+        func isVictory(for side: Side) -> Bool {
+            self == (side == .white ? .whiteWins : .blackWins)
+        }
+    }
+
     struct Player: Codable, Hashable {
         let name: String
         let title: String?
@@ -38,6 +51,8 @@ struct GameActivityAttributes: ActivityAttributes {
         /// Milliseconds after lila counts the player as gone to warn them that they left the game,
         /// or nil to warn as soon as the app stops running.
         let leftWarningDelay: Int?
+        /// The result of the game, once it is over.
+        let result: Result?
         /// Whether the game socket is down while the app still runs, so the app is trying to
         /// reconnect. Set by the Runner plugin, absent from the state sent by Dart.
         var reconnecting: Bool?
@@ -61,6 +76,8 @@ extension GameActivityAttributes.ContentState {
     }
 
     var isReconnecting: Bool { reconnecting ?? false }
+
+    var isOver: Bool { result != nil }
 
     var clockAtDate: Date { Date(timeIntervalSince1970: clockAt / 1000) }
 
