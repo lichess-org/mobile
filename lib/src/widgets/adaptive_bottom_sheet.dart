@@ -355,14 +355,15 @@ Future<T?> _showGlassModalSheet<T>({
   );
 }
 
-/// The tint opacity of the glass sheets: the other modals' glass, more opaque in light mode.
+/// The tint opacity of the glass sheets: more opaque than the other modals' glass.
 double _glassSheetTintOpacity(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
     ? _kLightGlassSheetTintOpacity
     : _kGlassSheetTintOpacity;
 
-/// The tint opacity of a glass sheet in dark mode: the other modals' ([glassModalSettings]).
-const _kGlassSheetTintOpacity = 0.65;
+/// The tint opacity of a glass sheet in dark mode, a little higher than the other modals'
+/// ([glassModalSettings]), to keep the content readable.
+const _kGlassSheetTintOpacity = 0.75;
 
 /// The tint opacity of a glass sheet in light mode, higher than the other modals', to keep
 /// the content readable over a board.
