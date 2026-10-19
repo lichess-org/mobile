@@ -416,7 +416,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.about)),
+      appBar: PlatformAppBar(title: Text(context.l10n.about), largeTitle: true),
       body: ListView(
         children: [
           ListSection(
