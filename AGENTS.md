@@ -498,10 +498,10 @@ possible until then. Rules:
   screen has no ref, use `PlatformAppBar.actionsBuilder: (context, ref) => [...]` and use that
   context and ref in the callbacks. Never wrap an action in a widget class of its own that
   navigates, presents or reads providers with its own context or ref; a widget that must be an
-  action takes callbacks instead (e.g. `DaysSelector`). Why: on iOS 26 the buttons of a pushed
-  screen are pinned above the navigator and morph into the next screen's ones; any other widget
-  is a custom item, built by the shell out of the screen's route (wrong navigator), disposed while
-  a sheet is shown (dead ref), and it only cross-fades.
+  action takes callbacks instead. Why: on iOS 26 the buttons of a pushed screen are pinned above
+  the navigator and morph into the next screen's ones; any other widget is a custom item, built by
+  the shell out of the screen's route (wrong navigator), disposed while a sheet is shown (dead
+  ref), and it only cross-fades.
 - **Tab bar**: `MainTabScaffold` (`lib/src/tab_scaffold.dart`) uses `GlassTabBar` on iOS. The
   root screen of a tab has a non-sticky app bar that scrolls away with the content, with an iOS
   large title (`PlatformAppBar` styles it automatically: don't pass a `titleTextStyle`).

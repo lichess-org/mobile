@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -50,7 +50,7 @@ class const StreakScreen({super.key}) extends StatelessWidget {
               Navigator.of(context).pop();
             },
           ),
-          actions: const [ToggleSoundButton()],
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           title: const Text('Puzzle Streak'),
         ),
         body: const _Load(),

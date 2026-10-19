@@ -50,6 +50,45 @@ void main() {
     expect(pressed, 1);
   });
 
+  testWidgets('marks the selected action with a check mark', variant: kPlatformVariant, (
+    tester,
+  ) async {
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: const Text('Title'),
+          actions: [
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: 'Menu',
+              actions: [
+                ContextMenuAction(label: 'One day', onPressed: () {}),
+                ContextMenuAction(label: 'One week', selected: true, onPressed: () {}),
+              ],
+            ),
+          ],
+        ),
+        body: const SizedBox.shrink(),
+      ),
+    );
+
+    await tester.pumpWidget(app);
+    await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.check), findsOneWidget);
+    // After the label of the selected action.
+    expect(
+      tester.getCenter(find.byIcon(Icons.check)).dx,
+      greaterThan(tester.getCenter(find.text('One week')).dx),
+    );
+    expect(
+      tester.getCenter(find.byIcon(Icons.check)).dy,
+      moreOrLessEquals(tester.getCenter(find.text('One week')).dy, epsilon: 1.0),
+    );
+  });
+
   group('ContextMenuRegion', () {
     Future<void> pumpRegion(WidgetTester tester, VoidCallback onCopy) async {
       final app = await makeTestProviderScopeApp(

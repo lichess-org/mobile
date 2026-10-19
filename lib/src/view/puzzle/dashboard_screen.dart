@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:material_ui/material_ui.dart';
@@ -34,9 +35,25 @@ class const PuzzleDashboardScreen({super.key}) extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        actionsBuilder: (context, ref) => [
-          DaysSelector(onPressed: () => showDaysPicker(context, ref)),
-        ],
+        actionsBuilder: (context, ref) {
+          if (ref.watch(authControllerProvider) == null) return const [];
+          final selectedDays = ref.watch(daysProvider);
+          return [
+            ContextMenuIconButton(
+              icon: const Icon(Icons.date_range),
+              // TODO: translate
+              semanticsLabel: 'Period',
+              actions: [
+                for (final days in Days.values)
+                  ContextMenuAction(
+                    label: _daysL10n(context, days),
+                    selected: days == selectedDays,
+                    onPressed: () => ref.read(daysProvider.notifier).state = days,
+                  ),
+              ],
+            ),
+          ];
+        },
       ),
       body: const _Body(),
     );
@@ -55,7 +72,7 @@ class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
-    final days = ref.watch(daysProvider).days;
+    final days = ref.watch(daysProvider);
 
     return puzzleDashboard.when(
       data: (dashboard) {
@@ -129,10 +146,10 @@ class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends
 class const _ChartSection({
   required final PuzzleDashboard dashboard,
   required final bool showDaysSelector,
-  required final int days,
-}) extends ConsumerWidget {
+  required final Days days,
+}) extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
     final puzzlesToReplay =
         dashboard.global.nb - dashboard.global.firstWins - dashboard.global.replayWins;
@@ -157,7 +174,16 @@ class const _ChartSection({
                   ],
                 ),
               ),
-              if (showDaysSelector) DaysSelector(onPressed: () => showDaysPicker(context, ref)),
+              // Chosen in the app bar menu of the dashboard screen.
+              if (showDaysSelector)
+                const DaysSelector()
+              else
+                Text(
+                  _daysL10n(context, days),
+                  style: Styles.subtitle.copyWith(
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
+                ),
             ],
           ),
         ],
@@ -186,7 +212,7 @@ class const _ChartSection({
                 Navigator.of(context, rootNavigator: true).push(
                   PuzzleScreen.buildRoute(
                     angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    replayDays: days,
+                    replayDays: days.days,
                   ),
                 );
               },
@@ -274,30 +300,27 @@ class const PuzzleChart(final List<PuzzleDashboardData> puzzleData) extends Stat
   }
 }
 
-/// The days of the puzzle dashboard, which opens a picker to choose them with [onPressed] (see
-/// [showDaysPicker]).
-class const DaysSelector({required final VoidCallback onPressed}) extends ConsumerWidget {
+/// A button showing the days of the puzzle dashboard, which opens a picker to choose them.
+class const DaysSelector() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final day = ref.watch(daysProvider);
     return authUser != null
-        ? TextButton(onPressed: onPressed, child: Text(_daysL10n(context, day)))
+        ? TextButton(
+            onPressed: () => showChoicePicker(
+              context,
+              choices: Days.values,
+              selectedItem: day,
+              labelBuilder: (t) => Text(_daysL10n(context, t)),
+              onSelectedItemChanged: (newDay) {
+                ref.read(daysProvider.notifier).state = newDay;
+              },
+            ),
+            child: Text(_daysL10n(context, day)),
+          )
         : const SizedBox.shrink();
   }
-}
-
-/// Opens a picker to choose the days of the puzzle dashboard.
-void showDaysPicker(BuildContext context, WidgetRef ref) {
-  showChoicePicker(
-    context,
-    choices: Days.values,
-    selectedItem: ref.read(daysProvider),
-    labelBuilder: (t) => Text(_daysL10n(context, t)),
-    onSelectedItemChanged: (newDay) {
-      ref.read(daysProvider.notifier).state = newDay;
-    },
-  );
 }
 
 enum Metric() {

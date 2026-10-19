@@ -33,6 +33,7 @@ List<GlassMenuItem> glassMenuItems(List<ContextMenuAction> actions) => [
     GlassMenuItem(
       title: action.label,
       icon: action.icon != null ? Icon(action.icon) : null,
+      trailing: action.selected ? const Icon(Icons.check, size: 20.0) : null,
       enabled: action.onPressed != null,
       onTap: action.onPressed ?? () {},
     ),
@@ -191,15 +192,23 @@ class const ContextMenuAction({
   ///
   /// Default to true.
   final bool dismissOnPress = true,
+
+  /// Whether this is the current choice of a menu of choices, shown with a check mark after the
+  /// label.
+  final bool selected = false,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MenuItemButton(
-      closeOnActivate: dismissOnPress,
-      leadingIcon: Icon(icon),
-      semanticsLabel: label,
-      onPressed: onPressed,
-      child: Text(label),
+    return Semantics(
+      selected: selected,
+      child: MenuItemButton(
+        closeOnActivate: dismissOnPress,
+        leadingIcon: Icon(icon),
+        trailingIcon: selected ? const Icon(Icons.check) : null,
+        semanticsLabel: label,
+        onPressed: onPressed,
+        child: Text(label),
+      ),
     );
   }
 }

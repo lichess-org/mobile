@@ -37,18 +37,14 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
       appBar: PlatformAppBar(
         title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
-          Builder(
-            builder: (context) {
-              return SemanticIconButton(
-                icon: const Icon(Icons.settings),
-                semanticsLabel: context.l10n.settingsSettings,
-                onPressed: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  showDragHandle: true,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
-              );
-            },
+          SemanticIconButton(
+            icon: const Icon(Icons.settings),
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+            ),
           ),
         ],
       ),

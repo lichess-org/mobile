@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/view/practice/practice_engine_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_gamebook_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_lesson_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
@@ -43,7 +43,7 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
           // A long title, next to the actions.
           centerTitle: false,
           title: Text(chapter.name),
-          actions: [
+          actionsBuilder: (context, ref) => [
             IconButton(
               icon: const Icon(Icons.list),
               tooltip: context.l10n.studyNbChapters(nbChapters),
@@ -56,7 +56,7 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
                     _ChaptersSheet(current: chapter, scrollController: scrollController),
               ),
             ),
-            const ToggleSoundButton(),
+            soundToggleButton(ref),
           ],
         ),
         body: switch (chapter) {

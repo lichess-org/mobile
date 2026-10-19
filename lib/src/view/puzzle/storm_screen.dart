@@ -23,7 +23,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -46,11 +46,14 @@ class const StormScreen({super.key}) extends ConsumerStatefulWidget {
 class _StormScreenState() extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
-    return const WakelockWidget(
+    return WakelockWidget(
       child: PlatformScaffold(
         extendBodyBehindAppBar: false,
-        appBar: PlatformAppBar(actions: [ToggleSoundButton()], title: Text('Puzzle Storm')),
-        body: _Load(),
+        appBar: PlatformAppBar(
+          title: const Text('Puzzle Storm'),
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
+        ),
+        body: const _Load(),
       ),
     );
   }

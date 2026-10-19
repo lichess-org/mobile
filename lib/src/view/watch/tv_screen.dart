@@ -21,7 +21,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -100,7 +100,7 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
                       const Icon(Icons.live_tv),
                     ],
                   ),
-            actions: const [ToggleSoundButton()],
+            actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           ),
           body: SafeArea(
             child: Column(
