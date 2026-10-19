@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -251,10 +252,8 @@ class const _TvGameBody({
                   label: context.l10n.viewTournament,
                   icon: LichessIcons.tournament_cup,
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TournamentScreen.buildRoute(game.meta.tournament!.id));
+                    Navigator.of(context)
+                        .pushHidingTabBar(TournamentScreen.buildRoute(game.meta.tournament!.id));
                   },
                 ),
               if (canShowChat) ChatBottomBarButton(options: chatOptions),

@@ -1,3 +1,4 @@
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -12,7 +13,8 @@ abstract class ScreenRoute<T extends Object?>() extends PageRoute<T> {
 /// A [MaterialPageRoute] that always builds the same screen widget.
 ///
 /// This route wraps the [screen] with a [FullScreenBackground] to ensure that the background
-/// is always filled with the configured app's background color or image.
+/// is always filled with the configured app's background color or image, and with a
+/// [TabRoutePage] to lay it out for the tab bar when it is pushed in a tab navigator.
 class MaterialScreenRoute<T extends Object?>({
   @override required final Widget screen,
   super.settings,
@@ -21,7 +23,10 @@ class MaterialScreenRoute<T extends Object?>({
   super.allowSnapshotting,
   final Duration? overrideTransitionDuration,
 }) extends MaterialPageRoute<T> implements ScreenRoute<T> {
-  this : super(builder: (_) => FullScreenBackground(child: screen));
+  this
+    : super(
+        builder: (_) => TabRoutePage(child: FullScreenBackground(child: screen)),
+      );
 
   @override
   Duration get transitionDuration => overrideTransitionDuration ?? super.transitionDuration;

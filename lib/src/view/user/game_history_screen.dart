@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -265,7 +266,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
                               ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
+                                  Navigator.of(context).pushHidingTabBar(
                                     AnalysisScreen.buildRoute(
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,
@@ -323,10 +324,9 @@ class _BodyState() extends ConsumerState<_Body> {
                                               );
                                               final source = UserChallengeSource(request);
                                               ref.invalidate(gameScreenLoaderProvider(source));
-                                              Navigator.of(
-                                                context,
-                                                rootNavigator: true,
-                                              ).push(GameScreen.buildRoute(source: source));
+                                              Navigator.of(context).pushHidingTabBar(
+                                                GameScreen.buildRoute(source: source),
+                                              );
                                             }
                                           : null,
                                       icon: Icons.sync,

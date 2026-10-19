@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
@@ -49,10 +50,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(CorrespondenceChallengesScreen.buildRoute());
+                Navigator.of(context).pushHidingTabBar(CorrespondenceChallengesScreen.buildRoute());
               },
               leading: Icon(Perf.correspondence.icon),
               title: Text(context.l10n.correspondence),
@@ -72,10 +70,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(OfflineComputerGameScreen.buildRoute());
+                Navigator.of(context).pushHidingTabBar(OfflineComputerGameScreen.buildRoute());
               },
               leading: const Icon(Icons.memory),
               title: Text(context.l10n.playAgainstComputer),
@@ -84,7 +79,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(context, rootNavigator: true).push(OverTheBoardScreen.buildRoute());
+                Navigator.of(context).pushHidingTabBar(OverTheBoardScreen.buildRoute());
               },
               leading: const Icon(Icons.table_restaurant_outlined),
               title: Text(context.l10n.mobileOverTheBoard),

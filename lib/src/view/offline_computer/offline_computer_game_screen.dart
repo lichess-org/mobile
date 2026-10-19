@@ -187,6 +187,8 @@ class _BodyState() extends ConsumerState<_Body> {
                   Navigator.pop(context);
                   _showNewGameDialog(initialVariant: gameState.game.meta.variant);
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );
@@ -1181,6 +1183,12 @@ class const _OfflineComputerGameSettingsSheet() extends ConsumerWidget {
 class const OfflineComputerGameResultDialog({
   required final OfflineComputerGame game,
   required final VoidCallback onNewGame,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysis,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -1215,15 +1223,13 @@ class const OfflineComputerGameResultDialog({
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: game.id,
-                  orientation: game.playerSide,
-                  pgn: game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: game.meta.variant,
-                ),
+            onAnalysis(
+              AnalysisOptions.pgn(
+                id: game.id,
+                orientation: game.playerSide,
+                pgn: game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: game.meta.variant,
               ),
             );
           },

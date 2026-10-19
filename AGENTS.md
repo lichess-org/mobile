@@ -263,6 +263,28 @@ dialogs and confirmations belong at the view layer call site, not on the bus.
 
 **Navigation**: Uses Flutter's Navigator with custom route resolution via `app_links.dart` for deep linking.
 
+- **One navigator per tab**, plus the root navigator above `MainTabScaffold`
+  (`lib/src/tab_navigation.dart`, `lib/src/tab_scaffold.dart`). Screens are pushed on the current
+  navigator, `Navigator.of(context)`: don't use `rootNavigator: true` to push a screen.
+- **Hiding the tab bar**: a screen that covers the whole screen (game, puzzle, analysis, study,
+  any board screen...) is pushed with `Navigator.of(context).pushHidingTabBar(route)` (or
+  `pushReplacementHidingTabBar` / `pushAndRemoveUntilHidingTabBar`), like iOS
+  `hidesBottomBarWhenPushed`. The tab bar is hidden while that route or any route above it is
+  shown, and fades back in when it is popped. Its page is laid out over the whole screen
+  (`TabRoutePage`). On the root navigator these are plain pushes. `popUntilTabBarShown()` pops
+  back to the screen below them.
+- **Root navigator**, only for what must cover the tab bar or comes from outside: dialogs
+  (Flutter's default), sheets and action sheets presented from a screen shown with the tab bar
+  (`useRootNavigator: true`; from a screen hiding it, the sheet helpers present on its own
+  navigator), fullscreen dialogs, and the pushes of services (notifications, deep links, quick
+  actions). A screen pushed from a presentation on root stays on root.
+- A dialog on root over a screen in a tab can't push on the screen's navigator with its own
+  context: it closes itself and calls back with the screen's context (e.g. `onAnalysisCallback`
+  of `GameResultDialog`).
+- **Route observers**: each navigator has its own. A `RouteAware` screen subscribes to
+  `pageRouteObserverOf(context)`, and stack lookups use `routeStackObserverOf(navigator)`, not
+  the root ones.
+
 ## Dart Event Loop Execution Model
 
 Understanding Dart's event loop is critical for this codebase due to heavy async operations (network requests, WebSocket communication, Stockfish engine interaction).
@@ -504,7 +526,9 @@ possible until then. Rules:
   leading keeps its action). Tab roots are not pinned (their header scrolls away). A
   `compactButtons` screen gets 44pt buttons, with a 6pt gap below them. While a sheet or a dialog
   is over the screen, the shell gives the buttons back to the route: the pinned copies are disposed
-  and built again (see the next rule).
+  and built again (see the next rule). Buttons only morph between routes of the same navigator:
+  a screen pushed on the root navigator over a tab screen slides in with its own buttons (see
+  "Navigation" above for where screens are pushed).
 - **App bar actions**: pass `IconButton` / `SemanticIconButton` / `ContextMenuIconButton` built in
   the screen's build method to `PlatformAppBar.actions`, with callbacks using the screen's context
   and ref. When a button watches providers that the screen doesn't (only the bar rebuilds), or the

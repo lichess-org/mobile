@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -32,7 +33,7 @@ void openGameScreen(
   DateTime? lastMoveAt,
 }) {
   if (game.variant.isReadSupported) {
-    Navigator.of(context, rootNavigator: true).push(
+    Navigator.of(context).pushHidingTabBar(
       game.fullId != null
           ? GameScreen.buildRoute(
               source: ExistingGameSource(game.fullId!),

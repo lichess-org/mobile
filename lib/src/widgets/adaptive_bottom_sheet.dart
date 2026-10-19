@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
+import 'package:lichess_mobile/src/tab_navigation.dart' show isTabBarHiddenAt;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
@@ -73,7 +74,9 @@ Future<T?> showAdaptiveBottomSheet<T>({
     context: context,
     isDismissible: isDismissible,
     isScrollControlled: isScrollControlled,
-    useRootNavigator: useRootNavigator,
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // A floating glass card must not grow under the status bar.
     useSafeArea: isIOS || useSafeArea,
     constraints: isIOS ? _glassSheetConstraints(context, constraints) : constraints,
@@ -127,7 +130,9 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
-    useRootNavigator: useRootNavigator,
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // A floating card must not grow under the status bar.
     useSafeArea: isIOS,
     constraints: constraints,
@@ -176,7 +181,9 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
-    useRootNavigator: useRootNavigator,
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // The sheet stops below the status bar.
     useSafeArea: true,
     backgroundColor: isIOS ? Colors.transparent : null,
@@ -317,7 +324,10 @@ Future<T?> _showGlassModalSheet<T>({
     halfSize: halfSize,
     isDismissible: isDismissible,
     dismissible: isDismissible,
-    useRootNavigator: useRootNavigator,
+    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
+    // sheets on its own navigator, so that the screens they push stay in its stack, and its
+    // navigation shell sees the sheet morph out of its bar button.
+    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     morphFrom: morphFrom,
     // Only a sheet that expands has a drag handle, like the iOS sheets.
     showDragIndicator: detents.length > 1,
@@ -675,7 +685,7 @@ class const BottomSheetContextMenuAction({
       title: child,
       onTap: () {
         if (closeOnPressed) {
-          Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pop();
         }
         onPressed?.call();
       },

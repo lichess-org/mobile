@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -209,7 +210,7 @@ class const _ChartSection({
           Center(
             child: TextButton.icon(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   PuzzleScreen.buildRoute(
                     angle: const PuzzleTheme(PuzzleThemeKey.mix),
                     replayDays: days.days,
@@ -408,10 +409,8 @@ class const PuzzleThemeRow({super.key, required final PuzzleDashboardData data})
 
     return InkWell(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(data.theme)));
+        Navigator.of(context)
+            .pushHidingTabBar(PuzzleScreen.buildRoute(angle: PuzzleTheme(data.theme)));
         ref.invalidate(puzzleDashboardProvider);
       },
       child: Container(

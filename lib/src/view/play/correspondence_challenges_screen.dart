@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -50,10 +51,8 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(GameScreen.buildRoute(source: ExistingGameSource(gameFullId)));
+            Navigator.of(context)
+                .pushHidingTabBar(GameScreen.buildRoute(source: ExistingGameSource(gameFullId)));
           }
 
         case 'reload_seeks':

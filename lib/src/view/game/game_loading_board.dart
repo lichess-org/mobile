@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -100,7 +101,7 @@ class _LobbyScreenLoadingContentState() extends State<LobbyScreenLoadingContent>
                             }
                           }
                           if (context.mounted) {
-                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context).pop();
                           }
                         },
                   label: context.l10n.cancel,
@@ -176,7 +177,7 @@ class _UserChallengeLoadingContentState() extends State<UserChallengeLoadingCont
                             }
                           }
                           if (context.mounted) {
-                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context).pop();
                           }
                         },
                   label: context.l10n.cancel,
@@ -268,7 +269,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                             title: Text(context.l10n.challengeAFriend),
                             onUserTap: (user) async {
                               // Capture everything that needs BuildContext before the async gap.
-                              final rootNav = Navigator.of(context, rootNavigator: true);
+                              final navigator = Navigator.of(context);
                               final directedChallengeReq = widget.challengeRequest.copyWith(
                                 destUser: user,
                               );
@@ -299,7 +300,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                                 );
                                 // Use pushAndRemoveUntil to clear any old GameScreen from
                                 // the stack without removing unrelated routes.
-                                rootNav.pushAndRemoveUntil(
+                                navigator.pushAndRemoveUntilHidingTabBar(
                                   directedChallengeRoute,
                                   (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                 );
@@ -312,8 +313,8 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                                   context,
                                   context.l10n.mobileChallengeCreated.replaceAll('\\n', '\n'),
                                 );
-                                // Back to home screen
-                                Navigator.of(context).popUntil((route) => route.isFirst);
+                                // Back to the screen below the game
+                                Navigator.of(context).popUntilTabBarShown();
                               }
                             },
                           ),
@@ -380,7 +381,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
                             }
                           }
                           if (context.mounted) {
-                            Navigator.of(context, rootNavigator: true).pop();
+                            Navigator.of(context).pop();
                           }
                         },
                   label: context.l10n.cancel,

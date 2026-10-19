@@ -44,18 +44,20 @@ class const ConversationScreen({super.key, required final LightUser user})
 }
 
 class _ConversationScreenState() extends ConsumerState<ConversationScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
   }
 
