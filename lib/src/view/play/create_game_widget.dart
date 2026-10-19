@@ -68,7 +68,6 @@ class const CreateGameWidget({
                         final double screenHeight = MediaQuery.heightOf(context);
                         showAdaptiveBottomSheet<void>(
                           context: context,
-                          glass: true,
                           isScrollControlled: true,
                           constraints: BoxConstraints(
                             maxHeight: screenHeight - (screenHeight / 10),
@@ -261,7 +260,7 @@ class const CreateGameWidget({
           onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
                   // Pops the play bottom sheet
-                  Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
                   final playban = ref.read(accountProvider).value?.playban;
                   if (playban != null) {

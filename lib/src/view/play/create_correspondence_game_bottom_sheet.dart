@@ -158,8 +158,7 @@ class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBotto
                               }
                             }
                             if (context.mounted) {
-                              Navigator.of(context)
-                                  .popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil((route) => route is! PopupRoute);
                             }
                           },
                     child: Text(context.l10n.createAGame),

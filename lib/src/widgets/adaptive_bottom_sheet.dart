@@ -11,6 +11,7 @@ import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
         GlassModalSheetStateProvider,
         GlassMorphAnchor,
         GlassSheetDetent,
+        MorphSpeed,
         ScrollControllerProvider;
 import 'package:material_ui/material_ui.dart';
 
@@ -34,8 +35,8 @@ const kGlassBottomSheetMinHeightFraction = 0.45;
 /// cards, and setting switches and [NonLinearSlider]s become glass controls.
 ///
 /// On iOS 26 a [glass] sheet is a [GlassModalSheet] at half height, which morphs out of
-/// [morphFrom] when given (the anchor of a [SheetIconButton]). Before iOS 26 it is in a
-/// [GlassBottomSheetFrame].
+/// [morphFrom] when given (the anchor of a [SheetIconButton] or a [SheetFloatingActionButton]).
+/// Before iOS 26 it is in a [GlassBottomSheetFrame].
 ///
 /// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), its
 /// minimum height is [kGlassBottomSheetMinHeightFraction] of the screen height, replacing the
@@ -329,6 +330,9 @@ Future<T?> _showGlassModalSheet<T>({
     // navigation shell sees the sheet morph out of its bar button.
     useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     morphFrom: morphFrom,
+    // The spring that settles in about the time of a Material sheet's transition (250 ms in, 200 ms
+    // out), the package's default being noticeably slower.
+    morphSpeed: MorphSpeed.fast,
     // Only a sheet that expands has a drag handle, like the iOS sheets.
     showDragIndicator: detents.length > 1,
     // The package's sheet glass is nearly clear: the glass of the other modals, more opaque in light
@@ -652,7 +656,9 @@ class const SheetHeaderButton({
 /// This is meant for content that mostly fits on the screen, not for long lists.
 ///
 /// In an iOS 26 sheet ([GlassModalSheet]), the space above the content is the sheet's, the same in
-/// every sheet: the top of [padding] is not applied.
+/// every sheet: the top of [padding] is not applied. Its bottom is the larger of the bottom of
+/// [padding] and of the sheet's safe area (the home indicator), not both: the sheet rests over the
+/// home indicator, whose safe area already sets the content off the sheet's bottom edge.
 class const BottomSheetScrollableContainer({
   required final List<Widget> children,
   final EdgeInsetsGeometry? padding = const EdgeInsets.symmetric(vertical: 16.0),
@@ -661,12 +667,18 @@ class const BottomSheetScrollableContainer({
   @override
   Widget build(BuildContext context) {
     final ownPadding = (padding ?? EdgeInsets.zero).resolve(Directionality.of(context));
+    final safePadding = MediaQuery.paddingOf(context);
     // The safe area is in the scroll view's padding, so that the content scrolls under it.
     return SingleChildScrollView(
       controller: scrollController,
-      padding: (_InGlassModalSheet.isIn(context) ? ownPadding.copyWith(top: 0.0) : ownPadding).add(
-        MediaQuery.paddingOf(context),
-      ),
+      padding: _InGlassModalSheet.isIn(context)
+          ? EdgeInsets.fromLTRB(
+              ownPadding.left + safePadding.left,
+              0.0,
+              ownPadding.right + safePadding.right,
+              math.max(ownPadding.bottom, safePadding.bottom),
+            )
+          : ownPadding.add(safePadding),
       child: ListBody(children: children),
     );
   }

@@ -544,7 +544,8 @@ possible until then. Rules:
   root screen of a tab has a non-sticky app bar that scrolls away with the content, with an iOS
   large title (`PlatformAppBar` styles it automatically: don't pass a `titleTextStyle`).
 - **Floating action buttons**: use `PlatformFloatingActionButton` (a tinted glass capsule on iOS)
-  instead of `FloatingActionButton`. A FAB is not an iOS pattern though: for a new primary action,
+  instead of `FloatingActionButton`, or `SheetFloatingActionButton` for one that presents a glass
+  sheet, which morphs out of it (`morphFrom`). A FAB is not an iOS pattern though: for a new primary action,
   prefer a nav bar action on iOS.
 - **Search fields**: a `PlatformSearchBar` placed in an app bar (e.g. its `bottom`) takes
   `inAppBar: true`, which makes it a glass search field on iOS. A search field inside the body is

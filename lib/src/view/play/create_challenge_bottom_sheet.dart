@@ -327,8 +327,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   // challenge instead of showing the old GameCreatedState.
                                   ref.invalidate(gameScreenLoaderProvider(source));
                                   final navigator = widget.navigator ?? Navigator.of(context);
-                                  Navigator.of(context)
-                                      .popUntil((route) => route is! ModalBottomSheetRoute);
+                                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
                                   navigator.pushAndRemoveUntilHidingTabBar(
@@ -357,8 +356,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
 
                               if (!context.mounted) return;
 
-                              Navigator.of(context)
-                                  .popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
                               if (maybeDeclined != null &&
                                   Theme.of(context).platform == TargetPlatform.iOS) {

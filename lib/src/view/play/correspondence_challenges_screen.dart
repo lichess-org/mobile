@@ -84,14 +84,16 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
         final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
         return PlatformScaffold(
           appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          floatingActionButton: PlatformFloatingActionButton(
-            onPressed: () {
+          floatingActionButton: SheetFloatingActionButton(
+            onPressed: (anchor) {
               if (authUser == null) {
                 showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                 return;
               }
               showAdaptiveBottomSheet<void>(
                 context: context,
+                glass: true,
+                morphFrom: anchor,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
                   return const CreateCorrespondenceGameBottomSheet();

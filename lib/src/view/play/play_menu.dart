@@ -40,7 +40,7 @@ class const PlayMenu({
               enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! PopupRoute);
                 showAdaptiveBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
@@ -55,7 +55,7 @@ class const PlayMenu({
               enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! PopupRoute);
                 navigator.pushHidingTabBar(CorrespondenceChallengesScreen.buildRoute());
               },
               leading: Icon(Perf.correspondence.icon),
@@ -65,7 +65,7 @@ class const PlayMenu({
               enabled: connectionStatus == LichessConnectionStatus.online,
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! PopupRoute);
                 navigator.push(TournamentListScreen.buildRoute());
               },
               leading: const Icon(LichessIcons.tournament_cup),
@@ -74,7 +74,7 @@ class const PlayMenu({
             ListTile(
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! PopupRoute);
                 navigator.pushHidingTabBar(OfflineComputerGameScreen.buildRoute());
               },
               leading: const Icon(Icons.memory),
@@ -83,7 +83,7 @@ class const PlayMenu({
             ListTile(
               onTap: () {
                 // Pops the play bottom sheet
-                Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                Navigator.of(context).popUntil((route) => route is! PopupRoute);
                 navigator.pushHidingTabBar(OverTheBoardScreen.buildRoute());
               },
               leading: const Icon(Icons.table_restaurant_outlined),
