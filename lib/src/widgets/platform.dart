@@ -884,7 +884,14 @@ class const PlatformAppBar({
         // Icon buttons, sheet buttons and context menu buttons become the shell's own items, whose
         // glyphs morph and whose capsule morphs into the sheet or the menu. Anything else is a
         // custom item, which cross-fades.
-        GlassBarItem barItem(Widget action) => switch (action) {
+        //
+        // Each item has an id, its slot counted from the edge the shell matches items from between
+        // routes (for the actions, the end of the list, or its start in RTL): it matches them as
+        // without an id, and an item built again keeps its identity. That's needed by the shell's hold on a sheet item: while
+        // a sheet is presented over the screen, the bar is drawn by the route again, with the
+        // tapped item's slot left empty for the capsule the sheet morphed out of. The bar is built
+        // again meanwhile, and its new item is recognized by its id only.
+        GlassBarItem barItem(Widget action, Object id) => switch (action) {
           IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
           SemanticIconButton(
             :final icon,
@@ -892,6 +899,7 @@ class const PlatformAppBar({
             semanticsLabel: final String? tooltip,
             :final color,
           ) when !_hasLongPress(action) => GlassBarItem.icon(
+            id: id,
             icon: glyph(icon, color),
             onTap: onPressed ?? () {},
             enabled: onPressed != null,
@@ -899,6 +907,7 @@ class const PlatformAppBar({
           ),
           SheetIconButton(:final icon, :final onPressed, :final semanticsLabel) =>
             GlassBarItem.sheet(
+              id: id,
               icon: glyph(icon, null),
               onPresent: onPressed ?? (_) {},
               enabled: onPressed != null,
@@ -906,16 +915,19 @@ class const PlatformAppBar({
             ),
           ContextMenuIconButton(:final icon, :final color, :final semanticsLabel, :final actions) =>
             GlassBarItem.menu(
+              id: id,
               icon: glyph(icon, color),
               menuItems: glassMenuItems(actions),
               menuWidth: kGlassMenuWidth,
               label: semanticsLabel,
             ),
           AppBarIndicator() => GlassBarItem.custom(
+            id: id,
             background: GlassBarItemBackground.none,
             child: captured(Center(child: action)),
           ),
           _ => GlassBarItem.custom(
+            id: id,
             child: captured(
               IconButtonTheme(
                 data: IconButtonThemeData(
@@ -935,15 +947,24 @@ class const PlatformAppBar({
         return GlassPinnedBarChrome(
           leading: [
             if (leading != null && backButtonLeading == null)
-              barItem(leading!)
+              barItem(leading!, const ('leading', 0))
             else if (impliesLeading && isFullscreenDialog)
               GlassBarItem.icon(
+                id: const ('leading', 0),
                 icon: const Icon(Icons.close_rounded),
                 label: MaterialLocalizations.of(context).closeButtonTooltip,
                 onTap: () => Navigator.maybePop(context),
               ),
           ],
-          actions: [for (final action in actions ?? const <Widget>[]) barItem(action)],
+          actions: [
+            for (final (index, action) in (actions ?? const <Widget>[]).indexed)
+              barItem(action, (
+                'action',
+                Directionality.of(context) == TextDirection.ltr
+                    ? actions!.length - 1 - index
+                    : index,
+              )),
+          ],
           backButton:
               backButtonLeading != null || (automaticallyImplyLeading && !isFullscreenDialog),
           onBack: backButtonLeading?.onPressed,
