@@ -29,8 +29,15 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateChallengeBottomSheet({final LightUser? user, final String? positionFen})
-    extends ConsumerStatefulWidget {
+class const CreateChallengeBottomSheet({
+  final LightUser? user,
+  final String? positionFen,
+
+  /// The navigator where the game is pushed, by default the navigator of the sheet: for a sheet on
+  /// the root navigator, the navigator of the screen that presents it, so that the game is pushed
+  /// in the current tab and hides the tab bar there.
+  final NavigatorState? navigator,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
@@ -319,11 +326,12 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   // new GameScreen always runs build() and creates a fresh
                                   // challenge instead of showing the old GameCreatedState.
                                   ref.invalidate(gameScreenLoaderProvider(source));
+                                  final navigator = widget.navigator ?? Navigator.of(context);
                                   Navigator.of(context)
                                       .popUntil((route) => route is! ModalBottomSheetRoute);
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
-                                  Navigator.of(context).pushAndRemoveUntilHidingTabBar(
+                                  navigator.pushAndRemoveUntilHidingTabBar(
                                     GameScreen.buildRoute(source: source),
                                     (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                   );

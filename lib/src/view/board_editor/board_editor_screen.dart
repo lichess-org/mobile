@@ -348,12 +348,11 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,
-                            builder: (context) {
-                              return CreateChallengeBottomSheet(
-                                user: user,
-                                positionFen: editorState.fen,
-                              );
-                            },
+                            builder: (_) => CreateChallengeBottomSheet(
+                              user: user,
+                              positionFen: editorState.fen,
+                              navigator: Navigator.of(context),
+                            ),
                           );
                         },
                         title: Text(context.l10n.mobileChallengeFromPosition),

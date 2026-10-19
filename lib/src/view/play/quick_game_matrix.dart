@@ -141,9 +141,7 @@ class const _SectionChoices({
                           context: context,
                           useRootNavigator: true,
                           isScrollControlled: true,
-                          builder: (context) {
-                            return const PlayBottomSheet();
-                          },
+                          builder: (_) => PlayBottomSheet(navigator: Navigator.of(context)),
                         );
                       }
                     : null,

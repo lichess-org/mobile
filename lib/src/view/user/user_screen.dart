@@ -68,9 +68,7 @@ class const UserScreen({required final LightUser user, super.key}) extends Consu
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
-        builder: (context) {
-          return CreateChallengeBottomSheet(user: user);
-        },
+        builder: (_) => CreateChallengeBottomSheet(user: user, navigator: Navigator.of(context)),
       );
     }
   }

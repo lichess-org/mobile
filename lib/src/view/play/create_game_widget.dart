@@ -20,7 +20,12 @@ import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateGameWidget() extends ConsumerWidget {
+class const CreateGameWidget({
+  /// The navigator where the game is pushed, by default the navigator of the widget: in a sheet on
+  /// the root navigator, the navigator of the screen that presents it.
+  final NavigatorState? navigator,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
@@ -264,7 +269,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                     return;
                   }
 
-                  Navigator.of(context).pushHidingTabBar(
+                  (navigator ?? Navigator.of(context)).pushHidingTabBar(
                     GameScreen.buildRoute(source: LobbySource(GameSeek.custom(playPrefs, account))),
                   );
                 }

@@ -15,16 +15,24 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const PlayMenu() extends ConsumerWidget {
+class const PlayMenu({
+  /// The navigator where the screens are pushed, by default the navigator of the menu.
+  ///
+  /// In a sheet on the root navigator, the navigator of the screen that presents it, so that the
+  /// screens are pushed in the current tab and hide the tab bar there.
+  final NavigatorState? navigator,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionStatus = ref.watch(lichessConnectionStatusProvider);
+    final navigator = this.navigator ?? Navigator.of(context);
 
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: CreateGameWidget(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: CreateGameWidget(navigator: navigator),
         ),
         _Section(
           children: [
@@ -37,9 +45,7 @@ class const PlayMenu() extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   useRootNavigator: true,
-                  builder: (context) {
-                    return const CreateChallengeBottomSheet(user: null);
-                  },
+                  builder: (_) => CreateChallengeBottomSheet(navigator: navigator),
                 );
               },
               leading: const Icon(Icons.person),
@@ -50,7 +56,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(context).pushHidingTabBar(CorrespondenceChallengesScreen.buildRoute());
+                navigator.pushHidingTabBar(CorrespondenceChallengesScreen.buildRoute());
               },
               leading: Icon(Perf.correspondence.icon),
               title: Text(context.l10n.correspondence),
@@ -60,8 +66,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-
-                Navigator.of(context).push(TournamentListScreen.buildRoute());
+                navigator.push(TournamentListScreen.buildRoute());
               },
               leading: const Icon(LichessIcons.tournament_cup),
               title: Text(context.l10n.arenaArenaTournaments),
@@ -70,7 +75,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(context).pushHidingTabBar(OfflineComputerGameScreen.buildRoute());
+                navigator.pushHidingTabBar(OfflineComputerGameScreen.buildRoute());
               },
               leading: const Icon(Icons.memory),
               title: Text(context.l10n.playAgainstComputer),
@@ -79,7 +84,7 @@ class const PlayMenu() extends ConsumerWidget {
               onTap: () {
                 // Pops the play bottom sheet
                 Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
-                Navigator.of(context).pushHidingTabBar(OverTheBoardScreen.buildRoute());
+                navigator.pushHidingTabBar(OverTheBoardScreen.buildRoute());
               },
               leading: const Icon(Icons.table_restaurant_outlined),
               title: Text(context.l10n.mobileOverTheBoard),
