@@ -159,7 +159,7 @@ class const _Body() extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).pushHidingTabBar(PlayerScreen.buildRoute());
+                  Navigator.of(context).push(PlayerScreen.buildRoute());
                 },
               ),
               if (authUser != null)
@@ -171,7 +171,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
-                    Navigator.of(context).pushHidingTabBar(FriendScreen.buildRoute());
+                    Navigator.of(context).push(FriendScreen.buildRoute());
                   },
                 ),
             ],
@@ -194,7 +194,7 @@ class const _Body() extends ConsumerWidget {
                   leading: const Icon(Icons.info_outline),
                   title: Text(context.l10n.about),
                   onTap: () {
-                    Navigator.of(context).pushHidingTabBar(AboutScreen.buildRoute());
+                    Navigator.of(context).push(AboutScreen.buildRoute());
                   },
                 ),
               ],
