@@ -398,23 +398,31 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
       mediaQuery: MediaQuery.of(context),
       tabBarHeight: tabBarLayout.height,
       extendBody: tabBarLayout.extendBody,
-      // One shell per navigator: it ranks the routes of a single navigator. It is above the builder
-      // below, which changes the shape of the tree when the tab bar is hidden or shown: only the
-      // navigator keeps its state through that, with its global key.
+      // One shell per navigator: it ranks the routes of a single navigator.
       child: GlassNavigationShell(
         enabled: usePinnedNavBar(context),
         // The routes that are not pages (sheets, dialogs, menus) are laid out for the tab bar while
         // it is shown, and over the whole screen while a route hides it.
+        //
+        // The shape of the tree is the same either way: a change of shape would move the navigator
+        // (it has a global key), deactivating and activating every element of the tab, which is
+        // costly and trips an overlay portal whose controller is attached elsewhere meanwhile.
         child: ListenableBuilder(
           listenable: observer,
           builder: (context, child) {
-            if (observer.hasTabBarHidingRoute) return child!;
             final mediaQuery = MediaQuery.of(context);
+            final tabBarShown = !observer.hasTabBarHidingRoute;
             return MediaQuery(
-              data: mediaQuery.copyWith(
-                padding: mediaQuery.padding.copyWith(bottom: tabBarLayout.height),
+              data: tabBarShown
+                  ? mediaQuery.copyWith(
+                      padding: mediaQuery.padding.copyWith(bottom: tabBarLayout.height),
+                    )
+                  : mediaQuery,
+              child: MainTabScaffoldProperties(
+                // Like no properties at all, while the tab bar is hidden.
+                extendBody: tabBarShown && tabBarLayout.extendBody,
+                child: child!,
               ),
-              child: MainTabScaffoldProperties(extendBody: tabBarLayout.extendBody, child: child!),
             );
           },
           child: Navigator(
