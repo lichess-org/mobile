@@ -58,7 +58,7 @@ class const GameHistoryScreen({
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
             data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
-            loading: () => const ButtonLoadingIndicator(),
+            loading: () => const SizedBox.shrink(),
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
