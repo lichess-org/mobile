@@ -41,198 +41,101 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class const StudyScreen({required final StudyOptions options, super.key}) extends StatelessWidget {
+/// The scaffold is the same while the study is loading and once it is loaded: the iOS 26 pinned bar
+/// buttons of the route are lost if its scaffold is replaced.
+class const StudyScreen({required final StudyOptions options, super.key})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudyScreen(options: options));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _StudyScreenLoader(options: options);
-  }
+  ConsumerState<StudyScreen> createState() => _StudyScreenState();
 }
 
-class const _StudyScreenLoader({required final StudyOptions options}) extends ConsumerWidget {
+class _StudyScreenState() extends ConsumerState<StudyScreen> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
-    switch (ref.watch(studyControllerProvider(options))) {
-      case AsyncData(:final value):
-        return _StudyScreen(options: options, studyState: value);
-      case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study:', error, stackTrace);
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: const PlatformAppBar(compactButtons: true, title: Text('')),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
-                ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: Text('Failed to load study.'))],
-            ),
+  Widget build(BuildContext context) {
+    final asyncState = ref.watch(studyControllerProvider(widget.options));
+    final studyState = switch (asyncState) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+    if (asyncState case AsyncError(:final error, :final stackTrace)) {
+      _logger.severe('Cannot load study:', error, stackTrace);
+    }
+    final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
+
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
+        compactButtons: true,
+        title: switch (asyncState) {
+          AsyncData(value: final studyState) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (studyState.variant != Variant.standard &&
+                  studyState.variant != Variant.fromPosition) ...[
+                Icon(studyState.variant.icon),
+                const SizedBox(width: 5.0),
+              ],
+              Flexible(child: AppBarTitleText(studyState.currentChapterTitle)),
+            ],
           ),
-        );
-      case _:
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: PlatformAppBar(
-            compactButtons: true,
-            title: Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SizedBox(
-                  height: 24.0,
-                  width: 200.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+          AsyncError() => null,
+          _ => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
             ),
           ),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
-                ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: CircularProgressIndicator.adaptive())],
-            ),
-          ),
-        );
-    }
-  }
-}
-
-class const _StudyScreen({
-  required final StudyOptions options,
-  required final StudyState studyState,
-}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_StudyScreen> createState() => _StudyScreenState();
-}
-
-class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
-  late List<AnalysisTab> tabs;
-  late TabController _tabController;
-
-  void _initTabs() {
-    tabs = [
-      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
-      AnalysisTab.moves,
-      if (widget.studyState.isServerAnalysisAllowed) AnalysisTab.summary,
-    ];
-
-    _tabController = TabController(
-      vsync: this,
-      initialIndex: tabs.indexOf(AnalysisTab.moves),
-      length: tabs.length,
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _initTabs();
-  }
-
-  @override
-  void didUpdateWidget(covariant _StudyScreen oldWidget) {
-    if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
-      _tabController.dispose();
-      _initTabs();
-    }
-
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final variant = widget.studyState.variant;
-    final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
-    return PlatformScaffold(
-      extendBodyBehindAppBar: false,
-      appBar: PlatformAppBar(
-        compactButtons: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (variant != Variant.standard && variant != Variant.fromPosition) ...[
-              Icon(variant.icon),
-              const SizedBox(width: 5.0),
-            ],
-            Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
-          ],
-        ),
+        },
         actions: [
-          ContextMenuIconButton(
-            semanticsLabel: 'Study menu',
-            icon: const Icon(Icons.more_horiz),
-            actions: [
-              if (isLoggedIn)
+          if (studyState != null)
+            ContextMenuIconButton(
+              semanticsLabel: 'Study menu',
+              icon: const Icon(Icons.more_horiz),
+              actions: [
+                if (isLoggedIn)
+                  ContextMenuAction(
+                    icon: studyState.study.liked ? Icons.favorite : Icons.favorite_border,
+                    label: studyState.study.liked ? 'Stop liking' : context.l10n.studyLike,
+                    onPressed: () {
+                      ref.read(studyControllerProvider(widget.options).notifier).toggleLike();
+                    },
+                  ),
                 ContextMenuAction(
-                  icon: widget.studyState.study.liked ? Icons.favorite : Icons.favorite_border,
-                  label: widget.studyState.study.liked ? 'Stop liking' : context.l10n.studyLike,
-                  onPressed: () {
-                    ref.read(studyControllerProvider(widget.options).notifier).toggleLike();
-                  },
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share
+                      : Icons.share,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => _showShareMenu(studyState),
                 ),
-              ContextMenuAction(
-                icon: Theme.of(context).platform == TargetPlatform.iOS
-                    ? Icons.ios_share
-                    : Icons.share,
-                label: context.l10n.studyShareAndExport,
-                onPressed: _showShareMenu,
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
-      body: _Body(options: widget.options, tabController: _tabController, tabs: tabs),
+      body: switch (asyncState) {
+        AsyncData(value: final studyState) => _TabbedBody(
+          options: widget.options,
+          studyState: studyState,
+        ),
+        AsyncError() => const _PlaceholderBody(child: Text('Failed to load study.')),
+        _ => const _PlaceholderBody(child: CircularProgressIndicator.adaptive()),
+      },
     );
   }
 
-  void _showShareMenu() {
-    final state = widget.studyState;
+  void _showShareMenu(StudyState state) {
     showAdaptiveActionSheet<void>(
       context: context,
       actions: [
@@ -326,6 +229,90 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
         ],
       ],
     );
+  }
+}
+
+/// An empty board, while the study is loading or when it could not be loaded.
+class const _PlaceholderBody({required final Widget child}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        pov: Side.white,
+        sideToMove: null,
+        boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
+          size: boardSize,
+          settings: StaticChessboardSettings.fromBoardSettings(
+            boardPrefs
+                .toBoardSettings(Variant.standard)
+                .copyWith(
+                  borderRadius: borderRadius,
+                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                ),
+          ),
+          orientation: Side.white,
+          fen: kEmptyFEN,
+        ),
+        smallBoard: studyPrefs.smallBoard,
+        children: [Center(child: child)],
+      ),
+    );
+  }
+}
+
+class const _TabbedBody({required final StudyOptions options, required final StudyState studyState})
+    extends StatefulWidget {
+  @override
+  State<_TabbedBody> createState() => _TabbedBodyState();
+}
+
+class _TabbedBodyState() extends State<_TabbedBody> with TickerProviderStateMixin {
+  late List<AnalysisTab> tabs;
+  late TabController _tabController;
+
+  void _initTabs() {
+    tabs = [
+      if (widget.studyState.isOpeningExplorerAvailable) AnalysisTab.explorer,
+      AnalysisTab.moves,
+      if (widget.studyState.isServerAnalysisAllowed) AnalysisTab.summary,
+    ];
+
+    _tabController = TabController(
+      vsync: this,
+      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      length: tabs.length,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initTabs();
+  }
+
+  @override
+  void didUpdateWidget(covariant _TabbedBody oldWidget) {
+    if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
+      _tabController.dispose();
+      _initTabs();
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _Body(options: widget.options, tabController: _tabController, tabs: tabs);
   }
 }
 
