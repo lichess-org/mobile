@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -48,10 +49,9 @@ class const GameListDetailTile({
 
     return InkWell(
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           builder: (context) =>
               GameContextMenu(game: game, mySide: mySide, onPressedBookmark: onPressedBookmark),
@@ -74,6 +74,7 @@ class const GameListDetailTile({
               children: [
                 if (game.lastFen != null)
                   BoardThumbnail(
+                    dimInDarkMode: true,
                     size: boardSize,
                     fen: game.lastFen!,
                     orientation: mySide,

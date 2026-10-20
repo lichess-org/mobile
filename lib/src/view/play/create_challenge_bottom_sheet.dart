@@ -22,6 +22,8 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
@@ -283,7 +285,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
             if (account != null)
               ListTile(
                 title: Text(context.l10n.rated),
-                trailing: Switch.adaptive(
+                trailing: PlatformSwitch(
                   value: preferences.isRatedAllowed && preferences.rated,
                   onChanged: preferences.isRatedAllowed
                       ? (bool value) {
@@ -298,7 +300,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: FilledButton(
+                  child: PlatformFilledButton(
                     onPressed: timeControl == ChallengeTimeControlType.clock || widget.user == null
                         ? isValidTimeControl && isValidPosition
                               ? () {
@@ -349,7 +351,15 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                               Navigator.of(context)
                                   .popUntil((route) => route is! ModalBottomSheetRoute);
 
-                              if (maybeDeclined != null) {
+                              if (maybeDeclined != null &&
+                                  Theme.of(context).platform == TargetPlatform.iOS) {
+                                // A glass toast holds a text message only.
+                                showSnackBar(
+                                  context,
+                                  '${context.l10n.challengeChallengeDeclined}\n${maybeDeclined.label(context.l10n)}',
+                                  duration: const Duration(seconds: 5),
+                                );
+                              } else if (maybeDeclined != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Column(
@@ -383,9 +393,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   ),
                                 );
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
-                                );
+                                showSnackBar(context, context.l10n.mobileChallengeCreated);
                               }
                             } catch (e) {
                               if (context.mounted) {

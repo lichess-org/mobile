@@ -50,6 +50,7 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Grootte van lokale databank</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Zetten bij loslaten</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Bij tikken om te zetten, wordt de zet gedaan als je vinger loslaat, zodat je van bestemmingsvakje kan wisselen.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Je moet ingelogd zijn om deze pagina te bekijken.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline puzzels</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nieuwe partij</string>

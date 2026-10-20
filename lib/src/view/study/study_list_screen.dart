@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -107,8 +108,8 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
         ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
       ),
       floatingActionButton: authUser != null
-          ? FloatingActionButton.extended(
-              onPressed: () => showModalBottomSheet<void>(
+          ? PlatformFloatingActionButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
@@ -121,7 +122,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
                 ),
               ),
               icon: const Icon(Symbols.school_rounded),
-              label: Text(context.l10n.studyCreateStudy),
+              label: context.l10n.studyCreateStudy,
             )
           : null,
     );

@@ -60,7 +60,7 @@ extension GameExtension on Pick {
         orElse: () => GameStatus.unknown,
       );
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to GameStatus");
+    throw PickException.fromPick(this, "can't be casted to GameStatus");
   }
 
   GameStatus? asGameStatusOrNull() {

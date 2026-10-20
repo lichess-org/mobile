@@ -148,7 +148,7 @@ class TournamentController(final TournamentId id)
         .read(tournamentRepositoryProvider)
         .loadPage(state.requireValue.tournament, page);
 
-    if (!state.hasValue) {
+    if (!ref.mounted || !state.hasValue) {
       return;
     }
 
@@ -166,7 +166,7 @@ class TournamentController(final TournamentId id)
         .read(tournamentRepositoryProvider)
         .reload(state.requireValue.tournament);
 
-    if (!state.hasValue) {
+    if (!ref.mounted || !state.hasValue) {
       return;
     }
 
