@@ -421,6 +421,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
       );
     }
   }
+
   /// Size of the button on iOS, where it fills the glass capsule of the navigation bar.
   static const _cupertinoButtonSize = 44.0;
   static const _cupertinoAvatarRadius = 20.0;
