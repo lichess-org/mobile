@@ -22,16 +22,17 @@ const kLightMenuGlassSettings = LiquidGlassSettings(
   chromaticAberration: 0.0,
 );
 
-/// [kLightMenuGlassSettings] for dark mode: the package default tint (white 12%), with the same
-/// stronger blur and saturation (with the package default blur, the content shows through sharply).
+/// [kLightMenuGlassSettings] for dark mode: a fainter tint than the package default (white 8%
+/// instead of 12%), its saturation, and the same stronger blur (with the package default blur, the
+/// content shows through sharply).
 const kDarkMenuGlassSettings = LiquidGlassSettings(
   blur: 20,
   thickness: 10,
-  glassColor: Color(0x1FFFFFFF),
+  glassColor: Color(0x14FFFFFF),
   lightAngle: GlassDefaults.lightAngle,
   lightIntensity: 0.7,
   ambientStrength: 0.4,
-  saturation: 1.8,
+  saturation: 1.2,
   refractiveIndex: 0.7,
   chromaticAberration: 0.0,
 );

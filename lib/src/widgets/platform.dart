@@ -253,8 +253,8 @@ const _kLightAppBarButtonSettings = LiquidGlassSettings(
 /// [kDarkMenuGlassSettings], for the menus of the pinned bar buttons.
 const _kDarkAppBarButtonSettings = LiquidGlassSettings(
   blur: 20,
-  glassColor: Color(0x1FFFFFFF),
-  saturation: 1.8,
+  glassColor: Color(0x14FFFFFF),
+  saturation: 1.2,
 );
 
 /// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
