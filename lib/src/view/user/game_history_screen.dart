@@ -88,6 +88,9 @@ class const GameHistoryScreen({
           }),
     );
 
+    final displayMode = ref.watch(
+      gameHistoryPreferencesProvider.select((value) => value.displayMode),
+    );
     final displayModeButton = ContextMenuIconButton(
       consumeOutsideTap: true,
       icon: const Icon(Icons.more_horiz),
@@ -96,6 +99,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.ballot_outlined,
           label: context.l10n.mobileDisplayModeDetailed,
+          selected: displayMode == GameHistoryDisplayMode.detail,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -105,6 +109,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.list_outlined,
           label: context.l10n.mobileDisplayModeCompact,
+          selected: displayMode == GameHistoryDisplayMode.compact,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)

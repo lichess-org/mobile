@@ -53,15 +53,15 @@ class const OpeningThemeScreen({super.key}) extends ConsumerWidget {
             semanticsLabel: 'Sort openings',
             actions: [
               ContextMenuAction(
-                icon: sort == PuzzleOpeningSort.popular ? Icons.check : null,
                 label: context.l10n.popularOpenings,
+                selected: sort == PuzzleOpeningSort.popular,
                 onPressed: () {
                   ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.popular;
                 },
               ),
               ContextMenuAction(
-                icon: sort == PuzzleOpeningSort.alphabetical ? Icons.check : null,
                 label: 'Alphabetical',
+                selected: sort == PuzzleOpeningSort.alphabetical,
                 onPressed: () {
                   ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.alphabetical;
                 },

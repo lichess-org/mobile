@@ -65,23 +65,23 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
             semanticsLabel: 'Sort studies',
             actions: [
               ContextMenuAction(
-                icon: order == StudyListOrder.hot ? Icons.check : null,
                 label: context.l10n.studyHot,
+                selected: order == StudyListOrder.hot,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.hot),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.newest ? Icons.check : null,
                 label: context.l10n.studyDateAddedNewest,
+                selected: order == StudyListOrder.newest,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.newest),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.updated ? Icons.check : null,
                 label: context.l10n.studyRecentlyUpdated,
+                selected: order == StudyListOrder.updated,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.updated),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.popular ? Icons.check : null,
                 label: context.l10n.studyMostPopular,
+                selected: order == StudyListOrder.popular,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.popular),
               ),
             ],

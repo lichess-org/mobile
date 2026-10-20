@@ -10,7 +10,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
-    show ContextMenuIconButton, glassMenuItems, kGlassMenuWidth;
+    show
+        ContextMenuIconButton,
+        glassMenuItems,
+        kDarkMenuGlassSettings,
+        kGlassMenuWidth,
+        kLightMenuGlassSettings;
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
@@ -237,21 +242,34 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
 /// navigation bar buttons (the package's light glass is nearly clear).
 ///
 /// The menus of the pinned bar buttons get the glass of the buttons (the package has no setting of
-/// their own): opaque enough to read them over the content.
-const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x99FFFFFF));
+/// their own): the same white, blur and saturation as [kLightMenuGlassSettings], like an iOS menu.
+const _kLightAppBarButtonSettings = LiquidGlassSettings(
+  blur: 20,
+  glassColor: Color(0x66FFFFFF),
+  saturation: 1.8,
+);
+
+/// [_kLightAppBarButtonSettings] for dark mode: the same tint, blur and saturation as
+/// [kDarkMenuGlassSettings], for the menus of the pinned bar buttons.
+const _kDarkAppBarButtonSettings = LiquidGlassSettings(
+  blur: 20,
+  glassColor: Color(0x1FFFFFFF),
+  saturation: 1.8,
+);
 
 /// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
 /// laid out inside it (the search field below a large title), so that they look the same.
 ///
 /// With a background theme, or when [tinted] (`PlatformAppBar.tintedGlass`), it is
-/// [tintedGlassSettings]: the barely tinted dark glass would show the image brightly. In light mode,
-/// the buttons are white like the iOS navigation bar buttons. Otherwise, the package default.
-LiquidGlassSettings? appBarButtonGlassSettings(BuildContext context, {bool tinted = false}) =>
+/// [tintedGlassSettings]: the barely tinted dark glass would show the image brightly. Otherwise,
+/// the buttons are white in light mode and light grey in dark mode, like the iOS navigation bar
+/// buttons.
+LiquidGlassSettings appBarButtonGlassSettings(BuildContext context, {bool tinted = false}) =>
     tinted || _hasBackgroundTheme(context)
     ? tintedGlassSettings(context)
     : Theme.of(context).brightness == Brightness.light
     ? _kLightAppBarButtonSettings
-    : null;
+    : _kDarkAppBarButtonSettings;
 
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
@@ -909,7 +927,7 @@ class const PlatformAppBar({
             GlassBarItem.menu(
               id: id,
               icon: glyph(icon, color),
-              menuItems: glassMenuItems(actions),
+              menuItems: glassMenuItems(context, actions),
               menuWidth: kGlassMenuWidth,
               label: semanticsLabel,
             ),

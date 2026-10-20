@@ -1,48 +1,90 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassDefaults, GlassMenu, GlassMenuController, GlassMenuItem, LiquidGlassSettings;
 import 'package:material_ui/material_ui.dart';
 
-/// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint.
+/// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint, a
+/// stronger blur and more saturation: like an iOS menu, the colors of the content show through.
 ///
 /// The package default glass (white 12%) is too clear over light content: used by the glass menus
-/// and popovers in light mode. Dark mode keeps the default.
+/// and popovers in light mode ([menuGlassSettings]).
 const kLightMenuGlassSettings = LiquidGlassSettings(
-  blur: 10,
+  blur: 20,
   thickness: 10,
-  glassColor: Color(0x99FFFFFF),
+  glassColor: Color(0x66FFFFFF),
   lightAngle: GlassDefaults.lightAngle,
   lightIntensity: 0.7,
   ambientStrength: 0.4,
-  saturation: 1.2,
+  saturation: 1.8,
   refractiveIndex: 0.7,
   chromaticAberration: 0.0,
 );
 
+/// [kLightMenuGlassSettings] for dark mode: the package default tint (white 12%), with the same
+/// stronger blur and saturation (with the package default blur, the content shows through sharply).
+const kDarkMenuGlassSettings = LiquidGlassSettings(
+  blur: 20,
+  thickness: 10,
+  glassColor: Color(0x1FFFFFFF),
+  lightAngle: GlassDefaults.lightAngle,
+  lightIntensity: 0.7,
+  ambientStrength: 0.4,
+  saturation: 1.8,
+  refractiveIndex: 0.7,
+  chromaticAberration: 0.0,
+);
+
+/// The glass of the liquid glass context menus and popovers.
+LiquidGlassSettings menuGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? kLightMenuGlassSettings
+    : kDarkMenuGlassSettings;
+
 /// Width of the liquid glass context menus.
 const kGlassMenuWidth = 250.0;
-
-/// The glass of the liquid glass context menus.
-LiquidGlassSettings? _glassMenuSettings(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light ? kLightMenuGlassSettings : null;
 
 /// The items of a liquid glass context menu, one per action.
 ///
 /// In a menu of choices (one of the actions is [ContextMenuAction.selected]), the current choice
-/// has a check mark on the leading edge, like an iOS menu.
-List<GlassMenuItem> glassMenuItems(List<ContextMenuAction> actions) {
+/// has a check mark on the leading edge, like an iOS menu, and the action icons are not shown.
+///
+/// The titles are a little smaller than the package's (17pt), and a title too long for one line
+/// wraps to two, like in an iOS menu.
+List<GlassMenuItem> glassMenuItems(BuildContext context, List<ContextMenuAction> actions) {
   final isChoiceMenu = actions.any((action) => action.selected);
+  // The package's title color: the theme text color at 90%.
+  final textColor = (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label)
+      .withValues(alpha: 0.9);
+  final titleStyle = TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w400);
+  // The menu sizes itself from the items' max lines, not from their layout: only a title that
+  // doesn't fit on one line gets two.
+  int maxLines(String title, {required bool hasIcon}) {
+    // The menu's (12pt) and the item's (16pt) horizontal padding, and the icon with its 12pt gap.
+    final width = kGlassMenuWidth - 2 * 12.0 - 2 * 16.0 - (hasIcon ? 20.0 + 12.0 : 0.0);
+    final painter = TextPainter(
+      text: TextSpan(text: title, style: titleStyle),
+      textDirection: Directionality.of(context),
+      textScaler: MediaQuery.textScalerOf(context),
+      maxLines: 1,
+    )..layout(maxWidth: width);
+    final exceeds = painter.didExceedMaxLines;
+    painter.dispose();
+    return exceeds ? 2 : 1;
+  }
+
   return [
     for (final action in actions)
       GlassMenuItem(
         title: action.label,
+        titleStyle: titleStyle,
+        maxLines: maxLines(action.label, hasIcon: isChoiceMenu || action.icon != null),
         icon: isChoiceMenu
             ? Icon(Icons.check, color: action.selected ? null : Colors.transparent)
             : action.icon != null
             ? Icon(action.icon)
             : null,
-        trailing: isChoiceMenu && action.icon != null ? Icon(action.icon, size: 20.0) : null,
         enabled: action.onPressed != null,
         onTap: action.onPressed ?? () {},
       ),
@@ -85,11 +127,11 @@ class const ContextMenuIconButton({
     if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
-        settings: _glassMenuSettings(context),
+        settings: menuGlassSettings(context),
         semanticLabel: semanticsLabel,
         // The button is not glass itself: it sits in the glass capsule of the app bar.
         triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
-        items: glassMenuItems(actions),
+        items: glassMenuItems(context, actions),
       );
     }
 
@@ -180,8 +222,8 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
               morphFromZero: true,
               autoAdjustToScreen: true,
               menuWidth: kGlassMenuWidth,
-              settings: _glassMenuSettings(context),
-              items: glassMenuItems(widget.actions),
+              settings: menuGlassSettings(context),
+              items: glassMenuItems(context, widget.actions),
             ),
           ),
       ],
