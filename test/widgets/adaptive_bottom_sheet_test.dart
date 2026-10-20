@@ -5,132 +5,12 @@ import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassModalSheetScaffold, GlassMorphTrigger, GlassSlider, GlassSwitch;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
 
 void main() {
-  testWidgets('shows a glass sheet on iOS only', variant: kPlatformVariant, (tester) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      home: Scaffold(
-        body: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                glass: true,
-                builder: (_) => BottomSheetScrollableContainer(
-                  children: [
-                    const ListSection(
-                      children: [
-                        ListTile(title: Text('Row')),
-                        SwitchSettingTile(title: Text('Switch'), value: true),
-                      ],
-                    ),
-                    NonLinearSlider(value: 2, values: const [1, 2, 3]),
-                  ],
-                ),
-              ),
-              child: const Text('Show'),
-            ),
-          ),
-        ),
-      ),
-    );
-    await tester.pumpWidget(app);
-    await tester.tap(find.text('Show'));
-    await tester.pumpAndSettle();
-
-    final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
-    expect(find.text('Row'), findsOneWidget);
-    // On iOS, a Material sheet with a glass card: only a sheet that morphs is a glass modal sheet.
-    expect(find.byType(GlassBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
-    expect(find.byType(GlassModalSheetScaffold), findsNothing);
-
-    // On the glass sheet, the section card is translucent.
-    final cardMaterial = tester.widget<Material>(
-      find.descendant(of: find.byType(ListSection), matching: find.byType(Material)).first,
-    );
-    expect(cardMaterial.color!.a < 1, isIOS);
-
-    // On the glass sheet, the switch and the slider are glass controls.
-    expect(find.byType(GlassSwitch), isIOS ? findsOneWidget : findsNothing);
-    expect(find.byType(GlassSlider), isIOS ? findsOneWidget : findsNothing);
-    expect(find.byType(Switch), isIOS ? findsNothing : findsOneWidget);
-    expect(find.byType(Slider), isIOS ? findsNothing : findsOneWidget);
-  });
-
-  testWidgets('a glass sheet that morphs out of its trigger is a glass modal sheet', (
-    tester,
-  ) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      home: Scaffold(
-        body: Center(
-          child: GlassMorphTrigger(
-            builder: (context, anchor) => ElevatedButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                glass: true,
-                morphFrom: anchor,
-                builder: (_) => const BottomSheetScrollableContainer(children: [Text('Content')]),
-              ),
-              child: const Text('Show'),
-            ),
-          ),
-        ),
-      ),
-    );
-    await tester.pumpWidget(app);
-    await tester.tap(find.text('Show'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Content'), findsOneWidget);
-    expect(find.byType(GlassModalSheetScaffold), findsOneWidget);
-    expect(find.byType(GlassBottomSheetFrame), findsNothing);
-  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
-
-  testWidgets('glass modal sheets have the same space above their content', (tester) async {
-    Future<double> contentTop(EdgeInsetsGeometry padding) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: Scaffold(
-          body: Center(
-            child: GlassMorphTrigger(
-              builder: (context, anchor) => ElevatedButton(
-                onPressed: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  glass: true,
-                  morphFrom: anchor,
-                  builder: (_) => BottomSheetScrollableContainer(
-                    padding: padding,
-                    children: const [Text('Content')],
-                  ),
-                ),
-                child: const Text('Show'),
-              ),
-            ),
-          ),
-        ),
-      );
-      await tester.pumpWidget(app);
-      await tester.tap(find.text('Show'));
-      await tester.pumpAndSettle();
-      final top = tester.getTopLeft(find.text('Content')).dy;
-      await tester.pumpWidget(const SizedBox.shrink());
-      return top;
-    }
-
-    expect(
-      await contentTop(const EdgeInsets.all(16.0)),
-      await contentTop(const EdgeInsets.only(bottom: 16.0)),
-    );
-  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
-
   testWidgets('shows an opaque sheet by default', variant: kPlatformVariant, (tester) async {
     final app = await makeTestProviderScopeApp(
       tester,
@@ -164,15 +44,13 @@ void main() {
 
     final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
     expect(find.text('Row'), findsOneWidget);
-    expect(find.byType(GlassBottomSheetFrame), findsNothing);
-    expect(find.byType(GlassSheetScope), findsNothing);
     expect(find.byType(OpaqueBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
     if (isIOS) {
       // The short content opens at the shared minimum height.
       final screenHeight = tester.view.physicalSize.height / tester.view.devicePixelRatio;
       expect(
         tester.getSize(find.byType(OpaqueBottomSheetFrame)).height,
-        moreOrLessEquals(screenHeight * kGlassBottomSheetMinHeightFraction),
+        moreOrLessEquals(screenHeight * kBottomSheetMinHeightFraction),
       );
       final frameMaterial = tester.widget<Material>(
         find
@@ -182,13 +60,11 @@ void main() {
       expect(frameMaterial.color!.a, 1.0);
     }
 
-    // The section card is opaque, the switch and the slider are not glass controls.
+    // The section card is opaque.
     final cardMaterial = tester.widget<Material>(
       find.descendant(of: find.byType(ListSection), matching: find.byType(Material)).first,
     );
     expect(cardMaterial.color!.a, 1.0);
-    expect(find.byType(GlassSwitch), findsNothing);
-    expect(find.byType(GlassSlider), findsNothing);
   });
 
   testWidgets('shows an expandable sheet', variant: kPlatformVariant, (tester) async {
@@ -216,10 +92,8 @@ void main() {
     await tester.pumpAndSettle();
 
     final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
-    // On iOS 26, a liquid glass modal sheet, whose content is opaque: it is opaque once expanded.
-    expect(find.byType(GlassModalSheetScaffold), isIOS ? findsOneWidget : findsNothing);
-    expect(find.byType(DraggableScrollableSheet), isIOS ? findsNothing : findsOneWidget);
-    expect(find.byType(GlassSheetScope), findsNothing);
+    expect(find.byType(DraggableScrollableSheet), findsOneWidget);
+    expect(find.byType(OpaqueBottomSheetFrame), isIOS ? findsOneWidget : findsNothing);
 
     // Scrolling the list up expands the sheet first: the first row moves up, still shown.
     final topBefore = tester.getTopLeft(find.text('Row 0')).dy;
@@ -271,7 +145,6 @@ void main() {
       if (isIOS) {
         // Opaque and flat: no glass card, and opaque content.
         expect(find.byType(GlassModalCard), findsNothing);
-        expect(find.byType(GlassSheetScope), findsNothing);
         final card = tester.widget<Material>(
           find
               .descendant(of: find.byType(OpaqueBottomSheetFrame), matching: find.byType(Material))

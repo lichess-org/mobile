@@ -1204,7 +1204,6 @@ class const InlineMove({
           ? () {
               showAdaptiveBottomSheet<void>(
                 context: context,
-                glass: true,
                 isScrollControlled: true,
                 showDragHandle: true,
                 builder: (context) => _MoveContextMenu(

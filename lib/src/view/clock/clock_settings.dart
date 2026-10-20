@@ -59,7 +59,6 @@ class const ClockSettings({required final Orientation orientation, super.key})
                       final double screenHeight = MediaQuery.heightOf(context);
                       showAdaptiveBottomSheet<void>(
                         context: context,
-                        glass: true,
                         isScrollControlled: true,
                         constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
                         builder: (BuildContext context) {

@@ -45,7 +45,6 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -103,14 +102,12 @@ class const OfflineComputerGameScreen({
       appBar: PlatformAppBar(
         title: AppBarTitleText(title),
         actions: [
-          SheetIconButton(
+          SemanticIconButton(
             icon: const Icon(Icons.settings),
             semanticsLabel: context.l10n.settingsSettings,
-            onPressed: (anchor) {
+            onPressed: () {
               showAdaptiveBottomSheet<void>(
                 context: context,
-                glass: true,
-                morphFrom: anchor,
                 builder: (_) => const _OfflineComputerGameSettingsSheet(),
               );
             },
@@ -1089,7 +1086,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: PlatformFilledButton(
+          child: FilledButton(
             onPressed: _isPlayEnabled
                 ? () {
                     final effectiveFen =

@@ -330,11 +330,9 @@ class const _PuzzleScaffold({
           ),
           actions: [
             if (initialPuzzleContext case final initialPuzzleContext?)
-              SheetIconButton(
-                onPressed: (anchor) => showAdaptiveBottomSheet<void>(
+              SemanticIconButton(
+                onPressed: () => showAdaptiveBottomSheet<void>(
                   context: context,
-                  glass: true,
-                  morphFrom: anchor,
                   isScrollControlled: true,
                   constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
                   builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),

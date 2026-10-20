@@ -875,7 +875,6 @@ class const _GameBottomBar({
           makeLabel: (context) => Text(context.l10n.settingsSettings),
           onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            glass: true,
             isScrollControlled: true,
             builder: (_) => GameSettings(id: id),
           ),

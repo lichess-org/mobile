@@ -36,13 +36,11 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
       appBar: PlatformAppBar(
         title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
-          SheetIconButton(
+          SemanticIconButton(
             icon: const Icon(Icons.settings),
             semanticsLabel: context.l10n.settingsSettings,
-            onPressed: (anchor) => showAdaptiveBottomSheet<void>(
+            onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
-              glass: true,
-              morphFrom: anchor,
               showDragHandle: true,
               builder: (BuildContext context) => const _CoordinateTrainingMenu(),
             ),
@@ -431,7 +429,6 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
   return showAdaptiveBottomSheet<void>(
     context: context,
-    glass: true,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );
 }

@@ -422,7 +422,6 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
           label: context.l10n.mobileFilters,
           onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
-            glass: true,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,
             constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),

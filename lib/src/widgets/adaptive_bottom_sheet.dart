@@ -1,18 +1,8 @@
-import 'dart:math' as math;
-
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
 import 'package:lichess_mobile/src/tab_navigation.dart' show isTabBarHiddenAt;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show
-        GlassIconButton,
-        GlassModalSheet,
-        GlassModalSheetStateProvider,
-        GlassMorphAnchor,
-        GlassSheetDetent,
-        MorphSpeed,
-        ScrollControllerProvider;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
 import 'package:material_ui/material_ui.dart';
 
 /// The minimum height of an iOS bottom sheet that doesn't expand ([showAdaptiveBottomSheet]), as a
@@ -20,7 +10,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// The same for every sheet, so that short sheets (menus, filters, settings) open at the same
 /// height whatever their content.
-const kGlassBottomSheetMinHeightFraction = 0.45;
+const kBottomSheetMinHeightFraction = 0.45;
 
 /// Shows a modal bottom sheet: a Material bottom sheet on Android, an inset card on iOS.
 ///
@@ -28,31 +18,16 @@ const kGlassBottomSheetMinHeightFraction = 0.45;
 /// work as usual), with a transparent background and the content in a card that floats inset from
 /// the screen edges, like an iOS 26 sheet at a partial height.
 ///
-/// Glass is for navigation and controls, never for content: the card is opaque and flat
-/// ([OpaqueBottomSheetFrame]), with opaque content, unless [glass]. Only a sheet made of navigation
-/// items and actions alone (a menu), or of a few settings or filters, is [glass]: its content is
-/// then in a [GlassSheetScope], on a glass background, where [ListSection]s get translucent section
-/// cards, and setting switches and [NonLinearSlider]s become glass controls.
-///
-/// A [glass] sheet is in a [GlassBottomSheetFrame], a Material modal bottom sheet that opens like
-/// the opaque ones. On iOS 26, one that morphs out of [morphFrom] (the anchor of a
-/// [SheetIconButton]) is a [GlassModalSheet] at half height instead: the morph only exists for it.
+/// The card is opaque and flat ([OpaqueBottomSheetFrame]), with opaque content.
 ///
 /// The iOS sheet doesn't expand: it has no drag handle ([showDragHandle] is Android only), its
-/// minimum height is [kGlassBottomSheetMinHeightFraction] of the screen height, replacing the
-/// minimum height of [constraints], and it stays below the status bar.
+/// minimum height is [kBottomSheetMinHeightFraction] of the screen height, replacing the minimum
+/// height of [constraints], and it stays below the status bar.
 ///
 /// For sheets that expand, use [showAdaptiveDraggableBottomSheet].
 Future<T?> showAdaptiveBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
-
-  /// Whether the iOS sheet is glass: only for a sheet of navigation items and actions alone, or of
-  /// a few settings or filters.
-  bool glass = false,
-
-  /// The control the iOS 26 [glass] sheet morphs out of (see [SheetIconButton]).
-  GlassMorphAnchor? morphFrom,
   bool isDismissible = true,
   bool isScrollControlled = false,
   bool useRootNavigator = false,
@@ -60,16 +35,6 @@ Future<T?> showAdaptiveBottomSheet<T>({
   bool useSafeArea = false,
   BoxConstraints? constraints,
 }) {
-  if (glass && morphFrom != null && useLiquidGlass(context)) {
-    return _showGlassModalSheet(
-      context: context,
-      detents: const {GlassSheetDetent.medium},
-      isDismissible: isDismissible,
-      useRootNavigator: useRootNavigator,
-      morphFrom: morphFrom,
-      builder: (context) => _GlassSheetContent(child: builder(context)),
-    );
-  }
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   return showModalBottomSheet<T>(
     context: context,
@@ -78,16 +43,14 @@ Future<T?> showAdaptiveBottomSheet<T>({
     // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
     // sheets on its own navigator, so that the screens they push stay in its stack.
     useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
-    // A floating glass card must not grow under the status bar.
+    // A floating card must not grow under the status bar.
     useSafeArea: isIOS || useSafeArea,
-    constraints: isIOS ? _glassSheetConstraints(context, constraints) : constraints,
+    constraints: isIOS ? _iosSheetConstraints(context, constraints) : constraints,
     showDragHandle: !isIOS && showDragHandle,
     backgroundColor: isIOS ? Colors.transparent : null,
     elevation: isIOS ? 0 : null,
     builder: isIOS
-        ? (context) => glass
-              ? GlassBottomSheetFrame(child: builder(context))
-              : OpaqueBottomSheetFrame(layout: .fixed, child: builder(context))
+        ? (context) => OpaqueBottomSheetFrame(layout: .fixed, child: builder(context))
         : builder,
   );
 }
@@ -97,15 +60,8 @@ Future<T?> showAdaptiveBottomSheet<T>({
 ///
 /// [builder] gets the sheet's scroll controller, to give to the scroll view of the content.
 ///
-/// It always has a drag handle. On iOS 26 it is a [GlassModalSheet], like a native iOS 26 sheet:
-/// glass at half height ([initialChildSize]), opaque once expanded to the full height. Its content
-/// is opaque (not in a [GlassSheetScope]), being on an opaque sheet once expanded. The other sizes
-/// are not used: it is dismissed by dragging it down from half height. The content gets the sheet's
-/// padding through the media query: its scroll view must apply it (see
-/// [BottomSheetScrollableContainer]).
-///
-/// Before iOS 26 the sheet is inset like the other sheets ([showAdaptiveBottomSheet]), an opaque,
-/// flat card ([OpaqueBottomSheetFrame]).
+/// It always has a drag handle. On iOS the sheet is inset like the other sheets
+/// ([showAdaptiveBottomSheet]), an opaque, flat card ([OpaqueBottomSheetFrame]).
 Future<T?> showAdaptiveDraggableBottomSheet<T>({
   required BuildContext context,
   required ScrollableWidgetBuilder builder,
@@ -116,17 +72,6 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
   bool useRootNavigator = false,
   BoxConstraints? constraints,
 }) {
-  if (useLiquidGlass(context)) {
-    return _showGlassModalSheet(
-      context: context,
-      detents: const {GlassSheetDetent.medium, GlassSheetDetent.large},
-      halfSize: initialChildSize,
-      useRootNavigator: useRootNavigator,
-      // The sheet installs its physics on the scroll views inside it: dragged up, the content
-      // expands the sheet first, then scrolls.
-      builder: (context) => builder(context, ScrollControllerProvider.of(context)!.controller),
-    );
-  }
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
   return showModalBottomSheet<T>(
     context: context,
@@ -308,143 +253,13 @@ class const _FullHeightSheetHeader({required final Widget title}) extends Statel
   }
 }
 
-/// Shows a [GlassModalSheet] resting at [detents]: glass at half height ([halfSize] of the screen
-/// height), opaque at full height.
-Future<T?> _showGlassModalSheet<T>({
-  required BuildContext context,
-  required WidgetBuilder builder,
-  required Set<GlassSheetDetent> detents,
-  double halfSize = kGlassBottomSheetMinHeightFraction,
-  bool isDismissible = true,
-  bool useRootNavigator = false,
-  GlassMorphAnchor? morphFrom,
-}) {
-  return GlassModalSheet.show<T>(
-    context: context,
-    detents: detents,
-    halfSize: halfSize,
-    isDismissible: isDismissible,
-    dismissible: isDismissible,
-    // The root navigator is only needed to cover the tab bar: a screen hiding it presents its
-    // sheets on its own navigator, so that the screens they push stay in its stack, and its
-    // navigation shell sees the sheet morph out of its bar button.
-    useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
-    morphFrom: morphFrom,
-    // The spring that settles in about the time of a Material sheet's transition (250 ms in, 200 ms
-    // out), the package's default being noticeably slower.
-    morphSpeed: MorphSpeed.fast,
-    // Only a sheet that expands has a drag handle, like the iOS sheets.
-    showDragIndicator: detents.length > 1,
-    // The package's sheet glass is nearly clear: the glass of the other modals, more opaque in light
-    // mode, where a sheet is often over a board.
-    settings: glassModalSettings(context, tintOpacity: _glassSheetTintOpacity(context)),
-    expandedColor: opaqueModalColor(context),
-    // The corners of the other sheets: concentric with the screen corners, inset at half height,
-    // edge to edge at full height.
-    horizontalMargin: _kSheetMargin,
-    bottomMargin: _kSheetMargin,
-    topBorderRadius: _sheetCornerRadius(context),
-    bottomBorderRadius: _sheetCornerRadius(context),
-    fullTopBorderRadius: _sheetCornerRadius(context, inset: 0),
-    fullBottomBorderRadius: _sheetCornerRadius(context, inset: 0),
-    // A dialog route, out of any Material ancestor: like the other sheets, the content gets one.
-    builder: (context) => Material(
-      type: MaterialType.transparency,
-      child: _GlassModalSheetPadding(child: Builder(builder: builder)),
-    ),
-  );
-}
-
-/// The tint opacity of the glass sheets: more opaque than the other modals' glass.
-double _glassSheetTintOpacity(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-    ? _kLightGlassSheetTintOpacity
-    : _kGlassSheetTintOpacity;
-
-/// The tint opacity of a glass sheet in dark mode, a little higher than the other modals'
-/// ([glassModalSettings]), to keep the content readable.
-const _kGlassSheetTintOpacity = 0.75;
-
-/// The tint opacity of a glass sheet in light mode, higher than the other modals', to keep
-/// the content readable over a board.
-const _kLightGlassSheetTintOpacity = 0.8;
-
-/// Space above the content of a [GlassModalSheet], below its drag handle (8 + 4 + 8), the same
-/// whether it has one or not.
-const _kGlassModalSheetTopPadding = 20.0;
-
-/// Lays the content of a [GlassModalSheet] out in the sheet.
-///
-/// The sheet gives its content its whole height, from its top edge, where the drag handle is drawn
-/// over it, to its bottom edge, which is not the bottom of what is seen.
-///
-/// At the top, the content starts [_kGlassModalSheetTopPadding] below the edge, whatever the
-/// content and even scrolled, so that every sheet has the same space above its content: the top
-/// padding of [BottomSheetScrollableContainer] is dropped in it.
-///
-/// At the bottom, the padding is given to the content through the media query, for its scroll view
-/// (or [SafeArea]) to apply: the sheet rests [_kSheetMargin] above the bottom of the screen at half
-/// height, over the home indicator, and expanded, it goes below the bottom of the screen
-/// ([SheetStateInfo.submergedBottom]). The bottom padding is what is out of the screen, plus the
-/// home indicator area. The route's media query is the screen's: its top padding (the status bar)
-/// is not the sheet's.
-class const _GlassModalSheetPadding({required final Widget child}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final submergedBottom = GlassModalSheetStateProvider.of(context)?.submergedBottom ?? 0.0;
-    // The distance from the bottom of the screen to the bottom of the sheet.
-    final sheetBottom = submergedBottom > 0 ? -submergedBottom : _kSheetMargin;
-    final padding = mediaQuery.padding.copyWith(
-      top: 0.0,
-      bottom: math.max(0.0, mediaQuery.padding.bottom - sheetBottom),
-    );
-    return _InGlassModalSheet(
-      child: Padding(
-        padding: const EdgeInsets.only(top: _kGlassModalSheetTopPadding),
-        child: MediaQuery(
-          data: mediaQuery.copyWith(padding: padding, viewPadding: padding),
-          child: child,
-        ),
-      ),
-    );
-  }
-}
-
-/// Marks the content of a [GlassModalSheet], whose top padding is the sheet's
-/// ([_GlassModalSheetPadding]).
-class const _InGlassModalSheet({required super.child}) extends InheritedWidget {
-  static bool isIn(BuildContext context) =>
-      context.getInheritedWidgetOfExactType<_InGlassModalSheet>() != null;
-
-  @override
-  bool updateShouldNotify(_InGlassModalSheet oldWidget) => false;
-}
-
-/// The content of a glass sheet: in a [GlassSheetScope], with translucent cards, like the grouped
-/// cells of an iOS 26 sheet.
-class const _GlassSheetContent({required final Widget child}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GlassSheetScope(
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          cardTheme: Theme.of(context).cardTheme
-              .copyWith(color: GlassSheetScope.fillColor(context)),
-        ),
-        child: child,
-      ),
-    );
-  }
-}
-
-BoxConstraints _glassSheetConstraints(BuildContext context, BoxConstraints? constraints) {
+BoxConstraints _iosSheetConstraints(BuildContext context, BoxConstraints? constraints) {
   // Without constraints, the Material sheet falls back to the theme's, then to a 640 max width.
   final base =
       constraints ??
       Theme.of(context).bottomSheetTheme.constraints ??
       const BoxConstraints(maxWidth: 640);
-  final minHeight = MediaQuery.heightOf(context) * kGlassBottomSheetMinHeightFraction;
+  final minHeight = MediaQuery.heightOf(context) * kBottomSheetMinHeightFraction;
   return base.copyWith(
     minHeight: minHeight,
     maxHeight: base.maxHeight < minHeight ? minHeight : null,
@@ -468,8 +283,8 @@ double _sheetCornerRadius(BuildContext context, {double inset = _kSheetMargin}) 
 }
 
 /// The corner radius of the iOS screen, which Flutter can't read: guessed from the screen size,
-/// like the package does for its own sheets (`GlassThemeHelpers.resolveAdaptiveRadius`, not
-/// exported).
+/// like the liquid glass package does for its own sheets
+/// (`GlassThemeHelpers.resolveAdaptiveRadius`, not exported).
 ///
 /// Read from the view, not the media query, whose padding a sheet may have removed.
 double _screenCornerRadius(BuildContext context) {
@@ -479,36 +294,6 @@ double _screenCornerRadius(BuildContext context) {
   final size = view.physicalSize / view.devicePixelRatio;
   // Pro Max and Plus iPhones (932 or 926 points), then the other Face ID iPhones.
   return size.longestSide >= 900 ? 54.0 : 46.0;
-}
-
-/// The iOS frame of a glass bottom sheet ([showAdaptiveBottomSheet] with `glass`, unless it
-/// morphs): a glass card inset from the screen edges, with the glass of the [GlassModalSheet]s.
-///
-/// Before iOS 26 ([useLiquidGlass]), the card is opaque, and so is its content: it is not in a
-/// [GlassSheetScope].
-class const GlassBottomSheetFrame({required final Widget child, super.key})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // At the sheet's minimum height, short content stays at the top.
-    final content = Material(
-      type: MaterialType.transparency,
-      child: Align(alignment: Alignment.topCenter, heightFactor: 1.0, child: child),
-    );
-    return Padding(
-      padding: const EdgeInsets.all(_kSheetMargin),
-      child: GlassModalCard(
-        borderRadius: _sheetCornerRadius(context),
-        tintOpacity: _glassSheetTintOpacity(context),
-        // The card ends just above the home indicator: the content needs no bottom safe area.
-        child: MediaQuery.removePadding(
-          context: context,
-          removeBottom: true,
-          child: useLiquidGlass(context) ? _GlassSheetContent(child: content) : content,
-        ),
-      ),
-    );
-  }
 }
 
 /// How an [OpaqueBottomSheetFrame] lays out its sheet.
@@ -526,8 +311,8 @@ enum OpaqueSheetLayout() {
   fullHeight,
 }
 
-/// The iOS frame of an opaque bottom sheet: an opaque, flat card, with the corners of the glass
-/// sheets. Its content is opaque too: it is not in a [GlassSheetScope].
+/// The iOS frame of a bottom sheet: an opaque, flat card, with corners concentric with the screen
+/// corners, like the iOS 26 sheets.
 class const OpaqueBottomSheetFrame({
   required final Widget child,
   required final OpaqueSheetLayout layout,
@@ -576,23 +361,6 @@ class const OpaqueBottomSheetFrame({
       ),
     );
   }
-}
-
-/// Tells the content of a sheet that it is laid out on a glass background, so that it can drop
-/// its opaque backgrounds ([fillColor]) and use glass controls.
-class const GlassSheetScope({required super.child, super.key}) extends InheritedWidget {
-  /// Whether [context] is inside a glass sheet.
-  static bool isIn(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<GlassSheetScope>() != null;
-
-  /// The translucent fill of the cards and other surfaces of a glass sheet, in place of their
-  /// opaque surface colors.
-  static Color fillColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
-      ? const Color(0x14FFFFFF)
-      : const Color(0x80FFFFFF);
-
-  @override
-  bool updateShouldNotify(GlassSheetScope oldWidget) => false;
 }
 
 /// The action of a [SheetHeaderButton].
@@ -657,11 +425,6 @@ class const SheetHeaderButton({
 /// context menu.
 ///
 /// This is meant for content that mostly fits on the screen, not for long lists.
-///
-/// In an iOS 26 sheet ([GlassModalSheet]), the space above the content is the sheet's, the same in
-/// every sheet: the top of [padding] is not applied. Its bottom is the larger of the bottom of
-/// [padding] and of the sheet's safe area (the home indicator), not both: the sheet rests over the
-/// home indicator, whose safe area already sets the content off the sheet's bottom edge.
 class const BottomSheetScrollableContainer({
   required final List<Widget> children,
   final EdgeInsetsGeometry? padding = const EdgeInsets.symmetric(vertical: 16.0),
@@ -669,19 +432,10 @@ class const BottomSheetScrollableContainer({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ownPadding = (padding ?? EdgeInsets.zero).resolve(Directionality.of(context));
-    final safePadding = MediaQuery.paddingOf(context);
     // The safe area is in the scroll view's padding, so that the content scrolls under it.
     return SingleChildScrollView(
       controller: scrollController,
-      padding: _InGlassModalSheet.isIn(context)
-          ? EdgeInsets.fromLTRB(
-              ownPadding.left + safePadding.left,
-              0.0,
-              ownPadding.right + safePadding.right,
-              math.max(ownPadding.bottom, safePadding.bottom),
-            )
-          : ownPadding.add(safePadding),
+      padding: (padding ?? EdgeInsets.zero).add(MediaQuery.paddingOf(context)),
       child: ListBody(children: children),
     );
   }

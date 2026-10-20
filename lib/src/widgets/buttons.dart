@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassMorphAnchor;
 import 'package:material_ui/material_ui.dart';
 
 /// Icon button with mandatory semantics.
@@ -25,27 +24,6 @@ class const SemanticIconButton({
       color: color,
       iconSize: iconSize,
       padding: padding,
-    );
-  }
-}
-
-/// An icon button that presents a sheet, which morphs out of the button on iOS 26 when the button
-/// is pinned in a `PlatformAppBar` (it is then a `GlassBarItem.sheet`).
-///
-/// [onPressed] gets the anchor to present the sheet with (`showAdaptiveBottomSheet`'s
-/// `morphFrom`), null where the button doesn't morph: elsewhere it is a [SemanticIconButton].
-class const SheetIconButton({
-  required final Widget icon,
-  required final void Function(GlassMorphAnchor? anchor)? onPressed,
-  required final String semanticsLabel,
-  super.key,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SemanticIconButton(
-      icon: icon,
-      semanticsLabel: semanticsLabel,
-      onPressed: onPressed != null ? () => onPressed!(null) : null,
     );
   }
 }

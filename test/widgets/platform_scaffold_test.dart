@@ -3,10 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassContainer, GlassModalSheet, GlassMorphAnchor, GlassMorphTrigger, GlassNavigationShell;
+    show GlassContainer, GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_provider_scope.dart';
@@ -288,76 +287,6 @@ void main() {
       expect(backs, 1);
       // Its own action, instead of popping.
       expect(find.text('Title'), findsWidgets);
-    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
-
-    testWidgets('gives a pinned sheet button the anchor to morph a sheet from', (tester) async {
-      GlassMorphAnchor? anchor;
-      var presented = false;
-      await pushScreen(
-        tester,
-        PlatformAppBar(
-          title: const Text('Title'),
-          actions: [
-            SheetIconButton(
-              icon: const Icon(Icons.tune),
-              semanticsLabel: 'Settings',
-              onPressed: (a) {
-                anchor = a;
-                presented = true;
-              },
-            ),
-          ],
-        ),
-      );
-
-      // A shell item, not the button itself.
-      expect(find.byType(IconButton), findsNothing);
-      await tester.tap(find.byIcon(Icons.tune).hitTestable());
-      await tester.pump();
-      expect(presented, isTrue);
-      expect(anchor, isNotNull);
-    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
-
-    testWidgets('keeps the capsule a sheet morphed out of emptied while the sheet is shown', (
-      tester,
-    ) async {
-      // The morph needs Impeller, which a widget test doesn't have.
-      GlassModalSheet.debugMorphSupportsBlending = true;
-      addTearDown(() => GlassModalSheet.debugMorphSupportsBlending = null);
-      await pushScreen(
-        tester,
-        PlatformAppBar(
-          title: const Text('Title'),
-          actionsBuilder: (context, ref) => [
-            SheetIconButton(
-              icon: const Icon(Icons.tune),
-              semanticsLabel: 'Settings',
-              // On the navigator of the screen, whose shell gives the bar back to the screen while
-              // the sheet is shown, except the capsule the sheet morphed out of.
-              onPressed: (anchor) => showAdaptiveBottomSheet<void>(
-                context: context,
-                glass: true,
-                morphFrom: anchor,
-                builder: (_) => const BottomSheetScrollableContainer(children: [Text('Sheet')]),
-              ),
-            ),
-          ],
-        ),
-      );
-
-      await tester.tap(find.byIcon(Icons.tune).hitTestable());
-      await tester.pumpAndSettle();
-      expect(find.text('Sheet'), findsOneWidget);
-
-      // The emptied capsule, which the sheet morphs back into when it is closed, is still there,
-      // although the bar was built again by the screen: no other copy of the button replaced it.
-      expect(
-        find.descendant(
-          of: find.byType(GlassMorphTrigger),
-          matching: find.byWidgetPredicate((widget) => widget is Opacity && widget.opacity == 0),
-        ),
-        findsWidgets,
-      );
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
     testWidgets('does not pin the actions of a tab root', (tester) async {

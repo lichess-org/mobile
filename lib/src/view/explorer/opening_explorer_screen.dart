@@ -259,7 +259,6 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
           showLabel: true,
           onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
-            glass: true,
             isScrollControlled: true,
             showDragHandle: true,
             builder: (_) => const OpeningExplorerSettings(),

@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -219,7 +218,6 @@ class const CreateGameWidget({
                             ? () {
                                 showAdaptiveBottomSheet<void>(
                                   context: context,
-                                  glass: true,
                                   constraints: BoxConstraints(
                                     minHeight: MediaQuery.heightOf(context) * 0.4,
                                   ),
@@ -255,7 +253,7 @@ class const CreateGameWidget({
             ],
           ),
         ],
-        PlatformFilledButton(
+        FilledButton.icon(
           icon: const Icon(Icons.groups),
           onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
@@ -273,7 +271,7 @@ class const CreateGameWidget({
                   );
                 }
               : null,
-          child: Text(context.l10n.createLobbyGame),
+          label: Text(context.l10n.createLobbyGame),
         ),
       ],
     );

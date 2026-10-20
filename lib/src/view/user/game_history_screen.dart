@@ -62,7 +62,7 @@ class const GameHistoryScreen({
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
-    final filterBtn = SheetIconButton(
+    final filterBtn = SemanticIconButton(
       icon: Badge.count(
         backgroundColor: ColorScheme.of(context).secondary,
         textStyle: TextStyle(
@@ -74,11 +74,9 @@ class const GameHistoryScreen({
         child: const Icon(Icons.filter_list),
       ),
       semanticsLabel: context.l10n.filterGames,
-      onPressed: (anchor) =>
+      onPressed: () =>
           showAdaptiveBottomSheet<GameFilterState>(
             context: context,
-            glass: true,
-            morphFrom: anchor,
             useRootNavigator: true,
             isScrollControlled: true,
             builder: (_) =>
