@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart' show debugDefaultTargetPlatformOverride;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
@@ -915,8 +916,16 @@ void main() {
       null,
     );
 
-    // dismiss settings by tapping outside of the bottom sheet
-    await tester.tapAt(const Offset(100, 100));
+    // close the settings sheet
+    await tester.tap(
+      find
+          .byIcon(
+            debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+                ? Icons.close_rounded
+                : Icons.close,
+          )
+          .hitTestable(),
+    );
 
     // wait for first move to be played and view solution button to appear
     await tester.pump(const Duration(seconds: 5));

@@ -2,27 +2,26 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shows the arena tournaments FAQ in a full height bottom sheet.
 Future<void> showTournamentFaqSheet(BuildContext context) {
-  return showAdaptiveFullHeightBottomSheet<void>(
+  return showAdaptiveNavigationSheet<void>(
     context: context,
     useRootNavigator: true,
-    title: Text(context.l10n.tournamentFAQ),
-    builder: (context, scrollController) => _TournamentFaq(scrollController: scrollController),
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.tournamentFAQ)),
+      body: const _TournamentFaq(),
+    ),
   );
 }
 
-class const _TournamentFaq({required final ScrollController scrollController})
-    extends StatelessWidget {
+class const _TournamentFaq() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: scrollController,
-      padding: Styles.horizontalBodyPadding.add(
-        EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-      ),
+      padding: Styles.horizontalBodyPadding.add(MediaQuery.paddingOf(context)),
       children: [
         Padding(
           padding: Styles.verticalBodyPadding,

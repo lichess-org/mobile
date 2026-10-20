@@ -1347,31 +1347,39 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
 }
 
 void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
-  showAdaptiveFullHeightBottomSheet<void>(
+  showAdaptiveNavigationSheet<void>(
     context: context,
-    title: _TournamentPlayerDetailsTitle(tournamentId: tournamentId, userId: userId),
-    builder: (context, scrollController) {
-      return Consumer(
-        builder: (context, ref, child) {
-          final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
-
-          return WhenRouteSettled(
-            ready: playerAsync.hasValue || playerAsync.hasError,
-            placeholder: const Center(child: CircularProgressIndicator.adaptive()),
-            builder: (context) => switch (playerAsync) {
-              AsyncData(value: final player) => _TournamentPlayerDetails(
-                player: player,
-                tournamentId: tournamentId,
-                scrollController: scrollController,
-              ),
-              AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
-          );
-        },
-      );
-    },
+    builder: (_) => _TournamentPlayerDetailsScreen(tournamentId: tournamentId, userId: userId),
   );
+}
+
+/// The details of a player of the tournament: the first page of the player details sheet, or a
+/// page pushed in the team details sheet.
+class const _TournamentPlayerDetailsScreen({
+  required final TournamentId tournamentId,
+  required final UserId userId,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: _TournamentPlayerDetailsTitle(tournamentId: tournamentId, userId: userId),
+      ),
+      body: WhenRouteSettled(
+        ready: playerAsync.hasValue || playerAsync.hasError,
+        placeholder: const Center(child: CircularProgressIndicator.adaptive()),
+        builder: (context) => switch (playerAsync) {
+          AsyncData(value: final player) => _TournamentPlayerDetails(
+            player: player,
+            tournamentId: tournamentId,
+          ),
+          AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
+        },
+      ),
+    );
+  }
 }
 
 /// The title of the player details sheet: the rank and name of the player, once loaded and the
@@ -1412,7 +1420,6 @@ class const _TournamentPlayerDetailsTitle({
 class const _TournamentPlayerDetails({
   required final TournamentPlayer player,
   required final TournamentId tournamentId,
-  required final ScrollController scrollController,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1420,13 +1427,14 @@ class const _TournamentPlayerDetails({
     final teamInfo = player.teamId != null
         ? tournamentState.value?.tournament.meta.teamBattle?.teams[player.teamId!]
         : null;
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.all(16).add(MediaQuery.paddingOf(context)),
       children: [
         if (teamInfo != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: Row(
-              mainAxisSize: .min,
+              mainAxisAlignment: .center,
               children: [
                 Text(teamInfo.name, style: const TextStyle(fontWeight: .w500, fontSize: 14)),
                 const SizedBox(width: 8.0),
@@ -1441,75 +1449,66 @@ class const _TournamentPlayerDetails({
               ],
             ),
           ),
-        Expanded(
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.all(16)
-                .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _StatRow(
-                        label: context.l10n.stormScore,
-                        value: '${player.score}',
-                        prefix: player.fire
-                            ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
-                            : null,
-                      ),
-                      if (player.performance != null)
-                        _StatRow(
-                          label: context.l10n.performance,
-                          value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
-                        ),
-                      if (player.stats.game > 0) ...[
-                        _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
-                        if (player.stats.win > 0)
-                          _StatRow(
-                            label: context.l10n.winRate,
-                            value: '${((player.stats.win / player.stats.game) * 100).round()}%',
-                          ),
-                        _StatRow(
-                          label: context.l10n.arenaBerserkRate,
-                          value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
-                        ),
-                      ],
-                      if (player.pairings.isNotEmpty)
-                        _StatRow(
-                          label: context.l10n.averageOpponent,
-                          value: '${_calculateAverageOpponentRating(player)}',
-                        ),
-                    ],
-                  ),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            child: Column(
+              children: [
+                _StatRow(
+                  label: context.l10n.stormScore,
+                  value: '${player.score}',
+                  prefix: player.fire
+                      ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
+                      : null,
                 ),
-              ),
+                if (player.performance != null)
+                  _StatRow(
+                    label: context.l10n.performance,
+                    value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
+                  ),
+                if (player.stats.game > 0) ...[
+                  _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
+                  if (player.stats.win > 0)
+                    _StatRow(
+                      label: context.l10n.winRate,
+                      value: '${((player.stats.win / player.stats.game) * 100).round()}%',
+                    ),
+                  _StatRow(
+                    label: context.l10n.arenaBerserkRate,
+                    value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
+                  ),
+                ],
+                if (player.pairings.isNotEmpty)
+                  _StatRow(
+                    label: context.l10n.averageOpponent,
+                    value: '${_calculateAverageOpponentRating(player)}',
+                  ),
+              ],
+            ),
+          ),
+        ),
 
-              if (player.pairings.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                Text(context.l10n.games, style: Styles.sectionTitle),
-                const SizedBox(height: 8),
-                Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: Column(
-                    children: [
-                      ...player.pairings.asMap().entries.map(
-                        (entry) => _PairingTile(
-                          pairing: entry.value,
-                          tournamentId: tournamentId,
-                          player: player.user,
-                          index: entry.key,
-                          nbGames: player.pairings.length,
-                        ),
-                      ),
-                    ],
+        if (player.pairings.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text(context.l10n.games, style: Styles.sectionTitle),
+          const SizedBox(height: 8),
+          Card(
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              children: [
+                ...player.pairings.asMap().entries.map(
+                  (entry) => _PairingTile(
+                    pairing: entry.value,
+                    tournamentId: tournamentId,
+                    player: player.user,
+                    index: entry.key,
+                    nbGames: player.pairings.length,
                   ),
                 ),
               ],
-            ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -1628,11 +1627,13 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
 }
 
 void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
-  showAdaptiveFullHeightBottomSheet<void>(
+  showAdaptiveNavigationSheet<void>(
     context: context,
-    title: _TournamentTeamDetailsTitle(tournamentId: tournamentId, teamId: teamId),
-    builder: (context, scrollController) {
-      return Consumer(
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: _TournamentTeamDetailsTitle(tournamentId: tournamentId, teamId: teamId),
+      ),
+      body: Consumer(
         builder: (context, ref, child) {
           final teamAsync = ref.watch(tournamentTeamProvider((tournamentId, teamId)));
 
@@ -1643,15 +1644,14 @@ void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId te
               AsyncData(value: final team) => _TournamentTeamDetails(
                 team: team,
                 tournamentId: tournamentId,
-                scrollController: scrollController,
               ),
               AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
               _ => const Center(child: CircularProgressIndicator.adaptive()),
             },
           );
         },
-      );
-    },
+      ),
+    ),
   );
 }
 
@@ -1687,7 +1687,6 @@ class const _TournamentTeamDetailsTitle({
 class const _TournamentTeamDetails({
   required final TournamentTeam team,
   required final TournamentId tournamentId,
-  required final ScrollController scrollController,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1695,9 +1694,7 @@ class const _TournamentTeamDetails({
     final nbLeaders = tournamentState.value?.tournament.meta.teamBattle?.nbLeaders;
 
     return ListView(
-      controller: scrollController,
-      padding: const EdgeInsets.all(16)
-          .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
+      padding: const EdgeInsets.all(16).add(MediaQuery.paddingOf(context)),
       children: [
         Card(
           child: Padding(
@@ -1785,9 +1782,15 @@ class const _TeamPlayerTile({
           ),
         ],
       ),
-      onTap: () {
-        _showPlayerDetails(context, tournamentId, player.user.id);
-      },
+      // In the team details sheet.
+      onTap: () => Navigator.of(context).push(
+        buildScreenRoute<void>(
+          screen: _TournamentPlayerDetailsScreen(
+            tournamentId: tournamentId,
+            userId: player.user.id,
+          ),
+        ),
+      ),
     );
   }
 }

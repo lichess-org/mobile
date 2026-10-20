@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart' show ValueListenable;
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart'
+    show NavigationSheetScope, showAdaptiveNavigationSheet;
 import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
     show
@@ -675,18 +677,27 @@ class const BlurredBarBackground({
       color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
       width: 1.0 / MediaQuery.devicePixelRatioOf(context),
     );
-    return ClipRect(
-      child: BackdropFilter(
-        filter: _barTintFilter(context),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: cupertinoBarTint(context, opacity: 0.4),
-            border: atBottom ? Border(top: hairline) : Border(bottom: hairline),
-          ),
-          child: child,
+    final blur = BackdropFilter(
+      filter: _barTintFilter(context),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cupertinoBarTint(context, opacity: 0.4),
+          border: atBottom ? Border(top: hairline) : Border(bottom: hairline),
         ),
+        child: child,
       ),
     );
+    // At the top of a navigation sheet, the blur gets the rounded corners of the sheet: the clip of
+    // the sheet doesn't clip it, only the clip right around it does.
+    final sheetCornerRadius = atBottom
+        ? 0.0
+        : NavigationSheetScope.maybeOf(context)?.topCornerRadius ?? 0.0;
+    return sheetCornerRadius > 0
+        ? ClipRSuperellipse(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(sheetCornerRadius)),
+            child: blur,
+          )
+        : ClipRect(child: blur);
   }
 }
 
@@ -829,6 +840,14 @@ class const PlatformAppBar({
   @override
   Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
+  /// Whether the app bar has a close button that closes the navigation sheet it is in: on the first
+  /// page of the sheet ([showAdaptiveNavigationSheet]), without a leading of its own.
+  bool _impliesSheetClose(BuildContext context) =>
+      automaticallyImplyLeading &&
+      leading == null &&
+      (ModalRoute.of(context)?.isFirst ?? false) &&
+      NavigationSheetScope.maybeOf(context) != null;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     assert(this.actions == null || actionsBuilder == null);
@@ -851,6 +870,7 @@ class const PlatformAppBar({
       final isFullscreenDialog = parentRoute is PageRoute && parentRoute.fullscreenDialog;
       final impliesLeading =
           automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false);
+      final impliesSheetClose = _impliesSheetClose(context);
       final largeTitleOffset = largeTitle ? _LargeTitleScrollScope.maybeOf(context) : null;
       final inlineTitle = largeTitleOffset != null && title != null
           ? ValueListenableBuilder(
@@ -964,6 +984,13 @@ class const PlatformAppBar({
                 icon: const Icon(Icons.close_rounded),
                 label: MaterialLocalizations.of(context).closeButtonTooltip,
                 onTap: () => Navigator.maybePop(context),
+              )
+            else if (impliesSheetClose)
+              GlassBarItem.icon(
+                id: const ('leading', 0),
+                icon: const Icon(Icons.close_rounded),
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                onTap: () => NavigationSheetScope.close(context),
               ),
           ],
           actions: [
@@ -1029,6 +1056,12 @@ class const PlatformAppBar({
                     : MaterialLocalizations.of(context).backButtonTooltip,
                 onPressed: () => Navigator.maybePop(context),
               )
+            : impliesSheetClose
+            ? IconButton(
+                icon: Icon(Icons.close_rounded, color: colorScheme.onSurface),
+                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                onPressed: () => NavigationSheetScope.close(context),
+              )
             : null,
         actions: actions != null && actions.isNotEmpty
             ? [
@@ -1054,7 +1087,15 @@ class const PlatformAppBar({
       titleSpacing: titleSpacing,
       title: title,
       titleTextStyle: titleTextStyle,
-      leading: leading,
+      leading:
+          leading ??
+          (_impliesSheetClose(context)
+              ? IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  onPressed: () => NavigationSheetScope.close(context),
+                )
+              : null),
       leadingWidth: leadingWidth,
       actions: actions,
       bottom: bottom,

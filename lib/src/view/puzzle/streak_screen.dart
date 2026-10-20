@@ -547,15 +547,15 @@ class const _BottomBar({
   }
 
   Future<void> _showStreakInfo(BuildContext context) {
-    return showAdaptiveFullHeightBottomSheet<void>(
+    return showAdaptiveNavigationSheet<void>(
       context: context,
-      title: Text(context.l10n.aboutX('Puzzle Streak')),
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        padding: Styles.bodyPadding.add(
-          EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+      builder: (context) => PlatformScaffold(
+        appBar: PlatformAppBar(title: Text(context.l10n.aboutX('Puzzle Streak'))),
+        body: ListView(
+          children: [
+            Padding(padding: Styles.bodyPadding, child: Text(context.l10n.puzzleStreakDescription)),
+          ],
         ),
-        children: [Text(context.l10n.puzzleStreakDescription)],
       ),
     );
   }

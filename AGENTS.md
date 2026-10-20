@@ -583,23 +583,31 @@ possible until then. Rules:
   background image or color theme, glass controls use `tintedGlassSettings` (`platform.dart`).
   `PlatformAppBar` does it for its buttons with `tintedGlass: true`, and always with a background
   theme.
-- **Bottom sheets**: never call `showModalBottomSheet` directly. Sheets are never glass on iOS:
-  they are content, an opaque, flat card (`OpaqueBottomSheetFrame`) with opaque content and plain
-  controls. A sheet that expands (a long list) uses `showAdaptiveDraggableBottomSheet` (an inset
-  card with a drag handle). An information sheet whose content may be long uses
-  `showAdaptiveFullHeightBottomSheet` (always at full height, a close button and a title in its
-  header, scrollable content; on iOS an edge to edge card, like an iOS 26 sheet at its large
-  detent, e.g. the broadcast overview). Every other sheet uses `showAdaptiveBottomSheet`
-  (`adaptive_bottom_sheet.dart`): on iOS an inset card, without a drag handle, and with a shared
-  minimum height (`kBottomSheetMinHeightFraction`, 45% of the screen) instead of the call site's.
-  Its bottom padding (the home indicator) comes through the media query: its scroll view applies
-  it (`BottomSheetScrollableContainer` does; a `ListView` with an explicit padding adds
-  `MediaQuery.paddingOf(context)`). Every iOS sheet's corners are concentric with the screen
-  corners. Filled and outlined buttons are capsules on iOS (app theme). Selectable chips use
-  `PlatformChoiceChip` (on iOS a flat pill, a glass pill with `inAppBar: true`); give their `Wrap`
-  an iOS `runSpacing`, glass chips have no tap target margin. `PlatformSegmentedControl` is flat
-  on iOS. A labelled group of chips is a `Filter` (`widgets/filter.dart`), or starts with a
-  `FilterTitle`: same title and spacing in every sheet, 16pt around the content and between groups.
+- **Bottom sheets**: never call `showModalBottomSheet` directly. A sheet's surface is never glass
+  on iOS: it is content, an opaque, flat card (`OpaqueBottomSheetFrame`) with opaque content and
+  plain controls; glass buttons in it (its header or app bar buttons) are fine. A sheet that
+  expands (a long list) uses `showAdaptiveDraggableBottomSheet` (an inset card with a drag handle).
+  A sheet whose content may be long, or that navigates to other screens, uses
+  `showAdaptiveNavigationSheet`: always at full height (on iOS an edge to edge card, like an iOS 26
+  sheet at its large detent, e.g. the broadcast overview), with a navigator of its own. Its first
+  page and the screens it pushes with `Navigator.of(context).push` are ordinary screens
+  (`PlatformScaffold` + `PlatformAppBar`, `buildScreenRoute`), shown in the sheet unchanged: the
+  app bar is the sheet's header, with a close button on the first page (implied, don't add one) and
+  a back button on the others. A screen pushed with `pushHidingTabBar` (a board screen) opens above
+  the sheet. The main scroll view of a page drags the sheet down to dismiss it, as long as it has no
+  controller of its own (it gets the sheet's as its primary scroll controller). Content that loads
+  switches from its loading state with `WhenRouteSettled`. Every other sheet uses
+  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS an inset card, without a drag
+  handle, and with a shared minimum height (`kBottomSheetMinHeightFraction`, 45% of the screen)
+  instead of the call site's. Its bottom padding (the home indicator) comes through the media
+  query: its scroll view applies it (`BottomSheetScrollableContainer` does; a `ListView` with an
+  explicit padding adds `MediaQuery.paddingOf(context)`). Every iOS sheet's corners are concentric
+  with the screen corners. Filled and outlined buttons are capsules on iOS (app theme). Selectable
+  chips use `PlatformChoiceChip` (on iOS a flat pill, a glass pill with `inAppBar: true`); give
+  their `Wrap` an iOS `runSpacing`, glass chips have no tap target margin.
+  `PlatformSegmentedControl` is flat on iOS. A labelled group of chips is a `Filter`
+  (`widgets/filter.dart`), or starts with a `FilterTitle`: same title and spacing in every sheet,
+  16pt around the content and between groups.
 - **Context menus**: a menu of actions is never a bottom sheet. From a button, use
   `ContextMenuIconButton`; on a long press of an item (e.g. a chat message), wrap it in a
   `ContextMenuRegion`, which opens the menu at the press point (both in

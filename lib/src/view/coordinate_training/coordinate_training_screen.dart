@@ -434,33 +434,38 @@ Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
 }
 
 Future<void> _showCoordinateTrainingInfo(BuildContext context) {
-  return showAdaptiveFullHeightBottomSheet<void>(
+  return showAdaptiveNavigationSheet<void>(
     context: context,
-    title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
-    builder: (context, scrollController) => ListView(
-      controller: scrollController,
-      padding: Styles.bodyPadding.add(
-        EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
       ),
-      children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
-              TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
-              TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
-              TextSpan(text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n'),
-              const TextSpan(text: '\n'),
+      body: ListView(
+        children: [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text.rich(
               TextSpan(
-                text: '${context.l10n.coordinatesFindSquare}\n',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
+                  TextSpan(
+                    text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
+                  ),
+                  const TextSpan(text: '\n'),
+                  TextSpan(
+                    text: '${context.l10n.coordinatesFindSquare}\n',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
+                  TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
+                ],
               ),
-              TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
-              TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }

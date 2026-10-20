@@ -1,8 +1,11 @@
-import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoTheme;
-import 'package:lichess_mobile/src/tab_navigation.dart' show isTabBarHiddenAt;
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show TabBarHidingNavigator, TabRoutePage, isTabBarHiddenAt;
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassIconButton;
+import 'package:lichess_mobile/src/widgets/platform.dart'
+    show PlatformAppBar, PlatformScaffold, usePinnedNavBar;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 /// The minimum height of an iOS bottom sheet that doesn't expand ([showAdaptiveBottomSheet]), as a
@@ -102,25 +105,32 @@ Future<T?> showAdaptiveDraggableBottomSheet<T>({
   );
 }
 
-/// Shows a modal bottom sheet that always opens at the full height of the screen, with a header
-/// made of a close button and a [title], above the content: for information that may be long.
+/// Shows a modal bottom sheet that always opens at the full height of the screen, with a navigator
+/// of its own, like an iOS sheet with a navigation stack: [builder] builds its first page, and the
+/// screens pushed from a page with `Navigator.of(context)` are shown in the sheet.
 ///
-/// [builder] builds the content below the header, which fills the rest of the sheet: a scroll view
-/// using the scroll controller it gets, which needs no bottom padding of its own (the sheet goes
-/// down to the bottom of the screen, its media query padding is applied). The content scrolls while
-/// it can; dragged down from its top, or when it has nothing to scroll, it drags the sheet, which
-/// is dismissed past half of its height, like an iOS sheet.
+/// The pages are screens ([PlatformScaffold] with a [PlatformAppBar], in routes built by
+/// [buildScreenRoute]), shown unchanged: their app bar is the header of the sheet. The app bar of
+/// the first page has a close button, the others a back button. A screen that covers the whole
+/// screen, pushed with [TabBarHidingNavigator.pushHidingTabBar] (e.g. a board screen), is pushed
+/// above the sheet instead.
+///
+/// The sheet is dismissed by dragging it down, from any page: the main vertical scroll view of a
+/// page drags the sheet once scrolled to its top, unless it has a controller of its own (it gets the
+/// sheet's as its primary scroll controller, see [TabRoutePage]). Elsewhere, the app bar drags it.
+/// Like any screen, a page lays out its content below the app bar with the media query padding
+/// (see [PlatformScaffold]), which also has the bottom safe area: the sheet goes down to the bottom
+/// of the screen.
 ///
 /// Content that loads should switch from its loading state with [WhenRouteSettled], so that it does
-/// not change while the sheet is opening.
+/// not change while the sheet is opening, or while the page is pushed.
 ///
-/// On iOS the sheet is like an iOS 26 sheet at its large detent: an opaque, flat card, edge to edge
-/// ([OpaqueBottomSheetFrame]), with a glass close button and a centered title. On Android
-/// it is a Material sheet with a close button and a title, like a full screen dialog.
-Future<T?> showAdaptiveFullHeightBottomSheet<T>({
+/// The pages are painted with the opaque color of the sheet, without the background theme. On iOS
+/// the sheet is like an iOS 26 sheet at its large detent: an opaque, flat card, edge to edge
+/// ([OpaqueBottomSheetFrame]), with glass bar buttons.
+Future<T?> showAdaptiveNavigationSheet<T>({
   required BuildContext context,
-  required Widget title,
-  required ScrollableWidgetBuilder builder,
+  required WidgetBuilder builder,
   bool useRootNavigator = false,
 }) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -132,11 +142,14 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
     useRootNavigator: useRootNavigator && !isTabBarHiddenAt(context),
     // The sheet stops below the status bar.
     useSafeArea: true,
-    backgroundColor: isIOS ? Colors.transparent : null,
+    // The pages are opaque, so that a page being pushed covers the one below it.
+    backgroundColor: isIOS ? Colors.transparent : opaqueModalColor(context),
     elevation: isIOS ? 0 : null,
+    // The opaque pages are clipped to the rounded corners of the Material sheet.
+    clipBehavior: isIOS ? null : Clip.antiAlias,
     // Snaps back to the full height, or down to nothing: the modal sheet is dismissed once the
     // sheet reaches its minimum size.
-    builder: (context) => LayoutBuilder(
+    builder: (sheetContext) => LayoutBuilder(
       builder: (context, constraints) => DraggableScrollableSheet(
         initialChildSize: 1.0,
         minChildSize: 0.0,
@@ -150,11 +163,11 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
               alignment: Alignment.topCenter,
               minHeight: constraints.maxHeight,
               maxHeight: constraints.maxHeight,
-              child: Column(
-                children: [
-                  _FullHeightSheetHeader(title: title),
-                  Expanded(child: builder(context, scrollController)),
-                ],
+              child: _SheetNavigator(
+                scrollController: scrollController,
+                sheetNavigator: Navigator.of(sheetContext),
+                sheetAnimation: ModalRoute.of(sheetContext)!.animation!,
+                builder: builder,
               ),
             ),
           );
@@ -165,9 +178,122 @@ Future<T?> showAdaptiveFullHeightBottomSheet<T>({
   );
 }
 
+/// Space above the app bar of the pages of a [showAdaptiveNavigationSheet] sheet on iOS.
+const _kNavigationSheetTopInset = 16.0;
+
+/// The sheet of [showAdaptiveNavigationSheet] that a page is shown in.
+class const NavigationSheetScope({
+  /// The scroll controller of the sheet, which drags it once scrolled to the top.
+  required final ScrollController scrollController,
+
+  /// The navigator that the sheet is presented on.
+  required final NavigatorState sheetNavigator,
+
+  /// The animation of the sheet's route.
+  required final Animation<double> sheetAnimation,
+
+  /// The radius of the top corners of the sheet on iOS (0 elsewhere).
+  required final double topCornerRadius,
+  required super.child,
+  super.key,
+}) extends InheritedWidget {
+  static NavigationSheetScope? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<NavigationSheetScope>();
+  }
+
+  /// Closes the navigation sheet that [context] is in, if any.
+  static void close(BuildContext context) {
+    context.getInheritedWidgetOfExactType<NavigationSheetScope>()?.sheetNavigator.pop();
+  }
+
+  @override
+  bool updateShouldNotify(NavigationSheetScope oldWidget) {
+    return scrollController != oldWidget.scrollController ||
+        sheetNavigator != oldWidget.sheetNavigator ||
+        sheetAnimation != oldWidget.sheetAnimation ||
+        topCornerRadius != oldWidget.topCornerRadius;
+  }
+}
+
+/// The observer of the navigator of a [showAdaptiveNavigationSheet] sheet, which marks it as such:
+/// [TabBarHidingNavigator.pushHidingTabBar] pushes on [sheetNavigator] instead.
+class NavigationSheetObserver(
+  /// The navigator that the sheet is presented on.
+  final NavigatorState sheetNavigator,
+) extends NavigatorObserver;
+
+/// The navigator of a [showAdaptiveNavigationSheet] sheet, with [builder] as its first page.
+class const _SheetNavigator({
+  required final ScrollController scrollController,
+  required final NavigatorState sheetNavigator,
+  required final Animation<double> sheetAnimation,
+  required final WidgetBuilder builder,
+}) extends StatefulWidget {
+  @override
+  State<_SheetNavigator> createState() => _SheetNavigatorState();
+}
+
+class _SheetNavigatorState() extends State<_SheetNavigator> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  final _heroController = MaterialApp.createMaterialHeroController();
+  late final _observer = NavigationSheetObserver(widget.sheetNavigator);
+
+  @override
+  void dispose() {
+    _heroController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = opaqueModalColor(context);
+    final mediaQuery = MediaQuery.of(context);
+    return NavigationSheetScope(
+      scrollController: widget.scrollController,
+      sheetNavigator: widget.sheetNavigator,
+      sheetAnimation: widget.sheetAnimation,
+      topCornerRadius: theme.platform == TargetPlatform.iOS
+          ? _sheetCornerRadius(context, inset: 0)
+          : 0,
+      child: Theme(
+        // The pages are painted with the color of the sheet.
+        data: theme.copyWith(
+          scaffoldBackgroundColor: color,
+          appBarTheme: theme.appBarTheme.copyWith(backgroundColor: color),
+        ),
+        child: MediaQuery(
+          // The app bar of the pages insets itself with the top padding, like below the status bar.
+          data: theme.platform == TargetPlatform.iOS
+              ? mediaQuery.copyWith(
+                  padding: mediaQuery.padding.copyWith(top: _kNavigationSheetTopInset),
+                )
+              : mediaQuery,
+          // One shell per navigator: the app bar buttons of the pages are pinned above the sheet's
+          // navigator, and morph between its pages.
+          child: GlassNavigationShell(
+            enabled: usePinnedNavBar(context),
+            // The system back pops the pages before the sheet.
+            child: NavigatorPopHandler(
+              onPopWithResult: (_) => _navigatorKey.currentState?.maybePop(),
+              child: Navigator(
+                key: _navigatorKey,
+                observers: [_heroController, _observer],
+                onGenerateInitialRoutes: (_, _) => [
+                  buildScreenRoute<void>(screen: Builder(builder: widget.builder)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Shows [placeholder] until [ready], and never switches to the content while the enclosing route
-/// (e.g. a bottom sheet) is animating in: building new content during the transition makes it
-/// stutter.
+/// (e.g. a bottom sheet, or a page of a [showAdaptiveNavigationSheet] sheet, or the sheet itself)
+/// is animating in: building new content during the transition makes it stutter.
 ///
 /// Content that is [ready] when this widget is first built is shown at once, during the transition.
 /// Content that becomes ready during the transition is shown once it is over.
@@ -184,6 +310,7 @@ class const WhenRouteSettled({
 class _WhenRouteSettledState() extends State<WhenRouteSettled> {
   late final bool _readyAtStart;
   Animation<double>? _routeAnimation;
+  Animation<double>? _sheetAnimation;
 
   @override
   void initState() {
@@ -199,11 +326,18 @@ class _WhenRouteSettledState() extends State<WhenRouteSettled> {
       _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
       _routeAnimation = animation?..addStatusListener(_onRouteAnimationStatus);
     }
+    // In a navigation sheet, the first page is not animated: the sheet is.
+    final sheetAnimation = NavigationSheetScope.maybeOf(context)?.sheetAnimation;
+    if (sheetAnimation != _sheetAnimation) {
+      _sheetAnimation?.removeStatusListener(_onRouteAnimationStatus);
+      _sheetAnimation = sheetAnimation?..addStatusListener(_onRouteAnimationStatus);
+    }
   }
 
   @override
   void dispose() {
     _routeAnimation?.removeStatusListener(_onRouteAnimationStatus);
+    _sheetAnimation?.removeStatusListener(_onRouteAnimationStatus);
     super.dispose();
   }
 
@@ -213,43 +347,12 @@ class _WhenRouteSettledState() extends State<WhenRouteSettled> {
 
   @override
   Widget build(BuildContext context) {
-    final isOpening = _routeAnimation?.status == AnimationStatus.forward;
+    final isOpening =
+        _routeAnimation?.status == AnimationStatus.forward ||
+        _sheetAnimation?.status == AnimationStatus.forward;
     return widget.ready && (_readyAtStart || !isOpening)
         ? widget.builder(context)
         : widget.placeholder;
-  }
-}
-
-/// The header of a [showAdaptiveFullHeightBottomSheet] sheet: a close button and a title, centered
-/// on iOS.
-class const _FullHeightSheetHeader({required final Widget title}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    return Padding(
-      padding: isIOS
-          ? const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0)
-          : const EdgeInsets.fromLTRB(4.0, 4.0, 16.0, 0.0),
-      child: SizedBox(
-        height: isIOS ? 44.0 : kToolbarHeight,
-        child: NavigationToolbar(
-          leading: SheetHeaderButton(action: .close, onPressed: () => Navigator.of(context).pop()),
-          middle: Semantics(
-            header: true,
-            child: DefaultTextStyle.merge(
-              style: isIOS
-                  ? CupertinoTheme.of(context).textTheme.navTitleTextStyle
-                        .copyWith(color: ColorScheme.of(context).onSurface)
-                  : TextTheme.of(context).titleLarge,
-              maxLines: 1,
-              overflow: .ellipsis,
-              child: title,
-            ),
-          ),
-          centerMiddle: isIOS,
-        ),
-      ),
-    );
   }
 }
 
@@ -306,7 +409,7 @@ enum OpaqueSheetLayout() {
   /// drag handle, the content filling the card.
   draggable,
 
-  /// A sheet at the full height of the screen ([showAdaptiveFullHeightBottomSheet]): edge to edge,
+  /// A sheet at the full height of the screen ([showAdaptiveNavigationSheet]): edge to edge,
   /// down to the bottom of the screen, without a drag handle, the content filling the card.
   fullHeight,
 }
@@ -359,62 +462,6 @@ class const OpaqueBottomSheetFrame({
           },
         ),
       ),
-    );
-  }
-}
-
-/// The action of a [SheetHeaderButton].
-enum SheetHeaderAction() {
-  close,
-  back,
-}
-
-/// A button in the header of a bottom sheet, that closes the sheet or goes back in it: an
-/// [IconButton] on Android, a round liquid glass button on iOS, like the buttons of an iOS 26
-/// sheet (a flat one before iOS 26).
-class const SheetHeaderButton({
-  required final SheetHeaderAction action,
-  required final VoidCallback onPressed,
-  super.key,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final localizations = MaterialLocalizations.of(context);
-    final tooltip = switch (action) {
-      .close => localizations.closeButtonTooltip,
-      .back => localizations.backButtonTooltip,
-    };
-    if (Theme.of(context).platform != TargetPlatform.iOS) {
-      return IconButton(
-        icon: Icon(switch (action) {
-          .close => Icons.close,
-          .back => Icons.arrow_back,
-        }),
-        tooltip: tooltip,
-        onPressed: onPressed,
-      );
-    }
-    final icon = Icon(switch (action) {
-      .close => Icons.close_rounded,
-      .back => Icons.arrow_back_ios_new_rounded,
-    }, color: ColorScheme.of(context).onSurface);
-    if (!useLiquidGlass(context)) {
-      // A round button on the control fill, like the buttons of an iOS 18 sheet.
-      return IconButton(
-        icon: icon,
-        tooltip: tooltip,
-        onPressed: onPressed,
-        style: IconButton.styleFrom(
-          backgroundColor: CupertinoColors.tertiarySystemFill.resolveFrom(context),
-        ),
-      );
-    }
-    return GlassIconButton(
-      icon: icon,
-      semanticLabel: tooltip,
-      onPressed: onPressed,
-      // The sheet has no glass layer to share.
-      useOwnLayer: true,
     );
   }
 }

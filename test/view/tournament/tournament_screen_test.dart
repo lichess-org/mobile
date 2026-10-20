@@ -1204,6 +1204,9 @@ void main() {
             }
             ''', 200);
         }
+        if (request.url.path == '/tournament/testTeamBattle/player/player1') {
+          return mockResponse(testTournamentPlayerResponse, 200);
+        }
         return mockResponse('', 404);
       });
 
@@ -1233,6 +1236,20 @@ void main() {
       expect(find.text('1921'), findsOneWidget);
       expect(find.text('Average score'), findsOneWidget);
       expect(find.text('23'), findsOneWidget);
+
+      // A player of the team opens in the same sheet.
+      await tester.tap(
+        find.descendant(of: find.byType(BottomSheet), matching: find.text('Player1')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsOneWidget);
+      expect(find.text('Average rating'), findsNothing);
+
+      // And goes back to the team, in the same sheet.
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsNothing);
+      expect(find.text('Average rating'), findsOneWidget);
     });
 
     testWidgets('shows "View all teams" button and opens all teams screen', (

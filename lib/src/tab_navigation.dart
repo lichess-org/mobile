@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -319,7 +320,16 @@ extension TabBarHidingNavigator on NavigatorState {
       widget.observers.whereType<TabNavigatorObserver>().firstOrNull;
 
   /// Pushes [route], hiding the tab bar while it is shown. See [push].
+  ///
+  /// Such a route covers the whole screen: on the navigator of a navigation sheet
+  /// ([showAdaptiveNavigationSheet]), it is pushed above the sheet, on the navigator that the sheet
+  /// is presented on.
   Future<T?> pushHidingTabBar<T extends Object?>(Route<T> route) {
+    final sheetNavigator = widget.observers
+        .whereType<NavigationSheetObserver>()
+        .firstOrNull
+        ?.sheetNavigator;
+    if (sheetNavigator != null) return sheetNavigator.pushHidingTabBar(route);
     _tabNavigatorObserver?._hideTabBarFor(route);
     return push(route);
   }
@@ -418,7 +428,9 @@ class const TabNavigatorScope({
 /// [TabBarHidingNavigator.pushHidingTabBar]), the page covers the whole screen, like on the root
 /// navigator.
 ///
-/// On the root navigator, it returns [child] unchanged.
+/// On the root navigator, it returns [child] unchanged. In a navigation sheet
+/// ([showAdaptiveNavigationSheet]), the scroll controller of the sheet is the primary scroll
+/// controller of the page: its main scroll view drags the sheet once scrolled to its top.
 class const TabRoutePage({required final Widget child, super.key}) extends StatefulWidget {
   @override
   State<TabRoutePage> createState() => _TabRoutePageState();
@@ -432,6 +444,12 @@ class _TabRoutePageState() extends State<TabRoutePage> {
 
   @override
   Widget build(BuildContext context) {
+    // The sheet is closer than the tab navigator around it.
+    final sheet = NavigationSheetScope.maybeOf(context);
+    if (sheet != null) {
+      return PrimaryScrollController(controller: sheet.scrollController, child: widget.child);
+    }
+
     final scope = TabNavigatorScope.maybeOf(context);
     final route = ModalRoute.of(context);
     if (scope == null || route == null) return widget.child;
