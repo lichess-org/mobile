@@ -1,9 +1,15 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
@@ -49,6 +55,51 @@ void main() {
       );
 
       expect(requestedPages, [1, 2]);
+    });
+
+    testWidgets('Category chips, search field and create button', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/study/all/hot') {
+          return mockResponse(kStudyAllHotPage1Response, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyListScreen(),
+        authUser: fakeAuthUser,
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pump();
+
+      // The chips are the first item of the list, on both platforms.
+      expect(
+        find.descendant(of: find.byType(ListView), matching: find.byType(StudyCategoryChips)),
+        findsOneWidget,
+      );
+
+      final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
+      // On iOS, the search field and the create button are at the bottom of the screen.
+      expect(
+        find.descendant(of: find.byType(BottomSearchBar), matching: find.byType(SearchBar)),
+        isIOS ? findsOneWidget : findsNothing,
+      );
+      expect(find.byType(BottomSearchBarButton), isIOS ? findsOneWidget : findsNothing);
+      expect(find.byType(PlatformFloatingActionButton), isIOS ? findsNothing : findsOneWidget);
+
+      await tester.tap(
+        isIOS ? find.byType(BottomSearchBarButton) : find.byType(PlatformFloatingActionButton),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(CreateStudyBottomSheet), findsOneWidget);
     });
 
     testWidgets('Searching', (WidgetTester tester) async {
