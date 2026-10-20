@@ -51,14 +51,15 @@ const kGlassMenuWidth = 250.0;
 /// In a menu of choices (one of the actions is [ContextMenuAction.selected]), the current choice
 /// has a check mark on the leading edge, like an iOS menu, and the action icons are not shown.
 ///
-/// The titles are a little smaller than the package's (17pt), and a title too long for one line
-/// wraps to two, like in an iOS menu.
+/// A title too long for one line wraps to two, like in an iOS menu.
 List<GlassMenuItem> glassMenuItems(BuildContext context, List<ContextMenuAction> actions) {
   final isChoiceMenu = actions.any((action) => action.selected);
-  // The package's title color: the theme text color at 90%.
+  // The package's title style (the theme text color at 90%), with the line height the menu sizes
+  // the items with (1.2, the app's is taller): the titles are measured with it.
   final textColor = (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label)
       .withValues(alpha: 0.9);
-  final titleStyle = TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w400);
+  final titleStyle = DefaultTextStyle.of(context).style
+      .merge(TextStyle(color: textColor, fontSize: 17, fontWeight: FontWeight.w400, height: 1.2));
   // The menu sizes itself from the items' max lines, not from their layout: only a title that
   // doesn't fit on one line gets two.
   int maxLines(String title, {required bool hasIcon}) {
