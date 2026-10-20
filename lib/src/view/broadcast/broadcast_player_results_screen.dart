@@ -333,11 +333,11 @@ class const _OverallStatPlayer({
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                                Image.asset(federation.flagAsset, height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
-                                    federationIdToName[federation]!,
+                                    federation.name,
                                     style: Theme.of(context).textTheme.bodyLarge
                                         ?.copyWith(height: 1.2),
                                     maxLines: 3,
@@ -561,7 +561,7 @@ class const _GameResultListTile({
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                Image.asset(federation.flagAsset, height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],

@@ -422,9 +422,7 @@ class const _Player({required final Key clockKey, required final Side side})
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final clock = ref.watch(overTheBoardClockProvider);
-    final clockTenths =
-        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
+    final timeIncrement = ref.watch(overTheBoardClockProvider.select((c) => c.timeIncrement));
 
     return GamePlayer(
       game: gameState.game,
@@ -434,17 +432,28 @@ class const _Player({required final Key clockKey, required final Side side})
           : null,
       materialDifferenceFormat: boardPreferences.materialDifferenceFormat,
       shouldLinkToUserProfile: false,
-      clock: clock.timeIncrement.isInfinite
-          ? null
-          : Clock(
-              timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
-              key: clockKey,
-              active: clock.activeClock == side,
-              emergencyThreshold: Duration(
-                seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
-              ),
-              clockTenths: clockTenths,
-            ),
+      clock: timeIncrement.isInfinite ? null : _OtbPlayerClock(side: side, clockKey: clockKey),
+    );
+  }
+}
+
+/// The clock of [side], self-watching so that a running clock rebuilds only itself.
+class const _OtbPlayerClock({required final Side side, required final Key clockKey})
+    extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final clock = ref.watch(overTheBoardClockProvider);
+    final clockTenths =
+        ref.watch(clockTenthsProvider).value ?? defaultAccountPreferences.clockTenths;
+
+    return Clock(
+      key: clockKey,
+      timeLeft: Duration(milliseconds: max(0, clock.timeLeft(side)!.inMilliseconds)),
+      active: clock.activeClock == side,
+      emergencyThreshold: Duration(
+        seconds: (clock.timeIncrement.time * 0.125).clamp(10, 60).toInt(),
+      ),
+      clockTenths: clockTenths,
     );
   }
 }

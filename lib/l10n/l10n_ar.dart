@@ -4897,7 +4897,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reason => 'السبب';
 
   @override
-  String get whatIsIheMatter => 'ما الأمر؟';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'غش';
@@ -4918,7 +4918,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get processReportFasterInEnglish => 'سنتمكن من معالجة تقريرك بسرعة أكبر إذا أرسلته باللغة الإنجليزية.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'برجاء تقديم رابط واحد علي الأقل لمباراة حدث فيها غش.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

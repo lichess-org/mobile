@@ -172,7 +172,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileMoveOnRelease => 'Jouer le coup en levant le doigt';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'Lorsque vous déplacez une pièce en touchant l\'écran, le déplacement se fait lorsque vous levez le doigt, ce qui vous permet de changer la case de destination.';
+  String get mobileMoveOnReleaseSubtitle => 'Lorsque vous touchez l\'écran pour déplacer une pièce, le déplacement se fait lorsque vous levez le doigt, ce qui vous permet de changer la case de destination.';
 
   @override
   String get mobileMustBeLoggedIn => 'Vous devez être connecté pour voir cette page.';
@@ -482,7 +482,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileWeWillEmailYouCode => 'Nous vous enverrons un code par courriel pour vous connecter.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Vous ne pouvez pas vous défier vous-même';
 
   @override
   String get activityActivity => 'Activité';
@@ -4785,7 +4785,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reason => 'Motif';
 
   @override
-  String get whatIsIheMatter => 'Quel est le problème ?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Triche';
@@ -4806,7 +4806,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get processReportFasterInEnglish => 'Nous pouvons traiter votre rapport plus rapidement si vous l\'écrivez en anglais.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Merci de fournir au moins un lien vers une partie où il y a eu triche.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6215,7 +6215,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get preview => 'Aperçu';
 
   @override
-  String get done => 'Done';
+  String get done => 'Terminé';
 
   @override
   String opponentLeftCounter(int count) {

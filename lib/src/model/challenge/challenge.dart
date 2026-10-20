@@ -247,12 +247,14 @@ extension ChallengeExtension on Pick {
         case 'inward' || 'in':
           return ChallengeDirection.inward;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeDirection: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeDirection",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeDirection");
+    throw PickException.fromPick(this, "can't be casted to ChallengeDirection");
   }
 
   ChallengeDirection? asChallengeDirectionOrNull() {
@@ -282,12 +284,14 @@ extension ChallengeExtension on Pick {
         case 'accepted':
           return ChallengeStatus.accepted;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeStatus: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeStatus",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeStatus");
+    throw PickException.fromPick(this, "can't be casted to ChallengeStatus");
   }
 
   ChallengeStatus? asChallengeStatusOrNull() {
@@ -313,14 +317,14 @@ extension ChallengeExtension on Pick {
         case 'correspondence':
           return ChallengeTimeControlType.correspondence;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeTimeControlType: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeTimeControlType",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeTimeControlType",
-    );
+    throw PickException.fromPick(this, "can't be casted to ChallengeTimeControlType");
   }
 
   ChallengeTimeControlType? asChallengeTimeControlTypeOrNull() {
@@ -346,12 +350,14 @@ extension ChallengeExtension on Pick {
         case 'black':
           return SideChoice.black;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to SideChoice: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to SideChoice",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to SideChoice");
+    throw PickException.fromPick(this, "can't be casted to SideChoice");
   }
 
   SideChoice? asSideChoiceOrNull() {
@@ -371,14 +377,14 @@ extension ChallengeExtension on Pick {
     if (value is String) {
       return ChallengeDeclineReason.values.firstWhere(
         (element) => element.name.toLowerCase() == value,
-        orElse: () => throw PickException(
-          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        orElse: () => throw PickException.fromPick(
+          this,
+          "can't be casted to ChallengeDeclineReason",
+          detail: 'invalid string',
         ),
       );
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason",
-    );
+    throw PickException.fromPick(this, "can't be casted to ChallengeDeclineReason");
   }
 
   ChallengeDeclineReason? asDeclineReasonOrNull() {

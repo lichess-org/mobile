@@ -74,15 +74,15 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'Kode';
 
   @override
   String mobileCodeLengthMessage(String param) {
-    return 'The code is $param characters long.';
+    return 'Koden er $param tegn lang.';
   }
 
   @override
-  String get mobileCopied => 'Copied.';
+  String get mobileCopied => 'Kopieret.';
 
   @override
   String get mobileCorrespondenceClearSavedMove => 'Ryd gemt træk';
@@ -97,10 +97,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Afvis';
 
   @override
-  String get mobileDangerZone => 'Danger zone';
+  String get mobileDangerZone => 'Farezone';
 
   @override
-  String get mobileDeleteYourAccount => 'Delete your account';
+  String get mobileDeleteYourAccount => 'Slet din konto';
 
   @override
   String get mobileDisplayModeCompact => 'Kompakt';
@@ -112,13 +112,13 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileDoYouAcceptChallenge => 'Accepterer du udfordringen?';
 
   @override
-  String get mobileDownloadMyGames => 'Download my games';
+  String get mobileDownloadMyGames => 'Download mine partier';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'Filtre';
 
   @override
   String get mobileFlipClock => 'Flip clock';
@@ -297,7 +297,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobilePuzzlesTab => 'Opgaver';
 
   @override
-  String get mobileRateThisApp => 'Rate this app';
+  String get mobileRateThisApp => 'Bedøm denne app';
 
   @override
   String get mobileRecentSearches => 'Seneste søgninger';
@@ -306,10 +306,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Fjern bogmærke';
 
   @override
-  String get mobileSelectAStudy => 'Select a study';
+  String get mobileSelectAStudy => 'Vælg et studie';
 
   @override
-  String get mobileSendMeACode => 'Send me a code';
+  String get mobileSendMeACode => 'Send mig en kode';
 
   @override
   String get mobileServerAnalysis => 'Server-analyse';
@@ -4785,7 +4785,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get reason => 'Årsag';
 
   @override
-  String get whatIsIheMatter => 'Hvad drejer henvendelsen sig om?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Snyd';
@@ -4806,7 +4806,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get processReportFasterInEnglish => 'Vi kan behandle din anmeldelse hurtigere, hvis du skriver på engelsk.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Angiv mindst ét link til et parti med snyd.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

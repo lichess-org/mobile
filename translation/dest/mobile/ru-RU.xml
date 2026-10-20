@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Согласиться на ничью?</string>
   <string name="account" comment="The account screen title.">Аккаунт</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Настройки аккаунта</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Эти настройки применяются к вашему аккаунту Lichess и будут использоваться на всех устройствах.</string>
@@ -8,14 +9,17 @@
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Настройки доски</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Отменить предложение о возврате хода</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Вызов создан: вы получите уведомление о начале партии.\nВы можете получить доступ к нему с главной вкладки.</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Название главы</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Шахматный движок</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Очистить</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Очистить сохранённый ход</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Настроить</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Подсказка: вы можете добавить больше виджетов на главный экран или удалить те, которые вам не нужны!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Отклонить</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Удалить свою учётную запись</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Компактный</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Детальный</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Скачать мои партии</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Отзыв</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрый день, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Добрый день</string>
@@ -49,6 +53,7 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Рапид</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3 шаха</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ультра</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN скопирован.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Игроки, содержащие «%s»</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Слева</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Справа</string>
@@ -92,7 +97,10 @@
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Поделиться позициями в формате FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Поделиться задачей</string>
   <string name="showComments" comment="Shown in the analysis screen.">Показать комментарии</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Показать линии движка</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Показать результат</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Войти через браузер</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Войти с помощью email</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Что-то пошло не так.</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Не показывать угрозу</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системные цвета</string>

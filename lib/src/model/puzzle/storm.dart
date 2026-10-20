@@ -90,7 +90,7 @@ extension StormExtension on Pick {
         return stormNewHighTypeMap[value]!;
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to StormNewHighType");
+    throw PickException.fromPick(this, "can't be casted to StormNewHighType");
   }
 
   StormNewHighType? asStormNewHighTypeOrNull() {

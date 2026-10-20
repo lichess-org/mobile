@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
-import '../../model/engine/fake_weights_service.dart';
+import '../../service/fake_weights_service.dart';
 import '../../test_provider_scope.dart';
 
 /// A screen whose only job is to open the picker and remember what it returned.

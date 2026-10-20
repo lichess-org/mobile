@@ -4785,7 +4785,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get reason => 'Arrazoia';
 
   @override
-  String get whatIsIheMatter => 'Zein da arazoa?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Tranpak';
@@ -4806,7 +4806,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get processReportFasterInEnglish => 'Ingelesez idazten badiguzu zure eskaerak azkarrago prozesatuko ditugu.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Iruzurra izandako partida baten lotura bidali gutxienez.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

@@ -94,7 +94,6 @@ class const _IsEditingHome({required super.child, required final bool isEditingW
   }
 }
 
-const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
 const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
 
 class _HomeScreenState() extends ConsumerState<HomeTabScreen> {

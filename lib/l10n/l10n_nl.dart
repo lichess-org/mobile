@@ -172,7 +172,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileMoveOnRelease => 'Zetten bij loslaten';
 
   @override
-  String get mobileMoveOnReleaseSubtitle => 'When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.';
+  String get mobileMoveOnReleaseSubtitle => 'Bij tikken om te zetten, wordt de zet gedaan als je vinger loslaat, zodat je van bestemmingsvakje kan wisselen.';
 
   @override
   String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
@@ -4785,7 +4785,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get reason => 'Reden';
 
   @override
-  String get whatIsIheMatter => 'Wat is er aan de hand?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Valsspelen';
@@ -4806,7 +4806,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get processReportFasterInEnglish => 'Als je in het Engels schrijft, kunnen we je melding sneller verwerken.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Geef ten minste één link naar een partij waarin vals gespeeld is.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -6215,7 +6215,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preview => 'Voorvertoning';
 
   @override
-  String get done => 'Done';
+  String get done => 'Gereed';
 
   @override
   String opponentLeftCounter(int count) {

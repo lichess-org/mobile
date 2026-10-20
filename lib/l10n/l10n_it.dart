@@ -74,7 +74,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
-  String get mobileCodeFieldLabel => 'Code';
+  String get mobileCodeFieldLabel => 'Codice';
 
   @override
   String mobileCodeLengthMessage(String param) {
@@ -118,7 +118,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileFeedbackButton => 'Suggerimenti';
 
   @override
-  String get mobileFilters => 'Filters';
+  String get mobileFilters => 'Filtri';
 
   @override
   String get mobileFlipClock => 'Flip clock';
@@ -824,7 +824,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get arenaEditTeamBattle => 'Modifica battaglia a squadre';
 
   @override
-  String get arenaDefenderLabel => 'Defender:';
+  String get arenaDefenderLabel => 'Difensore:';
 
   @override
   String get arenaPickYourTeam => 'Scegli la tua squadra';
@@ -2383,7 +2383,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Conferma della mossa';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Scelte multiple. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Può essere disabilitato durante una partita dal menu della scacchiera';
@@ -3796,7 +3796,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
-  String get illegalPosition => 'Illegal position';
+  String get illegalPosition => 'Posizione illegale';
 
   @override
   String get threefoldRepetition => 'Triplice ripetizione';
@@ -3941,7 +3941,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get password => 'Password';
 
   @override
-  String get showPassword => 'Show password';
+  String get showPassword => 'Mostra password';
 
   @override
   String get changePassword => 'Cambia password';
@@ -4061,10 +4061,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cancel => 'Annulla';
 
   @override
-  String get whiteRanOutOfTime => 'White ran out of time';
+  String get whiteRanOutOfTime => 'Il Bianco ha esaurito il tempo';
 
   @override
-  String get blackRanOutOfTime => 'Black ran out of time';
+  String get blackRanOutOfTime => 'Nero non ha più tempo';
 
   @override
   String get drawOfferSent => 'Offerta di patta inviata';
@@ -4785,7 +4785,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Qual è il problema?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Imbrogli';
@@ -4806,7 +4806,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Si prega di fornire almeno un collegamento link di una partita in cui il giocatore ha imbrogliato.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5136,7 +5136,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sourceCode => 'Codice sorgente';
 
   @override
-  String get blockAds => 'Block ads';
+  String get blockAds => 'Blocca pubblicità';
 
   @override
   String get simultaneousExhibitions => 'Esibizioni simultanee';
@@ -5201,7 +5201,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get simulAddExtraTime => 'Puoi aggiungere più tempo al tuo orologio per far fronte alla simultanea.';
 
   @override
-  String get extraClockTimeForHost => 'Extra clock time for the host:';
+  String get extraClockTimeForHost => 'Extra tempo per l\'host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Aggiungi del tempo al tuo orologio per ogni giocatore che si unisce alla simultanea.';
@@ -6215,7 +6215,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preview => 'Preview';
 
   @override
-  String get done => 'Done';
+  String get done => 'Finito';
 
   @override
   String opponentLeftCounter(int count) {
@@ -7386,7 +7386,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get studyCustomPositionText => 'Personalizza la scacchiera come preferisci.<br>Ideale per esplorare i finali.';
 
   @override
-  String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
+  String get studyLoadGameFromTheWebTitle => 'Carica una partita dal web';
 
   @override
   String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';

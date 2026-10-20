@@ -1,38 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">ยอมเสมอหรือไม่?</string>
   <string name="account" comment="The account screen title.">บัญชี</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">การตั้งค่าบัญชี</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">การตั้งค่าเหล่านี้จะถูกใช้กับบัญชี Lichess ของคุณและจะนำไปใช้กับอุปกรณ์ทุกเครื่อง</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">เพิ่มลงในการศึกษา</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">เกมทั้งหมด</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">ให้เดินใหม่และบอกคำใบ้ได้</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">สีดำสนิท</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">คุณแน่ใจไหม?</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">คุณแน่ใจหรือไม่ว่าต้องโหลดไฟล์ NNUE (%s)</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">ตำแหน่งกระดานในแนวนอน</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ตั้งค่ากระดาน</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">ระบบเวลาแบบบรอนสไตน์ดีเลย์</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">ยกเลิกการขอเดินอีกครั้ง</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">สร้างการท้าดวลแล้ว: คุณจะได้รับการแจ้งเตือนเมื่อเกมเริ่ม \nคุณสามารถเข้าถึงได้จากแท็บหน้าแรก</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">เริ่มแข่งจากตำแหน่งใดๆ</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">ชื่อบท</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">เครื่องจักรหมากรุก</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">เลือกภาพพื้นหลังด้วยตัวเอง</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">ล้าง</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">โค้ดจะหมดอายุภายใน 5 นาทีและสามารถใช้ได้ครั้งเดียว</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">รหัส</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">รหัสมีความยาว %s ตัวอักษร</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">คัดลอกแล้ว</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ลบการเดินที่บันทึกไว้</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">ปรับแต่ง</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">คำแนะนำ: คุณสามารถเพิ่มวิดเจ็ตเพิ่มเติมลงในหน้าจอหลัก หรือลบวิดเจ็ตที่ไม่ต้องการออกได้</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">ปฏิเสธ</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">หมวดล้างข้อมูล</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">ลบบัญชีของคุณ</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">กะทัดรัด</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">ละเอียด</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">คุณจะวยอมรับการท่าหรือไม่</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">ดาวน์โหลดเกมของฉัน</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">ข้อเสนอแนะ</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">ฟิลเตอร์</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">กลับด้านนาฬิกา</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">กลับด้านข้อมูลของคู่แข่งและตาเดินหลังจากคุณเดิน</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">ขอคำแนะนำสำหรับตาเดินของคุณ</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สบายดีไหม %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดี</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดีตอนเย็น %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">สวัสดีตอนเย็น</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">เดินได้ดีอยู่ แต่มีตาเดินที่ดีกว่านั้น</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">สวัสดี</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">หน้าหลัก</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">หากมีบัญชีที่ตรงกับ %1$s ระบบได้ส่งรหัสความยาว %2$s ตัวอักษรไปยังบัญชีดังกล่าวแล้ว โปรดตรวจสอบกล่องจดหมายของคุณและป้อนรหัสด้านล่างนี้</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">รหัสนี้ไม่ถูกต้องหรือหมดอายุแล้ว</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">ผู้สตรีมสด</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">ขนาดฐานข้อมูลในเครื่อง</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">ใช้นิ้วลากหมาก</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">เมื่อย้ายตัวหมากด้วยการแตะ การเดินหมากจะเกิดขึ้นเมื่อคุณยกนิ้วขึ้น ซึ่งช่วยให้คุณสามารถเลื่อนนิ้วเพื่อเปลี่ยนช่องปลายทางได้</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">คุณต้องเข้าสู่ระบบเพื่อเข้าถึงหน้านี้</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">ปริศนาหมากรุกไร้เน็ต</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">เกมใหม่</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">ตาเดินที่พลาดต่อไป</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">ไม่มีผลการค้นหา</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">คุณยังไม่ได้ติดตามใคร</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">ตารางเปิดเกมไม่สามารถเปิดในโหมดออฟไลน์ได้</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">หรือนำเข้าไฟล์ PGN</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">เล่นกระดานเดียวกัน</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">วางจากคลิปบอร์ด</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">แอนติเชส</string>
   <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">หมากปรมาณู</string>
   <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">บลิตซ์</string>
@@ -49,9 +79,11 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">แรปพิด</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">รุก 3 ที</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">อัลตร้า</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN คัดลอกแล้ว</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">ผู้เล่นที่มี \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">ซ้าย</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">ขวา</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">โหมดฝึกฝน</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">ขยายตัวหมากที่ลาก</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">ก่อนหน้านี้</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">คุณต้องการจบรอนนี้ไหม?</string>
@@ -60,8 +92,11 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">ไขปริศนาหมากรุกให้ได้มากที่สุดภายในเวลา 3 นาที</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">แก้ปริศนาหมากรุกจากการเปิดหมากที่คุณชอบหรือเลือกธีมก็ได้</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ปริศนา</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">ให้คะแนนแอปนี้</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">การค้นหาล่าสุด</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">ลบบุ๊กมาร์ก</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">เลือกการศึกษา</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">ส่งโค้ดมาให้ฉัน</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">เซอร์เวอร์ตัววิเคราะห์</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">ตำแหน่งนาฬิกา</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">ที่ตั้งไว้ล่วงหน้า</string>
@@ -82,25 +117,41 @@
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">เลื่อนเพื่อแสดงพื้นหลังอื่นๆ</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">ไม่กดก็ลากหมาก</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">คลิกช่องสองช่อง</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">การตั้งค่าของคุณได้รับการบันทึกไว้ในบัญชี Lichess แล้ว และจะถูกซิงค์ไปยังอุปกรณ์ทุกเครื่องของคุณ</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">วาดรูปร่าง</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">วาดรูปทรงโดยใช้สองนิ้ว โดยวางนิ้วหนึ่งไว้บนช่องว่างและลากอีกนิ้วหนึ่งเพื่อวาดรูปทรง</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">แสดงเส้นขอบ</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">ข้อเสนอแนะการแตะ</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">เมื่อเปิดใช้งาน อุปกรณ์จะสั่นชั่วครู่เมื่อคุณเดินหรือกินตัวหมาก</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">เปลี่ยน URL การท้าทาย</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">แชร์ PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">แชร์ URL เกม</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">แชร์การวิเคราะห์ PGN ในเครื่อง</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">แชร์ตำแหน่งในรูปแบบ FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">แชร์ปริศนานี้</string>
   <string name="showComments" comment="Shown in the analysis screen.">โชว์ความคิดเห็น</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">แสดงชุดลำดับตาเดิน</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">แสดงแท่งความเป็นต่อ</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">แสดงผลลัพธ์</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">เข้าระบบโดยบราวเซอร์</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">เข้าระบบโดยอีเมล</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">ระบบเวลาแบบซิมเปิลดีเลย์</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">กระดานขนาดเล็ก</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">บางอย่างผิดพลาด</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">จัดเรียงรายชื่อเพื่อน</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">หยุดแสดงความเสี่ยงของหมาก</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">สีของระบบ</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">ฐานข้อมูลปลายกระดานไม่สามารถใช้งานแบบออฟไลน์ได้</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">ธีม</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">มีการพยายามทำรายการมากเกินไป โปรดลองใหม่อีกครั้งในภายหลัง</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">เสร็จสมบูรณ์</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">ข้ามไปที่หน้าของฉัน</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">ตัวแปรกติกา %s ไม่รองรับในเวอร์ชั่นนี้</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">ใช้หมากแบบสมมาตรกัน</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">ดูเกม</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">ดูใบอนุญาต</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">กำลังรอผู้เล่นให้เข้าร่วม...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ดู</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">เราจะส่งรหัสสำหรับเข้าสู่ระบบไปให้คุณทางอีเมล</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">คุณไม่สามารถเล่นกับตัวเองได้</string>
 </resources>

@@ -46,7 +46,7 @@ class const Clock({
     final showTenths = switch (clockTenths) {
       ClockTenths.never => false,
       ClockTenths.lessThan10s || null => timeLeft < const Duration(seconds: 10),
-      ClockTenths.always => true,
+      ClockTenths.always => timeLeft < const Duration(hours: 1),
     };
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();

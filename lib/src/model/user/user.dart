@@ -57,7 +57,7 @@ extension LightUserExtension on Pick {
         isOnline: requiredPick('online').asBoolOrNull(),
       );
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to LightUser");
+    throw PickException.fromPick(this, "can't be casted to LightUser");
   }
 
   LightUser? asLightUserOrNull() {

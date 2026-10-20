@@ -2065,7 +2065,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get practiceSignUpToSaveYourProgress => 'Sign up to save your progress';
 
   @override
-  String get practiceSecHeadCheckmates => 'Checkmates';
+  String get practiceSecHeadCheckmates => 'Mattok';
 
   @override
   String get practiceSecHeadFundamentalTactics => 'Fundamental tactics';
@@ -2074,10 +2074,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get practiceSecHeadAdvancedTactics => 'Advanced tactics';
 
   @override
-  String get practiceSecHeadPawnEndgames => 'Pawn Endgames';
+  String get practiceSecHeadPawnEndgames => 'Gyalogvégjátékok';
 
   @override
-  String get practiceSecHeadRookEndgames => 'Rook Endgames';
+  String get practiceSecHeadRookEndgames => 'Bástyavégjátékok';
 
   @override
   String get practiceStNamPieceCheckmatesI => 'Piece Checkmates I';
@@ -2101,19 +2101,19 @@ class AppLocalizationsHu extends AppLocalizations {
   String get practiceStNamKnightAndBishopMate => 'Knight & Bishop Mate';
 
   @override
-  String get practiceStNamThePin => 'The Pin';
+  String get practiceStNamThePin => 'A kötés';
 
   @override
-  String get practiceStNamTheSkewer => 'The Skewer';
+  String get practiceStNamTheSkewer => 'A nyárs';
 
   @override
-  String get practiceStNamTheFork => 'The Fork';
+  String get practiceStNamTheFork => 'A villa';
 
   @override
-  String get practiceStNamDiscoveredAttacks => 'Discovered Attacks';
+  String get practiceStNamDiscoveredAttacks => 'Felfedett támadás';
 
   @override
-  String get practiceStNamDoubleCheck => 'Double Check';
+  String get practiceStNamDoubleCheck => 'Kettős sakk';
 
   @override
   String get practiceStNamOverloadedPieces => 'Overloaded Pieces';
@@ -2125,13 +2125,13 @@ class AppLocalizationsHu extends AppLocalizations {
   String get practiceStNamXRay => 'X-Ray';
 
   @override
-  String get practiceStNamZugzwang => 'Zugzwang';
+  String get practiceStNamZugzwang => 'Lépéskényszer';
 
   @override
   String get practiceStNamInterference => 'Interference';
 
   @override
-  String get practiceStNamGreekGift => 'Greek Gift';
+  String get practiceStNamGreekGift => 'Görögajándék';
 
   @override
   String get practiceStNamDeflection => 'Deflection';
@@ -2155,10 +2155,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get practiceStNamClearance => 'Clearance';
 
   @override
-  String get practiceStNamKeySquares => 'Key Squares';
+  String get practiceStNamKeySquares => 'Kulcsmezők';
 
   @override
-  String get practiceStNamOpposition => 'Opposition';
+  String get practiceStNamOpposition => 'Oppozíció';
 
   @override
   String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
@@ -2449,7 +2449,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get preferencesNotifyTournamentStartReminders => 'Tournaments start reminders';
 
   @override
-  String get preferencesNotifyBroadcasts => 'Broadcasts';
+  String get preferencesNotifyBroadcasts => 'Közvetítések';
 
   @override
   String get preferencesNotifyTimeAlarm => 'Hamarosan lejár az idő levelezős játszmában';
@@ -2518,10 +2518,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get preferencesMoveListSettings => 'Move list';
 
   @override
-  String get preferencesBoardSettings => 'Board';
+  String get preferencesBoardSettings => 'Tábla';
 
   @override
-  String get preferencesAnalysisSettings => 'Analysis settings';
+  String get preferencesAnalysisSettings => 'Elemzés beállításai';
 
   @override
   String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
@@ -4785,7 +4785,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get reason => 'Ok';
 
   @override
-  String get whatIsIheMatter => 'Probléma meghatározása';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Csalás';
@@ -4806,7 +4806,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Kérünk, legalább adj meg linket legalább egy csalt játszmához.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {

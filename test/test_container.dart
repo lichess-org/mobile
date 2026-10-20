@@ -9,28 +9,28 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/opening_book.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'binding.dart';
-import 'model/common/service/fake_sound_service.dart';
 import 'model/engine/fake_engine.dart';
 import 'model/engine/fake_maia_online_book.dart';
 import 'model/engine/fake_stockfish_nnue_service.dart';
-import 'model/engine/fake_weights_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
+import 'service/fake_sound_service.dart';
+import 'service/fake_weights_service.dart';
 import 'utils/fake_connectivity.dart';
 
 /// A mock client that always returns a 200 empty response.
