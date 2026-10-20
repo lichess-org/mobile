@@ -357,7 +357,7 @@ class _BodyState() extends ConsumerState<_Body> {
       },
       error: (e, s) {
         debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
-        return const Center(child: Text('Could not load Game History'));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(gameListProvider));
       },
       loading: () => const CenterLoadingIndicator(),
     );
