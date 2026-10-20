@@ -14,29 +14,44 @@ import '../../test_provider_scope.dart';
 
 const _listResponse = '''
 {
-  "coaches": [
+  "currentPage": 1,
+  "maxPerPage": 10,
+  "currentPageResults": [
     {
-      "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"},
-      "rating": 2434,
-      "languages": ["el-GR", "en-US"],
-      "nbReviews": 12,
-      "available": true,
-      "listed": true,
-      "headline": "Learn chess the fun way",
-      "hourlyRate": "25 EUR",
-      "picture": "https://example.com/toniaa.webp"
+      "coach": {
+        "id": "toniaa",
+        "listed": true,
+        "available": true,
+        "profile": {"headline": "Learn chess the fun way", "hourlyRate": "25 EUR"},
+        "picture": "https://example.com/toniaa.webp",
+        "nbReviews": 12,
+        "user": {"rating": 2434, "seenAt": 1760000000000},
+        "languages": ["el-GR", "en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
     },
     {
-      "user": {"id": "coach2", "name": "coach2"},
-      "rating": 2200,
-      "languages": ["en-US"],
-      "nbReviews": 0,
-      "available": false,
-      "listed": true
+      "coach": {
+        "id": "coach2",
+        "listed": true,
+        "available": false,
+        "profile": {"headline": null, "hourlyRate": null},
+        "picture": null,
+        "nbReviews": 0,
+        "user": {"rating": 2200, "seenAt": 1760000000000},
+        "languages": ["en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "coach2", "name": "coach2"}
     }
   ],
-  "page": 1,
+  "previousPage": null,
   "nextPage": null,
+  "nbResults": 2,
+  "nbPages": 1,
   "lang": "all",
   "order": "login",
   "country": "all",
@@ -47,24 +62,31 @@ const _listResponse = '''
 
 const _profileResponse = '''
 {
-  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"},
-  "rating": 2434,
-  "languages": ["el-GR", "en-US"],
-  "nbReviews": 12,
-  "available": true,
-  "listed": true,
-  "headline": "Learn chess the fun way",
-  "hourlyRate": "25 EUR",
-  "picture": "https://example.com/toniaa.webp",
-  "youtubeVideos": [],
-  "studies": [],
-  "description": "I teach chess for a living",
-  "playingExperience": null,
-  "teachingExperience": null,
-  "otherExperience": null,
-  "skills": null,
-  "methodology": null,
-  "youtubeChannel": null
+  "coach": {
+    "id": "toniaa",
+    "listed": true,
+    "available": true,
+    "profile": {
+      "headline": "Learn chess the fun way",
+      "hourlyRate": "25 EUR",
+      "description": "I teach chess for a living",
+      "playingExperience": null,
+      "teachingExperience": null,
+      "otherExperience": null,
+      "skills": null,
+      "methodology": null,
+      "youtubeVideos": null,
+      "youtubeChannel": null,
+      "publicStudies": null
+    },
+    "picture": "https://example.com/toniaa.webp",
+    "nbReviews": 12,
+    "user": {"rating": 2434, "seenAt": 1760000000000},
+    "languages": ["el-GR", "en-US"],
+    "createdAt": 1650000000000,
+    "updatedAt": 1750000000000
+  },
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
 }
 ''';
 
@@ -72,7 +94,7 @@ void main() {
   group('CoachListScreen', () {
     testWidgets('shows coaches with a 1:1 picture on the left side', (tester) async {
       final client = MockClient((request) async {
-        if (request.url.path == '/api/mobile/coach') {
+        if (request.url.path == '/coach/all/all/login') {
           return http.Response(_listResponse, 200);
         }
         return http.Response('', 404);
@@ -108,10 +130,10 @@ void main() {
 
     testWidgets('tapping a coach opens the profile', (tester) async {
       final client = MockClient((request) async {
-        if (request.url.path == '/api/mobile/coach') {
+        if (request.url.path == '/coach/all/all/login') {
           return http.Response(_listResponse, 200);
         }
-        if (request.url.path == '/api/mobile/coach/toniaa') {
+        if (request.url.path == '/coach/toniaa') {
           return http.Response(_profileResponse, 200);
         }
         return http.Response('', 404);
@@ -141,8 +163,8 @@ void main() {
     testWidgets('changing the sort filter refetches with the new order', (tester) async {
       final requestedOrders = <String?>[];
       final client = MockClient((request) async {
-        if (request.url.path == '/api/mobile/coach') {
-          requestedOrders.add(request.url.queryParameters['order']);
+        if (request.url.path.startsWith('/coach/')) {
+          requestedOrders.add(request.url.pathSegments[3]);
           return http.Response(_listResponse, 200);
         }
         return http.Response('', 404);

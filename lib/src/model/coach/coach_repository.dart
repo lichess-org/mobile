@@ -19,20 +19,15 @@ final coachRepositoryProvider = Provider<CoachRepository>((ref) {
 class CoachRepository(final LichessClient _client) {
   Future<CoachListPage> getCoaches(CoachFilters filters, {int page = 1}) {
     return _client.readJson(
-      Uri(
-        path: '/api/mobile/coach',
-        queryParameters: {
-          'page': page.toString(),
-          'lang': filters.language,
-          'country': filters.country,
-          'order': filters.order.key,
-        },
-      ),
+      lichessUri('/coach/${filters.language}/${filters.country}/${filters.order.key}', {
+        'page': page.toString(),
+      }),
+      headers: {'Accept': 'application/json'},
       mapper: (json) {
         return (
           coaches: pick(
             json,
-            'coaches',
+            'currentPageResults',
           ).asListOrThrow((p) => CoachPreview.fromPick(p.required())).toIList(),
           nextPage: pick(json, 'nextPage').asIntOrNull(),
           languages: pick(json, 'languages').asListOrEmpty((p) => p.asStringOrThrow()).toIList(),
@@ -51,7 +46,8 @@ class CoachRepository(final LichessClient _client) {
 
   Future<CoachProfile> getCoach(String username) {
     return _client.readJson(
-      Uri(path: '/api/mobile/coach/$username'),
+      lichessUri('/coach/$username'),
+      headers: {'Accept': 'application/json'},
       mapper: (json) => CoachProfile.fromPick(pick(json).required()),
     );
   }

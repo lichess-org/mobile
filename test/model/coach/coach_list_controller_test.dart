@@ -11,18 +11,29 @@ import '../../test_helpers.dart';
 String _pageResponse(String username, int? nextPage) =>
     '''
 {
-  "coaches": [
+  "currentPage": 1,
+  "maxPerPage": 10,
+  "currentPageResults": [
     {
-      "user": {"id": "$username", "name": "$username"},
-      "rating": 2400,
-      "languages": ["en-US"],
-      "nbReviews": 3,
-      "available": true,
-      "listed": true
+      "coach": {
+        "id": "$username",
+        "listed": true,
+        "available": true,
+        "profile": {"headline": null, "hourlyRate": null},
+        "picture": null,
+        "nbReviews": 3,
+        "user": {"rating": 2400, "seenAt": 1760000000000},
+        "languages": ["en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "$username", "name": "$username"}
     }
   ],
-  "page": 1,
+  "previousPage": null,
   "nextPage": $nextPage,
+  "nbResults": 1,
+  "nbPages": 1,
   "lang": "all",
   "order": "login",
   "country": "all",
@@ -45,6 +56,7 @@ void main() {
   group('CoachListController', () {
     test('appends the next page and clears nextPage at the end', () async {
       final mockClient = MockClient((request) {
+        expect(request.url.path, '/coach/all/all/login');
         final page = request.url.queryParameters['page'];
         if (page == '2') {
           return mockResponse(_pageResponse('coach2', null), 200);
