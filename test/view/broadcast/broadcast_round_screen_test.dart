@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -110,6 +109,45 @@ void main() {
 
       // Check that the right number of boards is displayed
       expect(find.byType(BoardThumbnail), findsNWidgets(4));
+    });
+
+    testWidgets('The boards fit without the evaluation gauges', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament, the round, and draw the pinned app bar buttons.
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Evaluation gauge'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(4));
+      expect(
+        tester.widget<BoardThumbnail>(find.byType(BoardThumbnail).first).showEvaluationGauge,
+        isFalse,
+      );
+      // The result of a finished game, next to the players, fits in the grid cell (overflow errors
+      // are ignored in tests).
+      final thumbnail = find.byType(BoardThumbnail).first;
+      final footerResult = find.descendant(of: thumbnail, matching: find.text('½')).last;
+      expect(
+        tester.getBottomLeft(footerResult).dy,
+        lessThanOrEqualTo(tester.getBottomLeft(thumbnail).dy),
+      );
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
@@ -216,87 +254,36 @@ void main() {
 
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
+      Future<void> pickTeam(String team) async {
+        await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+        await tester.pumpAndSettle();
+        // The team submenu, in the games filter section of the menu.
+        expect(find.text('Filter games'), findsOneWidget);
+        await tester.tap(find.text('Team'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(team).last);
+        await tester.pumpAndSettle();
+      }
+
       // The pinned app bar buttons are drawn a frame later.
       await tester.pump();
-      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Filter games'));
-      await tester.pumpAndSettle();
-      final teamChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.text('Team'),
-      );
-
-      expect(teamChip, findsOneWidget);
-
-      // Try to scroll the bottom sheet content to make the team chip visible
-      // Find the scrollable within the bottom sheet
-      await tester.scrollUntilVisible(teamChip, 100, scrollable: find.byType(Scrollable).first);
-
-      await tester.tap(teamChip);
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('All teams'), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byKey(const ValueKey('team-picker')),
-          matching: find.byType(ListTile),
-        ),
-        findsNWidgets(5),
-      ); // Back + "All teams" + 3 teams
-
-      await tester.tap(find.text('Team C'));
-
-      await tester.pump();
-
-      expect(find.text('Team: Team C'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
+      await pickTeam('Team C');
 
       // Filtered to one game
-      final filteredGame = find.byType(BoardThumbnail);
-
-      expect(filteredGame, findsOneWidget);
+      expect(find.byType(BoardThumbnail), findsOneWidget);
       expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
 
-      // Clear the filter by opening settings again
+      // The current team is shown below the submenu item, and the counts are those of its games.
       await tester.pump();
       await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Filter games'));
+      expect(find.text('Team C'), findsOneWidget);
+      expect(find.text('All games (1)'), findsOneWidget);
+      await tester.tapAt(const Offset(10, 400));
       await tester.pumpAndSettle();
-
-      // Tap the team filter chip
-      final teamFilterChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.byWidgetPredicate((widget) {
-          if (widget is Text) {
-            final text = widget.data;
-            return text != null && (text.startsWith('Team'));
-          }
-          return false;
-        }),
-      );
-      await tester.tap(teamFilterChip);
-
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('All teams'));
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Team'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
 
       // Filter cleared -> all results restored
+      await pickTeam('All teams');
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
     });
   });
