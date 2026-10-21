@@ -285,7 +285,7 @@ class const GameContextMenu({
                 onPressed: () {
                   launchShareDialog(
                     context,
-                    ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
+                    ShareParams(uri: lichessGameUri(game.id, orientation: orientation)),
                   );
                 },
                 icon: Theme.of(context).platform == TargetPlatform.iOS

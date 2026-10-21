@@ -236,8 +236,10 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
           );
           return [];
         }
-      // This might be a challenge or a game link. There's currently no API endpoint that resolves both games and challenges
-      // at the same time, so check if it's a game link first, and if that fails, we later check if it's a challenge link.
+      // This might be a challenge or a game link (/game/gameid or the legacy /gameid). There's
+      // currently no API endpoint that resolves both games and challenges at the same time, so
+      // check if it's a game link first, and if that fails, we later check if it's a challenge
+      // link.
       case _:
         final gameRoutes = await _tryResolveGameLink(context, appLinkUri);
         if (gameRoutes != null) return gameRoutes;
@@ -306,7 +308,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
 
   Future<bool> _tryResolveChallengeLink(BuildContext context, Uri appLinkUri) async {
     try {
-      final challengeId = ChallengeId(appLinkUri.pathSegments[0]);
+      final challengeId = ChallengeId(_gamePathSegments(appLinkUri)[0]);
       if (!challengeId.isValid) return false;
       final challenge = await ref.read(challengeRepositoryProvider).show(challengeId);
       if (!context.mounted) return false;
@@ -320,9 +322,17 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     return false;
   }
 
+  /// The path segments of a game or challenge link, starting with the id, for both `/game/gameid` links
+  /// and legacy `/gameid` links.
+  static List<String> _gamePathSegments(Uri appLinkUri) =>
+      appLinkUri.pathSegments.firstOrNull == 'game'
+      ? appLinkUri.pathSegments.sublist(1)
+      : appLinkUri.pathSegments;
+
   Future<List<Route<dynamic>>?> _tryResolveGameLink(BuildContext context, Uri appLinkUri) async {
     try {
-      final gameId = GameId(appLinkUri.pathSegments[0]);
+      final segments = _gamePathSegments(appLinkUri);
+      final gameId = GameId(segments[0]);
       if (!gameId.isValid) return null;
 
       final authUser = ref.read(authControllerProvider);
@@ -352,7 +362,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       if (!context.mounted) return null;
 
       final game = await ref.read(gameRepositoryProvider).getGame(gameId);
-      final orientation = appLinkUri.pathSegments.getOrNull(1) == 'black' ? Side.black : Side.white;
+      final orientation = segments.getOrNull(1) == 'black' ? Side.black : Side.white;
       final int ply = int.tryParse(appLinkUri.fragment) ?? 0;
 
       if (!context.mounted) return null;
