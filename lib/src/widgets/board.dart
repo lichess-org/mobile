@@ -34,10 +34,9 @@ class const BoardWidget({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // The board handles raw pointer events and doesn't enter the gesture arena. Claiming the
-    // pointers of an interactive board as soon as they touch down makes every other recognizer
-    // lose them, such as the iOS back swipe of the route, which would otherwise pop the screen
-    // while a piece on the edge of the board is being dragged.
+    // Chessground handles raw pointer events and doesn't enter the gesture arena.
+    // We use a RawGestureDetector to claim the pointer events for the board, so that they don't
+    // trigger a swipe gesture to pop the screen on iOS.
     final board = RawGestureDetector(
       gestures: {
         _BoardPointerClaimRecognizer:
