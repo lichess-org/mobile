@@ -19,6 +19,7 @@ enum PrefCategory(final String storageKey) {
   board('preferences.board'),
   analysis('preferences.analysis'),
   study('preferences.study'),
+  pinnedStudies('preferences.pinnedStudies'),
   overTheBoard('preferences.overTheBoard'),
   challenge('preferences.challenge'),
   gameSetup('preferences.gameSetup'),

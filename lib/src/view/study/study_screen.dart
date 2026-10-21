@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/study/pinned_studies.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -64,6 +65,19 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
       _logger.severe('Cannot load study:', error, stackTrace);
     }
     final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
+    final pinnedStudies = ref.watch(pinnedStudiesProvider);
+    final isPinned = pinnedStudies.isPinned(widget.options.id);
+
+    // Keep a pinned study up to date, so that it opens at the last viewed chapter.
+    ref.listen(studyControllerProvider(widget.options).select((s) => s.value?.study.chapter.id), (
+      _,
+      chapterId,
+    ) {
+      final study = ref.read(studyControllerProvider(widget.options)).value?.study;
+      if (chapterId != null && study != null) {
+        ref.read(pinnedStudiesProvider.notifier).updateFromStudy(study);
+      }
+    });
 
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
@@ -104,6 +118,24 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
               semanticsLabel: 'Study menu',
               icon: const Icon(Icons.more_horiz),
               actions: [
+                ContextMenuAction(
+                  icon: isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+                  label: isPinned ? 'Unpin study' : 'Pin study',
+                  onPressed: () {
+                    final notifier = ref.read(pinnedStudiesProvider.notifier);
+                    if (isPinned) {
+                      notifier.unpin(studyState.study.id);
+                    } else if (pinnedStudies.isFull) {
+                      showSnackBar(
+                        context,
+                        'You can pin up to $kMaxPinnedStudies studies',
+                        type: SnackBarType.error,
+                      );
+                    } else {
+                      notifier.pin(studyState.study);
+                    }
+                  },
+                ),
                 if (isLoggedIn)
                   ContextMenuAction(
                     icon: studyState.study.liked ? Icons.favorite : Icons.favorite_border,
@@ -129,7 +161,23 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
           options: widget.options,
           studyState: studyState,
         ),
-        AsyncError() => const _PlaceholderBody(child: Text('Failed to load study.')),
+        AsyncError() => _PlaceholderBody(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Failed to load study.'),
+              // A pinned study may have been deleted or made private.
+              if (isPinned) ...[
+                const SizedBox(height: 16.0),
+                FilledButton.tonal(
+                  onPressed: () =>
+                      ref.read(pinnedStudiesProvider.notifier).unpin(widget.options.id),
+                  child: const Text('Unpin study'),
+                ),
+              ],
+            ],
+          ),
+        ),
         _ => const _PlaceholderBody(child: CircularProgressIndicator.adaptive()),
       },
     );
