@@ -338,14 +338,14 @@ class _BoardsExcludedRects() {
       return;
     }
     _sentRects = rects;
-    GesturesExclusion.instance.setRects(rects);
+    _GesturesExclusion.instance.setRects(rects);
   }
 }
 
-class const GesturesExclusion._() {
+class const _GesturesExclusion._() {
   static const _channel = MethodChannel('mobile.lichess.org/gestures_exclusion');
 
-  static const instance = GesturesExclusion._();
+  static const instance = _GesturesExclusion._();
 
   Future<void> setRects(List<Rect> rects) async {
     if (defaultTargetPlatform != TargetPlatform.android) {
