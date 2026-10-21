@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -126,9 +128,11 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
   }
 }
 
-// Builds the appbar title (and subtitle showing time control, speed and rated)
-// For User TV: time control + speed + rated
-// For Lichess TV: time control + rated (title shows speed already)
+/// Builds the appbar title (and subtitle showing time control, speed and rated)
+/// - User TV subtitles: time control + speed + rated
+/// - Lichess TV subtitles: time control + rated (title shows speed already)
+/// - Tournament TV subtitles: time control + speed + rated
+/// - Tournament TV title: tournament name
 class const _TvAppBarTitle({
   required final TvChannel? channel,
   required final TvGameControllerParams? gameParams,
@@ -136,6 +140,13 @@ class const _TvAppBarTitle({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final tournament = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.meta.tournament?.name),
+          );
+
     final timeIncrement = gameParams == null
         ? null
         : ref.watch(
@@ -149,12 +160,6 @@ class const _TvAppBarTitle({
             tvGameControllerProvider(gameParams!).select((state) => state.value?.game.meta.rated),
           );
 
-    final ratedStr = rated == true
-        ? context.l10n.rated
-        : rated == false
-        ? context.l10n.casual
-        : '';
-
     final icon = gameParams == null
         ? null
         : ref.watch(
@@ -162,31 +167,14 @@ class const _TvAppBarTitle({
                 .select((state) => state.value?.game.meta.perf.icon),
           );
 
-    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
-    );
-
-    return channel != null
+    return timeIncrement == null
+        ? const SizedBox.shrink()
+        : channel != null
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Text('${channel!.label(context.l10n)} TV'),
-              if (timeIncrement == null)
-                const SizedBox.shrink()
-              else
-                Row(
-                  children: [
-                    Icon(icon, size: 16),
-                    const SizedBox(width: 2.0),
-                    Text(
-                      '${timeIncrement.display} • $ratedStr',
-                      style: subtitleTextStyle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+              _Subtitle(timeIncrement: timeIncrement, rated: rated, showSpeed: false, icon: icon),
             ],
           )
         : Row(
@@ -194,27 +182,31 @@ class const _TvAppBarTitle({
             children: [
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  spacing: 2.0,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UserFullNameWidget(user: user),
-                    if (timeIncrement == null)
-                      const SizedBox.shrink()
+                    if (tournament == null)
+                      UserFullNameWidget(user: user)
                     else
                       Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(icon, size: 16),
-                          const SizedBox(width: 2.0),
+                          const Icon(LichessIcons.tournament_cup, size: 20),
+                          const SizedBox(width: 4.0),
                           Expanded(
-                            child: Text(
-                              '${timeIncrement.display} • ${timeIncrement.speed.label(context.l10n)} • $ratedStr',
-                              style: subtitleTextStyle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            child: AppBarTitleText(
+                              '$tournament ${context.l10n.arenaArena}',
+                              maxLines: 2,
                             ),
                           ),
                         ],
                       ),
+                    _Subtitle(
+                      timeIncrement: timeIncrement,
+                      rated: rated,
+                      showSpeed: true,
+                      icon: tournament == null ? icon : null,
+                    ),
                   ],
                 ),
               ),
@@ -222,6 +214,39 @@ class const _TvAppBarTitle({
               const Icon(Icons.live_tv),
             ],
           );
+  }
+}
+
+class const _Subtitle({
+  required final TimeIncrement timeIncrement,
+  required final bool? rated,
+  required final bool? showSpeed,
+  required final IconData? icon,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final ratedStr = rated == true
+        ? context.l10n.rated
+        : rated == false
+        ? context.l10n.casual
+        : '';
+
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      children: [
+        if (icon != null) ...[Icon(icon, size: 16), const SizedBox(width: 2.0)],
+        Expanded(
+          child: Text(
+            '${timeIncrement.display}${showSpeed == true ? ' • ${timeIncrement.speed.label(context.l10n)}' : ''} • $ratedStr',
+            style: subtitleTextStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
   }
 }
 
