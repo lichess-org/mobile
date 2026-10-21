@@ -76,6 +76,38 @@ void main() {
       );
     });
 
+    testWidgets('the bottom bar floats over the tab view on iOS only', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      expect(
+        tester
+            .widget<SingleChildScrollView>(
+              find.descendant(
+                of: find.byType(TabBarView),
+                matching: find.byType(SingleChildScrollView),
+              ),
+            )
+            .padding,
+        EdgeInsets.only(bottom: bottomInset),
+      );
+    }, variant: kPlatformVariant);
+
     testWidgets('move backwards and forward', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

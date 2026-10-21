@@ -562,9 +562,13 @@ possible until then. Rules:
   `visibility`) on the text field fill (`GlassControlBackground`); glass is for bars only. The
   `bottom` of a large title app bar is in the content until it sticks below the bar buttons: its
   `PlatformTabBar` / `PlatformSearchBar` follow that automatically (`AppBarBottomGlassScope`).
-- **Bottom bars over scrolling content** (not board toolbars): `BottomBar(cupertinoGlass: true)`
-  has no background on iOS and its `BottomBarButton`s / `BottomBarTextButton`s are glass capsules,
-  as wide as their content and evenly spaced.
+- **Bottom bars**: `BottomBar(cupertinoGlass: true)` has no background on iOS and its
+  `BottomBarButton`s / `BottomBarTextButton`s are glass capsules (an icon alone is a circle), as
+  wide as their content and evenly spaced; when they don't fit, the widest ones shrink first.
+  Buttons that belong together (board navigation: previous / next) go in a `BottomBarGroup`: one
+  glass capsule on iOS, icons only, like an iOS toolbar group; elsewhere its buttons are laid out
+  like the others. A custom button draws itself as a `BottomBarGlassButton` when
+  `BottomBar.isGlass(context)` (e.g. the engine button). Game screens are not migrated yet.
 - **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
   `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
   give an iOS field its own `border` radius.
@@ -639,8 +643,13 @@ possible until then. Rules:
   home indicator. Put `MediaQuery.paddingOf(context)` in the scroll view's padding instead.
   `SafeArea` is fine for non-scrolling layouts (a form with a fixed button, a fixed board preview).
 - **Screens that don't scroll** (board screens) pass `extendBodyBehindAppBar: false` to
-  `PlatformScaffold`: the body is laid out below the glass bar, like in a Material `Scaffold`,
-  and the status bar blur is off. Their bottom toolbar (`BottomBar`) stays a regular bar.
+  `PlatformScaffold`: the body is laid out below the glass bar, like in a Material `Scaffold`, and
+  the status bar blur is off. Their bottom toolbar is a glass `BottomBar` below the content; on the
+  analysis, study, broadcast game and retro screens it floats over the tab view on iOS in portrait,
+  the tab content scrolling under it (`AnalysisLayout.bottomBarOverContent`: the tab views get the
+  bar height as bottom `MediaQuery` padding, which their scroll views apply), over a bottom edge
+  blur of the content on iOS 26 (`GlassScrollEdgeEffect`, like the status bar blur) under a gradient
+  of the tab view color, no bar tint.
 - **Pinned slivers** (sticky section headers) always stick to the top of their scroll view, which
   is behind the bar. For such a list, lay the body out below the bar instead
   (`PlatformScaffold(extendBodyBehindAppBar: false)`, which also keeps the bar untinted), and give

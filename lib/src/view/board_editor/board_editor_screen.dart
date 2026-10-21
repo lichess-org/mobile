@@ -274,6 +274,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
     final pieceCount = editorState.pieces.length;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           icon: Icons.menu,

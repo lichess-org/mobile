@@ -134,17 +134,22 @@ class const _Body({required final AnalysisOptions options, required final Analys
                                 clipBehavior: Clip.hardEdge,
                                 margin: const EdgeInsets.all(kTabletBoardTableSidePadding),
                                 semanticContainer: false,
-                                child: OpeningExplorerView(
-                                  pov: options.orientation,
-                                  position: state.currentPosition,
-                                  opening: state.currentNode.isRoot
-                                      ? LightOpening(eco: '', name: context.l10n.startPosition)
-                                      : state.currentNode.opening ?? state.currentBranchOpening,
-                                  onMoveSelected: (move) {
-                                    ref
-                                        .read(analysisControllerProvider(options).notifier)
-                                        .onUserMove(move);
-                                  },
+                                // The bottom bar below takes care of the bottom inset.
+                                child: MediaQuery.removePadding(
+                                  context: context,
+                                  removeBottom: true,
+                                  child: OpeningExplorerView(
+                                    pov: options.orientation,
+                                    position: state.currentPosition,
+                                    opening: state.currentNode.isRoot
+                                        ? LightOpening(eco: '', name: context.l10n.startPosition)
+                                        : state.currentNode.opening ?? state.currentBranchOpening,
+                                    onMoveSelected: (move) {
+                                      ref
+                                          .read(analysisControllerProvider(options).notifier)
+                                          .onUserMove(move);
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
@@ -253,6 +258,7 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
     };
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: dbLabel,
@@ -272,25 +278,29 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
           onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
-        RepeatButton(
-          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-          child: BottomBarButton(
-            onTap: canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            showLabel: true,
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: canGoNext ? () => _moveForward(ref) : null,
-          child: BottomBarButton(
-            icon: CupertinoIcons.chevron_forward,
-            label: 'Next',
-            showLabel: true,
-            onTap: canGoNext ? () => _moveForward(ref) : null,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+              child: BottomBarButton(
+                onTap: canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                showLabel: true,
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: canGoNext ? () => _moveForward(ref) : null,
+              child: BottomBarButton(
+                icon: CupertinoIcons.chevron_forward,
+                label: 'Next',
+                showLabel: true,
+                onTap: canGoNext ? () => _moveForward(ref) : null,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );

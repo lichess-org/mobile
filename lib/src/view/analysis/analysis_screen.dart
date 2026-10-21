@@ -325,6 +325,7 @@ class const _Body({
               )
             : null,
         bottomBar: _BottomBar(options: options, tabController: controller),
+        bottomBarOverContent: true,
         pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
@@ -417,6 +418,7 @@ class const _BottomBar({
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -438,25 +440,31 @@ class const _BottomBar({
             onToggle: () => ref.read(ctrlProvider.notifier).toggleEngine(),
             onGoDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
           ),
-        RepeatButton(
-          onLongPress: analysisState.canGoBack ? () => _moveBackward(ref, fastSeek: true) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: analysisState.canGoNext ? () => _moveForward(ref, fastSeek: true) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            label: context.l10n.next,
-            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: analysisState.canGoBack
+                  ? () => _moveBackward(ref, fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: analysisState.canGoNext ? () => _moveForward(ref, fastSeek: true) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                label: context.l10n.next,
+                onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );

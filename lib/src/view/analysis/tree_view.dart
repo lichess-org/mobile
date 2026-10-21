@@ -17,13 +17,17 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
     final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
     final currentNode =
         analysisState.root.branchesOn(analysisState.currentPath).lastOrNull ?? analysisState.root;
+    // The height of a bar floating over the view: the moves scroll under it, unless the variations
+    // bar is shown, which is kept above it.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final hasVariations = currentNode.children.length > 1;
 
     return Column(
       crossAxisAlignment: .stretch,
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
             child: Column(
               children: [
                 DebouncedPgnTreeView(
@@ -49,12 +53,16 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
             ),
           ),
         ),
-        VariationsBar(
-          currentNode: currentNode,
-          currentPath: analysisState.currentPath,
-          showAnnotations: enableServerAnalysis && prefs.showAnnotations,
-          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
-        ),
+        if (hasVariations)
+          Padding(
+            padding: EdgeInsets.only(bottom: bottomInset),
+            child: VariationsBar(
+              currentNode: currentNode,
+              currentPath: analysisState.currentPath,
+              showAnnotations: enableServerAnalysis && prefs.showAnnotations,
+              onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+            ),
+          ),
       ],
     );
   }

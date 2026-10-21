@@ -470,6 +470,7 @@ class const _BottomBar({
     final puzzleState = ref.watch(ctrlProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         if (!streak.finished)
           BottomBarButton(
@@ -523,18 +524,23 @@ class const _BottomBar({
             icon: Icons.biotech,
           ),
         if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoBack
-                ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-          ),
-        if (streak.finished)
-          BottomBarButton(
-            onTap: puzzleState.canGoNext ? () => ref.read(ctrlProvider.notifier).userNext() : null,
-            label: context.l10n.next,
-            icon: CupertinoIcons.chevron_forward,
+          BottomBarGroup(
+            children: [
+              BottomBarButton(
+                onTap: puzzleState.canGoBack
+                    ? () => ref.read(ctrlProvider.notifier).userPrevious()
+                    : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+              ),
+              BottomBarButton(
+                onTap: puzzleState.canGoNext
+                    ? () => ref.read(ctrlProvider.notifier).userNext()
+                    : null,
+                label: context.l10n.next,
+                icon: CupertinoIcons.chevron_forward,
+              ),
+            ],
           ),
         if (streak.finished)
           BottomBarButton(

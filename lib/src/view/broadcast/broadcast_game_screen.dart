@@ -293,6 +293,7 @@ class const _Body(
               tournamentSlug: tournamentSlug,
               roundSlug: roundSlug,
             ),
+            bottomBarOverContent: true,
             children: [
               _PgnTagsView(roundId, gameId),
               _OpeningExplorerTab(roundId, gameId),
@@ -318,12 +319,17 @@ class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final Broadca
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final currentNode = state.root.branchesOn(state.currentPath).lastOrNull ?? state.root;
+    // The height of a bar floating over the view: the moves scroll under it, unless the variations
+    // bar is shown, which is kept above it.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final hasVariations = currentNode.children.length > 1;
 
     return Column(
       crossAxisAlignment: .stretch,
       children: [
         Expanded(
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
             child: DebouncedPgnTreeView(
               root: state.root,
               currentPath: state.currentPath,
@@ -341,13 +347,17 @@ class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final Broadca
             ),
           ),
         ),
-
-        VariationsBar(
-          currentNode: currentNode,
-          currentPath: state.currentPath,
-          showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
-        ),
+        if (hasVariations)
+          Padding(
+            padding: EdgeInsets.only(bottom: bottomInset),
+            child: VariationsBar(
+              currentNode: currentNode,
+              currentPath: state.currentPath,
+              showAnnotations:
+                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+              onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+            ),
+          ),
       ],
     );
   }
@@ -389,7 +399,8 @@ class const _PgnTagsView(final BroadcastRoundId roundId, final BroadcastGameId g
     final pgnHeaders = state.pgnHeaders;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+      // Scrolls under a bar floating over it.
+      padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0 + MediaQuery.paddingOf(context).bottom),
       child: Table(
         columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
         defaultVerticalAlignment: TableCellVerticalAlignment.top,
@@ -659,6 +670,7 @@ class const _BroadcastGameBottomBar({
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -693,25 +705,29 @@ class const _BroadcastGameBottomBar({
             );
           },
         ),
-        RepeatButton(
-          onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            label: context.l10n.next,
-            onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                label: context.l10n.next,
+                onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );

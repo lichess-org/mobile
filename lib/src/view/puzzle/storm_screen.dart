@@ -679,6 +679,7 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
     final stormState = ref.watch(ctrl);
     final authUser = ref.watch(authControllerProvider);
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         if (stormState.mode == StormMode.initial)
           BottomBarButton(

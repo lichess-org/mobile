@@ -38,7 +38,7 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).value;
     if (state == null) {
-      return const BottomBar(children: []);
+      return const BottomBar.empty(cupertinoGlass: true);
     }
 
     final onGoForward = state.canGoNext
@@ -49,6 +49,7 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
         : null;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         _StudyMenuButton(options: options),
         _ChapterButton(options: options),
@@ -66,30 +67,36 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
           hasNextChapter: state.hasNextChapter,
           blink: state.isAtEndOfChapter && state.hasNextChapter,
         ),
-        RepeatButton(
-          onLongPress: state.canGoBack
-              ? () =>
-                    ref.read(studyControllerProvider(options).notifier).userPrevious(fastSeek: true)
-              : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: onGoBack,
-            label: context.l10n.studyBack,
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: state.canGoNext
-              ? () => ref.read(studyControllerProvider(options).notifier).userNext(fastSeek: true)
-              : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            onTap: onGoForward,
-            label: context.l10n.studyNext,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: state.canGoBack
+                  ? () => ref
+                        .read(studyControllerProvider(options).notifier)
+                        .userPrevious(fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: onGoBack,
+                label: context.l10n.studyBack,
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: state.canGoNext
+                  ? () =>
+                        ref.read(studyControllerProvider(options).notifier).userNext(fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                onTap: onGoForward,
+                label: context.l10n.studyNext,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -102,6 +109,7 @@ class const _GamebookBottomBar({required final StudyOptions options}) extends Co
     final state = ref.watch(studyControllerProvider(options)).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         _StudyMenuButton(options: options),
         _ChapterButton(options: options),

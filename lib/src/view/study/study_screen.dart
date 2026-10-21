@@ -406,6 +406,7 @@ class const _Body({
             )
           : null,
       bottomBar: StudyBottomBar(options: options),
+      bottomBarOverContent: true,
       pockets: studyState.currentPosition?.pockets,
       tabs: tabs,
       children: tabs.map((tab) {

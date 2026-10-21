@@ -179,6 +179,7 @@ class _BodyState() extends ConsumerState<_Body> {
           ),
           if (!trainingState.trainingActive)
             BottomBar(
+              cupertinoGlass: true,
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,

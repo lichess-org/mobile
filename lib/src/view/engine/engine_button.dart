@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/popover.dart';
 import 'package:material_ui/material_ui.dart';
@@ -57,87 +58,99 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
       fontSize: 11,
     );
 
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        PlatformPopover(
-          width: 250,
-          direction: PopoverDirection.top,
-          // The engine details are content, hard to read on glass over the board.
-          opaque: true,
-          bodyBuilder: (_) => _EnginePopup(
-            goDeeper: widget.goDeeper,
-            filters: widget.filters,
-            savedEval: widget.savedEval,
+    final chip = Badge(
+      offset: const Offset(4, -7),
+      backgroundColor: ColorScheme.of(context).tertiaryContainer,
+      textColor: ColorScheme.of(context).onTertiaryContainer,
+      label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
+      textStyle: const TextStyle(fontSize: 8),
+      isLabelVisible: prefs.isEnabled && eval is CloudEval,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          TweenAnimationBuilder<Color?>(
+            curve: Curves.easeInOut,
+            tween: ColorTween(begin: fromChipColor, end: toChipColor),
+            duration: const Duration(milliseconds: 300),
+            builder: (BuildContext context, Color? color, Widget? _) {
+              return CustomPaint(
+                size: const Size(microChipSize, microChipSize),
+                painter: MicroChipPainter(color ?? toChipColor!),
+              );
+            },
           ),
-          triggerBuilder: (context, showPopover) => SemanticIconButton(
-            semanticsLabel: context.l10n.toggleLocalEvaluation,
-            onPressed: widget.onTap,
-            onLongPress: showPopover,
-            icon: Badge(
-              offset: const Offset(4, -7),
-              backgroundColor: ColorScheme.of(context).tertiaryContainer,
-              textColor: ColorScheme.of(context).onTertiaryContainer,
-              label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
-              textStyle: const TextStyle(fontSize: 8),
-              isLabelVisible: prefs.isEnabled && eval is CloudEval,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  TweenAnimationBuilder<Color?>(
-                    curve: Curves.easeInOut,
-                    tween: ColorTween(begin: fromChipColor, end: toChipColor),
-                    duration: const Duration(milliseconds: 300),
-                    builder: (BuildContext context, Color? color, Widget? _) {
-                      return CustomPaint(
-                        size: const Size(microChipSize, microChipSize),
-                        painter: MicroChipPainter(color ?? toChipColor!),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: microChipSize,
-                    height: microChipSize,
-                    child: RepaintBoundary(
-                      child: Center(
-                        child: prefs.isEnabled
-                            ? eval is CloudEval
-                                  ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
-                                  : switch (engine) {
-                                      // No engine has been asked for yet.
-                                      null => Text('-', style: iconTextStyle),
-                                      AsyncError() => Text('!', style: iconTextStyle),
-                                      AsyncValue(isLoading: true) => loadingIndicator,
-                                      _ =>
-                                        eval?.depth != null
-                                            ? Text(
-                                                '${math.min(99, eval!.depth)}',
-                                                style: iconTextStyle,
-                                              )
-                                            : loadingIndicator,
-                                    }
-                            : const SizedBox.shrink(),
-                      ),
-                    ),
-                  ),
-                ],
+          SizedBox(
+            width: microChipSize,
+            height: microChipSize,
+            child: RepaintBoundary(
+              child: Center(
+                child: prefs.isEnabled
+                    ? eval is CloudEval
+                          ? Text('${math.min(99, eval.depth)}', style: iconTextStyle)
+                          : switch (engine) {
+                              // No engine has been asked for yet.
+                              null => Text('-', style: iconTextStyle),
+                              AsyncError() => Text('!', style: iconTextStyle),
+                              AsyncValue(isLoading: true) => loadingIndicator,
+                              _ =>
+                                eval?.depth != null
+                                    ? Text('${math.min(99, eval!.depth)}', style: iconTextStyle)
+                                    : loadingIndicator,
+                            }
+                    : const SizedBox.shrink(),
               ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: -6,
-          child: Text(
-            engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: textColor.withValues(alpha: 0.8),
+        ],
+      ),
+    );
+
+    final engineLabel =
+        engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel;
+    final engineLabelStyle = TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.w700,
+      color: textColor.withValues(alpha: 0.8),
+    );
+
+    return PlatformPopover(
+      width: 250,
+      direction: PopoverDirection.top,
+      // The engine details are content, hard to read on glass over the board.
+      opaque: true,
+      bodyBuilder: (_) => _EnginePopup(
+        goDeeper: widget.goDeeper,
+        filters: widget.filters,
+        savedEval: widget.savedEval,
+      ),
+      triggerBuilder: (context, showPopover) => BottomBar.isGlass(context)
+          // A capsule is too short for the label below the chip.
+          ? BottomBarGlassButton(
+              semanticsLabel: context.l10n.toggleLocalEvaluation,
+              onTap: widget.onTap,
+              onLongPress: showPopover,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 6.0,
+                children: [
+                  chip,
+                  Text(engineLabel, style: engineLabelStyle),
+                ],
+              ),
+            )
+          : Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                SemanticIconButton(
+                  semanticsLabel: context.l10n.toggleLocalEvaluation,
+                  onPressed: widget.onTap,
+                  onLongPress: showPopover,
+                  icon: chip,
+                ),
+                Positioned(bottom: -6, child: Text(engineLabel, style: engineLabelStyle)),
+              ],
             ),
-          ),
-        ),
-      ],
     );
   }
 }

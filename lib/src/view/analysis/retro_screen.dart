@@ -171,22 +171,29 @@ class const _RetroScreen(final RetroOptions options) extends ConsumerWidget {
         return EngineGauge(params: state.engineGaugeParams);
       },
       bottomBar: _BottomBar(options),
+      bottomBarOverContent: true,
       children: [
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _FeedbackWidget(options),
-              if (state.feedback == RetroFeedback.done)
-                FilledButton(
-                  onPressed: ref.read(retroControllerProvider(options).notifier).flipSide,
-                  child: Text(
-                    state.pov == Side.white
-                        ? context.l10n.reviewBlackMistakes
-                        : context.l10n.reviewWhiteMistakes,
-                  ),
-                ),
-            ],
+        Builder(
+          // Centered above the bar floating over the view.
+          builder: (context) => Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _FeedbackWidget(options),
+                  if (state.feedback == RetroFeedback.done)
+                    FilledButton(
+                      onPressed: ref.read(retroControllerProvider(options).notifier).flipSide,
+                      child: Text(
+                        state.pov == Side.white
+                            ? context.l10n.reviewBlackMistakes
+                            : context.l10n.reviewWhiteMistakes,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
@@ -272,6 +279,7 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
         : null;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         if (state.isSolving) ...[
           BottomBarButton(
@@ -294,27 +302,31 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
               showLabel: true,
               onTap: ref.read(retroControllerProvider(options).notifier).restart,
             ),
-          RepeatButton(
-            onLongPress: onGoBack,
-            child: BottomBarButton(
-              key: const ValueKey('goto-previous'),
-              onTap: onGoBack,
-              label: context.l10n.studyBack,
-              showLabel: true,
-              icon: CupertinoIcons.chevron_back,
-              showTooltip: false,
-            ),
-          ),
-          RepeatButton(
-            onLongPress: onGoForward,
-            child: BottomBarButton(
-              key: const ValueKey('goto-next'),
-              icon: CupertinoIcons.chevron_forward,
-              onTap: onGoForward,
-              label: context.l10n.studyNext,
-              showLabel: true,
-              showTooltip: false,
-            ),
+          BottomBarGroup(
+            children: [
+              RepeatButton(
+                onLongPress: onGoBack,
+                child: BottomBarButton(
+                  key: const ValueKey('goto-previous'),
+                  onTap: onGoBack,
+                  label: context.l10n.studyBack,
+                  showLabel: true,
+                  icon: CupertinoIcons.chevron_back,
+                  showTooltip: false,
+                ),
+              ),
+              RepeatButton(
+                onLongPress: onGoForward,
+                child: BottomBarButton(
+                  key: const ValueKey('goto-next'),
+                  icon: CupertinoIcons.chevron_forward,
+                  onTap: onGoForward,
+                  label: context.l10n.studyNext,
+                  showLabel: true,
+                  showTooltip: false,
+                ),
+              ),
+            ],
           ),
           if (state.feedback != RetroFeedback.done)
             BottomBarButton(

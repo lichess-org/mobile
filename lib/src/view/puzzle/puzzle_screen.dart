@@ -721,6 +721,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
     final puzzleState = ref.watch(ctrlProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         if (puzzleState.mode != PuzzleMode.view)
@@ -776,27 +777,30 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
             icon: Icons.biotech,
           ),
 
-        RepeatButton(
-          triggerDelays: _BottomBar._repeatTriggerDelays,
-          onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-          child: BottomBarButton(
-            onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-
-        RepeatButton(
-          triggerDelays: _BottomBar._repeatTriggerDelays,
-          onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-          child: BottomBarButton(
-            onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-            label: context.l10n.next,
-            icon: CupertinoIcons.chevron_forward,
-            showTooltip: false,
-            blink: puzzleState.shouldBlinkNextArrow,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              triggerDelays: _BottomBar._repeatTriggerDelays,
+              onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+              child: BottomBarButton(
+                onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              triggerDelays: _BottomBar._repeatTriggerDelays,
+              onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+              child: BottomBarButton(
+                onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+                label: context.l10n.next,
+                icon: CupertinoIcons.chevron_forward,
+                showTooltip: false,
+                blink: puzzleState.shouldBlinkNextArrow,
+              ),
+            ),
+          ],
         ),
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
