@@ -127,7 +127,10 @@ List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
     BottomSheetAction(
       makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
       onPressed: () {
-        launchShareDialog(context, ShareParams(uri: lichessUri('/$gameId/${orientation.name}')));
+        launchShareDialog(
+          context,
+          ShareParams(uri: lichessGameUri(gameId, orientation: orientation)),
+        );
       },
     ),
     if (finished) ...[
