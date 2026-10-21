@@ -12,7 +12,9 @@ import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -90,16 +92,11 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
         child: PlatformScaffold(
           extendBodyBehindAppBar: false,
           appBar: PlatformAppBar(
-            title: widget.channel != null
-                ? Text('${widget.channel!.label(context.l10n)} TV')
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(child: UserFullNameWidget(user: widget.user)),
-                      const SizedBox(width: 4.0),
-                      const Icon(Icons.live_tv),
-                    ],
-                  ),
+            title: _TvAppBarTitle(
+              channel: widget.channel,
+              gameParams: gameParams,
+              user: widget.user,
+            ),
             actions: const [ToggleSoundButton()],
           ),
           body: SafeArea(
@@ -126,6 +123,105 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
         ),
       ),
     );
+  }
+}
+
+// Builds the appbar title (and subtitle showing time control, speed and rated)
+// For User TV: time control + speed + rated
+// For Lichess TV: time control + rated (title shows speed already)
+class const _TvAppBarTitle({
+  required final TvChannel? channel,
+  required final TvGameControllerParams? gameParams,
+  required final LightUser? user,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final timeIncrement = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.timeIncrement),
+          );
+
+    final rated = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!).select((state) => state.value?.game.meta.rated),
+          );
+
+    final ratedStr = rated == true
+        ? context.l10n.rated
+        : rated == false
+        ? context.l10n.casual
+        : '';
+
+    final icon = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.meta.perf.icon),
+          );
+
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+
+    return channel != null
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${channel!.label(context.l10n)} TV'),
+              if (timeIncrement == null)
+                const SizedBox.shrink()
+              else
+                Row(
+                  children: [
+                    Icon(icon, size: 16),
+                    const SizedBox(width: 2.0),
+                    Text(
+                      '${timeIncrement.display} • $ratedStr',
+                      style: subtitleTextStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+            ],
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    UserFullNameWidget(user: user),
+                    if (timeIncrement == null)
+                      const SizedBox.shrink()
+                    else
+                      Row(
+                        children: [
+                          Icon(icon, size: 16),
+                          const SizedBox(width: 2.0),
+                          Expanded(
+                            child: Text(
+                              '${timeIncrement.display} • ${timeIncrement.speed.label(context.l10n)} • $ratedStr',
+                              style: subtitleTextStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 4.0),
+              const Icon(Icons.live_tv),
+            ],
+          );
   }
 }
 
