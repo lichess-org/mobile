@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -24,6 +23,7 @@ import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -266,10 +266,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
             ],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
-              ? AndroidGesturesExclusionWidget(
-                  boardKey: _boardKey,
-                  shouldExcludeGesturesOnFocusGained: isRealTimePlayingGame,
-                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+              ? AndroidImmersiveModeWidget(
+                  enabled:
+                      isRealTimePlayingGame &&
+                      (boardPreferences.immersiveModeWhilePlaying ?? false),
                   child: body,
                 )
               : body,

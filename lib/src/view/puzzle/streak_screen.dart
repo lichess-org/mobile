@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -28,6 +27,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
@@ -46,11 +46,6 @@ class const StreakScreen({super.key}) extends StatelessWidget {
       child: PlatformScaffold(
         extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
           actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           title: const Text('Puzzle Streak'),
         ),
@@ -196,224 +191,104 @@ class _BodyState() extends ConsumerState<_Body> {
       (_, _) => _applyBoardUpdate(),
     );
 
-    final content = PopScope(
-      canPop:
-          Theme.of(context).platform == TargetPlatform.iOS ||
-          widget.streak.index == 0 ||
-          widget.streak.finished,
-      child: SafeArea(
-        // view padding can change on Android when immersive mode is enabled, so to prevent any
-        // board vertical shift, we set `maintainBottomViewPadding` to true.
-        maintainBottomViewPadding: true,
-        child: Column(
-          children: [
-            Expanded(
-              child: Center(
-                child: SafeArea(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final orientation = constraints.maxWidth > constraints.maxHeight
-                          ? Orientation.landscape
-                          : Orientation.portrait;
-                      final isTablet = isTabletOrLarger(context);
+    final content = SafeArea(
+      // view padding can change on Android when immersive mode is enabled, so to prevent any
+      // board vertical shift, we set `maintainBottomViewPadding` to true.
+      maintainBottomViewPadding: true,
+      child: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final orientation = constraints.maxWidth > constraints.maxHeight
+                        ? Orientation.landscape
+                        : Orientation.portrait;
+                    final isTablet = isTabletOrLarger(context);
 
-                      final defaultSettings = boardPreferences
-                          .toBoardSettings(Variant.standard)
-                          .copyWith(
-                            borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                            boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                            drawShape: DrawShapeOptions(
-                              enable: boardPreferences.enableShapeDrawings,
-                              newShapeColor: boardPreferences.shapeColor.color,
-                            ),
-                          );
-
-                      if (orientation == Orientation.landscape) {
-                        final defaultBoardSize =
-                            constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                        final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-                        final boardSize = sideWidth >= 250
-                            ? defaultBoardSize
-                            : constraints.biggest.longestSide / kGoldenRatio -
-                                  (kTabletBoardTableSidePadding * 2);
-                        return Padding(
-                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              BoardWidget(
-                                boardKey: _boardKey,
-                                size: boardSize,
-                                controller: _controller,
-                                onMove: (move, {viaDragAndDrop}) {
-                                  ref.read(ctrlProvider.notifier).onUserMove(move);
-                                },
-                                orientation: puzzleState.pov,
-                                settings: defaultSettings,
-                              ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Center(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Expanded(
-                                            child: PuzzleFeedbackWidget(
-                                              puzzle: puzzleState.puzzle,
-                                              state: puzzleState,
-                                              onStreak: true,
-                                            ),
-                                          ),
-                                          Text(
-                                            context.l10n.puzzleRatingX(
-                                              puzzleState.puzzle.puzzle.rating.toString(),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16.0),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                                        vertical: 32.0,
-                                      ),
-                                      child: Center(
-                                        child: Card(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(24.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(
-                                                  LichessIcons.streak,
-                                                  size: 150.0,
-                                                  color: ColorScheme.of(context).primary,
-                                                ),
-                                                const SizedBox(width: 8.0),
-                                                Text(
-                                                  widget.streak.index.toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 90.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: ColorScheme.of(context).primary,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Card(
-                                        clipBehavior: Clip.hardEdge,
-                                        margin: EdgeInsets.zero,
-                                        child: SingleChildScrollView(
-                                          padding: EdgeInsets.zero,
-                                          child: Column(
-                                            children: [
-                                              DebouncedPgnTreeView(
-                                                root: puzzleState.root,
-                                                currentPath: puzzleState.currentPath,
-                                                pgnRootComments: null,
-                                                shouldShowComputerAnalysis: false,
-                                                shouldShowComments: false,
-                                                shouldShowAnnotations: false,
-                                                displayMode: PgnTreeDisplayMode.twoColumn,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    _BottomBar(
-                                      initialPuzzleContext: widget.initialPuzzleContext,
-                                      streak: widget.streak,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                    final defaultSettings = boardPreferences
+                        .toBoardSettings(Variant.standard)
+                        .copyWith(
+                          borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                          drawShape: DrawShapeOptions(
+                            enable: boardPreferences.enableShapeDrawings,
+                            newShapeColor: boardPreferences.shapeColor.color,
                           ),
                         );
-                      } else {
-                        final defaultBoardSize = constraints.biggest.shortestSide;
-                        final double boardSize = isTablet
-                            ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                            : defaultBoardSize;
 
-                        return Column(
+                    if (orientation == Orientation.landscape) {
+                      final defaultBoardSize =
+                          constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+                      final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+                      final boardSize = sideWidth >= 250
+                          ? defaultBoardSize
+                          : constraints.biggest.longestSide / kGoldenRatio -
+                                (kTabletBoardTableSidePadding * 2);
+                      return Padding(
+                        padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+                        child: Row(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            BoardWidget(
+                              boardKey: _boardKey,
+                              size: boardSize,
+                              controller: _controller,
+                              onMove: (move, {viaDragAndDrop}) {
+                                ref.read(ctrlProvider.notifier).onUserMove(move);
+                              },
+                              orientation: puzzleState.pov,
+                              settings: defaultSettings,
+                            ),
+                            const SizedBox(width: 16.0),
                             Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                                ),
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                    child: PuzzleFeedbackWidget(
-                                      puzzle: puzzleState.puzzle,
-                                      state: puzzleState,
-                                      onStreak: true,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: PuzzleFeedbackWidget(
+                                            puzzle: puzzleState.puzzle,
+                                            state: puzzleState,
+                                            onStreak: true,
+                                          ),
+                                        ),
+                                        Text(
+                                          context.l10n.puzzleRatingX(
+                                            puzzleState.puzzle.puzzle.rating.toString(),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 16.0),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: isTablet
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: kTabletBoardTableSidePadding,
-                                    )
-                                  : EdgeInsets.zero,
-                              child: BoardWidget(
-                                boardKey: _boardKey,
-                                size: boardSize,
-                                controller: _controller,
-                                onMove: (move, {viaDragAndDrop}) {
-                                  ref.read(ctrlProvider.notifier).onUserMove(move);
-                                },
-                                orientation: puzzleState.pov,
-                                settings: defaultSettings,
-                              ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10.0,
-                                    left: 10.0,
-                                    right: 10.0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Card(
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                                      vertical: 32.0,
+                                    ),
+                                    child: Center(
+                                      child: Card(
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(24.0),
                                           child: Row(
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Icon(
                                                 LichessIcons.streak,
-                                                size: 50.0,
+                                                size: 150.0,
                                                 color: ColorScheme.of(context).primary,
                                               ),
                                               const SizedBox(width: 8.0),
                                               Text(
                                                 widget.streak.index.toString(),
                                                 style: TextStyle(
-                                                  fontSize: 30.0,
+                                                  fontSize: 90.0,
                                                   fontWeight: FontWeight.bold,
                                                   color: ColorScheme.of(context).primary,
                                                 ),
@@ -422,38 +297,148 @@ class _BodyState() extends ConsumerState<_Body> {
                                           ),
                                         ),
                                       ),
-                                      Text(
-                                        context.l10n.puzzleRatingX(
-                                          puzzleState.puzzle.puzzle.rating.toString(),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Card(
+                                      clipBehavior: Clip.hardEdge,
+                                      margin: EdgeInsets.zero,
+                                      child: SingleChildScrollView(
+                                        padding: EdgeInsets.zero,
+                                        child: Column(
+                                          children: [
+                                            DebouncedPgnTreeView(
+                                              root: puzzleState.root,
+                                              currentPath: puzzleState.currentPath,
+                                              pgnRootComments: null,
+                                              shouldShowComputerAnalysis: false,
+                                              shouldShowComments: false,
+                                              shouldShowAnnotations: false,
+                                              displayMode: PgnTreeDisplayMode.twoColumn,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  _BottomBar(
+                                    initialPuzzleContext: widget.initialPuzzleContext,
+                                    streak: widget.streak,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      final defaultBoardSize = constraints.biggest.shortestSide;
+                      final double boardSize = isTablet
+                          ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                          : defaultBoardSize;
+
+                      return Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: PuzzleFeedbackWidget(
+                                    puzzle: puzzleState.puzzle,
+                                    state: puzzleState,
+                                    onStreak: true,
                                   ),
                                 ),
                               ),
                             ),
-                            _BottomBar(
-                              initialPuzzleContext: widget.initialPuzzleContext,
-                              streak: widget.streak,
+                          ),
+                          Padding(
+                            padding: isTablet
+                                ? const EdgeInsets.symmetric(
+                                    horizontal: kTabletBoardTableSidePadding,
+                                  )
+                                : EdgeInsets.zero,
+                            child: BoardWidget(
+                              boardKey: _boardKey,
+                              size: boardSize,
+                              controller: _controller,
+                              onMove: (move, {viaDragAndDrop}) {
+                                ref.read(ctrlProvider.notifier).onUserMove(move);
+                              },
+                              orientation: puzzleState.pov,
+                              settings: defaultSettings,
                             ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              LichessIcons.streak,
+                                              size: 50.0,
+                                              color: ColorScheme.of(context).primary,
+                                            ),
+                                            const SizedBox(width: 8.0),
+                                            Text(
+                                              widget.streak.index.toString(),
+                                              style: TextStyle(
+                                                fontSize: 30.0,
+                                                fontWeight: FontWeight.bold,
+                                                color: ColorScheme.of(context).primary,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      context.l10n.puzzleRatingX(
+                                        puzzleState.puzzle.puzzle.rating.toString(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          _BottomBar(
+                            initialPuzzleContext: widget.initialPuzzleContext,
+                            streak: widget.streak,
+                          ),
+                        ],
+                      );
+                    }
+                  },
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
 
     return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained: puzzleState.mode != PuzzleMode.view,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+        ? AndroidImmersiveModeWidget(
+            enabled:
+                puzzleState.mode != PuzzleMode.view &&
+                (boardPreferences.immersiveModeWhilePlaying ?? false),
             child: content,
           )
         : content;
