@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -253,15 +252,13 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                           ? Icons.ios_share_outlined
                           : Icons.share_outlined,
                       label: context.l10n.studyShareAndExport,
-                      onPressed: () => showAdaptiveActionSheet<void>(
-                        context: context,
-                        actions: makeFinishedGameShareBottomSheetActions(
-                          context,
-                          ref,
-                          gameId: createdGameId.gameId,
-                          orientation: gameState.game.youAre ?? Side.white,
-                          finished: gameState.game.finished,
-                        ),
+                      onPressed: null,
+                      submenu: makeFinishedGameShareMenuActions(
+                        context,
+                        ref,
+                        gameId: createdGameId.gameId,
+                        orientation: gameState.game.youAre ?? Side.white,
+                        finished: gameState.game.finished,
                       ),
                     ),
                   ],

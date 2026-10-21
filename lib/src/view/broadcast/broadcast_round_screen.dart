@@ -309,7 +309,8 @@ class _BroadcastRoundScreenState()
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
                     label: context.l10n.studyShareAndExport,
-                    onPressed: () => showBroadcastShareMenu(
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
                       context,
                       asyncTournament.value?.data ?? widget.broadcast.tour,
                       roundState.round,

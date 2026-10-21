@@ -82,6 +82,7 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
                 importDate: value.archivedGame!.data.importDate,
               )
             : VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
+        final shareActions = _shareMenuActions(value);
 
         return WakelockWidget(
           child: PlatformScaffold(
@@ -105,13 +106,14 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
                             : context.l10n.bookmarkThisGame,
                         onPressed: () => ref.read(ctrlProvider.notifier).toggleBookmark(),
                       ),
-                    if (value.gameId != null || value.isComputerAnalysisAllowed)
+                    if (shareActions.isNotEmpty)
                       ContextMenuAction(
                         icon: Theme.of(context).platform == TargetPlatform.iOS
                             ? Icons.ios_share_outlined
                             : Icons.share_outlined,
                         label: context.l10n.studyShareAndExport,
-                        onPressed: _showShareMenu,
+                        onPressed: null,
+                        submenu: shareActions,
                       ),
                   ],
                 ),
@@ -137,43 +139,37 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
     }
   }
 
-  Future<void> _showShareMenu() {
-    final analysisState = ref.read(analysisControllerProvider(widget.options)).requireValue;
+  List<ContextMenuAction> _shareMenuActions(AnalysisState analysisState) {
     final archivedGame = analysisState.archivedGame;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        // Share the original game from the server: URL, GIF and PGN downloads.
-        if (archivedGame != null)
-          ...makeFinishedGameShareBottomSheetActions(
-            context,
-            ref,
-            gameId: archivedGame.id,
-            orientation: analysisState.pov,
-            finished: archivedGame.finished,
-          ),
-        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-            onPressed: () {
-              final currentState = ref
-                  .read(analysisControllerProvider(widget.options))
-                  .requireValue;
-              launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
-            },
-          ),
-        // Shares the current PGN, including local analysis and edited tags. Can be
-        // used to quickly analyze a position, so the engine must be allowed to access.
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: widget.options));
-            },
-          ),
-      ],
-    );
+    return [
+      // Share the original game from the server: URL, GIF and PGN downloads.
+      if (archivedGame != null)
+        ...makeFinishedGameShareMenuActions(
+          context,
+          ref,
+          gameId: archivedGame.id,
+          orientation: analysisState.pov,
+          finished: archivedGame.finished,
+        ),
+      // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
+      if (analysisState.isComputerAnalysisAllowed)
+        ContextMenuAction(
+          label: context.l10n.mobileSharePositionAsFEN,
+          onPressed: () {
+            final currentState = ref.read(analysisControllerProvider(widget.options)).requireValue;
+            launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
+          },
+        ),
+      // Shares the current PGN, including local analysis and edited tags. Can be
+      // used to quickly analyze a position, so the engine must be allowed to access.
+      if (analysisState.isComputerAnalysisAllowed)
+        ContextMenuAction(
+          label: context.l10n.mobileShareLocalAnalysisPgn,
+          onPressed: () {
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: widget.options));
+          },
+        ),
+    ];
   }
 }
 

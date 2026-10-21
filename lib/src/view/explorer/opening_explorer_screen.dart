@@ -16,13 +16,13 @@ import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_view.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -49,36 +49,34 @@ class const OpeningExplorerScreen({required final AnalysisOptions options}) exte
         appBar: PlatformAppBar(
           title: Text(context.l10n.openingExplorer),
           actions: [
-            SemanticIconButton(
+            ContextMenuIconButton(
               semanticsLabel: context.l10n.studyShareAndExport,
-              onPressed: () => _showShareMenu(context, ref),
               icon: const PlatformShareIcon(),
+              actions: [
+                ContextMenuAction(
+                  label: context.l10n.mobileShareGamePGN,
+                  onPressed: () {
+                    Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
+                  },
+                ),
+                ContextMenuAction(
+                  label: context.l10n.mobileSharePositionAsFEN,
+                  onPressed: () {
+                    final analysisState = ref
+                        .read(analysisControllerProvider(options))
+                        .requireValue;
+                    launchShareDialog(
+                      context,
+                      ShareParams(text: analysisState.currentPosition.fen),
+                    );
+                  },
+                ),
+              ],
             ),
           ],
           bottom: _MoveList(options: options),
         ),
       ),
-    );
-  }
-
-  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: () {
-            Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: () {
-            final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-            launchShareDialog(context, ShareParams(text: analysisState.currentPosition.fen));
-          },
-        ),
-      ],
     );
   }
 }

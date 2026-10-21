@@ -437,9 +437,12 @@ class const _BroadcastCardContent({
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
                     label: context.l10n.studyShareAndExport,
-                    onPressed: () {
-                      showBroadcastShareMenu(context, broadcast.tour, broadcast.round);
-                    },
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      broadcast.tour,
+                      broadcast.round,
+                    ),
                   ),
                 ],
               ),
