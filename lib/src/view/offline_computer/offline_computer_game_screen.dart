@@ -343,6 +343,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
     final gameState = ref.watch(offlineComputerGameControllerProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

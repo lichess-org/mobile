@@ -241,6 +241,7 @@ class const _TvGameBody({
                 )
               : null,
           userActionsBar: BottomBar(
+            cupertinoGlass: true,
             children: [
               BottomBarButton(
                 label: context.l10n.flipBoard,
@@ -257,33 +258,37 @@ class const _TvGameBody({
                   },
                 ),
               if (canShowChat) ChatBottomBarButton(options: chatOptions),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoBack()
-                    ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-previous'),
-                  onTap: ref.read(gameCtrl.notifier).canGoBack()
-                      ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                      : null,
-                  label: 'Previous',
-                  icon: CupertinoIcons.chevron_back,
-                  showTooltip: false,
-                ),
-              ),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoForward()
-                    ? () => ref.read(gameCtrl.notifier).cursorForward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-next'),
-                  icon: CupertinoIcons.chevron_forward,
-                  label: context.l10n.next,
-                  onTap: ref.read(gameCtrl.notifier).canGoForward()
-                      ? () => ref.read(gameCtrl.notifier).cursorForward()
-                      : null,
-                  showTooltip: false,
-                ),
+              BottomBarGroup(
+                children: [
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoBack()
+                        ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-previous'),
+                      onTap: ref.read(gameCtrl.notifier).canGoBack()
+                          ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                          : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
+                  ),
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoForward()
+                        ? () => ref.read(gameCtrl.notifier).cursorForward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-next'),
+                      icon: CupertinoIcons.chevron_forward,
+                      label: context.l10n.next,
+                      onTap: ref.read(gameCtrl.notifier).canGoForward()
+                          ? () => ref.read(gameCtrl.notifier).cursorForward()
+                          : null,
+                      showTooltip: false,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

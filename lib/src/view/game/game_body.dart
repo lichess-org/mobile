@@ -711,7 +711,7 @@ class const _GameBottomBar({
       }),
     );
 
-    if (data == null) return const BottomBar.empty();
+    if (data == null) return const BottomBar.empty(cupertinoGlass: true);
 
     final canShowChat =
         gamePrefs.enableChat == true &&
@@ -721,6 +721,7 @@ class const _GameBottomBar({
     final numPremoveLines = data.numPremoveLines;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -859,8 +860,12 @@ class const _GameBottomBar({
             icon: Icons.flag_outlined,
           ),
         if (canShowChat) ChatBottomBarButton(options: data.chatOptions!),
-        _MoveNavButton(id: id, forward: false),
-        _MoveNavButton(id: id, forward: true),
+        BottomBarGroup(
+          children: [
+            _MoveNavButton(id: id, forward: false),
+            _MoveNavButton(id: id, forward: true),
+          ],
+        ),
       ],
     );
   }

@@ -568,7 +568,7 @@ possible until then. Rules:
   Buttons that belong together (board navigation: previous / next) go in a `BottomBarGroup`: one
   glass capsule on iOS, icons only, like an iOS toolbar group; elsewhere its buttons are laid out
   like the others. A custom button draws itself as a `BottomBarGlassButton` when
-  `BottomBar.isGlass(context)` (e.g. the engine button). Game screens are not migrated yet.
+  `BottomBar.isGlass(context)` (e.g. the engine button).
 - **Text fields and search bars** are rounded by the iOS theme (`theme.dart`): a capsule
   `SearchBar`, and a 28pt input border radius, which makes a single line field a capsule. Don't
   give an iOS field its own `border` radius.
