@@ -348,36 +348,39 @@ class _BroadcastRoundScreenState()
                 ),
               ),
             ],
-            // The header is above the tabs, which start below it with a SliverOverlapInjector.
-            body: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastBoardsTab(
-                      tournamentId: _selectedTournamentId,
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
-                      tournamentSlug: value.data.slug,
-                      showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                      teamFilter: _teamFilter,
-                    ),
-                    _ => const SizedBox.shrink(),
-                  },
-                  BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                  if (asyncTournament.value?.data.teamTable == true) ...[
+            // The header is above the tabs, which start below it with a SliverOverlapInjector. The
+            // padding is the body's, with the bottom bar height, not the screen's.
+            body: Builder(
+              builder: (context) => MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
                     switch (asyncTournament) {
-                      AsyncData(:final value) => BroadcastTeamsTab(
-                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                      AsyncData(:final value) => BroadcastBoardsTab(
                         tournamentId: _selectedTournamentId,
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
                         tournamentSlug: value.data.slug,
-                        showTeamScores: value.data.showTeamScores == true,
+                        showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                        teamFilter: _teamFilter,
                       ),
                       _ => const SizedBox.shrink(),
                     },
+                    BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                    if (asyncTournament.value?.data.teamTable == true) ...[
+                      switch (asyncTournament) {
+                        AsyncData(:final value) => BroadcastTeamsTab(
+                          roundId: _selectedRoundId ?? value.defaultRoundId,
+                          tournamentId: _selectedTournamentId,
+                          tournamentSlug: value.data.slug,
+                          showTeamScores: value.data.showTeamScores == true,
+                        ),
+                        _ => const SizedBox.shrink(),
+                      },
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
