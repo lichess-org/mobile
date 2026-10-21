@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -192,21 +191,6 @@ class const GameBody({
             }
           },
         );
-      }
-
-      // true when the game was loaded, playable, and just finished
-      if (prev?.value?.game.playable == true && state.requireValue.game.playable == false) {
-        clearAndroidBoardGesturesExclusion();
-      }
-      // true when the game was not loaded: handles rematches
-      else if (prev?.hasValue != true) {
-        if (game.meta.speed != Speed.correspondence && game.playable) {
-          setAndroidBoardGesturesExclusion(
-            boardKey,
-            withImmersiveMode:
-                ref.read(boardPreferencesProvider).immersiveModeWhilePlaying ?? false,
-          );
-        }
       }
     }
 
