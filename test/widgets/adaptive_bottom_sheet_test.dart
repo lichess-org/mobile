@@ -280,21 +280,26 @@ void main() {
       expect(find.text('Next'), findsNothing);
     });
 
-    testWidgets('pushes a screen hiding the tab bar above the sheet', (tester) async {
+    testWidgets('closes the sheet, then pushes a screen hiding the tab bar', (tester) async {
       await showSheetWithSecondPage(tester);
       await tester.tap(find.text('Full screen'));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
 
+      // Not pushed while the sheet is closing.
+      expect(find.text('Next'), findsOneWidget);
+      expect(find.text('Board body'), findsNothing);
+
+      await tester.pumpAndSettle();
+      expect(find.byType(BottomSheet), findsNothing);
       expect(find.text('Board body'), findsOneWidget);
-      expect(
-        find.descendant(of: find.byType(BottomSheet), matching: find.text('Board body')),
-        findsNothing,
-      );
-      // Popping it goes back to the sheet.
+
+      // Popping it goes back to the screen below, without the sheet.
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.text('Board body'), findsNothing);
-      expect(find.text('Next'), findsOneWidget);
+      expect(find.text('Next'), findsNothing);
+      expect(find.text('Show'), findsOneWidget);
     });
 
     testWidgets('the system back pops the pages before the sheet', (tester) async {

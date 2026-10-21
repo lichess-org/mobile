@@ -166,7 +166,7 @@ Future<T?> showAdaptiveNavigationSheet<T>({
               child: _SheetNavigator(
                 scrollController: scrollController,
                 sheetNavigator: Navigator.of(sheetContext),
-                sheetAnimation: ModalRoute.of(sheetContext)!.animation!,
+                sheetRoute: ModalRoute.of(sheetContext)!,
                 builder: builder,
               ),
             ),
@@ -216,17 +216,20 @@ class const NavigationSheetScope({
 }
 
 /// The observer of the navigator of a [showAdaptiveNavigationSheet] sheet, which marks it as such:
-/// [TabBarHidingNavigator.pushHidingTabBar] pushes on [sheetNavigator] instead.
+/// [TabBarHidingNavigator.pushHidingTabBar] closes the sheet and pushes on [sheetNavigator] instead.
 class NavigationSheetObserver(
   /// The navigator that the sheet is presented on.
   final NavigatorState sheetNavigator,
+
+  /// The route of the sheet, on [sheetNavigator].
+  final ModalRoute<dynamic> sheetRoute,
 ) extends NavigatorObserver;
 
 /// The navigator of a [showAdaptiveNavigationSheet] sheet, with [builder] as its first page.
 class const _SheetNavigator({
   required final ScrollController scrollController,
   required final NavigatorState sheetNavigator,
-  required final Animation<double> sheetAnimation,
+  required final ModalRoute<dynamic> sheetRoute,
   required final WidgetBuilder builder,
 }) extends StatefulWidget {
   @override
@@ -236,7 +239,7 @@ class const _SheetNavigator({
 class _SheetNavigatorState() extends State<_SheetNavigator> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   final _heroController = MaterialApp.createMaterialHeroController();
-  late final _observer = NavigationSheetObserver(widget.sheetNavigator);
+  late final _observer = NavigationSheetObserver(widget.sheetNavigator, widget.sheetRoute);
 
   @override
   void dispose() {
@@ -252,7 +255,7 @@ class _SheetNavigatorState() extends State<_SheetNavigator> {
     return NavigationSheetScope(
       scrollController: widget.scrollController,
       sheetNavigator: widget.sheetNavigator,
-      sheetAnimation: widget.sheetAnimation,
+      sheetAnimation: widget.sheetRoute.animation!,
       topCornerRadius: theme.platform == TargetPlatform.iOS
           ? _sheetCornerRadius(context, inset: 0)
           : 0,

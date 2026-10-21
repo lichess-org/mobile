@@ -321,15 +321,22 @@ extension TabBarHidingNavigator on NavigatorState {
 
   /// Pushes [route], hiding the tab bar while it is shown. See [push].
   ///
-  /// Such a route covers the whole screen: on the navigator of a navigation sheet
-  /// ([showAdaptiveNavigationSheet]), it is pushed above the sheet, on the navigator that the sheet
-  /// is presented on.
+  /// Such a route covers the whole screen, and is never stacked over a sheet: on the navigator of a
+  /// navigation sheet ([showAdaptiveNavigationSheet]), it closes the sheet, then is pushed on the
+  /// navigator that the sheet was presented on once the sheet is gone.
   Future<T?> pushHidingTabBar<T extends Object?>(Route<T> route) {
-    final sheetNavigator = widget.observers
-        .whereType<NavigationSheetObserver>()
-        .firstOrNull
-        ?.sheetNavigator;
-    if (sheetNavigator != null) return sheetNavigator.pushHidingTabBar(route);
+    final sheet = widget.observers.whereType<NavigationSheetObserver>().firstOrNull;
+    if (sheet != null) {
+      final sheetNavigator = sheet.sheetNavigator;
+      if (sheet.sheetRoute.isCurrent) {
+        sheetNavigator.pop();
+      } else {
+        sheetNavigator.removeRoute(sheet.sheetRoute);
+      }
+      return sheet.sheetRoute.completed.then(
+        (_) => sheetNavigator.mounted ? sheetNavigator.pushHidingTabBar(route) : null,
+      );
+    }
     _tabNavigatorObserver?._hideTabBarFor(route);
     return push(route);
   }

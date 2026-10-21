@@ -593,13 +593,14 @@ possible until then. Rules:
   page and the screens it pushes with `Navigator.of(context).push` are ordinary screens
   (`PlatformScaffold` + `PlatformAppBar`, `buildScreenRoute`), shown in the sheet unchanged: the
   app bar is the sheet's header, with a close button on the first page (implied, don't add one) and
-  a back button on the others. A screen pushed with `pushHidingTabBar` (a board screen) opens above
-  the sheet. The main scroll view of a page drags the sheet down to dismiss it, as long as it has no
-  controller of its own (it gets the sheet's as its primary scroll controller). Content that loads
-  switches from its loading state with `WhenRouteSettled`. Every other sheet uses
-  `showAdaptiveBottomSheet` (`adaptive_bottom_sheet.dart`): on iOS an inset card, without a drag
-  handle, and with a shared minimum height (`kBottomSheetMinHeightFraction`, 45% of the screen)
-  instead of the call site's. Its bottom padding (the home indicator) comes through the media
+  a back button on the others. A screen pushed with `pushHidingTabBar` (a board screen) is never
+  stacked over the sheet: the sheet closes, then the screen is pushed where the sheet was presented
+  (back goes to the screen below, without the sheet). The main scroll view of a page drags the
+  sheet down to dismiss it, as long as it has no controller of its own (it gets the sheet's as its
+  primary scroll controller). Content that loads switches from its loading state with
+  `WhenRouteSettled`. Every other sheet uses `showAdaptiveBottomSheet`
+  (`adaptive_bottom_sheet.dart`): on iOS an inset card, without a drag handle, and with a shared
+  minimum height (`kBottomSheetMinHeightFraction`, 45% of the screen) instead of the call site's. Its bottom padding (the home indicator) comes through the media
   query: its scroll view applies it (`BottomSheetScrollableContainer` does; a `ListView` with an
   explicit padding adds `MediaQuery.paddingOf(context)`). Every iOS sheet's corners are concentric
   with the screen corners. Filled and outlined buttons are capsules on iOS (app theme). Selectable
