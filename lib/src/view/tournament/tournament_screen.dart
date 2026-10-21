@@ -237,53 +237,58 @@ class const _Body({required final TournamentId id, required final TournamentStat
               ),
           ],
         ),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final isTabletLandscape =
-                constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
-            final listPadding = Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context));
-            return Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: isTabletLandscape
-                  ? Row(
-                      spacing: 16.0,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: ListView(
-                            padding: listPadding,
-                            children: [
-                              if (isIOS) _BodyTitle(state: state),
-                              _TournamentInfoCard(tournament: state.tournament),
-                              const SizedBox(height: 16),
-                              ...tournamentSecondaryInfoWidgets,
-                              bottomSheetSpacer,
-                            ],
+        // The list scrolls under the glass bottom bar buttons.
+        body: BottomBarScrollEdgeEffect(
+          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isTabletLandscape =
+                  constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
+              final listPadding = Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context));
+              return Padding(
+                padding: Styles.horizontalBodyPadding,
+                child: isTabletLandscape
+                    ? Row(
+                        spacing: 16.0,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: ListView(
+                              padding: listPadding,
+                              children: [
+                                if (isIOS) _BodyTitle(state: state),
+                                _TournamentInfoCard(tournament: state.tournament),
+                                const SizedBox(height: 16),
+                                ...tournamentSecondaryInfoWidgets,
+                                bottomSheetSpacer,
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: ListView(
-                            padding: listPadding,
-                            children: [...standingWidgets, bottomSheetSpacer],
+                          Expanded(
+                            flex: 2,
+                            child: ListView(
+                              padding: listPadding,
+                              children: [...standingWidgets, bottomSheetSpacer],
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  : ListView(
-                      padding: listPadding,
-                      children: [
-                        if (isIOS) _BodyTitle(state: state),
-                        _TournamentInfoCard(tournament: state.tournament),
-                        const SizedBox(height: 16),
-                        ...standingWidgets,
-                        const SizedBox(height: 16),
-                        ...tournamentSecondaryInfoWidgets,
-                        bottomSheetSpacer,
-                      ],
-                    ),
-            );
-          },
+                        ],
+                      )
+                    : ListView(
+                        padding: listPadding,
+                        children: [
+                          if (isIOS) _BodyTitle(state: state),
+                          _TournamentInfoCard(tournament: state.tournament),
+                          const SizedBox(height: 16),
+                          ...standingWidgets,
+                          const SizedBox(height: 16),
+                          ...tournamentSecondaryInfoWidgets,
+                          bottomSheetSpacer,
+                        ],
+                      ),
+              );
+            },
+          ),
         ),
         bottomSheet: showPairingStatus
             ? Material(

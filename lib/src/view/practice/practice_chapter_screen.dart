@@ -157,7 +157,7 @@ class const PracticeTable({required final List<Widget> children}) extends Statel
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: Styles.bodyPadding,
+      padding: Styles.bodyPadding.add(MediaQuery.paddingOf(context)),
       children: [
         for (final (index, child) in children.indexed) ...[
           if (index > 0) const SizedBox(height: 12.0),

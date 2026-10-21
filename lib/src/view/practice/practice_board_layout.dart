@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -77,14 +78,25 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    // On iOS in portrait, the bottom bar floats over the table, which scrolls under it, like an iOS
+    // toolbar.
+    final floatingBar =
+        Theme.of(context).platform == TargetPlatform.iOS &&
+        MediaQuery.orientationOf(context) == Orientation.portrait;
+    final tableBottomInset = floatingBar
+        ? kBottomBarHeight + MediaQuery.paddingOf(context).bottom
+        : 0.0;
 
     return SafeArea(
+      // The bar below the table takes care of the bottom inset itself.
+      bottom: !floatingBar,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isTablet = isTabletOrLarger(context);
           final isLandscape = constraints.biggest.aspectRatio > 1;
           final defaultBoardSize = constraints.biggest.shortestSide;
-          final remainingHeight = constraints.maxHeight - defaultBoardSize;
+          // The height left above a bar floating over the table.
+          final remainingHeight = constraints.maxHeight - tableBottomInset - defaultBoardSize;
           final isPadded = isTablet || isLandscape || remainingHeight < kSmallHeightMinusBoard;
           final boardSize = isPadded
               ? defaultBoardSize - kTabletBoardTableSidePadding * 2
@@ -130,8 +142,31 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
                   currentMoveIndex: widget.currentMoveIndex ?? moves.length,
                   onSelectMove: widget.onSelectMove,
                 ),
-              Expanded(child: widget.table),
-              widget.bottomBar,
+              if (floatingBar)
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: BottomBarScrollEdgeEffect(
+                          barHeight: tableBottomInset,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              padding: MediaQuery.paddingOf(context)
+                                  .copyWith(bottom: tableBottomInset),
+                            ),
+                            child: widget.table,
+                          ),
+                        ),
+                      ),
+                      Positioned(left: 0, right: 0, bottom: 0, child: widget.bottomBar),
+                    ],
+                  ),
+                )
+              else ...[
+                Expanded(child: widget.table),
+                widget.bottomBar,
+              ],
             ],
           );
 
