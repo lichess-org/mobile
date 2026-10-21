@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/gestures.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays an interactive chessboard driven by a [ChessboardController].
@@ -34,6 +35,17 @@ class const BoardWidget({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final chessboard = Chessboard(
+      key: boardKey,
+      controller: controller,
+      size: size,
+      orientation: orientation,
+      onMove: onMove,
+      shapes: shapes,
+      annotations: annotations,
+      settings: settings,
+    );
+
     // Chessground handles raw pointer events and doesn't enter the gesture arena.
     // We use a RawGestureDetector to claim the pointer events for the board, so that they don't
     // trigger a swipe gesture to pop the screen on iOS.
@@ -45,16 +57,14 @@ class const BoardWidget({
               (recognizer) => recognizer.controller = controller,
             ),
       },
-      child: Chessboard(
-        key: boardKey,
-        controller: controller,
-        size: size,
-        orientation: orientation,
-        onMove: onMove,
-        shapes: shapes,
-        annotations: annotations,
-        settings: settings,
-      ),
+      child: Theme.of(context).platform == TargetPlatform.android
+          ? AndroidBoardGesturesExclusion(
+              controller: controller,
+              orientation: orientation,
+              size: size,
+              child: chessboard,
+            )
+          : chessboard,
     );
 
     final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);

@@ -145,10 +145,6 @@ class _BodyState() extends ConsumerState<_Body> {
           }
         });
       }
-
-      if (state.mode == StormMode.ended) {
-        clearAndroidBoardGesturesExclusion();
-      }
     });
 
     // Drive the board on position/interactivity changes without rebuilding it.
@@ -376,11 +372,10 @@ class _BodyState() extends ConsumerState<_Body> {
     );
 
     return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained:
-                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+        ? AndroidImmersiveModeWidget(
+            enabled:
+                (stormState.mode == StormMode.initial || stormState.mode == StormMode.running) &&
+                (boardPreferences.immersiveModeWhilePlaying ?? false),
             child: content,
           )
         : content;

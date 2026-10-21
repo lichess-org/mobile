@@ -214,10 +214,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
             actions: [_GameMenu(gameId: createdGameId)],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
-              ? AndroidGesturesExclusionWidget(
-                  boardKey: _boardKey,
-                  shouldExcludeGesturesOnFocusGained: isRealTimePlayingGame,
-                  shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+              ? AndroidImmersiveModeWidget(
+                  enabled:
+                      isRealTimePlayingGame &&
+                      (boardPreferences.immersiveModeWhilePlaying ?? false),
                   child: body,
                 )
               : body,
