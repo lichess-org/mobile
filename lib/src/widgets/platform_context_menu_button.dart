@@ -1,16 +1,19 @@
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/services.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
+import 'package:lichess_mobile/src/widgets/platform.dart'
+    show appBarButtonGlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
+        GlassButton,
         GlassDefaults,
         GlassMenu,
         GlassMenuController,
         GlassMenuDivider,
         GlassMenuItem,
         GlassMenuLabel,
-        LiquidGlassSettings;
+        LiquidGlassSettings,
+        LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 
 /// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint, a
@@ -251,6 +254,93 @@ class const ContextMenuIconButton({
           }
         });
       },
+    );
+  }
+}
+
+/// Height of a [ContextMenuTitleButton] on iOS 26 and later: the height of the app bar buttons.
+const double _kGlassTitleButtonHeight = 44.0;
+
+/// An app bar title that opens a context menu, such as a menu to switch to a sibling screen.
+///
+/// On iOS 26 and later, a liquid glass capsule with the [title] and a chevron, out of which the
+/// menu morphs. Elsewhere, the [title] and a drop down arrow, opening a Material menu.
+class const ContextMenuTitleButton({
+  required final Widget title,
+  required final String semanticsLabel,
+  required final List<ContextMenuEntry> actions,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (useLiquidGlass(context)) {
+      final foregroundColor = ColorScheme.of(context).onSurface;
+      return GlassMenu(
+        menuWidth: kGlassMenuWidth,
+        settings: menuGlassSettings(context),
+        triggerBuilder: (context, toggleMenu) => Semantics(
+          button: true,
+          label: semanticsLabel,
+          child: GlassButton.custom(
+            onTap: toggleMenu,
+            label: semanticsLabel,
+            // The glass of the app bar buttons next to it.
+            settings: appBarButtonGlassSettings(context),
+            height: _kGlassTitleButtonHeight,
+            shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
+            // The app bar is isolated, there is no parent glass layer to share.
+            useOwnLayer: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: IconTheme.merge(
+                data: IconThemeData(color: foregroundColor),
+                child: Row(
+                  mainAxisSize: .min,
+                  spacing: 6.0,
+                  children: [
+                    Flexible(child: title),
+                    const Icon(CupertinoIcons.chevron_down, size: 14.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        items: glassMenuItems(context, actions),
+      );
+    }
+
+    return MenuAnchor(
+      crossAxisUnconstrained: false,
+      style: MenuStyle(
+        maximumSize: WidgetStatePropertyAll(
+          Size(MediaQuery.widthOf(context) * 0.8, MediaQuery.heightOf(context) * 0.8),
+        ),
+      ),
+      menuChildren: _materialMenuItems(context, actions),
+      builder: (BuildContext context, MenuController controller, Widget? child) => Semantics(
+        button: true,
+        label: semanticsLabel,
+        child: InkWell(
+          onTap: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisSize: .min,
+              children: [
+                Flexible(child: title),
+                const Icon(Icons.arrow_drop_down),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
