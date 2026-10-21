@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -321,58 +322,63 @@ class _BroadcastRoundScreenState()
             ];
           },
         ),
-        body: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (context, _) => [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: _RoundHeader(
-                title: Theme.of(context).platform == TargetPlatform.iOS
-                    ? asyncTournament.value?.data.name ?? widget.broadcast.title
-                    : null,
-                imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
-                information: asyncTournament.value?.data.information,
-                onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
-                tabController: _tabController,
-                tabsPinned: _tabsPinned,
-                tabs: [
-                  context.l10n.broadcastBoards,
-                  context.l10n.players,
-                  if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
-                ],
+        // The tabs scroll under the glass bottom bar buttons.
+        body: BottomBarScrollEdgeEffect(
+          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder: (context, _) => [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: _RoundHeader(
+                  title: Theme.of(context).platform == TargetPlatform.iOS
+                      ? asyncTournament.value?.data.name ?? widget.broadcast.title
+                      : null,
+                  imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+                  information: asyncTournament.value?.data.information,
+                  onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+                  tabController: _tabController,
+                  tabsPinned: _tabsPinned,
+                  tabs: [
+                    context.l10n.broadcastBoards,
+                    context.l10n.players,
+                    if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
+                  ],
+                ),
               ),
-            ),
-          ],
-          // The header is above the tabs, which start below it with a SliverOverlapInjector.
-          body: MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                switch (asyncTournament) {
-                  AsyncData(:final value) => BroadcastBoardsTab(
-                    tournamentId: _selectedTournamentId,
-                    roundId: _selectedRoundId ?? value.defaultRoundId,
-                    tournamentSlug: value.data.slug,
-                    showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                    teamFilter: _teamFilter,
-                  ),
-                  _ => const SizedBox.shrink(),
-                },
-                BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                if (asyncTournament.value?.data.teamTable == true) ...[
+            ],
+            // The header is above the tabs, which start below it with a SliverOverlapInjector.
+            body: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: TabBarView(
+                controller: _tabController,
+                children: <Widget>[
                   switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastTeamsTab(
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
+                    AsyncData(:final value) => BroadcastBoardsTab(
                       tournamentId: _selectedTournamentId,
+                      roundId: _selectedRoundId ?? value.defaultRoundId,
                       tournamentSlug: value.data.slug,
-                      showTeamScores: value.data.showTeamScores == true,
+                      showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                      teamFilter: _teamFilter,
                     ),
                     _ => const SizedBox.shrink(),
                   },
+                  BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                  if (asyncTournament.value?.data.teamTable == true) ...[
+                    switch (asyncTournament) {
+                      AsyncData(:final value) => BroadcastTeamsTab(
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                        tournamentId: _selectedTournamentId,
+                        tournamentSlug: value.data.slug,
+                        showTeamScores: value.data.showTeamScores == true,
+                      ),
+                      _ => const SizedBox.shrink(),
+                    },
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

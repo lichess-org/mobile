@@ -9,9 +9,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassScrollEdgeEffect;
 import 'package:material_ui/material_ui.dart';
 
 /// The height of the board header or footer in the analysis layout.
@@ -53,22 +52,6 @@ enum AnalysisTab(final IconData icon) {
     }
   }
 }
-
-/// Strongest blur of the content under a bottom bar floating over the tab view, at the bottom of
-/// the screen.
-const double _kBottomEdgeBlurMaxSigma = 8.0;
-
-/// Opacity of the tint over the bottom edge blur, below the top of the bar buttons, in light and
-/// dark mode. The glass buttons stand out less over light content.
-const double _kBottomEdgeTintLightOpacity = 0.7;
-const double _kBottomEdgeTintDarkOpacity = 0.5;
-
-/// How far above a bottom bar floating over the tab view the bottom edge blur and tint start, so
-/// that they are strong at the top of its buttons.
-const double _kBottomEdgeFadeAboveBar = 16.0;
-
-/// Distance from the top of a [BottomBar] to the top of its glass buttons.
-const double _kBottomBarButtonsTop = 8.0;
 
 /// Layout for the analysis and similar screens (study, broadcast, etc.).
 ///
@@ -419,49 +402,15 @@ class const AnalysisLayout({
     );
 
     if (floatingBar) {
-      final edgeHeight = tabViewBottomInset + _kBottomEdgeFadeAboveBar;
-      final tintOpacity = Theme.of(context).brightness == Brightness.light
-          ? _kBottomEdgeTintLightOpacity
-          : _kBottomEdgeTintDarkOpacity;
       return Stack(
         children: [
           Positioned.fill(
-            // The content under the bar is blurred, so that its glass buttons stay readable over
-            // the moves, like an iOS scroll edge effect. Before iOS 26, the bar has its own blur.
-            child: useLiquidGlass(context)
-                ? GlassScrollEdgeEffect(
-                    style: .blur,
-                    maxSigma: _kBottomEdgeBlurMaxSigma,
-                    fadeTop: false,
-                    bottomFadeHeight: edgeHeight,
-                    child: content,
-                  )
-                : content,
-          ),
-          if (useLiquidGlass(context))
-            // A tint of the tab view color over the blur, for a little more opacity under the
-            // buttons, fading in above them.
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: edgeHeight,
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        tabViewColor.withValues(alpha: 0.0),
-                        tabViewColor.withValues(alpha: tintOpacity),
-                      ],
-                      stops: [0.0, (_kBottomEdgeFadeAboveBar + _kBottomBarButtonsTop) / edgeHeight],
-                    ),
-                  ),
-                ),
-              ),
+            child: BottomBarScrollEdgeEffect(
+              barHeight: tabViewBottomInset,
+              color: tabViewColor,
+              child: content,
             ),
+          ),
           Positioned(left: 0, right: 0, bottom: 0, child: bottomBar!),
         ],
       );

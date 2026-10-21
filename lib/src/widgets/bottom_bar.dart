@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, LiquidRoundedRectangle;
+    show GlassButton, GlassScrollEdgeEffect, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
@@ -75,6 +75,98 @@ class BottomBar extends StatelessWidget {
     );
   }
 }
+
+/// Strongest blur of the content under a [BottomBar] floating over it, at the bottom of the screen.
+const double _kBottomEdgeBlurMaxSigma = 8.0;
+
+/// Opacity of the tint over the bottom edge blur, below the top of the bar buttons, in light and
+/// dark mode. The glass buttons stand out less over light content.
+const double _kBottomEdgeTintLightOpacity = 0.7;
+const double _kBottomEdgeTintDarkOpacity = 0.5;
+
+/// How far above a [BottomBar] floating over the content the bottom edge blur and tint start.
+const double _kBottomEdgeFadeAboveBar = 4.0;
+
+/// Distance from the top of a [BottomBar] to the vertical middle of its glass buttons, where the
+/// tint over the bottom edge blur reaches its full opacity.
+const double _kBottomBarButtonsMiddle = 8.0 + _kGlassCapsuleHeight / 2;
+
+/// Number of stops of the eased tint gradient over the bottom edge blur.
+const int _kBottomEdgeTintSteps = 8;
+
+/// The bottom edge of content scrolling under a [BottomBar] with [BottomBar.cupertinoGlass] that
+/// floats over it, on iOS 26 and later: the content under the bar is blurred, under a gradient of
+/// [color], so that its glass buttons stay readable, like an iOS scroll edge effect.
+///
+/// Before iOS 26, the bar has its own blur ([BlurredBarBackground]): [child] is shown as is.
+class const BottomBarScrollEdgeEffect({
+  /// Height of the bar over the content, home indicator included.
+  required final double barHeight,
+
+  /// The background color of the content, which tints the edge under the bar buttons.
+  required final Color color,
+  required final Widget child,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (!useLiquidGlass(context)) return child;
+
+    final edgeHeight = barHeight + _kBottomEdgeFadeAboveBar;
+    final tintOpacity = Theme.of(context).brightness == Brightness.light
+        ? _kBottomEdgeTintLightOpacity
+        : _kBottomEdgeTintDarkOpacity;
+    // Where the tint reaches its full opacity, as a fraction of the edge height.
+    final tintEnd = math.min(
+      1.0,
+      (_kBottomEdgeFadeAboveBar + _kBottomBarButtonsMiddle) / edgeHeight,
+    );
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: GlassScrollEdgeEffect(
+            style: .blur,
+            maxSigma: _kBottomEdgeBlurMaxSigma,
+            fadeTop: false,
+            bottomFadeHeight: edgeHeight,
+            child: child,
+          ),
+        ),
+        // A tint of the content color over the blur, for a little more opacity under the buttons,
+        // fading in above them.
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: edgeHeight,
+          child: IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  // A smoothstep from transparent to the full tint, with no visible edge where it
+                  // starts or ends.
+                  colors: [
+                    for (var i = 0; i <= _kBottomEdgeTintSteps; i++)
+                      color.withValues(alpha: tintOpacity * _smoothstep(i / _kBottomEdgeTintSteps)),
+                  ],
+                  stops: [
+                    for (var i = 0; i <= _kBottomEdgeTintSteps; i++)
+                      i / _kBottomEdgeTintSteps * tintEnd,
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Hermite interpolation of [t], from 0 to 1: eases in and out, with no visible edge at either end.
+double _smoothstep(double t) => t * t * (3 - 2 * t);
 
 /// The buttons of a [BottomBar] with liquid glass buttons, evenly spaced and as wide as their
 /// content. When they don't fit, the widest ones shrink first, to the same width: a label is
