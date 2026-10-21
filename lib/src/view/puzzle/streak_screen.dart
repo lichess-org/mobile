@@ -196,7 +196,10 @@ class _BodyState() extends ConsumerState<_Body> {
     );
 
     final content = PopScope(
-      canPop: widget.streak.index == 0 || widget.streak.finished,
+      canPop:
+          Theme.of(context).platform == TargetPlatform.iOS ||
+          widget.streak.index == 0 ||
+          widget.streak.finished,
       child: SafeArea(
         // view padding can change on Android when immersive mode is enabled, so to prevent any
         // board vertical shift, we set `maintainBottomViewPadding` to true.
