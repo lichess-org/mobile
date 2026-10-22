@@ -94,11 +94,11 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
             title: widget.channel != null
                 ? Text('${widget.channel!.label(context.l10n)} TV')
                 : Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
-                      Expanded(child: UserFullNameWidget(user: widget.user)),
-                      const SizedBox(width: 4.0),
                       const Icon(Icons.live_tv),
+                      const SizedBox(width: 4.0),
+                      Flexible(child: UserFullNameWidget(user: widget.user)),
                     ],
                   ),
             actionsBuilder: (context, ref) => [soundToggleButton(ref)],
