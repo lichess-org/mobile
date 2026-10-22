@@ -724,6 +724,65 @@ void main() {
       expect(find.text('Nf3'), findsOneWidget);
     });
 
+    testWidgets('offer draw stays unavailable after the opponent declines it', (
+      WidgetTester tester,
+    ) async {
+      await createTestGame(tester, pgn: 'e4 e5 Nf3 Nc6');
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      Future<void> expectOfferDrawInMenu(Matcher matcher) async {
+        await tester.tap(find.byIcon(Icons.menu));
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.byType(Dialog), findsOneWidget);
+        expect(find.text('Offer draw'), matcher);
+        // tap the barrier to close the menu
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.byType(Dialog), findsNothing);
+      }
+
+      await expectOfferDrawInMenu(findsOneWidget);
+
+      // white offers a draw at ply 4, black declines
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"reload","v":1,"d":{"t":"drawOffer","d":"white"}}',
+        '{"t":"reload","v":2,"d":{"t":"drawOffer","d":null}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // lichess refuses a new offer within 20 plies of the last one
+      await expectOfferDrawInMenu(findsNothing);
+
+      Position position = Chess.initial;
+      for (final san in 'e4 e5 Nf3 Nc6'.split(' ')) {
+        position = position.play(position.parseSan(san)!);
+      }
+      var ply = 4;
+      var version = 2;
+      Future<void> playMove(String san) async {
+        final move = position.parseSan(san)!;
+        position = position.play(move);
+        ply++;
+        version++;
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"move","v":$version,"d":{"ply":$ply,"uci":"${move.uci}","san":"$san"}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 1));
+      }
+
+      for (final san
+          in 'Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 d5 Bf6 Re1 Ne7 Rxe4 d6 Bg5 Bxg5'
+              .split(' ')) {
+        await playMove(san);
+      }
+      expect(ply, 24);
+      await expectOfferDrawInMenu(findsNothing);
+
+      await playMove('Nxg5');
+      expect(ply, 25);
+      await expectOfferDrawInMenu(findsOneWidget);
+    });
+
     group('Premoves', () {
       testWidgets('premove is applied after opponent move', (WidgetTester tester) async {
         const gameFullId = GameFullId('qVChCOTcHSeW');
