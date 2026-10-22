@@ -181,7 +181,7 @@ class const _TvAppBarTitle({
                   const SizedBox(width: 4.0),
                   Flexible(
                     child: channel != null
-                        ? Flexible(child: Text('${channel!.label(context.l10n)} TV'))
+                        ? Text('${channel!.label(context.l10n)} TV')
                         : tournament != null
                         ? AppBarTitleText('$tournament ${context.l10n.arenaArena}', maxLines: 2)
                         : UserFullNameWidget(user: user),
@@ -217,7 +217,7 @@ class const _Subtitle({
           Padding(padding: const EdgeInsets.only(left: 2.0), child: Icon(icon, size: 16)),
           const SizedBox(width: 6.0),
         ],
-        Expanded(
+        Flexible(
           child: Text(
             '${timeIncrement.display} • $ratedStr',
             style: subtitleTextStyle,

@@ -200,7 +200,7 @@ void main() {
       await loadGame(tester, socketUri: watchSocketUri(games[0].id, Side.white), game: games[0]);
 
       expect(find.widgetWithText(PlatformAppBar, 'NFChess13'), findsOneWidget);
-      expect(find.widgetWithText(PlatformAppBar, '3+2 • Blitz • Casual'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, '3+2 • Casual'), findsOneWidget);
     });
 
     testWidgets('app bar is not blank (Tournament TV)', (tester) async {
@@ -226,7 +226,7 @@ void main() {
         ),
       );
       expect(find.widgetWithText(PlatformAppBar, 'Awesome Tourney Arena'), findsOneWidget);
-      expect(find.widgetWithText(PlatformAppBar, '3+2 • Blitz • Casual'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, '3+2 • Casual'), findsOneWidget);
     });
   });
 }
