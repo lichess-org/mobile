@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -128,7 +127,7 @@ class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
 
   /// Fetches the keys of all saved opening batches for the given user.
   ///
-  /// Counting their puzzles is left to [fetchNbUnsolved], because the openings list only displays
+  /// Counting their puzzles is left to `puzzleBatchProvider`, because the openings list only displays
   /// a handful of them at a time.
   Future<ISet<String>> fetchSavedOpenings({required UserId? userId}) async {
     final list = await _db.query(
@@ -139,20 +138,6 @@ class const PuzzleBatchStorage(final Database _db, final Ref _ref) {
     );
 
     return list.map((map) => map['angle'] as String?).nonNulls.toISet();
-  }
-
-  /// Returns the number of unsolved puzzles saved for [angle], or 0 if it has no saved batch.
-  Future<int> fetchNbUnsolved({required UserId? userId, required PuzzleAngle angle}) async {
-    final list = await _db.query(
-      _tableName,
-      columns: ['data'],
-      where: 'userId = ? AND angle = ?',
-      whereArgs: [userId ?? _anonUserKey, angle.key],
-    );
-
-    final raw = list.firstOrNull?['data'] as String?;
-
-    return raw != null ? _nbUnsolved(raw) : 0;
   }
 }
 
