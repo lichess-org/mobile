@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -21,7 +22,6 @@ import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/watcher_list_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -190,7 +190,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                   ref.read(gameScreenLoaderProvider(widget.source).notifier).newOpponent();
                 } else {
                   final savedSetup = ref.read(gameSetupPreferencesProvider);
-                  Navigator.of(context, rootNavigator: true).pushReplacement(
+                  Navigator.of(context).pushReplacementHidingTabBar(
                     GameScreen.buildRoute(
                       source: LobbySource(GameSeek.newOpponentFromGame(game, savedSetup)),
                     ),
@@ -205,13 +205,78 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: isRealTimePlayingGame ? SocketPingRatingIcon(socketUri: socketUri) : null,
+            leading: isRealTimePlayingGame
+                ? AppBarIndicator(child: SocketPingRatingIcon(socketUri: socketUri))
+                : null,
             title: _GameTitle(
               _StandaloneTitleVariant(id: createdGameId, lastMoveAt: widget.lastMoveAt),
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            actions: [_GameMenu(gameId: createdGameId)],
+            // The menu is rebuilt with the game state fields it shows, not the whole screen: every
+            // rebuild of the actions also redraws the pinned bar buttons on iOS 26.
+            actionsBuilder: (context, ref) => [
+              if (ref.watch(
+                    gameControllerProvider(createdGameId).select(
+                      (s) => s.value == null
+                          ? null
+                          : (
+                              nbWatchers: s.value!.nbWatchers,
+                              bookmarked: s.value!.game.bookmarked == true,
+                              youAre: s.value!.game.youAre,
+                              finished: s.value!.game.finished,
+                            ),
+                    ),
+                  )
+                  case final menuState?)
+                ContextMenuIconButton(
+                  icon: const Icon(Icons.more_horiz),
+                  semanticsLabel: context.l10n.menu,
+                  actions: [
+                    if (menuState.nbWatchers > 0)
+                      ContextMenuAction(
+                        icon: Icons.person_outline,
+                        label: 'Spectators (${menuState.nbWatchers})',
+                        onPressed: () {
+                          final s = ref.read(gameControllerProvider(createdGameId)).value;
+                          if (s == null) return;
+                          showAdaptiveDraggableBottomSheet<void>(
+                            context: context,
+                            builder: (_, scrollController) => WatcherListBottomSheet(
+                              nbWatchers: s.nbWatchers,
+                              watcherNames: s.watcherNames,
+                              scrollController: scrollController,
+                            ),
+                          );
+                        },
+                      ),
+                    ContextMenuAction(
+                      icon: menuState.bookmarked
+                          ? Icons.bookmark_remove_outlined
+                          : Icons.bookmark_add_outlined,
+                      label: menuState.bookmarked
+                          ? context.l10n.mobileRemoveBookmark
+                          : context.l10n.bookmarkThisGame,
+                      onPressed: () =>
+                          ref.read(gameControllerProvider(createdGameId).notifier).toggleBookmark(),
+                    ),
+                    ContextMenuAction(
+                      icon: Theme.of(context).platform == TargetPlatform.iOS
+                          ? Icons.ios_share_outlined
+                          : Icons.share_outlined,
+                      label: context.l10n.mobileShare,
+                      onPressed: null,
+                      submenu: makeFinishedGameShareMenuActions(
+                        context,
+                        ref,
+                        gameId: createdGameId.gameId,
+                        orientation: menuState.youAre ?? Side.white,
+                        finished: menuState.finished,
+                      ),
+                    ),
+                  ],
+                ),
+            ],
           ),
           body: Theme.of(context).platform == TargetPlatform.android
               ? AndroidImmersiveModeWidget(
@@ -227,7 +292,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: _GameTitle(
               _ChallengeTitleVariant((widget.source as UserChallengeSource).challengeRequest),
               monitorSocket: true,
@@ -254,7 +319,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
               UserChallengeSource(:final challengeRequest) => _GameTitle(
@@ -286,7 +351,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
           appBar: PlatformAppBar(
-            leading: const SocketPingRatingIcon(),
+            leading: const AppBarIndicator(child: SocketPingRatingIcon()),
             title: switch (widget.source) {
               LobbySource(:final seek) => _GameTitle(_LobbyTitleVariant(seek), monitorSocket: true),
               UserChallengeSource(:final challengeRequest) when challengeRequest.destUser != null =>
@@ -383,64 +448,6 @@ class const _ExportedGameTitle({required final GameFullId id, final DateTime? la
       data: (meta) => ExportedGameTitle(meta: meta, lastMoveAt: lastMoveAt),
       loading: () => const ExportedGameTitleLoading(),
       error: (error, _) => const SizedBox.shrink(),
-    );
-  }
-}
-
-/// App bar menu holding the game actions: spectators, bookmark, share and export.
-class const _GameMenu({required final GameFullId gameId}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(gameControllerProvider(gameId)).value;
-    if (gameState == null) return const SizedBox.shrink();
-
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        if (gameState.nbWatchers > 0)
-          ContextMenuAction(
-            icon: Icons.person_outline,
-            label: 'Spectators (${gameState.nbWatchers})',
-            onPressed: () {
-              final s = ref.read(gameControllerProvider(gameId)).value;
-              if (s == null) return;
-              showAdaptiveDraggableBottomSheet<void>(
-                context: context,
-                builder: (_, scrollController) => WatcherListBottomSheet(
-                  nbWatchers: s.nbWatchers,
-                  watcherNames: s.watcherNames,
-                  scrollController: scrollController,
-                ),
-              );
-            },
-          ),
-        ContextMenuAction(
-          icon: gameState.game.bookmarked == true
-              ? Icons.bookmark_remove_outlined
-              : Icons.bookmark_add_outlined,
-          label: gameState.game.bookmarked == true
-              ? context.l10n.mobileRemoveBookmark
-              : context.l10n.bookmarkThisGame,
-          onPressed: () => ref.read(gameControllerProvider(gameId).notifier).toggleBookmark(),
-        ),
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS
-              ? Icons.ios_share_outlined
-              : Icons.share_outlined,
-          label: context.l10n.studyShareAndExport,
-          onPressed: () => showAdaptiveActionSheet<void>(
-            context: context,
-            actions: makeFinishedGameShareBottomSheetActions(
-              context,
-              ref,
-              gameId: gameId.gameId,
-              orientation: gameState.game.youAre ?? Side.white,
-              finished: gameState.game.finished,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

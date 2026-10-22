@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -24,15 +24,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
 enum BroadcastRoundTab() {
@@ -52,16 +48,7 @@ enum BroadcastRoundTab() {
 
 enum _BroadcastGameFilter() {
   all,
-  ongoing;
-
-  String l10n(AppLocalizations l10n) {
-    switch (this) {
-      case all:
-        return l10n.mobileAllGames;
-      case ongoing:
-        return l10n.broadcastOngoing;
-    }
-  }
+  ongoing,
 }
 
 class const BroadcastRoundScreenLoading({
@@ -194,7 +181,7 @@ class _BroadcastRoundScreenState()
     _tabController.index = BroadcastRoundTab.boards.index;
     setState(() {
       this.filter = filter;
-      _teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
+      _teamFilter = team;
     });
   }
 
@@ -226,148 +213,175 @@ class _BroadcastRoundScreenState()
                 ),
           // A long title, next to the actions.
           centerTitle: false,
-          actions: [
-            if (roundState.isSubscribed case final isSubscribed?)
-              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
-                SemanticIconButton(
-                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
-                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
-                  onPressed: () async {
-                    try {
-                      await ref
-                          .read(broadcastRoundControllerProvider(roundId).notifier)
-                          .setSubscribed(_selectedTournamentId, !isSubscribed);
-                    } catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(
-                          context,
-                          'Could not update the subscription',
-                          type: SnackBarType.error,
-                        );
+          actionsBuilder: (context, ref) {
+            final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+            final showEvalBar = ref.watch(
+              broadcastPreferencesProvider.select((prefs) => prefs.showRoundEvaluationGauges),
+            );
+            // Only what the menu shows, so that game updates don't rebuild the app bar. The counts
+            // are those of the selected team, whose games the filter choices apply to.
+            final games = roundId != null
+                ? ref.watch(
+                    broadcastRoundControllerProvider(roundId).select((state) {
+                      final games = state.value?.games.values ?? const [];
+                      final teamGames = _teamFilter == null
+                          ? games
+                          : games.where(
+                              (g) => g.players.values.any((p) => p.player.team == _teamFilter),
+                            );
+                      return (
+                        all: teamGames.length,
+                        ongoing: teamGames.where((g) => g.isOngoing).length,
+                        teams: games
+                            .expand((g) => g.players.values.map((p) => p.player.team))
+                            .nonNulls
+                            .toIList()
+                            .removeDuplicates()
+                            .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase())),
+                      );
+                    }),
+                  )
+                : null;
+            return [
+              if (roundState.isSubscribed case final isSubscribed?)
+                if (roundId != null)
+                  SemanticIconButton(
+                    icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                    semanticsLabel: isSubscribed
+                        ? context.l10n.unsubscribe
+                        : context.l10n.subscribe,
+                    onPressed: () async {
+                      try {
+                        await ref
+                            .read(broadcastRoundControllerProvider(roundId).notifier)
+                            .setSubscribed(_selectedTournamentId, !isSubscribed);
+                      } catch (_) {
+                        if (context.mounted) {
+                          showSnackBar(
+                            context,
+                            'Could not update the subscription',
+                            type: SnackBarType.error,
+                          );
+                        }
                       }
-                    }
-                  },
-                ),
-            ContextMenuIconButton(
-              icon: const Icon(Icons.more_horiz),
-              semanticsLabel: context.l10n.menu,
-              actions: [
-                ContextMenuAction(
-                  icon: Icons.settings,
-                  label: context.l10n.settingsSettings,
-                  onPressed: () {
-                    showAdaptiveBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
-                      builder: (_) => const _BroadcastSettingsBottomSheet(),
-                    );
-                  },
-                ),
-                ContextMenuAction(
-                  icon: Icons.filter_list,
-                  label: context.l10n.filterGames,
-                  onPressed: () {
-                    final currentRoundId =
-                        _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
-                    final gamesMap = currentRoundId != null
-                        ? ref.read(broadcastRoundControllerProvider(currentRoundId)).value?.games
-                        : null;
-                    final games = gamesMap?.values ?? const [];
-                    final allCount = games.length;
-                    final ongoingCount = games.where((g) => g.isOngoing).length;
-                    final uniqueTeams = games
-                        .expand((g) => g.players.values.map((p) => p.player.team))
-                        .nonNulls
-                        .toIList()
-                        .removeDuplicates()
-                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-                    final teams = uniqueTeams.isNotEmpty
-                        ? uniqueTeams.insert(0, context.l10n.broadcastAllTeams)
-                        : null;
-
-                    showAdaptiveBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
-                      builder: (_) => _BroadcastGamesFilterBottomSheet(
-                        filter,
-                        _teamFilter,
-                        allGamesCount: allCount,
-                        ongoingGamesCount: ongoingCount,
-                        onGameFilterChange: setGameFilter,
-                        teams: teams,
-                      ),
-                    );
-                  },
-                ),
-                ContextMenuAction(
-                  icon: Theme.of(context).platform == TargetPlatform.iOS
-                      ? Icons.ios_share_outlined
-                      : Icons.share_outlined,
-                  label: context.l10n.studyShareAndExport,
-                  onPressed: () => showBroadcastShareMenu(
-                    context,
-                    asyncTournament.value?.data ?? widget.broadcast.tour,
-                    roundState.round,
+                    },
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        body: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (context, _) => [
-            SliverOverlapAbsorber(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              sliver: _RoundHeader(
-                title: Theme.of(context).platform == TargetPlatform.iOS
-                    ? asyncTournament.value?.data.name ?? widget.broadcast.title
-                    : null,
-                imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
-                information: asyncTournament.value?.data.information,
-                onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
-                tabController: _tabController,
-                tabsPinned: _tabsPinned,
-                tabs: [
-                  context.l10n.broadcastBoards,
-                  context.l10n.players,
-                  if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
+              ContextMenuIconButton(
+                icon: const Icon(Icons.more_horiz),
+                semanticsLabel: context.l10n.menu,
+                actions: [
+                  ContextMenuAction(
+                    label: context.l10n.studyShowEvalBar,
+                    toggled: showEvalBar,
+                    onPressed: () =>
+                        ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar(),
+                  ),
+                  ContextMenuSection(
+                    title: context.l10n.filterGames,
+                    actions: [
+                      ContextMenuAction(
+                        label: '${context.l10n.mobileAllGames} (${games?.all ?? 0})',
+                        selected: filter == .all,
+                        onPressed: () => setGameFilter(.all, _teamFilter),
+                      ),
+                      ContextMenuAction(
+                        label: '${context.l10n.broadcastOngoing} (${games?.ongoing ?? 0})',
+                        selected: filter == .ongoing,
+                        onPressed: () => setGameFilter(.ongoing, _teamFilter),
+                      ),
+                      if (games != null && games.teams.isNotEmpty)
+                        ContextMenuAction(
+                          label: context.l10n.teamTeam,
+                          subtitle: _teamFilter ?? context.l10n.broadcastAllTeams,
+                          onPressed: null,
+                          submenu: [
+                            for (final team in [null, ...games.teams])
+                              ContextMenuAction(
+                                label: team ?? context.l10n.broadcastAllTeams,
+                                selected: team == _teamFilter,
+                                onPressed: () => setGameFilter(filter, team),
+                              ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  ContextMenuAction(
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
+                        ? Icons.ios_share_outlined
+                        : Icons.share_outlined,
+                    label: context.l10n.mobileShare,
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      asyncTournament.value?.data ?? widget.broadcast.tour,
+                      roundState.round,
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
-          // The header is above the tabs, which start below it with a SliverOverlapInjector.
-          body: MediaQuery.removePadding(
-            context: context,
-            removeTop: true,
-            child: TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                switch (asyncTournament) {
-                  AsyncData(:final value) => BroadcastBoardsTab(
-                    tournamentId: _selectedTournamentId,
-                    roundId: _selectedRoundId ?? value.defaultRoundId,
-                    tournamentSlug: value.data.slug,
-                    showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                    teamFilter: _teamFilter,
-                  ),
-                  _ => const SizedBox.shrink(),
-                },
-                BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                if (asyncTournament.value?.data.teamTable == true) ...[
-                  switch (asyncTournament) {
-                    AsyncData(:final value) => BroadcastTeamsTab(
-                      roundId: _selectedRoundId ?? value.defaultRoundId,
-                      tournamentId: _selectedTournamentId,
-                      tournamentSlug: value.data.slug,
-                      showTeamScores: value.data.showTeamScores == true,
-                    ),
-                    _ => const SizedBox.shrink(),
-                  },
-                ],
-              ],
+            ];
+          },
+        ),
+        // The tabs scroll under the glass bottom bar buttons.
+        body: BottomBarScrollEdgeEffect(
+          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: NestedScrollView(
+            controller: _scrollController,
+            headerSliverBuilder: (context, _) => [
+              SliverOverlapAbsorber(
+                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                sliver: _RoundHeader(
+                  title: Theme.of(context).platform == TargetPlatform.iOS
+                      ? asyncTournament.value?.data.name ?? widget.broadcast.title
+                      : null,
+                  imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+                  information: asyncTournament.value?.data.information,
+                  onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+                  tabController: _tabController,
+                  tabsPinned: _tabsPinned,
+                  tabs: [
+                    context.l10n.broadcastBoards,
+                    context.l10n.players,
+                    if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
+                  ],
+                ),
+              ),
+            ],
+            // The header is above the tabs, which start below it with a SliverOverlapInjector. The
+            // padding is the body's, with the bottom bar height, not the screen's.
+            body: Builder(
+              builder: (context) => MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    switch (asyncTournament) {
+                      AsyncData(:final value) => BroadcastBoardsTab(
+                        tournamentId: _selectedTournamentId,
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                        tournamentSlug: value.data.slug,
+                        showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                        teamFilter: _teamFilter,
+                      ),
+                      _ => const SizedBox.shrink(),
+                    },
+                    BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                    if (asyncTournament.value?.data.teamTable == true) ...[
+                      switch (asyncTournament) {
+                        AsyncData(:final value) => BroadcastTeamsTab(
+                          roundId: _selectedRoundId ?? value.defaultRoundId,
+                          tournamentId: _selectedTournamentId,
+                          tournamentSlug: value.data.slug,
+                          showTeamScores: value.data.showTeamScores == true,
+                        ),
+                        _ => const SizedBox.shrink(),
+                      },
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -907,176 +921,6 @@ class _TournamentSelectorState() extends ConsumerState<_TournamentSelectorMenu> 
             },
           ),
       ],
-    );
-  }
-}
-
-class const _BroadcastSettingsBottomSheet() extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
-      _BroadcastSettingsBottomSheetState();
-}
-
-class _BroadcastSettingsBottomSheetState() extends ConsumerState<_BroadcastSettingsBottomSheet> {
-  @override
-  Widget build(BuildContext context) {
-    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
-
-    return BottomSheetScrollableContainer(
-      children: [
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-          materialFilledCard: true,
-          children: [
-            SwitchSettingTile(
-              title: Text(context.l10n.studyShowEvalBar),
-              value: broadcastPreferences.showRoundEvaluationGauges,
-              onChanged: (value) {
-                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class const _BroadcastGamesFilterBottomSheet(
-  final _BroadcastGameFilter selectedFilter,
-  final String? selectedTeam, {
-  required final int allGamesCount,
-  required final int ongoingGamesCount,
-  required final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange,
-  required final IList<String>? teams,
-}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
-      _BroadcastGamesFilterBottomSheetState();
-}
-
-class _BroadcastGamesFilterBottomSheetState()
-    extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
-  late _BroadcastGameFilter filter;
-  late String? selectedTeam;
-  bool showingTeamPicker = false;
-
-  @override
-  void initState() {
-    super.initState();
-    filter = widget.selectedFilter;
-    selectedTeam = widget.selectedTeam;
-  }
-
-  @override
-  void didUpdateWidget(covariant _BroadcastGamesFilterBottomSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    filter = widget.selectedFilter;
-    selectedTeam = widget.selectedTeam;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: !showingTeamPicker,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && showingTeamPicker) {
-          setState(() => showingTeamPicker = false);
-        }
-      },
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 220),
-        transitionBuilder: (child, animation) {
-          final isTeamPicker = child.key == const ValueKey('team-picker');
-          final offset = Tween<Offset>(
-            begin: isTeamPicker ? const Offset(1, 0) : const Offset(-1, 0),
-            end: Offset.zero,
-          ).animate(animation);
-          return ClipRect(
-            child: SlideTransition(position: offset, child: child),
-          );
-        },
-        child: showingTeamPicker
-            ? KeyedSubtree(
-                key: const ValueKey('team-picker'),
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: SheetHeaderButton(
-                          action: .back,
-                          onPressed: () => setState(() => showingTeamPicker = false),
-                        ),
-                        title: Text(context.l10n.teamTeam),
-                      ),
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          children: [
-                            for (final team in widget.teams!)
-                              ListTile(
-                                selected: team == (selectedTeam ?? context.l10n.broadcastAllTeams),
-                                title: Text(team),
-                                onTap: () {
-                                  setState(() {
-                                    selectedTeam = team == context.l10n.broadcastAllTeams
-                                        ? null
-                                        : team;
-                                    showingTeamPicker = false;
-                                  });
-                                  widget.onGameFilterChange.call(filter, team);
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : KeyedSubtree(
-                key: const ValueKey('settings'),
-                child: BottomSheetScrollableContainer(
-                  padding: const EdgeInsets.all(16.0),
-                  children: [
-                    Filter<_BroadcastGameFilter>(
-                      filterName: context.l10n.filterGames,
-                      filterType: FilterType.singleChoice,
-                      choices: _BroadcastGameFilter.values,
-                      choiceSelected: (choice) => filter == choice,
-                      choiceLabel: (category) {
-                        final label = category.l10n(context.l10n);
-                        final count = category == _BroadcastGameFilter.all
-                            ? widget.allGamesCount
-                            : widget.ongoingGamesCount;
-                        return Text('$label ($count)');
-                      },
-                      onSelected: (value, selected) {
-                        setState(() => filter = value);
-                        widget.onGameFilterChange.call(value, selectedTeam);
-                      },
-                    ),
-                    if (widget.teams != null) ...[
-                      // The same space as between wrapped chips (see [Filter]).
-                      if (Theme.of(context).platform == TargetPlatform.iOS)
-                        const SizedBox(height: 8.0),
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: PlatformChoiceChip(
-                          label: selectedTeam != null
-                              ? Text('${context.l10n.teamTeam}: $selectedTeam')
-                              : Text(context.l10n.teamTeam),
-                          selected: selectedTeam != null,
-                          multiple: true,
-                          showCheckmark: selectedTeam != null,
-                          onSelected: (_) => setState(() => showingTeamPicker = true),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-      ),
     );
   }
 }

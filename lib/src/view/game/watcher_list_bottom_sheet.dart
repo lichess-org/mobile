@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -21,7 +22,7 @@ class const WatcherListBottomSheet({
 
     return ListView(
       controller: scrollController,
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 16).add(MediaQuery.paddingOf(context)),
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -35,8 +36,8 @@ class const WatcherListBottomSheet({
             leading: const Icon(Icons.person_outline, size: 20),
             title: Text(name),
             onTap: () {
-              Navigator.of(context, rootNavigator: true).pop();
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pop();
+              Navigator.of(context).pushHidingTabBar(
                 UserOrProfileScreen.buildRoute(
                   LightUser(id: UserId(name.toLowerCase()), name: name),
                 ),

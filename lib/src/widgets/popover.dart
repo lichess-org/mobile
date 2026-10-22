@@ -72,11 +72,9 @@ class const PlatformPopover({
       return GlassPopover(
         popoverWidth: width ?? 180.0,
         settings: opaque
-            // The package default popover glass (as [kLightMenuGlassSettings]), with an opaque fill.
-            ? kLightMenuGlassSettings.copyWith(glassColor: opaqueModalColor(context))
-            : Theme.of(context).brightness == Brightness.light
-            ? kLightMenuGlassSettings
-            : null,
+            // The menu glass, with an opaque fill.
+            ? menuGlassSettings(context).copyWith(glassColor: opaqueModalColor(context))
+            : menuGlassSettings(context),
         // The trigger is not glass itself (e.g. it sits in the glass capsule of the app bar).
         triggerBuilder: triggerBuilder,
         // The glass popover is outside of any Material.
@@ -94,8 +92,10 @@ class const PlatformPopover({
           bodyBuilder: bodyBuilder,
           direction: direction,
           width: width,
+          // Like a card, so that it stands out from the background.
           backgroundColor:
               DialogTheme.of(context).backgroundColor ??
+              CardTheme.of(context).color ??
               ColorScheme.of(context).surfaceContainerHigh,
           transitionDuration: Duration.zero,
           popoverTransitionBuilder: (_, child) => child,

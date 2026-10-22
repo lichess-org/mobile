@@ -387,6 +387,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'عند التفعيل, سيهتز الجهاز لمدة وجيزة عند نقل أو أسر القطع.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'مشاركة رابط التحدي';
 
   @override

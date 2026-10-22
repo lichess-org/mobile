@@ -42,96 +42,91 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
   Widget build(BuildContext context, WidgetRef ref) {
     final enginePrefs = ref.watch(engineEvaluationPreferencesProvider);
     final asyncState = ref.watch(retroControllerProvider(options));
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
+    );
 
-    switch (asyncState) {
-      case AsyncError(:final error):
-        debugPrint('Error loading retro controller for ${options.id}: $error');
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: PlatformAppBar(
-            // Like the loaded screen, whose long title is next to the actions.
-            centerTitle: false,
-            compactButtons: true,
-            title: AppBarTitleText(context.l10n.learnFromYourMistakes),
-          ),
-          body: switch (error) {
-            final ServerAnalysisRequestException refusal => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  refusal.message,
-                  style: Styles.sectionTitle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            // The game itself failed to load, which is worth another try.
-            _ => FullScreenRetryRequest(
-              onRetry: () {
-                ref.invalidate(retroControllerProvider(options));
-              },
-            ),
-          },
-        );
-      case AsyncData(:final value):
-        if (value.serverAnalysisAvailable == false) {
-          return _LoadingScreen(serverAnalysisProgress: value.serverAnalysisProgress);
-        }
-
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: PlatformAppBar(
-            // A long title, next to the actions.
-            centerTitle: false,
-            compactButtons: true,
-            title: AppBarTitleText(
-              '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
-              maxLines: 2,
-            ),
-            actions: [
-              if (value.isEngineAvailable(enginePrefs) == true)
-                EngineButton(
-                  filters: (context: value.evaluationContext, path: value.currentPath),
-                  savedEval: value.currentNode.eval,
-                  goDeeper: () => ref
-                      .read(retroControllerProvider(options).notifier)
-                      .requestEval(goDeeper: true),
-                ),
-              _RetroMenu(options: options),
-            ],
-          ),
-          body: DefaultTabController(length: 1, child: _RetroScreen(options)),
-        );
-      case _:
-        return const _LoadingScreen();
+    if (asyncState case AsyncError(:final error)) {
+      debugPrint('Error loading retro controller for ${options.id}: $error');
     }
-  }
-}
+    // The loaded state, once the server analysis it needs is available.
+    final value = switch (asyncState) {
+      AsyncData(:final value) when value.serverAnalysisAvailable != false => value,
+      _ => null,
+    };
 
-class const _LoadingScreen({final double? serverAnalysisProgress}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+    // The same tree in every state, so that the scaffold and its app bar are updated, not replaced,
+    // once the retro is loaded.
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
-        // Like the loaded screen, whose long title is next to the actions.
+        // A long title, next to the actions.
         centerTitle: false,
         compactButtons: true,
-        title: AppBarTitleText(context.l10n.learnFromYourMistakes),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(context.l10n.calculatingMoves),
-            Padding(
-              padding: Styles.bodySectionPadding,
-              child: LinearProgressIndicator(value: serverAnalysisProgress),
+        title: value != null
+            ? AppBarTitleText(
+                '${context.l10n.learnFromYourMistakes} (${math.min(value.mistakes.length, value.currentMistakeIndex + 1)}/${value.mistakes.length})',
+                maxLines: 2,
+              )
+            : AppBarTitleText(context.l10n.learnFromYourMistakes),
+        actions: [
+          if (value != null) ...[
+            if (value.isEngineAvailable(enginePrefs) == true)
+              EngineButton(
+                filters: (context: value.evaluationContext, path: value.currentPath),
+                savedEval: value.currentNode.eval,
+                goDeeper: () =>
+                    ref.read(retroControllerProvider(options).notifier).requestEval(goDeeper: true),
+              ),
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.settings,
+                  label: context.l10n.settingsSettings,
+                  onPressed: () =>
+                      Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
+                ),
+                ContextMenuAction(
+                  icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+                  label: context.l10n.sound,
+                  onPressed: () =>
+                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+                ),
+              ],
             ),
           ],
-        ),
+        ],
       ),
+      body: switch (asyncState) {
+        AsyncError(error: final ServerAnalysisRequestException refusal) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(refusal.message, style: Styles.sectionTitle, textAlign: TextAlign.center),
+          ),
+        ),
+        // The game itself failed to load, which is worth another try.
+        AsyncError() => FullScreenRetryRequest(
+          onRetry: () {
+            ref.invalidate(retroControllerProvider(options));
+          },
+        ),
+        _ when value != null => DefaultTabController(length: 1, child: _RetroScreen(options)),
+        _ => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(context.l10n.calculatingMoves),
+              Padding(
+                padding: Styles.bodySectionPadding,
+                child: LinearProgressIndicator(value: asyncState.value?.serverAnalysisProgress),
+              ),
+            ],
+          ),
+        ),
+      },
     );
   }
 }
@@ -150,22 +145,29 @@ class const _RetroScreen(final RetroOptions options) extends ConsumerWidget {
         return EngineGauge(params: state.engineGaugeParams);
       },
       bottomBar: _BottomBar(options),
+      bottomBarOverContent: true,
       children: [
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _FeedbackWidget(options),
-              if (state.feedback == RetroFeedback.done)
-                FilledButton(
-                  onPressed: ref.read(retroControllerProvider(options).notifier).flipSide,
-                  child: Text(
-                    state.pov == Side.white
-                        ? context.l10n.reviewBlackMistakes
-                        : context.l10n.reviewWhiteMistakes,
-                  ),
-                ),
-            ],
+        Builder(
+          // Centered above the bar floating over the view.
+          builder: (context) => Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _FeedbackWidget(options),
+                  if (state.feedback == RetroFeedback.done)
+                    FilledButton(
+                      onPressed: ref.read(retroControllerProvider(options).notifier).flipSide,
+                      child: Text(
+                        state.pov == Side.white
+                            ? context.l10n.reviewBlackMistakes
+                            : context.l10n.reviewWhiteMistakes,
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ],
@@ -251,6 +253,7 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
         : null;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         if (state.isSolving) ...[
           BottomBarButton(
@@ -273,27 +276,31 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
               showLabel: true,
               onTap: ref.read(retroControllerProvider(options).notifier).restart,
             ),
-          RepeatButton(
-            onLongPress: onGoBack,
-            child: BottomBarButton(
-              key: const ValueKey('goto-previous'),
-              onTap: onGoBack,
-              label: context.l10n.studyBack,
-              showLabel: true,
-              icon: CupertinoIcons.chevron_back,
-              showTooltip: false,
-            ),
-          ),
-          RepeatButton(
-            onLongPress: onGoForward,
-            child: BottomBarButton(
-              key: const ValueKey('goto-next'),
-              icon: CupertinoIcons.chevron_forward,
-              onTap: onGoForward,
-              label: context.l10n.studyNext,
-              showLabel: true,
-              showTooltip: false,
-            ),
+          BottomBarGroup(
+            children: [
+              RepeatButton(
+                onLongPress: onGoBack,
+                child: BottomBarButton(
+                  key: const ValueKey('goto-previous'),
+                  onTap: onGoBack,
+                  label: context.l10n.studyBack,
+                  showLabel: true,
+                  icon: CupertinoIcons.chevron_back,
+                  showTooltip: false,
+                ),
+              ),
+              RepeatButton(
+                onLongPress: onGoForward,
+                child: BottomBarButton(
+                  key: const ValueKey('goto-next'),
+                  icon: CupertinoIcons.chevron_forward,
+                  onTap: onGoForward,
+                  label: context.l10n.studyNext,
+                  showLabel: true,
+                  showTooltip: false,
+                ),
+              ),
+            ],
           ),
           if (state.feedback != RetroFeedback.done)
             BottomBarButton(
@@ -382,29 +389,4 @@ class const _FeedbackWidget(final RetroOptions options) extends ConsumerWidget {
 String _branchMoveToString(ViewBranch branch) {
   final nag = moveAnnotationChar(branch.nags ?? []);
   return '${(branch.position.ply / 2).ceil()}${branch.position.turn == Side.black ? '.' : '...'} ${branch.sanMove.san}$nag';
-}
-
-class const _RetroMenu({required final RetroOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ContextMenuAction(
-          icon: Icons.settings,
-          label: context.l10n.settingsSettings,
-          onPressed: () =>
-              Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
-        ),
-        ContextMenuAction(
-          icon: ref.watch(generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled))
-              ? Icons.volume_up
-              : Icons.volume_off,
-          label: context.l10n.sound,
-          onPressed: () => ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-        ),
-      ],
-    );
-  }
 }

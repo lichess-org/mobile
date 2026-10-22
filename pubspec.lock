@@ -1025,11 +1025,12 @@ packages:
   liquid_glass_widgets:
     dependency: "direct main"
     description:
-      name: liquid_glass_widgets
-      sha256: b66e9f72535bf7c50ffc2442693b8bbb50026e90b3674f9b0e7ae80c55c3c77c
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.13.0"
+      path: "."
+      ref: "244d666473a1bf156d4bbfadac4f4b22827ae167"
+      resolved-ref: "244d666473a1bf156d4bbfadac4f4b22827ae167"
+      url: "https://github.com/sdegenaar/liquid_glass_widgets.git"
+    source: git
+    version: "1.14.0"
   listen:
     dependency: transitive
     description:

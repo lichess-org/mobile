@@ -75,7 +75,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
         actions: [
           if (logs.isNotEmpty)
             IconButton(
-              tooltip: context.l10n.studyShareAndExport,
+              tooltip: context.l10n.mobileShare,
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,

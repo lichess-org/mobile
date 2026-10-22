@@ -13,7 +13,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show TabBarHidingNavigator, watchTabInteraction;
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -240,10 +241,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(widget.broadcast));
+        Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
@@ -414,7 +412,7 @@ class const _BroadcastCardContent({
                     icon: LichessIcons.chess_board,
                     label: context.l10n.broadcastBoards,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.boards,
@@ -426,7 +424,7 @@ class const _BroadcastCardContent({
                     icon: Icons.people,
                     label: context.l10n.players,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.players,
@@ -438,10 +436,13 @@ class const _BroadcastCardContent({
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
-                    label: context.l10n.studyShareAndExport,
-                    onPressed: () {
-                      showBroadcastShareMenu(context, broadcast.tour, broadcast.round);
-                    },
+                    label: context.l10n.mobileShare,
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      broadcast.tour,
+                      broadcast.round,
+                    ),
                   ),
                 ],
               ),

@@ -387,6 +387,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Khi được bật, thiết bị sẽ rung trong thời gian ngắn khi bạn di chuyển hoặc ăn một quân cờ.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Chia sẻ URL thách đấu';
 
   @override

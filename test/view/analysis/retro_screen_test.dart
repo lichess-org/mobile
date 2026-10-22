@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/server_analysis_service.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
+import 'package:material_ui/material_ui.dart' show TabBarView;
 import 'package:mocktail/mocktail.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -178,6 +179,22 @@ void main() {
 
       expect(find.text('No significant mistakes found for Black'), findsOneWidget);
       expect(find.text("Review white's mistakes"), findsOneWidget);
+    });
+
+    testWidgets('the bottom bar floats over the tab view on iOS only', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(await makeTestApp(tester, moves: 'e4 e5'));
+      await tester.pump();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The feedback is centered above the bar.
+      final feedback = find.text('No significant mistakes found for White');
+      final tabViewRect = tester.getRect(find.byType(TabBarView));
+      expect(
+        tester.getCenter(feedback).dy,
+        moreOrLessEquals((tabViewRect.top + tabViewRect.bottom - bottomInset) / 2, epsilon: 30),
+      );
     });
 
     testWidgets('One mistake by both sides', (WidgetTester tester) async {

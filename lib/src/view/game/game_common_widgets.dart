@@ -5,13 +5,13 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -32,7 +32,7 @@ void openGameScreen(
   DateTime? lastMoveAt,
 }) {
   if (game.variant.isReadSupported) {
-    Navigator.of(context, rootNavigator: true).push(
+    Navigator.of(context).pushHidingTabBar(
       game.fullId != null
           ? GameScreen.buildRoute(
               source: ExistingGameSource(game.fullId!),
@@ -111,12 +111,11 @@ class _GameBookmarkContextMenuActionState() extends State<GameBookmarkContextMen
   }
 }
 
-/// Makes a list of [BottomSheetAction] for game sharing options, meant to be
-/// used in a "Share & export" bottom sheet.
+/// Makes the game sharing actions of a "Share & export" submenu.
 ///
-/// The game URL can always be shared; the GIF and PGN exports are only available
-/// once the game is [finished].
-List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
+/// The game URL can always be shared; the GIF and PGN exports are only available once the game is
+/// [finished].
+List<ContextMenuAction> makeFinishedGameShareMenuActions(
   BuildContext context,
   WidgetRef ref, {
   required GameId gameId,
@@ -124,8 +123,8 @@ List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
   required bool finished,
 }) {
   return [
-    BottomSheetAction(
-      makeLabel: (context) => Text(context.l10n.mobileShareGameURL),
+    ContextMenuAction(
+      label: context.l10n.mobileShareGameURL,
       onPressed: () {
         launchShareDialog(
           context,
@@ -134,15 +133,15 @@ List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
       },
     ),
     if (finished) ...[
-      BottomSheetAction(
-        makeLabel: (context) => Text(context.l10n.gameAsGIF),
+      ContextMenuAction(
+        label: context.l10n.gameAsGIF,
         onPressed: () => showAdaptiveBottomSheet<void>(
           context: context,
           builder: (_) => GifExport(gameId: gameId, orientation: orientation),
         ),
       ),
-      BottomSheetAction(
-        makeLabel: (context) => Text(context.l10n.downloadAnnotated),
+      ContextMenuAction(
+        label: context.l10n.downloadAnnotated,
         onPressed: () async {
           try {
             final pgn = await ref.read(gameShareServiceProvider).annotatedPgn(gameId);
@@ -156,8 +155,8 @@ List<BottomSheetAction> makeFinishedGameShareBottomSheetActions(
           }
         },
       ),
-      BottomSheetAction(
-        makeLabel: (context) => Text(context.l10n.downloadRaw),
+      ContextMenuAction(
+        label: context.l10n.downloadRaw,
         onPressed: () async {
           try {
             final pgn = await ref.read(gameShareServiceProvider).rawPgn(gameId);

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -21,7 +22,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -93,14 +94,14 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
             title: widget.channel != null
                 ? Text('${widget.channel!.label(context.l10n)} TV')
                 : Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
-                      Expanded(child: UserFullNameWidget(user: widget.user)),
-                      const SizedBox(width: 4.0),
                       const Icon(Icons.live_tv),
+                      const SizedBox(width: 4.0),
+                      Flexible(child: UserFullNameWidget(user: widget.user)),
                     ],
                   ),
-            actions: const [ToggleSoundButton()],
+            actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           ),
           body: SafeArea(
             child: Column(
@@ -240,6 +241,7 @@ class const _TvGameBody({
                 )
               : null,
           userActionsBar: BottomBar(
+            cupertinoGlass: true,
             children: [
               BottomBarButton(
                 label: context.l10n.flipBoard,
@@ -251,40 +253,42 @@ class const _TvGameBody({
                   label: context.l10n.viewTournament,
                   icon: LichessIcons.tournament_cup,
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TournamentScreen.buildRoute(game.meta.tournament!.id));
+                    Navigator.of(context)
+                        .pushHidingTabBar(TournamentScreen.buildRoute(game.meta.tournament!.id));
                   },
                 ),
               if (canShowChat) ChatBottomBarButton(options: chatOptions),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoBack()
-                    ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-previous'),
-                  onTap: ref.read(gameCtrl.notifier).canGoBack()
-                      ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                      : null,
-                  label: 'Previous',
-                  icon: CupertinoIcons.chevron_back,
-                  showTooltip: false,
-                ),
-              ),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoForward()
-                    ? () => ref.read(gameCtrl.notifier).cursorForward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-next'),
-                  icon: CupertinoIcons.chevron_forward,
-                  label: context.l10n.next,
-                  onTap: ref.read(gameCtrl.notifier).canGoForward()
-                      ? () => ref.read(gameCtrl.notifier).cursorForward()
-                      : null,
-                  showTooltip: false,
-                ),
+              BottomBarGroup(
+                children: [
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoBack()
+                        ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-previous'),
+                      onTap: ref.read(gameCtrl.notifier).canGoBack()
+                          ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                          : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
+                  ),
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoForward()
+                        ? () => ref.read(gameCtrl.notifier).cursorForward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-next'),
+                      icon: CupertinoIcons.chevron_forward,
+                      label: context.l10n.next,
+                      onTap: ref.read(gameCtrl.notifier).canGoForward()
+                          ? () => ref.read(gameCtrl.notifier).cursorForward()
+                          : null,
+                      showTooltip: false,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

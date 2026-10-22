@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -67,9 +68,7 @@ class const UserScreen({required final LightUser user, super.key}) extends Consu
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
-        builder: (context) {
-          return CreateChallengeBottomSheet(user: user);
-        },
+        builder: (_) => CreateChallengeBottomSheet(user: user, navigator: Navigator.of(context)),
       );
     }
   }
@@ -220,10 +219,7 @@ class const _UserProfileListView(
                 leading: const Icon(Icons.live_tv_outlined),
                 trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(TvScreen.buildRoute(user: user.lightUser));
+                  Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: user.lightUser));
                 },
               ),
               if (authUser != null) ...[
@@ -244,10 +240,8 @@ class const _UserProfileListView(
                     leading: const Icon(Icons.chat_bubble_outline),
                     title: Text(context.l10n.composeMessage),
                     onTap: () {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(ConversationScreen.buildRoute(user: user.lightUser));
+                      Navigator.of(context)
+                          .pushHidingTabBar(ConversationScreen.buildRoute(user: user.lightUser));
                     },
                   ),
                 if (user.followable == true && user.following != true)

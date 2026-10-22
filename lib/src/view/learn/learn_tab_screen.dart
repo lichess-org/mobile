@@ -121,8 +121,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.chessBasics, style: Styles.callout),
-                  onTap: () =>
-                      Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).pushHidingTabBar(LearnScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.exercise),
@@ -130,8 +129,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.practice, style: Styles.callout),
-                  onTap: () =>
-                      Navigator.of(context, rootNavigator: true).push(PracticeScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).pushHidingTabBar(PracticeScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.where_to_vote),
@@ -139,10 +137,8 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-                  onTap: () => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(CoordinateTrainingScreen.buildRoute()),
+                  onTap: () =>
+                      Navigator.of(context).pushHidingTabBar(CoordinateTrainingScreen.buildRoute()),
                 ),
               ],
             ),
@@ -153,7 +149,7 @@ class const _Body() extends ConsumerWidget {
               ListSection(
                 header: Text(context.l10n.studyMenu),
                 onHeaderTap: () =>
-                    Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
+                    Navigator.of(context).pushHidingTabBar(StudyListScreen.buildRoute()),
                 hasLeading: true,
                 children: [
                   ...(switch (ref.watch(_hotStudiesProvider)) {
@@ -164,10 +160,9 @@ class const _Body() extends ConsumerWidget {
                             (study) => StudyListItem(
                               study: study,
                               titleMaxLines: 1,
-                              onTap: (context, study) => Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+                              onTap: (context, study) => Navigator.of(context).pushHidingTabBar(
+                                StudyScreen.buildRoute((id: study.id, initialChapter: null)),
+                              ),
                             ),
                           )
                           .toList(growable: false),
@@ -188,7 +183,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
                               )
                             : null,
@@ -201,7 +196,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyFavoriteStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
                               )
                             : null,

@@ -474,8 +474,8 @@ class const _LichessMessageBanner() extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true)
-              .push(
+          Navigator.of(context)
+              .pushHidingTabBar(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
                 ),
@@ -714,7 +714,7 @@ class const _OngoingGamesCarousel(
           list: list,
           onTap: (index) {
             final game = list[index];
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
@@ -751,10 +751,9 @@ class const _OfflineCorrespondenceCarousel(
           list: data,
           onTap: (index) {
             final el = data[index];
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)));
+            Navigator.of(context).pushHidingTabBar(
+              OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)),
+            );
           },
           builder: (el) => OngoingGameCarouselItem(
             game: OngoingGame(

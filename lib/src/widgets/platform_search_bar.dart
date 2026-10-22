@@ -1,5 +1,6 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -43,10 +44,11 @@ class const PlatformSearchBar({
   /// {@macro flutter.widgets.Focus.focusNode}
   final FocusNode? focusNode,
 
-  /// Whether the search bar is placed in the app bar, like in its `bottom`.
+  /// Whether the search bar is placed in a bar floating over the content: the app bar, like in its
+  /// `bottom`, or a [BottomSearchBar].
   ///
-  /// On iOS it is then a liquid glass search field, part of the glass navigation bar, which calls
-  /// [onClear] whenever its text becomes empty, after [onChanged].
+  /// On iOS it is then a liquid glass search field, part of the glass bar, which calls [onClear]
+  /// whenever its text becomes empty, after [onChanged].
   final bool inAppBar = false,
 }) extends StatefulWidget {
   @override

@@ -928,6 +928,12 @@ abstract class AppLocalizations {
   /// **'When enabled, the device will vibrate shortly when you move or capture a piece.'**
   String get mobileSettingsTouchFeedbackSubtitle;
 
+  /// No description provided for @mobileShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get mobileShare;
+
   /// No description provided for @mobileShareChallengeUrl.
   ///
   /// In en, this message translates to:

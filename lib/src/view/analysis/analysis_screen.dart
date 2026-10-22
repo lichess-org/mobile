@@ -6,7 +6,9 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -47,6 +49,15 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('AnalysisScreen');
 
+/// The fields of [AnalysisState] shown by [_AnalysisScreen] and its app bar.
+typedef _AnalysisScreenData = ({
+  ExportedGame? archivedGame,
+  Variant variant,
+  Side pov,
+  bool isComputerAnalysisAllowed,
+  bool hasChartClocks,
+});
+
 class const AnalysisScreen({required final AnalysisOptions options, super.key})
     extends StatelessWidget {
   static Route<dynamic> buildRoute(AnalysisOptions options) {
@@ -69,46 +80,136 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.options);
-    final asyncState = ref.watch(ctrlProvider);
-
-    switch (asyncState) {
-      case AsyncData(:final value):
-        final appBarTitle = value.archivedGame != null
-            ? ExportedGameTitle(
-                meta: value.archivedGame!.meta,
-                lastMoveAt: value.archivedGame!.data.lastMoveAt,
-                isImport: value.archivedGame!.source.isImport,
-                importDate: value.archivedGame!.data.importDate,
-              )
-            : VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
-
-        return WakelockWidget(
-          child: PlatformScaffold(
-            extendBodyBehindAppBar: false,
-            resizeToAvoidBottomInset: false,
-            appBar: PlatformAppBar(
-              compactButtons: true,
-              title: appBarTitle,
-              actions: [_AnalysisMenu(options: widget.options)],
-            ),
-            body: _TabbedBody(
-              options: widget.options,
-              // Move times can only be shown for games played with a clock.
-              showMoveTimes: value.chartClocks.isNotEmpty,
-            ),
+    // Only the fields shown by the screen and its app bar: the screen is not rebuilt on every move,
+    // which would also redraw the pinned bar buttons on iOS 26.
+    final asyncState = ref.watch(
+      ctrlProvider.select(
+        (s) => switch (s) {
+          AsyncData(value: final state) => AsyncData<_AnalysisScreenData>((
+            archivedGame: state.archivedGame,
+            variant: state.variant,
+            pov: state.pov,
+            isComputerAnalysisAllowed: state.isComputerAnalysisAllowed,
+            hasChartClocks: state.chartClocks.isNotEmpty,
+          )),
+          AsyncError(:final error, :final stackTrace) => AsyncError<_AnalysisScreenData>(
+            error,
+            stackTrace,
           ),
-        );
-      case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load analysis:', error, stackTrace);
-        return FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider));
-      case _:
-        return const PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          resizeToAvoidBottomInset: false,
-          appBar: PlatformAppBar(compactButtons: true, title: ExportedGameTitleLoading()),
-          body: Center(child: CircularProgressIndicator.adaptive()),
-        );
+          _ => const AsyncLoading<_AnalysisScreenData>(),
+        },
+      ),
+    );
+
+    final value = asyncState.value;
+    if (asyncState case AsyncError(:final error, :final stackTrace)) {
+      _logger.severe('Cannot load analysis:', error, stackTrace);
     }
+    final shareActions = value != null
+        ? _shareMenuActions(
+            archivedGame: value.archivedGame,
+            pov: value.pov,
+            isComputerAnalysisAllowed: value.isComputerAnalysisAllowed,
+          )
+        : const <ContextMenuAction>[];
+
+    // The same tree in every state, so that the scaffold and its app bar are updated, not replaced,
+    // once the analysis is loaded.
+    return WakelockWidget(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        resizeToAvoidBottomInset: false,
+        appBar: PlatformAppBar(
+          compactButtons: true,
+          title: switch (value?.archivedGame) {
+            final archivedGame? => ExportedGameTitle(
+              meta: archivedGame.meta,
+              lastMoveAt: archivedGame.data.lastMoveAt,
+              isImport: archivedGame.source.isImport,
+              importDate: archivedGame.data.importDate,
+            ),
+            null when value != null => VariantAppBarTitle(
+              variant: value.variant,
+              title: context.l10n.analysis,
+            ),
+            null => const ExportedGameTitleLoading(),
+          },
+          actions: [
+            if (value != null)
+              ContextMenuIconButton(
+                icon: const Icon(Icons.more_horiz),
+                semanticsLabel: context.l10n.menu,
+                actions: [
+                  if (value.archivedGame case final archivedGame?)
+                    ContextMenuAction(
+                      icon: archivedGame.data.bookmarked == true
+                          ? Icons.bookmark_remove_outlined
+                          : Icons.bookmark_add_outlined,
+                      label: archivedGame.data.bookmarked == true
+                          ? context.l10n.mobileRemoveBookmark
+                          : context.l10n.bookmarkThisGame,
+                      onPressed: () => ref.read(ctrlProvider.notifier).toggleBookmark(),
+                    ),
+                  if (shareActions.isNotEmpty)
+                    ContextMenuAction(
+                      icon: Theme.of(context).platform == TargetPlatform.iOS
+                          ? Icons.ios_share_outlined
+                          : Icons.share_outlined,
+                      label: context.l10n.mobileShare,
+                      onPressed: null,
+                      submenu: shareActions,
+                    ),
+                ],
+              ),
+          ],
+        ),
+        body: switch (asyncState) {
+          AsyncData(:final value) => _TabbedBody(
+            options: widget.options,
+            // Move times can only be shown for games played with a clock.
+            showMoveTimes: value.hasChartClocks,
+          ),
+          AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider)),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
+        },
+      ),
+    );
+  }
+
+  List<ContextMenuAction> _shareMenuActions({
+    required ExportedGame? archivedGame,
+    required Side pov,
+    required bool isComputerAnalysisAllowed,
+  }) {
+    return [
+      // Share the original game from the server: URL, GIF and PGN downloads.
+      if (archivedGame != null)
+        ...makeFinishedGameShareMenuActions(
+          context,
+          ref,
+          gameId: archivedGame.id,
+          orientation: pov,
+          finished: archivedGame.finished,
+        ),
+      // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
+      if (isComputerAnalysisAllowed)
+        ContextMenuAction(
+          label: context.l10n.mobileSharePositionAsFEN,
+          onPressed: () {
+            final currentState = ref.read(analysisControllerProvider(widget.options)).requireValue;
+            launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
+          },
+        ),
+      // Shares the current PGN, including local analysis and edited tags. Can be
+      // used to quickly analyze a position, so the engine must be allowed to access.
+      if (isComputerAnalysisAllowed)
+        ContextMenuAction(
+          label: context.l10n.mobileShareLocalAnalysisPgn,
+          onPressed: () {
+            Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: widget.options));
+          },
+        ),
+    ];
   }
 }
 
@@ -260,6 +361,7 @@ class const _Body({
               )
             : null,
         bottomBar: _BottomBar(options: options, tabController: controller),
+        bottomBarOverContent: true,
         pockets: analysisState.currentPosition.pockets,
         children: [
           ExplorerView(
@@ -352,6 +454,7 @@ class const _BottomBar({
     final analysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -373,25 +476,31 @@ class const _BottomBar({
             onToggle: () => ref.read(ctrlProvider.notifier).toggleEngine(),
             onGoDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
           ),
-        RepeatButton(
-          onLongPress: analysisState.canGoBack ? () => _moveBackward(ref, fastSeek: true) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: analysisState.canGoNext ? () => _moveForward(ref, fastSeek: true) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            label: context.l10n.next,
-            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: analysisState.canGoBack
+                  ? () => _moveBackward(ref, fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: analysisState.canGoNext ? () => _moveForward(ref, fastSeek: true) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                label: context.l10n.next,
+                onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -444,7 +553,7 @@ class const _BottomBar({
                     ref
                         .read(analysisControllerProvider(options).notifier)
                         .clearSavedStandaloneAnalysis();
-                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                    Navigator.of(context).pushReplacementHidingTabBar(
                       buildScreenRoute<dynamic>(
                         screen: AnalysisScreen(
                           options: (options as Standalone).copyWith(variant: variant),
@@ -546,80 +655,6 @@ class const _BottomBar({
               ),
             ),
         ],
-      ],
-    );
-  }
-}
-
-/// App bar menu holding the game actions: bookmark, share and export.
-class const _AnalysisMenu({required final AnalysisOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(analysisControllerProvider(options)).value;
-    if (analysisState == null) return const SizedBox.shrink();
-
-    final archivedGame = analysisState.archivedGame;
-
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        if (archivedGame != null)
-          ContextMenuAction(
-            icon: archivedGame.data.bookmarked == true
-                ? Icons.bookmark_remove_outlined
-                : Icons.bookmark_add_outlined,
-            label: archivedGame.data.bookmarked == true
-                ? context.l10n.mobileRemoveBookmark
-                : context.l10n.bookmarkThisGame,
-            onPressed: () =>
-                ref.read(analysisControllerProvider(options).notifier).toggleBookmark(),
-          ),
-        if (analysisState.gameId != null || analysisState.isComputerAnalysisAllowed)
-          ContextMenuAction(
-            icon: Theme.of(context).platform == TargetPlatform.iOS
-                ? Icons.ios_share_outlined
-                : Icons.share_outlined,
-            label: context.l10n.studyShareAndExport,
-            onPressed: () => _showShareMenu(context, ref),
-          ),
-      ],
-    );
-  }
-
-  Future<void> _showShareMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(options)).requireValue;
-    final archivedGame = analysisState.archivedGame;
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        // Share the original game from the server: URL, GIF and PGN downloads.
-        if (archivedGame != null)
-          ...makeFinishedGameShareBottomSheetActions(
-            context,
-            ref,
-            gameId: archivedGame.id,
-            orientation: analysisState.pov,
-            finished: archivedGame.finished,
-          ),
-        // share position as FEN can be used to quickly analyze a position, so engine must be allowed to access
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-            onPressed: () {
-              final currentState = ref.read(analysisControllerProvider(options)).requireValue;
-              launchShareDialog(context, ShareParams(text: currentState.currentPosition.fen));
-            },
-          ),
-        // Shares the current PGN, including local analysis and edited tags. Can be
-        // used to quickly analyze a position, so the engine must be allowed to access.
-        if (analysisState.isComputerAnalysisAllowed)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileShareLocalAnalysisPgn),
-            onPressed: () {
-              Navigator.of(context).push(AnalysisShareScreen.buildRoute(options: options));
-            },
-          ),
       ],
     );
   }

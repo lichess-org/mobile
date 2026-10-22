@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -130,7 +131,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
                               ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
+                                  Navigator.of(context).pushHidingTabBar(
                                     AnalysisScreen.buildRoute(
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,

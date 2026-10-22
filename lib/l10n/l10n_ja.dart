@@ -387,6 +387,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '有効にすると、着手・捕獲したときに端末が少し震えます。';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'チャレンジ URL をシェア';
 
   @override

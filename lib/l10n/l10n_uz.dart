@@ -387,6 +387,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Yoqilgan boʻlsa, yurish qilganingizda yoki donani olganingizda qurilmangiz vibratsiya beradi.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Chorlov havolasini ulashish';
 
   @override

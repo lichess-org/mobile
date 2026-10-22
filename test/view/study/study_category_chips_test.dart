@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassButton;
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
@@ -25,7 +25,7 @@ void main() {
     await tester.pumpWidget(app);
 
     final isIOS = debugDefaultTargetPlatformOverride == TargetPlatform.iOS;
-    expect(find.byType(GlassButton), isIOS ? findsNWidgets(6) : findsNothing);
+    expect(find.byType(PlatformChoiceChip), isIOS ? findsNWidgets(6) : findsNothing);
     expect(find.byType(ChoiceChip), isIOS ? findsNothing : findsNWidgets(6));
 
     await tester.tap(find.text('My studies'));

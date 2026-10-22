@@ -80,10 +80,7 @@ class _RichLinkTextState() extends State<RichLinkText> {
             text: element.text,
             style:
                 widget.linkStyle ??
-                defaultStyle.copyWith(
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
-                ),
+                defaultStyle.copyWith(color: Colors.blueAccent, decoration: TextDecoration.none),
             recognizer: widget.onOpen != null ? _recognizers[recognizerIndex++] : null,
           ),
         );

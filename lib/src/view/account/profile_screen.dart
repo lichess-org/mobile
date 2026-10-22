@@ -68,20 +68,13 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
             semanticsLabel: context.l10n.editProfile,
             onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
           ),
-          account.when(
-            data: (user) => user == null
-                ? const SizedBox.shrink()
-                : SemanticIconButton(
-                    icon: const PlatformShareIcon(),
-                    semanticsLabel: 'Share profile',
-                    onPressed: () => launchShareDialog(
-                      context,
-                      ShareParams(uri: lichessUri('/@/${user.username}')),
-                    ),
-                  ),
-            loading: () => const SizedBox.shrink(),
-            error: (error, _) => const SizedBox.shrink(),
-          ),
+          if (account.value case final user?)
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: 'Share profile',
+              onPressed: () =>
+                  launchShareDialog(context, ShareParams(uri: lichessUri('/@/${user.username}'))),
+            ),
         ],
       ),
       body: account.when(

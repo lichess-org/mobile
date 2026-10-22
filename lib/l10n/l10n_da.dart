@@ -387,6 +387,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Når aktiveret, vil enheden vibrere kortvarigt, når du flytter eller erobrer en brik.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
