@@ -59,7 +59,7 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 
 /// Creates the Uri of the lichess page of the game [id], seen from [orientation] if given.
 Uri lichessGameUri(GameId id, {Side? orientation}) =>
-    lichessUri(orientation != null ? '/$id/${orientation.name}' : '/$id');
+    lichessUri(orientation != null ? '/game/$id/${orientation.name}' : '/game/$id');
 
 /// The host of the lichess main server, without the port part.
 ///

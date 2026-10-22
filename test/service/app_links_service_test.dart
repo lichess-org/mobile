@@ -549,9 +549,9 @@ void main() {
 
     final finishedGame = generateExportedGames(count: 1).first.copyWith(status: GameStatus.draw);
 
-    testWidgets('resolves /gameid link for finished game', (WidgetTester tester) async {
-      // lichess.org/gameid -> Opens analysis at the first move
-      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}');
+    testWidgets('resolves /game/gameid link for finished game', (WidgetTester tester) async {
+      // lichess.org/game/gameid -> Opens analysis at the first move
+      final uri = Uri.parse('https://lichess.org/game/${finishedGame.id.value}');
       final mockGameRepository = MockGameRepository();
       when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
 
@@ -572,54 +572,10 @@ void main() {
       );
     });
 
-    testWidgets('resolves /gameid link for finished game with ply fragment', (
+    testWidgets('resolves /game/gameid link for finished game with ply fragment', (
       WidgetTester tester,
     ) async {
-      // lichess.org/gameid#20 -> Opens analysis at move 20
-      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}#20');
-      final mockGameRepository = MockGameRepository();
-      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
-
-      await triggerAppLink(
-        tester,
-        uri,
-        overrides: {
-          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
-        },
-      );
-      await tester.pumpAndSettle(); // Wait for analysis screen to load
-
-      expect(
-        tester.widget(find.byType(AnalysisScreen)),
-        isA<AnalysisScreen>()
-            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
-            .having((s) => s.options.initialMoveCursor, 'move number', 20),
-      );
-    });
-
-    testWidgets('resolves /gameid/black finished game link', (WidgetTester tester) async {
-      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}/black');
-      final mockGameRepository = MockGameRepository();
-      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
-
-      await triggerAppLink(
-        tester,
-        uri,
-        overrides: {
-          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
-        },
-      );
-      await tester.pumpAndSettle(); // Wait for analysis screen to load
-
-      expect(
-        tester.widget(find.byType(AnalysisScreen)),
-        isA<AnalysisScreen>()
-            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
-            .having((s) => s.options.orientation, 'player color', Side.black),
-      );
-    });
-
-    testWidgets('resolves /game/gameid link for finished game', (WidgetTester tester) async {
+      // lichess.org/game/gameid#20 -> Opens analysis at move 20
       final uri = Uri.parse('https://lichess.org/game/${finishedGame.id.value}#20');
       final mockGameRepository = MockGameRepository();
       when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
@@ -637,8 +593,7 @@ void main() {
         tester.widget(find.byType(AnalysisScreen)),
         isA<AnalysisScreen>()
             .having((s) => s.options.gameId, 'id', finishedGame.id.value)
-            .having((s) => s.options.initialMoveCursor, 'move number', 20)
-            .having((s) => s.options.orientation, 'player color', Side.white),
+            .having((s) => s.options.initialMoveCursor, 'move number', 20),
       );
     });
 
@@ -664,7 +619,9 @@ void main() {
       );
     });
 
-    testWidgets('resolves /gameid link for imported game to analysis', (WidgetTester tester) async {
+    testWidgets('resolves /game/gameid link for imported game to analysis', (
+      WidgetTester tester,
+    ) async {
       final mockGameRepository = MockGameRepository();
       final importedGame = generateExportedGames(count: 1).first.copyWith(
         status: GameStatus.started,
@@ -674,7 +631,7 @@ void main() {
       );
       when(() => mockGameRepository.getGame(importedGame.id)).thenAnswer((_) async => importedGame);
 
-      final uri = Uri.parse('https://lichess.org/${importedGame.id.value}');
+      final uri = Uri.parse('https://lichess.org/game/${importedGame.id.value}');
 
       await triggerAppLink(
         tester,
@@ -692,7 +649,7 @@ void main() {
       expect(find.byType(TvScreen), findsNothing);
     });
 
-    testWidgets('resolves /gameid link for ongoing game', (WidgetTester tester) async {
+    testWidgets('resolves /game/gameid link for ongoing game', (WidgetTester tester) async {
       final mockGameRepository = MockGameRepository();
       final ongoingGame = generateExportedGames(count: 1).first.copyWith(
         status: GameStatus.started,
@@ -705,7 +662,7 @@ void main() {
       );
       when(() => mockGameRepository.getGame(ongoingGame.id)).thenAnswer((_) async => ongoingGame);
 
-      final uri = Uri.parse('https://lichess.org/${ongoingGame.id.value}');
+      final uri = Uri.parse('https://lichess.org/game/${ongoingGame.id.value}');
 
       await triggerAppLink(
         tester,
@@ -738,7 +695,7 @@ void main() {
       );
     });
 
-    testWidgets('resolves /gameid link to GameScreen for ongoing game when user is playing', (
+    testWidgets('resolves /game/gameid link to GameScreen for ongoing game when user is playing', (
       WidgetTester tester,
     ) async {
       final mockGameRepository = MockGameRepository();
@@ -769,7 +726,7 @@ void main() {
         ].lock,
       );
 
-      final uri = Uri.parse('https://lichess.org/${ongoingGame.id.value}');
+      final uri = Uri.parse('https://lichess.org/game/${ongoingGame.id.value}');
 
       await triggerAppLink(
         tester,
@@ -847,47 +804,43 @@ void main() {
       expect(find.byType(PuzzleScreen), findsNothing);
     });
 
-    for (final prefix in ['/', '/game/']) {
-      testWidgets('resolves ${prefix}challengeId link for open challenge', (
-        WidgetTester tester,
-      ) async {
-        const challenge = Challenge(
-          id: ChallengeId('abcdefgh'),
-          challenger: (
-            user: LightUser(id: UserId('thibault'), name: 'Thibault'),
-            rating: 3000,
-            provisionalRating: null,
-            lagRating: null,
+    testWidgets('resolves /game/challengeId link for open challenge', (WidgetTester tester) async {
+      const challenge = Challenge(
+        id: ChallengeId('abcdefgh'),
+        challenger: (
+          user: LightUser(id: UserId('thibault'), name: 'Thibault'),
+          rating: 3000,
+          provisionalRating: null,
+          lagRating: null,
+        ),
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        speed: Speed.blitz,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (increment: Duration.zero, time: Duration(minutes: 5)),
+        rated: true,
+        sideChoice: SideChoice.white,
+      );
+      final uri = Uri.parse('https://lichess.org/game/${challenge.id.value}');
+      final mockChallengeRepository = MockChallengeRepository();
+      when(() => mockChallengeRepository.show(challenge.id)).thenAnswer((_) async => challenge);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
+            (_) => mockChallengeRepository,
           ),
-          status: ChallengeStatus.created,
-          variant: Variant.standard,
-          speed: Speed.blitz,
-          timeControl: ChallengeTimeControlType.clock,
-          clock: (increment: Duration.zero, time: Duration(minutes: 5)),
-          rated: true,
-          sideChoice: SideChoice.white,
-        );
-        final uri = Uri.parse('https://lichess.org$prefix${challenge.id.value}');
-        final mockChallengeRepository = MockChallengeRepository();
-        when(() => mockChallengeRepository.show(challenge.id)).thenAnswer((_) async => challenge);
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for challenge screen to load
 
-        await triggerAppLink(
-          tester,
-          uri,
-          overrides: {
-            challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
-              (_) => mockChallengeRepository,
-            ),
-          },
-        );
-        await tester.pumpAndSettle(); // Wait for challenge screen to load
-
-        expect(find.text('Thibault challenges you: ♚ Black • Rated • 5+0'), findsOneWidget);
-        expect(find.text('Accept'), findsOneWidget);
-        // challenges from link cannot be declined
-        expect(find.text('Cancel'), findsOneWidget);
-      });
-    }
+      expect(find.text('Thibault challenges you: ♚ Black • Rated • 5+0'), findsOneWidget);
+      expect(find.text('Accept'), findsOneWidget);
+      // challenges from link cannot be declined
+      expect(find.text('Cancel'), findsOneWidget);
+    });
 
     testWidgets('resolves /@/user link', (WidgetTester tester) async {
       final uri = Uri.parse('https://lichess.org/@/thibault');

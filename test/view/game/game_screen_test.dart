@@ -2476,7 +2476,7 @@ void main() {
 
       // AnalysisScreen uses this to get the game data
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$gameFullId/forecasts') {
+        if (request.url.path == '/game/$gameFullId/forecasts') {
           return mockResponse(
             jsonEncode(
               SocketEvent.fromJson(jsonDecode(fullEventString) as Map<String, dynamic>).data,
