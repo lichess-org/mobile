@@ -282,7 +282,7 @@ void main() {
           find.text('Or invite a Lichess user'),
           authUser == null ? findsNothing : findsOneWidget,
         );
-      });
+      }, variant: kPlatformVariant);
     }
 
     testWidgets('anchors the open challenge share sheet to the share button', (
@@ -343,7 +343,7 @@ void main() {
       await tester.pump();
 
       expect(shareOrigin, tester.getRect(shareButton));
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Reconnecting title', () {
@@ -458,7 +458,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('challenge cancelled shows challenge time control and mode', (
       WidgetTester tester,
@@ -506,7 +506,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('challenge declined shows challenge time control and mode', (
       WidgetTester tester,
@@ -555,7 +555,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('open challenge shows challenge time control and mode', (
       WidgetTester tester,
@@ -598,7 +598,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('finished game shows time control and mode', (WidgetTester tester) async {
       await loadFinishedTestGame(tester);
@@ -679,7 +679,7 @@ void main() {
       await tester.pump();
 
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
@@ -1050,7 +1050,7 @@ void main() {
         // premove should have been played
         expect(boardHasPremove(tester, const DropMove(to: Square.a4, role: Role.pawn)), isFalse);
         expect(boardHasPiece(tester, Square.a4, Piece.whitePawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('premove is cleared, not played, after a takeback', (WidgetTester tester) async {
         const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -1992,7 +1992,7 @@ void main() {
         expect(validMoves.contains(Square.c1), isFalse);
         expect(validMoves.contains(Square.d1), isTrue);
         expect(validMoves.contains(Square.a1), isTrue);
-      });
+      }, variant: kPlatformVariant);
     }
   });
 
@@ -2641,7 +2641,7 @@ void main() {
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
 
       await dropExpectation;
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('pocket count display updates after a player drop move', (tester) async {
       // Regression test: the pocket counts are rendered by the GameLayout from
@@ -2670,7 +2670,7 @@ void main() {
       // The pawn is on the board and the pocket count badge is gone (count 0).
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
       expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsNothing);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets("Cannot interact with the opponent's pockets", (tester) async {
       // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
@@ -2690,7 +2690,7 @@ void main() {
 
       // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
       expect(boardHasPiece(tester, Square.d6, Piece.blackPawn), isFalse);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('correctly handles opponent drop move received from server', (tester) async {
       const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -2715,7 +2715,7 @@ void main() {
 
       // White pawn should appear on c4
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Widget rebuilds', () {
