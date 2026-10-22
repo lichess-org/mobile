@@ -31,14 +31,16 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart' hide Step;
 
-const _fastLocalReviewSearchTime = Duration(milliseconds: 500);
-const _balancedLocalReviewSearchTime = Duration(seconds: 1);
+const _ultraBulletLocalReviewSearchTime = Duration(milliseconds: 100);
+const _bulletLocalReviewSearchTime = Duration(milliseconds: 250);
+const _blitzLocalReviewSearchTime = Duration(milliseconds: 500);
+const _rapidLocalReviewSearchTime = Duration(seconds: 1);
 const _thoroughLocalReviewSearchTime = Duration(seconds: 3);
 const _manualLocalReviewSearchTimeStep = Duration(milliseconds: 250);
 const _minimumManualLocalReviewSearchTime = Duration(milliseconds: 250);
 const _maximumManualLocalReviewSearchTime = Duration(seconds: 10);
 
-enum _LocalReviewSpeed { fast, balanced, thorough, manual }
+enum _LocalReviewSpeed { ultraBullet, bullet, blitz, rapid, thorough, manual }
 
 final _localGameAnalysisSessionProvider =
     NotifierProvider.family<_LocalGameAnalysisSession, IList<LocalEval>?, String>(
@@ -56,7 +58,9 @@ class const LocalGameAnalysis({
   ConsumerState<LocalGameAnalysis> createState() => _LocalGameAnalysisState();
 }
 
-class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
+class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _progressAnimationController;
   _LocalReviewStatus _status = .ready;
   int _positionsAnalyzed = 0;
   int _totalPositions = 0;
@@ -77,6 +81,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
   @override
   void initState() {
     super.initState();
+    _progressAnimationController = AnimationController(vsync: this);
     final cached = ref.read(_localGameAnalysisSessionProvider(_sessionKey));
     if (cached != null && cached.length == widget.root.mainline.length + 1) {
       _evaluations = cached;
@@ -87,6 +92,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
 
   @override
   void dispose() {
+    _progressAnimationController.dispose();
     _cancelSignal?.complete();
     if (_activeWork != null && _evaluator?.currentWork == _activeWork) {
       _evaluator?.stop();
@@ -150,11 +156,18 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
   }
 
   Widget _buildRunning(BuildContext context) {
-    final progress = _totalPositions == 0 ? 0.0 : _positionsAnalyzed / _totalPositions;
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        LinearProgressIndicator(value: progress),
+        AnimatedBuilder(
+          animation: _progressAnimationController,
+          builder: (context, child) {
+            final progress = _totalPositions == 0
+                ? 0.0
+                : (_positionsAnalyzed + _progressAnimationController.value) / _totalPositions;
+            return LinearProgressIndicator(value: progress);
+          },
+        ),
         const SizedBox(height: 12.0),
         Text('Analyzing position ${_positionsAnalyzed + 1} of $_totalPositions…'),
         const SizedBox(height: 12.0),
@@ -289,24 +302,52 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
               decoration: const InputDecoration(labelText: 'Analysis speed'),
               items: [
                 for (final speed in _LocalReviewSpeed.values)
-                  DropdownMenuItem(value: speed, child: Text(speed.label)),
+                  DropdownMenuItem(
+                    value: speed,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (speed == .ultraBullet) ...[
+                          const Icon(Icons.science_outlined, size: 18.0),
+                          const SizedBox(width: 6.0),
+                        ],
+                        Text(speed.label),
+                      ],
+                    ),
+                  ),
               ],
               onChanged: (speed) {
                 if (speed == null) return;
                 final settings = ref.read(engineEvaluationPreferencesProvider.notifier);
                 switch (speed) {
-                  case .fast:
+                  case .ultraBullet:
                     unawaited(
                       settings.setLocalGameAnalysisSettings(
-                        searchTime: _fastLocalReviewSearchTime,
+                        searchTime: _ultraBulletLocalReviewSearchTime,
                         isManual: false,
                         threads: threads,
                       ),
                     );
-                  case .balanced:
+                  case .bullet:
                     unawaited(
                       settings.setLocalGameAnalysisSettings(
-                        searchTime: _balancedLocalReviewSearchTime,
+                        searchTime: _bulletLocalReviewSearchTime,
+                        isManual: false,
+                        threads: threads,
+                      ),
+                    );
+                  case .blitz:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: _blitzLocalReviewSearchTime,
+                        isManual: false,
+                        threads: threads,
+                      ),
+                    );
+                  case .rapid:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: _rapidLocalReviewSearchTime,
                         isManual: false,
                         threads: threads,
                       ),
@@ -492,6 +533,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     ];
     final totalPositions = branches.length + 1;
     final path = StringBuffer();
+    _progressAnimationController.duration = searchTime;
 
     _evaluator = evaluator;
     _isReviewing = true;
@@ -507,6 +549,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     try {
       for (var ply = 0; ply < totalPositions; ply++) {
         _ensureActive(runId);
+        _progressAnimationController.forward(from: 0.0);
         final work = EvalWork(
           id: reviewContext.id,
           variant: analysis.variant,
@@ -690,8 +733,10 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
 _LocalReviewSpeed _localReviewSpeed(EngineEvaluationPrefState preferences) {
   if (preferences.isLocalGameAnalysisManual) return .manual;
   return switch (preferences.localGameAnalysisSearchTime) {
-    _fastLocalReviewSearchTime => .fast,
-    _balancedLocalReviewSearchTime => .balanced,
+    _ultraBulletLocalReviewSearchTime => .ultraBullet,
+    _bulletLocalReviewSearchTime => .bullet,
+    _blitzLocalReviewSearchTime => .blitz,
+    _rapidLocalReviewSearchTime => .rapid,
     _thoroughLocalReviewSearchTime => .thorough,
     _ => .manual,
   };
@@ -717,8 +762,12 @@ String _formatSearchTime(Duration value) => value.inMilliseconds % 1000 == 0
 
 extension on _LocalReviewSpeed {
   String get label => switch (this) {
-    .fast => 'Fast (${_formatSearchTime(_fastLocalReviewSearchTime)} per position)',
-    .balanced => 'Balanced (${_formatSearchTime(_balancedLocalReviewSearchTime)} per position)',
+    .ultraBullet =>
+      'Ultra bullet (experimental, ${_formatSearchTime(_ultraBulletLocalReviewSearchTime)} per '
+          'position)',
+    .bullet => 'Bullet (${_formatSearchTime(_bulletLocalReviewSearchTime)} per position)',
+    .blitz => 'Blitz (${_formatSearchTime(_blitzLocalReviewSearchTime)} per position)',
+    .rapid => 'Rapid (${_formatSearchTime(_rapidLocalReviewSearchTime)} per position)',
     .thorough => 'Thorough (${_formatSearchTime(_thoroughLocalReviewSearchTime)} per position)',
     .manual => 'Manual',
   };
