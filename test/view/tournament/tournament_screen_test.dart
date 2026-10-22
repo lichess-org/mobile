@@ -803,12 +803,13 @@ void main() {
         // Push the SAME tournament again on top of the game. The provider is kept
         // alive by the first screen, so `build` doesn't re-run: the socket must be
         // reopened by the newly focused screen.
-        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        final tournamentRoute = TournamentScreen.buildRoute(tournamentId);
+        navigator.push(tournamentRoute);
         await tester.pump(); // start the route transition
-        // Complete the push transition so the new screen becomes fully visible
-        // and its `FocusDetector` reports a focus gain -> onFocusGained.
-        await tester.pump(const Duration(milliseconds: 400));
-        await tester.pump(); // onFocusGained -> invalidateSelf
+        await tester.pump((tournamentRoute as PageRoute).transitionDuration);
+        // The push completes on the first tick past its duration: the new screen is fully visible
+        // and its `FocusDetector` reports a focus gain -> onFocusGained -> invalidateSelf.
+        await tester.pump(const Duration(milliseconds: 1));
         await tester.pump(); // rebuild: getTournament resolves -> socket reopens
         await tester.pump(kFakeWebSocketConnectionLag);
 
