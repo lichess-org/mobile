@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_s
 import 'package:lichess_mobile/src/view/offline_computer/opponent_settings.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -46,6 +47,10 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 class MockOfflineComputerGameStorage() extends Mock implements OfflineComputerGameStorage;
+
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
 
 void main() {
   TestLichessBinding.ensureInitialized();
@@ -124,6 +129,227 @@ void main() {
       expect(find.textContaining('Stockfish'), findsOneWidget);
       expect(find.textContaining('4'), findsWidgets);
     });
+
+    for (final profile in kCompactPortraitProfiles) {
+      for (final textScale in [1.0, 1.3, 2.0]) {
+        testWidgets('compact post-startup practice feedback ${profile.name} textScale=$textScale', (
+          tester,
+        ) async {
+          mockBoardPlatformChannels();
+          await prepareLayoutGolden(tester, loadFonts: true);
+          final suggestion = Move.parse('d2d4')! as NormalMove;
+          final commentState = _stateWithPracticeComment(
+            PracticeComment(
+              verdict: MoveVerdict.notBest,
+              evalAfter: '+0.3',
+              moveSuggestion: SanMove('d4', suggestion),
+            ),
+          );
+          final evaluatingState = commentState.copyWith(
+            game: commentState.game.copyWith(
+              steps: commentState.game.steps.replace(
+                1,
+                commentState.game.steps[1].copyWith(computerAnalysis: null),
+              ),
+            ),
+            isEvaluatingMove: true,
+          );
+          final controller = await _pumpWithState(
+            tester,
+            evaluatingState,
+            surfaceSize: profile.surface,
+            devicePixelRatio: 3.0,
+            physicalViewPadding: profile.physicalPadding,
+            failOnOverflow: true,
+          );
+          Navigator.of(tester.element(find.text('Play'))).pop();
+          await tester.pumpAndSettle();
+          tester.platformDispatcher.textScaleFactorTestValue = textScale;
+          addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+          await tester.pump();
+          final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+          final layoutState = tester.state(find.byType(GameLayout));
+
+          Future<void> checkLayout({
+            required bool commentVisible,
+            Orientation orientation = Orientation.portrait,
+          }) async {
+            expect(tester.state(find.byType(GameLayout)), same(layoutState));
+            expect(
+              container.read(offlineComputerGameControllerProvider.notifier),
+              same(controller),
+            );
+            expect(MediaQuery.orientationOf(tester.element(find.byType(GameLayout))), orientation);
+            expect(
+              MediaQuery.textScalerOf(tester.element(find.byType(OfflineComputerGameScreen)))
+                  .scale(16.0),
+              16.0 * textScale,
+            );
+            if (orientation == Orientation.portrait) {
+              expectCompactBoardLayout(
+                tester,
+                heightCapped: profile.heightCapped,
+                heightReserve: 196.0,
+                allowTableExpansion: textScale > 1.0,
+              );
+            } else {
+              final layout = tester.getRect(find.byType(GameLayout));
+              final board = tester.getRect(find.byType(Chessboard));
+              expect(board.width, board.height);
+              expect(board.width, greaterThan(0));
+              expect(board.left, greaterThanOrEqualTo(layout.left));
+              expect(board.right, lessThanOrEqualTo(layout.right));
+              expect(board.top, greaterThanOrEqualTo(layout.top));
+              expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+            }
+            if (orientation == Orientation.landscape) {
+              await tester.ensureVisible(find.byType(BottomBarButton).first);
+              await tester.pump();
+            }
+            expectGameControlsVisible(tester, find.byType(BottomBarButton));
+            if (commentVisible) {
+              final cardFinder = find.byWidget(_findCommentCardContainer(tester, Icons.info));
+              if (orientation == Orientation.landscape) {
+                await tester.ensureVisible(cardFinder);
+                await tester.pump();
+              }
+              final card = tester.getRect(cardFinder);
+              for (final control in [
+                find.text("Good move, but there's better"),
+                find.text('+0.3'),
+                find.textContaining('Best was'),
+              ]) {
+                expectGameControlsVisible(tester, control);
+                final rect = tester.getRect(control);
+                expect(rect.left, greaterThanOrEqualTo(card.left));
+                expect(rect.right, lessThanOrEqualTo(card.right));
+                expect(rect.top, greaterThanOrEqualTo(card.top));
+                expect(rect.bottom, lessThanOrEqualTo(card.bottom));
+              }
+              final verdict = tester.getRect(find.text("Good move, but there's better"));
+              final suggestion = tester.getRect(find.textContaining('Best was'));
+              final evaluation = tester.getRect(find.text('+0.3'));
+              expect(verdict.overlaps(suggestion), isFalse);
+              expect(verdict.overlaps(evaluation), isFalse);
+              expect(suggestion.overlaps(evaluation), isFalse);
+              expect(find.byTooltip("Good move, but there's better"), findsOneWidget);
+            } else {
+              expect(find.text("Good move, but there's better"), findsNothing);
+              expect(find.textContaining('Best was'), findsNothing);
+            }
+            expect(tester.takeException(), isNull);
+          }
+
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-initial-${profile.name}-$textScale',
+          );
+          await checkLayout(commentVisible: false);
+          controller.testState = commentState;
+          await tester.pumpAndSettle();
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-feedback-${profile.name}-$textScale',
+          );
+          await checkLayout(commentVisible: true);
+          await tester.longPress(find.text("Good move, but there's better"));
+          await tester.pumpAndSettle();
+          expect(find.text("Good move, but there's better", findRichText: true), findsNWidgets(2));
+          Tooltip.dismissAllToolTips();
+          await tester.pumpAndSettle();
+          final suggestedMove = find.textContaining('Best was');
+          expect(suggestedMove.hitTestable(), findsOneWidget);
+          await tester.tap(suggestedMove);
+          await tester.pump();
+          expect(controller.testState.showingSuggestedMove, suggestion);
+          await checkLayout(commentVisible: true);
+          await tester.tap(suggestedMove);
+          await tester.pump();
+          expect(controller.testState.showingSuggestedMove, isNull);
+
+          for (final evaluating in [false, true]) {
+            controller.testState = evaluating ? evaluatingState : commentState;
+            await tester.pumpAndSettle();
+            await checkLayout(commentVisible: true);
+            final steps = controller.testState.game.steps;
+            for (final orientation in [Orientation.landscape, Orientation.portrait]) {
+              await resizeTestSurface(
+                tester,
+                orientation == Orientation.portrait
+                    ? profile.surface
+                    : Size(profile.surface.height, profile.surface.width),
+                physicalViewPadding: orientation == Orientation.portrait
+                    ? profile.physicalPadding
+                    : EdgeInsets.only(
+                        left: profile.physicalPadding.top,
+                        right: profile.physicalPadding.top,
+                        bottom: 63.0,
+                      ),
+              );
+              await tester.pumpAndSettle();
+              await checkLayout(commentVisible: true, orientation: orientation);
+              expect(controller.testState.game.steps, same(steps));
+              expect(controller.testState.stepCursor, commentState.stepCursor);
+              expect(controller.testState.isEvaluatingMove, evaluating);
+              expect(
+                controller.testState.practiceComment,
+                evaluating ? isNull : commentState.practiceComment,
+              );
+              await expectLayoutGolden(
+                find.byType(OfflineComputerGameScreen),
+                '../../../build/compact-layout/practice-${evaluating ? 'evaluating' : 'feedback'}-${orientation.name}-${profile.name}-$textScale',
+              );
+              expect(suggestedMove.hitTestable(), findsOneWidget);
+              await tester.tap(suggestedMove);
+              await tester.pump();
+              expect(controller.testState.showingSuggestedMove, suggestion);
+              await tester.pump(const Duration(milliseconds: 100));
+              await tester.pumpAndSettle();
+              expect(suggestedMove.hitTestable(), findsOneWidget);
+              await checkLayout(commentVisible: true, orientation: orientation);
+              await tester.tap(suggestedMove);
+              await tester.pump();
+              expect(controller.testState.showingSuggestedMove, isNull);
+            }
+          }
+          controller.testState = evaluatingState.copyWith(isEvaluatingMove: false);
+          await tester.pumpAndSettle();
+          await checkLayout(commentVisible: false);
+          await expectLayoutGolden(
+            find.byType(OfflineComputerGameScreen),
+            '../../../build/compact-layout/practice-cleared-${profile.name}-$textScale',
+          );
+        }, variant: kPlatformVariant);
+      }
+    }
+
+    testWidgets('compact portrait board fills width without overflowing practice controls', (
+      tester,
+    ) async {
+      await _pumpWithState(
+        tester,
+        _stateWithPracticeComment(const PracticeComment(verdict: MoveVerdict.blunder)),
+        surfaceSize: _iPhone16ZoomedSurface,
+        devicePixelRatio: _iPhone16ZoomedDevicePixelRatio,
+        physicalViewPadding: _iPhone16ZoomedPhysicalViewPadding,
+        failOnOverflow: true,
+      );
+
+      // Empty storage opens the new-game sheet over the injected practice state.
+      expect(find.text('Play'), findsOneWidget);
+      Navigator.of(tester.element(find.text('Play'))).pop();
+      await tester.pumpAndSettle();
+      expect(find.text('Play'), findsNothing);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, 0.0);
+      expect(boardRect.right, _iPhone16ZoomedSurface.width);
+      expect(boardRect.size, const Size.square(320.0));
+      expect(find.text('Blunder'), findsOneWidget);
+      expect(find.byType(BottomBar), findsOneWidget);
+      expectGameControlsVisible(tester, find.text('Blunder'));
+      expectGameControlsVisible(tester, find.byType(BottomBarButton));
+    }, variant: kPlatformVariant);
 
     testWidgets('Can play moves and move list updates', (tester) async {
       await initOfflineComputerGame(tester);
@@ -2154,6 +2380,9 @@ class _FakePracticeController(final OfflineComputerGameState _initialState)
     extends OfflineComputerGameController {
   @override
   OfflineComputerGameState build() => _initialState;
+
+  OfflineComputerGameState get testState => state;
+  set testState(OfflineComputerGameState value) => state = value;
 }
 
 /// A fake preferences notifier that returns a preset [OfflineComputerGamePrefs].
@@ -2164,13 +2393,19 @@ class _FakeGamePreferences(final OfflineComputerGamePrefs _prefs)
 }
 
 /// Pumps [OfflineComputerGameScreen] with a specific [state] and optional [prefs] override.
-Future<void> _pumpWithState(
+Future<_FakePracticeController> _pumpWithState(
   WidgetTester tester,
   OfflineComputerGameState state, {
   OfflineComputerGamePrefs? prefs,
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
 }) async {
+  final flutterTestOnError = FlutterError.onError!;
   final gameStorage = MockOfflineComputerGameStorage();
   when(() => gameStorage.fetchGame()).thenAnswer((_) async => null);
+  final controller = _FakePracticeController(state);
 
   final app = await makeTestProviderScopeApp(
     tester,
@@ -2180,16 +2415,26 @@ Future<void> _pumpWithState(
         (_) => gameStorage,
       ),
       offlineComputerGameControllerProvider: offlineComputerGameControllerProvider.overrideWith(
-        () => _FakePracticeController(state),
+        () => controller,
       ),
       if (prefs != null)
         offlineComputerGamePreferencesProvider: offlineComputerGamePreferencesProvider.overrideWith(
           () => _FakeGamePreferences(prefs),
         ),
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
+  return controller;
 }
 
 /// Finds the decorated [Container] that forms the comment card body,

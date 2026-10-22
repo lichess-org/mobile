@@ -1,9 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -19,7 +22,9 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_cont
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_storage.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -33,6 +38,10 @@ const _customFen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2
 // White pawn on a5, black pawn on a7. White to move plays a6, blocking black's pawn.
 // Black has no legal moves = stalemate = black wins in antichess.
 const _antichessStalemateFen = '8/p7/8/P7/8/8/8/8 w - - 0 1';
+
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedDevicePixelRatio = 3.0;
+const _iPhone16ZoomedPhysicalViewPadding = EdgeInsets.only(top: 141.0, bottom: 102.0);
 
 class MockOverTheBoardGameStorage() extends Mock implements OverTheBoardGameStorage;
 
@@ -55,6 +64,185 @@ void main() {
   registerFallbackValue(const TimeIncrement(0, 0));
 
   group('Playing over the board (offline)', () {
+    for (final profile in [
+      (
+        name: 'zoomed-iphone',
+        surface: _iPhone16ZoomedSurface,
+        ratio: _iPhone16ZoomedDevicePixelRatio,
+        padding: _iPhone16ZoomedPhysicalViewPadding,
+        capped: false,
+      ),
+      (
+        name: 'compact-360x640',
+        surface: const Size(360.0, 640.0),
+        ratio: 3.0,
+        padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
+        capped: true,
+      ),
+      (
+        name: 'height-capped-360x560',
+        surface: const Size(360.0, 560.0),
+        ratio: 3.0,
+        padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
+        capped: true,
+      ),
+    ]) {
+      testWidgets('compact portrait ${profile.name} keeps clocks and actions usable', (
+        tester,
+      ) async {
+        await prepareLayoutGolden(tester);
+        const wakelockChannel =
+            'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+        final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        messenger.setMockMessageHandler(
+          wakelockChannel,
+          (_) async => const StandardMessageCodec().encodeMessage([null]),
+        );
+        addTearDown(() => messenger.setMockMessageHandler(wakelockChannel, null));
+        final boardRect = await initOverTheBoardGame(
+          tester,
+          const TimeIncrement(60, 5),
+          surfaceSize: profile.surface,
+          devicePixelRatio: profile.ratio,
+          physicalViewPadding: profile.padding,
+          failOnOverflow: true,
+        );
+
+        final layoutRect = tester.getRect(find.byType(GameLayout));
+        final heightCap = layoutRect.height - 180.0;
+        expect(heightCap < layoutRect.width, profile.capped);
+        expect(boardRect.size, Size.square(min(layoutRect.width, heightCap)));
+        expect(boardRect.center.dx, moreOrLessEquals(layoutRect.center.dx));
+        expect(boardRect.top, greaterThanOrEqualTo(layoutRect.top));
+        expect(boardRect.bottom, lessThanOrEqualTo(layoutRect.bottom));
+        expect(find.byType(Clock), findsNWidgets(2));
+        expect(find.byType(BottomBar), findsOneWidget);
+        expectGameControlsVisible(tester, find.byType(Clock));
+        expectGameControlsVisible(tester, find.byType(BottomBarButton));
+        expect(tester.takeException(), isNull);
+
+        // Opt-in rendered evidence: --dart-define=LAYOUT_GOLDENS=true --update-goldens.
+        // Generated images stay in ignored build/; ordinary CI only runs assertions.
+        if (const bool.fromEnvironment('LAYOUT_GOLDENS')) {
+          await expectLater(
+            find.byType(OverTheBoardScreen),
+            matchesGoldenFile(
+              '../../../build/compact-layout/${profile.name}-${debugDefaultTargetPlatformOverride!.name}.png',
+            ),
+          );
+        }
+
+        await playMove(tester, 'e2', 'e4');
+        expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+        await tester.tap(findByTooltip('Pause'));
+        await tester.pump();
+        expect(activeClock(tester), isNull);
+        expect(findByTooltip('Resume'), findsOneWidget);
+        expectGameControlsVisible(tester, find.byType(Clock));
+        expectGameControlsVisible(tester, find.byType(BottomBarButton));
+        expect(tester.takeException(), isNull);
+      }, variant: kPlatformVariant);
+    }
+
+    for (final profile in kCompactPortraitProfiles) {
+      testWidgets('compact active game survives rotation ${profile.name}', (tester) async {
+        mockBoardPlatformChannels();
+        await prepareLayoutGolden(tester);
+        await initOverTheBoardGame(
+          tester,
+          const TimeIncrement(60, 5),
+          surfaceSize: profile.surface,
+          devicePixelRatio: 3.0,
+          physicalViewPadding: profile.physicalPadding,
+          failOnOverflow: true,
+        );
+        final container = ProviderScope.containerOf(tester.element(find.byType(Chessboard)));
+        final controller = container.read(overTheBoardGameControllerProvider.notifier);
+        final layoutState = tester.state(find.byType(GameLayout));
+        await playMove(tester, 'e2', 'e4');
+        await playMove(tester, 'e7', 'e5');
+        expect(activeClock(tester), Side.white);
+        final whiteTime = findWhiteClock(tester).timeLeft;
+        final blackTime = findBlackClock(tester).timeLeft;
+
+        void checkLayout(Orientation orientation) {
+          expect(MediaQuery.orientationOf(tester.element(find.byType(GameLayout))), orientation);
+          expect(tester.state(find.byType(GameLayout)), same(layoutState));
+          expect(container.read(overTheBoardGameControllerProvider.notifier), same(controller));
+          expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
+          expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
+          expect(find.byType(Clock), findsNWidgets(2));
+          expectGameControlsVisible(tester, find.byType(Clock));
+          expectGameControlsVisible(tester, find.byType(BottomBarButton));
+          if (orientation == Orientation.portrait) {
+            expectCompactBoardLayout(tester, heightCapped: profile.heightCapped);
+          } else {
+            final layout = tester.getRect(find.byType(GameLayout));
+            final board = tester.getRect(find.byType(Chessboard));
+            expect(board.width, board.height);
+            expect(board.width, greaterThan(0));
+            expect(board.left, greaterThanOrEqualTo(layout.left));
+            expect(board.right, lessThanOrEqualTo(layout.right));
+            expect(board.top, greaterThanOrEqualTo(layout.top));
+            expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+          }
+          expect(tester.takeException(), isNull);
+        }
+
+        checkLayout(Orientation.portrait);
+        await resizeTestSurface(
+          tester,
+          Size(profile.surface.height, profile.surface.width),
+          physicalViewPadding: EdgeInsets.only(
+            left: profile.physicalPadding.top,
+            right: profile.physicalPadding.top,
+            bottom: 63.0,
+          ),
+        );
+        checkLayout(Orientation.landscape);
+        expect(activeClock(tester), Side.white);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findWhiteClock(tester).timeLeft, lessThan(whiteTime));
+        expect(findBlackClock(tester).timeLeft, blackTime);
+        await expectLayoutGolden(
+          find.byType(OverTheBoardScreen),
+          '../../../build/compact-layout/rotation-landscape-${profile.name}',
+        );
+
+        await playMove(tester, 'g1', 'f3');
+        expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+        expect(activeClock(tester), Side.black);
+        await tester.tap(findByTooltip('Pause'));
+        await tester.pump();
+        expect(activeClock(tester), isNull);
+        final pausedTime = findBlackClock(tester).timeLeft;
+        await resizeTestSurface(
+          tester,
+          profile.surface,
+          physicalViewPadding: profile.physicalPadding,
+        );
+        checkLayout(Orientation.portrait);
+        expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
+        expect(container.read(overTheBoardGameControllerProvider).game.steps.length, 4);
+        expect(activeClock(tester), isNull);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findBlackClock(tester).timeLeft, pausedTime);
+        await tester.tap(findByTooltip('Resume'));
+        await tester.pump();
+        expect(activeClock(tester), Side.black);
+        await tester.pump(const Duration(seconds: 2));
+        expect(findBlackClock(tester).timeLeft, lessThan(pausedTime));
+        await playMove(tester, 'b8', 'c6');
+        expect(boardHasPiece(tester, Square.c6, Piece.blackKnight), isTrue);
+        expect(activeClock(tester), Side.white);
+        checkLayout(Orientation.portrait);
+        await expectLayoutGolden(
+          find.byType(OverTheBoardScreen),
+          '../../../build/compact-layout/rotation-returned-${profile.name}',
+        );
+      }, variant: kPlatformVariant);
+    }
+
     testWidgets('Checkmate and Rematch', (tester) async {
       await initOverTheBoardGame(tester, const TimeIncrement(60, 5));
 
@@ -794,7 +982,15 @@ void main() {
   });
 }
 
-Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncrement) async {
+Future<Rect> initOverTheBoardGame(
+  WidgetTester tester,
+  TimeIncrement timeIncrement, {
+  Size surfaceSize = kTestSurfaceSize,
+  double? devicePixelRatio,
+  EdgeInsets? physicalViewPadding,
+  bool failOnOverflow = false,
+}) async {
+  final flutterTestOnError = FlutterError.onError!;
   final gameStorage = MockOverTheBoardGameStorage();
 
   when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
@@ -815,7 +1011,16 @@ Future<Rect> initOverTheBoardGame(WidgetTester tester, TimeIncrement timeIncreme
         (_) => gameStorage,
       ),
     },
+    surfaceSize: surfaceSize,
+    devicePixelRatio: devicePixelRatio,
+    physicalViewPadding: physicalViewPadding,
   );
+
+  if (failOnOverflow) {
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+  }
+
   await tester.pumpWidget(app);
 
   // Wait for bottom sheet to show up
