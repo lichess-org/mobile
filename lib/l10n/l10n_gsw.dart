@@ -387,6 +387,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Wänns aktiviert isch, vibriert s\'Grät churz, wänn du e Figur bewegsch oder schlasch.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

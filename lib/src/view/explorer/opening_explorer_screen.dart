@@ -49,7 +49,7 @@ class const OpeningExplorerScreen({required final AnalysisOptions options}) exte
           title: Text(context.l10n.openingExplorer),
           actions: [
             ContextMenuIconButton(
-              semanticsLabel: context.l10n.studyShareAndExport,
+              semanticsLabel: context.l10n.mobileShare,
               icon: const PlatformShareIcon(),
               actions: [
                 ContextMenuAction(

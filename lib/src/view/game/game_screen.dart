@@ -251,7 +251,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                       icon: Theme.of(context).platform == TargetPlatform.iOS
                           ? Icons.ios_share_outlined
                           : Icons.share_outlined,
-                      label: context.l10n.studyShareAndExport,
+                      label: context.l10n.mobileShare,
                       onPressed: null,
                       submenu: makeFinishedGameShareMenuActions(
                         context,

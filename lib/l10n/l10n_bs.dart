@@ -387,6 +387,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Kada je omogućeno, uređaj će kratko vibrirati kada pomaknete ili uhvatite figuru.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

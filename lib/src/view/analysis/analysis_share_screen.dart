@@ -24,7 +24,7 @@ class const AnalysisShareScreen({required final AnalysisOptions options}) extend
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.studyShareAndExport)),
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileShare)),
       body: _EditPgnTagsForm(options),
     );
   }

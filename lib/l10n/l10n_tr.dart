@@ -387,6 +387,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Aktif olduğunda, bir taş oynatıldığında veya alındığında cihaz hafifçe titreyecektir.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Meydan okuma bağlantısını paylaşın';
 
   @override

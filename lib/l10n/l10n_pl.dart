@@ -387,6 +387,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Po włączeniu urządzenie delikatnie zawibruje, gdy wykonasz ruch lub zbijesz bierkę.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Udostępnij link do wyzwania';
 
   @override

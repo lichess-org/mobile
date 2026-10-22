@@ -387,6 +387,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Калі актыўна, ваш дэвайс будзе крыху вібраваць калі вы паходзіце або пры ўзяцці фігуры.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

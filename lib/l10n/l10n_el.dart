@@ -387,6 +387,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Όταν αυτή η ρύθμιση είναι ενεργοποιημένη, η συσκευή σας θα δονείται σύντομα κάθε φορά που κάνετε μια κίνηση.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Κοινοποίηση URL πρόκλησης';
 
   @override

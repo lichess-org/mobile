@@ -387,6 +387,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Az eszköz rezgést ad figurák mozgatásakor és ütésekor.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

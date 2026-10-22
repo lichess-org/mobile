@@ -387,6 +387,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Ketika aktif, perangkat akan bergetar sekejap saat anda memindahkan atau memakan buah.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

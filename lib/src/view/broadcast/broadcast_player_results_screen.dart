@@ -154,7 +154,7 @@ class const BroadcastPlayerResultsScreen({
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
+              semanticsLabel: context.l10n.mobileShare,
               onPressed: () {
                 final (playerData, tournament) = data;
                 final playerId = playerData.playerWithOverallResult.player.id;
