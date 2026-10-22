@@ -40,25 +40,38 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class const StudyScreen({required final StudyOptions options, super.key}) extends StatelessWidget {
-  static Route<dynamic> buildRoute(StudyOptions options) {
-    return buildScreenRoute(screen: StudyScreen(options: options));
+class const StudyScreen({
+  required final StudyOptions options,
+  final bool openComputerAnalysis = false,
+  super.key,
+}) extends StatelessWidget {
+  static Route<dynamic> buildRoute(StudyOptions options, {bool openComputerAnalysis = false}) {
+    return buildScreenRoute(
+      screen: StudyScreen(options: options, openComputerAnalysis: openComputerAnalysis),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return _StudyScreenLoader(options: options);
+    return _StudyScreenLoader(options: options, openComputerAnalysis: openComputerAnalysis);
   }
 }
 
-class const _StudyScreenLoader({required final StudyOptions options}) extends ConsumerWidget {
+class const _StudyScreenLoader({
+  required final StudyOptions options,
+  required final bool openComputerAnalysis,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final studyPrefs = ref.watch(studyPreferencesProvider);
     switch (ref.watch(studyControllerProvider(options))) {
       case AsyncData(:final value):
-        return _StudyScreen(options: options, studyState: value);
+        return _StudyScreen(
+          options: options,
+          studyState: value,
+          openComputerAnalysis: openComputerAnalysis,
+        );
       case AsyncError(:final error, :final stackTrace):
         _logger.severe('Cannot load study:', error, stackTrace);
         return Scaffold(
@@ -135,6 +148,7 @@ class const _StudyScreenLoader({required final StudyOptions options}) extends Co
 class const _StudyScreen({
   required final StudyOptions options,
   required final StudyState studyState,
+  required final bool openComputerAnalysis,
 }) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_StudyScreen> createState() => _StudyScreenState();
@@ -153,7 +167,11 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
 
     _tabController = TabController(
       vsync: this,
-      initialIndex: tabs.indexOf(AnalysisTab.moves),
+      initialIndex: tabs.indexOf(
+        widget.openComputerAnalysis && tabs.contains(AnalysisTab.summary)
+            ? AnalysisTab.summary
+            : AnalysisTab.moves,
+      ),
       length: tabs.length,
     );
   }

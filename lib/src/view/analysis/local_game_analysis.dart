@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -14,10 +15,15 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
+import 'package:lichess_mobile/src/model/study/study_controller.dart';
+import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart' hide Step;
 
@@ -50,6 +56,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
   PositionEvaluator? _evaluator;
   EvalWork? _activeWork;
   bool _isReviewing = false;
+  bool _isRequestingServerAnalysis = false;
   IList<LocalEval> _evaluations = const IListConst([]);
 
   String get _sessionKey =>
@@ -122,6 +129,8 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
             label: const Text('Analyze game'),
           ),
         ),
+        const SizedBox(height: 8.0),
+        _buildServerAnalysisButton(context, moves),
       ],
     );
   }
@@ -196,10 +205,17 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
           ),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: OutlinedButton.icon(
-            onPressed: _startReview,
-            icon: const Icon(Icons.refresh),
-            label: const Text('Analyze again'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              OutlinedButton.icon(
+                onPressed: _startReview,
+                icon: const Icon(Icons.refresh),
+                label: const Text('Analyze again'),
+              ),
+              const SizedBox(height: 8.0),
+              _buildServerAnalysisButton(context, widget.root.mainline.length),
+            ],
           ),
         ),
       ],
@@ -217,8 +233,93 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
           icon: const Icon(Icons.refresh),
           label: const Text('Try again'),
         ),
+        const SizedBox(height: 8.0),
+        _buildServerAnalysisButton(context, widget.root.mainline.length),
       ],
     );
+  }
+
+  Widget _buildServerAnalysisButton(BuildContext context, int moves) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        OutlinedButton.icon(
+          onPressed: moves >= 4 && !_isRequestingServerAnalysis ? _requestServerAnalysis : null,
+          icon: _isRequestingServerAnalysis
+              ? const SizedBox(
+                  width: 18.0,
+                  height: 18.0,
+                  child: CircularProgressIndicator.adaptive(strokeWidth: 2.0),
+                )
+              : const Icon(Icons.cloud_upload_outlined),
+          label: Text(context.l10n.requestAComputerAnalysis),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Text(
+            moves < 4
+                ? 'Server analysis requires at least four moves.'
+                : 'Uploads this game to a private Lichess study before requesting server analysis.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _requestServerAnalysis() async {
+    if (_isRequestingServerAnalysis) return;
+
+    final authUser = ref.read(authControllerProvider);
+    if (authUser == null) {
+      showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+      return;
+    }
+
+    final (pgn, orientation, variant) = switch (widget.options) {
+      Pgn(:final pgn, :final orientation, :final variant) => (pgn, orientation, variant),
+      _ => throw StateError('Server analysis requires a PGN game.'),
+    };
+
+    setState(() => _isRequestingServerAnalysis = true);
+    try {
+      final (studyId, chapterIds) = await ref
+          .read(studyRepositoryProvider)
+          .createStudy(
+            CreateStudyPayload(
+              name: '${authUser.user.name} - Game Analysis',
+              chat: StudyFeatureAccess.nobody,
+              cloneable: StudyFeatureAccess.nobody,
+              computer: StudyFeatureAccess.owner,
+              explorer: StudyFeatureAccess.nobody,
+              shareable: StudyFeatureAccess.nobody,
+              visibility: StudyVisibility.private,
+              sticky: false,
+            ),
+            CreateStudyChapterPayload(
+              pgn: pgn,
+              name: context.l10n.computerAnalysis,
+              orientation: orientation,
+              variant: variant,
+            ),
+          );
+      final chapterId = chapterIds.isNotEmpty ? chapterIds.first : null;
+      if (chapterId == null) {
+        throw StateError('The server created a study without a chapter.');
+      }
+
+      final studyOptions = (id: studyId, initialChapter: chapterId);
+      Navigator.of(context).push(StudyScreen.buildRoute(studyOptions, openComputerAnalysis: true));
+      await ref.read(studyControllerProvider(studyOptions).future);
+      await ref.read(studyControllerProvider(studyOptions).notifier).requestServerAnalysis();
+    } on Object catch (error, stackTrace) {
+      _logger.severe('Could not request server analysis for offline game', error, stackTrace);
+      if (mounted) {
+        showSnackBar(context, error.toString(), type: SnackBarType.error);
+      }
+    } finally {
+      if (mounted) setState(() => _isRequestingServerAnalysis = false);
+    }
   }
 
   Future<void> _startReview() async {

@@ -75,7 +75,38 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Analyze game'), findsOneWidget);
+      expect(find.text('Request a computer analysis'), findsOneWidget);
       expect(find.textContaining('Stockfish will review every position'), findsOneWidget);
+    });
+
+    testWidgets('keeps local review and requires an account for server analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('local_server_review'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 2. Nf3 Nc6 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Analyze game'), findsOneWidget);
+      expect(find.text('Request a computer analysis'), findsOneWidget);
+      expect(find.textContaining('private Lichess study'), findsOneWidget);
+
+      await tester.tap(find.text('Request a computer analysis'));
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('You need an account to do that'), findsOneWidget);
+      expect(find.text('Analyze game'), findsOneWidget);
     });
 
     testWidgets('reviews every PGN move with the local engine', (tester) async {
@@ -98,13 +129,19 @@ void main() {
 
       expect(find.byType(AcplChart), findsOneWidget);
       expect(find.text('1. e4'), findsOneWidget);
+      expect(find.textContaining('good moves'), findsOneWidget);
       await tester.scrollUntilVisible(
         find.text('1... e5'),
         300,
         scrollable: find.byType(Scrollable).last,
       );
       expect(find.text('1... e5'), findsOneWidget);
-      expect(find.textContaining('good moves'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Request a computer analysis'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.text('Request a computer analysis'), findsOneWidget);
     });
 
     testWidgets('displays correct move and position', (tester) async {
