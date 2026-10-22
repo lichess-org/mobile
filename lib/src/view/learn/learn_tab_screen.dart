@@ -183,7 +183,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
                               )
                             : null,
@@ -196,7 +196,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyFavoriteStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
                               )
                             : null,

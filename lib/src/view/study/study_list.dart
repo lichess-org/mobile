@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -192,7 +193,14 @@ class _StudyListState() extends ConsumerState<StudyList> {
 
     return Stack(
       children: [
-        Positioned.fill(child: listener),
+        // The list scrolls under the glass search field.
+        Positioned.fill(
+          child: BottomBarScrollEdgeEffect(
+            barHeight: BottomSearchBar.heightOf(context),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: listener,
+          ),
+        ),
         Positioned(
           left: 0,
           right: 0,
