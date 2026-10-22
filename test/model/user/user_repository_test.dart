@@ -532,6 +532,9 @@ void main() {
 
     expect(result, isA<IList<UserActivity>>());
     expect(result.length, 7);
+    expect(result.first.startTime.isUtc, isTrue);
+    expect(result.first.startTime, DateTime.utc(2023, 4, 20));
+    expect(result.first.endTime, DateTime.utc(2023, 4, 21));
   });
 }
 

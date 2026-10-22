@@ -223,8 +223,8 @@ UserActivity _userActivityFromPick(RequiredPick pick) {
   ).asListOrNull((p0) => UserActivityTournament.fromPick(p0));
 
   return UserActivity(
-    startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow(),
-    endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow(),
+    startTime: pick('interval', 'start').asDateTimeFromMillisecondsOrThrow().toUtc(),
+    endTime: pick('interval', 'end').asDateTimeFromMillisecondsOrThrow().toUtc(),
     games: games.isEmpty ? null : games,
     followInNb: pick('follows', 'in', 'nb').asIntOrNull(),
     followOutNb: pick('follows', 'in', 'nb').asIntOrNull(),
