@@ -305,7 +305,7 @@ class const _MessageBubble({
   Color _bubbleColor(BuildContext context) {
     return isMe
         ? ColorScheme.of(context).secondaryContainer
-        : ColorScheme.of(context).surfaceContainer;
+        : Theme.of(context).cardTheme.color ?? ColorScheme.of(context).surfaceContainer;
   }
 
   Color _textColor(BuildContext context) {

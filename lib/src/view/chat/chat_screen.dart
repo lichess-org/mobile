@@ -200,8 +200,9 @@ class const _MessageBubble({
   required final ChatMessage message,
   final bool showUsername = false,
 }) extends ConsumerWidget {
-  Color _bubbleColor(BuildContext context) =>
-      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
+  Color _bubbleColor(BuildContext context) => you
+      ? ColorScheme.of(context).secondary
+      : Theme.of(context).cardTheme.color ?? ColorScheme.of(context).surfaceContainerHigh;
 
   Color _textColor(BuildContext context) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;

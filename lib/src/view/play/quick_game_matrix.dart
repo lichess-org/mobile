@@ -170,7 +170,9 @@ class const _ChoiceChip({
         ? scaffoldOpacity > 0
               ? Colors.white10
               : ColorScheme.of(context).surfaceContainerLow
-        : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
+        // Translucent, so that the logo behind the tiles shows through.
+        : Theme.of(context).cardTheme.color?.withValues(alpha: 0.65) ??
+              ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.65);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,

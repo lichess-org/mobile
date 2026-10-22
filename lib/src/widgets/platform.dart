@@ -240,14 +240,15 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
   bool updateShouldNotify(AppBarBottomGlassScope oldWidget) => glass != oldWidget.glass;
 }
 
-/// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS
-/// navigation bar buttons (the package's light glass is nearly clear).
+/// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, a bit clearer
+/// than the bottom bar buttons ([tintedGlassSettings]) yet standing out from the background, like
+/// the iOS navigation bar buttons (the package's light glass is nearly clear).
 ///
 /// The menus of the pinned bar buttons get the glass of the buttons (the package has no setting of
-/// their own): the same white, blur and saturation as [kLightMenuGlassSettings], like an iOS menu.
+/// their own): the same blur and saturation as [kLightMenuGlassSettings], like an iOS menu.
 const _kLightAppBarButtonSettings = LiquidGlassSettings(
   blur: 20,
-  glassColor: Color(0x66FFFFFF),
+  glassColor: Color(0xB3FFFFFF),
   saturation: 1.8,
 );
 

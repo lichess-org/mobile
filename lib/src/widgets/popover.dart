@@ -92,8 +92,10 @@ class const PlatformPopover({
           bodyBuilder: bodyBuilder,
           direction: direction,
           width: width,
+          // Like a card, so that it stands out from the background.
           backgroundColor:
               DialogTheme.of(context).backgroundColor ??
+              CardTheme.of(context).color ??
               ColorScheme.of(context).surfaceContainerHigh,
           transitionDuration: Duration.zero,
           popoverTransitionBuilder: (_, child) => child,
