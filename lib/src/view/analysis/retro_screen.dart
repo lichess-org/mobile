@@ -46,113 +46,87 @@ class const RetroScreen({required final RetroOptions options, super.key}) extend
       generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
     );
 
-    switch (asyncState) {
-      case AsyncError(:final error):
-        debugPrint('Error loading retro controller for ${options.id}: $error');
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: PlatformAppBar(
-            // Like the loaded screen, whose long title is next to the actions.
-            centerTitle: false,
-            compactButtons: true,
-            title: AppBarTitleText(context.l10n.learnFromYourMistakes),
-          ),
-          body: switch (error) {
-            final ServerAnalysisRequestException refusal => Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  refusal.message,
-                  style: Styles.sectionTitle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            // The game itself failed to load, which is worth another try.
-            _ => FullScreenRetryRequest(
-              onRetry: () {
-                ref.invalidate(retroControllerProvider(options));
-              },
-            ),
-          },
-        );
-      case AsyncData(:final value):
-        if (value.serverAnalysisAvailable == false) {
-          return _LoadingScreen(serverAnalysisProgress: value.serverAnalysisProgress);
-        }
-
-        return PlatformScaffold(
-          extendBodyBehindAppBar: false,
-          appBar: PlatformAppBar(
-            // A long title, next to the actions.
-            centerTitle: false,
-            compactButtons: true,
-            title: AppBarTitleText(
-              '${context.l10n.learnFromYourMistakes} (${math.min(asyncState.requireValue.mistakes.length, asyncState.requireValue.currentMistakeIndex + 1)}/${asyncState.requireValue.mistakes.length})',
-              maxLines: 2,
-            ),
-            actions: [
-              if (value.isEngineAvailable(enginePrefs) == true)
-                EngineButton(
-                  filters: (context: value.evaluationContext, path: value.currentPath),
-                  savedEval: value.currentNode.eval,
-                  goDeeper: () => ref
-                      .read(retroControllerProvider(options).notifier)
-                      .requestEval(goDeeper: true),
-                ),
-              ContextMenuIconButton(
-                icon: const Icon(Icons.more_horiz),
-                semanticsLabel: context.l10n.menu,
-                actions: [
-                  ContextMenuAction(
-                    icon: Icons.settings,
-                    label: context.l10n.settingsSettings,
-                    onPressed: () =>
-                        Navigator.of(context)
-                            .push(RetroSettingsScreen.buildRoute(options: options)),
-                  ),
-                  ContextMenuAction(
-                    icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
-                    label: context.l10n.sound,
-                    onPressed: () =>
-                        ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          body: DefaultTabController(length: 1, child: _RetroScreen(options)),
-        );
-      case _:
-        return const _LoadingScreen();
+    if (asyncState case AsyncError(:final error)) {
+      debugPrint('Error loading retro controller for ${options.id}: $error');
     }
-  }
-}
+    // The loaded state, once the server analysis it needs is available.
+    final value = switch (asyncState) {
+      AsyncData(:final value) when value.serverAnalysisAvailable != false => value,
+      _ => null,
+    };
 
-class const _LoadingScreen({final double? serverAnalysisProgress}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+    // The same tree in every state, so that the scaffold and its app bar are updated, not replaced,
+    // once the retro is loaded.
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
-        // Like the loaded screen, whose long title is next to the actions.
+        // A long title, next to the actions.
         centerTitle: false,
         compactButtons: true,
-        title: AppBarTitleText(context.l10n.learnFromYourMistakes),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(context.l10n.calculatingMoves),
-            Padding(
-              padding: Styles.bodySectionPadding,
-              child: LinearProgressIndicator(value: serverAnalysisProgress),
+        title: value != null
+            ? AppBarTitleText(
+                '${context.l10n.learnFromYourMistakes} (${math.min(value.mistakes.length, value.currentMistakeIndex + 1)}/${value.mistakes.length})',
+                maxLines: 2,
+              )
+            : AppBarTitleText(context.l10n.learnFromYourMistakes),
+        actions: [
+          if (value != null) ...[
+            if (value.isEngineAvailable(enginePrefs) == true)
+              EngineButton(
+                filters: (context: value.evaluationContext, path: value.currentPath),
+                savedEval: value.currentNode.eval,
+                goDeeper: () =>
+                    ref.read(retroControllerProvider(options).notifier).requestEval(goDeeper: true),
+              ),
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.settings,
+                  label: context.l10n.settingsSettings,
+                  onPressed: () =>
+                      Navigator.of(context).push(RetroSettingsScreen.buildRoute(options: options)),
+                ),
+                ContextMenuAction(
+                  icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+                  label: context.l10n.sound,
+                  onPressed: () =>
+                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+                ),
+              ],
             ),
           ],
-        ),
+        ],
       ),
+      body: switch (asyncState) {
+        AsyncError(error: final ServerAnalysisRequestException refusal) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(refusal.message, style: Styles.sectionTitle, textAlign: TextAlign.center),
+          ),
+        ),
+        // The game itself failed to load, which is worth another try.
+        AsyncError() => FullScreenRetryRequest(
+          onRetry: () {
+            ref.invalidate(retroControllerProvider(options));
+          },
+        ),
+        _ when value != null => DefaultTabController(length: 1, child: _RetroScreen(options)),
+        _ => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(context.l10n.calculatingMoves),
+              Padding(
+                padding: Styles.bodySectionPadding,
+                child: LinearProgressIndicator(value: asyncState.value?.serverAnalysisProgress),
+              ),
+            ],
+          ),
+        ),
+      },
     );
   }
 }

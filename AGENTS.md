@@ -220,7 +220,9 @@ This project uses `flutter_riverpod 3.x` / `riverpod 3.x`.
 
 - **Reading async data**: `AsyncValue<T>.value` returns `T?`, which is `null` while loading or on
   error. Use it when you only need the data, and `switch` on the `AsyncValue` when loading and
-  error states must be rendered.
+  error states must be rendered. Pattern match the `AsyncValue` (`AsyncData(:final value)`,
+  `AsyncError(:final error)`, `AsyncLoading()`) rather than its callback methods (`when`, `map`,
+  `whenData`...), including to transform it (e.g. in a `select`).
 - **Don't name provider types**: `ProviderListenable<T>` and the type returned by `.select()` are
   internal, so never use them as type annotations. Pass providers and `select` results straight to
   `ref.watch`/`ref.read`/`ref.listenManual`. Where a signature would need such a type (e.g. an
@@ -448,6 +450,19 @@ for (el in items) widgets.add(Text(el.name));
 - Avoid functions returning widgets (use `StatelessWidget` for reusables)
 - Don't create private widgets used only once - inline them
 - Write reusable widgets as classes even if single-screen scope
+- **Read the media query with its specific accessors** (`MediaQuery.paddingOf`, `sizeOf`,
+  `viewInsetsOf`, `orientationOf`...), never `MediaQuery.of(context)`: it depends on the whole data,
+  so the widget rebuilds on every change of any field, e.g. on every frame of a keyboard animation.
+  Where the whole data is needed (to pass it on, or `copyWith` it), read it in a small `Builder`
+  around children built outside it, so that only that builder rebuilds (`_MaterialTabViewState` in
+  `tab_scaffold.dart`).
+- **Same tree shape in every state**: a screen that loads (`AsyncValue` loading / error / data)
+  builds the same widgets down to its scaffold and app bar in every state: one `PlatformScaffold`
+  (with the same wrappers, e.g. `WakelockWidget`) whose title, actions and body switch on the
+  state, not a different scaffold per state or a widget class of its own for the loaded state. Its
+  elements are then updated instead of replaced once loaded, which keeps their state, avoids
+  rebuilding the whole screen, and on iOS 26 keeps the pinned app bar registered with its shell
+  (`analysis_screen.dart`, `retro_screen.dart`).
 
 ### Analysis
 - Strict mode enabled: `strict-casts`, `strict-inference`, `strict-raw-types`

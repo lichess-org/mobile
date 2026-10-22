@@ -213,17 +213,30 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
               monitorSocket: isRealTimePlayingGame,
               socketUri: socketUri,
             ),
-            // The menu is rebuilt with the game state, not the whole screen.
+            // The menu is rebuilt with the game state fields it shows, not the whole screen: every
+            // rebuild of the actions also redraws the pinned bar buttons on iOS 26.
             actionsBuilder: (context, ref) => [
-              if (ref.watch(gameControllerProvider(createdGameId)).value case final gameState?)
+              if (ref.watch(
+                    gameControllerProvider(createdGameId).select(
+                      (s) => s.value == null
+                          ? null
+                          : (
+                              nbWatchers: s.value!.nbWatchers,
+                              bookmarked: s.value!.game.bookmarked == true,
+                              youAre: s.value!.game.youAre,
+                              finished: s.value!.game.finished,
+                            ),
+                    ),
+                  )
+                  case final menuState?)
                 ContextMenuIconButton(
                   icon: const Icon(Icons.more_horiz),
                   semanticsLabel: context.l10n.menu,
                   actions: [
-                    if (gameState.nbWatchers > 0)
+                    if (menuState.nbWatchers > 0)
                       ContextMenuAction(
                         icon: Icons.person_outline,
-                        label: 'Spectators (${gameState.nbWatchers})',
+                        label: 'Spectators (${menuState.nbWatchers})',
                         onPressed: () {
                           final s = ref.read(gameControllerProvider(createdGameId)).value;
                           if (s == null) return;
@@ -238,10 +251,10 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                         },
                       ),
                     ContextMenuAction(
-                      icon: gameState.game.bookmarked == true
+                      icon: menuState.bookmarked
                           ? Icons.bookmark_remove_outlined
                           : Icons.bookmark_add_outlined,
-                      label: gameState.game.bookmarked == true
+                      label: menuState.bookmarked
                           ? context.l10n.mobileRemoveBookmark
                           : context.l10n.bookmarkThisGame,
                       onPressed: () =>
@@ -257,8 +270,8 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
                         context,
                         ref,
                         gameId: createdGameId.gameId,
-                        orientation: gameState.game.youAre ?? Side.white,
-                        finished: gameState.game.finished,
+                        orientation: menuState.youAre ?? Side.white,
+                        finished: menuState.finished,
                       ),
                     ),
                   ],

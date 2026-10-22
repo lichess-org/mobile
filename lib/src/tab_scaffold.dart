@@ -29,10 +29,20 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     final tabBarVisibility = tabNavigatorObservers[currentTab]!.tabBarVisibility;
 
     if (!isIOS) {
-      final mediaQuery = MediaQuery.of(context);
       final tabBarHeight =
           (NavigationBarTheme.of(context).height ?? _kNavigationBarDefaultHeight) +
-          mediaQuery.padding.bottom;
+          MediaQuery.paddingOf(context).bottom;
+      final navigationBar = NavigationBar(
+        selectedIndex: currentTab.index,
+        destinations: [
+          for (final tab in BottomTab.values)
+            NavigationDestination(
+              icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+              label: tab.label(context.l10n),
+            ),
+        ],
+        onDestinationSelected: (i) => _onItemTapped(ref, i),
+      );
       // The tab navigators cover the whole screen, below the navigation bar: the routes shown with
       // it are laid out above it ([TabRoutePage]), the routes hiding it cover the whole screen.
       return FullScreenBackground(
@@ -49,23 +59,12 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
                     left: 0,
                     right: 0,
                     bottom: 0,
+                    // Rebuilt with the media query (on every frame of a keyboard animation), but
+                    // the navigation bar is the same widget.
                     child: MediaQuery.removePadding(
                       context: context,
                       removeTop: true,
-                      child: _TabBarTransition(
-                        visibility: tabBarVisibility,
-                        child: NavigationBar(
-                          selectedIndex: currentTab.index,
-                          destinations: [
-                            for (final tab in BottomTab.values)
-                              NavigationDestination(
-                                icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                                label: tab.label(context.l10n),
-                              ),
-                          ],
-                          onDestinationSelected: (i) => _onItemTapped(ref, i),
-                        ),
-                      ),
+                      child: _TabBarTransition(visibility: tabBarVisibility, child: navigationBar),
                     ),
                   ),
                 ],
@@ -393,46 +392,51 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
     final enablePopHandler = currentTab == widget.tab;
     final observer = tabNavigatorObservers[widget.tab]!;
     final tabBarLayout = _TabBarLayout.of(context);
-    final scope = TabNavigatorScope(
-      observer: observer,
-      mediaQuery: MediaQuery.of(context),
-      tabBarHeight: tabBarLayout.height,
-      extendBody: tabBarLayout.extendBody,
-      // One shell per navigator: it ranks the routes of a single navigator.
-      child: GlassNavigationShell(
-        enabled: usePinnedNavBar(context),
-        // The routes that are not pages (sheets, dialogs, menus) are laid out for the tab bar while
-        // it is shown, and over the whole screen while a route hides it.
-        //
-        // The shape of the tree is the same either way: a change of shape would move the navigator
-        // (it has a global key), deactivating and activating every element of the tab, which is
-        // costly and trips an overlay portal whose controller is attached elsewhere meanwhile.
-        child: ListenableBuilder(
-          listenable: observer,
-          builder: (context, child) {
-            final mediaQuery = MediaQuery.of(context);
-            final tabBarShown = !observer.hasTabBarHidingRoute;
-            return MediaQuery(
-              data: tabBarShown
-                  ? mediaQuery.copyWith(
-                      padding: mediaQuery.padding.copyWith(bottom: tabBarLayout.height),
-                    )
-                  : mediaQuery,
-              child: MainTabScaffoldProperties(
-                // Like no properties at all, while the tab bar is hidden.
-                extendBody: tabBarShown && tabBarLayout.extendBody,
-                child: child!,
-              ),
-            );
-          },
-          child: Navigator(
-            key: widget.navigatorKey,
-            onGenerateRoute: _onGenerateRoute,
-            onUnknownRoute: _onUnknownRoute,
-            observers: _navigatorObservers,
-            restorationScopeId: widget.restorationScopeId,
-          ),
+    // One shell per navigator: it ranks the routes of a single navigator.
+    final shell = GlassNavigationShell(
+      enabled: usePinnedNavBar(context),
+      // The routes that are not pages (sheets, dialogs, menus) are laid out for the tab bar while
+      // it is shown, and over the whole screen while a route hides it.
+      //
+      // The shape of the tree is the same either way: a change of shape would move the navigator
+      // (it has a global key), deactivating and activating every element of the tab, which is
+      // costly and trips an overlay portal whose controller is attached elsewhere meanwhile.
+      child: ListenableBuilder(
+        listenable: observer,
+        builder: (context, child) {
+          final mediaQuery = MediaQuery.of(context);
+          final tabBarShown = !observer.hasTabBarHidingRoute;
+          return MediaQuery(
+            data: tabBarShown
+                ? mediaQuery.copyWith(
+                    padding: mediaQuery.padding.copyWith(bottom: tabBarLayout.height),
+                  )
+                : mediaQuery,
+            child: MainTabScaffoldProperties(
+              // Like no properties at all, while the tab bar is hidden.
+              extendBody: tabBarShown && tabBarLayout.extendBody,
+              child: child!,
+            ),
+          );
+        },
+        child: Navigator(
+          key: widget.navigatorKey,
+          onGenerateRoute: _onGenerateRoute,
+          onUnknownRoute: _onUnknownRoute,
+          observers: _navigatorObservers,
+          restorationScopeId: widget.restorationScopeId,
         ),
+      ),
+    );
+    // The media query changes on every frame of a keyboard animation: only this builder rebuilds
+    // then, the shell and the navigator under it are the same widgets.
+    final scope = Builder(
+      builder: (context) => TabNavigatorScope(
+        observer: observer,
+        mediaQuery: MediaQuery.of(context),
+        tabBarHeight: tabBarLayout.height,
+        extendBody: tabBarLayout.extendBody,
+        child: shell,
       ),
     );
     return NavigatorPopHandler(
