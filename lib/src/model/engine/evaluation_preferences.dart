@@ -57,6 +57,20 @@ class EngineEvaluationPreferences()
     return save(state.copyWith(engineSearchTime: engineSearchTime));
   }
 
+  Future<void> setLocalGameAnalysisSettings({
+    required Duration searchTime,
+    required bool isManual,
+    required int threads,
+  }) {
+    return save(
+      state.copyWith(
+        localGameAnalysisSearchTime: searchTime,
+        isLocalGameAnalysisManual: isManual,
+        localGameAnalysisThreads: threads,
+      ),
+    );
+  }
+
   Future<void> setEvaluationFunction(ChessEnginePref enginePref) {
     return save(state.copyWith(enginePref: enginePref));
   }
@@ -100,6 +114,14 @@ sealed class const EngineEvaluationPrefState._()
       toJson: _searchTimeToJson,
     )
     required Duration engineSearchTime,
+    @JsonKey(
+      defaultValue: _localGameAnalysisSearchTimeDefault,
+      fromJson: _searchTimeFromMilliseconds,
+      toJson: _searchTimeToMilliseconds,
+    )
+    required Duration localGameAnalysisSearchTime,
+    @Default(false) bool isLocalGameAnalysisManual,
+    int? localGameAnalysisThreads,
     @JsonKey(defaultValue: ChessEnginePref.sfLight, unknownEnumValue: ChessEnginePref.sfLight)
     required ChessEnginePref enginePref,
   }) = _EngineEvaluationPrefState;
@@ -109,6 +131,8 @@ sealed class const EngineEvaluationPrefState._()
     numEvalLines: 2,
     numEngineCores: 1,
     engineSearchTime: Duration(seconds: 4),
+    localGameAnalysisSearchTime: Duration(seconds: 1),
+    localGameAnalysisThreads: 1,
     enginePref: ChessEnginePref.sfLight,
   );
 
@@ -127,6 +151,18 @@ Duration _searchTimeFromJson(int seconds) {
 
 int _searchTimeToJson(Duration duration) {
   return duration.inSeconds;
+}
+
+Duration _localGameAnalysisSearchTimeDefault() {
+  return const Duration(seconds: 1);
+}
+
+Duration _searchTimeFromMilliseconds(int milliseconds) {
+  return Duration(milliseconds: milliseconds);
+}
+
+int _searchTimeToMilliseconds(Duration duration) {
+  return duration.inMilliseconds;
 }
 
 const kAvailableEngineSearchTimes = [

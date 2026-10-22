@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
@@ -75,9 +76,23 @@ void main() {
       await tester.tap(find.byTooltip('Computer analysis'));
       await tester.pumpAndSettle();
 
+      expect(find.text('Local review speed settings'), findsOneWidget);
+      expect(find.text('Balanced (1s per position)'), findsOneWidget);
       expect(find.text('Analyze game'), findsOneWidget);
       expect(find.text('Request a computer analysis'), findsOneWidget);
       expect(find.textContaining('Stockfish will review every position'), findsOneWidget);
+      if (maxEngineCores > 1) {
+        expect(find.text('Threads (experimental)'), findsOneWidget);
+      }
+
+      await tester.tap(find.text('Balanced (1s per position)'));
+      await tester.pumpAndSettle();
+      expect(find.text('Fast (0.50s per position)'), findsOneWidget);
+      expect(find.text('Thorough (3s per position)'), findsOneWidget);
+
+      await tester.tap(find.text('Manual'));
+      await tester.pumpAndSettle();
+      expect(find.text('Time per position'), findsOneWidget);
     });
 
     testWidgets('keeps local review and requires an account for server analysis', (tester) async {

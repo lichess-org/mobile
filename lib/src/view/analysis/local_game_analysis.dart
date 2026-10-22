@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_budget.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
@@ -26,10 +27,18 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart' hide Step;
 
-const _localReviewSearchTime = Duration(seconds: 1);
+const _fastLocalReviewSearchTime = Duration(milliseconds: 500);
+const _balancedLocalReviewSearchTime = Duration(seconds: 1);
+const _thoroughLocalReviewSearchTime = Duration(seconds: 3);
+const _manualLocalReviewSearchTimeStep = Duration(milliseconds: 250);
+const _minimumManualLocalReviewSearchTime = Duration(milliseconds: 250);
+const _maximumManualLocalReviewSearchTime = Duration(seconds: 10);
+
+enum _LocalReviewSpeed { fast, balanced, thorough, manual }
 
 final _localGameAnalysisSessionProvider =
     NotifierProvider.family<_LocalGameAnalysisSession, IList<LocalEval>?, String>(
@@ -104,13 +113,16 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
 
   Widget _buildReady(BuildContext context, bool engineEnabled, AsyncValue<String?>? engine) {
     final moves = widget.root.mainline.length;
+    final enginePreferences = ref.read(engineEvaluationPreferencesProvider);
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
         const Text(
-          'Stockfish will review every position on this device. It searches for one second per '
-          'position; longer games take more time.',
+          'Stockfish will review every position on this device. Longer searches can improve '
+          'analysis but take more time.',
         ),
+        const SizedBox(height: 16.0),
+        _buildLocalReviewSettings(enginePreferences),
         if (engine case AsyncError(:final error))
           Padding(padding: const EdgeInsets.only(top: 12.0), child: Text('Engine error: $error')),
         if (!engineEnabled)
@@ -156,6 +168,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         .where((review) => review.verdict == .goodMove || review.verdict == .notBest)
         .length;
     final analysisState = ref.watch(analysisControllerProvider(widget.options)).requireValue;
+    final enginePreferences = ref.watch(engineEvaluationPreferencesProvider);
     final playersAnalysis = (
       white: _playerAnalysisFor(Side.white),
       black: _playerAnalysisFor(Side.black),
@@ -225,6 +238,8 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Analyze again'),
               ),
+              const SizedBox(height: 16.0),
+              _buildLocalReviewSettings(enginePreferences),
               const SizedBox(height: 8.0),
               _buildServerAnalysisButton(context, widget.root.mainline.length),
             ],
@@ -235,10 +250,13 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
   }
 
   Widget _buildError(BuildContext context) {
+    final enginePreferences = ref.watch(engineEvaluationPreferencesProvider);
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
         Text('The local game review could not be completed: ${_error ?? 'Unknown error'}'),
+        const SizedBox(height: 16.0),
+        _buildLocalReviewSettings(enginePreferences),
         const SizedBox(height: 12.0),
         FilledButton.icon(
           onPressed: _startReview,
@@ -248,6 +266,123 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         const SizedBox(height: 8.0),
         _buildServerAnalysisButton(context, widget.root.mainline.length),
       ],
+    );
+  }
+
+  Widget _buildLocalReviewSettings(EngineEvaluationPrefState preferences) {
+    final selectedSpeed = _localReviewSpeed(preferences);
+    final manualSearchTime = _normalizedManualSearchTime(preferences.localGameAnalysisSearchTime);
+    final threads = _normalizedLocalReviewThreads(
+      preferences.localGameAnalysisThreads ?? preferences.numEngineCores,
+    );
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Local review speed settings', style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 8.0),
+            DropdownButtonFormField<_LocalReviewSpeed>(
+              initialValue: selectedSpeed,
+              decoration: const InputDecoration(labelText: 'Analysis speed'),
+              items: [
+                for (final speed in _LocalReviewSpeed.values)
+                  DropdownMenuItem(value: speed, child: Text(speed.label)),
+              ],
+              onChanged: (speed) {
+                if (speed == null) return;
+                final settings = ref.read(engineEvaluationPreferencesProvider.notifier);
+                switch (speed) {
+                  case .fast:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: _fastLocalReviewSearchTime,
+                        isManual: false,
+                        threads: threads,
+                      ),
+                    );
+                  case .balanced:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: _balancedLocalReviewSearchTime,
+                        isManual: false,
+                        threads: threads,
+                      ),
+                    );
+                  case .thorough:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: _thoroughLocalReviewSearchTime,
+                        isManual: false,
+                        threads: threads,
+                      ),
+                    );
+                  case .manual:
+                    unawaited(
+                      settings.setLocalGameAnalysisSettings(
+                        searchTime: manualSearchTime,
+                        isManual: true,
+                        threads: threads,
+                      ),
+                    );
+                }
+              },
+            ),
+            if (selectedSpeed == .manual)
+              SliderSettingsTile(
+                title: const Text('Time per position'),
+                explanation: 'Longer times may improve analysis but increase review duration.',
+                value: manualSearchTime.inMilliseconds.toDouble(),
+                values: [
+                  for (
+                    var millis = _minimumManualLocalReviewSearchTime.inMilliseconds;
+                    millis <= _maximumManualLocalReviewSearchTime.inMilliseconds;
+                    millis += _manualLocalReviewSearchTimeStep.inMilliseconds
+                  )
+                    millis.toDouble(),
+                ],
+                labelBuilder: (value) => _formatSearchTime(Duration(milliseconds: value.toInt())),
+                onChangeEnd: (value) {
+                  unawaited(
+                    ref
+                        .read(engineEvaluationPreferencesProvider.notifier)
+                        .setLocalGameAnalysisSettings(
+                          searchTime: Duration(milliseconds: value.toInt()),
+                          isManual: true,
+                          threads: threads,
+                        ),
+                  );
+                },
+              ),
+            if (maxEngineCores > 1)
+              SliderSettingsTile(
+                title: const Text('Threads (experimental)'),
+                explanation:
+                    'Uses multiple processor cores for local analysis. Higher values may use '
+                    'more battery and make the device warmer; speed gains vary.',
+                value: threads.toDouble(),
+                values: [
+                  for (var threadCount = 1; threadCount <= maxEngineCores; threadCount++)
+                    threadCount.toDouble(),
+                ],
+                labelBuilder: (value) => value.toInt().toString(),
+                onChangeEnd: (value) {
+                  unawaited(
+                    ref
+                        .read(engineEvaluationPreferencesProvider.notifier)
+                        .setLocalGameAnalysisSettings(
+                          searchTime: preferences.localGameAnalysisSearchTime,
+                          isManual: preferences.isLocalGameAnalysisManual,
+                          threads: value.toInt(),
+                        ),
+                  );
+                },
+              ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -348,6 +483,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     );
     final evaluator = ref.read(positionEvaluatorProvider(reviewContext).notifier);
     final enginePreferences = ref.read(engineEvaluationPreferencesProvider);
+    final searchTime = enginePreferences.localGameAnalysisSearchTime;
     final engineBudget = ref.read(engineBudgetProvider);
     final root = widget.root;
     final branches = root.mainline.toList(growable: false);
@@ -374,9 +510,11 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         final work = EvalWork(
           id: reviewContext.id,
           variant: analysis.variant,
-          threads: engineBudget.analysisThreads(enginePreferences.numEngineCores),
+          threads: engineBudget.analysisThreads(
+            enginePreferences.localGameAnalysisThreads ?? enginePreferences.numEngineCores,
+          ),
           path: UciPath(path.toString()),
-          searchTime: _localReviewSearchTime,
+          searchTime: searchTime,
           multiPv: 1,
           threatMode: false,
           initialPosition: root.position,
@@ -384,7 +522,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         );
 
         _activeWork = work;
-        evaluations.add(await _evaluatePosition(ref, evaluator, work, runId, signal));
+        evaluations.add(await _evaluatePosition(ref, evaluator, work, runId, signal, searchTime));
         _activeWork = null;
         _ensureActive(runId);
         setState(() => _positionsAnalyzed = ply + 1);
@@ -425,6 +563,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     EvalWork work,
     int runId,
     Completer<void> signal,
+    Duration searchTime,
   ) async {
     final firstEval = Completer<void>();
     LocalEval? latestEval;
@@ -450,7 +589,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
       ]);
       _ensureActive(runId);
 
-      final remaining = _localReviewSearchTime - stopwatch.elapsed;
+      final remaining = searchTime - stopwatch.elapsed;
       if (ref.read(positionEvaluatorProvider(evaluator.context)).isComputing &&
           remaining > Duration.zero) {
         await Future.any([
@@ -544,9 +683,45 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
           break;
       }
     }
-
     return PlayerAnalysis(inaccuracies: inaccuracies, mistakes: mistakes, blunders: blunders);
   }
+}
+
+_LocalReviewSpeed _localReviewSpeed(EngineEvaluationPrefState preferences) {
+  if (preferences.isLocalGameAnalysisManual) return .manual;
+  return switch (preferences.localGameAnalysisSearchTime) {
+    _fastLocalReviewSearchTime => .fast,
+    _balancedLocalReviewSearchTime => .balanced,
+    _thoroughLocalReviewSearchTime => .thorough,
+    _ => .manual,
+  };
+}
+
+Duration _normalizedManualSearchTime(Duration value) {
+  final steps = (value.inMilliseconds / _manualLocalReviewSearchTimeStep.inMilliseconds)
+      .round()
+      .clamp(
+        _minimumManualLocalReviewSearchTime.inMilliseconds ~/
+            _manualLocalReviewSearchTimeStep.inMilliseconds,
+        _maximumManualLocalReviewSearchTime.inMilliseconds ~/
+            _manualLocalReviewSearchTimeStep.inMilliseconds,
+      );
+  return Duration(milliseconds: steps * _manualLocalReviewSearchTimeStep.inMilliseconds);
+}
+
+int _normalizedLocalReviewThreads(int value) => value.clamp(1, maxEngineCores);
+
+String _formatSearchTime(Duration value) => value.inMilliseconds % 1000 == 0
+    ? '${value.inSeconds}s'
+    : '${(value.inMilliseconds / 1000).toStringAsFixed(2)}s';
+
+extension on _LocalReviewSpeed {
+  String get label => switch (this) {
+    .fast => 'Fast (${_formatSearchTime(_fastLocalReviewSearchTime)} per position)',
+    .balanced => 'Balanced (${_formatSearchTime(_balancedLocalReviewSearchTime)} per position)',
+    .thorough => 'Thorough (${_formatSearchTime(_thoroughLocalReviewSearchTime)} per position)',
+    .manual => 'Manual',
+  };
 }
 
 final _logger = Logger('LocalGameAnalysis');
