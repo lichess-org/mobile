@@ -35,6 +35,7 @@ const _ultraBulletLocalReviewSearchTime = Duration(milliseconds: 100);
 const _bulletLocalReviewSearchTime = Duration(milliseconds: 250);
 const _blitzLocalReviewSearchTime = Duration(milliseconds: 500);
 const _rapidLocalReviewSearchTime = Duration(seconds: 1);
+const _localReviewRetrySearchTime = Duration(seconds: 1);
 const _thoroughLocalReviewSearchTime = Duration(seconds: 3);
 const _manualLocalReviewSearchTimeStep = Duration(milliseconds: 250);
 const _minimumManualLocalReviewSearchTime = Duration(milliseconds: 250);
@@ -298,21 +299,18 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
             Text('Local review speed settings', style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 8.0),
             DropdownButtonFormField<_LocalReviewSpeed>(
+              isExpanded: true,
               initialValue: selectedSpeed,
               decoration: const InputDecoration(labelText: 'Analysis speed'),
               items: [
                 for (final speed in _LocalReviewSpeed.values)
                   DropdownMenuItem(
                     value: speed,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (speed == .ultraBullet) ...[
-                          const Icon(Icons.science_outlined, size: 18.0),
-                          const SizedBox(width: 6.0),
-                        ],
-                        Text(speed.label),
-                      ],
+                    child: Text(
+                      speed.label,
+                      maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
               ],
@@ -534,6 +532,10 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
     final totalPositions = branches.length + 1;
     final path = StringBuffer();
     _progressAnimationController.duration = searchTime;
+    final evaluatorSubscription = ref.listenManual(
+      positionEvaluatorProvider(reviewContext),
+      (previous, next) {},
+    );
 
     _evaluator = evaluator;
     _isReviewing = true;
@@ -594,9 +596,12 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
     } finally {
       if (evaluator.currentWork == _activeWork) evaluator.stop();
       _activeWork = null;
-      _isReviewing = false;
       if (identical(_evaluator, evaluator)) _evaluator = null;
+      _progressAnimationController.stop();
+      _isReviewing = false;
+      if (mounted) setState(() {});
       if (mounted) ctrl.requestEval();
+      evaluatorSubscription.close();
     }
   }
 
@@ -609,45 +614,100 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
     Duration searchTime,
   ) async {
     final firstEval = Completer<void>();
+    final searchStopped = Completer<void>();
     LocalEval? latestEval;
+    var hasStartedSearching = false;
     final stopwatch = Stopwatch()..start();
     final subscription = ref.listenManual(positionEvaluatorProvider(evaluator.context), (
       previous,
       next,
     ) {
       if (next.currentWork == work) {
+        if (next.isComputing) {
+          hasStartedSearching = true;
+        } else if (hasStartedSearching && !searchStopped.isCompleted) {
+          searchStopped.complete();
+        }
         final eval = next.eval;
         if (eval != null) {
           latestEval = eval;
           if (!firstEval.isCompleted) firstEval.complete();
         }
+      } else if (hasStartedSearching && !next.isComputing && !searchStopped.isCompleted) {
+        searchStopped.complete();
       }
+    });
+    final evalSubscription = evaluator.evalStream.where((result) => result.$1 == work).listen((
+      result,
+    ) {
+      latestEval = result.$2;
+      if (!firstEval.isCompleted) firstEval.complete();
     });
 
     try {
       evaluator.evaluate(work);
       await Future.any([
         firstEval.future.timeout(const Duration(seconds: 30)),
+        searchStopped.future.timeout(const Duration(seconds: 30)),
         signal.future.then((_) => throw const _LocalReviewCancelled()),
       ]);
       _ensureActive(runId);
 
       final remaining = searchTime - stopwatch.elapsed;
-      if (ref.read(positionEvaluatorProvider(evaluator.context)).isComputing &&
-          remaining > Duration.zero) {
+      final currentState = ref.read(positionEvaluatorProvider(evaluator.context));
+      if (latestEval != null && currentState.isComputing && remaining > Duration.zero) {
         await Future.any([
           Future<void>.delayed(remaining),
+          searchStopped.future,
           signal.future.then((_) => throw const _LocalReviewCancelled()),
         ]);
       }
       _ensureActive(runId);
-      evaluator.stop();
-      await Future<void>.delayed(kEngineEvalEmissionThrottleDelay);
+      if (ref.read(positionEvaluatorProvider(evaluator.context)).isComputing) {
+        evaluator.stop();
+        await Future.any([
+          searchStopped.future.timeout(const Duration(seconds: 30)),
+          signal.future.then((_) => throw const _LocalReviewCancelled()),
+        ]);
+      }
       _ensureActive(runId);
 
-      return latestEval ?? (throw StateError('The engine returned no evaluation.'));
+      if (latestEval case final eval?) return eval;
+      if (work.position.isCheckmate || work.position.isStalemate) {
+        return LocalEval(
+          position: work.position,
+          depth: 0,
+          nodes: 0,
+          pvs: const IListConst([]),
+          millis: 0,
+          searchTime: searchTime,
+          threatMode: work.threatMode,
+          mate: work.position.isCheckmate ? (work.position.turn == .white ? -1 : 1) : null,
+          cp: work.position.isStalemate ? 0 : null,
+        );
+      }
+      if (searchTime < _localReviewRetrySearchTime) {
+        const retryTime = _localReviewRetrySearchTime;
+        if (mounted && runId == _runId) {
+          _progressAnimationController.duration = retryTime;
+          _progressAnimationController.forward(from: 0.0);
+        }
+        return await _evaluatePosition(
+          ref,
+          evaluator,
+          work.copyWith(searchTime: retryTime),
+          runId,
+          signal,
+          retryTime,
+        );
+      }
+      throw StateError(
+        'Stockfish returned no evaluation for ply ${work.position.ply} after '
+        '${searchTime.inMilliseconds} ms.',
+      );
     } finally {
       subscription.close();
+      await evalSubscription.cancel();
     }
   }
 
@@ -763,12 +823,11 @@ String _formatSearchTime(Duration value) => value.inMilliseconds % 1000 == 0
 extension on _LocalReviewSpeed {
   String get label => switch (this) {
     .ultraBullet =>
-      'Ultra bullet (experimental, ${_formatSearchTime(_ultraBulletLocalReviewSearchTime)} per '
-          'position)',
-    .bullet => 'Bullet (${_formatSearchTime(_bulletLocalReviewSearchTime)} per position)',
-    .blitz => 'Blitz (${_formatSearchTime(_blitzLocalReviewSearchTime)} per position)',
-    .rapid => 'Rapid (${_formatSearchTime(_rapidLocalReviewSearchTime)} per position)',
-    .thorough => 'Thorough (${_formatSearchTime(_thoroughLocalReviewSearchTime)} per position)',
+      'Ultra bullet (experimental) · ${_formatSearchTime(_ultraBulletLocalReviewSearchTime)}',
+    .bullet => 'Bullet · ${_formatSearchTime(_bulletLocalReviewSearchTime)}',
+    .blitz => 'Blitz · ${_formatSearchTime(_blitzLocalReviewSearchTime)}',
+    .rapid => 'Rapid · ${_formatSearchTime(_rapidLocalReviewSearchTime)}',
+    .thorough => 'Thorough · ${_formatSearchTime(_thoroughLocalReviewSearchTime)}',
     .manual => 'Manual',
   };
 }

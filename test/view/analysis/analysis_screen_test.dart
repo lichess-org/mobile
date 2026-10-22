@@ -77,24 +77,35 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Local review speed settings'), findsOneWidget);
-      expect(find.text('Rapid (1s per position)'), findsOneWidget);
-      expect(find.text('Analyze game'), findsOneWidget);
-      expect(find.text('Request a computer analysis'), findsOneWidget);
+      expect(find.text('Rapid · 1s'), findsOneWidget);
       expect(find.textContaining('Stockfish will review every position'), findsOneWidget);
-      if (maxEngineCores > 1) {
-        expect(find.text('Threads (experimental)'), findsOneWidget);
-      }
 
-      await tester.tap(find.text('Rapid (1s per position)'));
+      await tester.tap(find.text('Rapid · 1s'));
       await tester.pumpAndSettle();
-      expect(find.text('Ultra bullet (experimental, 0.10s per position)'), findsOneWidget);
-      expect(find.text('Bullet (0.25s per position)'), findsOneWidget);
-      expect(find.text('Blitz (0.50s per position)'), findsOneWidget);
-      expect(find.text('Thorough (3s per position)'), findsOneWidget);
+      expect(find.text('Ultra bullet (experimental) · 0.10s'), findsOneWidget);
+      expect(find.text('Bullet · 0.25s'), findsOneWidget);
+      expect(find.text('Blitz · 0.50s'), findsOneWidget);
+      expect(find.text('Thorough · 3s'), findsOneWidget);
 
       await tester.tap(find.text('Manual'));
       await tester.pumpAndSettle();
       expect(find.text('Time per position'), findsOneWidget);
+
+      if (maxEngineCores > 1) {
+        await tester.scrollUntilVisible(
+          find.text('Threads (experimental)'),
+          250,
+          scrollable: find.byType(Scrollable).last,
+        );
+        expect(find.text('Threads (experimental)'), findsOneWidget);
+      }
+
+      await tester.scrollUntilVisible(
+        find.text('Analyze game'),
+        250,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.text('Analyze game'), findsOneWidget);
     });
 
     testWidgets('keeps local review and requires an account for server analysis', (tester) async {
@@ -136,9 +147,13 @@ void main() {
         stockfish: engine,
       );
       await tester.pumpAndSettle();
-
       await tester.tap(find.byTooltip('Computer analysis'));
       await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Analyze game'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
       await tester.tap(find.text('Analyze game'));
       for (var i = 0; i < 50; i++) {
         await tester.pump(const Duration(milliseconds: 100));
