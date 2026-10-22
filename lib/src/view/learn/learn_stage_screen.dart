@@ -18,8 +18,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
@@ -39,7 +40,7 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
         appBar: PlatformAppBar(
           compactButtons: true,
           title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
-          actions: const [ToggleSoundButton()],
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
         ),
         // The controller reads the saved progress to pick the level to start with.
         body: switch (ref.watch(learnProgressProvider)) {
@@ -449,12 +450,26 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                   padding: Styles.bodyPadding,
                   child: GestureDetector(
                     onTap: () {},
-                    child: Card(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(24.0),
-                        child: child,
-                      ),
-                    ),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        // Shown over the board, which the glass would let show through too much.
+                        ? GlassModalCard(
+                            tintOpacity: 0.85,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(24.0),
+                                child: child,
+                              ),
+                            ),
+                          )
+                        : Card(
+                            // The dialog color, opaque enough with a background theme.
+                            color: DialogTheme.of(context).backgroundColor,
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(24.0),
+                              child: child,
+                            ),
+                          ),
                   ),
                 ),
               ),

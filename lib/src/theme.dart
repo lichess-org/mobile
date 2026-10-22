@@ -126,9 +126,19 @@ ThemeData _makeDefaultTheme(
 
   final textTheme = isIOS ? kCupertinoDefaultTextTheme : null;
 
-  final theme = hasSystemColors
-      ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
-      : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
+  final baseScheme = hasSystemColors ? systemScheme : boardScheme;
+
+  // On iOS light mode, like the iOS grouped lists, cards stand out brighter on a darker background.
+  final isIOSLight = isIOS && brightness == Brightness.light;
+  final theme = ThemeData.from(
+    colorScheme: isIOSLight
+        ? baseScheme.copyWith(surface: baseScheme.surfaceContainer)
+        : baseScheme,
+    textTheme: textTheme,
+  );
+  final cupertinoCardColor = isIOSLight
+      ? Color.lerp(baseScheme.surface, baseScheme.surfaceContainerLowest, 0.75)
+      : theme.colorScheme.surfaceContainerHigh;
 
   final isAmoled = themeMode == BackgroundThemeMode.amoled;
 
@@ -158,9 +168,7 @@ ThemeData _makeDefaultTheme(
     searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
     listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
-    cardTheme: isIOS
-        ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh)
-        : null,
+    cardTheme: isIOS ? _kCupertinoCardTheme.copyWith(color: cupertinoCardColor) : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
     floatingActionButtonTheme: isIOS
         ? FloatingActionButtonThemeData(
@@ -174,7 +182,13 @@ ThemeData _makeDefaultTheme(
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
-    extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
+    extensions: [
+      lichessCustomColors.harmonized(theme.colorScheme),
+      // The rows are brighter than the background, like the cards, so that a card of rows still
+      // stands out from it.
+      if (isIOSLight)
+        CustomTheme(rowEven: cupertinoCardColor!, rowOdd: baseScheme.surfaceContainerLow),
+    ],
   );
 
   if (!isAmoled) return finalTheme;
@@ -351,7 +365,11 @@ const _kCupertinoInputBorderRadius = BorderRadius.all(Radius.circular(28));
 InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
   return InputDecorationTheme(
     filled: true,
-    fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
+    // In light mode, a translucent darkening like the iOS system fills, which shows on both the
+    // background and the brighter cards.
+    fillColor: colorScheme.brightness == Brightness.light
+        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.12)
+        : colorScheme.surfaceContainer.withValues(alpha: 0.7),
     border: const OutlineInputBorder(borderRadius: _kCupertinoInputBorderRadius),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline),

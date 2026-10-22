@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -73,10 +74,9 @@ class const OfflineCorrespondenceGamePreview({
         ],
       ),
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (lastModified, game)));
+        Navigator.of(context).pushHidingTabBar(
+          OfflineCorrespondenceGameScreen.buildRoute(initialGame: (lastModified, game)),
+        );
       },
     );
   }

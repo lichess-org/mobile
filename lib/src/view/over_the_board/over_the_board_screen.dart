@@ -158,6 +158,8 @@ class _BodyState() extends ConsumerState<_Body> {
                     Navigator.pop(context);
                   });
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );
@@ -275,6 +277,7 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
     final clock = ref.watch(overTheBoardClockProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -297,33 +300,43 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
                   },
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
-        BottomBarButton(
-          label: 'Previous',
-          onTap: gameState.canGoBack
-              ? () {
-                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
-                  if (clock.active) {
-                    ref
-                        .read(overTheBoardClockProvider.notifier)
-                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                  }
-                }
-              : null,
-          icon: CupertinoIcons.chevron_back,
-        ),
-        BottomBarButton(
-          label: 'Next',
-          onTap: gameState.canGoForward
-              ? () {
-                  ref.read(overTheBoardGameControllerProvider.notifier).goForward();
-                  if (clock.active) {
-                    ref
-                        .read(overTheBoardClockProvider.notifier)
-                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                  }
-                }
-              : null,
-          icon: CupertinoIcons.chevron_forward,
+        BottomBarGroup(
+          children: [
+            BottomBarButton(
+              label: 'Previous',
+              onTap: gameState.canGoBack
+                  ? () {
+                      ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                      if (clock.active) {
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .switchSide(
+                              newSideToMove: gameState.turn.opposite,
+                              addIncrement: false,
+                            );
+                      }
+                    }
+                  : null,
+              icon: CupertinoIcons.chevron_back,
+            ),
+            BottomBarButton(
+              label: 'Next',
+              onTap: gameState.canGoForward
+                  ? () {
+                      ref.read(overTheBoardGameControllerProvider.notifier).goForward();
+                      if (clock.active) {
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .switchSide(
+                              newSideToMove: gameState.turn.opposite,
+                              addIncrement: false,
+                            );
+                      }
+                    }
+                  : null,
+              icon: CupertinoIcons.chevron_forward,
+            ),
+          ],
         ),
         BottomBarButton(
           label: 'Takeback',

@@ -76,6 +76,38 @@ void main() {
       );
     });
 
+    testWidgets('the bottom bar floats over the tab view on iOS only', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      expect(
+        tester
+            .widget<SingleChildScrollView>(
+              find.descendant(
+                of: find.byType(TabBarView),
+                matching: find.byType(SingleChildScrollView),
+              ),
+            )
+            .padding,
+        EdgeInsets.only(bottom: bottomInset),
+      );
+    }, variant: kPlatformVariant);
+
     testWidgets('move backwards and forward', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
@@ -922,7 +954,7 @@ void main() {
 
     testWidgets('Displays conditional premove lines saved on server', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: 'e4 e5',
@@ -957,7 +989,7 @@ void main() {
     testWidgets('Regaining focus refreshes correspondence moves', (tester) async {
       var liveGamePgn = 'e4 e5';
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: liveGamePgn,
@@ -1779,7 +1811,7 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           if (request.method == 'POST') {
             lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
                 .map(
@@ -1873,7 +1905,8 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path.startsWith('/$kGameFullId/forecasts/') && request.method == 'POST') {
+        if (request.url.path.startsWith('/game/$kGameFullId/forecasts/') &&
+            request.method == 'POST') {
           lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
               .map(
                 (steps) => (steps as List<dynamic>)
@@ -1883,7 +1916,7 @@ void main() {
               .toSet();
           playedMoveUci = request.url.pathSegments.last;
           return mockResponse('', 200);
-        } else if (request.url.path == '/$kGameFullId/forecasts' && request.method == 'GET') {
+        } else if (request.url.path == '/game/$kGameFullId/forecasts' && request.method == 'GET') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -2025,7 +2058,7 @@ void main() {
 
     testWidgets('Tapping a premove line jumps to its final position', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -2076,7 +2109,7 @@ void main() {
 
     testWidgets('New move by opponent updates premove lines', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',

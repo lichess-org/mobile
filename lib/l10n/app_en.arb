@@ -166,6 +166,7 @@
   "mobileSettingsShowBorder": "Show border",
   "mobileSettingsTouchFeedback": "Touch feedback",
   "mobileSettingsTouchFeedbackSubtitle": "When enabled, the device will vibrate shortly when you move or capture a piece.",
+  "mobileShare": "Share",
   "mobileShareChallengeUrl": "Share challenge URL",
   "mobileShareGamePGN": "Share PGN",
   "mobileShareGameURL": "Share game URL",

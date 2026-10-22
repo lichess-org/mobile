@@ -155,9 +155,8 @@ void _challengeBot(User bot, {required BuildContext context, required WidgetRef 
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,
-      builder: (context) {
-        return CreateChallengeBottomSheet(user: bot.lightUser);
-      },
+      builder: (_) =>
+          CreateChallengeBottomSheet(user: bot.lightUser, navigator: Navigator.of(context)),
     );
   }
 }

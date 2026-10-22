@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -88,7 +89,7 @@ class const OngoingGamePreview({
         ],
       ),
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context).pushHidingTabBar(
           GameScreen.buildRoute(
             source: ExistingGameSource(game.fullId),
             loadingPosition: (

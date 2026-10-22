@@ -9,6 +9,24 @@ Color opaqueModalColor(BuildContext context) =>
     Theme.of(context).bottomSheetTheme.backgroundColor?.withValues(alpha: 1.0) ??
     ColorScheme.of(context).surfaceContainerLow;
 
+/// The glass of the iOS modals (the package action sheet's), tinted black or white at
+/// [tintOpacity] in dark or light mode, or with [color]: opaque enough to read the modal over most
+/// content.
+LiquidGlassSettings glassModalSettings(
+  BuildContext context, {
+  double tintOpacity = 0.65,
+  Color? color,
+}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  return LiquidGlassSettings(
+    thickness: 30,
+    blur: 5,
+    refractiveIndex: 1.15,
+    saturation: 1.2,
+    glassColor: color ?? (isDark ? Colors.black : Colors.white).withValues(alpha: tintOpacity),
+  );
+}
+
 /// The rounded liquid glass card of an iOS modal (action sheet, alert dialog, bottom sheet).
 ///
 /// Its tint is opaque enough to read the modal over most content; raise [tintOpacity] over busy
@@ -38,21 +56,13 @@ class const GlassModalCard({
       );
     }
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GlassContainer(
       // A modal floats alone over the content, there is no parent glass layer to share.
       useOwnLayer: true,
       shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
       clipBehavior: Clip.antiAlias,
       padding: padding,
-      // The package action sheet's glass.
-      settings: LiquidGlassSettings(
-        thickness: 30,
-        blur: 5,
-        refractiveIndex: 1.15,
-        saturation: 1.2,
-        glassColor: color ?? (isDark ? Colors.black : Colors.white).withValues(alpha: tintOpacity),
-      ),
+      settings: glassModalSettings(context, tintOpacity: tintOpacity, color: color),
       child: child,
     );
   }

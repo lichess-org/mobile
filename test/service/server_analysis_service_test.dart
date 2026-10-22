@@ -19,7 +19,7 @@ const _source = ServerAnalysisSource.game(gameId: GameId('H9fIRZUk'));
 Future<ServerAnalysisService> _makeService(int statusCode, String body) async {
   final container = await lichessClientContainer(
     MockClient((request) async {
-      if (request.url.path == '/H9fIRZUk/request-analysis') {
+      if (request.url.path == '/game/H9fIRZUk/request-analysis') {
         return http.Response(body, statusCode);
       }
       return http.Response('', 404);

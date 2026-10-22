@@ -36,6 +36,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -44,7 +45,6 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -102,9 +102,9 @@ class const OfflineComputerGameScreen({
       appBar: PlatformAppBar(
         title: AppBarTitleText(title),
         actions: [
-          IconButton(
+          SemanticIconButton(
             icon: const Icon(Icons.settings),
-            tooltip: context.l10n.settingsSettings,
+            semanticsLabel: context.l10n.settingsSettings,
             onPressed: () {
               showAdaptiveBottomSheet<void>(
                 context: context,
@@ -184,6 +184,8 @@ class _BodyState() extends ConsumerState<_Body> {
                   Navigator.pop(context);
                   _showNewGameDialog(initialVariant: gameState.game.meta.variant);
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );
@@ -341,6 +343,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
     final gameState = ref.watch(offlineComputerGameControllerProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -1084,7 +1087,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: PlatformFilledButton(
+          child: FilledButton(
             onPressed: _isPlayEnabled
                 ? () {
                     final effectiveFen =
@@ -1178,6 +1181,12 @@ class const _OfflineComputerGameSettingsSheet() extends ConsumerWidget {
 class const OfflineComputerGameResultDialog({
   required final OfflineComputerGame game,
   required final VoidCallback onNewGame,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysis,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -1212,15 +1221,13 @@ class const OfflineComputerGameResultDialog({
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: game.id,
-                  orientation: game.playerSide,
-                  pgn: game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: game.meta.variant,
-                ),
+            onAnalysis(
+              AnalysisOptions.pgn(
+                id: game.id,
+                orientation: game.playerSide,
+                pgn: game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: game.meta.variant,
               ),
             );
           },

@@ -9,8 +9,6 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -111,6 +109,45 @@ void main() {
 
       // Check that the right number of boards is displayed
       expect(find.byType(BoardThumbnail), findsNWidgets(4));
+    });
+
+    testWidgets('The boards fit without the evaluation gauges', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament, the round, and draw the pinned app bar buttons.
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Evaluation gauge'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(4));
+      expect(
+        tester.widget<BoardThumbnail>(find.byType(BoardThumbnail).first).showEvaluationGauge,
+        isFalse,
+      );
+      // The result of a finished game, next to the players, fits in the grid cell (overflow errors
+      // are ignored in tests).
+      final thumbnail = find.byType(BoardThumbnail).first;
+      final footerResult = find.descendant(of: thumbnail, matching: find.text('½')).last;
+      expect(
+        tester.getBottomLeft(footerResult).dy,
+        lessThanOrEqualTo(tester.getBottomLeft(thumbnail).dy),
+      );
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
@@ -217,85 +254,36 @@ void main() {
 
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
-      await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pumpAndSettle();
+      Future<void> pickTeam(String team) async {
+        await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+        await tester.pumpAndSettle();
+        // The team submenu, in the games filter section of the menu.
+        expect(find.text('Filter games'), findsOneWidget);
+        await tester.tap(find.text('Team'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(team).last);
+        await tester.pumpAndSettle();
+      }
 
-      await tester.tap(find.text('Filter games'));
-      await tester.pumpAndSettle();
-      final teamChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.text('Team'),
-      );
-
-      expect(teamChip, findsOneWidget);
-
-      // Try to scroll the bottom sheet content to make the team chip visible
-      // Find the scrollable within the bottom sheet
-      await tester.scrollUntilVisible(teamChip, 100, scrollable: find.byType(Scrollable).first);
-
-      await tester.tap(teamChip);
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('All teams'), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byKey(const ValueKey('team-picker')),
-          matching: find.byType(ListTile),
-        ),
-        findsNWidgets(5),
-      ); // Back + "All teams" + 3 teams
-
-      await tester.tap(find.text('Team C'));
-
+      // The pinned app bar buttons are drawn a frame later.
       await tester.pump();
-
-      expect(find.text('Team: Team C'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
+      await pickTeam('Team C');
 
       // Filtered to one game
-      final filteredGame = find.byType(BoardThumbnail);
-
-      expect(filteredGame, findsOneWidget);
+      expect(find.byType(BoardThumbnail), findsOneWidget);
       expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
 
-      // Clear the filter by opening settings again
+      // The current team is shown below the submenu item, and the counts are those of its games.
       await tester.pump();
-      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Filter games'));
+      expect(find.text('Team C'), findsOneWidget);
+      expect(find.text('All games (1)'), findsOneWidget);
+      await tester.tapAt(const Offset(10, 400));
       await tester.pumpAndSettle();
-
-      // Tap the team filter chip
-      final teamFilterChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.byWidgetPredicate((widget) {
-          if (widget is Text) {
-            final text = widget.data;
-            return text != null && (text.startsWith('Team'));
-          }
-          return false;
-        }),
-      );
-      await tester.tap(teamFilterChip);
-
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('All teams'));
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Team'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
 
       // Filter cleared -> all results restored
+      await pickTeam('All teams');
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
     });
   });
@@ -572,6 +560,8 @@ void main() {
       await tester.pump();
       // Load the round
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
     }
 
     testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
@@ -588,12 +578,13 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: false, recordedRequests: requests);
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.method, 'POST');
@@ -606,10 +597,11 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: true, recordedRequests: requests);
 
-      await tester.tap(find.byIcon(Icons.notifications));
+      await tester.tap(find.byIcon(Icons.notifications).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.url.queryParameters['set'], 'false');
@@ -638,18 +630,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
       // Toggled right away, while the request is still in flight...
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 1));
       await tester.pump();
+      await tester.pump();
 
       // ...then reverted once the request failed.
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
     });
   });
 }

@@ -280,8 +280,8 @@ class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChann
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap: () => Navigator.of(context, rootNavigator: true)
-                      .push(
+                  onTap: () => Navigator.of(context)
+                      .pushHidingTabBar(
                         TvScreen.buildRoute(
                           channel: snapshot.channel,
                           gameId: snapshot.id,

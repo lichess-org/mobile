@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -68,10 +69,8 @@ class const UserContextMenu({final User? user, final UserId? userId, super.key})
                 BottomSheetContextMenuAction(
                   icon: Icons.live_tv_outlined,
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TvScreen.buildRoute(user: value.lightUser));
+                    Navigator.of(context)
+                        .pushHidingTabBar(TvScreen.buildRoute(user: value.lightUser));
                   },
                   child: Text(context.l10n.watchGames),
                 ),

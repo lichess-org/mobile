@@ -803,12 +803,13 @@ void main() {
         // Push the SAME tournament again on top of the game. The provider is kept
         // alive by the first screen, so `build` doesn't re-run: the socket must be
         // reopened by the newly focused screen.
-        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        final tournamentRoute = TournamentScreen.buildRoute(tournamentId);
+        navigator.push(tournamentRoute);
         await tester.pump(); // start the route transition
-        // Complete the push transition so the new screen becomes fully visible
-        // and its `FocusDetector` reports a focus gain -> onFocusGained.
-        await tester.pump(const Duration(milliseconds: 400));
-        await tester.pump(); // onFocusGained -> invalidateSelf
+        await tester.pump((tournamentRoute as PageRoute).transitionDuration);
+        // The push completes on the first tick past its duration: the new screen is fully visible
+        // and its `FocusDetector` reports a focus gain -> onFocusGained -> invalidateSelf.
+        await tester.pump(const Duration(milliseconds: 1));
         await tester.pump(); // rebuild: getTournament resolves -> socket reopens
         await tester.pump(kFakeWebSocketConnectionLag);
 
@@ -1204,6 +1205,9 @@ void main() {
             }
             ''', 200);
         }
+        if (request.url.path == '/tournament/testTeamBattle/player/player1') {
+          return mockResponse(testTournamentPlayerResponse, 200);
+        }
         return mockResponse('', 404);
       });
 
@@ -1233,6 +1237,20 @@ void main() {
       expect(find.text('1921'), findsOneWidget);
       expect(find.text('Average score'), findsOneWidget);
       expect(find.text('23'), findsOneWidget);
+
+      // A player of the team opens in the same sheet.
+      await tester.tap(
+        find.descendant(of: find.byType(BottomSheet), matching: find.text('Player1')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsOneWidget);
+      expect(find.text('Average rating'), findsNothing);
+
+      // And goes back to the team, in the same sheet.
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsNothing);
+      expect(find.text('Average rating'), findsOneWidget);
     });
 
     testWidgets('shows "View all teams" button and opens all teams screen', (

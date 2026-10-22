@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -15,11 +16,15 @@ import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateGameWidget() extends ConsumerWidget {
+class const CreateGameWidget({
+  /// The navigator where the game is pushed, by default the navigator of the widget: in a sheet on
+  /// the root navigator, the navigator of the screen that presents it.
+  final NavigatorState? navigator,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
@@ -248,12 +253,12 @@ class const CreateGameWidget() extends ConsumerWidget {
             ],
           ),
         ],
-        PlatformFilledButton(
+        FilledButton.icon(
           icon: const Icon(Icons.groups),
           onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
                   // Pops the play bottom sheet
-                  Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
                   final playban = ref.read(accountProvider).value?.playban;
                   if (playban != null) {
@@ -261,12 +266,12 @@ class const CreateGameWidget() extends ConsumerWidget {
                     return;
                   }
 
-                  Navigator.of(context, rootNavigator: true).push(
+                  (navigator ?? Navigator.of(context)).pushHidingTabBar(
                     GameScreen.buildRoute(source: LobbySource(GameSeek.custom(playPrefs, account))),
                   );
                 }
               : null,
-          child: Text(context.l10n.createLobbyGame),
+          label: Text(context.l10n.createLobbyGame),
         ),
       ],
     );

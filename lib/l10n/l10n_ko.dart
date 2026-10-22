@@ -387,6 +387,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '기물을 움직이거나 잡았을 때 기기가 짧게 진동합니다.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => '도전 URL 공유';
 
   @override

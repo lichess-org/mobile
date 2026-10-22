@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -55,10 +56,7 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
   }
 
   Future<void> pushConversationScreen(LightUser user) async {
-    await Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(ConversationScreen.buildRoute(user: user));
+    await Navigator.of(context).pushHidingTabBar(ConversationScreen.buildRoute(user: user));
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
     controller.clear();

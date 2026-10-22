@@ -418,8 +418,12 @@ class const _PlayerWidget({
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
+                  // The line height of the other texts, which the grid cell height is computed from.
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    height: _kPlayerWidgetTextStyle.height,
+                    fontWeight: .bold,
+                    color: game.status.colorFor(side, context),
+                  ),
                 )
               else if (clock != null)
                 CountdownClockBuilder(

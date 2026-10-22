@@ -5,6 +5,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 
 const kBackgroundImageBlurFactor = 8.0;
@@ -22,6 +23,9 @@ class const FullScreenBackground({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // A page of a navigation sheet is painted with the color of the sheet.
+    if (NavigationSheetScope.maybeOf(context) != null) return child;
+
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final appDocumentsDirectory = ref
         .read(preloadedDataProvider)

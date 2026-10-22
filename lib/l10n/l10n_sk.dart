@@ -387,6 +387,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Keď je táto funkcia zapnutá, zariadenie pri presunutí alebo braní figúrky krátko zavibruje.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override

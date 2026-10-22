@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassScrollEdgeEffect;
 import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
@@ -36,6 +38,32 @@ const kTestSurfaces = [
 const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
+
+/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS,
+/// over a bottom edge blur of the content that starts above it, and is below the tab view
+/// elsewhere.
+///
+/// Returns the bottom padding that the tab views must apply: the bar height on iOS, else 0.
+double expectBottomBarOverTabView(WidgetTester tester) {
+  final barRect = tester.getRect(find.byType(BottomBar));
+  final tabViewBottom = tester.getBottomLeft(find.byType(TabBarView)).dy;
+  final bottomEdgeBlur = find.byWidgetPredicate(
+    (widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom,
+  );
+  if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+    expect(tabViewBottom, greaterThan(barRect.top));
+    // The blur starts above the bar, to be strong at the top of its buttons.
+    expect(
+      tester.widget<GlassScrollEdgeEffect>(bottomEdgeBlur).bottomFadeHeight,
+      greaterThan(barRect.height),
+    );
+    return barRect.height;
+  } else {
+    expect(tabViewBottom, barRect.top);
+    expect(bottomEdgeBlur, findsNothing);
+    return 0.0;
+  }
+}
 
 /// Mocks a surface with a given size.
 class const TestSurface({required final Widget child, required final Size size, super.key})

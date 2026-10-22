@@ -5,23 +5,31 @@ import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class const StudyGamebook(final StudyOptions options) extends StatelessWidget {
+class const StudyGamebook(final StudyOptions options) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasHint = ref.watch(
+      studyControllerProvider(options).select((state) => state.value?.gamebookHint != null),
+    );
+    // Above a bar floating over the view: the comment scrolls under it, unless the hint is shown,
+    // which is kept above it.
+    final bottomPadding = 16.0 + MediaQuery.paddingOf(context).bottom;
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _Comment(options: options),
-          _Hint(options: options),
+          _Comment(options: options, bottomPadding: hasHint ? 0.0 : bottomPadding),
+          _Hint(options: options, bottomPadding: bottomPadding),
         ],
       ),
     );
   }
 }
 
-class const _Comment({required final StudyOptions options}) extends ConsumerStatefulWidget {
+class const _Comment({required final StudyOptions options, required final double bottomPadding})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Comment> createState() => _CommentState();
 }
@@ -54,6 +62,7 @@ class _CommentState() extends ConsumerState<_Comment> {
         controller: _scrollController,
         child: SingleChildScrollView(
           controller: _scrollController,
+          padding: EdgeInsets.only(bottom: widget.bottomPadding),
           child: Padding(
             padding: const EdgeInsets.only(right: 5),
             child: RichLinkText(
@@ -70,7 +79,8 @@ class _CommentState() extends ConsumerState<_Comment> {
   }
 }
 
-class const _Hint({required final StudyOptions options}) extends ConsumerStatefulWidget {
+class const _Hint({required final StudyOptions options, required final double bottomPadding})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Hint> createState() => _HintState();
 }
@@ -107,8 +117,9 @@ class _HintState() extends ConsumerState<_Hint> {
     final hint = ref.watch(studyControllerProvider(widget.options)).requireValue.gamebookHint;
     return hint == null
         ? const SizedBox.shrink()
-        : SizedBox(
-            height: 40,
+        : Container(
+            height: 40 + widget.bottomPadding,
+            padding: EdgeInsets.only(bottom: widget.bottomPadding),
             child: showHint
                 ? Center(child: Text(hint))
                 : TextButton(

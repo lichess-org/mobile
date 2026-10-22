@@ -218,8 +218,8 @@ void main() {
       // lila omits 'fide.follow' when the user is not logged in.
       await pumpPlayerResultsScreen(tester, points: '1', customPoints: null, fideId: fideId);
 
-      expect(find.byIcon(Icons.star), findsNothing);
-      expect(find.byIcon(Icons.star_border), findsNothing);
+      expect(find.byIcon(Icons.star).hitTestable(), findsNothing);
+      expect(find.byIcon(Icons.star_border).hitTestable(), findsNothing);
     });
 
     testWidgets('is not shown when the player has no FIDE id', variant: kPlatformVariant, (
@@ -227,8 +227,8 @@ void main() {
     ) async {
       await pumpPlayerResultsScreen(tester, points: '1', customPoints: null, follow: false);
 
-      expect(find.byIcon(Icons.star), findsNothing);
-      expect(find.byIcon(Icons.star_border), findsNothing);
+      expect(find.byIcon(Icons.star).hitTestable(), findsNothing);
+      expect(find.byIcon(Icons.star_border).hitTestable(), findsNothing);
     });
 
     testWidgets('is filled when already following', variant: kPlatformVariant, (tester) async {
@@ -240,7 +240,7 @@ void main() {
         fideId: fideId,
       );
 
-      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.byIcon(Icons.star).hitTestable(), findsOneWidget);
     });
 
     testWidgets('follows the player when tapped', variant: kPlatformVariant, (tester) async {
@@ -254,12 +254,14 @@ void main() {
         recordedRequests: requests,
       );
 
-      expect(find.byIcon(Icons.star_border), findsOneWidget);
+      expect(find.byIcon(Icons.star_border).hitTestable(), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.star_border));
+      await tester.tap(find.byIcon(Icons.star_border).hitTestable());
+      // The pinned copy of the button is redrawn a frame later.
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.byIcon(Icons.star).hitTestable(), findsOneWidget);
 
       final followRequest = requests.firstWhere((r) => r.url.path == '/fide/$fideId/follow');
       expect(followRequest.method, 'POST');
@@ -279,10 +281,12 @@ void main() {
         recordedRequests: requests,
       );
 
-      await tester.tap(find.byIcon(Icons.star));
+      await tester.tap(find.byIcon(Icons.star).hitTestable());
+      // The pinned copy of the button is redrawn a frame later.
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.star_border), findsOneWidget);
+      expect(find.byIcon(Icons.star_border).hitTestable(), findsOneWidget);
 
       final followRequest = requests.firstWhere((r) => r.url.path == '/fide/$fideId/follow');
       expect(followRequest.url.queryParameters['follow'], 'false');
