@@ -128,10 +128,10 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
   }
 }
 
-/// Builds the appbar title (and subtitle showing time control, speed and rated)
-/// - User TV subtitles: time control + speed + rated
-/// - Lichess TV subtitles: time control + rated (title shows speed already)
-/// - Tournament TV subtitles: time control + speed + rated
+/// Builds the appbar title (and subtitle showing time control, speed and rated/casual)
+/// - User TV subtitles: time control + speed + rated/casual
+/// - Lichess TV subtitles: time control + rated/casual (title shows speed already)
+/// - Tournament TV subtitles: time control + speed + rated/casual
 /// - Tournament TV title: tournament name
 class const _TvAppBarTitle({
   required final TvChannel? channel,
