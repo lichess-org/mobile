@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
@@ -15,6 +17,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -22,6 +25,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
@@ -744,6 +748,85 @@ void main() {
         },
       );
     }
+
+    testWidgets('a replayed puzzle shows its new result in the session, not the old rating diff', (
+      tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith(
+            (ref) => mockBatchStorage,
+          ),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
+        },
+        authUser: fakeAuthUser,
+        defaultPreferences: {
+          // the puzzle was already solved in this session, as a rated attempt
+          'puzzle_session.${fakeAuthUser.user.id}': jsonEncode(
+            PuzzleSessionData(
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              attempts: IList([PuzzleAttempt(id: puzzle2.puzzle.id, win: true, ratingDiff: 8)]),
+              lastUpdatedAt: DateTime.now(),
+            ).toJson(),
+          ),
+        },
+      );
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: fakeAuthUser.user.id,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(
+        () => mockBatchStorage.fetch(
+          userId: fakeAuthUser.user.id,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => batch);
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load
+      await tester.pump(const Duration(milliseconds: 200));
+
+      final session = find.byType(PuzzleSessionWidget);
+      expect(find.descendant(of: session, matching: find.text('+8')), findsOneWidget);
+
+      // wait for first move to be played, then for the solution button to be enabled
+      await tester.pump(const Duration(milliseconds: 1500));
+      await tester.pump(const Duration(seconds: 4));
+
+      // give up on the replay
+      await tester.tap(find.byIcon(Icons.flag_outlined));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.descendant(of: session, matching: find.text('+8')), findsNothing);
+      expect(find.descendant(of: session, matching: find.byIcon(Icons.close)), findsOneWidget);
+
+      // called once to save solution and once after fetching a new puzzle
+      verify(saveDBReq).called(2);
+    });
 
     testWidgets('puzzle rating is saved correctly when hint is used', variant: kPlatformVariant, (
       WidgetTester tester,
