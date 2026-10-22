@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart' hide Step;
 
@@ -153,9 +155,11 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     final goodMoves = _reviews
         .where((review) => review.verdict == .goodMove || review.verdict == .notBest)
         .length;
-    final inaccuracies = _reviews.where((review) => review.verdict == .inaccuracy).length;
-    final mistakes = _reviews.where((review) => review.verdict == .mistake).length;
-    final blunders = _reviews.where((review) => review.verdict == .blunder).length;
+    final analysisState = ref.watch(analysisControllerProvider(widget.options)).requireValue;
+    final playersAnalysis = (
+      white: _playerAnalysisFor(Side.white),
+      black: _playerAnalysisFor(Side.black),
+    );
 
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -179,11 +183,15 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
                   .jumpToNthNodeOnMainline(index),
             ),
           ),
+        GameSummaryTable(pgnHeaders: analysisState.pgnHeaders, playersAnalysis: playersAnalysis),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: Text(
-            '$goodMoves good moves · $inaccuracies inaccuracies · $mistakes mistakes · '
-            '$blunders blunders',
+            '$goodMoves good moves · '
+            '${playersAnalysis.white.inaccuracies + playersAnalysis.black.inaccuracies} '
+            'inaccuracies · '
+            '${playersAnalysis.white.mistakes + playersAnalysis.black.mistakes} mistakes · '
+            '${playersAnalysis.white.blunders + playersAnalysis.black.blunders} blunders',
             style: Theme.of(context).textTheme.titleSmall,
           ),
         ),
@@ -200,7 +208,11 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
               trailing: review.verdict != null ? Text(review.verdict!.label(context)) : null,
               onTap: () => ref
                   .read(analysisControllerProvider(widget.options).notifier)
-                  .userJump(review.path),
+                  .userJump(
+                    UciPath.fromIds(
+                      widget.root.mainline.take(review.ply + 1).map((branch) => branch.id),
+                    ),
+                  ),
             ),
           ),
         Padding(
@@ -339,7 +351,11 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     final engineBudget = ref.read(engineBudgetProvider);
     final root = widget.root;
     final branches = root.mainline.toList(growable: false);
+    final steps = [
+      for (final branch in branches) Step(position: branch.position, sanMove: branch.sanMove),
+    ];
     final totalPositions = branches.length + 1;
+    final path = StringBuffer();
 
     _evaluator = evaluator;
     _isReviewing = true;
@@ -355,20 +371,16 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     try {
       for (var ply = 0; ply < totalPositions; ply++) {
         _ensureActive(runId);
-        final path = UciPath.fromIds(branches.take(ply).map((branch) => branch.id));
         final work = EvalWork(
           id: reviewContext.id,
           variant: analysis.variant,
           threads: engineBudget.analysisThreads(enginePreferences.numEngineCores),
-          path: path,
+          path: UciPath(path.toString()),
           searchTime: _localReviewSearchTime,
           multiPv: 1,
           threatMode: false,
           initialPosition: root.position,
-          steps: [
-            for (final branch in branches.take(ply))
-              Step(position: branch.position, sanMove: branch.sanMove),
-          ].lock,
+          steps: IList(steps.take(ply)),
         );
 
         _activeWork = work;
@@ -376,9 +388,10 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
         _activeWork = null;
         _ensureActive(runId);
         setState(() => _positionsAnalyzed = ply + 1);
+        if (ply < branches.length) path.write(branches[ply].id);
       }
 
-      final reviews = [..._makeReviews(evaluations.lock)];
+      final reviews = _makeReviews(evaluations.lock);
 
       if (!mounted || runId != _runId) return;
       setState(() {
@@ -476,7 +489,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
     required ViewBranch branch,
     required LocalEval before,
     required LocalEval after,
-    required UciPath path,
+    required int ply,
   }) {
     final moveNumber = before.position.fullmoves;
     final movePrefix = before.position.turn == Side.white ? '$moveNumber.' : '$moveNumber...';
@@ -495,7 +508,8 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
       moveLabel: '$movePrefix ${branch.sanMove.san}',
       evalLabel: '${before.evalString} → ${after.evalString}',
       verdict: verdict,
-      path: path,
+      side: before.position.turn,
+      ply: ply,
     );
   }
 
@@ -507,9 +521,31 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis> {
           branch: branch,
           before: evaluations[index],
           after: evaluations[index + 1],
-          path: UciPath.fromIds(branches.take(index + 1).map((move) => move.id)),
+          ply: index,
         ),
     ];
+  }
+
+  PlayerAnalysis _playerAnalysisFor(Side side) {
+    var inaccuracies = 0;
+    var mistakes = 0;
+    var blunders = 0;
+
+    for (final review in _reviews) {
+      if (review.side != side) continue;
+      switch (review.verdict) {
+        case .inaccuracy:
+          inaccuracies++;
+        case .mistake:
+          mistakes++;
+        case .blunder:
+          blunders++;
+        case _:
+          break;
+      }
+    }
+
+    return PlayerAnalysis(inaccuracies: inaccuracies, mistakes: mistakes, blunders: blunders);
   }
 }
 
@@ -528,12 +564,14 @@ class const _MoveReview({
   required this.moveLabel,
   required this.evalLabel,
   required this.verdict,
-  required this.path,
+  required this.side,
+  required this.ply,
 }) {
   final String moveLabel;
   final String evalLabel;
   final MoveVerdict? verdict;
-  final UciPath path;
+  final Side side;
+  final int ply;
 }
 
 final class _LocalReviewCancelled implements Exception {

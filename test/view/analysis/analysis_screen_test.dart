@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
@@ -128,6 +129,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(AcplChart), findsOneWidget);
+      expect(find.byType(GameSummaryTable), findsOneWidget);
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.textContaining('good moves'), findsOneWidget);
       await tester.scrollUntilVisible(
