@@ -922,7 +922,7 @@ void main() {
 
     testWidgets('Displays conditional premove lines saved on server', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: 'e4 e5',
@@ -957,7 +957,7 @@ void main() {
     testWidgets('Regaining focus refreshes correspondence moves', (tester) async {
       var liveGamePgn = 'e4 e5';
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: liveGamePgn,
@@ -1779,7 +1779,7 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           if (request.method == 'POST') {
             lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
                 .map(
@@ -1873,7 +1873,8 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path.startsWith('/$kGameFullId/forecasts/') && request.method == 'POST') {
+        if (request.url.path.startsWith('/game/$kGameFullId/forecasts/') &&
+            request.method == 'POST') {
           lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
               .map(
                 (steps) => (steps as List<dynamic>)
@@ -1883,7 +1884,7 @@ void main() {
               .toSet();
           playedMoveUci = request.url.pathSegments.last;
           return mockResponse('', 200);
-        } else if (request.url.path == '/$kGameFullId/forecasts' && request.method == 'GET') {
+        } else if (request.url.path == '/game/$kGameFullId/forecasts' && request.method == 'GET') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -2025,7 +2026,7 @@ void main() {
 
     testWidgets('Tapping a premove line jumps to its final position', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -2076,7 +2077,7 @@ void main() {
 
     testWidgets('New move by opponent updates premove lines', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
