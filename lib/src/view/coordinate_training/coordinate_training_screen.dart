@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
@@ -31,8 +32,9 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
           Builder(
@@ -40,7 +42,7 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
               return SemanticIconButton(
                 icon: const Icon(Icons.settings),
                 semanticsLabel: context.l10n.settingsSettings,
-                onPressed: () => showModalBottomSheet<void>(
+                onPressed: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   showDragHandle: true,
                   builder: (BuildContext context) => const _CoordinateTrainingMenu(),
@@ -430,7 +432,7 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
 }
 
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
-  return showModalBottomSheet<void>(
+  return showAdaptiveBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );
@@ -440,7 +442,7 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
         content: SingleChildScrollView(
           child: Text.rich(

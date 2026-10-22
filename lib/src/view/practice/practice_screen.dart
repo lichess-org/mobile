@@ -29,6 +29,7 @@ class const PracticeScreen({super.key}) extends ConsumerWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.practice),
+        largeTitle: true,
         actions: [
           if (progress case AsyncData(value: final progress) when !progress.isEmpty)
             ContextMenuIconButton(
@@ -102,7 +103,7 @@ class const _Body({
             children: [
               ListTile(
                 leading: PracticeStudyIcon(study: study),
-                title: Text(context.l10n.resumePractice),
+                title: Text(context.l10n.resumeLearning),
                 subtitle: Text(study.l10nName(context.l10n)),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()

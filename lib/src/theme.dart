@@ -11,29 +11,40 @@ const kSliderTheme = SliderThemeData(
   year2023: false,
 );
 
-ThemeData makeAppTheme(BuildContext context, GeneralPrefs generalPrefs, BoardPrefs boardPrefs) {
+ThemeData makeAppTheme(
+  BuildContext context, {
+  required BackgroundThemeMode themeMode,
+  required (BackgroundColor, bool)? backgroundColor,
+  required BackgroundImage? backgroundImage,
+  required bool systemColors,
+  required BoardTheme boardTheme,
+}) {
   final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-  final brightness = generalPrefs.isForcedDarkMode
+  final isForcedDarkMode = backgroundColor != null || backgroundImage != null;
+  final brightness = isForcedDarkMode
       ? Brightness.dark
-      : switch (generalPrefs.themeMode) {
+      : switch (themeMode) {
           BackgroundThemeMode.light => Brightness.light,
           BackgroundThemeMode.dark || BackgroundThemeMode.amoled => Brightness.dark,
           BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
         };
 
-  if (generalPrefs.backgroundColor == null && generalPrefs.backgroundImage == null) {
-    return _makeDefaultTheme(brightness, generalPrefs, boardPrefs, isIOS);
+  if (backgroundColor == null && backgroundImage == null) {
+    return _makeDefaultTheme(
+      brightness,
+      themeMode: themeMode,
+      systemColors: systemColors,
+      boardTheme: boardTheme,
+      isIOS: isIOS,
+    );
   } else {
     return _makeBackgroundImageTheme(
-      baseTheme:
-          generalPrefs.backgroundImage?.baseTheme ?? generalPrefs.backgroundColor!.$1.baseTheme,
+      baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
       seedColor:
-          generalPrefs.backgroundImage?.seedColor ??
-          (generalPrefs.backgroundColor!.$2
-              ? generalPrefs.backgroundColor!.$1.darker
-              : generalPrefs.backgroundColor!.$1.color),
+          backgroundImage?.seedColor ??
+          (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
       isIOS: isIOS,
-      isBackgroundImage: generalPrefs.backgroundImage != null,
+      isBackgroundImage: backgroundImage != null,
     );
   }
 }
@@ -72,18 +83,18 @@ extension CustomThemeBuildContext on BuildContext {
 // --
 
 ThemeData _makeDefaultTheme(
-  Brightness brightness,
-  GeneralPrefs generalPrefs,
-  BoardPrefs boardPrefs,
-  bool isIOS,
-) {
-  final boardTheme = boardPrefs.boardTheme;
+  Brightness brightness, {
+  required BackgroundThemeMode themeMode,
+  required bool systemColors,
+  required BoardTheme boardTheme,
+  required bool isIOS,
+}) {
   final dynamicColorSchemes = getDynamicColorSchemes();
   final systemScheme = switch (brightness) {
     Brightness.light => dynamicColorSchemes?.light,
     Brightness.dark => dynamicColorSchemes?.dark,
   };
-  final hasSystemColors = systemScheme != null && generalPrefs.systemColors == true;
+  final hasSystemColors = systemScheme != null && systemColors;
 
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
@@ -119,7 +130,7 @@ ThemeData _makeDefaultTheme(
       ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
       : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
 
-  final isAmoled = generalPrefs.themeMode == BackgroundThemeMode.amoled;
+  final isAmoled = themeMode == BackgroundThemeMode.amoled;
 
   final finalTheme = theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
@@ -279,20 +290,13 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
+/// Capsule buttons, like the iOS 26 buttons.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
@@ -333,37 +337,41 @@ const _kCupertinoCardTheme = CardThemeData(
 
 const _kCupertinoSearchBarTheme = SearchBarThemeData(
   elevation: WidgetStatePropertyAll(0),
-  shape: WidgetStatePropertyAll(
-    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-  ),
+  shape: WidgetStatePropertyAll(StadiumBorder()),
   constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
   padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 7)),
 );
+
+/// The corner radius of text fields on iOS.
+///
+/// A radius is clamped to half the height of the field: a single line field is a capsule, like the
+/// iOS 26 search and message fields, and a multiline one a rounded rectangle.
+const _kCupertinoInputBorderRadius = BorderRadius.all(Radius.circular(28));
 
 InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
   return InputDecorationTheme(
     filled: true,
     fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
-    border: const OutlineInputBorder(),
+    border: const OutlineInputBorder(borderRadius: _kCupertinoInputBorderRadius),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
   );
 }
@@ -381,8 +389,10 @@ CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness b
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
       ),
+      // Smaller than the iOS large title (34pt), so that longer (translated) titles fit on one line.
       navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
+        fontSize: 29.0,
       ),
     ),
     brightness: brightness,

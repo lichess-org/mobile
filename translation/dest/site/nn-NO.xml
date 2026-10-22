@@ -460,6 +460,8 @@ få en computeranalyse, chatte eller dele ein URL.</string>
     <item quantity="one">%s ven er innlogga</item>
     <item quantity="other">%s vener er innlogga</item>
   </plurals>
+  <string name="friendsOnlineAndPlaying">Vener på nett: %1$s
+Vener som spelar: %2$s</string>
   <string name="favoriteOpponents">Favorittmotstandarar</string>
   <string name="follow">Følg</string>
   <string name="following">Følgjer</string>
@@ -588,14 +590,12 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="reportAUser">Rapportér ein brukar</string>
   <string name="user">Brukar</string>
   <string name="reason">Årsak</string>
-  <string name="whatIsIheMatter">Kva gjeld saka?</string>
   <string name="cheat">Juks</string>
   <string name="troll">Troll</string>
   <string name="other">Anna</string>
   <string name="reportCheatBoostHelp">Legg ved lenke til partiet/partia og forklar kva som er gale med åtferda til denne brukaren. Å berre påstå at brukaren juksar er ikkje nok, men gje ei nærare forklaring på korleis du kom til denne konklusjonen.</string>
-  <string name="reportUsernameHelp">Forklår kva som gjer brukarnamnet er støytande. Det held ikkje med å påstå at \"namnet er støytande/upassande\", men fortell oss korleis du kom til denne konklusjonen, spesielt om tydinga er uklår, ikkje er på engelsk, er eit slanguttrykk, eller har ein historisk/kulturell referanse.</string>
+  <string name="reportUsernameHelp">Forklår kva som gjer brukarnamnet støytande. Det held ikkje med å påstå at \"namnet er støytande/upassande\", men fortell oss korleis du kom til denne konklusjonen, spesielt om tydinga er uklår, ikkje er på engelsk, er eit slanguttrykk, eller har ein historisk/kulturell referanse.</string>
   <string name="processReportFasterInEnglish" comment="Appears on the &quot;Report a user&quot; page https://lichess.org/report, to encourage users to write in English, so any Lichess moderator can process it.">Vi kan handsama rapporten din raskare om du skriv på engelsk.</string>
-  <string name="error.provideOneCheatedGameLink">Oppgje minst ei lenke til eit jukseparti.</string>
   <string name="by">av %s</string>
   <string name="importedByX">Importert av %s</string>
   <string name="thisTopicIsNowClosed">Dette emnet er no lukka.</string>
@@ -787,7 +787,9 @@ få en computeranalyse, chatte eller dele ein URL.</string>
   <string name="downloadAnnotated">Last ned kommentert</string>
   <string name="downloadRaw">Last ned rådata</string>
   <string name="downloadImported">Last ned importert</string>
+  <string name="downloadMyGames">Last ned partia mine</string>
   <string name="downloadAllGames">Last ned alle partia</string>
+  <string name="downloadResults">Last ned resultat</string>
   <string name="crosstable">Tabell</string>
   <string name="youCanAlsoScrollOverTheBoardToMoveInTheGame">Du kan også scrolle over brettet for å flytte.</string>
   <string name="scrollOverComputerVariationsToPreviewThem">Scroll over datamaskin-variasjonane for å førehandsvisa dei.</string>
@@ -1061,4 +1063,5 @@ Alle kostnader for drift, utvikling og innhald vert finansiert eine og åleine a
   <string name="boards">Brett</string>
   <string name="write">Skriv</string>
   <string name="preview">Førehandsvising</string>
+  <string name="done">Ferdig</string>
 </resources>

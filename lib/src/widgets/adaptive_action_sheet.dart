@@ -4,6 +4,8 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassDefaults;
 import 'package:material_ui/material_ui.dart';
 
 /// A action bottom sheet that adapts to the platform (Android/iOS).
@@ -85,6 +87,11 @@ Future<T?> showConfirmDialog<T>(
   }
 }
 
+/// Shows an iOS 26 liquid glass action sheet.
+///
+/// Laid out like the package's `showGlassActionSheet` (a card of actions above a separate cancel
+/// button), which can't be used directly: it takes text labels only, and pops the sheet after an
+/// action's callback, which would pop a route pushed by that callback.
 Future<T?> showCupertinoActionSheet<T>({
   required BuildContext context,
   Widget? title,
@@ -94,41 +101,140 @@ Future<T?> showCupertinoActionSheet<T>({
   return showCupertinoModalPopup(
     context: context,
     barrierDismissible: isDismissible,
+    barrierColor: GlassDefaults.barrierColor,
     builder: (BuildContext context) {
-      return CupertinoActionSheet(
-        title: title,
-        actions: actions
-            .map(
-              // Builder is used to retrieve the context immediately surrounding the button
-              // This is necessary to get the correct context for the iPad share dialog
-              // which needs the position of the action to display the share dialog
-              (action) => Builder(
-                builder: (context) {
-                  return CupertinoActionSheetAction(
-                    onPressed: () {
-                      if (action.dismissOnPress) {
-                        Navigator.of(context).pop();
-                      }
-                      action.onPressed();
-                    },
-                    isDestructiveAction: action.isDestructiveAction,
-                    isDefaultAction: action.isDefaultAction,
-                    child: action.makeLabel(context),
-                  );
-                },
-              ),
-            )
-            .toList(),
-        cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(context.l10n.cancel),
+      final separatorColor = CupertinoColors.separator.resolveFrom(context);
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: kMaterialPopupMenuMaxWidth),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: GlassModalCard(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (title != null)
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                  color: CupertinoColors.secondaryLabel.resolveFrom(context),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                textAlign: TextAlign.center,
+                                child: title,
+                              ),
+                            ),
+                          for (final (index, action) in actions.indexed) ...[
+                            if (index > 0 || title != null)
+                              Container(height: 0.5, color: separatorColor),
+                            // Builder is used to retrieve the context immediately surrounding the
+                            // button. This is necessary to get the correct context for the iPad
+                            // share dialog which needs the position of the action to display the
+                            // share dialog.
+                            Builder(
+                              builder: (context) {
+                                return _GlassActionSheetButton(
+                                  onPressed: () {
+                                    if (action.dismissOnPress) {
+                                      Navigator.of(context).pop();
+                                    }
+                                    action.onPressed();
+                                  },
+                                  isDestructiveAction: action.isDestructiveAction,
+                                  isDefaultAction: action.isDefaultAction,
+                                  child: action.makeLabel(context),
+                                );
+                              },
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                GlassModalCard(
+                  child: _GlassActionSheetButton(
+                    isDefaultAction: true,
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(context.l10n.cancel),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     },
   );
+}
+
+/// A full width action sheet row, highlighted while pressed.
+class const _GlassActionSheetButton({
+  required final VoidCallback onPressed,
+  required final Widget child,
+  final bool isDestructiveAction = false,
+  final bool isDefaultAction = false,
+}) extends StatefulWidget {
+  @override
+  State<_GlassActionSheetButton> createState() => _GlassActionSheetButtonState();
+}
+
+class _GlassActionSheetButtonState() extends State<_GlassActionSheetButton> {
+  bool _isPressed = false;
+
+  void _setPressed(bool value) {
+    if (_isPressed != value) setState(() => _isPressed = value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final labelColor = CupertinoColors.label.resolveFrom(context);
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: (_) => _setPressed(true),
+        onTapUp: (_) => _setPressed(false),
+        onTapCancel: () => _setPressed(false),
+        onTap: widget.onPressed,
+        child: AnimatedContainer(
+          duration: _isPressed ? Duration.zero : const Duration(milliseconds: 150),
+          curve: Curves.easeOutCubic,
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: 56),
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          color: _isPressed ? labelColor.withValues(alpha: 0.06) : labelColor.withValues(alpha: 0),
+          child: DefaultTextStyle(
+            style: TextStyle(
+              color: widget.isDestructiveAction ? CupertinoColors.destructiveRed : labelColor,
+              fontSize: 17,
+              fontWeight: widget.isDefaultAction ? FontWeight.w600 : FontWeight.w400,
+              letterSpacing: -0.4,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            child: IconTheme.merge(
+              data: IconThemeData(
+                color: widget.isDestructiveAction ? CupertinoColors.destructiveRed : labelColor,
+                size: 20,
+              ),
+              child: widget.child,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Future<T?> showMaterialActionSheet<T>({

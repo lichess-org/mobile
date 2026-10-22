@@ -73,13 +73,13 @@ class const BroadcastPlayerResultsScreenLoading({
         player: player,
         playerId: playerId,
       ),
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(title: const Text('')),
+      AsyncError(:final error) => PlatformScaffold(
+        appBar: const PlatformAppBar(title: Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => Scaffold(
-        appBar: AppBar(title: const Text('')),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+      _ => const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('')),
+        body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
@@ -121,6 +121,8 @@ class const BroadcastPlayerResultsScreen({
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),
@@ -333,11 +335,11 @@ class const _OverallStatPlayer({
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                                Image.asset(federation.flagAsset, height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
-                                    federationIdToName[federation]!,
+                                    federation.name,
                                     style: Theme.of(context).textTheme.bodyLarge
                                         ?.copyWith(height: 1.2),
                                     maxLines: 3,
@@ -561,7 +563,7 @@ class const _GameResultListTile({
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                Image.asset(federation.flagAsset, height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],

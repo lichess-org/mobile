@@ -46,16 +46,16 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Boa xogada, pero hai unha mellor</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Ola</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
-  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Se unha conta coincide con %1$s, envióuselle un código de caracteres de %2$s. Consulta a túa caixa de entrada e introduce o código a continuación.</string>
-  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">O código é inválido ou caducou.</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Se hai unha conta asociada ao correo electrónico %1$s, enviouse a este enderezo un código de %2$s caracteres. Comproba a túa bandexa de entrada e introduce este código a continuación.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">O código é incorrecto ou caducou.</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en directo</string>
-  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño da Base de Datos local</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño da base de datos local</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mover ao soltar</string>
-  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Ao mover unha peza tocando, o movemento realízase ao levantar o dedo, o que permite deslizar para cambiar a casa de destino.</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Cando moves unha peza premendo dúas casas, a xogada realízase só o levantares o dedo: deste xeito podes deslizalo para cambiar a casa de destino.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Debes iniciar sesión para ver esta páxina.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Crebacabezas sen conexión</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nova partida</string>
-  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Novo erro</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Seguinte erro</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sen resultados</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Non estás a seguir a ningún usuario.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
@@ -92,7 +92,7 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Resolve tantos crebacabezas como sexa posible en 3 minutos.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Resolve crebacabezas das túas aperturas favoritas ou elixe un tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Problemas</string>
-  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Valorar esta app</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Valorar esta aplicación</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Procuras recentes</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eliminar marcador</string>
   <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Selecciona un estudo</string>
@@ -115,9 +115,9 @@
   <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Agochar o taboleiro</string>
   <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Amosar o taboleiro</string>
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Arrastrar para amosar outros fondos</string>
-  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tocar ou arrastrar</string>
-  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tocar dúas casas</string>
-  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">As túas preferencias foron gardadas na túa conta de Lichess. Sincronizaranse en tódolos teus dispositivos.</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Tocando ou arrastrando</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tocando dúas casas</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Gardáronse os axustes da túa conta de Lichess. Serán sincronizados en tódolos teus dispositivos.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Debuxo de figuras</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Debuxar figuras usando dous dedos: poñer un dedo sobre unha casa baleira e arrastrar o outro dedo pra debuxar unha figura.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Amosar o bordo</string>
@@ -126,22 +126,22 @@
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Partillar URL de desafío</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
-  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Partillar análise local PGN</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Partillar o PGN da análise local</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartir a posición coma FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este crebacabezas</string>
   <string name="showComments" comment="Shown in the analysis screen.">Amosar os comentarios</string>
-  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Ver liñas do motor</string>
-  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Ver indicador de avaliación</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Ver as liñas da máquina</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Ver o indicador de avaliación</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Amosar o resultado</string>
-  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Iniciar sesión co navegador</string>
-  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Iniciar sesión cun correo electrónico</string>
-  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Retardo simple</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Rexistrarse co navegador</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Rexistrarse cun correo electrónico</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Modo con retardo simple</string>
   <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Taboleiro pequeno</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo foi mal.</string>
-  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Ordear amigos/as</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Ordenar as amizades</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Non amosar a ameaza</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Cores do sistema</string>
-  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase non está dispoñible sen conexión.</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">A base de datos de finais non está dispoñible sen conexión.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Demasiados intentos. Proba máis tarde.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Completados</string>
@@ -149,9 +149,9 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">A variante %s non é compatíbel con esta versión.</string>
   <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Usa pezas simétricas</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Ver a partida</string>
-  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Ver licencias</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Ver as licenzas</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Agardando un rival...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ver</string>
-  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Enviarémosche por correo electrónico un código para iniciar sesión.</string>
-  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Non podes desafiarte a ti mesmo/a</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Enviarémosche un código por correo electrónico para que poidas rexistrarte.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Non podes desafiarte a ti mesmo</string>
 </resources>

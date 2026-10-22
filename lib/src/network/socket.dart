@@ -43,7 +43,7 @@ const _kIdleTimeout = Duration(seconds: 2);
 /// On iOS the connection will be closed by the OS after 30s anyway. On Android, it varies.
 /// This timeout is a fail-safe to avoid keeping the connection open for too long and draining
 /// the battery.
-const _kDisconnectOnBackgroundTimeout = Duration(minutes: 1);
+const kDisconnectOnBackgroundTimeout = Duration(minutes: 1);
 
 final _logger = Logger('Socket');
 
@@ -800,9 +800,9 @@ class SocketPool(
   void onAppHidden() {
     _isAppInBackground = true;
     _closeInBackgroundTimer?.cancel();
-    _closeInBackgroundTimer = Timer(_kDisconnectOnBackgroundTimeout, () {
+    _closeInBackgroundTimer = Timer(kDisconnectOnBackgroundTimeout, () {
       _logger.info(
-        'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
+        'App is in background for ${kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
       );
       currentClient.close();
     });

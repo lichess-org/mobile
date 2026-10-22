@@ -9,7 +9,9 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../test_helpers.dart';
@@ -42,47 +44,43 @@ void main() {
       // Load the round
       await tester.pump();
 
-      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Overview'), findsNothing);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Teams'), findsNothing);
     });
+  });
 
-    testWidgets('Check that the screen can be loaded from round id', variant: kPlatformVariant, (
+  testWidgets('The tabs stay pinned below the app bar', variant: kPlatformVariant, (tester) async {
+    final app = await makeTestProviderScopeApp(
       tester,
-    ) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const BroadcastRoundScreenLoading(roundId: BroadcastRoundId('S5VCwuVn')),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_finishedBroadcastClient, ref),
-          ),
-        },
-      );
+      home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith(
+          (ref) => LichessClient(_liveBroadcastClient(), ref),
+        ),
+      },
+    );
 
-      await tester.pumpWidget(app);
+    await tester.pumpWidget(app);
+    // Load the tournament and the round
+    await tester.pump();
+    await tester.pump();
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    final tabs = find.byType(PlatformTabBar);
+    final initialTop = tester.getTopLeft(tabs).dy;
 
-      // Load the broadcast data
-      await tester.pump();
+    // Scroll the header away
+    await tester.drag(find.byType(NestedScrollView), const Offset(0, -600));
+    await tester.pump();
+    final pinnedTop = tester.getTopLeft(tabs).dy;
+    expect(pinnedTop, lessThan(initialTop));
+    expect(pinnedTop, greaterThan(0));
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament data
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round data
-      await tester.pump();
-
-      expect(find.text('Overview'), findsOneWidget);
-      expect(find.text('Boards'), findsOneWidget);
-      expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Teams'), findsNothing);
-    });
+    // Scroll the boards under the tabs
+    await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
+    await tester.pump();
+    expect(tester.getTopLeft(tabs).dy, pinnedTop);
   });
 
   group('Test boards tab', () {
@@ -113,10 +111,6 @@ void main() {
 
       // Check that the right number of boards is displayed
       expect(find.byType(BoardThumbnail), findsNWidgets(4));
-
-      // Check that players name are displayed
-      expect(find.text('Nepomniachtchi, Ian'), findsNWidgets(4));
-      expect(find.text('Carlsen, Magnus'), findsNWidgets(4));
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
@@ -174,7 +168,7 @@ void main() {
       // Load the round
       await tester.pump();
 
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(4));
       // Enter a query that doesn't match any player
       final searchField = find.byType(SearchBar);
       expect(searchField, findsOneWidget);
@@ -194,7 +188,7 @@ void main() {
       await tester.pump();
       // Clear the field -> results restored
       await tester.pump();
-      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(6));
+      expect(find.byType(BoardThumbnail), findsAtLeastNWidgets(4));
     });
 
     testWidgets('Test boards tab when filtering by team', variant: kPlatformVariant, (
@@ -224,14 +218,14 @@ void main() {
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pump();
-
-      final filterGames = find.byWidgetPredicate(
-        (widget) => widget is ContextMenuAction && widget.label == 'Filter games',
-      );
-      await tester.tap(filterGames);
       await tester.pumpAndSettle();
-      final teamChip = find.descendant(of: find.byType(FilterChip), matching: find.text('Team'));
+
+      await tester.tap(find.text('Filter games'));
+      await tester.pumpAndSettle();
+      final teamChip = find.descendant(
+        of: find.byType(PlatformChoiceChip),
+        matching: find.text('Team'),
+      );
 
       expect(teamChip, findsOneWidget);
 
@@ -272,13 +266,13 @@ void main() {
       // Clear the filter by opening settings again
       await tester.pump();
       await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pump();
-      await tester.tap(filterGames);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Filter games'));
       await tester.pumpAndSettle();
 
       // Tap the team filter chip
       final teamFilterChip = find.descendant(
-        of: find.byType(FilterChip),
+        of: find.byType(PlatformChoiceChip),
         matching: find.byWidgetPredicate((widget) {
           if (widget is Text) {
             final text = widget.data;
@@ -306,8 +300,8 @@ void main() {
     });
   });
 
-  group('Test overview tab', () {
-    testWidgets('Test overview tab with an upcoming tournament', variant: kPlatformVariant, (
+  group('Test overview sheet', () {
+    testWidgets('Test overview sheet with an upcoming tournament', variant: kPlatformVariant, (
       tester,
     ) async {
       final app = await makeTestProviderScopeApp(
@@ -335,8 +329,16 @@ void main() {
       final startsAt = DateTime.fromMillisecondsSinceEpoch(1736526600000);
       final endsAt = DateTime.fromMillisecondsSinceEpoch(1737189000000);
       final f = DateFormat.MMMd();
+      final dates = '${f.format(startsAt)} - ${f.format(endsAt)}';
 
-      expect(find.text('${f.format(startsAt)} - ${f.format(endsAt)}'), findsOneWidget);
+      // The header shows the first 4 pieces of information, on 2 lines
+      expect(find.text('$dates · 9-round Swiss'), findsOneWidget);
+      expect(find.text('90 min + 30 sec / move · Seville, Spain'), findsOneWidget);
+
+      await tester.tap(find.text('MORE'));
+      await tester.pumpAndSettle();
+
+      expect(find.text(dates), findsOneWidget);
       expect(find.text('9-round Swiss'), findsOneWidget);
       expect(find.text('90 min + 30 sec / move'), findsOneWidget);
       expect(find.text('Seville, Spain'), findsOneWidget);
@@ -430,110 +432,6 @@ void main() {
       expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
       expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
     });
-
-    testWidgets('Test elo sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_liveBroadcastClient(), ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Player (Elo)'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Player (Elo)'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
-
-    testWidgets('Test games sort', (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: BroadcastRoundScreen(
-          broadcast: _liveBroadcast,
-          initialTab: BroadcastRoundTab.players,
-        ),
-        overrides: {
-          lichessClientProvider: lichessClientProvider.overrideWith(
-            (ref) => LichessClient(_liveBroadcastClient(withPlayerScores: false), ref),
-          ),
-        },
-      );
-
-      await tester.pumpWidget(app);
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the tournament
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the round
-      await tester.pump();
-
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
-      // Load the players
-      await tester.pump();
-
-      await tester.tap(find.text('Games'));
-      await tester.pump();
-
-      final playersList = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersList[0].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-      expect(playersList[1].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-
-      await tester.tap(find.text('Games'));
-      await tester.pump();
-
-      final playersListReversed = tester
-          .widgetList<BroadcastPlayerRow>(find.byType(BroadcastPlayerRow))
-          .toList();
-
-      expect(playersListReversed[0].playerWithOverallResult.player.name, 'Nepomniachtchi, Ian');
-      expect(playersListReversed[1].playerWithOverallResult.player.name, 'Carlsen, Magnus');
-    });
   });
   group('Test teams tab', () {
     testWidgets('Check that teams tab is present when teamTable is true', (tester) async {
@@ -556,7 +454,7 @@ void main() {
       await tester.pump();
 
       // Verify tabs
-      expect(find.text('Overview'), findsOneWidget);
+      expect(find.text('Overview'), findsNothing);
       expect(find.text('Boards'), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Teams'), findsOneWidget);
@@ -682,12 +580,6 @@ void main() {
 
       expect(find.byIcon(Icons.notifications), findsNothing);
       expect(find.byIcon(Icons.notifications_none), findsNothing);
-    });
-
-    testWidgets('is filled when already subscribed', variant: kPlatformVariant, (tester) async {
-      await pumpRoundScreen(tester, isSubscribed: true);
-
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
     });
 
     testWidgets('subscribes to the tournament when tapped', variant: kPlatformVariant, (
@@ -816,7 +708,7 @@ final _finishedBroadcastClient = MockClient((request) {
   return mockResponse('', 404);
 });
 
-MockClient _liveBroadcastClient({bool withPlayerScores = true}) => MockClient((request) {
+MockClient _liveBroadcastClient() => MockClient((request) {
   if (request.url.path == '/api/broadcast/AAAAAAAA') {
     return mockResponse(
       _liveTournamentResponse,
@@ -833,7 +725,7 @@ MockClient _liveBroadcastClient({bool withPlayerScores = true}) => MockClient((r
   }
   if (request.url.path == '/broadcast/AAAAAAAA/players') {
     return mockResponse(
-      withPlayerScores ? _livePlayersResponse : _livePlayersWithoutScoresResponse,
+      _livePlayersResponse,
       200,
       headers: {'content-type': 'application/json; charset=utf-8'},
     );
@@ -2366,27 +2258,6 @@ const _livePlayersResponse = '''
     "fed": "RUS",
     "played": 4,
     "score": 1
-  }
-]
-''';
-
-const _livePlayersWithoutScoresResponse = '''
-[
-  {
-    "name": "Carlsen, Magnus",
-    "title": "GM",
-    "rating": 2890,
-    "fideId": 1503014,
-    "fed": "NOR",
-    "played": 5
-  },
-  {
-    "name": "Nepomniachtchi, Ian",
-    "title": "GM",
-    "rating": 2770,
-    "fideId": 4168119,
-    "fed": "RUS",
-    "played": 4
   }
 ]
 ''';

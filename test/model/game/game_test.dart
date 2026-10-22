@@ -27,7 +27,7 @@ void main() {
 
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-[Site "https://lichess.dev/Fn9UvVKF"]
+[Site "https://lichess.dev/game/Fn9UvVKF"]
 [Date "${formatDate(1706204482969)}"]
 [White "chabrot"]
 [Black "veloce"]
@@ -48,7 +48,7 @@ void main() {
 
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-[Site "https://lichess.dev/CCW6EEru"]
+[Site "https://lichess.dev/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
@@ -115,7 +115,7 @@ void main() {
       );
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-[Site "https://lichess.dev/CCW6EEru"]
+[Site "https://lichess.dev/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
@@ -139,7 +139,7 @@ void main() {
       );
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-[Site "https://lichess.dev/CCW6EEru"]
+[Site "https://lichess.dev/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]

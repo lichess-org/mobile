@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">یەکسانبوون قبوڵ دەکەیت؟</string>
   <string name="account" comment="The account screen title."></string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">ھەڵبژاردەکانی ھەژمار</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">ئەم ھەڵبژاردانە بۆ ھەژماری لیچێسەکەت بەکاردێن لەسەر ھەموو ئامارەکان.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">زیادی بکە بۆ فێربوون</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">ھەموو یارییەکان</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">ڕێگە بە گەڕاندنەوە و ڕێنمایی بدە</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">ڕەشی ئامۆلێد</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">دڵنیایت؟</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">دڵنیایت کە دەتەوێت بەڕگەی NNUE دابگریت (%s)؟</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">شوێنی تەختە لە دۆخی پانی</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">ڕێکخستنەکانی تەختە</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">داخوازیی گەڕاندنەوە ھەڵوەشێنەرەوە</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">بزوێنەری شەترەنج</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">پاشبنەمایەکی خوازراو هەڵبژێرە</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">سڕینه‌وه‌</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">کۆدەکە دوای ٥ خولەک بەسەر دەچێت و تەنیا یەک جاریش بەکاردێت.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">جووڵەی پاشەکەوتکراو بسڕەوە</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">بۆچوونەکانت</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">ڕۆژ باش، %s</string>

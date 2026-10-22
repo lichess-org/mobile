@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/log/app_log_paginator.dart';
-import 'package:lichess_mobile/src/model/log/app_log_service.dart';
 import 'package:lichess_mobile/src/model/log/app_log_storage.dart';
 import 'package:lichess_mobile/src/model/settings/log_preferences.dart';
+import 'package:lichess_mobile/src/service/app_log_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -107,6 +107,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     hintText: context.l10n.searchSearch,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;

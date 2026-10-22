@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -24,11 +23,13 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
@@ -45,10 +46,11 @@ class const StormScreen({super.key}) extends ConsumerStatefulWidget {
 class _StormScreenState() extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
-    return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Storm')),
-        body: const _Load(),
+    return const WakelockWidget(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(actions: [ToggleSoundButton()], title: Text('Puzzle Storm')),
+        body: _Load(),
       ),
     );
   }
@@ -142,10 +144,6 @@ class _BodyState() extends ConsumerState<_Body> {
             _showStats(context, ref.read(ctrlProvider).stats!);
           }
         });
-      }
-
-      if (state.mode == StormMode.ended) {
-        clearAndroidBoardGesturesExclusion();
       }
     });
 
@@ -374,11 +372,10 @@ class _BodyState() extends ConsumerState<_Body> {
     );
 
     return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained:
-                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+        ? AndroidImmersiveModeWidget(
+            enabled:
+                (stormState.mode == StormMode.initial || stormState.mode == StormMode.running) &&
+                (boardPreferences.immersiveModeWhilePlaying ?? false),
             child: content,
           )
         : content;
@@ -389,7 +386,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.aboutX('Puzzle Storm')),
         content: const SingleChildScrollView(
           child: Text.rich(
@@ -733,8 +730,9 @@ class const _RunStats(final StormRunStats stats) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),

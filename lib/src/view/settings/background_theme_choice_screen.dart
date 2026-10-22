@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -223,9 +224,26 @@ class _ConfirmColorBackgroundScreenState() extends State<ConfirmColorBackgroundS
                 ? _controller.page ?? widget.initialIndex
                 : widget.initialIndex)
             .toInt()];
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final cancelLabel = Text(context.l10n.cancel);
+    void onCancel() => Navigator.pop(context, null);
+    final acceptLabel = Text(context.l10n.accept);
+    void onAccept() =>
+        Navigator.pop(context, _controller.hasClients ? (_controller.page!.toInt(), true) : null);
     return _BackgroundTheme(
       baseTheme: BackgroundImage.getTheme(color.color),
       child: Scaffold(
+        // On iOS the glass buttons float over the color.
+        extendBody: isIOS,
+        bottomNavigationBar: isIOS
+            ? BottomBar(
+                cupertinoGlass: true,
+                children: [
+                  BottomBarTextButton(onPressed: onCancel, child: cancelLabel),
+                  BottomBarTextButton(onPressed: onAccept, child: acceptLabel),
+                ],
+              )
+            : null,
         body: LayoutBuilder(
           builder: (context, constraints) {
             final orientation = constraints.maxWidth > constraints.maxHeight
@@ -285,19 +303,12 @@ class _ConfirmColorBackgroundScreenState() extends State<ConfirmColorBackgroundS
             );
           },
         ),
-        persistentFooterButtons: [
-          TextButton(
-            child: Text(context.l10n.cancel),
-            onPressed: () => Navigator.pop(context, null),
-          ),
-          TextButton(
-            child: Text(context.l10n.accept),
-            onPressed: () => Navigator.pop(
-              context,
-              _controller.hasClients ? (_controller.page!.toInt(), true) : null,
-            ),
-          ),
-        ],
+        persistentFooterButtons: isIOS
+            ? null
+            : [
+                TextButton(onPressed: onCancel, child: cancelLabel),
+                TextButton(onPressed: onAccept, child: acceptLabel),
+              ],
       ),
     );
   }
@@ -373,6 +384,41 @@ class _ConfirmImageBackgroundScreenState() extends State<ConfirmImageBackgroundS
     );
 
     final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    void toggleBoard() => setState(() => showBoard = !showBoard);
+    final toggleBoardLabel = Text(
+      showBoard
+          ? context.l10n.mobileSettingsPickAnImageHideBoard
+          : context.l10n.mobileSettingsPickAnImageShowBoard,
+    );
+    void onCancel() => Navigator.pop(context, null);
+    final cancelLabel = Text(context.l10n.cancel);
+    Future<void> onAccept() async {
+      final ext = extension(widget.image.path);
+      final relativePath = 'custom-board-background$ext';
+      final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
+      await FileImage(File(targetPath)).evict();
+      await File(widget.image.path).copy(targetPath);
+      if (context.mounted) {
+        return Navigator.pop<BackgroundImage>(
+          context,
+          BackgroundImage(
+            path: relativePath,
+            transform: _transformationMatrix,
+            isBlurred: blur,
+            seedColor: widget.baseColor,
+            meanLuminance: widget.meanLuminance,
+            width: widget.imageSize.width,
+            height: widget.imageSize.height,
+            viewportWidth: widget.viewport.width,
+            viewportHeight: widget.viewport.height,
+          ),
+        );
+      }
+    }
+
+    final acceptLabel = Text(context.l10n.accept);
 
     return _BackgroundTheme(
       baseTheme: baseTheme,
@@ -442,92 +488,113 @@ class _ConfirmImageBackgroundScreenState() extends State<ConfirmImageBackgroundS
               left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
               right: 0,
               child: Center(
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  margin: const EdgeInsets.all(16.0),
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    onTap: () {
-                      setState(() {
-                        blur = !blur;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
-                          const SizedBox(width: 6.0),
-                          Text(
-                            context.l10n.mobileSettingsPickAnImageBlur,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                child: isIOS
+                    // Glass buttons floating over the image, like the bottom ones.
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8.0,
+                          children: [
+                            BottomBarTextButton(
+                              onPressed: () => setState(() => blur = !blur),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 6.0,
+                                children: [
+                                  Icon(blur ? Icons.check_circle : Icons.circle_outlined),
+                                  Text(context.l10n.mobileSettingsPickAnImageBlur),
+                                ],
+                              ),
+                            ),
+                            BottomBarTextButton(onPressed: toggleBoard, child: toggleBoardLabel),
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8.0,
+                          children: [
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              margin: EdgeInsets.zero,
+                              child: InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                onTap: () {
+                                  setState(() {
+                                    blur = !blur;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        blur ? Icons.check_circle : Icons.circle_outlined,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        context.l10n.mobileSettingsPickAnImageBlur,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              margin: EdgeInsets.zero,
+                              child: InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                onTap: toggleBoard,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  child: toggleBoardLabel,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
             ),
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom,
+              // The bottom bar has its own safe area.
+              bottom: isIOS ? 0 : MediaQuery.paddingOf(context).bottom,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    child: Text(
-                      showBoard
-                          ? context.l10n.mobileSettingsPickAnImageHideBoard
-                          : context.l10n.mobileSettingsPickAnImageShowBoard,
+              child: isIOS
+                  // Glass buttons floating over the image.
+                  ? BottomBar(
+                      cupertinoGlass: true,
+                      children: [
+                        BottomBarTextButton(onPressed: onCancel, child: cancelLabel),
+                        BottomBarTextButton(onPressed: onAccept, child: acceptLabel),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(onPressed: onCancel, child: cancelLabel),
+                        const SizedBox(width: 10.0),
+                        TextButton(onPressed: onAccept, child: acceptLabel),
+                      ],
                     ),
-                    onPressed: () => setState(() {
-                      showBoard = !showBoard;
-                    }),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        child: Text(context.l10n.cancel),
-                        onPressed: () => Navigator.pop(context, null),
-                      ),
-                      const SizedBox(width: 10.0),
-                      TextButton(
-                        child: Text(context.l10n.accept),
-                        onPressed: () async {
-                          final ext = extension(widget.image.path);
-                          final relativePath = 'custom-board-background$ext';
-                          final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
-                          await FileImage(File(targetPath)).evict();
-                          await File(widget.image.path).copy(targetPath);
-                          if (context.mounted) {
-                            return Navigator.pop<BackgroundImage>(
-                              context,
-                              BackgroundImage(
-                                path: relativePath,
-                                transform: _transformationMatrix,
-                                isBlurred: blur,
-                                seedColor: widget.baseColor,
-                                meanLuminance: widget.meanLuminance,
-                                width: widget.imageSize.width,
-                                height: widget.imageSize.height,
-                                viewportWidth: widget.viewport.width,
-                                viewportHeight: widget.viewport.height,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ),
           ],
         ),

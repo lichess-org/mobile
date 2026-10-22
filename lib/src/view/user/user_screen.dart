@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
@@ -62,7 +63,7 @@ class const UserScreen({required final LightUser user, super.key}) extends Consu
     if (isOddBot) {
       Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user));
     } else {
-      showModalBottomSheet<void>(
+      showAdaptiveBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
@@ -98,6 +99,8 @@ class _UserScreenState() extends ConsumerState<UserScreen> {
     final seenAt = userScreenData.maybeWhen(data: (data) => data.user.seenAt, orElse: () => null);
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         titleSpacing: 0,
         title: UserAppBarTitleWidget(
           user: updatedLightUser ?? widget.user,
@@ -179,9 +182,6 @@ class const _UserProfileListView(
     }
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       onRefresh: onRefresh,
       child: ListView(
         children: [

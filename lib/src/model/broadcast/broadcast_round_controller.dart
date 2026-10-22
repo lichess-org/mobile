@@ -19,6 +19,33 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 
 part 'broadcast_round_controller.freezed.dart';
 
+/// A provider for observed games of a broadcast round, decoupled from [BroadcastRoundController].
+final observedGamesControllerProvider = NotifierProvider.autoDispose
+    .family<ObservedGamesController, ISet<BroadcastGameId>, BroadcastRoundId>(
+      ObservedGamesController.new,
+      name: 'ObservedGamesControllerProvider',
+    );
+
+class ObservedGamesController(final BroadcastRoundId roundId)
+    extends Notifier<ISet<BroadcastGameId>> {
+  @override
+  ISet<BroadcastGameId> build() {
+    return ISet();
+  }
+
+  void add(BroadcastGameId gameId) {
+    state = state.add(gameId);
+  }
+
+  void remove(BroadcastGameId gameId) {
+    state = state.remove(gameId);
+  }
+
+  void clear() {
+    state = ISet();
+  }
+}
+
 /// A provider for [BroadcastRoundController].
 final broadcastRoundControllerProvider = AsyncNotifierProvider.autoDispose
     .family<BroadcastRoundController, BroadcastRoundState, BroadcastRoundId>(
@@ -53,6 +80,12 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
       _evalRequestDebouncer.cancel();
     });
 
+    ref.listen(observedGamesControllerProvider(broadcastRoundId), (prev, next) {
+      if (prev != next) {
+        _evalRequestDebouncer(_sendEvalMultiGet);
+      }
+    });
+
     _socketClient = ref
         .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
@@ -83,7 +116,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     return BroadcastRoundState(
       round: round.round,
       games: round.games,
-      observedGames: ISet(),
       isTeamTournament: round.tournament.teamTable == true,
       isSubscribed: round.isSubscribed,
     );
@@ -101,7 +133,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
         BroadcastRoundState(
           round: round.round,
           games: round.games,
-          observedGames: state.requireValue.observedGames.where(round.games.containsKey).toISet(),
           isTeamTournament: isTeamTournament,
           isSubscribed: round.isSubscribed,
         ),
@@ -170,7 +201,7 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
       ),
     );
 
-    if (state.requireValue.observedGames.contains(broadcastGameId)) {
+    if (ref.read(observedGamesControllerProvider(broadcastRoundId)).contains(broadcastGameId)) {
       _sendEvalMultiGet();
     }
   }
@@ -182,13 +213,7 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
   void _handleGamesChangeEvent(SocketEvent event) {
     final games = IMap.fromEntries(pick(event.data).asListOrThrow(gameFromPick));
 
-    state = AsyncData(
-      state.requireValue.copyWith(
-        round: state.requireValue.round,
-        games: games,
-        observedGames: state.requireValue.observedGames.where(games.containsKey).toISet(),
-      ),
-    );
+    state = AsyncData(state.requireValue.copyWith(round: state.requireValue.round, games: games));
 
     _sendEvalMultiGet();
     if (state.requireValue.isTeamTournament) {
@@ -256,11 +281,6 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     );
   }
 
-  void clearObservedGames() {
-    if (!state.hasValue) return;
-    state = AsyncData(state.requireValue.copyWith(observedGames: ISet()));
-  }
-
   /// Subscribes to, or unsubscribes from, the tournament this round belongs to.
   ///
   /// The state is updated right away and reverted if the request fails.
@@ -280,34 +300,25 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     }
   }
 
-  void addObservedGame(BroadcastGameId gameId) {
-    if (state.value?.games.containsKey(gameId) != true) return;
-
-    state = AsyncData(
-      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.add(gameId)),
-    );
-
-    _evalRequestDebouncer(_sendEvalMultiGet);
-  }
-
-  void removeObservedGame(BroadcastGameId gameId) {
-    if (!state.hasValue) return;
-
-    state = AsyncData(
-      state.requireValue.copyWith(observedGames: state.requireValue.observedGames.remove(gameId)),
-    );
-
-    _evalRequestDebouncer(_sendEvalMultiGet);
-  }
-
+  /// Requests the evals of the observed games that are part of the round.
+  ///
+  /// The observed set is maintained by the widgets showing the games, so it may briefly hold ids of
+  /// games that the round no longer has: those are skipped.
   void _sendEvalMultiGet() {
-    final round = state.requireValue;
+    // Supersedes any pending debounced request, since this one reads the latest observed set.
+    _evalRequestDebouncer.cancel();
+    if (!state.hasValue) return;
+    final games = state.requireValue.games;
     final prefs = ref.read(broadcastPreferencesProvider);
-    if (prefs.showRoundEvaluationGauges == false || round.observedGames.isEmpty) return;
+    if (prefs.showRoundEvaluationGauges == false) return;
 
-    _socketClient.send('evalGetMulti', {
-      'fens': [for (final id in round.observedGames) round.games[id]!.fen],
-    });
+    final fens = [
+      for (final id in ref.read(observedGamesControllerProvider(broadcastRoundId)))
+        if (games[id] case final game?) game.fen,
+    ];
+    if (fens.isEmpty) return;
+
+    _socketClient.send('evalGetMulti', {'fens': fens});
   }
 }
 
@@ -319,11 +330,6 @@ sealed class BroadcastRoundState with _$BroadcastRoundState {
 
     /// The games of the round
     required IMap<BroadcastGameId, BroadcastGame> games,
-
-    /// The games that are visible on the screen
-    ///
-    /// The controller has the responsibility to maintain [observedGames] as a subset of [games].
-    required ISet<BroadcastGameId> observedGames,
 
     /// Whether the tournament is a team event
     required bool isTeamTournament,

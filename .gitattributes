@@ -1,0 +1,6 @@
+# Store text files with LF line endings, whatever the contributor's platform or editor settings.
+* text=auto eol=lf
+
+# Sources copied verbatim from lila, kept byte-identical to upstream.
+translation/source/*.xml -text
+translation/source/mobile.xml text eol=lf

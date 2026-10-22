@@ -2,6 +2,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -9,6 +10,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -33,8 +35,10 @@ class const BroadcastPlayersTab({required final BroadcastTournamentId tournament
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (ref.watch(playersAndTournamentProvider(tournamentId))) {
       AsyncData(value: final data) => BroadcastPlayersList(data.$1, data.$2),
-      AsyncError(:final error) => Center(child: Text('Cannot load players data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load players data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -175,6 +179,7 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
 
     return CustomScrollView(
       slivers: [
+        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         SliverSafeArea(
           bottom: false,
           sliver: SliverToBoxAdapter(
@@ -183,8 +188,10 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
               children: [
                 if (showSearchBar)
                   Padding(
-                    padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+                    // Closer to the tabs above it.
+                    padding: Styles.bodyPadding.copyWith(top: 8.0, bottom: 0.0),
                     child: PlatformSearchBar(
+                      hintText: context.l10n.searchSearch,
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
@@ -312,9 +319,8 @@ class const BroadcastPlayerRow({
 
     final BroadcastPlayerWithOverallResult(:player, :score, :played) = playerWithOverallResult;
 
-    showModalBottomSheet<void>(
+    showAdaptiveBottomSheet<void>(
       context: context,
-      isDismissible: true,
       isScrollControlled: true,
       builder: (context) {
         return BottomSheetScrollableContainer(
@@ -412,8 +418,7 @@ class const BroadcastPlayerRow({
         mainAxisSize: .min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (federation != null)
-            Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+          if (federation != null) Image.asset(federation.flagAsset, height: 12),
           if (ratingsMap != null)
             Column(
               mainAxisAlignment: .start,
