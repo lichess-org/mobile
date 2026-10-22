@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -2517,7 +2518,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(analysisBoard);
       await tester.pumpAndSettle(); // wait for analysis screen to open
-      expect(find.text('Analysis board'), findsOneWidget); // analysis screen is now open
+      expect(
+        find.widgetWithText(PlatformAppBar, 'Analysis board'),
+        findsOneWidget,
+      ); // analysis screen is now open
       expect(boardHasPiece(tester, Square.f3, Piece.whiteQueen), isTrue);
       expect(boardHasPiece(tester, Square.d3, Piece.whiteBishop), isTrue);
       expect(getBoardLastMove(tester)?.hasSquare(Square.b5), isTrue);
@@ -2536,7 +2540,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500)); // wait for popup
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
-      expect(find.text('2+1 • Rated'), findsOneWidget); // analysis screen is now open
+      expect(
+        find.descendant(of: find.byType(PlatformAppBar), matching: find.text('2+1 • Rated')),
+        findsOneWidget,
+      );
       expect(find.byType(Chessboard), findsOneWidget);
       expect(boardHasPiece(tester, Square.e6, Piece.whiteQueen), isTrue);
       expect(getBoardLastMove(tester)?.hasSquare(Square.d5), isTrue);
