@@ -1025,9 +1025,11 @@ packages:
   liquid_glass_widgets:
     dependency: "direct main"
     description:
-      path: "../liquid_glass_widgets"
-      relative: true
-    source: path
+      path: "."
+      ref: "244d666473a1bf156d4bbfadac4f4b22827ae167"
+      resolved-ref: "244d666473a1bf156d4bbfadac4f4b22827ae167"
+      url: "https://github.com/sdegenaar/liquid_glass_widgets.git"
+    source: git
     version: "1.14.0"
   listen:
     dependency: transitive

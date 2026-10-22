@@ -89,7 +89,9 @@ dependencies:
 # TEMPORARY: the scrollable glass submenus fix, until it is released.
 dependency_overrides:
   liquid_glass_widgets:
-    path: ../liquid_glass_widgets
+    git: 
+      url: https://github.com/sdegenaar/liquid_glass_widgets.git
+      ref: 244d666473a1bf156d4bbfadac4f4b22827ae167
 
 dev_dependencies:
   build_runner: ^2.15.1
