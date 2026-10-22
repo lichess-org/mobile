@@ -19,7 +19,7 @@ import 'package:share_plus/share_plus.dart';
 
 final Logger _logger = Logger('AppLogSettingsScreen');
 
-final _logDateFormatter = DateFormat.yMd().add_Hms();
+DateFormat get _logDateFormatter => DateFormat.yMd().add_Hms();
 
 class const AppLogSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {

@@ -272,7 +272,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd();
+DateFormat get _dateFormat => DateFormat.MMMd();
 
 class const _BlogCardContent({
   required final BlogPost post,

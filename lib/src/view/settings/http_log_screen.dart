@@ -149,7 +149,7 @@ class _HttpLogListState() extends ConsumerState<_HttpLogList> {
   }
 }
 
-final _logDateFormatter = DateFormat.yMd().add_Hms();
+DateFormat get _logDateFormatter => DateFormat.yMd().add_Hms();
 
 String _formatElapsed(Duration elapsed) {
   if (elapsed.inMilliseconds < 1000) {
