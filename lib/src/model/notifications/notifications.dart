@@ -36,12 +36,6 @@ import 'package:meta/meta.dart';
 sealed class const FcmMessage() {
   RemoteNotification? get notification;
 
-  /// The channel the server set on the Android notification, if it is one of ours.
-  ///
-  /// It overrides the default channel of the [LocalNotification] shown for this message, so that
-  /// a notification lands in the same channel whether the app is in the foreground or not.
-  NotificationChannel? get channel => .fromId(notification?.android?.channelId);
-
   factory fromRemoteMessage(RemoteMessage message) {
     final messageType = message.data['lichess.type'] as String?;
 
@@ -234,11 +228,10 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 
 /// A notification channel, shared by one or more [LocalNotification] types.
 ///
-/// On Android, all channels are created when the app starts, so that the notifications displayed
-/// by Firebase while the app is in the background, which only name their channel, can be posted to
-/// it. Without it, Firebase falls back to its own "Miscellaneous" channel.
+/// On Android, all channels are created when the app starts, so that the FCM notifications
+/// displayed by the system don't fall back to the "Miscellaneous" channel.
 ///
-/// The [id]s are shared with the server, which sets them as the FCM message channel, so they must
+/// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
 /// never change.
 enum NotificationChannel(final String id, final Importance importance) {
   playban('playban', .max),
@@ -250,9 +243,6 @@ enum NotificationChannel(final String id, final Importance importance) {
   challenge('challenge', .max),
   broadcast('broadcast', .defaultImportance),
   recap('recap', .defaultImportance);
-
-  /// The channel with this [id], or `null` if there is none.
-  static NotificationChannel? fromId(String? id) => values.firstWhereOrNull((c) => c.id == id);
 
   /// The localized name of the channel, shown in the system notification settings.
   String name(AppLocalizations l10n) => switch (this) {
@@ -418,11 +408,8 @@ class const PlaybanNotification(final TemporaryBan playban) extends LocalNotific
 class const NewMessageNotification(
   final UserId conversationId,
   final String _title,
-  final String _message, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _message,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final conversationId = UserId.fromJson(json['conversationId'] as String);
     final title = json['title'] as String;
@@ -435,12 +422,11 @@ class const NewMessageNotification(
       message.conversationId,
       message.notification?.title ?? '',
       message.notification?.body ?? '',
-      fcmChannel: message.channel,
     );
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .newMessage;
+  NotificationChannel get channel => .newMessage;
 
   @override
   String get payloadType => 'newMessage';
@@ -478,11 +464,8 @@ class const NewMessageNotification(
 class const CorresGameUpdateNotification(
   final GameFullId fullId,
   final String _title,
-  final String _body, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _body,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final gameId = GameFullId.fromJson(json['fullId'] as String);
     final title = json['title'] as String;
@@ -493,11 +476,11 @@ class const CorresGameUpdateNotification(
   factory fromFcmMessage(CorresGameUpdateFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return CorresGameUpdateNotification(message.fullId, title, body, fcmChannel: message.channel);
+    return CorresGameUpdateNotification(message.fullId, title, body);
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .corresGameUpdate;
+  NotificationChannel get channel => .corresGameUpdate;
 
   @override
   String get payloadType => 'corresGameUpdate';
@@ -531,11 +514,8 @@ class const CorresGameUpdateNotification(
 class const ChallengeAcceptedNotification(
   final GameFullId fullId,
   final String _title,
-  final String _body, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _body,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final gameId = GameFullId.fromJson(json['fullId'] as String);
     final title = json['title'] as String;
@@ -546,11 +526,11 @@ class const ChallengeAcceptedNotification(
   factory fromFcmMessage(ChallengeAcceptFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeAcceptedNotification(message.fullId, title, body, fcmChannel: message.channel);
+    return ChallengeAcceptedNotification(message.fullId, title, body);
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .challengeAccept;
+  NotificationChannel get channel => .challengeAccept;
 
   @override
   String get payloadType => 'challengeAccept';
@@ -585,11 +565,8 @@ class const ChallengeAcceptedNotification(
 class const ChallengeCreatedNotification(
   final ChallengeId challengeId,
   final String _title,
-  final String _body, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _body,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final challengeId = ChallengeId.fromJson(json['challengeId'] as String);
     final title = json['title'] as String;
@@ -600,11 +577,11 @@ class const ChallengeCreatedNotification(
   factory fromFcmMessage(ChallengeCreateFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeCreatedNotification(message.id, title, body, fcmChannel: message.channel);
+    return ChallengeCreatedNotification(message.id, title, body);
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .challengeCreate;
+  NotificationChannel get channel => .challengeCreate;
 
   @override
   String get payloadType => 'challengeCreate';
@@ -811,11 +788,8 @@ class const ChallengeNotification(final Challenge challenge) extends LocalNotifi
 class const BroadcastRoundNotification(
   final BroadcastRoundId roundId,
   final String _title,
-  final String _body, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _body,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
     final title = json['title'] as String;
@@ -828,12 +802,11 @@ class const BroadcastRoundNotification(
       broadcast.roundId,
       broadcast.notification?.title ?? '',
       broadcast.notification?.body ?? '',
-      fcmChannel: broadcast.channel,
     );
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .broadcast;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastRound';
@@ -869,11 +842,8 @@ class const BroadcastPlayerFollowNotification(
   final BroadcastGameId gameId,
   final Side pov,
   final String _title,
-  final String _body, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+  final String _body,
+) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
     final gameId = BroadcastGameId(json['gameId'] as String);
@@ -890,12 +860,11 @@ class const BroadcastPlayerFollowNotification(
       broadcast.pov,
       broadcast.notification?.title ?? '',
       broadcast.notification?.body ?? '',
-      fcmChannel: broadcast.channel,
     );
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .broadcast;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastPlayerFollow';
@@ -928,23 +897,18 @@ class const BroadcastPlayerFollowNotification(
 /// A notification for the year-end recap
 ///
 /// This notification is shown when the year-end recap is received from the server
-class const RecapNotification(
-  final int year, {
-
-  /// The channel set by the server in the FCM message, if any.
-  final NotificationChannel? fcmChannel,
-}) extends LocalNotification {
+class const RecapNotification(final int year) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final year = json['year'] as int;
     return RecapNotification(year);
   }
 
   factory fromFcmMessage(RecapFcmMessage message) {
-    return RecapNotification(message.year, fcmChannel: message.channel);
+    return RecapNotification(message.year);
   }
 
   @override
-  NotificationChannel get channel => fcmChannel ?? .recap;
+  NotificationChannel get channel => .recap;
 
   @override
   String get payloadType => 'recap';
