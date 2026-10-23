@@ -164,15 +164,16 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     );
     final searchQuery = _searchQuery;
     final allGameIds = widget.gameIds;
-    final matchedGameIds = ref.watch(
-      broadcastRoundControllerProvider(widget.roundId).select(
-        (state) => allGameIds?.where((gameId) {
-          final game = state.value?.games[gameId];
-          return game != null && _containsPlayer(game, searchQuery);
-        }).toIList(),
-      ),
-    );
-    final gameIds = searchQuery.isEmpty ? allGameIds : matchedGameIds;
+    final gameIds = allGameIds == null || searchQuery.isEmpty
+        ? allGameIds
+        : ref.watch(
+            broadcastRoundControllerProvider(widget.roundId).select(
+              (state) => allGameIds.where((gameId) {
+                final game = state.value?.games[gameId];
+                return game != null && _containsPlayer(game, searchQuery);
+              }).toIList(),
+            ),
+          );
 
     final showSearchBar = widget.gameIds != null && widget.gameIds!.length > 6;
     final pinnedComment = round?.pinnedComment;
