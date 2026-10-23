@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -50,9 +51,6 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
     );
-<<<<<<< HEAD
-    final filterButton = ContextMenuIconButton(
-=======
     final calendarButton = SemanticIconButton(
       icon: const Icon(Icons.calendar_month),
       onPressed: () {
@@ -60,8 +58,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
       },
       semanticsLabel: context.l10n.broadcastBroadcastCalendar,
     );
-    final filterButton = SemanticIconButton(
->>>>>>> d829555f4 (Add read-only broadcast calendar screen)
+    final filterButton = ContextMenuIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',

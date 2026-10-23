@@ -213,7 +213,6 @@ class _BroadcastRoundScreenState()
                 ),
           // A long title, next to the actions.
           centerTitle: false,
-<<<<<<< HEAD
           actionsBuilder: (context, ref) {
             final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
             final showEvalBar = ref.watch(
@@ -244,7 +243,7 @@ class _BroadcastRoundScreenState()
                   )
                 : null;
             return [
-              if (roundState.isSubscribed case final isSubscribed?)
+              if (subscription case final isSubscribed?)
                 if (roundId != null)
                   SemanticIconButton(
                     icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
@@ -264,26 +263,6 @@ class _BroadcastRoundScreenState()
                             type: SnackBarType.error,
                           );
                         }
-=======
-          actions: [
-            if (subscription case final isSubscribed?)
-              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
-                SemanticIconButton(
-                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
-                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
-                  onPressed: () async {
-                    try {
-                      await ref
-                          .read(broadcastRoundControllerProvider(roundId).notifier)
-                          .setSubscribed(_selectedTournamentId, !isSubscribed);
-                    } catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(
-                          context,
-                          'Could not update the subscription',
-                          type: SnackBarType.error,
-                        );
->>>>>>> 2371aa30e (Fix broken merge in broadcast round screen)
                       }
                     },
                   ),
@@ -305,7 +284,6 @@ class _BroadcastRoundScreenState()
                         selected: filter == .all,
                         onPressed: () => setGameFilter(.all, _teamFilter),
                       ),
-<<<<<<< HEAD
                       ContextMenuAction(
                         label: '${context.l10n.broadcastOngoing} (${games?.ongoing ?? 0})',
                         selected: filter == .ongoing,
@@ -331,27 +309,13 @@ class _BroadcastRoundScreenState()
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
-                    label: context.l10n.mobileShare,
+                    label: context.l10n.studyShareAndExport,
                     onPressed: null,
                     submenu: makeBroadcastShareMenuActions(
                       context,
                       asyncTournament.value?.data ?? widget.broadcast.tour,
-                      roundState.round,
+                      round,
                     ),
-=======
-                    );
-                  },
-                ),
-                ContextMenuAction(
-                  icon: Theme.of(context).platform == TargetPlatform.iOS
-                      ? Icons.ios_share_outlined
-                      : Icons.share_outlined,
-                  label: context.l10n.studyShareAndExport,
-                  onPressed: () => showBroadcastShareMenu(
-                    context,
-                    asyncTournament.value?.data ?? widget.broadcast.tour,
-                    round,
->>>>>>> 2371aa30e (Fix broken merge in broadcast round screen)
                   ),
                 ],
               ),
@@ -471,9 +435,14 @@ class _BroadcastRoundScreenState()
         // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
         final roundState = ref.watch(
           broadcastRoundControllerProvider(roundId).select(
-            (state) => switch (state.value) {
-              final value? => (round: value.round, isSubscribed: value.isSubscribed),
-              null => null,
+            (state) => switch (state) {
+              AsyncData(:final value) => AsyncData<({BroadcastRound round, bool? isSubscribed})>((
+                round: value.round,
+                isSubscribed: value.isSubscribed,
+              )),
+              AsyncError(:final error, :final stackTrace) =>
+                AsyncError<({BroadcastRound round, bool? isSubscribed})>(error, stackTrace),
+              AsyncLoading() => const AsyncLoading<({BroadcastRound round, bool? isSubscribed})>(),
             },
           ),
         );

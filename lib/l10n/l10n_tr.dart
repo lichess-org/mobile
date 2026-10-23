@@ -450,6 +450,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.';
 
   @override

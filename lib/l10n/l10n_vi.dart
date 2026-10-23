@@ -450,6 +450,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileTheme => 'Giao diện';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Quá nhiều lần thử. Vui lòng thử lại sau.';
 
   @override

@@ -450,6 +450,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Prea multe încercări. Te invităm să revii mai târziu.';
 
   @override

@@ -1054,6 +1054,12 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get mobileTheme;
 
+  /// No description provided for @mobileToBeAnnounced.
+  ///
+  /// In en, this message translates to:
+  /// **'To be announced'**
+  String get mobileToBeAnnounced;
+
   /// No description provided for @mobileTooManyLoginAttempts.
   ///
   /// In en, this message translates to:

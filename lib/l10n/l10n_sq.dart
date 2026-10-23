@@ -450,6 +450,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileTheme => 'Temë';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override

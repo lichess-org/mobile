@@ -450,6 +450,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileTheme => 'Itxura';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override

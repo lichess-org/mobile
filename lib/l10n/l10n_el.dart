@@ -450,6 +450,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileTheme => 'Εμφάνιση';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Πάρα πολλές προσπάθειες. Δοκιμάστε ξανά αργότερα.';
 
   @override

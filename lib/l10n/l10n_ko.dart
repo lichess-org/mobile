@@ -450,6 +450,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileTheme => '테마';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '시도 횟수가 너무 많습니다. 나중에 다시 시도해 주세요.';
 
   @override
