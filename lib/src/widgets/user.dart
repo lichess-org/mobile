@@ -30,9 +30,10 @@ class const ConnectedIcon({
     return Tooltip(
       message: label,
       child: Icon(
-        isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.3),
+        isConnected ? Symbols.circle : Symbols.wifi_off,
+        color: isConnected ? context.lichessColors.good : textShade(context, 0.3),
         size: size,
+        fill: 1,
       ),
     );
   }
