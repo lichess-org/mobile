@@ -183,7 +183,7 @@ class const _TvAppBarTitle({
                     child: channel != null
                         ? Text('${channel!.label(context.l10n)} TV')
                         : tournament != null
-                        ? AppBarTitleText('$tournament ${context.l10n.arenaArena}', maxLines: 2)
+                        ? AppBarTitleText('$tournament ${context.l10n.arenaArena}', maxLines: 1)
                         : UserFullNameWidget(user: user),
                   ),
                 ],
