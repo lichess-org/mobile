@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -104,46 +105,53 @@ class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
 ///
 /// Http clients created by this factory log all requests and responses to the database.
 final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
-  return HttpClientFactory(
-    wrapper: (client) => _RegisterCallbackClient(
-      client,
-      onRequest: (request) async {
-        if (request.method == 'HEAD') return;
-        final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-        httpLogStorage.save(
-          HttpLogEntry(
-            httpLogId: request.hashCode.toString(),
-            requestDateTime: DateTime.now(),
-            requestMethod: request.method,
-            requestUrl: request.url,
-          ),
-        );
-      },
-      onResponse: (response) async {
-        if (response.request != null) {
-          final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-          httpLogStorage.updateWithResponse(
-            response.request!.hashCode.toString(),
-            responseCode: response.statusCode,
-            responseDateTime: DateTime.now(),
-          );
-        }
-      },
-      onError: (request, error, [st]) async {
-        if (request.method == 'HEAD') return;
-        final httpLogStorage = await ref.read(httpLogStorageProvider.future);
-        if (error is ClientException) {
-          httpLogStorage.updateWithError(request.hashCode.toString(), errorMessage: error.message);
-        } else {
-          httpLogStorage.updateWithError(
-            request.hashCode.toString(),
-            errorMessage: error.toString(),
-          );
-        }
-      },
-    ),
-  );
+  return HttpClientFactory(wrapper: (client) => wrapWithCallbacks(ref, client));
 });
+
+/// Wraps [client] in the callbacks of the clients created by [httpClientFactoryProvider].
+///
+/// They log all requests and responses to the database, and tell [ConnectivityChangesNotifier]
+/// about every response received.
+///
+/// Exposed so that tests overriding [httpClientFactoryProvider] can still go through them.
+@visibleForTesting
+Client wrapWithCallbacks(Ref ref, Client client) => _RegisterCallbackClient(
+  client,
+  onRequest: (request) async {
+    if (request.method == 'HEAD') return;
+    final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+    httpLogStorage.save(
+      HttpLogEntry(
+        httpLogId: request.hashCode.toString(),
+        requestDateTime: DateTime.now(),
+        requestMethod: request.method,
+        requestUrl: request.url,
+      ),
+    );
+  },
+  onResponse: (response) async {
+    if (ref.mounted && ref.exists(connectivityChangesProvider)) {
+      ref.read(connectivityChangesProvider.notifier).onHttpResponse(response.request?.url);
+    }
+    if (response.request != null) {
+      final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+      httpLogStorage.updateWithResponse(
+        response.request!.hashCode.toString(),
+        responseCode: response.statusCode,
+        responseDateTime: DateTime.now(),
+      );
+    }
+  },
+  onError: (request, error, [st]) async {
+    if (request.method == 'HEAD') return;
+    final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+    if (error is ClientException) {
+      httpLogStorage.updateWithError(request.hashCode.toString(), errorMessage: error.message);
+    } else {
+      httpLogStorage.updateWithError(request.hashCode.toString(), errorMessage: error.toString());
+    }
+  },
+);
 
 /// The default http client.
 ///

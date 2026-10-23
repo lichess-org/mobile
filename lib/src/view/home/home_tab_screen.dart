@@ -431,7 +431,10 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       ? content
                       : HapticRefreshIndicator(
                           key: _refreshKey,
-                          onRefresh: () => _refreshData(isOnline: isOnline),
+                          // Not gated on the connectivity status: the device may be marked
+                          // offline while its network is back, and the responses to these
+                          // requests are what tell the connectivity check to run again.
+                          onRefresh: () => _refreshData(isOnline: true),
                           child: content,
                         ),
                   floatingActionButton: widget.editModeEnabled || isTablet
