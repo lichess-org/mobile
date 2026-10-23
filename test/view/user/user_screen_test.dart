@@ -49,6 +49,9 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
 
       expect(find.text('Activity'), findsOneWidget);
+
+      // activity days are server (UTC) days, as on the website
+      expect(find.text('Aug 28, 2025'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('Challenge action is hidden when canChallenge is null (own profile case)', (
