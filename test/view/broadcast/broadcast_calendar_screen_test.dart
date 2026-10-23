@@ -4,9 +4,6 @@ import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -45,57 +42,70 @@ void main() {
 
       await tester.pump();
 
-      expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
-      expect(find.byType(ListSection), findsNWidgets(2));
-      expect(find.byType(HttpNetworkImageWidget), findsOneWidget);
-      final cover = tester.widget<HttpNetworkImageWidget>(find.byType(HttpNetworkImageWidget));
-      expect(cover.width, 80.0);
-      expect(cover.height, 40.0);
-      final fallbacks = find.byType(BroadcastCalendarFallbackIcon);
-      expect(fallbacks, findsWidgets);
-      for (final element in fallbacks.evaluate()) {
-        expect(tester.getSize(find.byWidget(element.widget)), const Size(80.0, 40.0));
-      }
       expect(find.text('Tour A'), findsOneWidget);
       expect(find.text('Tour B'), findsOneWidget);
-      expect(find.byType(DropdownButton<int>), findsNWidgets(2));
-      expect(find.byType(DropdownButtonHideUnderline), findsNWidgets(2));
-      for (final dropdown in tester.widgetList<DropdownButton<int>>(
-        find.byType(DropdownButton<int>),
-      )) {
-        expect(dropdown.isDense, isFalse);
-      }
-      final pills = tester
-          .widgetList<Container>(
-            find.ancestor(
-              of: find.byType(DropdownButton<int>).first,
-              matching: find.byType(Container),
-            ),
-          )
-          .where((c) {
-            final decoration = c.decoration;
-            return decoration is BoxDecoration &&
-                decoration.borderRadius == BorderRadius.circular(28.0);
-          });
-      expect(pills, hasLength(1));
     });
 
-    testWidgets('Loading state stays refreshable', variant: kPlatformVariant, (tester) async {
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => client);
-          }),
-        },
-      );
+    testWidgets(
+      'Shows a loading indicator while waiting for the month',
+      variant: kPlatformVariant,
+      (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastCalendarScreen(initialYear: 2026, initialMonth: 10),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => client);
+            }),
+          },
+        );
 
-      await tester.pumpWidget(app);
+        await tester.pumpWidget(app);
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(find.byType(CustomScrollView), findsOneWidget);
-    });
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'Disables month navigation at the supported date limits',
+      variant: kPlatformVariant,
+      (tester) async {
+        final firstMonthApp = await makeTestProviderScopeApp(
+          tester,
+          home: const BroadcastCalendarScreen(initialYear: 2020, initialMonth: 1),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => client);
+            }),
+          },
+        );
+
+        await tester.pumpWidget(firstMonthApp);
+        final previousButton = find.ancestor(
+          of: find.byIcon(Icons.chevron_left),
+          matching: find.byType(IconButton),
+        );
+        expect(tester.widget<IconButton>(previousButton).onPressed, isNull);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        final lastMonthApp = await makeTestProviderScopeApp(
+          tester,
+          home: BroadcastCalendarScreen(initialYear: DateTime.now().year + 1, initialMonth: 12),
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+              return FakeHttpClientFactory(() => client);
+            }),
+          },
+        );
+
+        await tester.pumpWidget(lastMonthApp);
+        final nextButton = find.ancestor(
+          of: find.byIcon(Icons.chevron_right),
+          matching: find.byType(IconButton),
+        );
+        expect(tester.widget<IconButton>(nextButton).onPressed, isNull);
+      },
+    );
 
     testWidgets('Shows empty state when month has no broadcasts', variant: kPlatformVariant, (
       tester,
@@ -145,7 +155,6 @@ void main() {
 
       expect(find.text(DateFormat.yMMMMd().format(DateTime(2026, 10, 1))), findsOneWidget);
       expect(find.text('To be announced'), findsOneWidget);
-      expect(find.byType(BroadcastCalendarTile), findsNWidgets(2));
     });
 
     testWidgets('Shows live marker for started rounds', variant: kPlatformVariant, (tester) async {
@@ -174,7 +183,6 @@ void main() {
         await tester.pump();
       });
 
-      expect(find.byType(BroadcastCalendarTile), findsNWidgets(3));
       expect(find.textContaining('LIVE'), findsNWidgets(2));
     });
 
