@@ -226,27 +226,86 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 /// Local Notifications
 ///////////////////////
 
+/// A notification channel, shared by one or more [LocalNotification] types.
+///
+/// On Android, all channels are created when the app starts, so that the FCM notifications
+/// displayed by the system don't fall back to the "Miscellaneous" channel.
+///
+/// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
+/// never change.
+enum NotificationChannel(final String id, final Importance importance) {
+  playban('playban', .max),
+  newMessage('newMessage', .high),
+  corresGameUpdate('corresGameUpdate', .high),
+  challengeAccept('challengeAccept', .high),
+  challengeCreate('challengeCreate', .high),
+  announce('announce', .high),
+  challenge('challenge', .max),
+  broadcast('broadcast', .defaultImportance),
+  recap('recap', .defaultImportance);
+
+  /// The localized name of the channel, shown in the system notification settings.
+  String name(AppLocalizations l10n) => switch (this) {
+    playban => 'Playban',
+    newMessage => l10n.preferencesNotifyDirectMessage,
+    corresGameUpdate || challengeAccept || challengeCreate => l10n.preferencesNotifyGameEvent,
+    announce => 'Lichess Announcements',
+    challenge => l10n.preferencesNotifyChallenge,
+    broadcast => l10n.broadcastBroadcasts,
+    recap => 'Annual recap',
+  };
+
+  /// The notification priority matching the channel [importance].
+  ///
+  /// Android 8+ only uses the channel importance, the priority is set for consistency.
+  Priority get priority => switch (importance) {
+    .unspecified || .defaultImportance => .defaultPriority,
+    .none || .min => .min,
+    .low => .low,
+    .high => .high,
+    .max => .max,
+  };
+
+  /// The Android channel to create on the device.
+  AndroidNotificationChannel androidChannel(AppLocalizations l10n) =>
+      AndroidNotificationChannel(id, name(l10n), importance: importance);
+}
+
 /// A notification shown to the user from the platform's notification system.
 @immutable
 sealed class const LocalNotification() {
   /// The unique identifier of the notification.
   int get id;
 
+  /// The channel of the notification.
+  NotificationChannel get channel;
+
   /// The channel identifier of the notification.
   ///
   /// Corresponds to [AndroidNotificationDetails.channelId] for android and
   /// [DarwinNotificationDetails.threadIdentifier] for iOS.
-  ///
-  /// It must match the channel identifier of the notification details.
-  String get channelId;
+  String get channelId => channel.id;
+
+  /// The Android details of the notification on its [channel].
+  AndroidNotificationDetails _androidDetails(
+    AppLocalizations l10n, {
+    bool autoCancel = true,
+    List<AndroidNotificationAction>? actions,
+  }) => AndroidNotificationDetails(
+    channel.id,
+    channel.name(l10n),
+    importance: channel.importance,
+    priority: channel.priority,
+    autoCancel: autoCancel,
+    actions: actions,
+  );
 
   /// The discriminator used to reconstruct the concrete notification type from its payload.
   ///
-  /// Defaults to [channelId], which is enough as long as a channel carries a single notification
-  /// type. Types sharing a channel with another type must override this with a unique value.
+  /// It is unique to each type, unlike [channel], which can be shared or set by the server.
   ///
   /// See [LocalNotification.fromJson].
-  String get payloadType => channelId;
+  String get payloadType;
 
   /// The localized title of the notification.
   String title(AppLocalizations l10n);
@@ -314,7 +373,10 @@ class const PlaybanNotification(final TemporaryBan playban) extends LocalNotific
   }
 
   @override
-  String get channelId => 'playban';
+  NotificationChannel get channel => .playban;
+
+  @override
+  String get payloadType => 'playban';
 
   @override
   int get id => playban.date.toIso8601String().hashCode;
@@ -333,13 +395,7 @@ class const PlaybanNotification(final TemporaryBan playban) extends LocalNotific
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      'Playban',
-      importance: Importance.max,
-      priority: Priority.max,
-      autoCancel: false,
-    ),
+    android: _androidDetails(l10n, autoCancel: false),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -370,7 +426,10 @@ class const NewMessageNotification(
   }
 
   @override
-  String get channelId => 'newMessage';
+  NotificationChannel get channel => .newMessage;
+
+  @override
+  String get payloadType => 'newMessage';
 
   @override
   int get id => conversationId.hashCode;
@@ -390,13 +449,7 @@ class const NewMessageNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyDirectMessage,
-      importance: Importance.max,
-      priority: Priority.high,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -427,7 +480,10 @@ class const CorresGameUpdateNotification(
   }
 
   @override
-  String get channelId => 'corresGameUpdate';
+  NotificationChannel get channel => .corresGameUpdate;
+
+  @override
+  String get payloadType => 'corresGameUpdate';
 
   @override
   int get id => fullId.hashCode;
@@ -447,13 +503,7 @@ class const CorresGameUpdateNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -480,7 +530,10 @@ class const ChallengeAcceptedNotification(
   }
 
   @override
-  String get channelId => 'challengeAccept';
+  NotificationChannel get channel => .challengeAccept;
+
+  @override
+  String get payloadType => 'challengeAccept';
 
   @override
   int get id => fullId.hashCode;
@@ -500,13 +553,7 @@ class const ChallengeAcceptedNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -534,7 +581,10 @@ class const ChallengeCreatedNotification(
   }
 
   @override
-  String get channelId => 'challengeCreate';
+  NotificationChannel get channel => .challengeCreate;
+
+  @override
+  String get payloadType => 'challengeCreate';
 
   @override
   int get id => challengeId.hashCode;
@@ -554,13 +604,7 @@ class const ChallengeCreatedNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -577,8 +621,6 @@ class const AnnounceNotification(
   final DateTime? date,
 }) extends LocalNotification {
   static final int notificationId = 'announce'.hashCode;
-
-  static const _channelId = 'announce';
 
   static const dismissActionId = 'dismiss';
 
@@ -604,7 +646,10 @@ class const AnnounceNotification(
   int get id => notificationId;
 
   @override
-  String get channelId => _channelId;
+  NotificationChannel get channel => .announce;
+
+  @override
+  String get payloadType => 'announce';
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -620,11 +665,8 @@ class const AnnounceNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      _channelId,
-      'Lichess Announcements',
-      importance: Importance.high,
-      priority: Priority.high,
+    android: _androidDetails(
+      l10n,
       autoCancel: false,
       actions: [
         AndroidNotificationAction(
@@ -634,8 +676,8 @@ class const AnnounceNotification(
         ),
       ],
     ),
-    iOS: const DarwinNotificationDetails(
-      threadIdentifier: _channelId,
+    iOS: DarwinNotificationDetails(
+      threadIdentifier: channelId,
       categoryIdentifier: darwinCategoryId,
     ),
   );
@@ -652,7 +694,10 @@ class const ChallengeNotification(final Challenge challenge) extends LocalNotifi
   }
 
   @override
-  String get channelId => 'challenge';
+  NotificationChannel get channel => .challenge;
+
+  @override
+  String get payloadType => 'challenge';
 
   @override
   int get id => challenge.id.value.hashCode;
@@ -668,11 +713,8 @@ class const ChallengeNotification(final Challenge challenge) extends LocalNotifi
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyChallenge,
-      importance: Importance.max,
-      priority: Priority.high,
+    android: _androidDetails(
+      l10n,
       autoCancel: false,
       actions: <AndroidNotificationAction>[
         if (challenge.variant.isPlaySupported)
@@ -740,9 +782,6 @@ class const ChallengeNotification(final Challenge challenge) extends LocalNotifi
       );
 }
 
-/// The Android notification channel shared by all broadcast notifications.
-const _kBroadcastChannelId = 'broadcast';
-
 /// A notification for when a broadcast round starts.
 ///
 /// This notification is shown when a broadcast round the user subscribed to starts.
@@ -767,7 +806,7 @@ class const BroadcastRoundNotification(
   }
 
   @override
-  String get channelId => _kBroadcastChannelId;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastRound';
@@ -790,7 +829,7 @@ class const BroadcastRoundNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -825,7 +864,7 @@ class const BroadcastPlayerFollowNotification(
   }
 
   @override
-  String get channelId => _kBroadcastChannelId;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastPlayerFollow';
@@ -850,7 +889,7 @@ class const BroadcastPlayerFollowNotification(
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -869,7 +908,10 @@ class const RecapNotification(final int year) extends LocalNotification {
   }
 
   @override
-  String get channelId => 'recap';
+  NotificationChannel get channel => .recap;
+
+  @override
+  String get payloadType => 'recap';
 
   @override
   int get id => year.hashCode;
@@ -884,7 +926,6 @@ class const RecapNotification(final int year) extends LocalNotification {
   String body(AppLocalizations l10n) => l10n.recapAwaitQuestion;
 
   @override
-  NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(channelId, 'Annual recap', importance: Importance.high),
-  );
+  NotificationDetails details(AppLocalizations l10n) =>
+      NotificationDetails(android: _androidDetails(l10n));
 }

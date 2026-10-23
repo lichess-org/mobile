@@ -23,6 +23,22 @@ RemoteMessage broadcastMessage(String? url) => RemoteMessage(
 );
 
 void main() {
+  test('notification channel ids are stable', () {
+    // The server specifies these channel IDs in the FCM messages it sends. They must not differ
+    // from the ones used in the app.
+    expect(NotificationChannel.values.map((c) => c.id), [
+      'playban',
+      'newMessage',
+      'corresGameUpdate',
+      'challengeAccept',
+      'challengeCreate',
+      'announce',
+      'challenge',
+      'broadcast',
+      'recap',
+    ]);
+  });
+
   group('Broadcast FCM message parsing:', () {
     test('a round path is parsed as a round message', () {
       final message = FcmMessage.fromRemoteMessage(

@@ -244,7 +244,7 @@ void main() {
           result.captured[0],
           isA<NotificationDetails>()
               .having((d) => d.android?.importance, 'importance', Importance.high)
-              .having((d) => d.android?.priority, 'priority', Priority.defaultPriority),
+              .having((d) => d.android?.priority, 'priority', Priority.high),
         );
       });
     });

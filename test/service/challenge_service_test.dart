@@ -175,7 +175,7 @@ void main() {
         isA<NotificationDetails>()
             .having((details) => details.android?.channelId, 'channelId', 'challenge')
             .having((d) => d.android?.importance, 'importance', Importance.max)
-            .having((d) => d.android?.priority, 'priority', Priority.high),
+            .having((d) => d.android?.priority, 'priority', Priority.max),
       );
 
       sendServerSocketMessages(Uri(path: kDefaultSocketRoute), [
