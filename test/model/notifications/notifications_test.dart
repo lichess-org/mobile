@@ -23,6 +23,22 @@ RemoteMessage broadcastMessage(String? url) => RemoteMessage(
 );
 
 void main() {
+  test('notification channel ids are stable', () {
+    // The server names these channels in the FCM messages it sends: changing an id sends the
+    // background notifications of that channel to the Firebase fallback channel.
+    expect(NotificationChannel.values.map((c) => c.id), [
+      'playban',
+      'newMessage',
+      'corresGameUpdate',
+      'challengeAccept',
+      'challengeCreate',
+      'announce',
+      'challenge',
+      'broadcast',
+      'recap',
+    ]);
+  });
+
   group('Broadcast FCM message parsing:', () {
     test('a round path is parsed as a round message', () {
       final message = FcmMessage.fromRemoteMessage(
@@ -251,6 +267,42 @@ void main() {
 
       for (final message in messages) {
         expect(message.toLocalNotification(), isNull, reason: 'for $message');
+      }
+    });
+  });
+
+  group('FCM message channel:', () {
+    RemoteMessage newMessage({String? channelId}) => RemoteMessage(
+      data: const {'lichess.type': 'newMessage', 'lichess.threadId': 'thethread'},
+      notification: RemoteNotification(
+        title: 'title',
+        body: 'body',
+        android: AndroidNotification(channelId: channelId),
+      ),
+    );
+
+    test('the channel set by the server is used for the local notification', () {
+      final notification = FcmMessage.fromRemoteMessage(newMessage(channelId: 'corresGameUpdate'))
+          .toLocalNotification()!;
+
+      final l10n = MockAppLocalizations();
+      when(() => l10n.preferencesNotifyGameEvent).thenReturn('Game events');
+
+      expect(notification.channel, NotificationChannel.corresGameUpdate);
+      expect(notification.details(l10n).android?.channelId, 'corresGameUpdate');
+      // the payload type does not depend on the channel
+      expect(notification.payloadType, 'newMessage');
+    });
+
+    test('a missing or unknown channel falls back to the default one', () {
+      for (final channelId in [null, 'fcm_fallback_notification_channel']) {
+        expect(
+          FcmMessage.fromRemoteMessage(newMessage(channelId: channelId))
+              .toLocalNotification()!
+              .channel,
+          NotificationChannel.newMessage,
+          reason: 'for $channelId',
+        );
       }
     });
   });
