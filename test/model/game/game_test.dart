@@ -27,11 +27,7 @@ void main() {
 
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-<<<<<<< HEAD
-[Site "https://lichess.dev/game/Fn9UvVKF"]
-=======
-[Site "https://lichess.org/Fn9UvVKF"]
->>>>>>> 5ca4f417c (Tests expect prod default host)
+[Site "https://lichess.org/game/Fn9UvVKF"]
 [Date "${formatDate(1706204482969)}"]
 [White "chabrot"]
 [Black "veloce"]
@@ -52,11 +48,7 @@ void main() {
 
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-<<<<<<< HEAD
-[Site "https://lichess.dev/game/CCW6EEru"]
-=======
-[Site "https://lichess.org/CCW6EEru"]
->>>>>>> 5ca4f417c (Tests expect prod default host)
+[Site "https://lichess.org/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
@@ -123,11 +115,7 @@ void main() {
       );
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-<<<<<<< HEAD
-[Site "https://lichess.dev/game/CCW6EEru"]
-=======
-[Site "https://lichess.org/CCW6EEru"]
->>>>>>> 5ca4f417c (Tests expect prod default host)
+[Site "https://lichess.org/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
@@ -151,11 +139,7 @@ void main() {
       );
       expect(game.makePgn(), '''
 [Event "Rated Bullet game"]
-<<<<<<< HEAD
-[Site "https://lichess.dev/game/CCW6EEru"]
-=======
-[Site "https://lichess.org/CCW6EEru"]
->>>>>>> 5ca4f417c (Tests expect prod default host)
+[Site "https://lichess.org/game/CCW6EEru"]
 [Date "${formatDate(1706185945680)}"]
 [White "veloce"]
 [Black "chabrot"]
