@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
@@ -42,11 +43,6 @@ const _minimumManualLocalReviewSearchTime = Duration(milliseconds: 250);
 const _maximumManualLocalReviewSearchTime = Duration(seconds: 10);
 
 enum _LocalReviewSpeed { ultraBullet, bullet, blitz, rapid, thorough, manual }
-
-final _localGameAnalysisSessionProvider =
-    NotifierProvider.family<_LocalGameAnalysisSession, IList<LocalEval>?, String>(
-      _LocalGameAnalysisSession.new,
-    );
 
 enum _LocalReviewStatus { ready, running, complete, error }
 
@@ -75,15 +71,13 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
   bool _isRequestingServerAnalysis = false;
   IList<LocalEval> _evaluations = const IListConst([]);
 
-  String get _sessionKey =>
-      '${widget.options.contextId.value}:${widget.root.position.fen}:'
-      '${widget.root.mainline.map((branch) => branch.id).join()}';
+  String get _sessionKey => localGameAnalysisSessionKey(widget.options.contextId, widget.root);
 
   @override
   void initState() {
     super.initState();
     _progressAnimationController = AnimationController(vsync: this);
-    final cached = ref.read(_localGameAnalysisSessionProvider(_sessionKey));
+    final cached = ref.read(localGameAnalysisSessionProvider(_sessionKey));
     if (cached != null && cached.length == widget.root.mainline.length + 1) {
       _evaluations = cached;
       _reviews = _makeReviews(cached);
@@ -582,7 +576,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
         _evaluations = evaluations.lock;
         _reviews = reviews;
       });
-      ref.read(_localGameAnalysisSessionProvider(_sessionKey).notifier).evaluations = _evaluations;
+      ref.read(localGameAnalysisSessionProvider(_sessionKey).notifier).evaluations = _evaluations;
     } on _LocalReviewCancelled {
       return;
     } on Object catch (error, stackTrace) {
@@ -744,16 +738,7 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
   }) {
     final moveNumber = before.position.fullmoves;
     final movePrefix = before.position.turn == Side.white ? '$moveNumber.' : '$moveNumber...';
-    final bestMove = before.bestMove;
-    final verdict = bestMove == null
-        ? null
-        : MoveVerdict.fromShift(
-            before.winningChances(before.position.turn) -
-                after.winningChances(before.position.turn),
-            hasBetterMove: bestMove != branch.sanMove.move,
-            winningChancesBefore: before.winningChances(before.position.turn),
-            winningChancesAfter: after.winningChances(before.position.turn),
-          );
+    final verdict = localMoveVerdictFor(before: before, after: after, branch: branch);
 
     return _MoveReview(
       moveLabel: '$movePrefix ${branch.sanMove.san}',
@@ -842,15 +827,6 @@ extension on _LocalReviewSpeed {
 }
 
 final _logger = Logger('LocalGameAnalysis');
-
-class _LocalGameAnalysisSession(final String sessionKey) extends Notifier<IList<LocalEval>?> {
-  @override
-  IList<LocalEval>? build() => null;
-
-  IList<LocalEval>? get evaluations => state;
-
-  set evaluations(IList<LocalEval> evaluations) => state = evaluations;
-}
 
 class const _MoveReview({
   required this.moveLabel,

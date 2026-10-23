@@ -46,6 +46,9 @@ abstract class AnalysisBoardState<
   /// Whether the annotations should be shown on the board.
   bool get showAnnotations;
 
+  /// Annotation from local game analysis, when available.
+  Annotation? get localMoveAnnotation => null;
+
   /// Override this to hide the best move arrow in certain states, even if enabled in [analysisPrefs].
   bool get hideBestMoveArrow => false;
 
@@ -234,7 +237,8 @@ abstract class AnalysisBoardState<
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final currentNode = analysisState.currentNode;
-    final annotation = showAnnotations ? makeAnnotation(currentNode.nags) : null;
+    final annotation =
+        localMoveAnnotation ?? (showAnnotations ? makeAnnotation(currentNode.nags) : null);
     final sanMove = currentNode.sanMove;
 
     final externalShapes = {..._bestMoveShapes(boardPrefs.pieceSet.assets), ...extraShapes.unlock};

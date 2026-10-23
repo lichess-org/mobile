@@ -7,6 +7,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -52,6 +54,33 @@ void main() {
   });
 
   group('Analysis Screen', () {
+    testWidgets('can toggle local move quality annotations in analysis settings', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisSettingsScreen(
+          AnalysisOptions.pgn(
+            id: StringId('local_game_review_settings'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      const title = 'Show local move quality on board';
+      final tile = find.ancestor(of: find.text(title), matching: find.byType(ListTile));
+      final switchFinder = find.descendant(of: tile, matching: find.byType(Switch));
+      expect(tester.widget<Switch>(switchFinder).value, isTrue);
+
+      await tester.tap(switchFinder);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<Switch>(switchFinder).value, isFalse);
+    });
+
     testWidgets('offers local computer analysis for a PGN when engine analysis is allowed', (
       tester,
     ) async {
@@ -139,6 +168,12 @@ void main() {
     });
 
     testWidgets('reviews every PGN move with the local engine', (tester) async {
+      const wakelockChannel =
+          'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+      final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMessageHandler(wakelockChannel, (data) async => data);
+      addTearDown(() => messenger.setMockMessageHandler(wakelockChannel, null));
+
       final engine = LegalMoveEngine();
       await makeEngineTestApp(
         tester,
@@ -163,6 +198,13 @@ void main() {
 
       expect(find.byType(AcplChart), findsOneWidget);
       expect(find.byType(GameSummaryTable), findsOneWidget);
+      final boardAnnotations = tester.widget<Chessboard>(find.byType(Chessboard)).annotations;
+      expect(boardAnnotations, contains(Square.e5));
+      expect(boardAnnotations[Square.e5]?.symbol, '!');
+      final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
+      await container.read(analysisPreferencesProvider.notifier).toggleLocalMoveVerdicts();
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).annotations, isEmpty);
       await tester.scrollUntilVisible(
         find.text('1. e4'),
         300,
