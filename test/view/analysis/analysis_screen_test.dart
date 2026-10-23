@@ -156,7 +156,11 @@ void main() {
       await tester.tap(find.byTooltip('Computer analysis'));
       await tester.pumpAndSettle();
 
+      final panelScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(find.text('Analyze game'), 300, scrollable: panelScrollable);
       expect(find.text('Analyze game'), findsOneWidget);
+      await tester.ensureVisible(find.text('Request a computer analysis'));
+      await tester.pumpAndSettle();
       expect(find.text('Request a computer analysis'), findsOneWidget);
       expect(find.textContaining('private Lichess study'), findsOneWidget);
 
@@ -164,6 +168,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.textContaining('You need an account to do that'), findsOneWidget);
+      await tester.ensureVisible(find.text('Analyze game'));
+      await tester.pumpAndSettle();
       expect(find.text('Analyze game'), findsOneWidget);
     });
 
