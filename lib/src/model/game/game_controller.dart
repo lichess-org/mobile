@@ -990,7 +990,7 @@ class GameController(final GameFullId gameFullId)
           curState.copyWith(
             lastDrawOfferAtPly: side != null && side == curState.game.youAre
                 ? curState.game.lastPly
-                : null,
+                : curState.lastDrawOfferAtPly,
             game: curState.game.copyWith(
               white: curState.game.white.copyWith(
                 offeringDraw: side == null ? null : side == Side.white,

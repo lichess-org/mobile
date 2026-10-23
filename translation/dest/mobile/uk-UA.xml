@@ -54,7 +54,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Головна</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Якщо обліковий запис збігається з %1\(s, на нього було надіслано код із \%2\)s символів. Перевірте свою поштову скриньку та введіть код нижче.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Цей код недійсний або його термін дії закінчився.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стримери в прямому етері</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Розмір локальної бази даних</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Хід після відпускання</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Якщо ви переміщуєте фігуру дотиком, хід робиться тоді, коли ви підіймати палець. Це дозволяє ковзати пальцем, щоб змінити кінцеве поле.</string>

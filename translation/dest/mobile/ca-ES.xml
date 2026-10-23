@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inici</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Si un compte és igual a %1$s, un %2$s codi de caràcters serà enviat. Comproveu la vostra bústia i introduïu el codi a continuació.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">El codi és invàlid o ha caducat.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Retransmissors en directe</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Mida de la base de dades local</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mou al soltar</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Quan es mou les peces polsant, el moviment es fa quan deixeu el dit, permetent moure\'s per canviar la casella destí.</string>
@@ -123,6 +122,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Mostra la vora</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Resposta tàctil</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Quan s\'activa, el dispositiu produirà una petita vibració quan es mou o es captura una peça.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Comparteix</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Comparteix l\'URL del repte</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Comparteix PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Comparteix l\'enllaç a la partida</string>
@@ -153,4 +153,5 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Esperant que s\'uneixi l\'adversari...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Visualitza</string>
   <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">T\'enviarem un correu electrònic per a identificar-te.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">No pots desafiar a tu mateix</string>
 </resources>

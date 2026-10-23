@@ -43,7 +43,6 @@
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Καλωσορίσατε</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Αρχική</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Αυτός ο κωδικός δεν είναι έγκυρος ή έχει λήξει.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers ζωντανά αυτή τη στιγμή</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Μέγεθος τοπικής βάσης δεδομένων</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Κίνηση στο άφημα του ποντίκι</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.</string>

@@ -30,6 +30,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permitir retroceder y pistas';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Negro Amoled';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Descartar';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Zona de riesgo';
 
   @override
@@ -155,6 +161,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileHomeTab => 'Inicio';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'Si una cuenta coincide con $param1, se te envió un código de $param2 caracteres. Verifica tu bandeja de entrada e ingresa el siguiente código.';
   }
@@ -211,7 +220,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobilePerfShortAtomic => 'Atómico';
 
   @override
-  String get mobilePerfShortBlitz => 'Relá';
+  String get mobilePerfShortBlitz => 'Blitz';
 
   @override
   String get mobilePerfShortBullet => 'Bala';
@@ -220,10 +229,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortClassical => 'Clás';
+  String get mobilePerfShortClassical => 'Clásica';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corr';
+  String get mobilePerfShortCorrespondence => 'Corresp.';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
@@ -244,13 +253,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobilePerfShortRacingKings => 'Carrera';
 
   @override
-  String get mobilePerfShortRapid => 'Rapi';
+  String get mobilePerfShortRapid => 'Rápida';
 
   @override
   String get mobilePerfShortThreeCheck => '3jaques';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultr';
+  String get mobilePerfShortUltraBullet => 'Ultra';
 
   @override
   String get mobilePgnCopied => 'PGN copiado.';
@@ -274,6 +283,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Anterior';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '¿Quieres terminar esta ronda?';
@@ -387,7 +399,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Si está activa, el dispositivo vibrará brevemente cuando muevas o captures una pieza.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Compartir';
 
   @override
   String get mobileShareChallengeUrl => 'Compartir enlace del desafío';
@@ -1422,6 +1434,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practicar sólo algunas filas & columnas';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Introduce la coordenada';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Pulsa $param para empezar';
+  }
 
   @override
   String get learnLearnChess => 'Aprende ajedrez';
@@ -2482,7 +2502,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get preferencesInlineNotation => 'Notación compacta';
 
   @override
-  String get preferencesShowServerAnalysis => 'Mostrar análisis del servidor';
+  String get preferencesShowMainlineAnalysis => 'Mostrar análisis de línea principal';
 
   @override
   String get preferencesShowBestMoveArrows => 'Mostrar flechas de mejor movimiento';
@@ -2510,6 +2530,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Mostrar rey en peligro';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Mostrar piezas atrapadas';
 
   @override
   String get preferencesDisclosureMode => 'Habilitar ocultamiento de variantes';
@@ -2903,9 +2926,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get puzzleThemeCastling => 'Enroque';
 
   @override
-  String get puzzleThemeEnPassant => 'Captura al paso';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Lleva al rey a un lugar seguro y despliega la torre para atacar.';
 
   @override
@@ -2997,6 +3017,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Una táctica durante la última fase de la partida.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Captura al paso';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Una táctica que involucra la regla de captura al paso, donde un peón puede capturar un peón contrario que acaba de mover por su columna adyacente en su movimiento inicial de dos casillas.';
@@ -3796,6 +3819,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get engineSettings => 'Ajustes del motor';
 
   @override
+  String get engine => 'Motor';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Motores de los más fuertes a los más débiles';
 
   @override
@@ -4422,6 +4448,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noNetwork => 'Desconectado';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Amigos en línea: $param1\nAmigos jugando: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Oponentes favoritos';
 
   @override
@@ -4788,9 +4819,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Trampa';
 
   @override
@@ -4807,9 +4835,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Podremos procesar tu informe más rápido si lo escribes en inglés.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5389,7 +5414,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get downloadImported => 'Descargar la partida importada';
 
   @override
+  String get downloadMyGames => 'Descargar mis partidas';
+
+  @override
   String get downloadAllGames => 'Descargar todas las partidas';
+
+  @override
+  String get downloadResults => 'Descargar resultados';
 
   @override
   String get crosstable => 'Tabla cruzada';
@@ -6156,7 +6187,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get showMeEverything => 'Mostrarme todo';
 
   @override
-  String get lichessPatronInfo => 'Lichess es una organización benéfica y un software totalmente libre y de código abierto.\nTodos los gastos de funcionamiento, desarrollo y contenidos se financian exclusivamente mediante las donaciones de sus usuarios.';
+  String get lichessPatronInfo => 'Lichess es una organización benéfica y software libre de código abierto. Dependemos de donaciones de usuarios para apoyar nuestros costos operativos, desarrollo y contenido. Sin nuestra generosa comunidad, no podríamos mantener el sitio funcionando. ¡Gracias por unirte!';
 
   @override
   String get nothingToSeeHere => 'Nada que ver aquí por ahora.';
@@ -6966,9 +6997,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Sólo los colaboradores del estudio pueden solicitar un análisis por ordenador.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Obtén un análisis completo de la línea principal en el servidor.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Asegúrate de que el capítulo está completo. Sólo puede solicitar el análisis una vez.';
 
   @override
@@ -7185,9 +7213,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyStart => 'Comenzar';
-
-  @override
-  String get studySave => 'Guardar';
 
   @override
   String get studyClearChat => 'Limpiar el chat';
@@ -7423,6 +7448,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Derrota Blanca, aunque el Negro no puede ganar';
+
+  @override
+  String get studyAnalysisEditor => 'Editor de análisis';
+
+  @override
+  String get studyClearLocal => '¿Borrar análisis local?';
+
+  @override
+  String get studyClearPublished => '¿Borrar análisis publicado?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Solicitar un análisis al servidor';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analizar en tu dispositivo';
 
   @override
   String studyNbChapters(int count) {

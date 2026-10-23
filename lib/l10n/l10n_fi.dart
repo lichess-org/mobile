@@ -30,6 +30,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Salli siirron peruutukset ja vihjeet';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled-musta';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ohita';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Vaaravyöhyke';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Etusivu';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -276,6 +285,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePreviousPage => 'Edellinen';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
 
   @override
@@ -387,7 +399,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Kun käytössä, laite värähtelee hieman kun siirrät tai lyöt nappulan.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Jaa';
 
   @override
   String get mobileShareChallengeUrl => 'Jaa haasteen URL';
@@ -473,7 +485,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileViewGame => 'Näytä peli';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'Näytä lisenssit';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
@@ -1422,6 +1434,14 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Harjoittele vain tiettyjä linjoja ja rivejä';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Syötä koordinaatti';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Aloita painamalla $param';
+  }
 
   @override
   String get learnLearnChess => 'Opi shakkia';
@@ -2482,7 +2502,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesInlineNotation => 'Rivinsisäinen kommentointi';
 
   @override
-  String get preferencesShowServerAnalysis => 'Näytä palvelinanalyysi';
+  String get preferencesShowMainlineAnalysis => 'Näytä päälinjan analyysi';
 
   @override
   String get preferencesShowBestMoveArrows => 'Näytä parhaiden siirtojen nuolet';
@@ -2510,6 +2530,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Näytä, kun kuningasta voi shakata';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Näytä ansassa olevat nappulat';
 
   @override
   String get preferencesDisclosureMode => 'Ota käyttöön muunnelmien piilotus';
@@ -2903,9 +2926,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get puzzleThemeCastling => 'Linnoitus';
 
   @override
-  String get puzzleThemeEnPassant => 'Ohestalyönti';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Vie kuninkaasi turvaan ja tuo tornisi mukaan hyökkäykseen.';
 
   @override
@@ -2997,6 +3017,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktiikka pelin viimeisessä vaiheessa.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Ohestalyönti';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan siirtynyt tämän viereen.';
@@ -3796,6 +3819,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get engineSettings => 'Tietokoneasetukset';
 
   @override
+  String get engine => 'Kone';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Tietokoneet vahvimmasta heikoimpaan';
 
   @override
@@ -4422,6 +4448,11 @@ class AppLocalizationsFi extends AppLocalizations {
   String get noNetwork => 'Ei yhteyttä';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Kavereita paikalla: $param1\nKavereita pelaamassa: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Suosikkivastustajat';
 
   @override
@@ -4788,9 +4819,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get reason => 'Syy';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Huijaus';
 
   @override
@@ -4807,9 +4835,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Voimme käsitellä ilmoituksesi nopeammin, jos kirjoitat meille englanniksi.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5389,7 +5414,13 @@ class AppLocalizationsFi extends AppLocalizations {
   String get downloadImported => 'Imuroi tuotu PGN';
 
   @override
+  String get downloadMyGames => 'Lataa pelini';
+
+  @override
   String get downloadAllGames => 'Lataa kaikki pelit';
+
+  @override
+  String get downloadResults => 'Lataa tulokset';
 
   @override
   String get crosstable => 'Pistetaulukko';
@@ -6156,7 +6187,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get showMeEverything => 'Näytä kaikki';
 
   @override
-  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö ja täysin ilmainen avoimen lähdekoodin ohjelmisto.\nKaikki toimintakustannukset, kehitystyö ja sisältö rahoitetaan yksinomaan käyttäjien lahjoituksilla. Ilman anteliasta yhteisöämme emme pystyisi pitämään sivustoa yllä. Kiitos liittymisestä tukijoihimme!  ';
+  String get lichessPatronInfo => 'Lichess on hyväntekeväisyysjärjestö sekä täysin vapaa ja avoimen lähdekoodin ohjelmisto. Riipumme käyttäjien lahjoituksista, joilla katamme käyttökustannukset, kehitystyön ja sivustosisällön. Ilman anteliasta yhteisöä sivusto ei pysyisi käynnissä. Kiitos kun liityt joukkoomme!';
 
   @override
   String get nothingToSeeHere => 'Täällä ei ole tällä hetkellä mitään nähtävää.';
@@ -6966,9 +6997,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Vain tutkielman osallistujat voivat pyytää tietokoneanalyysin.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Hanki palvelimelta täysi tietokoneanalyysi päälinjasta.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Varmista, että luku on valmis. Voit pyytää analyysiä vain kerran.';
 
   @override
@@ -7185,9 +7213,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyStart => 'Aloita';
-
-  @override
-  String get studySave => 'Tallenna';
 
   @override
   String get studyClearChat => 'Tyhjennä keskustelu';
@@ -7423,6 +7448,21 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Valkean tappio, mutta musta ei voi voittaa';
+
+  @override
+  String get studyAnalysisEditor => 'Analyysieditori';
+
+  @override
+  String get studyClearLocal => 'Poistetaanko paikallinen analyysi?';
+
+  @override
+  String get studyClearPublished => 'Poistetaanko julkaista analyysi?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Pyydä palvelinanalyysiä';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analysoi omalla laitteellasi';
 
   @override
   String studyNbChapters(int count) {

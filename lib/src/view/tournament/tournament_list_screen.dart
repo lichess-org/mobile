@@ -245,7 +245,7 @@ Color? _iconColor(LightTournament tournament) {
 
 class const _TournamentListItem({required final LightTournament tournament})
     extends StatelessWidget {
-  static final _hourMinuteFormat = DateFormat.Hm();
+  static DateFormat get _hourMinuteFormat => DateFormat.Hm();
 
   @override
   Widget build(BuildContext context) {

@@ -166,7 +166,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
   String? get imageUrl => widget.post.imageUrl?.toString();
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBlogImage;
 
   @override
@@ -175,7 +175,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -272,7 +272,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd();
+DateFormat get _dateFormat => DateFormat.MMMd();
 
 class const _BlogCardContent({
   required final BlogPost post,

@@ -6,18 +6,21 @@
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ushbu sozlamalar Lichess akkauntingizga saqlanadi va barcha qurilmalaringizda amal qiladi.</string>
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Saboqqa qoʻshish</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Barcha oʻyinlar</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Yurishni qaytarish va maslahatlarga ruxsat berish</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Qora Amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ishonchingiz komilmi?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Rostan ham NNUE faylni (%s) yuklab olmoqchimisiz?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Doska gorizontal rejimda</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Taxta sozlamalari</string>
   <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Bronstein kechikishi</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Yurishni qaytarishni bekor qilish</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Chorlov yaratildi: oʻyin boshlanganida bildirishnoma olasiz.\nUnga asosiy ekrandan kirishingiz mumkin.</string>
   <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Pozitsiyadan chorlash</string>
   <string name="chapterName" comment="Label of the text field to name a new study chapter.">Bob nomi</string>
-  <string name="chessEngine" comment="Chess engine settings screen title.">Shaxmat dvijogi</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Shaxmat dvigateli</string>
   <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Maxsus orqa fon tanlash</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Tozalash</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Kodning amal qilish muddati 5 daqiqadan soʻng tugaydi va undan faqat bir marta foydalanish mumkin.</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kod</string>
   <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Kod %s ta belgidan iborat.</string>
   <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Nusxa olindi.</string>
@@ -34,6 +37,8 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Fikr‑mulohaza</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtrlar</string>
   <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Soatni aylantirish</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Yurishdan soʻng donalarni va raqib maʼlumotlarini aylantirish</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Yurishlaringiz boʻyicha fikr-mulohaza oling</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kun</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Xayrli kech, %s</string>
@@ -41,9 +46,11 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Yaxshi yurish, ammo bundan ham yaxshirogʻi bor</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Salom</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Asosiy</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Agar biror akkaunt %1$s ga mos kelgan boʻlsa, unga %2$s ta belgili kod yuborildi. Kiruvchi xatlaringizni tekshiring va kodni pastga kiriting.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Kod yaroqsiz yoki muddati tugagan.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Efirdagi strimerlar</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Lokal maʼlumotlar bazasining hajmi</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Qoʻyib yuborishda yurish</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Bosish orqali donani surayotganda, yurish barmogʻingizni koʻtarganingizda amalga oshiriladi. Bu oxirgi katakni oʻzgartirish uchun barmoqni surish imkonini beradi.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Ushbu sahifani koʻrish uchun tizimga kirishingiz kerak.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Oflayn masalalar</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Yangi oʻyin</string>
@@ -109,6 +116,7 @@
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Boshqa orqa fonlarni koʻrish uchun suring</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Bosing yoki suring</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Ikkita katakni bosing</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Sozlamalaringiz Lichess akkauntingizda saqlandi. Ular barcha qurilmalaringizda sinxronlanadi.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Shakl chizish</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Ikki barmoq yordamida shakllarni chizish: bir barmogʻingizni boʻsh katakda ushlab turing va shaklni chizish uchun boshqa barmogʻingizni suring.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ramkani koʻrsatish</string>
@@ -121,7 +129,8 @@
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Pozitsiyani FEN sifatida ulashish</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ushbu masalani ulashish</string>
   <string name="showComments" comment="Shown in the analysis screen.">Sharhlarni koʻrsatish</string>
-  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Dvijok variantlarini koʻrsatish</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Dvigatel variantlarini koʻrsatish</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Baholash shkalasini koʻrsatish</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Natijani koʻrsatish</string>
   <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Browser orqali kirish</string>
   <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">E-pochta orqali kirish</string>
@@ -131,6 +140,7 @@
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Doʻstlarni tartiblash</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Tahdidni yashirish</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Tizim ranglari</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase oflayn rejimda mavjud emas.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Urinishlar soni juda koʻp. Iltimos, keyinroq urinib koʻring.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Tugagan</string>

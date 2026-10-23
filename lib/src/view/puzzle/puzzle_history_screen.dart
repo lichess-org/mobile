@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 /// Shows a short preview of the puzzle history.
 class const PuzzleHistoryPreview(

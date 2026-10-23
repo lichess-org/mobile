@@ -45,7 +45,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Trang chủ</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Nếu tài khoản liên kết với %1$s, một mã %2$s kí tự sẽ được gửi đến tài khoản đó. Kiểm tra hộp thư đến của bạn và nhập mã bên dưới.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Mã này không hợp lệ hoặc đã hết hạn.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Các Streamer phát trực tiếp</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Kích thước CSDL cục bộ</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Khi di chuyển một quân cờ bằng cách chạm, thao tác di chuyển được thực hiện khi bạn nhấc ngón tay lên, cho phép bạn trượt ngón tay để thay đổi ô đích.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Bạn phải đăng nhập để xem trang này.</string>
@@ -57,7 +56,7 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Khám phá Khai cuộc không khả dụng khi ngoại tuyến.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Hoặc nhập một tệp PGN</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Trên bàn cờ</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Chơi ngoại tuyến trên bàn cờ</string>
   <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Dán từ bảng nhớ tạm</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Phản cờ</string>
   <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Nguyên tử</string>

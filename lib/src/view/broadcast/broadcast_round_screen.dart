@@ -858,8 +858,8 @@ class const _RoundSelectorMenu({
   ConsumerState<_RoundSelectorMenu> createState() => _RoundSelectorState();
 }
 
-final _dateFormatMonth = DateFormat.MMMd().add_jm();
-final _dateFormatYearMonth = DateFormat.yMMMd().add_jm();
+DateFormat get _dateFormatMonth => DateFormat.MMMd().add_jm();
+DateFormat get _dateFormatYearMonth => DateFormat.yMMMd().add_jm();
 
 class _RoundSelectorState() extends ConsumerState<_RoundSelectorMenu> {
   final currentRoundKey = GlobalKey();

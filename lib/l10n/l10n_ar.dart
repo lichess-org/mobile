@@ -18,7 +18,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileAccountPreferences => 'تفضيلات الحساب';
 
   @override
-  String get mobileAccountPreferencesHelp => 'يتم تطبيق هذه التفضيلات على حساب Lichess الخاص بك وسيتم استخدامها عبر جميع الأجهزة.';
+  String get mobileAccountPreferencesHelp => 'تُطبَّق هذه التفضيلات على حسابك في Lichess، وستُستخدم على جميع أجهزتك.';
 
   @override
   String get mobileAddToStudy => 'إضافة إلى الدراسة';
@@ -28,6 +28,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileAllowTakebacksAndHints => 'السماح بالتراجع والتلميحات';
+
+  @override
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'أسود';
@@ -53,7 +56,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'إلغاء عرض الاسترجاع';
 
   @override
-  String get mobileChallengeCreated => 'تم إنشاء التحدي: سيتم إبلاغك عند بداية اللعبة\nيمكنك فتحها في الصفحة الرئيسة';
+  String get mobileChallengeCreated => 'تم إنشاء التحدّي: ستتلقى إشعارًا عند بَدْء المباراة.\nيمكنك الوصول إليه من علامة تبويب الصفحة الرئيسية.';
 
   @override
   String get mobileChallengeFromPosition => 'تحدٍّ من وضعية الشطرنج';
@@ -95,6 +98,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileCustomizeHomeTipDismiss => 'تجاهل';
+
+  @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
 
   @override
   String get mobileDangerZone => 'منطقة الخطر';
@@ -153,6 +159,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'الرئيسية';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'السابق';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'هل تريد إنهاء هذه الجولة؟';
@@ -1512,6 +1524,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'تدرب فقط علي بعض الأعمدة & الصفوف';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'أدخل الإحداثيات';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'اضغط على $param للبدء';
+  }
+
+  @override
   String get learnLearnChess => 'تعلم الشطرنج';
 
   @override
@@ -2070,7 +2090,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'القيمة المنخفضة تعني أن التصنيف أكثر استقرارا. أعلى من $param1، يعتبر التقييم مؤقتا. لكي يتم تضمينه في الترتيبات، يجب أن تكون هذه القيمة أقل من $param2 (الشطرنج القياسي) أو $param3 (المتغيرات).';
+    return 'كلما انخفضت القيمة، كان التصنيف أكثر استقرارًا. إذا تجاوزت القيمة $param1، يُعتبر التصنيف مؤقتًا. ولإدراجك في قوائم التصنيف، يجب أن تكون هذه القيمة أقل من $param2 (للشطرنج القياسي) أو $param3 (للمتغيرات).';
   }
 
   @override
@@ -2570,7 +2590,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesInlineNotation => 'التدوين داخل النص';
 
   @override
-  String get preferencesShowServerAnalysis => 'عرض تحليل الخادم';
+  String get preferencesShowMainlineAnalysis => 'إظهار تحليل الخط الرئيسي';
 
   @override
   String get preferencesShowBestMoveArrows => 'عرض أسهم أفضل النقلات';
@@ -2598,6 +2618,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'إظهار الملك القابل للكش';
+
+  @override
+  String get preferencesShowTrappedPieces => 'إظهار القطع المحاصرة';
 
   @override
   String get preferencesDisclosureMode => 'تفعيل إخفاء النقلات البديلة';
@@ -2684,7 +2707,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleDownVote => 'لم يعجبني اللغز';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'تقييم الألغاز الخاص بك لن يتغير. لاحظ أن الألغاز ليست مسابقة. التقييم يساعد على اختيار أفضل الألغاز لمهاراتك الحالية.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'لن يتغير تصنيفك بسبب هذا التمرين. تذكّر أن الألغاز ليست منافسة، بل يساعد تصنيفك على اختيار الألغاز الأنسب لمستوى مهارتك.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'جد أفضل نقلة للأبيض.';
@@ -2734,7 +2757,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleOpeningsYouPlayedTheMost => 'أكثر الإفتتاحات لعباً من مبارياتك المقيمة';
 
   @override
-  String get puzzleUseFindInPage => 'استخدم خاصية \"البحث في الصفحة\" في المتصفح للعثور على افتتاحك المفضل!';
+  String get puzzleUseFindInPage => 'استخدم خِيار «البحث في الصفحة» من قائمة المتصفح للعثور على افتتاحيتك المفضّلة!';
 
   @override
   String get puzzleUseCtrlF => 'أضغط Ctrl و f لتبحث عن افتتاحك المفضل!';
@@ -3015,9 +3038,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzleThemeCastling => 'تبييت';
 
   @override
-  String get puzzleThemeEnPassant => 'أسر بالمرور';
-
-  @override
   String get puzzleThemeCastlingDescription => 'ضع الملك في أمان، وانشر القلعة للهجوم.';
 
   @override
@@ -3109,6 +3129,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'تكتيك خلال مرحلة نهاية المباراة.';
+
+  @override
+  String get puzzleThemeEnPassant => 'أسر بالمرور';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'تكتيك يستخدم قاعدة الأخذ بالتجاوز، التي تسمح للبيدق بأسر بيدق الخَصْم الذي تحرك للتو مربعين في حركته الأولى وأصبح ملاصقًا له، كما لو أنه تحرك مربعًا واحدًا فقط.';
@@ -3590,7 +3613,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get blackPlays => 'دور الأسود';
 
   @override
-  String get opponentLeftChoices => 'يبدو أن الخصم ترك المباراة. يمكنك انتزاع الفوز، إعلان التعادل أو الانتظار.';
+  String get opponentLeftChoices => 'غادر خصمك المباراة. يمكنك إعلان فوزك، أو إنهاء المباراة بالتعادل، أو الانتظار.';
 
   @override
   String get forceResignation => 'إعلن فوزك';
@@ -3906,6 +3929,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get engineSettings => 'إعدادات المحرك';
+
+  @override
+  String get engine => 'محرّك الشطرنج';
 
   @override
   String get enginesFromStrongestToWeakest => 'المحركات من الأقوى إلى ألأضعف';
@@ -4534,6 +4560,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noNetwork => 'غير متصل';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'الأصدقاء المتصلون: $param1\nالأصدقاء الذين يلعبون: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'خصوم مفضلين';
 
   @override
@@ -4900,9 +4931,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reason => 'السبب';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'غش';
 
   @override
@@ -4919,9 +4947,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'سنتمكن من معالجة تقريرك بسرعة أكبر إذا أرسلته باللغة الإنجليزية.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5501,7 +5526,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get downloadImported => 'تحميل المستورد';
 
   @override
+  String get downloadMyGames => 'تنزيل مبارياتي';
+
+  @override
   String get downloadAllGames => 'حمِل كل المباريات';
+
+  @override
+  String get downloadResults => 'تنزيل النتائج';
 
   @override
   String get crosstable => 'تاريخ';
@@ -6268,7 +6299,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showMeEverything => 'اظهر لي كل شيء';
 
   @override
-  String get lichessPatronInfo => 'Lichess هو موقع خيري و مجاني بشكل كامل ومفتوح المصدر.\nكافة التكاليف التشغيلية و التطويرية و المحتوى يتم الحصول عليه من قبل تبرعات المستخدمين.';
+  String get lichessPatronInfo => 'Lichess مؤسسة غير ربحية، وبرمجياتها حرة ومفتوحة المصدر بالكامل. نعتمد على تبرعات المستخدمين لتغطية تكاليف التشغيل والتطوير وإنتاج المحتوى. لولا مجتمعنا الكريم، لما تمكّنا من مواصلة تشغيل الموقع. شكرًا لانضمامك إلينا!';
 
   @override
   String get nothingToSeeHere => 'لا يوجد شيء يمكن رؤيته هنا في الوقت الحالي.';
@@ -7250,16 +7281,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'فقط المساهمون في هذا الدراسة يمكنهم طلب تحليل الحاسوب';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'احصل على تحليل حاسوب كامل للتفريع الرئيسي من قبل الخادم';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'كن متأكداً ان الفصل مكتمل، يمكنك طلب تحليل الحاسوب مره واحده فحسب';
 
   @override
   String get studyAllSyncMembersRemainOnTheSamePosition => 'يظل جميع ألاعضاء الذين تمت مزامنة معلوماتهم في نفس الترتيب';
 
   @override
-  String get studyShareChanges => 'شارك التغيبرات مع المشاهدين وإحفظهن الى الخادم';
+  String get studyShareChanges => 'شارك التغييرات مع المتفرّجين وحفظها على الخادم';
 
   @override
   String get studyPlaying => 'يلعب الان';
@@ -7469,9 +7497,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyStart => 'ابدأ';
-
-  @override
-  String get studySave => 'حفظ';
 
   @override
   String get studyClearChat => 'مسح المحادثة';
@@ -7707,6 +7732,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'الأبيض مهزوم, لكن الأسود لا يستطيع الفوز';
+
+  @override
+  String get studyAnalysisEditor => 'محرّر التحليل';
+
+  @override
+  String get studyClearLocal => 'هل تريد مسح التحليل المحلي؟';
+
+  @override
+  String get studyClearPublished => 'هل تريد مسح التحليل المنشور؟';
+
+  @override
+  String get studyRequestAServerAnalysis => 'طلب تحليل على الخادم';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'حلّل على جهازك';
 
   @override
   String studyNbChapters(int count) {
@@ -8104,7 +8144,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get variantCrazyhouse => 'البيت المجنون';
 
   @override
-  String get variantCrazyhouseTitle => 'يمكنك إلقاء القطع المصطادة مرة أخرى على اللوحة بدلا من تحريك قطعة.';
+  String get variantCrazyhouseTitle => 'يمكن إعادة إسقاط القطع المأسورة على الرقعة بدلًا من تحريك إحدى القطع.';
 
   @override
   String get variantFromPosition => 'من وضع';

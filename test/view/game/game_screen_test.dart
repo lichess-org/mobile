@@ -41,6 +41,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
@@ -151,7 +152,7 @@ void main() {
         initialBoardPosition,
         reason: 'board position should not change',
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('a game from the pool with a seek', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
@@ -223,7 +224,7 @@ void main() {
         initialBoardPosition,
         reason: 'board position should not change',
       );
-    });
+    }, variant: kPlatformVariant);
 
     for (final authUser in [
       null,
@@ -282,7 +283,7 @@ void main() {
           find.text('Or invite a Lichess user'),
           authUser == null ? findsNothing : findsOneWidget,
         );
-      });
+      }, variant: kPlatformVariant);
     }
 
     testWidgets('anchors the open challenge share sheet to the share button', (
@@ -343,7 +344,7 @@ void main() {
       await tester.pump();
 
       expect(shareOrigin, tester.getRect(shareButton));
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Reconnecting title', () {
@@ -362,7 +363,7 @@ void main() {
 
       // averageLag stays at Duration.zero (no pong ever received), so rating == 0.
       expect(find.text('Reconnecting'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('shows normal game title when socket ping is established', (
       WidgetTester tester,
@@ -374,7 +375,7 @@ void main() {
       // createTestGame pumps 10ms, during which the immediate pong is received
       // (connectionLag = 5ms), so averageLag > 0 and rating > 0.
       expect(find.text('Reconnecting'), findsNothing);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('AppBar title', () {
@@ -384,7 +385,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Casual'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('lobby loading shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
@@ -406,7 +407,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('seek cancelled shows seek time control and mode', (WidgetTester tester) async {
       const seek = GameSeek(clock: (Duration(minutes: 3), Duration(seconds: 2)), rated: true);
@@ -427,7 +428,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('challenge loading with destUser shows challenge time control and mode', (
       WidgetTester tester,
@@ -458,7 +459,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('challenge cancelled shows challenge time control and mode', (
       WidgetTester tester,
@@ -506,7 +507,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('challenge declined shows challenge time control and mode', (
       WidgetTester tester,
@@ -555,7 +556,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('open challenge shows challenge time control and mode', (
       WidgetTester tester,
@@ -598,7 +599,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('3+2 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('finished game shows time control and mode', (WidgetTester tester) async {
       await loadFinishedTestGame(tester);
@@ -606,7 +607,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
 
       expect(find.text('2+1 • Rated'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Plays sound for', () {
@@ -626,7 +627,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => mockSoundService.play(Sound.move));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('captures', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
@@ -643,7 +644,7 @@ void main() {
       await playMove(tester, 'e4', 'd5');
 
       verify(() => mockSoundService.playCaptureSound(Variant.standard));
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Game actions', () {
@@ -679,7 +680,7 @@ void main() {
       await tester.pump();
 
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('move confirmation', (WidgetTester tester) async {
       await createTestGame(
@@ -722,6 +723,65 @@ void main() {
       expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
       // move appears in move list
       expect(find.text('Nf3'), findsOneWidget);
+    }, variant: kPlatformVariant);
+
+    testWidgets('offer draw stays unavailable after the opponent declines it', (
+      WidgetTester tester,
+    ) async {
+      await createTestGame(tester, pgn: 'e4 e5 Nf3 Nc6');
+      expect(find.byType(Chessboard), findsOneWidget);
+
+      Future<void> expectOfferDrawInMenu(Matcher matcher) async {
+        await tester.tap(find.byIcon(Icons.menu));
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.byType(Dialog), findsOneWidget);
+        expect(find.text('Offer draw'), matcher);
+        // tap the barrier to close the menu
+        await tester.tapAt(const Offset(10, 10));
+        await tester.pump(const Duration(milliseconds: 500));
+        expect(find.byType(Dialog), findsNothing);
+      }
+
+      await expectOfferDrawInMenu(findsOneWidget);
+
+      // white offers a draw at ply 4, black declines
+      sendServerSocketMessages(testGameSocketUri, [
+        '{"t":"reload","v":1,"d":{"t":"drawOffer","d":"white"}}',
+        '{"t":"reload","v":2,"d":{"t":"drawOffer","d":null}}',
+      ]);
+      await tester.pump(const Duration(milliseconds: 1));
+
+      // lichess refuses a new offer within 20 plies of the last one
+      await expectOfferDrawInMenu(findsNothing);
+
+      Position position = Chess.initial;
+      for (final san in 'e4 e5 Nf3 Nc6'.split(' ')) {
+        position = position.play(position.parseSan(san)!);
+      }
+      var ply = 4;
+      var version = 2;
+      Future<void> playMove(String san) async {
+        final move = position.parseSan(san)!;
+        position = position.play(move);
+        ply++;
+        version++;
+        sendServerSocketMessages(testGameSocketUri, [
+          '{"t":"move","v":$version,"d":{"ply":$ply,"uci":"${move.uci}","san":"$san"}}',
+        ]);
+        await tester.pump(const Duration(milliseconds: 1));
+      }
+
+      for (final san
+          in 'Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 d5 Bf6 Re1 Ne7 Rxe4 d6 Bg5 Bxg5'
+              .split(' ')) {
+        await playMove(san);
+      }
+      expect(ply, 24);
+      await expectOfferDrawInMenu(findsNothing);
+
+      await playMove('Nxg5');
+      expect(ply, 25);
+      await expectOfferDrawInMenu(findsOneWidget);
     });
 
     group('Premoves', () {
@@ -773,7 +833,7 @@ void main() {
         // premove should have been played
         expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
 
       // Non-regression test for https://github.com/lichess-org/mobile/issues/2130:
       // an auto-fired premove that the server never confirmed (because the player
@@ -844,7 +904,7 @@ void main() {
 
         // wait for the dong
         await tester.pump(const Duration(seconds: 500));
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('illegal premove is cancelled after opponent move with move confirmation', (
         WidgetTester tester,
@@ -916,7 +976,7 @@ void main() {
         expect(boardHasPiece(tester, Square.d5, Piece.blackPawn), isTrue);
         // d4 should still have white's pawn
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
 
       // Regression test for https://github.com/lichess-org/mobile/issues/3124:
       // an invalidated premove was being played a couple of moves later.
@@ -1003,7 +1063,7 @@ void main() {
         // the bishop must still be on c4 — the old premove was never played
         expect(boardHasPiece(tester, Square.c4, Piece.whiteBishop), isTrue);
         expect(boardHasPiece(tester, Square.f7, Piece.blackPawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('can premove drop moves in Crazyhouse', (WidgetTester tester) async {
         const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -1050,7 +1110,7 @@ void main() {
         // premove should have been played
         expect(boardHasPremove(tester, const DropMove(to: Square.a4, role: Role.pawn)), isFalse);
         expect(boardHasPiece(tester, Square.a4, Piece.whitePawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('premove is cleared, not played, after a takeback', (WidgetTester tester) async {
         const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -1122,7 +1182,7 @@ void main() {
         expect(boardHasPiece(tester, Square.e2, Piece.whitePawn), isTrue);
         expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isFalse);
         expect(getBoardPieces(tester).length, 32);
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('premove is played after reconnect when the opponent has moved', (
         WidgetTester tester,
@@ -1196,7 +1256,7 @@ void main() {
         // the opponent's move is on the board
         expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
         expect(boardHasPiece(tester, Square.d2, Piece.whitePawn), isFalse);
-      });
+      }, variant: kPlatformVariant);
 
       // The premove must only be played when the opponent just moved (it is now
       // our turn). A forward line change that lands on the opponent's turn — e.g.
@@ -1280,7 +1340,7 @@ void main() {
 
         expect(boardHasPremove(tester, const NormalMove(from: Square.d2, to: Square.d4)), isFalse);
         expect(boardHasPiece(tester, Square.d4, Piece.whitePawn), isTrue);
-      });
+      }, variant: kPlatformVariant);
     });
 
     testWidgets('takeback', (WidgetTester tester) async {
@@ -1368,7 +1428,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.black, '0:51'), findsOneWidget);
       expect(findClockWithTime(Side.white, '0:55'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('full event after takeback clamps an out-of-bounds replay cursor', (
       WidgetTester tester,
@@ -1439,7 +1499,7 @@ void main() {
       container.read(ctrlProvider.notifier).cursorForward();
       await tester.pump();
       expect(container.read(ctrlProvider).requireValue.stepCursor, 3);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('full event keeps the replay cursor instead of jumping to the live position', (
       WidgetTester tester,
@@ -1505,7 +1565,7 @@ void main() {
       expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('full event clears a pending move-to-confirm when the server position changed', (
       WidgetTester tester,
@@ -1576,7 +1636,7 @@ void main() {
       expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isFalse);
       expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isFalse);
       expect(getBoardPieces(tester).length, 32);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('full event keeps a pending move-to-confirm when the position is unchanged', (
       WidgetTester tester,
@@ -1637,7 +1697,7 @@ void main() {
 
       expect(container.read(ctrlProvider).requireValue.moveToConfirm, isNotNull);
       expect(boardHasPiece(tester, Square.g5, Piece.whiteKnight), isTrue);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Live Activity', () {
@@ -1696,7 +1756,7 @@ void main() {
       expect(lastCall(channel).state!.turn, Side.white);
       expect(lastCall(channel).state!.lastMove, 'd7d5');
       expect(lastCall(channel).state!.blackClock, const Duration(seconds: 175));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('follows the time given to a player', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1718,7 +1778,7 @@ void main() {
       await tester.pump();
       expect(lastCall(channel).method, 'update');
       expect(lastCall(channel).state!.blackClock, const Duration(seconds: 195));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('reports the game socket connection state', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1749,7 +1809,7 @@ void main() {
       // the socket reconnects after its backoff
       await tester.pump(const Duration(seconds: 10));
       expect(channel.connectedCalls.last, isTrue);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('warns sooner when the user is down material', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1774,7 +1834,7 @@ void main() {
 
       // down 8 points: lila halves the 120 s grace of a rapid game
       expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 30));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('warns half-way through the grace in rapid', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1799,7 +1859,7 @@ void main() {
 
       // half the 120 s grace of a rapid game
       expect(channel.calls.single.state!.leftWarningDelay, const Duration(seconds: 60));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('warns as soon as the app stops running in bullet', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1824,7 +1884,7 @@ void main() {
 
       expect(channel.calls.single.state!.claimable, isTrue);
       expect(channel.calls.single.state!.leftWarningDelay, isNull);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('ends with the result when the game is over', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1857,7 +1917,7 @@ void main() {
       // leaving the screen doesn't end it again
       await tester.pumpWidget(const SizedBox.shrink());
       expect(channel.calls, hasLength(nbCalls));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('stops updating once the user dismisses it', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1881,7 +1941,7 @@ void main() {
 
       await tester.pumpWidget(const SizedBox.shrink());
       expect(channel.calls, hasLength(1));
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('is not started for a spectator', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1898,7 +1958,7 @@ void main() {
       await tester.pump();
 
       expect(channel.calls, isEmpty);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('is not started for a correspondence game', (tester) async {
       final channel = FakeGameLiveActivityChannel();
@@ -1920,7 +1980,7 @@ void main() {
       await tester.pump();
 
       expect(channel.calls, isEmpty);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Castling', () {
@@ -1962,7 +2022,7 @@ void main() {
             expect(validMoves.contains(Square.d1), isTrue);
             expect(validMoves.contains(Square.a1), isFalse);
         }
-      });
+      }, variant: kPlatformVariant);
     }
 
     for (final castlingMethod in CastlingMethod.values) {
@@ -1992,7 +2052,7 @@ void main() {
         expect(validMoves.contains(Square.c1), isFalse);
         expect(validMoves.contains(Square.d1), isTrue);
         expect(validMoves.contains(Square.a1), isTrue);
-      });
+      }, variant: kPlatformVariant);
     }
   });
 
@@ -2035,7 +2095,7 @@ void main() {
       expect(find.text('Test Tournament'), findsOneWidget);
       expect(find.textContaining('#42'), findsOneWidget);
       expect(find.textContaining('#24'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('supports berserking', (WidgetTester tester) async {
       final app = await makeTestProviderScopeApp(
@@ -2069,7 +2129,8 @@ void main() {
       sendServerSocketMessages(GameController.socketUri(testGameFullId), [
         '''{"t": "berserk", "d": "white"}''',
       ]);
-      // wait for socket message handling
+      // wait for socket message handling (on iOS, the berserk state lands after the first frame)
+      await tester.pump();
       await tester.pump();
 
       // We have berserked, which caused the berserk icon appear next to our name.
@@ -2084,7 +2145,7 @@ void main() {
       await tester.pump();
 
       expect(find.byIcon(LichessIcons.body_cut), findsNWidgets(3));
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Clock', () {
@@ -2100,7 +2161,7 @@ void main() {
         2,
         reason: 'clocks are not active yet',
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('ticks after the first full move', (WidgetTester tester) async {
       await createTestGame(tester);
@@ -2126,7 +2187,7 @@ void main() {
       expect(findClockWithTime(Side.white, '2:59'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.white, '2:58'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('ticks immediately when resuming game', (WidgetTester tester) async {
       await createTestGame(
@@ -2148,7 +2209,7 @@ void main() {
       expect(findClockWithTime(Side.black, '2:53'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.black, '2:52'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('switch timer side after a move', (WidgetTester tester) async {
       await createTestGame(
@@ -2201,7 +2262,7 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.white, '2:57'), findsOneWidget);
       expect(findClockWithTime(Side.black, '2:56'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('compensates opponent lag', (WidgetTester tester) async {
       int socketVersion = 0;
@@ -2243,7 +2304,7 @@ void main() {
       expect(findClockWithTime(Side.black, '0:53'), findsOneWidget);
       await tester.pump(const Duration(seconds: 1));
       expect(findClockWithTime(Side.black, '0:52'), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('onEmergency', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
@@ -2270,7 +2331,7 @@ void main() {
       await tester.pump(const Duration(seconds: 10));
       expect(findClockWithTime(Side.white, '0:30'), findsOneWidget);
       verify(() => mockSoundService.play(Sound.lowTime)).called(1);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('flags', (WidgetTester tester) async {
       final socketFactory = ListenableFakeWebSocketChannelFactory(
@@ -2332,7 +2393,7 @@ void main() {
 
       // wait for the dong
       await tester.pump(const Duration(seconds: 500));
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Correspondence Clock', () {
@@ -2362,7 +2423,7 @@ void main() {
       expect(find.byType(CorrespondenceClock), findsNWidgets(2));
       expect(find.text('One day', findRichText: true), findsOneWidget);
       expect(find.text('20:05', findRichText: true), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets("active clock is white's when it is white's turn", (tester) async {
       // pgn 'e4 e5': fullmoves = 2, white to move → white active
@@ -2385,7 +2446,7 @@ void main() {
       expect(find.text('20:05', findRichText: true), findsNothing);
       expect(find.text('20:03', findRichText: true), findsOneWidget);
       expect(find.text('One day', findRichText: true), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets("active clock is black's when it is black's turn", (tester) async {
       // pgn 'e4 e5 Nf3': black to move → black active
@@ -2408,7 +2469,7 @@ void main() {
       expect(find.text('19:59', findRichText: true), findsNothing);
       expect(find.text('19:54', findRichText: true), findsOneWidget);
       expect(find.text('One day', findRichText: true), findsOneWidget);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('clock values and active side update after opponent move', (tester) async {
       await createTestGame(
@@ -2441,7 +2502,7 @@ void main() {
       // white is now active
       expect(correspondenceClockWithTime(tester, '23:59').active, isTrue);
       expect(correspondenceClockWithTime(tester, 'One day').active, isFalse);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Opening analysis', () {
@@ -2454,9 +2515,11 @@ void main() {
       expect(find.byType(Chessboard), findsOneWidget);
       await tester.tap(find.byIcon(Icons.menu));
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byType(Dialog), findsOneWidget);
+      // The game menu is a Material dialog on Android and a Cupertino popup on iOS: check for an
+      // action that is always present instead of the containing widget.
+      expect(find.text('Flip board'), findsOneWidget);
       expect(find.text('Analysis board'), findsNothing);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('for an unfinished correspondence game', (WidgetTester tester) async {
       const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -2508,11 +2571,15 @@ void main() {
       expect(getBoardLastMove(tester)?.hasSquare(Square.d3), isTrue);
       await tester.tap(find.byIcon(Icons.menu));
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byType(Dialog), findsOneWidget);
-      await tester.tap(find.text('Analysis board'));
+      expect(find.text('Flip board'), findsOneWidget);
+      final analysisBoard = find.text('Analysis board');
+      // The action sheet may be too tall for the screen: scroll it into view first.
+      await tester.ensureVisible(analysisBoard);
+      await tester.pumpAndSettle();
+      await tester.tap(analysisBoard);
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.widgetWithText(AppBar, 'Analysis board'),
+        find.widgetWithText(PlatformAppBar, 'Analysis board'),
         findsOneWidget,
       ); // analysis screen is now open
       expect(boardHasPiece(tester, Square.f3, Piece.whiteQueen), isTrue);
@@ -2522,7 +2589,7 @@ void main() {
       expect(find.bySemanticsLabel(RegExp('Moves played')), findsOneWidget);
       // computer analysis is not available when game is not finished
       expect(find.bySemanticsLabel(RegExp('Computer analysis')), findsNothing);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('for a finished game', (WidgetTester tester) async {
       await loadFinishedTestGame(tester);
@@ -2534,9 +2601,9 @@ void main() {
       await tester.tap(find.text('Analysis board'));
       await tester.pumpAndSettle(); // wait for analysis screen to open
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('2+1 • Rated')),
+        find.descendant(of: find.byType(PlatformAppBar), matching: find.text('2+1 • Rated')),
         findsOneWidget,
-      ); // analysis screen is now open
+      );
       expect(find.byType(Chessboard), findsOneWidget);
       expect(boardHasPiece(tester, Square.e6, Piece.whiteQueen), isTrue);
       expect(getBoardLastMove(tester)?.hasSquare(Square.d5), isTrue);
@@ -2546,7 +2613,7 @@ void main() {
         find.bySemanticsLabel(RegExp('Computer analysis')),
         findsOneWidget,
       ); // computer analysis is available
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Chat', () {
@@ -2568,7 +2635,7 @@ void main() {
         await tester.pump();
         verify(() => mockSoundService.play(Sound.confirmation, volume: any(named: 'volume')))
             .called(1);
-      });
+      }, variant: kPlatformVariant);
 
       testWidgets('chat messages do not disappear when game state changes', (
         WidgetTester tester,
@@ -2587,7 +2654,7 @@ void main() {
         await tester.pumpAndSettle(); // wait for chat to open
 
         expect(find.text('Hello!'), findsOneWidget);
-      });
+      }, variant: kPlatformVariant);
     });
 
     group('Disabled', () {
@@ -2607,7 +2674,7 @@ void main() {
         ]);
         await tester.pump();
         verifyNever(() => mockSoundService.play(Sound.confirmation));
-      });
+      }, variant: kPlatformVariant);
     });
   });
 
@@ -2641,7 +2708,7 @@ void main() {
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
 
       await dropExpectation;
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('pocket count display updates after a player drop move', (tester) async {
       // Regression test: the pocket counts are rendered by the GameLayout from
@@ -2670,7 +2737,7 @@ void main() {
       // The pawn is on the board and the pocket count badge is gone (count 0).
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
       expect(find.descendant(of: whitePawnPocket, matching: find.text('1')), findsNothing);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets("Cannot interact with the opponent's pockets", (tester) async {
       // After 1.e4 d5 2.exd5 Qxd5 Nf3, white and black both have a pawn in pocket and it's black's turn
@@ -2690,7 +2757,7 @@ void main() {
 
       // Move should not be played since it's not our turn and the opponent's pockets should not be interactable
       expect(boardHasPiece(tester, Square.d6, Piece.blackPawn), isFalse);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('correctly handles opponent drop move received from server', (tester) async {
       const gameFullId = GameFullId('qVChCOTcHSeW');
@@ -2715,7 +2782,7 @@ void main() {
 
       // White pawn should appear on c4
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Widget rebuilds', () {
@@ -2774,7 +2841,7 @@ void main() {
         isTrue,
         reason: 'the bottom bar must not rebuild on a move',
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('an opponent move does not rebuild GameBody, GameLayout or the board', (
       tester,
@@ -2815,7 +2882,7 @@ void main() {
         isTrue,
         reason: 'the bottom bar must not rebuild on an opponent move',
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets(
       'a chat message does not rebuild GameBody, GameLayout, the board or the bottom bar',
@@ -2866,6 +2933,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Hello!'), findsOneWidget);
       },
+      variant: kPlatformVariant,
     );
   });
 
@@ -2910,6 +2978,7 @@ void main() {
           await tester.pump(const Duration(seconds: 500));
           expect(messages.last.enable, gameIsFinished ? isFalse : isTrue);
         },
+        variant: kPlatformVariant,
       );
     }
   });
@@ -2968,7 +3037,7 @@ void main() {
       expectLater(socketFactory.outgoingMessages(testGameSocketUri), emits('{"t":"resign-force"}'));
       await tester.tap(find.text('Claim victory'));
       await tester.pump();
-    });
+    }, variant: kPlatformVariant);
   });
 
   group('Zen mode', () {
@@ -2989,7 +3058,7 @@ void main() {
       final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
       expect(state.isZenModeEnabled, isTrue);
       expect(state.isZenModeActive, isTrue);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('Zen.no does not activate zen', (tester) async {
       await createTestGame(
@@ -3008,7 +3077,7 @@ void main() {
       final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
       expect(state.isZenModeEnabled, isFalse);
       expect(state.isZenModeActive, isFalse);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('Zen.yes activates zen', (tester) async {
       await createTestGame(
@@ -3027,7 +3096,7 @@ void main() {
       final state = container.read(gameControllerProvider(testGameFullId)).requireValue;
       expect(state.isZenModeEnabled, isTrue);
       expect(state.isZenModeActive, isTrue);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('Zen.gameAuto deactivates zen when game finishes', (tester) async {
       await createTestGame(
@@ -3057,7 +3126,7 @@ void main() {
         container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
         isFalse,
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('Zen.yes keeps zen active when game finishes', (tester) async {
       await createTestGame(
@@ -3087,7 +3156,7 @@ void main() {
         container.read(gameControllerProvider(testGameFullId)).requireValue.isZenModeActive,
         isTrue,
       );
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('toggleZenMode switches zen off and on', (tester) async {
       await createTestGame(
@@ -3119,7 +3188,7 @@ void main() {
 
       expect(container.read(ctrlProvider).requireValue.isZenModeEnabled, isTrue);
       expect(container.read(ctrlProvider).requireValue.isZenModeActive, isTrue);
-    });
+    }, variant: kPlatformVariant);
   });
 }
 

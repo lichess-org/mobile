@@ -40,10 +40,10 @@ Text l10nWithWidget<T extends Widget>(
   );
 }
 
-final _dateFormatterWithYear = DateFormat.yMMMMd();
-final _dateFormatterWithYearShort = DateFormat.yMMMd();
-final _monthFormatterWithYear = DateFormat.yMMMM();
-final _monthFormatterWithYearShort = DateFormat.yMMM();
+DateFormat get _dateFormatterWithYear => DateFormat.yMMMMd();
+DateFormat get _dateFormatterWithYearShort => DateFormat.yMMMd();
+DateFormat get _monthFormatterWithYear => DateFormat.yMMMM();
+DateFormat get _monthFormatterWithYearShort => DateFormat.yMMM();
 
 /// Formats a raw PGN date string, as found in the tags of an imported game.
 ///

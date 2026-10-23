@@ -30,9 +30,10 @@ class const ConnectedIcon({
     return Tooltip(
       message: label,
       child: Icon(
-        isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.3),
+        isConnected ? Symbols.circle : Symbols.wifi_off,
+        color: isConnected ? context.lichessColors.good : textShade(context, 0.3),
         size: size,
+        fill: 1,
       ),
     );
   }
@@ -303,7 +304,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
     final user = widget.user;
     final initial = user.name[0].toUpperCase();
     final showFlair = user.flair != null && !_errorLoadingFlair;

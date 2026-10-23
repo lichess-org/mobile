@@ -170,7 +170,7 @@
   <string name="illegalPosition">Lubamatu asetus</string>
   <string name="threefoldRepetition">Kolmekordne kordus</string>
   <string name="claimADraw">Võta viik</string>
-  <string name="drawClaimed">Nõutav viik</string>
+  <string name="drawClaimed">Viiginõue</string>
   <string name="offerDraw">Paku viiki</string>
   <string name="draw">Viik</string>
   <plurals name="nbPlayers">
@@ -1044,8 +1044,6 @@ Jäta tühjaks, et alustada mänge tavalisest algpositsioonist.</string>
   <string name="ourEventTips">Meie nõuanded ürituste korraldamiseks</string>
   <string name="instructions">Juhised</string>
   <string name="showMeEverything">Näita mulle kõike</string>
-  <string name="lichessPatronInfo">Lichess on heategevuslik ja täiesti tasuta avatud lähtekoodiga tarkvara.
-Kõik tegevuskulud, arendus ja sisu rahastatakse ainult kasutajate annetustest.</string>
   <string name="nothingToSeeHere">Siin pole hetkel midagi näha.</string>
   <string name="stats">Statistika</string>
   <string name="accessibility">Ligipääsetavus</string>

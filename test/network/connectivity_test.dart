@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -405,6 +406,126 @@ void main() {
 
       // No await: the check never completes, so the status stays unknown.
       expect(container.read(isDeviceOnlineProvider), isTrue);
+    });
+  });
+
+  group('http responses while offline', () {
+    // A network whose probes fail while [offline] is set, after [checkDelay]
+    ({bool offline, Duration checkDelay}) network = (offline: false, checkDelay: Duration.zero);
+
+    Future<ProviderContainer> makeOfflineContainer() {
+      network = (offline: true, checkDelay: Duration.zero);
+      return makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => wrapWithCallbacks(
+                ref,
+                MockClient((request) async {
+                  if (!internetCheckUris.contains(request.url)) return http.Response('', 200);
+                  final (:offline, :checkDelay) = network;
+                  await Future<void>.delayed(checkDelay);
+                  if (offline) throw const SocketException('No internet');
+                  return http.Response('', 200);
+                }),
+              ),
+            ),
+          ),
+        },
+      );
+    }
+
+    void startOffline(ProviderContainer container, FakeAsync async) {
+      network = (offline: true, checkDelay: Duration.zero);
+      container.read(connectivityChangesProvider);
+      async.elapse(const Duration(seconds: 1));
+      expect(container.read(isDeviceOnlineProvider), isFalse);
+    }
+
+    test('a response brings the device back online once a check confirms it', () async {
+      final container = await makeOfflineContainer();
+
+      fakeAsync((async) {
+        startOffline(container, async);
+
+        // The network comes back, and neither the plugin nor the app lifecycle say so.
+        network = (offline: false, checkDelay: Duration.zero);
+        container.read(lichessClientProvider).get(Uri(path: '/api/account'));
+        async.elapse(const Duration(milliseconds: 100));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        async.flushTimers();
+      });
+    });
+
+    test('a response from the default client counts too', () async {
+      final container = await makeOfflineContainer();
+
+      fakeAsync((async) {
+        startOffline(container, async);
+
+        network = (offline: false, checkDelay: Duration.zero);
+        container.read(defaultClientProvider).get(Uri.parse('https://explorer.lichess.ovh/x'));
+        async.elapse(const Duration(milliseconds: 100));
+
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        async.flushTimers();
+      });
+    });
+
+    test('a response does not outdate a check already running', () async {
+      final container = await makeOfflineContainer();
+
+      fakeAsync((async) {
+        startOffline(container, async);
+
+        // A connectivity event starts a check that takes seconds to find the network is back.
+        network = (offline: false, checkDelay: const Duration(seconds: 3));
+        FakeConnectivity.controller.add([ConnectivityResult.wifi]);
+        async.elapse(const Duration(milliseconds: 100));
+
+        // Meanwhile a cached response asks for a check of its own, which fails right away. It is
+        // only a hint: the check that was already running keeps the last word.
+        network = (offline: true, checkDelay: Duration.zero);
+        container.read(lichessClientProvider).get(Uri(path: '/api/account'));
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isTrue);
+
+        async.flushTimers();
+      });
+    });
+
+    test('the check of a response does not overwrite a newer one', () async {
+      final container = await makeOfflineContainer();
+
+      fakeAsync((async) {
+        startOffline(container, async);
+
+        // A response asks for a check, which takes seconds to find the network is back.
+        network = (offline: false, checkDelay: const Duration(seconds: 3));
+        container.read(lichessClientProvider).get(Uri(path: '/api/account'));
+        async.elapse(const Duration(milliseconds: 100));
+
+        // The network is gone again, and the user coming back to the app checks again. That
+        // check is the newer one, so its answer stands.
+        network = (offline: true, checkDelay: Duration.zero);
+        final binding = TestWidgetsFlutterBinding.instance;
+        // The binding may still be resumed from an earlier test, and only a change is notified.
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+        async.elapse(const Duration(milliseconds: 100));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        async.elapse(const Duration(seconds: 5));
+        expect(container.read(isDeviceOnlineProvider), isFalse);
+
+        async.flushTimers();
+      });
     });
   });
 
