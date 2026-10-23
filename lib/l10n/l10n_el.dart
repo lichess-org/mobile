@@ -497,6 +497,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Δεν μπορείτε να προκαλέσετε τον εαυτό σας';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from teams you join will appear here.';
+
+  @override
+  String get mobileJoinTeams => 'Join teams';
+
+  @override
   String get activityActivity => 'Δραστηριότητα';
 
   @override
