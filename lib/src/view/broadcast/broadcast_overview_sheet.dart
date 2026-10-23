@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final _dateFormatter = DateFormat.MMMd();
+DateFormat get _dateFormatter => DateFormat.MMMd();
 
 String _formatDates(BroadcastTournamentDates dates) => dates.endsAt == null
     ? _dateFormatter.format(dates.startsAt)

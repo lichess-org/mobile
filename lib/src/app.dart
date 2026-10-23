@@ -6,10 +6,12 @@ import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoUiCompatibilityBri
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -185,6 +187,11 @@ class _AppState() extends ConsumerState<Application> {
         }
       }, fireImmediately: true);
     }
+
+    // [setupIntl] sets [Intl.defaultLocale] on startup: follow the app language from then on.
+    ref.listenManual(generalPreferencesProvider.select((prefs) => prefs.locale), (_, locale) {
+      Intl.defaultLocale = (locale ?? getSystemLocale(WidgetsBinding.instance)).toLanguageTag();
+    });
 
     // Listening to the settled status rather than to [isDeviceOnlineProvider]: both actions are
     // network calls, which must not be made on the optimistic assumption that a device whose

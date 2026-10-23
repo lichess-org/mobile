@@ -36,7 +36,7 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;

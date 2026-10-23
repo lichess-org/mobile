@@ -291,7 +291,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd().add_jm();
+DateFormat get _dateFormat => DateFormat.MMMd().add_jm();
 
 class const _BroadcastCardContent({
   required final Broadcast broadcast,
