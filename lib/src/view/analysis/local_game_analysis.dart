@@ -653,6 +653,15 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
       ]);
       _ensureActive(runId);
 
+      if (latestEval == null && searchStopped.isCompleted) {
+        await Future.any([
+          firstEval.future,
+          Future<void>.delayed(kEngineEvalEmissionThrottleDelay),
+          signal.future.then((_) => throw const _LocalReviewCancelled()),
+        ]);
+        _ensureActive(runId);
+      }
+
       final remaining = searchTime - stopwatch.elapsed;
       final currentState = ref.read(positionEvaluatorProvider(evaluator.context));
       if (latestEval != null && currentState.isComputing && remaining > Duration.zero) {

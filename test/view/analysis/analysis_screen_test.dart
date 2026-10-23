@@ -155,13 +155,19 @@ void main() {
         scrollable: find.byType(Scrollable).last,
       );
       await tester.tap(find.text('Analyze game'));
-      for (var i = 0; i < 50; i++) {
+      for (var i = 0; i < 200 && find.byType(AcplChart).evaluate().isEmpty; i++) {
         await tester.pump(const Duration(milliseconds: 100));
+        await tester.runAsync(() => Future<void>.delayed(Duration.zero));
       }
       await tester.pumpAndSettle();
 
       expect(find.byType(AcplChart), findsOneWidget);
       expect(find.byType(GameSummaryTable), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('1. e4'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
       expect(find.text('1. e4'), findsOneWidget);
       expect(find.textContaining('good moves'), findsOneWidget);
       await tester.scrollUntilVisible(
