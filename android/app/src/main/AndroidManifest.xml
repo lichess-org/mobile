@@ -127,18 +127,10 @@
                 <data android:pathPattern="/editor" />
                 <data android:pathPattern="/editor/.*" />
 
-                <!--
-                  Game or challenge link: any 8-char path (e.g. /abcd1234).
-                  pathPattern cannot exclude known static 8-char routes (e.g. /analysis,
-                  /settings); the app resolver handles false positives by falling back to
-                  launchUrl. On Android 15+, exclusions are enforced server-side via
-                  dynamic_app_link_components in assetlinks.json.
-                -->
-                <data android:pathPattern="/........" />
-
-                <!-- Game with color POV -->
-                <data android:pathPattern="/......../black" />
-                <data android:pathPattern="/......../white" />
+                <!-- Game or challenge link: /game/<id>, optionally with a color POV. -->
+                <data android:pathPattern="/game/........" />
+                <data android:pathPattern="/game/......../black" />
+                <data android:pathPattern="/game/......../white" />
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>

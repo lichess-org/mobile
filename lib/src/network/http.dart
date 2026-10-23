@@ -4,6 +4,7 @@ import 'dart:math' as math;
 
 import 'package:cronet_http/cronet_http.dart';
 import 'package:cupertino_http/cupertino_http.dart';
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -23,6 +24,7 @@ import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -54,6 +56,10 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
     guessIsUnsecureSchemeFromHost(kLichessHost)
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
+
+/// Creates the Uri of the lichess page of the game [id], seen from [orientation] if given.
+Uri lichessGameUri(GameId id, {Side? orientation}) =>
+    lichessUri(orientation != null ? '/game/$id/${orientation.name}' : '/game/$id');
 
 /// The host of the lichess main server, without the port part.
 ///
