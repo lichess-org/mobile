@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -115,39 +114,6 @@ class const LagIndicator({
               child: SpinKitThreeBounce(color: Colors.grey, size: size / 2),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class const OfflineBanner() extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    if (ref.watch(isDeviceOnlineProvider)) {
-      return const SizedBox.shrink();
-    }
-    return Material(
-      child: Container(
-        height: 40,
-        color: theme.colorScheme.tertiaryContainer,
-        child: Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: Row(
-            children: [
-              Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
-              const SizedBox(width: 5),
-              Flexible(
-                child: Text(
-                  'Network connectivity unavailable.',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

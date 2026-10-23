@@ -423,7 +423,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         )
                       : PlatformAppBar(
                           // A greeting without a name when logged out.
-                          title: _GreetingWidget(authUser?.user),
+                          title: _GreetingWidget(authUser?.user, isOnline: isOnline),
                           centerTitle: false,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
@@ -437,7 +437,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   floatingActionButton: widget.editModeEnabled || isTablet
                       ? null
                       : const FloatingPlayButton(),
-                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
                 ),
               ),
             );
@@ -612,10 +611,12 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
 );
 
 /// The greeting of the user, as the app bar title, which opens the profile when logged in.
+/// The greeting of the home app bar, with an "Offline" subtitle while the device is offline.
 class const _GreetingWidget(
   /// Null when logged out: the greeting has no name.
-  final LightUser? user,
-) extends ConsumerWidget {
+  final LightUser? user, {
+  required final bool isOnline,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDayTime = ref.watch(_isDayTimeProvider);
@@ -635,14 +636,28 @@ class const _GreetingWidget(
     return InkWell(
       onTap: user != null ? openProfile : null,
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      child: Text(
-        greeting,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
-        style: Theme.of(context).platform == TargetPlatform.iOS
-            ? TextTheme.of(context).titleLarge
-            : null,
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            greeting,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
+            style: Theme.of(context).platform == TargetPlatform.iOS
+                ? TextTheme.of(context).titleLarge
+                : null,
+          ),
+          if (!isOnline)
+            Text(
+              context.l10n.noNetwork,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextTheme.of(context).bodySmall
+                  ?.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
       ),
     );
   }

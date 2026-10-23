@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassButton;
@@ -308,7 +307,7 @@ void main() {
   });
 
   group('Home offline', () {
-    testWidgets('shows offline banner', (tester) async {
+    testWidgets('shows offline subtitle', (tester) async {
       final app = await makeOfflineTestProviderScope(tester, child: const Application());
 
       await tester.pumpWidget(app);
@@ -316,7 +315,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
-      expect(find.byType(OfflineBanner), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, 'Offline'), findsOneWidget);
     });
 
     testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
