@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Accueil</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Si le compte correspond à %1$s, un code de %2$s caractères a été envoyé à cette adresse. Vérifiez votre boîte de réception et entrez le code ci-dessous.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Ce code est invalide ou a expiré.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Diffuseurs en direct</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Taille de la base de parties locale</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Jouer le coup en levant le doigt</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Lorsque vous touchez l\'écran pour déplacer une pièce, le déplacement se fait lorsque vous levez le doigt, ce qui vous permet de changer la case de destination.</string>
@@ -123,6 +122,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Afficher la bordure</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Retour tactile</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Lorsque cette option est activée, l\'appareil vibrera lorsque vous bougez ou capturez une pièce.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Partager</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Partager l\'URL du défi</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Partager le PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partager l\'URL de la partie</string>

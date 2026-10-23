@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Accepter remis?</string>
   <string name="account" comment="The account screen title.">Konto</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoindstillinger</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Disse indstillinger anvendes på din Lichess-konto og vil blive brugt på tværs af alle enheder.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Tilføj til studie</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle partier</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Tillad omtræk og tips</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled-sort</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Er du sikker?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Er du sikker på du vil downloade NNUE filen (%s)?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Brætsposition i liggende tilstand</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brætindstillinger</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Bronstein-forsinkelse</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Annuller tilbud om tilbagetagelse</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Udfordring oprettet: Du vil blive underrettet, når partiet starter.\nDu kan få adgang til det fra hjemfanen.</string>
-  <string name="chessEngine" comment="Chess engine settings screen title.">Skakprogram</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Udfordring fra position</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Kapitelnavn</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Skakmotor</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Vælg en brugerdefineret baggrund</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Ryd</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Koden udløber efter 5 minutter og kan kun bruges én gang.</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kode</string>
   <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Koden er %s tegn lang.</string>
   <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopieret.</string>
@@ -26,6 +36,9 @@
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Download mine partier</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtre</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Vend ur</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">Vend brikker og modstander-oplysninger efter træk</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Få feedback på dine træk</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goddag, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Goddag</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Godaften, %s</string>
@@ -33,16 +46,22 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Godt træk, men der findes et bedre</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hej</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hjem</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-streamere</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Hvis en konto svarer til %1$s, er der sendt en %2$s-kode til den. Tjek din indbakke, og indtast koden nedenfor.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Denne kode er ugyldig eller er udløbet.</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Størrelse på lokal database</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Flyt ved frigivelse</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Når du flytter en brik ved at trykke på skærmen, udføres trækket, når du løfter fingeren, så du kan skubbe brikken for at ændre målfeltet.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du skal være logget ind for at se denne side.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline opgaver</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nyt parti</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Næste fejl</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ingen resultater</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du følger ikke nogen brugere.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">Ok</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Åbningsudforsker er ikke tilgængelig offline.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Eller importer en PGN-fil</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Spil offline, brug som bræt</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Indsæt fra udklipsholderen</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antiskak</string>
   <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atom</string>
   <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Lyn</string>
@@ -56,9 +75,11 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hurtig</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3skak</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN kopieret.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spillere med \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Venstre</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Højre</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Øvetilstand</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Forstør brik, som trækkes</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Forrige</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Vil du afslutte dette løb?</string>
@@ -92,26 +113,42 @@
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Swipe for at vise andre baggrunde</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Enten tryk eller træk</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Tryk på to felter</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Dine indstillinger er blevet gemt på din Lichess-konto. De vil blive synkroniseret på alle dine enheder.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Form tegning</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Tegn figurer ved hjælp af to fingre: hold en finger på et tomt felt og træk en anden finger for at tegne en form.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Vis kant</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Berøringsfeedback</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Når aktiveret, vil enheden vibrere kortvarigt, når du flytter eller erobrer en brik.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Del</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Del udfordrings-URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Del PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Del partiets URL</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Del lokal analyse-PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Del position som FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Del denne opgave</string>
   <string name="showComments" comment="Shown in the analysis screen.">Vis kommentarer</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Vis motorlinjer</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Vis evalueringsindikator</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Vis resultat</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Log ind med browseren</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Log ind med en e-mail</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Simpel forsinkelse</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Lille bræt</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Noget gik galt.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sortér venner</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Vis ikke længere trussel</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemfarver</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase er ikke tilgængelig offline.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">For mange forsøg. Prøv igen senere.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Afsluttet</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Gå til min side</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s er ikke understøttet i denne version.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Brug symmetriske brikker</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vis parti</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Se licenser</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Venter på at modstander slutter sig til...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Se</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Vi sender dig en kode via e-mail, som du kan bruge til at logge ind med.</string>
   <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Du kan ikke udfordre dig selv</string>
 </resources>

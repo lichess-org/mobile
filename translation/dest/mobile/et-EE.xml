@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Lisa uuringusse</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kõik mängud</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Luba tagasivõtmised ja vihjed</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled-must</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Kas oled kindel?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Kas oled kindel, et soovid alla laadida NNUE-faili (%s)?</string>
   <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Laua asend horisontaalpaigutuses</string>
@@ -47,19 +48,40 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kodu</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Kui konto vastab aadressile %1$s, saadeti sellele %2$s märgikood. Vaata oma postkasti ja sisesta kood.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">See kood on vigane või aegunud.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Reaalajas striimijad</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Kohaliku andmebaasi suurus</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Käik vabastamisel</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Nuppu puudutusega liigutades, tehakse käik sõrme tõstmisel, võimaldades sihtruutu libistades muuta.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Selle lehe vaatamiseks peab olema sisse logitud.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Võrguühenduseta pusled</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Uus mäng</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Järgmine viga</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Tulemused puuduvad</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Sa pole jälgimas ühtki kasutajat.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">Hüva</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Maleavangute uurija pole võrguühenduseta saadaval.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Või importi PGN-fail</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Üle laua</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Kopeeri lõikelaualt</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antimale</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Aatom</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Kiir</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Välk</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klassika</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Kirim.</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Pöörane</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Seisult.</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Hord</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Pusle</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Kihutus</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Tormakas</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3tuli</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN kopeeritud.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Kasutajad sisuga \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vasakul</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Paremal</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Harjutuslaad</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Suurenda tiritud malendit</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Eelmine</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Kas soovid partii lõpetada?</string>
@@ -68,14 +90,19 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lahenda 3 minuti jooksul nii palju puslesid kui võimalik.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Mängi oma lemmikavangute puslesid või vali teema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pusled</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Hinda seda rakendust</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Hiljutised otsingud</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Eemalda järjehoidja</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Vali uuring</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Saada mulle kood</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Serveri analüüs</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Kella asukoht</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Taustad</string>
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Lohistatud malendi siht</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Ring</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Ruut</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Joonistatud kuju värv</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Seda värvi kasutatakse kahe sõrmega käsitsi joonistatud kujundite puhul.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Kodu vidinad</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Haarav seisund</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Peida mängimise ajal süsteemi UI. Kasuta seda, kui sind segavad ekraani servades süsteemi juhtimise väljad. Kehtib mängu- ja pusleekraanide kohta.</string>
@@ -88,25 +115,41 @@
   <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Libista, et näha teisi taustapilte</string>
   <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Puuduta või lohista</string>
   <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Puuduta kahte ruutu</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Sinu eelistused on salvestatud sinu Lichessi kontole. Need sünkroniseeritakse kõigis sinu seadmetes.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Kuju joonistamine</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Joonista kujundeid kahe sõrmega: hoia üht sõrme tühjal ruudul ja tõmba teisega, et kujundit joonistada.</string>
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Näita piire</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Puutetagasiside</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Jaga väljakutse URL-i</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaga PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaga mängu URL</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Jaga kohalikku analüüsi PGN-failina</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Jaga positsiooni FEN-ina</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Jaga seda puslet</string>
   <string name="showComments" comment="Shown in the analysis screen.">Näita kommentaare</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Kuva mootorijooned</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Kuva hinnangumõõdik</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Näita tulemust</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Logi sisse brauseri kaudu</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Logi sisse e-posti kaudu</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Lihtne viivitus</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Väike laud</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Midagi läks valesti.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sorteeri sõpru</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Lõpeta ohu näitamine</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Süsteemi värvid</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Lõppmängude andmebaas ei ole võrguühenduseta saadaval.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Liiga palju katseid. Palun proovi hiljem uuesti.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Lõpetatud</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Mine minu lehele</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s ei ole selles versioonis saadaval.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Kasuta sümmeetrilisi nuppe</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Vaata mängu</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Vaata litsentse</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Vastase ühinemise ootamine...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Vaata</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Saadame sulle e-postiga sisselogimiskoodi.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Sa ei saa endale väljakutset esitada</string>
 </resources>
