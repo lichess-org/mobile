@@ -399,7 +399,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Po włączeniu urządzenie delikatnie zawibruje, gdy wykonasz ruch lub zbijesz bierkę.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Udostępnij';
 
   @override
   String get mobileShareChallengeUrl => 'Udostępnij link do wyzwania';
@@ -1477,6 +1477,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny & rzędy';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Wprowadź współrzędne';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Naciśnij $param aby rozpocząć';
+  }
+
+  @override
   String get learnLearnChess => 'Ucz się szachów';
 
   @override
@@ -2535,7 +2543,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesInlineNotation => 'Notacja ciągła';
 
   @override
-  String get preferencesShowServerAnalysis => 'Pokaż analizę serwera';
+  String get preferencesShowMainlineAnalysis => 'Pokaż analizę głównej linii';
 
   @override
   String get preferencesShowBestMoveArrows => 'Pokaż strzałkę najlepszego ruchu';
@@ -2563,6 +2571,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Pokaż możliwość zaszachowania króla';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Pokaż złapane w pułapkę bierki';
 
   @override
   String get preferencesDisclosureMode => 'Włącz ukrywanie wariantów';
@@ -2968,9 +2979,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCastling => 'Roszada';
 
   @override
-  String get puzzleThemeEnPassant => 'Bicie w przelocie';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
 
   @override
@@ -3062,6 +3070,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktyka w ostatniej fazie gry.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Bicie w przelocie';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.';
@@ -3861,6 +3872,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get engineSettings => 'Ustawienia silnika';
 
   @override
+  String get engine => 'Silnik';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Silniki szachowe od najmocniejszego do najsłabszego';
 
   @override
@@ -4487,6 +4501,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Znajomi online: $param1\nZnajomi grający: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Ulubieni przeciwnicy';
 
   @override
@@ -4853,9 +4872,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reason => 'Powód';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Oszust';
 
   @override
@@ -4872,9 +4888,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Szybciej przetwarzymy Twoje zgłoszenie, jeśli napiszesz do nas po angielsku.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5454,7 +5467,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get downloadImported => 'Pobierz zaimportowane';
 
   @override
+  String get downloadMyGames => 'Pobierz moje partie';
+
+  @override
   String get downloadAllGames => 'Pobierz wszystkie partie';
+
+  @override
+  String get downloadResults => 'Pobierz wyniki';
 
   @override
   String get crosstable => 'Wyniki spotkań';
@@ -6221,7 +6240,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get showMeEverything => 'Pokaż mi wszystko';
 
   @override
-  String get lichessPatronInfo => 'Lichess jest organizacją niedochodową i całkowicie darmowym otwartym oprogramowaniem.\nWszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z darowizn użytkowników.';
+  String get lichessPatronInfo => 'Lichess jest organizacją charytatywną i całkowicie darmowym otwartym oprogramowaniem. Nasze koszty operacyjne, rozwój i treść zależą od darowizn użytkowników. Bez naszej szczodrej społeczności nie bylibyśmy w stanie utrzymać serwisu. Dziękujemy za dołączenie do nas!';
 
   @override
   String get nothingToSeeHere => 'W tej chwili nie ma nic do zobaczenia.';
@@ -7117,9 +7136,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Tylko współautorzy opracowania mogą prosić o analizę komputerową.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Uzyskaj pełną, zdalną analizę komputerową głównego wariantu.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Upewnij się, że rozdział jest kompletny. O jego analizę możesz poprosić tylko raz.';
 
   @override
@@ -7336,9 +7352,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyStart => 'Rozpocznij';
-
-  @override
-  String get studySave => 'Zapisz';
 
   @override
   String get studyClearChat => 'Wyczyść czat';
@@ -7574,6 +7587,21 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Przegrana białych, ale czarne nie mogą wygrać';
+
+  @override
+  String get studyAnalysisEditor => 'Edytor analiz';
+
+  @override
+  String get studyClearLocal => 'Wyczyścić analizę lokalną?';
+
+  @override
+  String get studyClearPublished => 'Wyczyścić opublikowaną analizę?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Poproś o analizę na serwerze';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analizuj na swoim urządzeniu';
 
   @override
   String studyNbChapters(int count) {

@@ -1477,6 +1477,14 @@ class AppLocalizationsSk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vybrať konkrétne stĺpce a rady';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Naučte sa šach';
 
   @override
@@ -2535,7 +2543,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get preferencesInlineNotation => 'Vložená notácia';
 
   @override
-  String get preferencesShowServerAnalysis => 'Zobraziť serverovú analýzu';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Zobraziť šípky najlepších ťahov';
@@ -2563,6 +2571,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Ukázať kráľa, ktorému možno dať šach';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Zapnúť skrytie variácií';
@@ -2968,9 +2979,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzleThemeCastling => 'Rošáda';
 
   @override
-  String get puzzleThemeEnPassant => 'Branie mimochodom';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku.';
 
   @override
@@ -3062,6 +3070,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktika počas posledného úseku hry.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Branie mimochodom';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3861,6 +3872,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4487,6 +4501,11 @@ class AppLocalizationsSk extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Obľúbení súperi';
 
   @override
@@ -4853,9 +4872,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get reason => 'Dôvod';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Podvod';
 
   @override
@@ -4872,9 +4888,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5454,7 +5467,13 @@ class AppLocalizationsSk extends AppLocalizations {
   String get downloadImported => 'Stiahnuť importované';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Stiahnuť všetky partie';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Tabuľka';
@@ -6221,7 +6240,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get showMeEverything => 'Ukázať všetko';
 
   @override
-  String get lichessPatronInfo => 'Lichess je bezplatný a úplne slobodný/nezávislý softvér s otvoreným zdrojovým kódom. Všetky prevádzkové náklady, vývoj a obsah sú financované výlučne z darov používateľov. Bez našej štedrej komunity by sme nedokázali udržať stránku v prevádzke. Ďakujeme, že ste sa k nám pridali!\n  ';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Momentálne tu nie je nič k zobrazeniu.';
@@ -7117,9 +7136,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Oba prispievatelia k tejto štúdii môžu požiadať a počítačovú analýzu.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Získajte úplnú počítačovú analýzu hlavného variantu na strane servera.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Uistite sa, že kapitola je kompletná. Požiadať o analýzu môžete iba raz.';
 
   @override
@@ -7336,9 +7352,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyStart => 'Štart';
-
-  @override
-  String get studySave => 'Uložiť';
 
   @override
   String get studyClearChat => 'Vymazať čet';
@@ -7574,6 +7587,21 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Biely porazený, ale čierny nedokáže vyhrať';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

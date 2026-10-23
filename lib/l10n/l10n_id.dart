@@ -1414,6 +1414,14 @@ class AppLocalizationsId extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Materi pelajaran catur';
 
   @override
@@ -2472,7 +2480,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2500,6 +2508,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2888,9 +2899,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokade';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Letakkan posisi raja aman, dan manfaatkan benteng untuk menyerang.';
 
   @override
@@ -2982,6 +2990,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Sebuah taktik selama fase akhir permainan.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3781,6 +3792,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4407,6 +4421,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Lawan Favorit';
 
   @override
@@ -4773,9 +4792,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get reason => 'Alasan';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Cheat';
 
   @override
@@ -4792,9 +4808,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5374,7 +5387,13 @@ class AppLocalizationsId extends AppLocalizations {
   String get downloadImported => 'Unduh permainan yang telah dimasukkan';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Unduh semua permainan';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Napak tilas';
@@ -6141,7 +6160,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get showMeEverything => 'Tunjukkan semuanya';
 
   @override
-  String get lichessPatronInfo => 'Lichess adalah sebuah amal dan semuanya merupakan perangkat lunak sumber terbuka yang gratis/bebas.\nSemua biaya operasi, pengembangan, dan konten didanai sepenuhnya oleh donasi pengguna.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Tidak ada yang bisa dilihat untuk saat ini.';
@@ -6908,9 +6927,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Hanya kontributor yang dapat meminta analisa komputer.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Dapatkan analisis komputer penuh di pihak server dari jalur utama.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Pastikan bab ini selesai. Anda hanya dapat meminta analisis satu kali.';
 
   @override
@@ -7127,9 +7143,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyStart => 'Mulai';
-
-  @override
-  String get studySave => 'Simpan';
 
   @override
   String get studyClearChat => 'Bersihkan obrolan';
@@ -7365,6 +7378,21 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

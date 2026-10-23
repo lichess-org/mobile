@@ -2560,6 +2560,18 @@ abstract class AppLocalizations {
   /// **'Practice only some files & ranks'**
   String get coordinatesPracticeOnlySomeFilesAndRanks;
 
+  /// No description provided for @coordinatesEnterTheCoordinate.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the coordinate'**
+  String get coordinatesEnterTheCoordinate;
+
+  /// No description provided for @coordinatesPressEnterToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Press {param} to start'**
+  String coordinatesPressEnterToStart(String param);
+
   /// No description provided for @learnLearnChess.
   ///
   /// In en, this message translates to:
@@ -4624,11 +4636,11 @@ abstract class AppLocalizations {
   /// **'Inline notation'**
   String get preferencesInlineNotation;
 
-  /// No description provided for @preferencesShowServerAnalysis.
+  /// No description provided for @preferencesShowMainlineAnalysis.
   ///
   /// In en, this message translates to:
-  /// **'Show server analysis'**
-  String get preferencesShowServerAnalysis;
+  /// **'Show mainline analysis'**
+  String get preferencesShowMainlineAnalysis;
 
   /// No description provided for @preferencesShowBestMoveArrows.
   ///
@@ -4683,6 +4695,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show checkable king'**
   String get preferencesShowCheckableKing;
+
+  /// No description provided for @preferencesShowTrappedPieces.
+  ///
+  /// In en, this message translates to:
+  /// **'Show trapped pieces'**
+  String get preferencesShowTrappedPieces;
 
   /// No description provided for @preferencesDisclosureMode.
   ///
@@ -5350,12 +5368,6 @@ abstract class AppLocalizations {
   /// **'Castling'**
   String get puzzleThemeCastling;
 
-  /// No description provided for @puzzleThemeEnPassant.
-  ///
-  /// In en, this message translates to:
-  /// **'En passant'**
-  String get puzzleThemeEnPassant;
-
   /// No description provided for @puzzleThemeCastlingDescription.
   ///
   /// In en, this message translates to:
@@ -5541,6 +5553,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A tactic during the last phase of the game.'**
   String get puzzleThemeEndgameDescription;
+
+  /// No description provided for @puzzleThemeEnPassant.
+  ///
+  /// In en, this message translates to:
+  /// **'En passant'**
+  String get puzzleThemeEnPassant;
 
   /// No description provided for @puzzleThemeEnPassantAdjacentCaptureDescription.
   ///
@@ -7096,6 +7114,12 @@ abstract class AppLocalizations {
   /// **'Engine settings'**
   String get engineSettings;
 
+  /// No description provided for @engine.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine'**
+  String get engine;
+
   /// No description provided for @enginesFromStrongestToWeakest.
   ///
   /// In en, this message translates to:
@@ -8260,6 +8284,12 @@ abstract class AppLocalizations {
   /// **'Offline'**
   String get noNetwork;
 
+  /// No description provided for @friendsOnlineAndPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Friends online: {param1}\nFriends playing: {param2}'**
+  String friendsOnlineAndPlaying(String param1, String param2);
+
   /// No description provided for @favoriteOpponents.
   ///
   /// In en, this message translates to:
@@ -8956,12 +8986,6 @@ abstract class AppLocalizations {
   /// **'Reason'**
   String get reason;
 
-  /// No description provided for @whatIsIheMatter.
-  ///
-  /// In en, this message translates to:
-  /// **'What\'s the matter?'**
-  String get whatIsIheMatter;
-
   /// No description provided for @cheat.
   ///
   /// In en, this message translates to:
@@ -8997,12 +9021,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We can process your report faster if you write in English.'**
   String get processReportFasterInEnglish;
-
-  /// No description provided for @error_provideOneCheatedGameLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Please provide at least one link to a game for review.'**
-  String get error_provideOneCheatedGameLink;
 
   /// No description provided for @by.
   ///
@@ -10054,11 +10072,23 @@ abstract class AppLocalizations {
   /// **'Download imported'**
   String get downloadImported;
 
+  /// No description provided for @downloadMyGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Download my games'**
+  String get downloadMyGames;
+
   /// No description provided for @downloadAllGames.
   ///
   /// In en, this message translates to:
   /// **'Download all games'**
   String get downloadAllGames;
+
+  /// No description provided for @downloadResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Download results'**
+  String get downloadResults;
 
   /// No description provided for @crosstable.
   ///
@@ -11455,7 +11485,7 @@ abstract class AppLocalizations {
   /// No description provided for @lichessPatronInfo.
   ///
   /// In en, this message translates to:
-  /// **'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  '**
+  /// **'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!'**
   String get lichessPatronInfo;
 
   /// No description provided for @nothingToSeeHere.
@@ -12364,12 +12394,6 @@ abstract class AppLocalizations {
   /// **'Only the study contributors can request a computer analysis.'**
   String get studyOnlyContributorsCanRequestAnalysis;
 
-  /// No description provided for @studyGetAFullComputerAnalysis.
-  ///
-  /// In en, this message translates to:
-  /// **'Get a full server-side computer analysis of the main line.'**
-  String get studyGetAFullComputerAnalysis;
-
   /// No description provided for @studyMakeSureTheChapterIsComplete.
   ///
   /// In en, this message translates to:
@@ -12789,12 +12813,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start'**
   String get studyStart;
-
-  /// No description provided for @studySave.
-  ///
-  /// In en, this message translates to:
-  /// **'Save'**
-  String get studySave;
 
   /// No description provided for @studyClearChat.
   ///
@@ -13245,6 +13263,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'White defeat, but Black can\'t win'**
   String get studyWhiteDefeatBlackCanNotWin;
+
+  /// No description provided for @studyAnalysisEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis editor'**
+  String get studyAnalysisEditor;
+
+  /// No description provided for @studyClearLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear local analysis?'**
+  String get studyClearLocal;
+
+  /// No description provided for @studyClearPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear published analysis?'**
+  String get studyClearPublished;
+
+  /// No description provided for @studyRequestAServerAnalysis.
+  ///
+  /// In en, this message translates to:
+  /// **'Request a server analysis'**
+  String get studyRequestAServerAnalysis;
+
+  /// No description provided for @studyAnalyzeOnYourDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Analyse on your device'**
+  String get studyAnalyzeOnYourDevice;
 
   /// No description provided for @studyNbChapters.
   ///

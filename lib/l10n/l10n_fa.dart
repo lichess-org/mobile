@@ -9,7 +9,7 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'قبول مساوی؟';
 
   @override
   String get mobileAccount => 'حساب';
@@ -21,19 +21,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'این ترجیحات به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'افزودن به مطالعه';
 
   @override
   String get mobileAllGames => 'همه بازی‌ها';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'اجازهٔ برگردان و نَمار';
 
   @override
   String get mobileAppLogs => 'App logs';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAmoledBlack => 'مشکیِ دَنگابَف';
 
   @override
   String get mobileAreYouSure => 'مطمئنید؟';
@@ -53,7 +53,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileBronsteinDelay => 'Bronstein delay';
 
   @override
-  String get mobileCancelTakebackOffer => 'رد درخواست برگرداندن';
+  String get mobileCancelTakebackOffer => 'لغو پیشنهاد «برگردان»';
 
   @override
   String get mobileChallengeCreated => 'چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.';
@@ -312,7 +312,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileRecentSearches => 'جستجوهای اخیر';
 
   @override
-  String get mobileRemoveBookmark => 'حذفِ نشانک';
+  String get mobileRemoveBookmark => 'برچیدنِ نشانک';
 
   @override
   String get mobileSelectAStudy => 'Select a study';
@@ -476,13 +476,13 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => 'استفاده از مهره‌های متقارن';
 
   @override
   String get mobileViewGame => 'دیدنِ بازی';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'دیدنِ جوازها';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'در انتظار آمدن حریف...';
@@ -491,10 +491,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileWatchTab => 'تماشا';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'برای ورود، کدی را به رایانامه‌تان خواهیم فرستاد.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'نمی‌توانید به خودتان پیشنهاد بازی دهید';
 
   @override
   String get activityActivity => 'فعالیت';
@@ -1433,6 +1433,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'تمرین فقط روی ستون‌ها و ردیف‌های مشخص';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'وارد کردن همآرا';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'برای شروع $param را بفشارید';
+  }
+
+  @override
   String get learnLearnChess => 'یادگیری شطرنج';
 
   @override
@@ -2218,58 +2226,58 @@ class AppLocalizationsFa extends AppLocalizations {
   String get practiceStDesInBetweenMoves => 'حرکت بِینابِین';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'حمله با عبور از مهره دشمن';
 
   @override
-  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+  String get practiceStDesBeingForcedToMove => 'مجبور به حرکت بودن';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => 'اَندرنهیدنِ شدیدا موثرِ مهره‌ای';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'مطالعهٔ قربانی هدیهٔ یونانی';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => 'منحرف کردن دفاعگر';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => 'تطمیعِ مهره‌ای به خانه‌ای بد';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => 'ارتقا - اما نه به وزیر!';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'مهره‌ای تباهیده است، اما هنوز می‌تواند کمک کند';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => 'پاسخ به کیش، با کیش';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => 'برچیدنِ مهرهٔ دفاعگر';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => 'از سر راه برو کنار!';
 
   @override
-  String get practiceStDesReachAKeySquare => 'Reach a key square';
+  String get practiceStDesReachAKeySquare => 'رسیدن به خانه‌ای کلیدی';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => 'کسبِ تقابل';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => 'علیهِ وزیر';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => 'و رخِ نافعال علیه رخ';
 
   @override
-  String get practiceStDesLucenaAndPhilidor => 'Lucena and Philidor';
+  String get practiceStDesLucenaAndPhilidor => 'لوسِنا و فیلیدُر';
 
   @override
-  String get practiceStDesBroadenYourKnowledge => 'Broaden your knowledge';
+  String get practiceStDesBroadenYourKnowledge => 'دانش‌تان را بگسترید';
 
   @override
-  String get practiceStDesRookEndingsWithSeveralPawns => 'Rook endings with several pawns';
+  String get practiceStDesRookEndingsWithSeveralPawns => 'آخربازی رخ با چند پیاده';
 
   @override
   String get preferencesPreferences => 'تنظیمات';
@@ -2491,7 +2499,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesInlineNotation => 'نشانه‌گذاریِ درخط';
 
   @override
-  String get preferencesShowServerAnalysis => 'نمایشِ تحلیلِ کارساز';
+  String get preferencesShowMainlineAnalysis => 'نمایش تحلیلِ شاخه اصلی';
 
   @override
   String get preferencesShowBestMoveArrows => 'نمایشِ پیکان‌های بهترین حرکت';
@@ -2519,6 +2527,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'نمایشِ شاهِ کیش‌پذیر';
+
+  @override
+  String get preferencesShowTrappedPieces => 'نمایش مهره‌های گرفتار';
 
   @override
   String get preferencesDisclosureMode => 'فعالسازیِ پنهاندنِ وَرتِش';
@@ -2912,9 +2923,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeCastling => 'قلعه‌روی';
 
   @override
-  String get puzzleThemeEnPassant => 'گرفتن هنگامِ عبور';
-
-  @override
   String get puzzleThemeCastlingDescription => 'شاه خود را ایمن کنید و رخ خود را برای حمله مستقر کنید.';
 
   @override
@@ -3006,6 +3014,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'یک تاکتیک در لحظات آخر بازی.';
+
+  @override
+  String get puzzleThemeEnPassant => 'گرفتن هنگامِ عبور';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'راهکُنشی که شاملِ قاعدهٔ «آن‌پاسان» است، که در آن پیاده می‌تواند با حرکتِ نخستینِ دو-خانه‌ای خود، پیادهٔ حریف در ستونِ همجوار را، بزند.';
@@ -3251,7 +3262,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get puzzleThemeSuperGMDescription => 'معماهای برگرفته از بازی‌های بهترین بازیکنان جهان.';
 
   @override
-  String get puzzleThemeTrappedPiece => 'مهره به‌دام‌افتاده';
+  String get puzzleThemeTrappedPiece => 'مهره گرفتار';
 
   @override
   String get puzzleThemeTrappedPieceDescription => 'یک مهره قادر به فرار کردن از زده شدن نیست چون حرکات محدودی دارد.';
@@ -3805,6 +3816,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get engineSettings => 'تنظیماتِ موتور';
 
   @override
+  String get engine => 'موتور';
+
+  @override
   String get enginesFromStrongestToWeakest => 'موتورها از قوی‌ترین تا ضعیف‌ترین';
 
   @override
@@ -4226,34 +4240,34 @@ class AppLocalizationsFa extends AppLocalizations {
   String get proposeATakeback => 'پیشنهاد برگردان';
 
   @override
-  String get whiteProposesTakeback => 'سفید درخواست بازپسگیری میکند';
+  String get whiteProposesTakeback => 'پیشنهاد «برگردان» از سفید';
 
   @override
-  String get blackProposesTakeback => 'سیاه درخواست بازپسگیری میکند';
+  String get blackProposesTakeback => 'پیشنهاد «برگردان» از سیاه';
 
   @override
   String get takebackPropositionSent => 'برگردان فرستاده شد';
 
   @override
-  String get whiteDeclinesTakeback => 'سفید درخواست بازپسگیری را رد میکند';
+  String get whiteDeclinesTakeback => 'سفید «برگردان» را رد می‌کند';
 
   @override
-  String get blackDeclinesTakeback => 'سیاه درخواست بازپسگیری را رد میکند';
+  String get blackDeclinesTakeback => 'سیاه «برگردان» را رد می‌کند';
 
   @override
-  String get whiteAcceptsTakeback => 'سفید درخواست بازپسگیری را تائید میکند';
+  String get whiteAcceptsTakeback => 'سفید «برگردان» را می‌پذیرد';
 
   @override
-  String get blackAcceptsTakeback => 'سیاه درخواست بازپسگیری را تائید میکند';
+  String get blackAcceptsTakeback => 'سیاه «برگردان» را می‌پذیرد';
 
   @override
-  String get whiteCancelsTakeback => 'سفید درخواست بازپسگیری را لغو میکند';
+  String get whiteCancelsTakeback => 'سفید «برگردان» را می‌لغود';
 
   @override
-  String get blackCancelsTakeback => 'سیاه درخواست بازپسگیری را لغو میکند';
+  String get blackCancelsTakeback => 'سیاه «برگردان» را می‌لغود';
 
   @override
-  String get yourOpponentProposesATakeback => 'حریف‌تان پیشنهاد «برگرداندن» می‌دهد';
+  String get yourOpponentProposesATakeback => 'پیشنهاد «برگردان» از حریف‌تان';
 
   @override
   String get bookmarkThisGame => 'نشانک‌گذاری';
@@ -4429,6 +4443,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get noNetwork => 'بُرون‌خط';
+
+  @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'دوستان برخط: $param1\nدوستان در بازی: $param2';
+  }
 
   @override
   String get favoriteOpponents => 'رقبای مورد علاقه';
@@ -4752,7 +4771,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get createANewTopic => 'ایجاد یک موضوع جدید';
 
   @override
-  String get topics => 'مباحث';
+  String get topics => 'موضوع‌ها';
 
   @override
   String get posts => 'فرسته‌ها';
@@ -4797,9 +4816,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get reason => 'دلیل';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'تقلب';
 
   @override
@@ -4816,9 +4832,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'اگر به انگلیسی بنویسید، می‌توانیم سریع‌تر به گزارش‌تان رسیدگی کنیم.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5195,7 +5208,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aboutSimulRules => 'وقتی هَمگاه می‌آغازد، هر بازیکن بازی‌ای را با میزبان شروع می‌کند. هَمگاه وقتی پایان می‌یابد که همهٔ بازی‌ها تمام شوند.';
 
   @override
-  String get aboutSimulSettings => 'هَمگاه همیشه نارَسمی است. بازرویارویی، برگرداندن و زمانِ افزاینده نافعال شده‌اند.';
+  String get aboutSimulSettings => 'هَمگاه همیشه نارَسمی است. بازرویارویی، برگردان و زمانِ افزاینده نافعال شده‌اند.';
 
   @override
   String get create => 'ساختن';
@@ -5398,7 +5411,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get downloadImported => 'بارگیری درونبُرد';
 
   @override
+  String get downloadMyGames => 'بارگیری بازی‌هایم';
+
+  @override
   String get downloadAllGames => 'بارگیری تمام بازی ها';
+
+  @override
+  String get downloadResults => 'بارگیری نتایج';
 
   @override
   String get crosstable => 'رودررو';
@@ -5483,7 +5502,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noChallenges => 'هیچ چالشی موجود نیست.';
 
   @override
-  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
+  String get browserNotificationsDenied => 'اعلان‌های بالاپَر در تنظیمات مرورگر نافعالند';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6165,7 +6184,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get showMeEverything => 'همه چیز را به من نشان بده';
 
   @override
-  String get lichessPatronInfo => 'وبگاهِ Lichess خیریه است و نرم‌افزار متن‌بازِ تمام‌رایگانی است. همهٔ هزینه‌های عملیات، توسعه و محتوا تنها از راهِ داشَن‌های کاربران تأمین می‌شود.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'فعلا هیچی اینجا نیست.';
@@ -6227,7 +6246,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preview => 'پیشنما';
 
   @override
-  String get done => 'Done';
+  String get done => 'تکمیل';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6975,9 +6994,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'تنها مشارکت‌گران این مطالعه، می‌توانند درخواست تحلیل رایانه‌ای دهند.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'یک تحلیلِ رایانه‌ای کارساز-سوی کامل از شاخه اصلی بگیرید.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'مطمئن شوید که بخش کامل است. شما فقط یک بار می‌توانید درخواست تحلیل دهید.';
 
   @override
@@ -7194,9 +7210,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyStart => 'آغاز';
-
-  @override
-  String get studySave => 'ذخیره';
 
   @override
   String get studyClearChat => 'پاکیدنِ گپ';
@@ -7432,6 +7445,21 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'سفید باخت، اما سیاه نمی‌تواند ببرد';
+
+  @override
+  String get studyAnalysisEditor => 'ویراستار تحلیل';
+
+  @override
+  String get studyClearLocal => 'پاکیدنِ تحلیلِ محلی؟';
+
+  @override
+  String get studyClearPublished => 'پاکیدنِ تحلیلِ منتشرشده؟';
+
+  @override
+  String get studyRequestAServerAnalysis => 'درخواستِ تحلیلِ کارساز';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'تحلیل در اَفزاره‌تان';
 
   @override
   String studyNbChapters(int count) {

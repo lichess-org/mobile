@@ -1433,6 +1433,14 @@ class AppLocalizationsKk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Шахмат ойнап,';
 
   @override
@@ -2491,7 +2499,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2519,6 +2527,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2912,9 +2923,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get puzzleThemeCastling => 'Бекіну';
 
   @override
-  String get puzzleThemeEnPassant => 'Жолай басу';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Патшаны қорғаулы жерге кіргізіп, тураны шабуылға даярлаңыз.';
 
   @override
@@ -3006,6 +3014,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Ойынның соңғы кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Жолай басу';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3805,6 +3816,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4431,6 +4445,11 @@ class AppLocalizationsKk extends AppLocalizations {
   String get noNetwork => 'Желіден тыс';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Қалаулы қарсыластар';
 
   @override
@@ -4797,9 +4816,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get reason => 'Түйіні';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Чит, алдап ойнау';
 
   @override
@@ -4816,9 +4832,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5398,7 +5411,13 @@ class AppLocalizationsKk extends AppLocalizations {
   String get downloadImported => 'Жүктеп салынғанды алу';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Барлық ойындарды жүктеп алу';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Қос дерек';
@@ -6165,7 +6184,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get showMeEverything => 'Бәрін көрсету';
 
   @override
-  String get lichessPatronInfo => 'Личес – толығымен тегін/еркін, қайырымдылық негізінде жасалған програм.\nБүкіл жұмыс шығыны, әзірлеу, мазмұны пайдаланушылардың ақшалай демеуінен өтеледі.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Әзірге ештеңе жоқ.';
@@ -6975,9 +6994,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Зерттеу қолдаушылары ғана компьютерлік талдауды сұрай алады.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Сервер-жақты компьютер осы негізгі жолға толық талдау жасайтын болады.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Талдауды бір рет қана сұрай аласыз, сондықтан бөлімді аяқтауды ұмытпаңыз.';
 
   @override
@@ -7194,9 +7210,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyStart => 'Бастау';
-
-  @override
-  String get studySave => 'Сақтау';
 
   @override
   String get studyClearChat => 'Чатты өшіру';
@@ -7432,6 +7445,21 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

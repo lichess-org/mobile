@@ -399,7 +399,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Ko je nastavitev omogočena, bo naprava izvedla kratko vibracijo ko premaknete ali vzamete figuro.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Deli';
 
   @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
@@ -1477,6 +1477,14 @@ class AppLocalizationsSl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Vadite le nekatere stolpce in vrstice';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Naučimo se šah';
 
   @override
@@ -2535,7 +2543,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Prikaži analizo glavne linije';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2563,6 +2571,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Prikaži ujete figure';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2968,9 +2979,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokada';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Umik kralja na varno in razporeditev trdnjave za napad.';
 
   @override
@@ -3062,6 +3070,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktika v zadnji fazi partije.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3861,6 +3872,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4487,6 +4501,11 @@ class AppLocalizationsSl extends AppLocalizations {
   String get noNetwork => 'Brez povezave';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Priljubljeni nasprotniki';
 
   @override
@@ -4853,9 +4872,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get reason => 'Razlog';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Goljufija';
 
   @override
@@ -4872,9 +4888,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5454,7 +5467,13 @@ class AppLocalizationsSl extends AppLocalizations {
   String get downloadImported => 'Prenesi uvoženo PGN datoteko';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Prenesi vse igre';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Medsebojni dvoboji';
@@ -6221,7 +6240,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get showMeEverything => 'Prikaži vse';
 
   @override
-  String get lichessPatronInfo => 'Lichess je dobrodelna in popolnoma brezplačna odprtokodna programska oprema.\nVsi operativni stroški, razvoj in vsebina se financirajo izključno iz donacij uporabnikov.';
+  String get lichessPatronInfo => 'Lichess je dobrodelna organizacija in v celoti brezplačna odprtokodna programska oprema. Za kritje operativnih stroškov, razvoj in vsebino smo odvisni od donacij uporabnikov. Brez naše velikodušne skupnosti spletnega mesta ne bi mogli ohraniti pri življenju. Hvala, ker ste se nam pridružili!';
 
   @override
   String get nothingToSeeHere => 'Tukaj trenutno ni ničesar za videti.';
@@ -7117,9 +7136,6 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Samo sodelovalci v študiji lahko zahtevajo računalniško analizo.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Pridobi na računalniškem strežniku izvedeno računalniško analizo glavne varjante.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Poskrbite, da bo poglavje zaključeno. Analizo lahko zahtevate samo enkrat.';
 
   @override
@@ -7336,9 +7352,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyStart => 'Začni';
-
-  @override
-  String get studySave => 'Shrani';
 
   @override
   String get studyClearChat => 'Počisti klepet';
@@ -7574,6 +7587,21 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Beli poraz, a črni ne more zmagati';
+
+  @override
+  String get studyAnalysisEditor => 'Urednik analiz';
+
+  @override
+  String get studyClearLocal => 'Jasna lokalna analiza?';
+
+  @override
+  String get studyClearPublished => 'Jasna lokalna analiza?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Zahtevajte analizo strežnika';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analizirajte v svoji napravi';
 
   @override
   String studyNbChapters(int count) {

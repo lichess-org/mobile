@@ -208,7 +208,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileOrImportPgnFile => 'Hoặc nhập một tệp PGN';
 
   @override
-  String get mobileOverTheBoard => 'Trên bàn cờ';
+  String get mobileOverTheBoard => 'Chơi ngoại tuyến trên bàn cờ';
 
   @override
   String get mobilePasteFromClipboard => 'Dán từ bảng nhớ tạm';
@@ -1411,6 +1411,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Chỉ thực hành ở một số tệp & thứ hạng';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Học cờ vua';
 
   @override
@@ -2469,7 +2477,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesInlineNotation => 'Ký hiệu bên trong bàn cờ';
 
   @override
-  String get preferencesShowServerAnalysis => 'Hiện phân tích từ máy chủ';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Hiện mũi tên cho nước đi tốt nhất';
@@ -2497,6 +2505,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Hiển thị vua có thể bị chiếu';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Cho phép ẩn biến';
@@ -2884,9 +2895,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleThemeCastling => 'Nhập thành';
 
   @override
-  String get puzzleThemeEnPassant => 'Bắt tốt qua đường';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Chuyển quân vua đến vị trí an toàn và triển khai quân xe để tấn công.';
 
   @override
@@ -2978,6 +2986,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Chiến thuật trong phần kết thúc của ván cờ.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Bắt tốt qua đường';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Một chiến thuật sử dụng luật bắt tốt qua đường, trong đó một quân tốt có thể bắt quân tốt đối phương vừa di chuyển đến bên cạnh nó bằng nước đi hai ô đầu tiên.';
@@ -3318,7 +3329,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
-    return 'Would you like to $param instead?';
+    return 'Thay vào đó bạn có muốn $param không?';
   }
 
   @override
@@ -3775,6 +3786,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get engineSettings => 'Thiết đặt công cụ';
+
+  @override
+  String get engine => 'Công cụ';
 
   @override
   String get enginesFromStrongestToWeakest => 'Các công cụ từ mạnh nhất đến yếu nhất';
@@ -4403,6 +4417,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get noNetwork => 'Ngoại tuyến';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Bạn bè đang trực tuyến: $param1\nBạn bè đang chơi: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Đối thủ yêu thích';
 
   @override
@@ -4769,9 +4788,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reason => 'Lý do';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Gian lận';
 
   @override
@@ -4788,9 +4804,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Chúng tôi có thể xử lý báo cáo của bạn nhanh hơn nếu bạn viết bằng tiếng Anh.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5370,7 +5383,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get downloadImported => 'Tải về tệp đã được nhập';
 
   @override
+  String get downloadMyGames => 'Tải về các ván đấu của tôi';
+
+  @override
   String get downloadAllGames => 'Tải xuống tất cả các ván đấu';
+
+  @override
+  String get downloadResults => 'Tải xuống kết quả';
 
   @override
   String get crosstable => 'Tổng điểm đối đầu';
@@ -6137,7 +6156,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get showMeEverything => 'Cho tôi xem mọi thứ nào';
 
   @override
-  String get lichessPatronInfo => 'Lichess là một tổ chức phi lợi nhuận và là phần mềm hoàn toàn miễn phí/mã nguồn mở.\nMọi chi phí vận hành, phát triển, và nội dung được tài trợ bởi những đóng góp của người dùng.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Không có gì để xem ở đây vào lúc này.';
@@ -6904,9 +6923,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Chỉ những người đóng góp nghiên cứu mới có thể yêu cầu máy tính phân tích.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Nhận phân tích máy tính phía máy chủ đầy đủ về biến chính.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Hãy chắc chắn chương đã hoàn thành. Bạn chỉ có thể yêu cầu phân tích 1 lần.';
 
   @override
@@ -7123,9 +7139,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyStart => 'Bắt đầu';
-
-  @override
-  String get studySave => 'Lưu';
 
   @override
   String get studyClearChat => 'Xóa trò chuyện';
@@ -7361,6 +7374,21 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Bên Trắng thua, nhưng bên Đen không thể thắng';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Yêu cầu máy chủ phân tích';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {
