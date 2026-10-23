@@ -30,6 +30,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Hamleyi geri almaya ve ipuçlarına izin verir';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled siyah';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Gizle';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Tehlikeli bölge';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Ana sayfa';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Önceki';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';

@@ -30,6 +30,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Luba tagasivõtmised ja vihjed';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Taganda';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Ohutsoon';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Kodu';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Eelmine';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Kas soovid partii lõpetada?';

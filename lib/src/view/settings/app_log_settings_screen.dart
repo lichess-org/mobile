@@ -71,7 +71,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('App Logs'),
+        title: Text(context.l10n.mobileAppLogs),
         actions: [
           if (logs.isNotEmpty)
             IconButton(
@@ -84,12 +84,12 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              tooltip: 'Delete all logs',
+              tooltip: context.l10n.mobileClearButton,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
                     ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();

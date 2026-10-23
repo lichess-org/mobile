@@ -60,7 +60,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
     final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('HTTP logs'),
+        title: Text(context.l10n.mobileHttpLogs),
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
@@ -69,8 +69,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  // TODO localize
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () =>
                       ref.read(httpLogPaginatorProvider(_searchQuery).notifier).deleteAll(),
                 );

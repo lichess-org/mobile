@@ -30,6 +30,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Salli siirron peruutukset ja vihjeet';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled-musta';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ohita';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Vaaravyöhyke';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Etusivu';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Edellinen';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';

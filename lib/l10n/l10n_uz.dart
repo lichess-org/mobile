@@ -30,6 +30,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Qora Amoled';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Yopish';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Xavfli hudud';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Asosiy';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Oldingi';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Urinishni yakunlamoqchimisiz?';
