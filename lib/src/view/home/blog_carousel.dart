@@ -166,7 +166,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
   String? get imageUrl => widget.post.imageUrl?.toString();
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBlogImage;
 
   @override
@@ -175,7 +175,7 @@ class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 

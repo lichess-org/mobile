@@ -303,7 +303,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
     final user = widget.user;
     final initial = user.name[0].toUpperCase();
     final showFlair = user.flair != null && !_errorLoadingFlair;

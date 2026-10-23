@@ -184,7 +184,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBroadcastImage;
 
   @override
@@ -193,7 +193,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
