@@ -6,13 +6,16 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -28,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -91,16 +95,11 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
         child: PlatformScaffold(
           extendBodyBehindAppBar: false,
           appBar: PlatformAppBar(
-            title: widget.channel != null
-                ? Text('${widget.channel!.label(context.l10n)} TV')
-                : Row(
-                    mainAxisSize: .min,
-                    children: [
-                      const Icon(Icons.live_tv),
-                      const SizedBox(width: 4.0),
-                      Flexible(child: UserFullNameWidget(user: widget.user)),
-                    ],
-                  ),
+            title: _TvAppBarTitle(
+              channel: widget.channel,
+              gameParams: gameParams,
+              user: widget.user,
+            ),
             actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           ),
           body: SafeArea(
@@ -126,6 +125,107 @@ class _TvScreenState() extends ConsumerState<TvScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Builds the appbar title (and subtitle showing time control, speed and rated/casual)
+/// - User TV subtitles: time control + speed + rated/casual
+/// - Lichess TV subtitles: time control + rated/casual (title shows speed already)
+/// - Tournament TV subtitles: time control + speed + rated/casual
+/// - Tournament TV title: tournament name
+class const _TvAppBarTitle({
+  required final TvChannel? channel,
+  required final TvGameControllerParams? gameParams,
+  required final LightUser? user,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournament = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.meta.tournament?.name),
+          );
+
+    final timeIncrement = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.timeIncrement),
+          );
+
+    final rated = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!).select((state) => state.value?.game.meta.rated),
+          );
+
+    final speedIcon = gameParams == null
+        ? null
+        : ref.watch(
+            tvGameControllerProvider(gameParams!)
+                .select((state) => state.value?.game.meta.perf.icon),
+          );
+
+    return timeIncrement == null
+        ? const SizedBox.shrink()
+        : Column(
+            spacing: 2.0,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(tournament == null ? Icons.live_tv : LichessIcons.tournament_cup, size: 20),
+                  const SizedBox(width: 4.0),
+                  Flexible(
+                    child: channel != null
+                        ? Text('${channel!.label(context.l10n)} TV')
+                        : tournament != null
+                        ? AppBarTitleText('$tournament ${context.l10n.arenaArena}', maxLines: 1)
+                        : UserFullNameWidget(user: user),
+                  ),
+                ],
+              ),
+              _Subtitle(timeIncrement: timeIncrement, rated: rated, icon: speedIcon),
+            ],
+          );
+  }
+}
+
+class const _Subtitle({
+  required final TimeIncrement timeIncrement,
+  required final bool? rated,
+  required final IconData? icon,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final ratedStr = rated == true
+        ? context.l10n.rated
+        : rated == false
+        ? context.l10n.casual
+        : '';
+
+    final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
+    );
+    return Row(
+      children: [
+        if (icon != null) ...[
+          // small padding for better alignment
+          Padding(padding: const EdgeInsets.only(left: 2.0), child: Icon(icon, size: 16)),
+          const SizedBox(width: 6.0),
+        ],
+        Flexible(
+          child: Text(
+            '${timeIncrement.display} • $ratedStr',
+            style: subtitleTextStyle,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }
