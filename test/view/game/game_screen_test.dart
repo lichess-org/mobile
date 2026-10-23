@@ -2129,7 +2129,8 @@ void main() {
       sendServerSocketMessages(GameController.socketUri(testGameFullId), [
         '''{"t": "berserk", "d": "white"}''',
       ]);
-      // wait for socket message handling
+      // wait for socket message handling (on iOS, the berserk state lands after the first frame)
+      await tester.pump();
       await tester.pump();
 
       // We have berserked, which caused the berserk icon appear next to our name.
