@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
 import 'package:lichess_mobile/src/service/server_analysis_service.dart';
@@ -98,9 +99,7 @@ class StudyController(final StudyOptions options)
       _likeDebouncer.cancel();
     });
     final socketPool = ref.watch(socketPoolProvider);
-    final (study, analysisSummary, pgn) = await ref
-        .read(studyRepositoryProvider)
-        .getStudy(id: options.id, chapterId: options.initialChapter);
+    final (study, analysisSummary, pgn) = await _getInitialStudy();
 
     _socketClient = socketPool.open(
       Uri(path: '/study/${options.id}/socket/v6'),
@@ -164,6 +163,18 @@ class StudyController(final StudyOptions options)
     // openings explicitly here.
     if (state.hasValue) initMainlineOpenings();
     _ensureItsOurTurnIfGamebook();
+  }
+
+  /// Like the website, opens the study at its default chapter if [options.initialChapter] no longer
+  /// exists (e.g. the last viewed chapter of a pinned study was deleted).
+  Future<(Study, AnalysisSummary?, String)> _getInitialStudy() async {
+    final repository = ref.read(studyRepositoryProvider);
+    try {
+      return await repository.getStudy(id: options.id, chapterId: options.initialChapter);
+    } on ServerException catch (e) {
+      if (options.initialChapter == null || e.statusCode != 404) rethrow;
+      return await repository.getStudy(id: options.id);
+    }
   }
 
   Future<StudyState> _loadChapter(

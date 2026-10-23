@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -12,14 +12,16 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/study/pinned_studies.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
-import 'package:material_ui/material_ui.dart' show TabBarView, TextButton;
+import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -1157,6 +1159,147 @@ void main() {
       await tester.pumpAndSettle(); // wait for switch to server analysis tab
 
       expect(find.textContaining('Request a computer analysis'), findsOneWidget);
+    });
+  });
+
+  group('Pinned studies', () {
+    PinnedStudies readPinnedStudies(WidgetTester tester) {
+      final container = ProviderScope.containerOf(tester.element(find.byType(StudyScreen)));
+      return container.read(pinnedStudiesProvider);
+    }
+
+    Future<void> tapMenuAction(WidgetTester tester, String label) async {
+      await tester.tap(find.byIcon(Icons.more_horiz));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(label));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('Can pin and unpin the study from the menu', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+      final study = makeStudy().copyWith(name: 'My repertoire');
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (study, null, '{pgn 1}'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(readPinnedStudies(tester).studies, isEmpty);
+
+      await tapMenuAction(tester, 'Pin study');
+
+      expect(readPinnedStudies(tester).studies, [
+        const PinnedStudy(
+          id: testId,
+          name: 'My repertoire',
+          chapterCount: 1,
+          lastChapterId: StudyChapterId('1'),
+        ),
+      ]);
+
+      await tapMenuAction(tester, 'Unpin study');
+
+      expect(readPinnedStudies(tester).studies, isEmpty);
+    });
+
+    testWidgets('Remembers the last viewed chapter of a pinned study', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+      final studyChapter1 = makeStudy(
+        chapters: IList(const [
+          StudyChapterMeta(id: StudyChapterId('1'), name: 'Chapter 1', fen: null),
+          StudyChapterMeta(id: StudyChapterId('2'), name: 'Chapter 2', fen: null),
+        ]),
+      );
+      final studyChapter2 = studyChapter1.copyWith(
+        chapter: makeChapter(id: const StudyChapterId('2')),
+      );
+      // Moves, so that the end of the chapter (with its next chapter button) is not reached.
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (studyChapter1, null, '{pgn 1} 1. e4 e5'));
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('2')))
+          .thenAnswer((_) async => (studyChapter2, null, '{pgn 2} 1. d4 d5'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tapMenuAction(tester, 'Pin study');
+      expect(readPinnedStudies(tester).studies.single.lastChapterId, const StudyChapterId('1'));
+
+      await tester.tap(findByTooltip('2 Chapters'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('2 Chapter 2', findRichText: true));
+      await tester.pumpAndSettle();
+
+      expect(readPinnedStudies(tester).studies.single.lastChapterId, const StudyChapterId('2'));
+    });
+
+    testWidgets('Opens the default chapter if the last viewed chapter was deleted', (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+      when(() => mockRepository.getStudy(id: testId, chapterId: const StudyChapterId('deleted')))
+          .thenThrow(ServerException(404, 'Not found', Uri(path: '/study/$testId/deleted'), null));
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (makeStudy(), null, '{pgn 1}'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: StudyChapterId('deleted'))),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Failed to load study.'), findsNothing);
+      expect(find.text('pgn 1'), findsOneWidget);
+    });
+
+    testWidgets('Can unpin a pinned study that fails to load', (WidgetTester tester) async {
+      final mockRepository = MockStudyRepository();
+      when(() => mockRepository.getStudy(id: testId)).thenThrow(Exception('not found'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+        defaultPreferences: {
+          SessionPreferencesStorage.key(PrefCategory.pinnedStudies.storageKey, null): jsonEncode(
+            const PinnedStudies(
+              studies: IListConst([
+                PinnedStudy(id: testId, name: 'Deleted study', chapterCount: 3),
+              ]),
+            ).toJson(),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Failed to load study.'), findsOneWidget);
+
+      await tester.tap(find.text('Unpin study'));
+      await tester.pumpAndSettle();
+
+      expect(readPinnedStudies(tester).studies, isEmpty);
+      expect(find.text('Unpin study'), findsNothing);
     });
   });
 }

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/learn/pinned_studies_section.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
@@ -146,6 +147,7 @@ class const _Body() extends ConsumerWidget {
             // replaced by the outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
             if (connectionStatus == LichessConnectionStatus.online) ...[
+              const PinnedStudiesSection(),
               ListSection(
                 header: Text(context.l10n.studyMenu),
                 onHeaderTap: () =>
