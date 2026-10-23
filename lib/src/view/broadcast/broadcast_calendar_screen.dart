@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const BroadcastCalendarScreen({
@@ -69,10 +69,12 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
     final params = (year: year, month: month);
     final calendar = ref.watch(broadcastCalendarProvider(params));
     final maxYear = DateTime.now().year + 1;
+    final canGoToPreviousMonth = year > 2020 || month > 1;
+    final canGoToNextMonth = year < maxYear || month < 12;
     final years = [for (int y = 2020; y <= maxYear; y++) y];
 
-    return Scaffold(
-      appBar: AppBar(title: AppBarTitleText(context.l10n.broadcastBroadcastCalendar)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.broadcastBroadcastCalendar)),
       body: Column(
         children: [
           Padding(
@@ -81,7 +83,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
               children: [
                 IconButton(
                   icon: const Icon(Icons.chevron_left),
-                  onPressed: goToPreviousMonth,
+                  onPressed: canGoToPreviousMonth ? goToPreviousMonth : null,
                   tooltip: 'Previous month',
                 ),
                 Expanded(
@@ -140,7 +142,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
-                  onPressed: goToNextMonth,
+                  onPressed: canGoToNextMonth ? goToNextMonth : null,
                   tooltip: 'Next month',
                 ),
               ],
@@ -196,7 +198,7 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                               onPressed: () =>
                                   ref.refresh(broadcastCalendarProvider(params).future),
                               icon: const Icon(Icons.refresh),
-                              label: const Text('Retry'),
+                              label: Text(context.l10n.retry),
                             ),
                           ],
                         ),
