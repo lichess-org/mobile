@@ -7694,6 +7694,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
 
   @override
+  String get tfaAuthenticationCode => 'Код аутентификации';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Откройте приложение для двухфакторной аутентификации на вашем устройстве, чтобы просмотреть код аутентификации и подтвердить свою личность.';
+
+  @override
   String get timeagoJustNow => 'только что';
 
   @override

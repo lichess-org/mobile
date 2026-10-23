@@ -1979,6 +1979,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Battaglia ad {count} squadra} other{Battaglia a {count} squadre}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Un leader per squadra} other{{count} leader per squadra}}",
   "tfaTwoFactorAuth": "Autenticazione a due fattori",
+  "tfaAuthenticationCode": "Codice di autenticazione",
+  "tfaOpenTwoFactorApp": "Apri l'app di autenticazione a due fattori sul tuo dispositivo per visualizzare il tuo codice di autenticazione e verificare la tua identità.",
   "timeagoJustNow": "adesso",
   "timeagoRightNow": "adesso",
   "timeagoCompleted": "completato",

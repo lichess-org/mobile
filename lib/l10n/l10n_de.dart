@@ -7540,6 +7540,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Authentifizierung';
 
   @override
+  String get tfaAuthenticationCode => 'Authentifizierungscode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Öffne auf deinem Gerät die App zur zweistufigen Authentifizierung, um deinen Authentifizierungscode anzuzeigen und deine Identität zu bestätigen.';
+
+  @override
   String get timeagoJustNow => 'in Kürze';
 
   @override

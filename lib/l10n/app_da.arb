@@ -2159,6 +2159,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Kamp mellem {count} hold} other{Kamp mellem {count} hold}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{En leder pr. hold} other{{count} ledere pr. hold}}",
   "tfaTwoFactorAuth": "To-faktor-godkendelse",
+  "tfaAuthenticationCode": "Bekræftelseskode",
+  "tfaOpenTwoFactorApp": "Åbn to-faktor-godkendelsesappen på din enhed for at se din godkendelseskode og bekræfte din identitet.",
   "timeagoJustNow": "for lidt siden",
   "timeagoRightNow": "netop nu",
   "timeagoCompleted": "afsluttet",

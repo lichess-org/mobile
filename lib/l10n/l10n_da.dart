@@ -7540,6 +7540,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get tfaTwoFactorAuth => 'To-faktor-godkendelse';
 
   @override
+  String get tfaAuthenticationCode => 'Bekræftelseskode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Åbn to-faktor-godkendelsesappen på din enhed for at se din godkendelseskode og bekræfte din identitet.';
+
+  @override
   String get timeagoJustNow => 'for lidt siden';
 
   @override

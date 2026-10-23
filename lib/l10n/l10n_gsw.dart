@@ -7540,6 +7540,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Zwei-Faktor-Autentifizierig';
 
   @override
+  String get tfaAuthenticationCode => 'Authentifizierigscode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Mach d\'App für d\'Zwei-Faktor-Authentifizierig uf, det findsch de Code, wo dini Identität beschtätigt.';
+
+  @override
   String get timeagoJustNow => 'grad jetzt';
 
   @override

@@ -7540,6 +7540,12 @@ class AppLocalizationsMk extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Двофакторна автентикација';
 
   @override
+  String get tfaAuthenticationCode => 'Код за автентикација';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Отворете ја апликацијата со двофакторна автентикација на вашиот уред, за да го видите вашиот код за автентикација и да го потврдите вашиот идентитет.';
+
+  @override
   String get timeagoJustNow => 'тукушто';
 
   @override

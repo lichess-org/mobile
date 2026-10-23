@@ -1936,6 +1936,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} tima} few{Bitka {count} tima} other{Bitka {count} timova}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Jedan vođa po timu} few{{count} vođe po timu} other{{count} vođa po timu}}",
   "tfaTwoFactorAuth": "Dvofaktorska provjera autentičnosti",
+  "tfaAuthenticationCode": "Kod za provjeru autentičnosti",
+  "tfaOpenTwoFactorApp": "Otvorite aplikaciju za autentikaciju s dva faktora na Vašem uređaju da vidite Vaš kod za autentikaciju i potvrdite Vaš identitet.",
   "timeagoJustNow": "upravo sada",
   "timeagoRightNow": "upravo sada",
   "timeagoCompleted": "završeno",

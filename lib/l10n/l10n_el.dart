@@ -7540,6 +7540,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
 
   @override
+  String get tfaAuthenticationCode => 'Κωδικός ταυτοποίησης';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ανοίξτε την εφαρμογή ελέγχου ταυτότητας δύο παραγόντων στη συσκευή σας για να δείτε τον κωδικό ταυτοποίησης και να επαληθεύσετε την ταυτότητά σας.';
+
+  @override
   String get timeagoJustNow => 'μόλις τώρα';
 
   @override

@@ -7540,6 +7540,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Tweeledige verifikasie';
 
   @override
+  String get tfaAuthenticationCode => 'Verifikasie kode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Maak die twee-faktor verifikasie toep of jou toestel oop om die verifikasie kode te sien en jou identiteit te bevestig.';
+
+  @override
   String get timeagoJustNow => 'sopas';
 
   @override

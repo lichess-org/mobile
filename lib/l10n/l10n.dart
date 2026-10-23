@@ -13354,6 +13354,18 @@ abstract class AppLocalizations {
   /// **'Two-factor authentication'**
   String get tfaTwoFactorAuth;
 
+  /// No description provided for @tfaAuthenticationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication code'**
+  String get tfaAuthenticationCode;
+
+  /// No description provided for @tfaOpenTwoFactorApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the two-factor authentication app on your device to view your authentication code and verify your identity.'**
+  String get tfaOpenTwoFactorApp;
+
   /// No description provided for @timeagoJustNow.
   ///
   /// In en, this message translates to:

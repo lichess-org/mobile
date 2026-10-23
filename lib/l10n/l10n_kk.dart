@@ -7540,6 +7540,12 @@ class AppLocalizationsKk extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Екісатылы өкіл-растау';
 
   @override
+  String get tfaAuthenticationCode => 'Өкіл-растау құлыпсаны';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Өкіл-растау құлыпсанын көру әрі тұлғаңызды растау үшін құрылғыңызда екісатылы өкіл-растайтын қолданбаны ашыңыз.';
+
+  @override
   String get timeagoJustNow => 'жаңа ғана';
 
   @override

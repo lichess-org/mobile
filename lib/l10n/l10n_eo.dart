@@ -7540,6 +7540,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Dufaza aŭtentigo';
 
   @override
+  String get tfaAuthenticationCode => 'Aŭtentiga kodo';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Malfermu la dufazan aŭtentigan apon en via aparato por vidi vian aŭtentigan kodon kaj kontrolu vian identecon.';
+
+  @override
   String get timeagoJustNow => 'ĵus nun';
 
   @override

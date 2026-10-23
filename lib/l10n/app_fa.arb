@@ -2142,6 +2142,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{نبرد یک تیم} other{نبرد {count} تیم}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{یک رهبر از هر تیم} other{{count} رهبر از هر تیم}}",
   "tfaTwoFactorAuth": "راستین‌آزمایی دوعاملی",
+  "tfaAuthenticationCode": "کد هویت‌سنجی",
+  "tfaOpenTwoFactorApp": "بَرکِ راستین‌آزمایی دوعاملی را در اَفزاره‌تان باز کنید تا کد راستین‌آزمایی را ببینید و هویت‌تان را تایید کنید.",
   "timeagoJustNow": "چند لحظه پیش",
   "timeagoRightNow": "هم‌اکنون",
   "timeagoCompleted": "کامل شده",

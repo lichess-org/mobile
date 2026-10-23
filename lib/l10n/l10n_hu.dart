@@ -7540,6 +7540,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Kétlépcsős azonosítás';
 
   @override
+  String get tfaAuthenticationCode => 'Hitelesítő kód';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Nyisd meg a kétlépcsős azonosítási alkalmazást az eszközödön az azonosító kódért, és igazold a személyazonosságod.';
+
+  @override
   String get timeagoJustNow => 'épp most';
 
   @override

@@ -7694,6 +7694,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Двофакторна автентифікація';
 
   @override
+  String get tfaAuthenticationCode => 'Код автентифікації';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Відкрийте застосунок для двофакторної автентифікації на вашому пристрої, щоб переглянути ваш код автентифікації та підтвердити вашу особу.';
+
+  @override
   String get timeagoJustNow => 'щойно';
 
   @override

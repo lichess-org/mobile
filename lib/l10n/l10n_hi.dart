@@ -7538,6 +7538,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get tfaTwoFactorAuth => 'दो-चरण प्रमाणीकरण';
 
   @override
+  String get tfaAuthenticationCode => 'प्रमाणीकरण कोड';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'अपना प्रमाणीकरण कोड देखने और अपनी पहचान सत्यापित करने के लिए अपने डिवाइस पर दो-कारक प्रमाणीकरण ऐप खोलें।';
+
+  @override
   String get timeagoJustNow => 'अभी';
 
   @override

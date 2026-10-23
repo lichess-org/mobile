@@ -2188,6 +2188,8 @@
   "teamBattleOfNbTeams": "{count, plural, other{バトル、{count} チーム}}",
   "teamNbLeadersPerTeam": "{count, plural, other{各チーム {count} 人がリーダー}}",
   "tfaTwoFactorAuth": "2 要素認証",
+  "tfaAuthenticationCode": "認証コード",
+  "tfaOpenTwoFactorApp": "デバイスで 2 要素認証アプリを開き、認証コードを表示して確認してださい。",
   "timeagoJustNow": "たった今",
   "timeagoRightNow": "たった今",
   "timeagoCompleted": "完了",

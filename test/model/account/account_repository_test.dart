@@ -69,5 +69,26 @@ void main() {
 
       expect(result.autoQueen, AutoQueen.premove);
     });
+
+    test('closeAccount posts username, passwd, token and forever', () async {
+      Map<String, String>? posted;
+      String? path;
+
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/account/close') {
+          path = request.url.path;
+          posted = Map<String, String>.from(request.bodyFields);
+          return mockResponse('', 204);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await lichessClientContainer(mockClient);
+      final repo = container.read(accountRepositoryProvider);
+      await repo.closeAccount(username: 'alice', password: 'secret', token: '', forever: true);
+
+      expect(path, '/account/close');
+      expect(posted, {'username': 'alice', 'passwd': 'secret', 'token': '', 'forever': 'true'});
+    });
   });
 }

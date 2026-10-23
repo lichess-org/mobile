@@ -7540,6 +7540,12 @@ class AppLocalizationsBg extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Двуфакторно удостоверяване';
 
   @override
+  String get tfaAuthenticationCode => 'Код за удостоверяване';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Отворете приложението за двуфакторно удостоверяване на устройството Ви за да намерите кода за удостоверяване и да потвърдите самоличността си.';
+
+  @override
   String get timeagoJustNow => 'току що';
 
   @override

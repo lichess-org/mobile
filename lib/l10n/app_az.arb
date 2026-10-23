@@ -1451,6 +1451,8 @@
   "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər} other{PGN mətninizi bura yapışdırın, ən çox {count} oyuna qədər}}",
   "teamTeam": "Komanda",
   "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə",
+  "tfaAuthenticationCode": "Kimlik təsdiqləmə kodu",
+  "tfaOpenTwoFactorApp": "Kimlik təsdiqləmə koduna baxmaq və kimliyinizi təsdiqləmək üçün cihazınızdakı iki mərhələli kimlik təsdiqləmə tətbiqini açın.",
   "timeagoJustNow": "elə indi",
   "timeagoRightNow": "indicə",
   "timeagoCompleted": "tamamlanan"

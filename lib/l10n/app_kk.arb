@@ -1729,6 +1729,8 @@
   "teamTeam": "Топ",
   "teamIncorrectEntryCode": "Құпиясөз қате.",
   "tfaTwoFactorAuth": "Екісатылы өкіл-растау",
+  "tfaAuthenticationCode": "Өкіл-растау құлыпсаны",
+  "tfaOpenTwoFactorApp": "Өкіл-растау құлыпсанын көру әрі тұлғаңызды растау үшін құрылғыңызда екісатылы өкіл-растайтын қолданбаны ашыңыз.",
   "timeagoJustNow": "жаңа ғана",
   "timeagoRightNow": "дәл қазір",
   "timeagoCompleted": "аяқталған",

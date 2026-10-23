@@ -2187,6 +2187,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Bătălia echipelor {count}} few{Bătălia echipelor {count}} other{Bătălia echipelor {count}}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Un lider per echipă} few{{count} lideri per echipă} other{{count} de lideri per echipă}}",
   "tfaTwoFactorAuth": "Autentificare în doi pași",
+  "tfaAuthenticationCode": "Cod de autentificare",
+  "tfaOpenTwoFactorApp": "Deschideți aplicația de autentificare cu doi factori de pe dispozitivul dvs pentru a vedea codul de autentificare și a verifica identitatea dvs.",
   "timeagoJustNow": "chiar acum",
   "timeagoRightNow": "chiar acum",
   "timeagoCompleted": "completat",
