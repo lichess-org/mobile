@@ -251,7 +251,12 @@ class const EmailLinkifier() extends Linkifier {
   }
 }
 
-final _userTagRegex = RegExp(r'^(.*?)(@[\w@]+(?:[.!][\w@]+)*)', caseSensitive: false, dotAll: true);
+// Same rule as lila's UserName.atRegex.
+final _userTagRegex = RegExp(
+  r'^(.*?)(@[\w-]{2,30}(?![@\w-]|\.\w))',
+  caseSensitive: false,
+  dotAll: true,
+);
 
 class const UserTagLinkifier() extends Linkifier {
   @override
