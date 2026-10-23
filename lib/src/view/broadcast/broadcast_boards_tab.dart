@@ -164,19 +164,6 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     );
     final searchQuery = _searchQuery;
     final allGameIds = widget.gameIds;
-<<<<<<< HEAD
-    // While searching, rebuilds only when the list of matching games changes.
-    final gameIds = allGameIds == null || searchQuery.isEmpty
-        ? allGameIds
-        : ref.watch(
-            broadcastRoundControllerProvider(widget.roundId).select(
-              (state) => allGameIds.where((gameId) {
-                final game = state.value?.games[gameId];
-                return game != null && _containsPlayer(game, searchQuery);
-              }).toIList(),
-            ),
-          );
-=======
     final matchedGameIds = ref.watch(
       broadcastRoundControllerProvider(widget.roundId).select(
         (state) => allGameIds?.where((gameId) {
@@ -186,7 +173,6 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
       ),
     );
     final gameIds = searchQuery.isEmpty ? allGameIds : matchedGameIds;
->>>>>>> d9c7060e6 (Watch broadcast search filter unconditionally)
 
     final showSearchBar = widget.gameIds != null && widget.gameIds!.length > 6;
     final pinnedComment = round?.pinnedComment;

@@ -165,30 +165,6 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           physics: const AlwaysScrollableScrollPhysics(),
                           slivers: [
                             for (final day in value)
-<<<<<<< HEAD
-                              SliverMainAxisGroup(
-                                slivers: [
-                                  SliverAppBar(
-                                    centerTitle: false,
-                                    automaticallyImplyLeading: false,
-                                    primary: false,
-                                    pinned: true,
-                                    title: switch (day.date) {
-                                      null => const AppBarTitleText('To be announced'),
-                                      final date => AppBarTitleText(
-                                        DateFormat.yMMMMd().format(date.toUtc()),
-                                      ),
-                                    },
-                                  ),
-                                  SliverList.separated(
-                                    separatorBuilder: (context, index) =>
-                                        const PlatformDivider(height: 1),
-                                    itemCount: day.broadcasts.length,
-                                    itemBuilder: (context, index) =>
-                                        BroadcastCalendarTile(broadcast: day.broadcasts[index]),
-                                  ),
-                                ],
-=======
                               SliverToBoxAdapter(
                                 child: ListSection(
                                   header: switch (day.date) {
@@ -201,7 +177,6 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                                       BroadcastCalendarTile(broadcast: broadcast),
                                   ],
                                 ),
->>>>>>> 803bbb8a5 (Calendar day groups use TV-style list sections)
                               ),
                           ],
                         ),
