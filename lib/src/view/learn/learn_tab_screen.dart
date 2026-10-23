@@ -121,7 +121,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.chessBasics, style: Styles.callout),
-                  onTap: () => Navigator.of(context).pushHidingTabBar(LearnScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).push(LearnScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.exercise),
@@ -129,7 +129,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.practice, style: Styles.callout),
-                  onTap: () => Navigator.of(context).pushHidingTabBar(PracticeScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).push(PracticeScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.where_to_vote),
