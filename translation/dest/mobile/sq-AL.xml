@@ -8,6 +8,7 @@
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Rregullime fushe</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulojeni ofertën për prapakthim</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Sfida u krijua: Do të njoftoheni, kur të fillojë loja.\nMund ta përdorni që nga skeda shtëpi.</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Mekanizëm shahu</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Spastroje</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Spastroje lëvizjen e ruajtur</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Përshtateni</string>
@@ -22,7 +23,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Mirëmbrëma</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Lëvizje e mirë, por ka edhe më mirë</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kreu</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmetues drejtpërsëdrejti</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Lojë e re</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nuk ka rezultate</string>
@@ -50,6 +50,8 @@
   <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Vendndodhje e synuar për gurin e tërhequr</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Rreth</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Katror</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Ngjyrë formash të vizatuara</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Kjo ngjyrë përdoret për forma të vizatuara me dorë duke përdorur dy gishta.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Widget-e kreu</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Modaliteti zhytës</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Fshihe UI-n e sistemit kur luhet. Përdoreni këtë nëse ju bezdisin gjestet e sistemit për lëvizje në skaje të ekranit. Vlen për skena lojërash dhe puzzle-sh.</string>

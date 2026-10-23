@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Se hai unha conta asociada ao correo electrónico %1$s, enviouse a este enderezo un código de %2$s caracteres. Comproba a túa bandexa de entrada e introduce este código a continuación.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">O código é incorrecto ou caducou.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en directo</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño da base de datos local</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mover ao soltar</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Cando moves unha peza premendo dúas casas, a xogada realízase só o levantares o dedo: deste xeito podes deslizalo para cambiar a casa de destino.</string>
@@ -123,6 +122,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Amosar o bordo</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Resposta táctil</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Se está activada, o dispositivo vibrará ó moveres ou capturares unha peza.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Compartir</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Partillar URL de desafío</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir o URL da partida</string>
