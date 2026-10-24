@@ -52,6 +52,7 @@ void main() {
 [
   {"tour":{"id":"bbbbbbb1","name":"Tour B","slug":"tour-b"},"round":{"id":"rrrrrrr3","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790899200000}},
   {"tour":{"id":"ccccccc1","name":"Undated Tour","slug":"undated-tour"},"round":{"id":"rrrrrrr9","name":"Round TBD","slug":"round-tbd","ongoing":false,"finished":false,"startsAfterPrevious":true}},
+  {"tour":{"id":"ddddddd1","name":"Another Undated Tour","slug":"another-undated-tour"},"round":{"id":"rrrrrrr8","name":"Round TBD","slug":"round-tbd","ongoing":false,"finished":false,"startsAfterPrevious":true}},
   {"tour":{"id":"aaaaaaa1","name":"Tour A","slug":"tour-a"},"round":{"id":"rrrrrrr1","name":"Round 1","slug":"round-1","ongoing":false,"finished":false,"startsAt":1790812800000}}
 ]
 ''',
@@ -67,7 +68,11 @@ void main() {
 
       final response = await repo.getCalendar(year: 2026, month: 10);
 
-      expect(response.map((broadcast) => broadcast.title), ['Tour A', 'Tour B', 'Undated Tour']);
+      expect(response.take(2).map((broadcast) => broadcast.title), ['Tour A', 'Tour B']);
+      expect(
+        response.skip(2).map((broadcast) => broadcast.title),
+        unorderedEquals(['Undated Tour', 'Another Undated Tour']),
+      );
     });
 
     test('calendar provider groups by day and sorts', () async {

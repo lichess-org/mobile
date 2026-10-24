@@ -252,9 +252,9 @@ class const _BroadcastWidget(
   }
 }
 
-class const _BroadcastCalendarCard() extends ConsumerWidget {
+class const _BroadcastCalendarCard() extends StatelessWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return ListSection(
       margin: Styles.bodySectionPadding.copyWith(top: 12.0),
       hasLeading: true,

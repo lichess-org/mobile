@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_tile.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -72,13 +73,15 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
     final canGoToPreviousMonth = year > 2020 || month > 1;
     final canGoToNextMonth = year < maxYear || month < 12;
     final years = [for (int y = 2020; y <= maxYear; y++) y];
+    final isIOS = Theme.of(context).platform == .iOS;
 
     return PlatformScaffold(
+      extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(title: Text(context.l10n.broadcastBroadcastCalendar)),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 4.0, right: 4.0, top: 8.0, bottom: 8.0),
+            padding: const .symmetric(horizontal: 4.0, vertical: 8.0),
             child: Row(
               children: [
                 IconButton(
@@ -88,30 +91,43 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2.0),
+                    padding: const .symmetric(horizontal: 12.0, vertical: 2.0),
                     decoration: BoxDecoration(
                       border: Border.all(color: Theme.of(context).dividerColor),
-                      borderRadius: BorderRadius.circular(28.0),
+                      borderRadius: .circular(28.0),
                     ),
                     child: Row(
                       children: [
                         Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<int>(
-                              value: years.contains(year) ? year : null,
-                              isExpanded: true,
-                              items: [
-                                for (final y in years)
-                                  DropdownMenuItem(value: y, child: Text(y.toString())),
-                              ],
-                              onChanged: (value) {
-                                if (value != null) setState(() => year = value);
-                              },
-                            ),
-                          ),
+                          child: isIOS
+                              ? TextButton(
+                                  onPressed: () => showChoicePicker<int>(
+                                    context,
+                                    choices: years,
+                                    selectedItem: year,
+                                    labelBuilder: (value) => Text(value.toString()),
+                                    onSelectedItemChanged: (value) {
+                                      if (mounted) setState(() => year = value);
+                                    },
+                                  ),
+                                  child: Text(year.toString()),
+                                )
+                              : DropdownButtonHideUnderline(
+                                  child: DropdownButton<int>(
+                                    value: year,
+                                    isExpanded: true,
+                                    items: [
+                                      for (final y in years)
+                                        DropdownMenuItem(value: y, child: Text(y.toString())),
+                                    ],
+                                    onChanged: (value) {
+                                      if (value != null) setState(() => year = value);
+                                    },
+                                  ),
+                                ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: const .symmetric(horizontal: 8.0),
                           child: Container(
                             width: 1.0,
                             height: 20.0,
@@ -119,22 +135,36 @@ class _BroadcastCalendarScreenState() extends ConsumerState<BroadcastCalendarScr
                           ),
                         ),
                         Expanded(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<int>(
-                              value: month,
-                              isExpanded: true,
-                              items: [
-                                for (int m = 1; m <= 12; m++)
-                                  DropdownMenuItem(
-                                    value: m,
-                                    child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
+                          child: isIOS
+                              ? TextButton(
+                                  onPressed: () => showChoicePicker<int>(
+                                    context,
+                                    choices: [for (int m = 1; m <= 12; m++) m],
+                                    selectedItem: month,
+                                    labelBuilder: (value) =>
+                                        Text(DateFormat.MMMM().format(DateTime(2000, value))),
+                                    onSelectedItemChanged: (value) {
+                                      if (mounted) setState(() => month = value);
+                                    },
                                   ),
-                              ],
-                              onChanged: (value) {
-                                if (value != null) setState(() => month = value);
-                              },
-                            ),
-                          ),
+                                  child: Text(DateFormat.MMMM().format(DateTime(2000, month))),
+                                )
+                              : DropdownButtonHideUnderline(
+                                  child: DropdownButton<int>(
+                                    value: month,
+                                    isExpanded: true,
+                                    items: [
+                                      for (int m = 1; m <= 12; m++)
+                                        DropdownMenuItem(
+                                          value: m,
+                                          child: Text(DateFormat.MMMM().format(DateTime(2000, m))),
+                                        ),
+                                    ],
+                                    onChanged: (value) {
+                                      if (value != null) setState(() => month = value);
+                                    },
+                                  ),
+                                ),
                         ),
                       ],
                     ),

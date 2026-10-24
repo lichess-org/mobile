@@ -5,7 +5,7 @@ const kLichessHost = String.fromEnvironment('LICHESS_HOST', defaultValue: 'liche
 
 const kLichessWSHost = String.fromEnvironment(
   'LICHESS_WS_HOST',
-  defaultValue: 'socket.lichess.org',
+  defaultValue: 'socket.lichess.dev',
 );
 
 const kLichessWSSecret = String.fromEnvironment(

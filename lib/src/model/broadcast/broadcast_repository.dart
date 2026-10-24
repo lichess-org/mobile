@@ -106,7 +106,7 @@ class BroadcastRepository(final LichessClient client, final Aggregator aggregato
       ..sort((a, b) {
         final aStart = a.round.startsAt;
         final bStart = b.round.startsAt;
-        if (aStart == null) return 1;
+        if (aStart == null) return bStart == null ? 0 : 1;
         if (bStart == null) return -1;
         return aStart.compareTo(bStart);
       });

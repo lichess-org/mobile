@@ -157,7 +157,9 @@ void main() {
       expect(find.text('To be announced'), findsOneWidget);
     });
 
-    testWidgets('Shows live marker for started rounds', variant: kPlatformVariant, (tester) async {
+    testWidgets('Shows live marker only for ongoing rounds', variant: kPlatformVariant, (
+      tester,
+    ) async {
       final liveClient = MockClient((request) {
         if (request.url.path == '/api/broadcast/calendar/2026/10') {
           return mockResponse(
@@ -183,7 +185,17 @@ void main() {
         await tester.pump();
       });
 
-      expect(find.textContaining('LIVE'), findsNWidgets(2));
+      expect(find.textContaining('LIVE'), findsOneWidget);
+      final liveRow = find.ancestor(of: find.text('Live Tour'), matching: find.byType(ListTile));
+      expect(find.descendant(of: liveRow, matching: find.text('LIVE · Round 1')), findsOneWidget);
+      final startedRow = find.ancestor(
+        of: find.text('Started Tour'),
+        matching: find.byType(ListTile),
+      );
+      expect(
+        find.descendant(of: startedRow, matching: find.textContaining('Round 1 · ')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('Shows retry on error', variant: kPlatformVariant, (tester) async {

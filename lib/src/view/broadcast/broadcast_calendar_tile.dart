@@ -1,4 +1,3 @@
-import 'package:clock/clock.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -38,15 +37,9 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
 
   @override
   Widget build(BuildContext context) {
-    // The calendar payload has no `ongoing` flag, so a round that started and
-    // isn't finished counts as live.
-    final isLive =
-        broadcast.isLive ||
-        (broadcast.round.startsAt != null &&
-            !broadcast.isFinished &&
-            !broadcast.round.startsAt!.isAfter(clock.now()));
+    final isLive = broadcast.isLive;
 
-    final subtitle = broadcast.round.startsAt != null
+    final subtitle = !isLive && broadcast.round.startsAt != null
         ? '${broadcast.round.name} · ${relativeDate(context.l10n, broadcast.round.startsAt!)}'
         : broadcast.round.name;
 
@@ -58,12 +51,12 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
               width: coverWidth,
               height: coverHeight,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
+                borderRadius: .circular(8.0),
                 child: HttpNetworkImageWidget(
                   broadcast.tour.imageUrl!,
                   width: coverWidth,
                   height: coverHeight,
-                  fit: BoxFit.cover,
+                  fit: .cover,
                   errorBuilder: (context, _, _) => fallbackIcon,
                 ),
               ),
@@ -76,19 +69,14 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
                 children: [
                   TextSpan(
                     text: 'LIVE · ',
-                    style: TextStyle(
-                      color: context.lichessColors.error,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: context.lichessColors.error, fontWeight: .bold),
                   ),
                   TextSpan(text: subtitle),
                 ],
               ),
             )
           : Text(subtitle),
-      trailing: Theme.of(context).platform == TargetPlatform.iOS
-          ? const CupertinoListTileChevron()
-          : null,
+      trailing: Theme.of(context).platform == .iOS ? const CupertinoListTileChevron() : null,
       onTap: () {
         Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(broadcast));
       },

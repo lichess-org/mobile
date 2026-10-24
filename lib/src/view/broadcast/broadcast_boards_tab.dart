@@ -164,6 +164,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     );
     final searchQuery = _searchQuery;
     final allGameIds = widget.gameIds;
+    // While searching, rebuilds only when the list of matching games changes.
     final gameIds = allGameIds == null || searchQuery.isEmpty
         ? allGameIds
         : ref.watch(

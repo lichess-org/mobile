@@ -128,12 +128,8 @@ IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
     final day = DateTime.utc(startsAt.year, startsAt.month, startsAt.day);
     (byDay[day] ??= []).add(broadcast);
   }
-  final days = byDay.entries.toList(growable: false)..sort((a, b) => a.key.compareTo(b.key));
-  for (final entry in days) {
-    entry.value.sort((a, b) => a.round.startsAt!.compareTo(b.round.startsAt!));
-  }
   return <BroadcastCalendarDay>[
-    for (final entry in days) (date: entry.key, broadcasts: entry.value.toIList()),
+    for (final entry in byDay.entries) (date: entry.key, broadcasts: entry.value.toIList()),
     if (undated.isNotEmpty) (date: null, broadcasts: undated.toIList()),
   ].toIList();
 }
