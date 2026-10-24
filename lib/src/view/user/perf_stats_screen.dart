@@ -1182,6 +1182,7 @@ class _EloChartState() extends State<_EloChart> {
         AspectRatio(
           aspectRatio: 16 / 9,
           child: LineChart(
+            duration: Duration.zero,
             LineChartData(
               minX: _minX,
               maxX: _maxX,
