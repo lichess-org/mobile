@@ -209,32 +209,13 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 },
               ),
               statGroupSpace,
+              _GamesBreakdownCard(data: data),
+              statGroupSpace,
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.rated,
-                          child: _PercentageValueWidget(data.ratedGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.tournament,
-                          child: _PercentageValueWidget(data.tournamentGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatBerserkedGames.replaceAll(
-                            ' ${context.l10n.games.toLowerCase()}',
-                            '',
-                          ),
-                          child: _PercentageValueWidget(data.berserkGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatDisconnections,
-                          child: _PercentageValueWidget(data.disconnections, data.totalGames),
-                        ),
-                      ]),
                       StatCardRow([
                         StatCard(
                           context.l10n.averageOpponent,
@@ -548,6 +529,82 @@ class const _ResultColumn({
   }
 }
 
+class const _GamesBreakdownCard({required final UserPerfStats data}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final totalGames = data.totalGames;
+
+    return _StatsCard(
+      child: Column(
+        spacing: 16.0,
+        children: [
+          _BreakdownRow(
+            icon: Icons.emoji_events_outlined,
+            label: context.l10n.rated,
+            value: data.ratedGames,
+            totalGames: totalGames,
+          ),
+          _BreakdownRow(
+            icon: Icons.groups_outlined,
+            label: context.l10n.tournament,
+            value: data.tournamentGames,
+            totalGames: totalGames,
+          ),
+          _BreakdownRow(
+            icon: Icons.bolt,
+            label: context.l10n.perfStatBerserkedGames.replaceAll(
+              ' ${context.l10n.games.toLowerCase()}',
+              '',
+            ),
+            value: data.berserkGames,
+            totalGames: totalGames,
+          ),
+          _BreakdownRow(
+            icon: Icons.wifi_off,
+            label: context.l10n.perfStatDisconnections,
+            value: data.disconnections,
+            totalGames: totalGames,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class const _BreakdownRow({
+  required final IconData icon,
+  required final String label,
+  required final int value,
+  required final int totalGames,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final fraction = totalGames == 0 ? 0.0 : value / totalGames;
+
+    return Row(
+      children: [
+        Icon(icon, size: 22, color: textShade(context, 0.7)),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+          ),
+        ),
+        Text(
+          value.toString().localizeNumbers(),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(width: 10),
+        Text(
+          NumberFormat.percentPattern().format(fraction),
+          style: TextStyle(fontSize: 13, color: textShade(context, _customOpacity)),
+        ),
+      ],
+    );
+  }
+}
+
 class const _RatingRecord({
   required final String label,
   required final int? rating,
@@ -663,33 +720,6 @@ class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
     return game == null
         ? const Text('?', style: defaultDateStyle)
         : Text(_dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
-  }
-}
-
-class const _PercentageValueWidget(final int value, final int denominator) extends StatelessWidget {
-  String _getPercentageString(num numerator, num denominator) {
-    final fraction = denominator == 0 ? 0 : numerator / denominator;
-    return NumberFormat.percentPattern().format(fraction);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          value.toString().localizeNumbers(),
-          style: const TextStyle(fontSize: _defaultValueFontSize),
-        ),
-        Text(
-          _getPercentageString(value, denominator),
-          style: TextStyle(
-            fontSize: _defaultValueFontSize,
-            color: textShade(context, _customOpacity),
-          ),
-        ),
-      ],
-    );
   }
 }
 

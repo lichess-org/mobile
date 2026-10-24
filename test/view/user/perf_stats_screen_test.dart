@@ -107,6 +107,11 @@ void main() {
       expect(find.byType(ResultMeter), findsOneWidget);
       expect(find.text('40.0%'), findsNWidgets(2));
       expect(find.text('20.0%'), findsOneWidget);
+
+      // games breakdown
+      expect(find.text('Rated'), findsOneWidget);
+      expect(find.text('60%'), findsOneWidget);
+      expect(find.text('20%'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
