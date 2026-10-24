@@ -234,7 +234,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               _StreakCard(
                 title: context.l10n.perfStatWinningStreak,
-                icon: LichessIcons.streak,
+                icon: Icons.local_fire_department,
                 color: context.lichessColors.good,
                 currentStreak: data.curWinStreak,
                 maxStreak: data.maxWinStreak,
@@ -242,7 +242,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               _StreakCard(
                 title: context.l10n.perfStatLosingStreak,
-                icon: Icons.trending_down,
+                icon: Icons.local_fire_department,
                 color: context.lichessColors.error,
                 currentStreak: data.curLossStreak,
                 maxStreak: data.maxLossStreak,
@@ -335,7 +335,7 @@ class const _RatingCard({
           // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
           _StatRow(
             label: context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
-            trailing: ProgressionWidget(data.progress),
+            trailing: ProgressionWidget(data.progress, useTrendArrows: true),
           ),
           if (data.rank != null) ...[
             const SizedBox(height: 10),
@@ -603,7 +603,7 @@ class const _AverageOpponentCard({required final UserPerfStats data}) extends St
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(LichessIcons.crossed_swords, size: 28, color: textShade(context, 0.7)),
+          Icon(LichessIcons.target, size: 28, color: textShade(context, 0.7)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
