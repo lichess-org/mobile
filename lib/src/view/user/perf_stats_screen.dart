@@ -39,6 +39,27 @@ import 'package:material_ui/material_ui.dart';
 
 DateFormat get _dateFormatter => DateFormat.yMMMd();
 
+String? _formatStreakDates(UserStreak? streak) {
+  final start = streak?.startGame?.finishedAt;
+  final end = streak?.endGame?.finishedAt;
+  if (start == null || end == null) return null;
+  if (start.year == end.year) {
+    return '${DateFormat.MMMd().format(start)} – ${_dateFormatter.format(end)}';
+  }
+  return '${_dateFormatter.format(start)} – ${_dateFormatter.format(end)}';
+}
+
+int _streakValue(UserStreak? streak) => switch (streak) {
+  null => 0,
+  UserGameStreak(:final gamesPlayed) => gamesPlayed,
+  UserTimeStreak(:final timePlayed) => timePlayed.inSeconds,
+};
+
+String _streakValueLabel(BuildContext context, UserStreak streak) => switch (streak) {
+  UserGameStreak(:final gamesPlayed) => context.l10n.nbGames(gamesPlayed),
+  UserTimeStreak(:final timePlayed) => timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+};
+
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
@@ -213,6 +234,22 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               _AverageOpponentCard(data: data),
               statGroupSpace,
+              _StreakCard(
+                title: context.l10n.perfStatWinningStreak,
+                icon: Icons.local_fire_department,
+                color: context.lichessColors.good,
+                currentStreak: data.curWinStreak,
+                maxStreak: data.maxWinStreak,
+              ),
+              statGroupSpace,
+              _StreakCard(
+                title: context.l10n.perfStatLosingStreak,
+                icon: Icons.trending_down,
+                color: context.lichessColors.error,
+                currentStreak: data.curLossStreak,
+                maxStreak: data.maxLossStreak,
+              ),
+              statGroupSpace,
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -224,26 +261,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
                           value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
                         ),
                       ]),
-                      _StatGroup(
-                        title: context.l10n.perfStatWinningStreak,
-                        children: [
-                          _StreakWidget(
-                            data.maxWinStreak,
-                            data.curWinStreak,
-                            color: context.lichessColors.good,
-                          ),
-                        ],
-                      ),
-                      _StatGroup(
-                        title: context.l10n.perfStatLosingStreak,
-                        children: [
-                          _StreakWidget(
-                            data.maxLossStreak,
-                            data.curLossStreak,
-                            color: context.lichessColors.error,
-                          ),
-                        ],
-                      ),
                       _StatGroup(
                         title: context.l10n.perfStatGamesInARow,
                         children: [_StreakWidget(data.maxPlayStreak, data.curPlayStreak)],
@@ -645,6 +662,112 @@ class const _AverageOpponentCard({required final UserPerfStats data}) extends St
   }
 }
 
+class const _StreakCard({
+  required final String title,
+  required final IconData icon,
+  required final Color color,
+  required final UserStreak? currentStreak,
+  required final UserStreak? maxStreak,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final current = currentStreak;
+    final best = maxStreak;
+    final currentValue = current == null || current.isValueEmpty
+        ? '-'
+        : _streakValueLabel(context, current);
+    final maxValue = best == null || best.isValueEmpty ? '-' : _streakValueLabel(context, best);
+    final bestValue = _streakValue(best);
+    final progress = bestValue == 0 ? 0.0 : (_streakValue(current) / bestValue).clamp(0.0, 1.0);
+    final currentDates = _formatStreakDates(current);
+    final maxDates = _formatStreakDates(best);
+    final supportingStyle = TextStyle(
+      fontSize: _supportingFontSize,
+      color: textShade(context, _customOpacity),
+    );
+
+    return _StatsCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _IconTile(icon, color: color),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 6),
+                    Text(
+                      currentValue,
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
+                    ),
+                    Text(
+                      context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
+                      style: supportingStyle,
+                    ),
+                    if (currentDates != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        currentDates,
+                        style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
+                      style: supportingStyle,
+                      textAlign: TextAlign.end,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      maxValue,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color),
+                      textAlign: TextAlign.end,
+                    ),
+                    if (maxDates != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        maxDates,
+                        style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
+                        textAlign: TextAlign.end,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ExcludeSemantics(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4.0),
+              child: LinearProgressIndicator(
+                value: progress,
+                minHeight: 8.0,
+                backgroundColor: color.withValues(alpha: 0.15),
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class const _RatingRecord({
   required final String label,
   required final int? rating,
@@ -714,10 +837,10 @@ class const _StatRow({required final String label, final String? value, final Wi
   }
 }
 
-class const _IconTile(final IconData icon) extends StatelessWidget {
+class const _IconTile(final IconData icon, {final Color? color}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final tileColor = Styles.chartColor(context);
+    final tileColor = color ?? Styles.chartColor(context);
 
     return Container(
       width: 40,
@@ -763,14 +886,11 @@ class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
   }
 }
 
-class const _StreakWidget(
-  final UserStreak? maxStreak,
-  final UserStreak? curStreak, {
-  final Color? color,
-}) extends StatelessWidget {
+class const _StreakWidget(final UserStreak? maxStreak, final UserStreak? curStreak)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final valueStyle = TextStyle(fontSize: _defaultValueFontSize, color: color);
+    const valueStyle = TextStyle(fontSize: _defaultValueFontSize);
 
     final streakTitleStyle = TextStyle(
       fontSize: _defaultStatFontSize,

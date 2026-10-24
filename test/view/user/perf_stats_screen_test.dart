@@ -117,6 +117,14 @@ void main() {
       await tester.scrollUntilVisible(find.text('Average opponent'), 200);
       expect(find.widgetWithText(Card, 'Average opponent'), findsOneWidget);
       expect(find.widgetWithText(Card, '1,401'), findsOneWidget);
+
+      // winning and losing streaks
+      await tester.scrollUntilVisible(find.text('Winning streak'), 200);
+      expect(find.widgetWithText(Card, 'Winning streak'), findsOneWidget);
+      expect(find.widgetWithText(Card, '9 games'), findsNWidgets(2));
+      await tester.scrollUntilVisible(find.text('Losing streak'), 200);
+      expect(find.widgetWithText(Card, 'Losing streak'), findsOneWidget);
+      expect(find.widgetWithText(Card, '3 games'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
@@ -162,7 +170,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // end of the current and of the longest winning streaks
-      final streakEnd = find.text('Jan 20, 2023');
+      final streakEnd = find.textContaining('Jan 20, 2023');
       await tester.scrollUntilVisible(
         streakEnd.first,
         200,
@@ -176,7 +184,7 @@ void main() {
       await container.read(generalPreferencesProvider.notifier).setLocale(const Locale('de'));
       await tester.pumpAndSettle();
 
-      expect(find.text('20. Jan. 2023'), findsWidgets);
+      expect(find.textContaining('20. Jan. 2023'), findsWidgets);
       expect(streakEnd, findsNothing);
     }, variant: kPlatformVariant);
   });
