@@ -32,6 +32,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
+import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -195,80 +196,24 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 isMe: loggedInUser?.user.id == user.id,
               ),
               statGroupSpace,
-              Semantics(
-                container: true,
-                enabled: true,
-                button: true,
-                label: context.l10n.perfStatViewTheGames,
-                child: Tooltip(
-                  excludeFromSemantics: true,
-                  message: context.l10n.perfStatViewTheGames,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        GameHistoryScreen.buildRoute(
-                          user: user.lightUser,
-                          isOnline: true,
-                          gameFilter: GameFilterState(perfs: ISet({perf})),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                            style: Styles.sectionTitle,
-                          ),
-                          Text(
-                            data.totalGames.toString().localizeNumbers(),
-                            style: _mainValueStyle,
-                          ),
-                          Text(
-                            String.fromCharCode(Icons.arrow_forward_ios.codePoint),
-                            style: Styles.sectionTitle.copyWith(fontFamily: 'MaterialIcons'),
-                          ),
-                        ],
-                      ),
+              _TotalGamesCard(
+                data: data,
+                onViewGames: () {
+                  Navigator.of(context).push(
+                    GameHistoryScreen.buildRoute(
+                      user: user.lightUser,
+                      isOnline: true,
+                      gameFilter: GameFilterState(perfs: ISet({perf})),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
+              statGroupSpace,
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.wins,
-                          child: _PercentageValueWidget(
-                            data.wonGames,
-                            data.totalGames,
-                            color: context.lichessColors.good,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.draws,
-                          child: _PercentageValueWidget(
-                            data.drawnGames,
-                            data.totalGames,
-                            color: textShade(context, _customOpacity),
-                            isShaded: true,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.losses,
-                          child: _PercentageValueWidget(
-                            data.lostGames,
-                            data.totalGames,
-                            color: context.lichessColors.error,
-                          ),
-                        ),
-                      ]),
                       StatCardRow([
                         StatCard(
                           context.l10n.rated,
@@ -469,6 +414,140 @@ class const _RatingCard({
   }
 }
 
+class const _TotalGamesCard({
+  required final UserPerfStats data,
+  required final VoidCallback onViewGames,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
+
+    return _StatsCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.perfStatTotalGames,
+            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+          ),
+          const SizedBox(height: 4),
+          Text(data.totalGames.toString().localizeNumbers(), style: _mainValueStyle),
+          const SizedBox(height: 16),
+          ResultMeter(
+            wins: data.wonGames,
+            draws: data.drawnGames,
+            losses: data.lostGames,
+            height: 12,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _ResultColumn(
+                  label: context.l10n.wins,
+                  value: data.wonGames,
+                  totalGames: data.totalGames,
+                  color: context.lichessColors.good,
+                ),
+              ),
+              Container(
+                width: 1,
+                height: 64,
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                color: dividerColor,
+              ),
+              Expanded(
+                child: _ResultColumn(
+                  label: context.l10n.draws,
+                  value: data.drawnGames,
+                  totalGames: data.totalGames,
+                ),
+              ),
+              Container(
+                width: 1,
+                height: 64,
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                color: dividerColor,
+              ),
+              Expanded(
+                child: _ResultColumn(
+                  label: context.l10n.losses,
+                  value: data.lostGames,
+                  totalGames: data.totalGames,
+                  color: context.lichessColors.error,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Divider(height: 1, color: dividerColor),
+          Tooltip(
+            excludeFromSemantics: true,
+            message: context.l10n.perfStatViewTheGames,
+            child: InkWell(
+              borderRadius: Styles.cardBorderRadius,
+              onTap: onViewGames,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        context.l10n.perfStatViewTheGames,
+                        style: TextStyle(fontSize: _labelFontSize, color: textShade(context, 0.8)),
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: textShade(context, _customOpacity),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class const _ResultColumn({
+  required final String label,
+  required final int value,
+  required final int totalGames,
+  final Color? color,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final fraction = totalGames == 0 ? 0.0 : value / totalGames;
+    final percentFormat = NumberFormat.percentPattern()
+      ..minimumFractionDigits = 1
+      ..maximumFractionDigits = 1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value.toString().localizeNumbers(),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
+        ),
+        Text(
+          percentFormat.format(fraction),
+          style: TextStyle(fontSize: _labelFontSize, color: textShade(context, 0.7)),
+        ),
+      ],
+    );
+  }
+}
+
 class const _RatingRecord({
   required final String label,
   required final int? rating,
@@ -587,12 +666,7 @@ class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
   }
 }
 
-class const _PercentageValueWidget(
-  final int value,
-  final int denominator, {
-  final Color? color,
-  final bool isShaded = false,
-}) extends StatelessWidget {
+class const _PercentageValueWidget(final int value, final int denominator) extends StatelessWidget {
   String _getPercentageString(num numerator, num denominator) {
     final fraction = denominator == 0 ? 0 : numerator / denominator;
     return NumberFormat.percentPattern().format(fraction);
@@ -605,19 +679,13 @@ class const _PercentageValueWidget(
       children: [
         Text(
           value.toString().localizeNumbers(),
-          style: TextStyle(fontSize: _defaultValueFontSize, color: color),
+          style: const TextStyle(fontSize: _defaultValueFontSize),
         ),
         Text(
           _getPercentageString(value, denominator),
           style: TextStyle(
             fontSize: _defaultValueFontSize,
-            color: color == null
-                ? isShaded
-                      ? textShade(context, _customOpacity / 2)
-                      : textShade(context, _customOpacity)
-                : isShaded
-                ? color!.withValues(alpha: _customOpacity / 2)
-                : color!.withValues(alpha: _customOpacity),
+            color: textShade(context, _customOpacity),
           ),
         ),
       ],

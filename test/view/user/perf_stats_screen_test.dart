@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../model/auth/fake_auth_repository.dart';
@@ -101,6 +102,11 @@ void main() {
       for (final val in requiredStatsValues) {
         expect(find.widgetWithText(Card, val), findsAtLeastNWidgets(1));
       }
+
+      // results meter
+      expect(find.byType(ResultMeter), findsOneWidget);
+      expect(find.text('40.0%'), findsNWidgets(2));
+      expect(find.text('20.0%'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
