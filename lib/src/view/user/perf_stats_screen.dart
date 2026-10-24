@@ -41,6 +41,9 @@ DateFormat get _dateFormatter => DateFormat.yMMMd();
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
+const _labelFontSize = 14.0;
+const _supportingFontSize = 12.0;
+const _rowValueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
 class const PerfStatsScreen({required final User user, required final Perf perf, super.key})
@@ -110,7 +113,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
     final ratingHistory = ref.watch(userRatingHistoryProvider(user.id));
     final loggedInUser = ref.watch(authControllerProvider);
     const statGroupSpace = SizedBox(height: 16.0);
-    const subStatSpace = SizedBox(height: 10);
 
     // For puzzle perfs, only show the rating history chart
     if (perf == Perf.puzzle) {
@@ -186,79 +188,11 @@ class const _Body({required final User user, required final Perf perf}) extends 
             ),
             if (perf != Perf.puzzle) ...[
               statGroupSpace,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text('${context.l10n.rating} ', style: Styles.sectionTitle),
-                  RatingWidget(
-                    rating: data.rating,
-                    deviation: data.deviation,
-                    provisional: data.provisional,
-                    style: _mainValueStyle,
-                  ),
-                ],
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      if (data.percentile != null && data.percentile! > 0.0)
-                        Text(
-                          (loggedInUser != null && loggedInUser.user.id == user.id)
-                              ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                                  '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.label(context.l10n),
-                                )
-                              : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                                  user.username,
-                                  '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.label(context.l10n),
-                                ),
-                          style: TextStyle(color: textShade(context, 0.7)),
-                        ),
-                      subStatSpace,
-                      // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-                      StatCard(
-                        context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
-                        child: ProgressionWidget(data.progress),
-                      ),
-                      StatCardRow([
-                        if (data.rank != null)
-                          StatCard(
-                            context.l10n.rank,
-                            value: data.rank == null
-                                ? '?'
-                                : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                                      .format(data.rank),
-                          ),
-                        StatCard(
-                          context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
-                          value: data.deviation.toStringAsFixed(2),
-                        ),
-                      ]),
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.perfStatHighestRating('').replaceAll(':', ''),
-                          child: _RatingWidget(
-                            data.highestRating,
-                            data.highestRatingGame,
-                            context.lichessColors.good,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatLowestRating('').replaceAll(':', ''),
-                          child: _RatingWidget(
-                            data.lowestRating,
-                            data.lowestRatingGame,
-                            context.lichessColors.error,
-                          ),
-                        ),
-                      ]),
-                    ],
-                  ),
-                ),
+              _RatingCard(
+                data: data,
+                perf: perf,
+                user: user,
+                isMe: loggedInUser?.user.id == user.id,
               ),
               statGroupSpace,
               Semantics(
@@ -422,6 +356,205 @@ class const _Body({required final User user, required final Perf perf}) extends 
   }
 }
 
+class const _RatingCard({
+  required final UserPerfStats data,
+  required final Perf perf,
+  required final User user,
+  required final bool isMe,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final percentile = data.percentile;
+    final percentileText = percentile != null && percentile > 0.0
+        ? (isMe
+              ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                  '${percentile.toStringAsFixed(2)}%',
+                  perf.label(context.l10n),
+                )
+              : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                  user.username,
+                  '${percentile.toStringAsFixed(2)}%',
+                  perf.label(context.l10n),
+                ))
+        : null;
+    final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
+
+    return _StatsCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _IconTile(perf.icon),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.rating,
+                      style: TextStyle(
+                        fontSize: _labelFontSize,
+                        color: textShade(context, _customOpacity),
+                      ),
+                    ),
+                    RatingWidget(
+                      rating: data.rating,
+                      deviation: data.deviation,
+                      provisional: data.provisional,
+                      style: _mainValueStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (percentileText != null) ...[
+            const SizedBox(height: 12),
+            Text(
+              percentileText,
+              style: TextStyle(fontSize: _supportingFontSize, color: textShade(context, 0.7)),
+            ),
+          ],
+          const SizedBox(height: 16),
+          // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
+          _StatRow(
+            label: context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
+            trailing: ProgressionWidget(data.progress),
+          ),
+          if (data.rank != null) ...[
+            const SizedBox(height: 10),
+            _StatRow(
+              label: context.l10n.rank,
+              value: NumberFormat.decimalPattern(Intl.getCurrentLocale()).format(data.rank),
+            ),
+          ],
+          const SizedBox(height: 10),
+          _StatRow(
+            label: context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
+            value: data.deviation.toStringAsFixed(2),
+          ),
+          const SizedBox(height: 16),
+          Divider(height: 1, color: dividerColor),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: _RatingRecord(
+                  label: context.l10n.perfStatHighestRating('').replaceAll(':', ''),
+                  rating: data.highestRating,
+                  game: data.highestRatingGame,
+                  color: context.lichessColors.good,
+                ),
+              ),
+              Container(
+                width: 1,
+                height: 48,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                color: dividerColor,
+              ),
+              Expanded(
+                child: _RatingRecord(
+                  label: context.l10n.perfStatLowestRating('').replaceAll(':', ''),
+                  rating: data.lowestRating,
+                  game: data.lowestRatingGame,
+                  color: context.lichessColors.error,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class const _RatingRecord({
+  required final String label,
+  required final int? rating,
+  required final UserPerfGame? game,
+  required final Color color,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: _supportingFontSize,
+            color: textShade(context, _customOpacity),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          rating?.toString() ?? '?',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: rating == null ? textShade(context, _customOpacity) : color,
+          ),
+        ),
+        if (game != null) ...[
+          const SizedBox(height: 2),
+          Text(
+            _dateFormatter.format(game!.finishedAt),
+            style: TextStyle(
+              fontSize: _supportingFontSize,
+              color: textShade(context, _customOpacity),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class const _StatsCard({required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(padding: const EdgeInsets.all(16.0), child: child),
+    );
+  }
+}
+
+class const _StatRow({required final String label, final String? value, final Widget? trailing})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+          ),
+        ),
+        if (trailing != null) trailing! else Text(value ?? '', style: _rowValueStyle),
+      ],
+    );
+  }
+}
+
+class const _IconTile(final IconData icon) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final tileColor = Styles.chartColor(context);
+
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: tileColor.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Icon(icon, size: 22, color: tileColor),
+    );
+  }
+}
+
 class const _StatGroup({required final String title, required final List<Widget> children})
     extends StatelessWidget {
   @override
@@ -451,25 +584,6 @@ class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
     return game == null
         ? const Text('?', style: defaultDateStyle)
         : Text(_dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
-  }
-}
-
-class const _RatingWidget(final int? rating, final UserPerfGame? game, final Color color)
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return (rating == null)
-        ? const Text('?', style: TextStyle(fontSize: _defaultValueFontSize))
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                rating.toString(),
-                style: TextStyle(fontSize: _defaultValueFontSize, color: color),
-              ),
-              _UserGameWidget(game),
-            ],
-          );
   }
 }
 

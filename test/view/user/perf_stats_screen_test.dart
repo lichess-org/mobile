@@ -94,6 +94,9 @@ void main() {
 
       // rating
       expect(find.text('1500'), findsOneWidget);
+      expect(find.widgetWithText(Card, 'Rating deviation'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1515'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1336'), findsOneWidget);
 
       for (final val in requiredStatsValues) {
         expect(find.widgetWithText(Card, val), findsAtLeastNWidgets(1));
