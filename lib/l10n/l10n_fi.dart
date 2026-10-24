@@ -462,6 +462,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileTheme => 'Teema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Liian monta yritystä. Yritä myöhemmin uudelleen.';
 
   @override

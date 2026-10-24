@@ -462,6 +462,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileTheme => 'Тема';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '• \nЗабагато спроб. Будь ласка, спробуйте пізніше.\n';
 
   @override

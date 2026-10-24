@@ -462,6 +462,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileTheme => 'Vzhľad';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override

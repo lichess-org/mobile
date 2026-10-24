@@ -462,6 +462,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Massa intents. Torneu-ho a provar més tard.';
 
   @override

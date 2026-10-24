@@ -462,6 +462,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileTheme => 'Teema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Liiga palju katseid. Palun proovi hiljem uuesti.';
 
   @override

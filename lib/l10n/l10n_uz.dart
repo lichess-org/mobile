@@ -462,6 +462,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Urinishlar soni juda koʻp. Iltimos, keyinroq urinib koʻring.';
 
   @override

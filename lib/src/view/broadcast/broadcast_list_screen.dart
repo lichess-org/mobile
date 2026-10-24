@@ -3,8 +3,10 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -49,6 +51,13 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
     );
+    final calendarButton = SemanticIconButton(
+      icon: const Icon(Icons.calendar_month),
+      onPressed: () {
+        Navigator.of(context).push(BroadcastCalendarScreen.buildRoute());
+      },
+      semanticsLabel: context.l10n.broadcastBroadcastCalendar,
+    );
     final filterButton = ContextMenuIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
@@ -70,7 +79,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         // under the bar anyway, since a pinned header always covers that edge, so the bar is never
         // tinted.
         extendBodyBehindAppBar: false,
-        appBar: PlatformAppBar(title: title, actions: [searchButton, filterButton]),
+        appBar: PlatformAppBar(title: title, actions: [searchButton, calendarButton, filterButton]),
         body: _Body(filter),
       );
     }
@@ -84,7 +93,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
         title: title,
-        actions: [searchButton, filterButton],
+        actions: [searchButton, calendarButton, filterButton],
       ),
     );
   }

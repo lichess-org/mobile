@@ -462,6 +462,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileTheme => 'Оформление';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Слишком много попыток. Пожалуйста, попробуйте позже.';
 
   @override

@@ -462,6 +462,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileTheme => 'Temo';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Tro da provoj. Bonvolu reprovi poste.';
 
   @override
