@@ -33,7 +33,6 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/result_meter.dart';
-import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -61,8 +60,6 @@ String _streakValueLabel(BuildContext context, UserStreak streak) => switch (str
 };
 
 const _customOpacity = 0.6;
-const _defaultStatFontSize = 12.0;
-const _defaultValueFontSize = 18.0;
 const _labelFontSize = 14.0;
 const _supportingFontSize = 12.0;
 const _rowValueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
@@ -250,29 +247,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 maxStreak: data.maxLossStreak,
               ),
               statGroupSpace,
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.perfStatTimeSpentPlaying,
-                          value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-                        ),
-                      ]),
-                      _StatGroup(
-                        title: context.l10n.perfStatGamesInARow,
-                        children: [_StreakWidget(data.maxPlayStreak, data.curPlayStreak)],
-                      ),
-                      _StatGroup(
-                        title: context.l10n.perfStatMaxTimePlaying,
-                        children: [_StreakWidget(data.maxTimeStreak, data.curTimeStreak)],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _PlayingHabitsCard(data: data),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
                 statGroupSpace,
                 _GameListWidget(
@@ -768,6 +743,153 @@ class const _StreakCard({
   }
 }
 
+class const _PlayingHabitsCard({required final UserPerfStats data}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
+
+    return _StatsCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _PlayingHabitRow(
+            icon: Icons.schedule,
+            label: context.l10n.perfStatTimeSpentPlaying,
+            value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+          ),
+          const SizedBox(height: 16),
+          Divider(height: 1, color: dividerColor),
+          const SizedBox(height: 16),
+          _PlayingHabitStreakRow(
+            icon: Icons.calendar_month,
+            title: context.l10n.perfStatGamesInARow,
+            currentStreak: data.curPlayStreak,
+            maxStreak: data.maxPlayStreak,
+          ),
+          const SizedBox(height: 16),
+          Divider(height: 1, color: dividerColor),
+          const SizedBox(height: 16),
+          _PlayingHabitStreakRow(
+            icon: Icons.timer_outlined,
+            title: context.l10n.perfStatMaxTimePlaying,
+            currentStreak: data.curTimeStreak,
+            maxStreak: data.maxTimeStreak,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class const _PlayingHabitRow({
+  required final IconData icon,
+  required final String label,
+  required final String value,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 22, color: textShade(context, 0.7)),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
+}
+
+class const _PlayingHabitStreakRow({
+  required final IconData icon,
+  required final String title,
+  required final UserStreak? currentStreak,
+  required final UserStreak? maxStreak,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final current = currentStreak;
+    final best = maxStreak;
+    final currentValue = current == null || current.isValueEmpty
+        ? '-'
+        : _streakValueLabel(context, current);
+    final maxValue = best == null || best.isValueEmpty ? '-' : _streakValueLabel(context, best);
+    final currentDates = _formatStreakDates(current);
+    final maxDates = _formatStreakDates(best);
+    final labelStyle = TextStyle(
+      fontSize: _labelFontSize,
+      color: textShade(context, _customOpacity),
+    );
+    final smallStyle = TextStyle(fontSize: 11, color: textShade(context, 0.5));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 22, color: textShade(context, 0.7)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(title, style: labelStyle)),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
+                    style: smallStyle,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    currentValue,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  if (currentDates != null) ...[
+                    const SizedBox(height: 2),
+                    Text(currentDates, style: smallStyle),
+                  ],
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
+                    style: smallStyle,
+                    textAlign: TextAlign.end,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    maxValue,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.end,
+                  ),
+                  if (maxDates != null) ...[
+                    const SizedBox(height: 2),
+                    Text(maxDates, style: smallStyle, textAlign: TextAlign.end),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class const _RatingRecord({
   required final String label,
   required final int? rating,
@@ -850,120 +972,6 @@ class const _IconTile(final IconData icon, {final Color? color}) extends Statele
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Icon(icon, size: 22, color: tileColor),
-    );
-  }
-}
-
-class const _StatGroup({required final String title, required final List<Widget> children})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          const SizedBox(height: 5),
-          for (final child in children) ...[child, const SizedBox(height: 10)],
-        ],
-      ),
-    );
-  }
-}
-
-class const _UserGameWidget(final UserPerfGame? game) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: Implement functionality to view game on tap.
-    // (Return a button? Wrap with InkWell?)
-    const defaultDateFontSize = 16.0;
-    const defaultDateStyle = TextStyle(fontSize: defaultDateFontSize);
-
-    return game == null
-        ? const Text('?', style: defaultDateStyle)
-        : Text(_dateFormatter.format(game!.finishedAt), style: defaultDateStyle);
-  }
-}
-
-class const _StreakWidget(final UserStreak? maxStreak, final UserStreak? curStreak)
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    const valueStyle = TextStyle(fontSize: _defaultValueFontSize);
-
-    final streakTitleStyle = TextStyle(
-      fontSize: _defaultStatFontSize,
-      color: textShade(context, _customOpacity),
-    );
-
-    final longestStreakStr = context.l10n.perfStatLongestStreak('').replaceAll(':', '');
-    final currentStreakStr = context.l10n.perfStatCurrentStreak('').replaceAll(':', '');
-
-    final List<Widget> streakWidgets = [maxStreak, curStreak]
-        .mapIndexed((index, streak) {
-          final streakTitle = Text(
-            index == 0 ? longestStreakStr : currentStreakStr,
-            style: streakTitleStyle,
-          );
-
-          if (streak == null || streak.isValueEmpty) {
-            return Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  streakTitle,
-                  Text(
-                    '-',
-                    style: const TextStyle(fontSize: _defaultValueFontSize),
-                    semanticsLabel: context.l10n.none,
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final valueText = switch (streak) {
-            UserTimeStreak(:final timePlayed) => Text(
-              timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-              style: valueStyle,
-              textAlign: TextAlign.center,
-            ),
-            UserGameStreak(:final gamesPlayed) => Text(
-              context.l10n.nbGames(gamesPlayed),
-              style: valueStyle,
-              textAlign: TextAlign.center,
-            ),
-          };
-
-          return Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                streakTitle,
-                valueText,
-                if (streak.startGame != null && streak.endGame != null)
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 5.0),
-                      _UserGameWidget(streak.startGame),
-                      Icon(Icons.arrow_downward_rounded, color: textShade(context, _customOpacity)),
-                      _UserGameWidget(streak.endGame),
-                    ],
-                  ),
-              ],
-            ),
-          );
-        })
-        .toList(growable: false);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(height: 5.0),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: streakWidgets),
-      ],
     );
   }
 }

@@ -125,6 +125,16 @@ void main() {
       await tester.scrollUntilVisible(find.text('Losing streak'), 200);
       expect(find.widgetWithText(Card, 'Losing streak'), findsOneWidget);
       expect(find.widgetWithText(Card, '3 games'), findsOneWidget);
+
+      // playing habits
+      await tester.scrollUntilVisible(find.text('Games played in a row'), 200);
+      expect(find.widgetWithText(Card, 'Time spent playing'), findsOneWidget);
+      expect(find.widgetWithText(Card, '16 minutes'), findsOneWidget);
+      expect(find.widgetWithText(Card, 'Games played in a row'), findsOneWidget);
+      expect(find.widgetWithText(Card, '7 games'), findsOneWidget);
+      await tester.scrollUntilVisible(find.text('Max time spent playing'), 200);
+      expect(find.widgetWithText(Card, 'Max time spent playing'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1 hour, 27 minutes'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
