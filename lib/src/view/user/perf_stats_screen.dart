@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -233,7 +234,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               _StreakCard(
                 title: context.l10n.perfStatWinningStreak,
-                icon: Icons.local_fire_department,
+                icon: LichessIcons.streak,
                 color: context.lichessColors.good,
                 currentStreak: data.curWinStreak,
                 maxStreak: data.maxWinStreak,
@@ -527,13 +528,13 @@ class const _GamesBreakdownCard({required final UserPerfStats data}) extends Sta
         spacing: 16.0,
         children: [
           _BreakdownRow(
-            icon: Icons.emoji_events_outlined,
+            icon: Icons.verified,
             label: context.l10n.rated,
             value: data.ratedGames,
             totalGames: totalGames,
           ),
           _BreakdownRow(
-            icon: Icons.groups_outlined,
+            icon: LichessIcons.tournament_cup,
             label: context.l10n.tournament,
             value: data.tournamentGames,
             totalGames: totalGames,
@@ -548,7 +549,7 @@ class const _GamesBreakdownCard({required final UserPerfStats data}) extends Sta
             totalGames: totalGames,
           ),
           _BreakdownRow(
-            icon: Icons.wifi_off,
+            icon: Icons.link_off,
             label: context.l10n.perfStatDisconnections,
             value: data.disconnections,
             totalGames: totalGames,
@@ -602,7 +603,7 @@ class const _AverageOpponentCard({required final UserPerfStats data}) extends St
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.people_outline, size: 28, color: textShade(context, 0.7)),
+          Icon(LichessIcons.crossed_swords, size: 28, color: textShade(context, 0.7)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -754,7 +755,7 @@ class const _PlayingHabitsCard({required final UserPerfStats data}) extends Stat
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _PlayingHabitRow(
-            icon: Icons.schedule,
+            icon: LichessIcons.clock,
             label: context.l10n.perfStatTimeSpentPlaying,
             value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
           ),
@@ -762,7 +763,7 @@ class const _PlayingHabitsCard({required final UserPerfStats data}) extends Stat
           Divider(height: 1, color: dividerColor),
           const SizedBox(height: 16),
           _PlayingHabitStreakRow(
-            icon: Icons.calendar_month,
+            icon: Icons.repeat,
             title: context.l10n.perfStatGamesInARow,
             currentStreak: data.curPlayStreak,
             maxStreak: data.maxPlayStreak,
@@ -771,7 +772,7 @@ class const _PlayingHabitsCard({required final UserPerfStats data}) extends Stat
           Divider(height: 1, color: dividerColor),
           const SizedBox(height: 16),
           _PlayingHabitStreakRow(
-            icon: Icons.timer_outlined,
+            icon: Icons.timer,
             title: context.l10n.perfStatMaxTimePlaying,
             currentStreak: data.curTimeStreak,
             maxStreak: data.maxTimeStreak,
