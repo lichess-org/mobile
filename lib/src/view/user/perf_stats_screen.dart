@@ -672,7 +672,6 @@ class const _StreakCard({
               _IconTile(icon, color: color),
               const SizedBox(width: 12),
               Expanded(
-                flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -697,36 +696,38 @@ class const _StreakCard({
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
               Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
-                      style: supportingStyle,
-                      textAlign: TextAlign.end,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      maxValue,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color),
-                      textAlign: TextAlign.end,
-                    ),
-                    if (maxDates != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        maxDates,
-                        style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
-                        textAlign: TextAlign.end,
-                      ),
-                    ],
-                  ],
+                child: Text(
+                  context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
+                  style: supportingStyle,
                 ),
+              ),
+              Text(
+                maxValue,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color),
+                textAlign: TextAlign.end,
+                semanticsLabel: maxValue == '-' ? context.l10n.none : null,
               ),
             ],
           ),
+          if (maxDates != null) ...[
+            const SizedBox(height: 2),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                maxDates,
+                style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ],
           const SizedBox(height: 14),
           ExcludeSemantics(
             child: ClipRRect(
