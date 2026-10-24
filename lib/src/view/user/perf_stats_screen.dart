@@ -211,18 +211,14 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               _GamesBreakdownCard(data: data),
               statGroupSpace,
+              _AverageOpponentCard(data: data),
+              statGroupSpace,
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       StatCardRow([
-                        StatCard(
-                          context.l10n.averageOpponent,
-                          value: data.avgOpponent == null
-                              ? '?'
-                              : data.avgOpponent!.round().toString(),
-                        ),
                         StatCard(
                           context.l10n.perfStatTimeSpentPlaying,
                           value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
@@ -601,6 +597,50 @@ class const _BreakdownRow({
           style: TextStyle(fontSize: 13, color: textShade(context, _customOpacity)),
         ),
       ],
+    );
+  }
+}
+
+class const _AverageOpponentCard({required final UserPerfStats data}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final avgOpponent = data.avgOpponent;
+
+    return _StatsCard(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.people_outline, size: 28, color: textShade(context, 0.7)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.averageOpponent,
+                  style: TextStyle(
+                    fontSize: _labelFontSize,
+                    color: textShade(context, _customOpacity),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  avgOpponent == null ? '?' : avgOpponent.round().toString().localizeNumbers(),
+                  style: _mainValueStyle,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  context.l10n.rating,
+                  style: TextStyle(
+                    fontSize: _supportingFontSize,
+                    color: textShade(context, _customOpacity),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

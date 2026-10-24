@@ -112,6 +112,11 @@ void main() {
       expect(find.text('Rated'), findsOneWidget);
       expect(find.text('60%'), findsOneWidget);
       expect(find.text('20%'), findsOneWidget);
+
+      // average opponent
+      await tester.scrollUntilVisible(find.text('Average opponent'), 200);
+      expect(find.widgetWithText(Card, 'Average opponent'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1,401'), findsOneWidget);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
