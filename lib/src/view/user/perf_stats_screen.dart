@@ -199,7 +199,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 debugPrint(
                   'SEVERE: [PerfStatsScreen] could not load rating history data; $error\n$stackTrace',
                 );
-                return const Text('Could not show chart elo chart');
+                return const Text('Could not show rating chart');
               },
               loading: () {
                 return const SizedBox.shrink();
@@ -680,6 +680,7 @@ class const _StreakCard({
                     Text(
                       currentValue,
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
+                      semanticsLabel: currentValue == '-' ? context.l10n.none : null,
                     ),
                     Text(
                       context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
@@ -1278,20 +1279,34 @@ class const _RangeButton({
   required final VoidCallback onPressed,
   final bool selected = false,
 }) extends StatelessWidget {
+  static const _borderRadius = BorderRadius.all(Radius.circular(20.0));
+
   @override
   Widget build(BuildContext context) {
     final chartColor = Styles.chartColor(context);
 
-    return Card(
-      color: selected ? chartColor.withValues(alpha: 0.2) : null,
-      shadowColor: selected ? Colors.transparent : null,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: selected ? chartColor.withValues(alpha: 0.15) : Colors.transparent,
+        borderRadius: _borderRadius,
+      ),
       child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: _borderRadius,
         onTap: onPressed,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-            child: Text(text),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 44.0, minWidth: 44.0),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  color: selected ? chartColor : textShade(context, 0.7),
+                ),
+              ),
+            ),
           ),
         ),
       ),
