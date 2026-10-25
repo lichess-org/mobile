@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Додати до дослідження</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Усі ігри</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Дозволяти повернення ходів та підказки</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Журнали застосунку</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Темна aMOLED</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ви впевнені?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Ви справді хочете завантажити файл NNUE (%s)?</string>
@@ -29,6 +30,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Змінити</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Порада: Можна додавати більше віджетів на головний екран або прибирати непотрібні!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Прибрати</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Очистити журнал?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Небезпечна зона</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Видалити свій обліковий запис</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Стислий</string>
@@ -52,6 +54,7 @@
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">
 Привіт</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Головна</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Журнал мережі</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Якщо обліковий запис збігається з %1\(s, на нього було надіслано код із \%2\)s символів. Перевірте свою поштову скриньку та введіть код нижче.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Цей код недійсний або його термін дії закінчився.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Розмір локальної бази даних</string>

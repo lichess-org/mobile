@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">إضافة إلى الدراسة</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">جميع المباريات</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">السماح بالتراجع والتلميحات</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">سجلات التطبيق</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">أسود</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">هل أنت متأكد؟</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">هل أنت متأكد من أنك تريد تنزيل ملف NNUE (%s)؟</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">تخصيص</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">نصيحة: يمكنك إضافة المزيد من الأدوات إلى الشاشة الرئيسية أو إزالة تلك التي لا تحتاج اليها!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">تجاهل</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">هل تريد حذف جميع السجلات؟</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">منطقة الخطر</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">حذف حسابك</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">مصغر</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">نقلة جيدة، ولكن توجد نقلة أفضل</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">مرحبا</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الرئيسية</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">سجلات الشبكة</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">إذا كان هناك حساب يطابق %1$s، فقد أُرسل إليه رمز مكوّن من %2$s أحرف. تحقّق من صندوق الوارد وأدخل الرمز أدناه.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">هذا الرمز غير صالح أو انتهت صلاحيته.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">حجم قاعدة البيانات المحلية</string>
@@ -85,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">وضع التدريب</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">تكبير القطعة المسحوبة</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">السابق</string>
+  <string name="puzzleHistoryDescription" comment="puzzleHistoryDescription&#10;Subtitle of the puzzle history entry on the puzzles tab.&#10;&#10;&quot;Attempts&quot; refers to puzzles you have previously tried, whether successfully or failed.">راجع محاولاتك السابقة في حل الألغاز</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">هل تريد إنهاء هذه الجولة؟</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">لا يوجد شيء لعرضه، يُرجى تغيير المرشّحات</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">لا يوجد شيء لعرضه. جرّب لعب بعض الجولات في ”عاصفة الألغاز“.</string>
@@ -122,6 +126,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">إظهار الحـواف</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">الإهتزاز عند لمس</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">عند التفعيل, سيهتز الجهاز لمدة وجيزة عند نقل أو أسر القطع.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">مشاركة</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">مشاركة رابط التحدي</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">شارك الـ PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">شارك رابط المباراة</string>
@@ -149,7 +154,7 @@
   <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">استخدام قطع متماثلة</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">عرض اللعبة</string>
   <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">عرض التراخيص</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">في إنتظار الطرف الآخر...</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">بانتظار انضمام الخصم...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">شاهد</string>
   <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">سنرسل إليك رمزًا عبر البريد الإلكتروني لتسجيل الدخول.</string>
   <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">لا يمكنك تحدّي نفسك</string>

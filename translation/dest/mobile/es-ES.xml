@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Añadir al estudio</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todas las partidas</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Permitir retroceder y pistas</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Registros de la aplicación</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Negro Amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">¿Estás seguro?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">¿Estás seguro de que deseas descargar el archivo NNUE (%s)?</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Personalizar</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Consejo: ¡Puedes añadir más componentes a la pantalla de inicio o eliminar aquellos que no necesitas!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Descartar</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">¿Quieres eliminar todos los registros?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Zona de riesgo</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Eliminar tu cuenta</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compacto</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Buen movimiento, pero los hay mejores</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hola</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inicio</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Registros de red</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Si una cuenta coincide con %1$s, se te envió un código de %2$s caracteres. Verifica tu bandeja de entrada e ingresa el siguiente código.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Este código no es válido o ha caducado.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Tamaño de base de datos local</string>
@@ -85,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Modo de práctica</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Aumentar la pieza arrastrada</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
+  <string name="puzzleHistoryDescription" comment="puzzleHistoryDescription&#10;Subtitle of the puzzle history entry on the puzzles tab.&#10;&#10;&quot;Attempts&quot; refers to puzzles you have previously tried, whether successfully or failed.">Revisión de tus intentos anteriores en los ejercicios</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">¿Quieres terminar esta ronda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nada que mostrar, por favor cambia los filtros</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nada que mostrar. Juega algunas rondas de Puzzle Storm.</string>
