@@ -148,45 +148,47 @@ class const PerfStatsGamesBreakdownCard({required final UserPerfStats data})
     final totalGames = data.totalGames;
 
     return PerfStatsCard(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: _BreakdownColumn(
-              icon: Icons.verified,
-              label: context.l10n.rated,
-              value: data.ratedGames,
-              totalGames: totalGames,
-            ),
-          ),
-          Expanded(
-            child: _BreakdownColumn(
-              icon: LichessIcons.tournament_cup,
-              label: context.l10n.tournament,
-              value: data.tournamentGames,
-              totalGames: totalGames,
-            ),
-          ),
-          Expanded(
-            child: _BreakdownColumn(
-              icon: Icons.bolt,
-              label: context.l10n.perfStatBerserkedGames.replaceAll(
-                ' ${context.l10n.games.toLowerCase()}',
-                '',
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: _BreakdownColumn(
+                icon: Icons.verified,
+                label: context.l10n.rated,
+                value: data.ratedGames,
+                totalGames: totalGames,
               ),
-              value: data.berserkGames,
-              totalGames: totalGames,
             ),
-          ),
-          Expanded(
-            child: _BreakdownColumn(
-              icon: Icons.link_off,
-              label: context.l10n.perfStatDisconnections,
-              value: data.disconnections,
-              totalGames: totalGames,
+            Expanded(
+              child: _BreakdownColumn(
+                icon: LichessIcons.tournament_cup,
+                label: context.l10n.tournament,
+                value: data.tournamentGames,
+                totalGames: totalGames,
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: _BreakdownColumn(
+                icon: Icons.bolt,
+                label: context.l10n.perfStatBerserkedGames.replaceAll(
+                  ' ${context.l10n.games.toLowerCase()}',
+                  '',
+                ),
+                value: data.berserkGames,
+                totalGames: totalGames,
+              ),
+            ),
+            Expanded(
+              child: _BreakdownColumn(
+                icon: Icons.link_off,
+                label: context.l10n.perfStatDisconnections,
+                value: data.disconnections,
+                totalGames: totalGames,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -206,14 +208,20 @@ class const _BreakdownColumn({
       children: [
         Icon(icon, size: 22, color: textShade(context, 0.7)),
         const SizedBox(height: 8),
-        Text(
-          label,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: perfStatsSupportingFontSize,
-            color: textShade(context, perfStatsSecondaryOpacity),
+        Expanded(
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                softWrap: false,
+                style: TextStyle(
+                  fontSize: perfStatsSupportingFontSize,
+                  color: textShade(context, perfStatsSecondaryOpacity),
+                ),
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 6),

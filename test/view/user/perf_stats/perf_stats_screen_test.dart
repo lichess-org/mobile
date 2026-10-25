@@ -8,11 +8,13 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_games_cards.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../model/auth/fake_auth_repository.dart';
+import '../../../network/fake_http_client_factory.dart';
 import '../../../test_helpers.dart';
 import '../../../test_provider_scope.dart';
 
@@ -135,6 +137,49 @@ void main() {
       await tester.scrollUntilVisible(find.text('Max time spent playing'), 200);
       expect(find.widgetWithText(Card, 'Max time spent playing'), findsOneWidget);
       expect(find.widgetWithText(Card, '1 hour, 27 minutes'), findsOneWidget);
+    }, variant: kPlatformVariant);
+
+    testWidgets('breakdown labels fit and values align on a narrow screen', (
+      WidgetTester tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(320, 844),
+        home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.scrollUntilVisible(find.text('Disconnections'), 100);
+
+      final card = find.byType(PerfStatsGamesBreakdownCard);
+      final columns = find.descendant(of: card, matching: find.byType(Column));
+      expect(columns, findsNWidgets(4));
+      double? valueTop;
+      double? percentTop;
+      for (var i = 0; i < 4; i++) {
+        final column = columns.at(i);
+        final texts = find.descendant(of: column, matching: find.byType(Text));
+        final label = tester.widget<Text>(texts.first);
+        expect(label.maxLines, 1);
+        expect(label.softWrap, isFalse);
+        expect(
+          tester.getRect(texts.first).width,
+          lessThanOrEqualTo(tester.getSize(column).width + 0.01),
+        );
+        final top = tester.getTopLeft(texts.at(1)).dy;
+        final percentageTop = tester.getTopLeft(texts.at(2)).dy;
+        valueTop ??= top;
+        percentTop ??= percentageTop;
+        expect(top, closeTo(valueTop, 0.01));
+        expect(percentageTop, closeTo(percentTop, 0.01));
+      }
+      expect(tester.takeException(), isNull);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
