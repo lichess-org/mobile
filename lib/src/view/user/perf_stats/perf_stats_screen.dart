@@ -139,7 +139,16 @@ class const _Body({required final User user, required final Perf perf}) extends 
             statGroupSpace,
             PerfStatsGamesBreakdownCard(data: data),
             statGroupSpace,
-            PerfStatsAverageOpponentCard(data: data),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: PerfStatsAverageOpponentCard(data: data)),
+                  const SizedBox(width: 12),
+                  Expanded(child: PerfStatsTimeSpentPlayingCard(data: data)),
+                ],
+              ),
+            ),
             statGroupSpace,
             PerfStatsStreakCard(
               title: context.l10n.perfStatWinningStreak,

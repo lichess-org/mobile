@@ -113,10 +113,12 @@ void main() {
       expect(find.text('60%'), findsOneWidget);
       expect(find.text('20%'), findsOneWidget);
 
-      // average opponent
+      // average opponent and time spent playing
       await tester.scrollUntilVisible(find.text('Average opponent'), 200);
       expect(find.widgetWithText(Card, 'Average opponent'), findsOneWidget);
       expect(find.widgetWithText(Card, '1,401'), findsOneWidget);
+      expect(find.widgetWithText(Card, 'Time spent playing'), findsOneWidget);
+      expect(find.widgetWithText(Card, '16 minutes'), findsOneWidget);
 
       // winning and losing streaks
       await tester.scrollUntilVisible(find.text('Winning streak'), 200);
@@ -128,8 +130,6 @@ void main() {
 
       // playing habits
       await tester.scrollUntilVisible(find.text('Games played in a row'), 200);
-      expect(find.widgetWithText(Card, 'Time spent playing'), findsOneWidget);
-      expect(find.widgetWithText(Card, '16 minutes'), findsOneWidget);
       expect(find.widgetWithText(Card, 'Games played in a row'), findsOneWidget);
       expect(find.widgetWithText(Card, '7 games'), findsOneWidget);
       await tester.scrollUntilVisible(find.text('Max time spent playing'), 200);

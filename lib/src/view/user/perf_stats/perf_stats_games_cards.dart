@@ -30,13 +30,6 @@ class const PerfStatsTotalGamesCard({
           const SizedBox(height: 4),
           Text(data.totalGames.toString().localizeNumbers(), style: perfStatsMainValueStyle),
           const SizedBox(height: 16),
-          ResultMeter(
-            wins: data.wonGames,
-            draws: data.drawnGames,
-            losses: data.lostGames,
-            height: 12,
-          ),
-          const SizedBox(height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -48,24 +41,12 @@ class const PerfStatsTotalGamesCard({
                   color: context.lichessColors.good,
                 ),
               ),
-              Container(
-                width: 1,
-                height: 64,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                color: dividerColor,
-              ),
               Expanded(
                 child: _ResultColumn(
                   label: context.l10n.draws,
                   value: data.drawnGames,
                   totalGames: data.totalGames,
                 ),
-              ),
-              Container(
-                width: 1,
-                height: 64,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                color: dividerColor,
               ),
               Expanded(
                 child: _ResultColumn(
@@ -76,6 +57,13 @@ class const PerfStatsTotalGamesCard({
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          ResultMeter(
+            wins: data.wonGames,
+            draws: data.drawnGames,
+            losses: data.lostGames,
+            height: 12,
           ),
           const SizedBox(height: 12),
           Divider(height: 1, color: dividerColor),
@@ -128,7 +116,6 @@ class const _ResultColumn({
       ..maximumFractionDigits = 1;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
@@ -144,7 +131,10 @@ class const _ResultColumn({
         ),
         Text(
           percentFormat.format(fraction),
-          style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.7)),
+          style: TextStyle(
+            fontSize: perfStatsLabelFontSize,
+            color: color ?? textShade(context, 0.7),
+          ),
         ),
       ],
     );
@@ -158,35 +148,43 @@ class const PerfStatsGamesBreakdownCard({required final UserPerfStats data})
     final totalGames = data.totalGames;
 
     return PerfStatsCard(
-      child: Column(
-        spacing: 16.0,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _BreakdownRow(
-            icon: Icons.verified,
-            label: context.l10n.rated,
-            value: data.ratedGames,
-            totalGames: totalGames,
-          ),
-          _BreakdownRow(
-            icon: LichessIcons.tournament_cup,
-            label: context.l10n.tournament,
-            value: data.tournamentGames,
-            totalGames: totalGames,
-          ),
-          _BreakdownRow(
-            icon: Icons.bolt,
-            label: context.l10n.perfStatBerserkedGames.replaceAll(
-              ' ${context.l10n.games.toLowerCase()}',
-              '',
+          Expanded(
+            child: _BreakdownColumn(
+              icon: Icons.verified,
+              label: context.l10n.rated,
+              value: data.ratedGames,
+              totalGames: totalGames,
             ),
-            value: data.berserkGames,
-            totalGames: totalGames,
           ),
-          _BreakdownRow(
-            icon: Icons.link_off,
-            label: context.l10n.perfStatDisconnections,
-            value: data.disconnections,
-            totalGames: totalGames,
+          Expanded(
+            child: _BreakdownColumn(
+              icon: LichessIcons.tournament_cup,
+              label: context.l10n.tournament,
+              value: data.tournamentGames,
+              totalGames: totalGames,
+            ),
+          ),
+          Expanded(
+            child: _BreakdownColumn(
+              icon: Icons.bolt,
+              label: context.l10n.perfStatBerserkedGames.replaceAll(
+                ' ${context.l10n.games.toLowerCase()}',
+                '',
+              ),
+              value: data.berserkGames,
+              totalGames: totalGames,
+            ),
+          ),
+          Expanded(
+            child: _BreakdownColumn(
+              icon: Icons.link_off,
+              label: context.l10n.perfStatDisconnections,
+              value: data.disconnections,
+              totalGames: totalGames,
+            ),
           ),
         ],
       ),
@@ -194,7 +192,7 @@ class const PerfStatsGamesBreakdownCard({required final UserPerfStats data})
   }
 }
 
-class const _BreakdownRow({
+class const _BreakdownColumn({
   required final IconData icon,
   required final String label,
   required final int value,
@@ -204,24 +202,31 @@ class const _BreakdownRow({
   Widget build(BuildContext context) {
     final fraction = totalGames == 0 ? 0.0 : value / totalGames;
 
-    return Row(
+    return Column(
       children: [
         Icon(icon, size: 22, color: textShade(context, 0.7)),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: perfStatsLabelFontSize,
-              color: textShade(context, perfStatsSecondaryOpacity),
-            ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: perfStatsSupportingFontSize,
+            color: textShade(context, perfStatsSecondaryOpacity),
           ),
         ),
-        Text(value.toString().localizeNumbers(), style: perfStatsRowValueStyle),
-        const SizedBox(width: 10),
+        const SizedBox(height: 6),
+        Text(
+          value.toString().localizeNumbers(),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
         Text(
           NumberFormat.percentPattern().format(fraction),
-          style: TextStyle(fontSize: 13, color: textShade(context, perfStatsSecondaryOpacity)),
+          style: TextStyle(
+            fontSize: perfStatsSupportingFontSize,
+            color: textShade(context, perfStatsSecondaryOpacity),
+          ),
         ),
       ],
     );
@@ -234,41 +239,10 @@ class const PerfStatsAverageOpponentCard({required final UserPerfStats data})
   Widget build(BuildContext context) {
     final avgOpponent = data.avgOpponent;
 
-    return PerfStatsCard(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(LichessIcons.target, size: 28, color: textShade(context, 0.7)),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.averageOpponent,
-                  style: TextStyle(
-                    fontSize: perfStatsLabelFontSize,
-                    color: textShade(context, perfStatsSecondaryOpacity),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  avgOpponent == null ? '?' : avgOpponent.round().toString().localizeNumbers(),
-                  style: perfStatsMainValueStyle,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  context.l10n.rating,
-                  style: TextStyle(
-                    fontSize: perfStatsSupportingFontSize,
-                    color: textShade(context, perfStatsSecondaryOpacity),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return PerfStatsCompactCard(
+      icon: LichessIcons.target,
+      label: context.l10n.averageOpponent,
+      value: avgOpponent == null ? '?' : avgOpponent.round().toString().localizeNumbers(),
     );
   }
 }

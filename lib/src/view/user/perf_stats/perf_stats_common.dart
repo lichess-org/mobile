@@ -69,6 +69,50 @@ class const PerfStatsRow({required final String label, final String? value, fina
   }
 }
 
+class const PerfStatsCompactCard({
+  required final IconData icon,
+  required final String label,
+  required final String value,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final iconColor = Styles.chartColor(context);
+
+    return PerfStatsCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 20, color: iconColor),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: perfStatsSupportingFontSize,
+                    color: textShade(context, perfStatsSecondaryOpacity),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
+  }
+}
+
 class const PerfStatsIconTile(final IconData icon, {final Color? color}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

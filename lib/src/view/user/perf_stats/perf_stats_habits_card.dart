@@ -7,6 +7,18 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_common.dart';
 import 'package:material_ui/material_ui.dart';
 
+class const PerfStatsTimeSpentPlayingCard({required final UserPerfStats data})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return PerfStatsCompactCard(
+      icon: LichessIcons.clock,
+      label: context.l10n.perfStatTimeSpentPlaying,
+      value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+    );
+  }
+}
+
 class const PerfStatsPlayingHabitsCard({required final UserPerfStats data})
     extends StatelessWidget {
   @override
@@ -17,14 +29,6 @@ class const PerfStatsPlayingHabitsCard({required final UserPerfStats data})
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _PlayingHabitRow(
-            icon: LichessIcons.clock,
-            label: context.l10n.perfStatTimeSpentPlaying,
-            value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-          ),
-          const SizedBox(height: 16),
-          Divider(height: 1, color: dividerColor),
-          const SizedBox(height: 16),
           _PlayingHabitStreakRow(
             icon: Icons.repeat,
             title: context.l10n.perfStatGamesInARow,
@@ -42,33 +46,6 @@ class const PerfStatsPlayingHabitsCard({required final UserPerfStats data})
           ),
         ],
       ),
-    );
-  }
-}
-
-class const _PlayingHabitRow({
-  required final IconData icon,
-  required final String label,
-  required final String value,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 22, color: textShade(context, 0.7)),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: perfStatsLabelFontSize,
-              color: textShade(context, perfStatsSecondaryOpacity),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-      ],
     );
   }
 }
