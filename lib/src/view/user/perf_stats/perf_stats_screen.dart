@@ -1,39 +1,32 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
-import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_common.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_best_wins.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_games_cards.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_habits_card.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_rating_card.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_streak_cards.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const PerfStatsScreen({required final User user, required final Perf perf, super.key})
@@ -221,12 +214,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               PerfStatsPlayingHabitsCard(data: data),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
                 statGroupSpace,
-                _GameListWidget(
-                  games: data.bestWins!,
-                  perf: perf,
-                  user: user,
-                  header: Text(context.l10n.perfStatBestRated, style: Styles.sectionTitle),
-                ),
+                PerfStatsBestWins(games: data.bestWins!, user: user),
               ],
             ],
           ],
@@ -237,67 +225,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
-    );
-  }
-}
-
-class const _GameListWidget({
-  required final IList<UserPerfGame> games,
-  required final Perf perf,
-  required final User user,
-  required final Widget header,
-}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ListSection(
-      header: header,
-      margin: const EdgeInsets.only(top: 10.0),
-      hasLeading: false,
-      children: [
-        for (final game in games)
-          _GameListTile(
-            onTap: () async {
-              final gameIds = ISet(games.map((g) => g.gameId));
-              final list = await ref.read(gameRepositoryProvider).getGamesByIds(gameIds);
-              final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
-              if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
-                Navigator.of(context).pushHidingTabBar(
-                  AnalysisScreen.buildRoute(
-                    AnalysisOptions.archivedGame(
-                      orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,
-                      gameId: gameData.id,
-                      initialMoveCursor: 0,
-                    ),
-                  ),
-                );
-              } else if (context.mounted && gameData != null) {
-                showSnackBar(context, 'This variant is not supported yet');
-              }
-            },
-            playerTitle: UserFullNameWidget(user: game.opponent, rating: game.opponentRating),
-            subtitle: Text(perfStatsDateFormat.format(game.finishedAt)),
-          ),
-      ],
-    );
-  }
-}
-
-class const _GameListTile({
-  required final Widget playerTitle,
-  final Widget? subtitle,
-  final GestureTapCallback? onTap,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      title: playerTitle,
-      subtitle: subtitle != null
-          ? DefaultTextStyle.merge(
-              child: subtitle!,
-              style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-            )
-          : null,
     );
   }
 }
