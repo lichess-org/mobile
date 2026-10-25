@@ -26,6 +26,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_common.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -36,35 +37,6 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
-
-DateFormat get _dateFormatter => DateFormat.yMMMd();
-
-String? _formatStreakDates(UserStreak? streak) {
-  final start = streak?.startGame?.finishedAt;
-  final end = streak?.endGame?.finishedAt;
-  if (start == null || end == null) return null;
-  if (start.year == end.year) {
-    return '${DateFormat.MMMd().format(start)} – ${_dateFormatter.format(end)}';
-  }
-  return '${_dateFormatter.format(start)} – ${_dateFormatter.format(end)}';
-}
-
-int _streakValue(UserStreak? streak) => switch (streak) {
-  null => 0,
-  UserGameStreak(:final gamesPlayed) => gamesPlayed,
-  UserTimeStreak(:final timePlayed) => timePlayed.inSeconds,
-};
-
-String _streakValueLabel(BuildContext context, UserStreak streak) => switch (streak) {
-  UserGameStreak(:final gamesPlayed) => context.l10n.nbGames(gamesPlayed),
-  UserTimeStreak(:final timePlayed) => timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-};
-
-const _customOpacity = 0.6;
-const _labelFontSize = 14.0;
-const _supportingFontSize = 12.0;
-const _rowValueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
-const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
 
 class const PerfStatsScreen({required final User user, required final Perf perf, super.key})
     extends StatelessWidget {
@@ -294,13 +266,13 @@ class const _RatingCard({
         : null;
     final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              _IconTile(perf.icon),
+              PerfStatsIconTile(perf.icon),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -309,15 +281,15 @@ class const _RatingCard({
                     Text(
                       context.l10n.rating,
                       style: TextStyle(
-                        fontSize: _labelFontSize,
-                        color: textShade(context, _customOpacity),
+                        fontSize: perfStatsLabelFontSize,
+                        color: textShade(context, perfStatsSecondaryOpacity),
                       ),
                     ),
                     RatingWidget(
                       rating: data.rating,
                       deviation: data.deviation,
                       provisional: data.provisional,
-                      style: _mainValueStyle,
+                      style: perfStatsMainValueStyle,
                     ),
                   ],
                 ),
@@ -328,24 +300,27 @@ class const _RatingCard({
             const SizedBox(height: 12),
             Text(
               percentileText,
-              style: TextStyle(fontSize: _supportingFontSize, color: textShade(context, 0.7)),
+              style: TextStyle(
+                fontSize: perfStatsSupportingFontSize,
+                color: textShade(context, 0.7),
+              ),
             ),
           ],
           const SizedBox(height: 16),
           // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-          _StatRow(
+          PerfStatsRow(
             label: context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
             trailing: ProgressionWidget(data.progress, useTrendArrows: true),
           ),
           if (data.rank != null) ...[
             const SizedBox(height: 10),
-            _StatRow(
+            PerfStatsRow(
               label: context.l10n.rank,
               value: NumberFormat.decimalPattern(Intl.getCurrentLocale()).format(data.rank),
             ),
           ],
           const SizedBox(height: 10),
-          _StatRow(
+          PerfStatsRow(
             label: context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
             value: data.deviation.toStringAsFixed(2),
           ),
@@ -392,16 +367,19 @@ class const _TotalGamesCard({
   Widget build(BuildContext context) {
     final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             context.l10n.perfStatTotalGames,
-            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+            style: TextStyle(
+              fontSize: perfStatsLabelFontSize,
+              color: textShade(context, perfStatsSecondaryOpacity),
+            ),
           ),
           const SizedBox(height: 4),
-          Text(data.totalGames.toString().localizeNumbers(), style: _mainValueStyle),
+          Text(data.totalGames.toString().localizeNumbers(), style: perfStatsMainValueStyle),
           const SizedBox(height: 16),
           ResultMeter(
             wins: data.wonGames,
@@ -465,13 +443,16 @@ class const _TotalGamesCard({
                     Expanded(
                       child: Text(
                         context.l10n.perfStatViewTheGames,
-                        style: TextStyle(fontSize: _labelFontSize, color: textShade(context, 0.8)),
+                        style: TextStyle(
+                          fontSize: perfStatsLabelFontSize,
+                          color: textShade(context, 0.8),
+                        ),
                       ),
                     ),
                     Icon(
                       Icons.arrow_forward_ios,
                       size: 14,
-                      color: textShade(context, _customOpacity),
+                      color: textShade(context, perfStatsSecondaryOpacity),
                     ),
                   ],
                 ),
@@ -502,7 +483,10 @@ class const _ResultColumn({
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+          style: TextStyle(
+            fontSize: perfStatsLabelFontSize,
+            color: textShade(context, perfStatsSecondaryOpacity),
+          ),
         ),
         const SizedBox(height: 2),
         Text(
@@ -511,7 +495,7 @@ class const _ResultColumn({
         ),
         Text(
           percentFormat.format(fraction),
-          style: TextStyle(fontSize: _labelFontSize, color: textShade(context, 0.7)),
+          style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.7)),
         ),
       ],
     );
@@ -523,7 +507,7 @@ class const _GamesBreakdownCard({required final UserPerfStats data}) extends Sta
   Widget build(BuildContext context) {
     final totalGames = data.totalGames;
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Column(
         spacing: 16.0,
         children: [
@@ -577,7 +561,10 @@ class const _BreakdownRow({
         Expanded(
           child: Text(
             label,
-            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+            style: TextStyle(
+              fontSize: perfStatsLabelFontSize,
+              color: textShade(context, perfStatsSecondaryOpacity),
+            ),
           ),
         ),
         Text(
@@ -587,7 +574,7 @@ class const _BreakdownRow({
         const SizedBox(width: 10),
         Text(
           NumberFormat.percentPattern().format(fraction),
-          style: TextStyle(fontSize: 13, color: textShade(context, _customOpacity)),
+          style: TextStyle(fontSize: 13, color: textShade(context, perfStatsSecondaryOpacity)),
         ),
       ],
     );
@@ -599,7 +586,7 @@ class const _AverageOpponentCard({required final UserPerfStats data}) extends St
   Widget build(BuildContext context) {
     final avgOpponent = data.avgOpponent;
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -612,21 +599,21 @@ class const _AverageOpponentCard({required final UserPerfStats data}) extends St
                 Text(
                   context.l10n.averageOpponent,
                   style: TextStyle(
-                    fontSize: _labelFontSize,
-                    color: textShade(context, _customOpacity),
+                    fontSize: perfStatsLabelFontSize,
+                    color: textShade(context, perfStatsSecondaryOpacity),
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   avgOpponent == null ? '?' : avgOpponent.round().toString().localizeNumbers(),
-                  style: _mainValueStyle,
+                  style: perfStatsMainValueStyle,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   context.l10n.rating,
                   style: TextStyle(
-                    fontSize: _supportingFontSize,
-                    color: textShade(context, _customOpacity),
+                    fontSize: perfStatsSupportingFontSize,
+                    color: textShade(context, perfStatsSecondaryOpacity),
                   ),
                 ),
               ],
@@ -651,25 +638,29 @@ class const _StreakCard({
     final best = maxStreak;
     final currentValue = current == null || current.isValueEmpty
         ? '-'
-        : _streakValueLabel(context, current);
-    final maxValue = best == null || best.isValueEmpty ? '-' : _streakValueLabel(context, best);
-    final bestValue = _streakValue(best);
-    final progress = bestValue == 0 ? 0.0 : (_streakValue(current) / bestValue).clamp(0.0, 1.0);
-    final currentDates = _formatStreakDates(current);
-    final maxDates = _formatStreakDates(best);
+        : perfStatsStreakValueLabel(context, current);
+    final maxValue = best == null || best.isValueEmpty
+        ? '-'
+        : perfStatsStreakValueLabel(context, best);
+    final bestValue = perfStatsStreakValue(best);
+    final progress = bestValue == 0
+        ? 0.0
+        : (perfStatsStreakValue(current) / bestValue).clamp(0.0, 1.0);
+    final currentDates = formatPerfStatsStreakDates(current);
+    final maxDates = formatPerfStatsStreakDates(best);
     final supportingStyle = TextStyle(
-      fontSize: _supportingFontSize,
-      color: textShade(context, _customOpacity),
+      fontSize: perfStatsSupportingFontSize,
+      color: textShade(context, perfStatsSecondaryOpacity),
     );
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _IconTile(icon, color: color),
+              PerfStatsIconTile(icon, color: color),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -751,7 +742,7 @@ class const _PlayingHabitsCard({required final UserPerfStats data}) extends Stat
   Widget build(BuildContext context) {
     final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
 
-    return _StatsCard(
+    return PerfStatsCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -798,7 +789,10 @@ class const _PlayingHabitRow({
         Expanded(
           child: Text(
             label,
-            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
+            style: TextStyle(
+              fontSize: perfStatsLabelFontSize,
+              color: textShade(context, perfStatsSecondaryOpacity),
+            ),
           ),
         ),
         const SizedBox(width: 12),
@@ -820,13 +814,15 @@ class const _PlayingHabitStreakRow({
     final best = maxStreak;
     final currentValue = current == null || current.isValueEmpty
         ? '-'
-        : _streakValueLabel(context, current);
-    final maxValue = best == null || best.isValueEmpty ? '-' : _streakValueLabel(context, best);
-    final currentDates = _formatStreakDates(current);
-    final maxDates = _formatStreakDates(best);
+        : perfStatsStreakValueLabel(context, current);
+    final maxValue = best == null || best.isValueEmpty
+        ? '-'
+        : perfStatsStreakValueLabel(context, best);
+    final currentDates = formatPerfStatsStreakDates(current);
+    final maxDates = formatPerfStatsStreakDates(best);
     final labelStyle = TextStyle(
-      fontSize: _labelFontSize,
-      color: textShade(context, _customOpacity),
+      fontSize: perfStatsLabelFontSize,
+      color: textShade(context, perfStatsSecondaryOpacity),
     );
     final smallStyle = TextStyle(fontSize: 11, color: textShade(context, 0.5));
 
@@ -907,8 +903,8 @@ class const _RatingRecord({
         Text(
           label,
           style: TextStyle(
-            fontSize: _supportingFontSize,
-            color: textShade(context, _customOpacity),
+            fontSize: perfStatsSupportingFontSize,
+            color: textShade(context, perfStatsSecondaryOpacity),
           ),
         ),
         const SizedBox(height: 4),
@@ -917,64 +913,20 @@ class const _RatingRecord({
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: rating == null ? textShade(context, _customOpacity) : color,
+            color: rating == null ? textShade(context, perfStatsSecondaryOpacity) : color,
           ),
         ),
         if (game != null) ...[
           const SizedBox(height: 2),
           Text(
-            _dateFormatter.format(game!.finishedAt),
+            perfStatsDateFormat.format(game!.finishedAt),
             style: TextStyle(
-              fontSize: _supportingFontSize,
-              color: textShade(context, _customOpacity),
+              fontSize: perfStatsSupportingFontSize,
+              color: textShade(context, perfStatsSecondaryOpacity),
             ),
           ),
         ],
       ],
-    );
-  }
-}
-
-class const _StatsCard({required final Widget child}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(padding: const EdgeInsets.all(16.0), child: child),
-    );
-  }
-}
-
-class const _StatRow({required final String label, final String? value, final Widget? trailing})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(fontSize: _labelFontSize, color: textShade(context, _customOpacity)),
-          ),
-        ),
-        if (trailing != null) trailing! else Text(value ?? '', style: _rowValueStyle),
-      ],
-    );
-  }
-}
-
-class const _IconTile(final IconData icon, {final Color? color}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final tileColor = color ?? Styles.chartColor(context);
-
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: tileColor.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: Icon(icon, size: 22, color: tileColor),
     );
   }
 }
@@ -1013,7 +965,7 @@ class const _GameListWidget({
               }
             },
             playerTitle: UserFullNameWidget(user: game.opponent, rating: game.opponentRating),
-            subtitle: Text(_dateFormatter.format(game.finishedAt)),
+            subtitle: Text(perfStatsDateFormat.format(game.finishedAt)),
           ),
       ],
     );
