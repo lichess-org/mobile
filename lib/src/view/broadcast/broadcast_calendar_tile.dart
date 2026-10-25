@@ -56,6 +56,7 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
                   broadcast.tour.imageUrl!,
                   width: coverWidth,
                   height: coverHeight,
+                  cacheWidth: (coverWidth * MediaQuery.devicePixelRatioOf(context)).toInt(),
                   fit: .cover,
                   errorBuilder: (context, _, _) => fallbackIcon,
                 ),
