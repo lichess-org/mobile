@@ -97,8 +97,6 @@ class _RatingChartState() extends State<_RatingChart> {
   void initState() {
     super.initState();
 
-    // We need to fill in the missing days in the rating history because rating should be constant for days where no games were played
-
     final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
     final numberOfDays = _lastDate.difference(_firstDate).inDays + 1;
 
@@ -211,8 +209,6 @@ class _RatingChartState() extends State<_RatingChart> {
               return _AxisLabel(_formatAxisDate(value), meta: meta);
             },
             interval: (_maxX - _minX) / 3,
-            // The placement of the bottom titles is not perfect
-            // See the issue https://github.com/imaNNeo/fl_chart/issues/1605
           ),
         ),
         leftTitles: AxisTitles(

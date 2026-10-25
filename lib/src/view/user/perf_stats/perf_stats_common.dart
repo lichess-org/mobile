@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Opacity used by the secondary text inside the perf stats cards.
 const perfStatsSecondaryOpacity = 0.6;
 
 const perfStatsLabelFontSize = 14.0;
@@ -40,7 +39,6 @@ String perfStatsStreakValueLabel(BuildContext context, UserStreak streak) => swi
   UserTimeStreak(:final timePlayed) => timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
 };
 
-/// A card that groups one section of the perf stats screen.
 class const PerfStatsCard({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,6 @@ class const PerfStatsCard({required final Widget child}) extends StatelessWidget
   }
 }
 
-/// A label on the left and a value or a trailing widget on the right.
 class const PerfStatsRow({required final String label, final String? value, final Widget? trailing})
     extends StatelessWidget {
   @override
@@ -72,7 +69,6 @@ class const PerfStatsRow({required final String label, final String? value, fina
   }
 }
 
-/// A rounded tinted square that holds the leading icon of a card.
 class const PerfStatsIconTile(final IconData icon, {final Color? color}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

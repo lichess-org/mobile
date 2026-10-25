@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The best rated victories of a user, each one opening the game analysis.
 class const PerfStatsBestWins({required final IList<UserPerfGame> games, required final User user})
     extends ConsumerWidget {
   @override

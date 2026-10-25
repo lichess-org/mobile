@@ -1,10 +1,6 @@
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A compact bar that shows the share of wins, draws and losses.
-///
-/// The bar is decorative: the counts and percentages beside it carry the meaning for screen
-/// readers, so it is excluded from semantics.
 class const ResultMeter({
   required final int wins,
   required final int draws,
