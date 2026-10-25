@@ -8,13 +8,13 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
-import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../model/auth/fake_auth_repository.dart';
-import '../../test_helpers.dart';
-import '../../test_provider_scope.dart';
+import '../../../model/auth/fake_auth_repository.dart';
+import '../../../test_helpers.dart';
+import '../../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
