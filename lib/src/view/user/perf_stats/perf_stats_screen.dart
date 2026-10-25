@@ -16,10 +16,8 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -27,7 +25,9 @@ import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_common.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_games_cards.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_habits_card.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_rating_card.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_streak_cards.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -202,7 +202,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               statGroupSpace,
               PerfStatsAverageOpponentCard(data: data),
               statGroupSpace,
-              _StreakCard(
+              PerfStatsStreakCard(
                 title: context.l10n.perfStatWinningStreak,
                 icon: Icons.local_fire_department,
                 color: context.lichessColors.good,
@@ -210,7 +210,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 maxStreak: data.maxWinStreak,
               ),
               statGroupSpace,
-              _StreakCard(
+              PerfStatsStreakCard(
                 title: context.l10n.perfStatLosingStreak,
                 icon: Icons.local_fire_department,
                 color: context.lichessColors.error,
@@ -218,7 +218,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 maxStreak: data.maxLossStreak,
               ),
               statGroupSpace,
-              _PlayingHabitsCard(data: data),
+              PerfStatsPlayingHabitsCard(data: data),
               if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
                 statGroupSpace,
                 _GameListWidget(
@@ -237,270 +237,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
-    );
-  }
-}
-
-class const _StreakCard({
-  required final String title,
-  required final IconData icon,
-  required final Color color,
-  required final UserStreak? currentStreak,
-  required final UserStreak? maxStreak,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final current = currentStreak;
-    final best = maxStreak;
-    final currentValue = current == null || current.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, current);
-    final maxValue = best == null || best.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, best);
-    final bestValue = perfStatsStreakValue(best);
-    final progress = bestValue == 0
-        ? 0.0
-        : (perfStatsStreakValue(current) / bestValue).clamp(0.0, 1.0);
-    final currentDates = formatPerfStatsStreakDates(current);
-    final maxDates = formatPerfStatsStreakDates(best);
-    final supportingStyle = TextStyle(
-      fontSize: perfStatsSupportingFontSize,
-      color: textShade(context, perfStatsSecondaryOpacity),
-    );
-
-    return PerfStatsCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PerfStatsIconTile(icon, color: color),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 6),
-                    Text(
-                      currentValue,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
-                      semanticsLabel: currentValue == '-' ? context.l10n.none : null,
-                    ),
-                    Text(
-                      context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
-                      style: supportingStyle,
-                    ),
-                    if (currentDates != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        currentDates,
-                        style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Expanded(
-                child: Text(
-                  context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
-                  style: supportingStyle,
-                ),
-              ),
-              Text(
-                maxValue,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color),
-                textAlign: TextAlign.end,
-                semanticsLabel: maxValue == '-' ? context.l10n.none : null,
-              ),
-            ],
-          ),
-          if (maxDates != null) ...[
-            const SizedBox(height: 2),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                maxDates,
-                style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
-                textAlign: TextAlign.end,
-              ),
-            ),
-          ],
-          const SizedBox(height: 14),
-          ExcludeSemantics(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4.0),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 8.0,
-                backgroundColor: color.withValues(alpha: 0.15),
-                color: color,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class const _PlayingHabitsCard({required final UserPerfStats data}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final dividerColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.12);
-
-    return PerfStatsCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _PlayingHabitRow(
-            icon: LichessIcons.clock,
-            label: context.l10n.perfStatTimeSpentPlaying,
-            value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-          ),
-          const SizedBox(height: 16),
-          Divider(height: 1, color: dividerColor),
-          const SizedBox(height: 16),
-          _PlayingHabitStreakRow(
-            icon: Icons.repeat,
-            title: context.l10n.perfStatGamesInARow,
-            currentStreak: data.curPlayStreak,
-            maxStreak: data.maxPlayStreak,
-          ),
-          const SizedBox(height: 16),
-          Divider(height: 1, color: dividerColor),
-          const SizedBox(height: 16),
-          _PlayingHabitStreakRow(
-            icon: Icons.timer,
-            title: context.l10n.perfStatMaxTimePlaying,
-            currentStreak: data.curTimeStreak,
-            maxStreak: data.maxTimeStreak,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class const _PlayingHabitRow({
-  required final IconData icon,
-  required final String label,
-  required final String value,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 22, color: textShade(context, 0.7)),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: perfStatsLabelFontSize,
-              color: textShade(context, perfStatsSecondaryOpacity),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-      ],
-    );
-  }
-}
-
-class const _PlayingHabitStreakRow({
-  required final IconData icon,
-  required final String title,
-  required final UserStreak? currentStreak,
-  required final UserStreak? maxStreak,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final current = currentStreak;
-    final best = maxStreak;
-    final currentValue = current == null || current.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, current);
-    final maxValue = best == null || best.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, best);
-    final currentDates = formatPerfStatsStreakDates(current);
-    final maxDates = formatPerfStatsStreakDates(best);
-    final labelStyle = TextStyle(
-      fontSize: perfStatsLabelFontSize,
-      color: textShade(context, perfStatsSecondaryOpacity),
-    );
-    final smallStyle = TextStyle(fontSize: 11, color: textShade(context, 0.5));
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 22, color: textShade(context, 0.7)),
-            const SizedBox(width: 12),
-            Expanded(child: Text(title, style: labelStyle)),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
-                    style: smallStyle,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    currentValue,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                  ),
-                  if (currentDates != null) ...[
-                    const SizedBox(height: 2),
-                    Text(currentDates, style: smallStyle),
-                  ],
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
-                    style: smallStyle,
-                    textAlign: TextAlign.end,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    maxValue,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.end,
-                  ),
-                  if (maxDates != null) ...[
-                    const SizedBox(height: 2),
-                    Text(maxDates, style: smallStyle, textAlign: TextAlign.end),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }
