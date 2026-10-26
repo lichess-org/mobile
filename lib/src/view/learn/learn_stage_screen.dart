@@ -111,7 +111,7 @@ class _BodyState() extends ConsumerState<_Body> {
                   : defaultBoardSize;
 
               final settings = boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     autoQueenPromotion: false,

@@ -109,7 +109,7 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
               orientation: widget.orientation,
               controller: _controller,
               settings: boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     borderRadius: isPadded ? Styles.boardBorderRadius : BorderRadius.zero,

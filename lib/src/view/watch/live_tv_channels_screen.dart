@@ -52,7 +52,6 @@ class const _Body() extends ConsumerWidget {
           itemBuilder: (context, index) {
             final game = list[index];
             return SmallBoardPreview(
-              dimInDarkMode: true,
               onTap: () {
                 Navigator.of(context).pushHidingTabBar(
                   TvScreen.buildRoute(
