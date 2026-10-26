@@ -62,7 +62,7 @@ class const MessageInputField({required final Widget field, super.key}) extends 
           child: GlassContainer(
             shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassMessageInputRadius),
             // Like the bottom search fields.
-            settings: appBarButtonGlassSettings(context),
+            settings: ios27GlassSettings(context),
             // Floats over the content, there is no parent glass layer to share.
             useOwnLayer: true,
             child: const SizedBox.expand(),

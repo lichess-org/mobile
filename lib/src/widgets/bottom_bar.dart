@@ -372,15 +372,15 @@ class const _GlassBottomBarCapsule({
     final enabled = onTap != null;
     final colorScheme = ColorScheme.of(context);
     final foregroundColor = prominent ? colorScheme.primary : colorScheme.onSurface;
-    final glassSettings = tintedGlassSettings(context);
+    final glassSettings = ios27GlassSettings(context);
     // A wash that shows on the light glass as well as on the dark one.
     final washAlpha = Theme.of(context).brightness == Brightness.light ? 0.3 : 0.15;
 
     Widget buildButton(double wash) => GlassButton.custom(
       onTap: onTap ?? () {},
       enabled: enabled,
-      // Tinted for busy content, like boards. A prominent button gets a light wash of the theme
-      // color, with a label in that color, like an iOS tinted button.
+      // A prominent button gets a light wash of the theme color, with a label in that color, like an
+      // iOS tinted button.
       settings: wash > 0
           ? glassSettings.copyWith(
               glassColor: Color.alphaBlend(

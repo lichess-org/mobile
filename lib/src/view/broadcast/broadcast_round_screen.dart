@@ -199,9 +199,7 @@ class _BroadcastRoundScreenState()
     return switch (roundState) {
       final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-        // Tinted like the bottom bar buttons, over the boards.
         appBar: PlatformAppBar(
-          tintedGlass: true,
           // Before iOS 26, the pinned tabs paint the bar background ([_RoundHeader]).
           scrolledUnderTint: false,
           // On iOS the title is in the header of the body, below the image, like the Music app.
@@ -535,7 +533,6 @@ class const _RoundHeader({
               tabs: tabs,
               controller: tabController,
               inAppBar: false,
-              tintedGlass: true,
               // Flat in the header, glass once pinned under the app bar, over the content.
               glass: pinned,
             ),

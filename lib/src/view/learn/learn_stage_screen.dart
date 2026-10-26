@@ -451,9 +451,7 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                   child: GestureDetector(
                     onTap: () {},
                     child: Theme.of(context).platform == TargetPlatform.iOS
-                        // Shown over the board, which the glass would let show through too much.
                         ? GlassModalCard(
-                            tintOpacity: 0.85,
                             child: Material(
                               type: MaterialType.transparency,
                               child: SingleChildScrollView(
