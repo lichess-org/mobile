@@ -234,13 +234,13 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 /// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
 /// never change.
 enum NotificationChannel(final String id, final Importance importance) {
-  playban('playban', .max),
-  newMessage('newMessage', .high),
+  playban('playban', .defaultImportance),
+  newMessage('newMessage', .defaultImportance),
   corresGameUpdate('corresGameUpdate', .high),
+  challenge('challenge', .high),
   challengeAccept('challengeAccept', .high),
   challengeCreate('challengeCreate', .high),
-  announce('announce', .high),
-  challenge('challenge', .max),
+  announce('announce', .defaultImportance),
   broadcast('broadcast', .defaultImportance),
   recap('recap', .defaultImportance);
 
