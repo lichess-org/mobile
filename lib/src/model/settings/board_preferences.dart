@@ -14,6 +14,9 @@ part 'board_preferences.g.dart';
 const kBoardDefaultBrightnessFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
+/// The brightness filter of the boards when they are dimmed in dark mode.
+const kBoardDimmedBrightnessFilter = 0.8;
+
 final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   BoardPreferences.new,
   name: 'BoardPreferencesProvider',
@@ -88,6 +91,10 @@ class BoardPreferences() extends Notifier<BoardPrefs> with PreferencesStorage<Bo
 
   Future<void> toggleBorder() {
     return save(state.copyWith(showBorder: !state.showBorder));
+  }
+
+  Future<void> toggleDimInDarkMode() {
+    return save(state.copyWith(dimInDarkMode: !state.dimInDarkMode));
   }
 
   Future<void> togglePieceAnimation() {
@@ -177,6 +184,11 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
+
+    /// Whether to dim the boards in dark mode, overriding the [brightness] filter.
+    ///
+    /// On for new installs ([defaults]), off for stored preferences that predate the setting.
+    @JsonKey(defaultValue: false) required bool dimInDarkMode,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
@@ -204,6 +216,7 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    dimInDarkMode: true,
     brightness: kBoardDefaultBrightnessFilter,
     hue: kBoardDefaultHueFilter,
   );
@@ -211,11 +224,19 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
   bool get hasColorAdjustments =>
       brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
 
-  ChessboardSettings toBoardSettings(Variant variant) {
+  /// Whether the boards are dimmed when the app has the [appBrightness], overriding the
+  /// [brightness] filter.
+  bool isDimmed(Brightness appBrightness) => dimInDarkMode && appBrightness == .dark;
+
+  /// The brightness filter to apply to the boards when the app has the [appBrightness].
+  double effectiveBrightness(Brightness appBrightness) =>
+      isDimmed(appBrightness) ? kBoardDimmedBrightnessFilter : brightness;
+
+  ChessboardSettings toBoardSettings(Variant variant, {required Brightness appBrightness}) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
-      brightness: brightness,
+      brightness: effectiveBrightness(appBrightness),
       hue: hue,
       border: showBorder
           ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)

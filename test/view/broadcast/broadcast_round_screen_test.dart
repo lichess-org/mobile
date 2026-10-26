@@ -49,7 +49,7 @@ void main() {
     });
   });
 
-  testWidgets('The tabs stay pinned below the app bar', variant: kPlatformVariant, (tester) async {
+  testWidgets('The tabs scroll away with the header', variant: kPlatformVariant, (tester) async {
     final app = await makeTestProviderScopeApp(
       tester,
       home: BroadcastRoundScreen(broadcast: _liveBroadcast),
@@ -65,20 +65,12 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    final tabs = find.byType(PlatformTabBar);
-    final initialTop = tester.getTopLeft(tabs).dy;
+    expect(find.byType(PlatformTabBar), findsOneWidget);
 
-    // Scroll the header away
+    // Scroll the header and the tabs away
     await tester.drag(find.byType(NestedScrollView), const Offset(0, -600));
     await tester.pump();
-    final pinnedTop = tester.getTopLeft(tabs).dy;
-    expect(pinnedTop, lessThan(initialTop));
-    expect(pinnedTop, greaterThan(0));
-
-    // Scroll the boards under the tabs
-    await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
-    await tester.pump();
-    expect(tester.getTopLeft(tabs).dy, pinnedTop);
+    expect(find.byType(PlatformTabBar), findsNothing);
   });
 
   group('Test boards tab', () {

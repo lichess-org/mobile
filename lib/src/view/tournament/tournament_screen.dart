@@ -239,7 +239,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
         ),
         // The list scrolls under the glass bottom bar buttons.
         body: BottomBarScrollEdgeEffect(
-          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          barHeight: BottomBar.heightOf(context),
           color: Theme.of(context).scaffoldBackgroundColor,
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -1235,7 +1235,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
       cupertinoGlass: true,
       children: [
         if (widget.state.chatOptions != null && kidModeAsync.value == false)
-          ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
+          ChatBottomBarButton(options: widget.state.chatOptions!),
 
         if (widget.state.tournament.isFinished != true && authUser != null)
           if (joinOrLeaveInProgress)

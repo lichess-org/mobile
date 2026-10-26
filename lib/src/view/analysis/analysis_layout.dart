@@ -129,9 +129,7 @@ class const AnalysisLayout({
         Theme.of(context).platform == TargetPlatform.iOS &&
         MediaQuery.orientationOf(context) == Orientation.portrait;
     // The bar below the content takes care of the bottom inset itself.
-    final tabViewBottomInset = floatingBar
-        ? kBottomBarHeight + MediaQuery.paddingOf(context).bottom
-        : 0.0;
+    final tabViewBottomInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
     final tabViewColor = ColorScheme.of(context).surfaceContainerLowest;
 

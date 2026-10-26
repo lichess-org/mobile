@@ -1,12 +1,7 @@
-import 'dart:math' as math;
-
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -117,11 +112,6 @@ class _BroadcastRoundScreenState()
     extends ConsumerState<BroadcastRoundScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
-
-  /// The outer scroll controller of the [NestedScrollView], scrolled to its end when the tabs are
-  /// pinned below the app bar.
-  final _scrollController = ScrollController();
-  final _tabsPinned = ValueNotifier(false);
   late BroadcastTournamentId _selectedTournamentId;
   BroadcastRoundId? _selectedRoundId;
   String? _teamFilter;
@@ -140,7 +130,6 @@ class _BroadcastRoundScreenState()
       vsync: this,
     );
     _tabController.addListener(_onTabChanged);
-    _scrollController.addListener(_onScroll);
 
     _selectedTournamentId = widget.broadcast.tour.id;
     _selectedRoundId = widget.broadcast.roundToLinkId;
@@ -151,15 +140,7 @@ class _BroadcastRoundScreenState()
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
-    _tabsPinned.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    final position = _scrollController.position;
-    _tabsPinned.value = position.maxScrollExtent > 0 && position.pixels >= position.maxScrollExtent;
   }
 
   void _onTabChanged() {
@@ -199,11 +180,7 @@ class _BroadcastRoundScreenState()
     return switch (roundState) {
       final roundState? => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-        // Tinted like the bottom bar buttons, over the boards.
         appBar: PlatformAppBar(
-          tintedGlass: true,
-          // Before iOS 26, the pinned tabs paint the bar background ([_RoundHeader]).
-          scrolledUnderTint: false,
           // On iOS the title is in the header of the body, below the image, like the Music app.
           title: Theme.of(context).platform == TargetPlatform.iOS
               ? null
@@ -324,32 +301,35 @@ class _BroadcastRoundScreenState()
         ),
         // The tabs scroll under the glass bottom bar buttons.
         body: BottomBarScrollEdgeEffect(
-          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          barHeight: BottomBar.heightOf(context),
           color: Theme.of(context).scaffoldBackgroundColor,
           child: NestedScrollView(
-            controller: _scrollController,
             headerSliverBuilder: (context, _) => [
-              SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: _RoundHeader(
-                  title: Theme.of(context).platform == TargetPlatform.iOS
-                      ? asyncTournament.value?.data.name ?? widget.broadcast.title
-                      : null,
-                  imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
-                  information: asyncTournament.value?.data.information,
-                  onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
-                  tabController: _tabController,
-                  tabsPinned: _tabsPinned,
-                  tabs: [
-                    context.l10n.broadcastBoards,
-                    context.l10n.players,
-                    if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
-                  ],
+              SliverPadding(
+                // The body starts behind the app bar on iOS.
+                padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                sliver: SliverToBoxAdapter(
+                  child: _RoundHeader(
+                    title: Theme.of(context).platform == TargetPlatform.iOS
+                        ? asyncTournament.value?.data.name ?? widget.broadcast.title
+                        : null,
+                    imageUrl:
+                        asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+                    information: asyncTournament.value?.data.information,
+                    onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+                    tabController: _tabController,
+                    tabs: [
+                      context.l10n.broadcastBoards,
+                      context.l10n.players,
+                      if (asyncTournament.value?.data.teamTable == true)
+                        context.l10n.broadcastTeams,
+                    ],
+                  ),
                 ),
               ),
             ],
-            // The header is above the tabs, which start below it with a SliverOverlapInjector. The
-            // padding is the body's, with the bottom bar height, not the screen's.
+            // The tabs are below the header, which has the app bar padding. The padding is the
+            // body's, with the bottom bar height, not the screen's.
             body: Builder(
               builder: (context) => MediaQuery.removePadding(
                 context: context,
@@ -428,9 +408,8 @@ class _BroadcastRoundScreenState()
   }
 }
 
-/// The header of the round screen, above the tabs: the tournament image, title and a line of its
-/// information that opens the overview sheet, which scroll away, and the tabs, which stay pinned
-/// below the app bar.
+/// The header of the round screen, which scrolls away with the tabs below it: the tournament image,
+/// title and a line of its information that opens the overview sheet.
 class const _RoundHeader({
   /// Null when the title is in the app bar (Android).
   required final String? title,
@@ -440,293 +419,81 @@ class const _RoundHeader({
   required final BroadcastTournamentInformation? information,
   required final VoidCallback onMorePressed,
   required final TabController tabController,
-
-  /// Whether the tabs are pinned below the app bar.
-  required final ValueListenable<bool> tabsPinned,
   required final List<String> tabs,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    // The height of the app bar on iOS, where the body extends behind it.
-    final topPadding = MediaQuery.paddingOf(context).top;
-
-    return _SliverPinnedTabsHeader(
-      topInset: topPadding,
-      header: Padding(
-        padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
-        child: Column(
-          children: [
-            if (imageUrl != null)
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 500),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  // Broadcast images are cropped to this ratio by the server.
-                  child: AspectRatio(
-                    aspectRatio: 2.0,
-                    child: HttpNetworkImageWidget(
-                      imageUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, _, _) =>
-                          ColoredBox(color: ColorScheme.of(context).surfaceContainer),
-                    ),
-                  ),
-                ),
-              ),
-            if (title != null) ...[
-              const SizedBox(height: 16.0),
-              Text(
-                title!,
-                style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ] else
-              const SizedBox(height: 8.0),
-            if (information case final information?)
-              Row(
-                // MORE is at the end of the last line.
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: DefaultTextStyle.merge(
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Up to 2 pieces of information per line, on 2 lines.
-                          for (final line in broadcastInformationTexts(
-                            information,
-                          ).take(4).slices(2))
-                            Text(line.join(' · ')),
-                        ],
+    return Column(
+      children: [
+        Padding(
+          padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
+          child: Column(
+            children: [
+              if (imageUrl != null)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    // Broadcast images are cropped to this ratio by the server.
+                    child: AspectRatio(
+                      aspectRatio: 2.0,
+                      child: HttpNetworkImageWidget(
+                        imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, _, _) =>
+                            ColoredBox(color: ColorScheme.of(context).surfaceContainer),
                       ),
                     ),
                   ),
-                  TextButton(
-                    onPressed: onMorePressed,
-                    child: Text(
-                      context.l10n.more.toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
-      tabs: ValueListenableBuilder(
-        valueListenable: tabsPinned,
-        builder: (context, pinned, _) {
-          final tabBar = AnimatedContainer(
-            duration: kThemeChangeDuration,
-            // On iOS the content scrolls under the glass segmented control. On Android, pinned
-            // tabs have the color of the scrolled under app bar above them.
-            color: isIOS
-                ? Colors.transparent
-                : pinned
-                ? _scrolledUnderAppBarColor(context)
-                : Theme.of(context).scaffoldBackgroundColor,
-            child: PlatformTabBar(
-              tabs: tabs,
-              controller: tabController,
-              inAppBar: false,
-              tintedGlass: true,
-              // Flat in the header, glass once pinned under the app bar, over the content.
-              glass: pinned,
-            ),
-          );
-          if (!isIOS || useLiquidGlass(context)) return tabBar;
-          // Before iOS 26, pinned tabs are the bottom of the app bar: one bar background behind
-          // the status bar, the app bar (which has no tint of its own) and the tabs.
-          return Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Positioned(
-                top: -topPadding,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: IgnorePointer(
-                  child: AnimatedOpacity(
-                    opacity: pinned ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 150),
-                    child: const BlurredBarBackground(),
-                  ),
                 ),
-              ),
-              tabBar,
+              if (title != null) ...[
+                const SizedBox(height: 16.0),
+                Text(
+                  title!,
+                  style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ] else
+                const SizedBox(height: 8.0),
+              if (information case final information?)
+                Row(
+                  // MORE is at the end of the last line.
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: DefaultTextStyle.merge(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Up to 2 pieces of information per line, on 2 lines.
+                            for (final line in broadcastInformationTexts(
+                              information,
+                            ).take(4).slices(2))
+                              Text(line.join(' · ')),
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: onMorePressed,
+                      child: Text(
+                        context.l10n.more.toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
             ],
-          );
-        },
-      ),
+          ),
+        ),
+        PlatformTabBar(tabs: tabs, controller: tabController, inAppBar: false, glass: false),
+      ],
     );
-  }
-}
-
-/// The color of a Material 3 [AppBar] when content is scrolled under it: its background color with
-/// the surface tint of its scrolled under elevation, as its [Material] paints it.
-Color _scrolledUnderAppBarColor(BuildContext context) {
-  final appBarTheme = AppBarTheme.of(context);
-  final colorScheme = ColorScheme.of(context);
-  return ElevationOverlay.applySurfaceTint(
-    appBarTheme.backgroundColor ?? colorScheme.surfaceContainer,
-    appBarTheme.surfaceTintColor ?? colorScheme.surfaceTint,
-    // The Material 3 default.
-    appBarTheme.scrolledUnderElevation ?? 3.0,
-  );
-}
-
-enum _HeaderSlot() {
-  header,
-  tabs,
-}
-
-/// The header of a [NestedScrollView], in a [SliverOverlapAbsorber]: a [header] that scrolls away,
-/// followed by [tabs] that stay pinned [topInset] below the top of the scroll view.
-///
-/// The scroll view starts at the top of the screen, behind the app bar, and [topInset] is the
-/// height of the app bar: the content starts below it, and scrolls under it. The [header] fades out
-/// as it goes under the app bar, since its bottom stays there when the [tabs] are pinned.
-///
-/// Unlike a [SliverMainAxisGroup] with pinned slivers, the pinned extent is reported in
-/// [SliverGeometry.maxScrollObstructionExtent], which the [SliverOverlapAbsorber] needs to keep the
-/// [tabs] on screen.
-class const _SliverPinnedTabsHeader({
-  required final Widget header,
-  required final Widget tabs,
-  required final double topInset,
-}) extends SlottedMultiChildRenderObjectWidget<_HeaderSlot, RenderBox> {
-  @override
-  Iterable<_HeaderSlot> get slots => _HeaderSlot.values;
-
-  @override
-  Widget childForSlot(_HeaderSlot slot) => switch (slot) {
-    .header => header,
-    .tabs => tabs,
-  };
-
-  @override
-  _RenderSliverPinnedTabsHeader createRenderObject(BuildContext context) =>
-      _RenderSliverPinnedTabsHeader(topInset);
-
-  @override
-  void updateRenderObject(BuildContext context, _RenderSliverPinnedTabsHeader renderObject) {
-    renderObject.topInset = topInset;
-  }
-}
-
-class _RenderSliverPinnedTabsHeader(var double _topInset)
-    extends RenderSliver
-    with SlottedContainerRenderObjectMixin<_HeaderSlot, RenderBox>, RenderSliverHelpers {
-  double get topInset => _topInset;
-  set topInset(double value) {
-    if (_topInset == value) return;
-    _topInset = value;
-    markNeedsLayout();
-  }
-
-  RenderBox get _header => childForSlot(_HeaderSlot.header)!;
-  RenderBox get _tabs => childForSlot(_HeaderSlot.tabs)!;
-
-  // Main axis positions of the children, and opacity of the header, set during layout.
-  double _headerPosition = 0.0;
-  double _tabsPosition = 0.0;
-  double _headerOpacity = 1.0;
-
-  final _headerOpacityLayer = LayerHandle<OpacityLayer>();
-
-  @override
-  void performLayout() {
-    assert(constraints.axisDirection == AxisDirection.down);
-    final boxConstraints = constraints.asBoxConstraints();
-    _header.layout(boxConstraints, parentUsesSize: true);
-    _tabs.layout(boxConstraints, parentUsesSize: true);
-    final headerExtent = _header.size.height;
-    final tabsExtent = _tabs.size.height;
-    final scrollExtent = _topInset + headerExtent + tabsExtent;
-    final pinnedExtent = _topInset + tabsExtent;
-    final scrollOffset = constraints.scrollOffset;
-
-    _headerPosition = _topInset - scrollOffset;
-    _tabsPosition = math.max(_topInset + headerExtent - scrollOffset, _topInset);
-    // Fades out while the bottom of the header goes from twice the inset to the inset.
-    _headerOpacity = _topInset == 0.0
-        ? 1.0
-        : clampDouble((headerExtent - scrollOffset) / _topInset, 0.0, 1.0);
-
-    final paintExtent = math.min(
-      math.max(scrollExtent - scrollOffset, pinnedExtent),
-      constraints.remainingPaintExtent,
-    );
-    geometry = SliverGeometry(
-      scrollExtent: scrollExtent,
-      paintExtent: paintExtent,
-      layoutExtent: clampDouble(scrollExtent - scrollOffset, 0.0, paintExtent),
-      maxPaintExtent: scrollExtent,
-      maxScrollObstructionExtent: pinnedExtent,
-      cacheExtent: calculateCacheOffset(constraints, from: 0.0, to: scrollExtent),
-      hasVisualOverflow: true,
-    );
-  }
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    if (!geometry!.visible) return;
-    if (_headerOpacity == 0.0) {
-      _headerOpacityLayer.layer = null;
-    } else if (_headerOpacity == 1.0) {
-      _headerOpacityLayer.layer = null;
-      context.paintChild(_header, offset + Offset(0.0, _headerPosition));
-    } else {
-      _headerOpacityLayer.layer = context.pushOpacity(
-        offset + Offset(0.0, _headerPosition),
-        (_headerOpacity * 255).round(),
-        (context, offset) => context.paintChild(_header, offset),
-        oldLayer: _headerOpacityLayer.layer,
-      );
-    }
-    context.paintChild(_tabs, offset + Offset(0.0, _tabsPosition));
-  }
-
-  @override
-  bool hitTestChildren(
-    SliverHitTestResult result, {
-    required double mainAxisPosition,
-    required double crossAxisPosition,
-  }) {
-    final boxResult = BoxHitTestResult.wrap(result);
-    return hitTestBoxChild(
-          boxResult,
-          _tabs,
-          mainAxisPosition: mainAxisPosition,
-          crossAxisPosition: crossAxisPosition,
-        ) ||
-        (_headerOpacity > 0.0 &&
-            hitTestBoxChild(
-              boxResult,
-              _header,
-              mainAxisPosition: mainAxisPosition,
-              crossAxisPosition: crossAxisPosition,
-            ));
-  }
-
-  @override
-  double childMainAxisPosition(RenderBox child) => child == _tabs ? _tabsPosition : _headerPosition;
-
-  @override
-  void applyPaintTransform(RenderBox child, Matrix4 transform) {
-    applyPaintTransformForBoxChild(child, transform);
-  }
-
-  @override
-  void dispose() {
-    _headerOpacityLayer.layer = null;
-    super.dispose();
   }
 }
 
@@ -737,7 +504,6 @@ class const BroadcastRoundTabPlaceholder(final Widget child) extends StatelessWi
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         SliverFillRemaining(
           hasScrollBody: false,
           child: Padding(

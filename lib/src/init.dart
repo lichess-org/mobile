@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
@@ -28,11 +28,18 @@ Future<void> initializeApp() async {
   final prefs = LichessBinding.instance.sharedPreferences;
 
   try {
+    final isFirstRun = prefs.getBool('first_run') ?? true;
+
+    if (!isFirstRun && prefs.getString(PrefCategory.board.storageKey) == null) {
+      final boardPrefs = BoardPrefs.defaults.copyWith(dimInDarkMode: false);
+      await prefs.setString(PrefCategory.board.storageKey, jsonEncode(boardPrefs.toJson()));
+    }
+
     final pInfo = await PackageInfo.fromPlatform();
     final appVersion = Version.parse(pInfo.version);
     final installedVersion = prefs.getString('installed_version');
 
-    if (prefs.getBool('first_run') ?? true) {
+    if (isFirstRun) {
       // Clear secure storage on first run because it is not deleted on app uninstall
       await SecureStorage.instance.deleteAll();
 

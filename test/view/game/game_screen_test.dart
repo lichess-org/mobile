@@ -278,7 +278,10 @@ void main() {
         expect(find.text('To invite someone to play, give this URL'), findsOneWidget);
         expect(find.text('Or let your opponent scan this QR code'), findsOneWidget);
         expect(find.byType(QrImageView), findsOneWidget);
-        expect(find.textContaining('https://$kLichessHost/${challenge.id.value}'), findsOneWidget);
+        expect(
+          find.textContaining('https://$kLichessHost/game/${challenge.id.value}'),
+          findsOneWidget,
+        );
         expect(
           find.text('Or invite a Lichess user'),
           authUser == null ? findsNothing : findsOneWidget,

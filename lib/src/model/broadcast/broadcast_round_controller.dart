@@ -67,6 +67,8 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
   final _syncRoundDebouncer = Debouncer(const Duration(milliseconds: 150));
   final _evalRequestDebouncer = Debouncer(const Duration(milliseconds: 200));
 
+  Timer? _teamMatchesRefreshTimer;
+
   Object? _key = Object();
 
   @override
@@ -78,6 +80,7 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
       _appLifecycleListener?.dispose();
       _syncRoundDebouncer.cancel();
       _evalRequestDebouncer.cancel();
+      _teamMatchesRefreshTimer?.cancel();
     });
 
     ref.listen(observedGamesControllerProvider(broadcastRoundId), (prev, next) {
@@ -218,7 +221,8 @@ class BroadcastRoundController(final BroadcastRoundId broadcastRoundId)
     _sendEvalMultiGet();
     if (state.requireValue.isTeamTournament) {
       // Add delay before invalidating team matches to allow server to update scores
-      Future.delayed(
+      _teamMatchesRefreshTimer?.cancel();
+      _teamMatchesRefreshTimer = Timer(
         const Duration(seconds: 5),
         () => ref.invalidate(broadcastTeamMatchesProvider(broadcastRoundId)),
       );

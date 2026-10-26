@@ -465,7 +465,7 @@ class _BodyState() extends ConsumerState<_Body> {
           final isTablet = isTabletOrLarger(context);
 
           final defaultSettings = boardPreferences
-              .toBoardSettings(Variant.standard)
+              .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
               .copyWith(
                 borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                 boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
@@ -724,7 +724,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
       cupertinoGlass: true,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        if (puzzleState.mode != PuzzleMode.view)
+        if (puzzleState.mode != PuzzleMode.view) ...[
           FutureBuilder(
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
@@ -738,7 +738,6 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
               );
             },
           ),
-        if (puzzleState.mode != PuzzleMode.view)
           FutureBuilder(
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
@@ -751,6 +750,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
               );
             },
           ),
+        ],
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
             label: context.l10n.menu,
@@ -760,23 +760,34 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
             icon: Icons.menu,
           ),
         if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
-            onTap: () {
-              Navigator.of(context).push(
-                AnalysisScreen.buildRoute(
-                  puzzleState.makeAnalysisOptions(
-                    ref
-                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                        .makePgn,
-                  ),
-                ),
-              );
-            },
+          BottomBarGroup(
+            children: [
+              BottomBarButton(
+                onTap: () {
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
+                      puzzleState.makeAnalysisOptions(
+                        ref
+                            .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                            .makePgn,
+                      ),
+                    ),
+                  );
+                },
 
-            label: context.l10n.analysis,
-            icon: Icons.biotech,
+                label: context.l10n.analysis,
+                icon: Icons.biotech,
+              ),
+              BottomBarButton(
+                onTap: puzzleState.nextContext != null
+                    ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
+                    : null,
+                highlighted: true,
+                label: context.l10n.puzzleContinueTraining,
+                icon: CupertinoIcons.play_arrow_solid,
+              ),
+            ],
           ),
-
         BottomBarGroup(
           children: [
             RepeatButton(
@@ -802,15 +813,6 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
             ),
           ],
         ),
-        if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
-            onTap: puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
-                ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
-                : null,
-            highlighted: true,
-            label: context.l10n.puzzleContinueTraining,
-            icon: CupertinoIcons.play_arrow_solid,
-          ),
       ],
     );
   }

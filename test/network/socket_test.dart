@@ -62,7 +62,6 @@ SocketClient makeTestSocketClient({
 }
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
   TestLichessBinding.ensureInitialized();
 
   group('SocketClient', () {

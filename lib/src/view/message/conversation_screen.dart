@@ -465,35 +465,27 @@ class _MessageInputState() extends ConsumerState<_MessageInput> {
       },
     );
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: messageInputVerticalPadding(context, fallback: 6),
+    return MessageInputBar(
+      fallbackVerticalPadding: 6.0,
+      field: TextField(
+        decoration: messageInputDecoration(
+          context,
+          suffixIcon: sendButton,
+          hintText: isBlocked
+              ? 'This conversation is blocked.'
+              : isBot
+              ? 'Bot accounts cannot send nor receive messages.'
+              : !canPost
+              ? "${widget.user.name} doesn't accept new messages."
+              : null,
         ),
-        child: MessageInputField(
-          field: TextField(
-            decoration: messageInputDecoration(
-              context,
-              suffixIcon: sendButton,
-              hintText: isBlocked
-                  ? 'This conversation is blocked.'
-                  : isBot
-                  ? 'Bot accounts cannot send nor receive messages.'
-                  : !canPost
-                  ? "${widget.user.name} doesn't accept new messages."
-                  : null,
-            ),
-            controller: controller,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            minLines: 1,
-            maxLines: 4,
-            enableSuggestions: true,
-            readOnly: readOnly,
-          ),
-        ),
+        controller: controller,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        minLines: 1,
+        maxLines: 4,
+        enableSuggestions: true,
+        readOnly: readOnly,
       ),
     );
   }

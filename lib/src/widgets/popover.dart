@@ -1,6 +1,5 @@
 import 'package:lichess_mobile/src/widgets/glass_modal.dart' show opaqueModalColor;
-import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show ios27GlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
 import 'package:material_ui/material_ui.dart';
 import 'package:popover/popover.dart' as popover;
@@ -34,9 +33,9 @@ class const PlatformPopover({
       return GlassPopover(
         popoverWidth: width ?? 180.0,
         settings: opaque
-            // The menu glass, with an opaque fill.
-            ? menuGlassSettings(context).copyWith(glassColor: opaqueModalColor(context))
-            : menuGlassSettings(context),
+            // The glass, with an opaque fill.
+            ? ios27GlassSettings(context).copyWith(glassColor: opaqueModalColor(context))
+            : ios27GlassSettings(context),
         // The trigger is not glass itself (e.g. it sits in the glass capsule of the app bar).
         triggerBuilder: triggerBuilder,
         // The glass popover is outside of any Material.
