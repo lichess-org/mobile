@@ -286,55 +286,49 @@ class const _BlogCardContent({
     return Padding(
       padding: kBlogCardItemContentPadding,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 6.0,
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            spacing: 4.0,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Expanded(
-                    child: UserFullNameWidget(
-                      user: post.author,
-                      showPatron: false,
-                      showFlair: false,
-                      style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                    ),
-                  ),
-                  const SizedBox(width: 4.0),
-                  Text(
-                    _dateFormat.format(post.createdAt),
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
-                    overflow: TextOverflow.clip,
-                    softWrap: false,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6.0),
-              Text.rich(
-                maxLines: 3,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: post.title,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        height: 1.0,
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: UserFullNameWidget(
+                  user: post.author,
+                  showPatron: false,
+                  showFlair: false,
+                  style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
                 ),
-                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                _dateFormat.format(post.createdAt),
+                style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                maxLines: 1,
               ),
             ],
+          ),
+          Text.rich(
+            maxLines: 3,
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: post.title,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
