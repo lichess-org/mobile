@@ -3,7 +3,7 @@
   <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">قَبُول التعادل؟</string>
   <string name="account" comment="The account screen title.">الحساب</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">تفضيلات الحساب</string>
-  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">يتم تطبيق هذه التفضيلات على حساب Lichess الخاص بك وسيتم استخدامها عبر جميع الأجهزة.</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">تُطبَّق هذه التفضيلات على حسابك في Lichess، وستُستخدم على جميع أجهزتك.</string>
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">إضافة إلى الدراسة</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">جميع المباريات</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">السماح بالتراجع والتلميحات</string>
@@ -14,8 +14,7 @@
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">إعدادات الرقعة</string>
   <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">تأخير برونشتاين</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">إلغاء عرض الاسترجاع</string>
-  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">تم إنشاء التحدي: سيتم إبلاغك عند بداية اللعبة
-يمكنك فتحها في الصفحة الرئيسة</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">تم إنشاء التحدّي: ستتلقى إشعارًا عند بَدْء المباراة.\nيمكنك الوصول إليه من علامة تبويب الصفحة الرئيسية.</string>
   <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">تحدٍّ من وضعية الشطرنج</string>
   <string name="chapterName" comment="Label of the text field to name a new study chapter.">اسم الفصل</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">محرك الشطرنج</string>
@@ -49,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الرئيسية</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">إذا كان هناك حساب يطابق %1$s، فقد أُرسل إليه رمز مكوّن من %2$s أحرف. تحقّق من صندوق الوارد وأدخل الرمز أدناه.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">هذا الرمز غير صالح أو انتهت صلاحيته.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">البثوث المباشرة</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">حجم قاعدة البيانات المحلية</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">تنفيذ النقلة عند الإفلات</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">عند تحريك قطعة بالنقر، تُنفَّذ النقلة عند رفع إصبعك، مما يتيح لك تحريك إصبعك لتغيير مربع الوصول.</string>

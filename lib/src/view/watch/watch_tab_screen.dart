@@ -99,8 +99,22 @@ class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
               );
             },
           ),
-          LichessConnectionStatus.networkDown => const Center(
-            child: Text('No internet connection.', style: Styles.noResultTextStyle),
+          // Pulling to refresh is not gated on the connectivity status: the device may be marked
+          // offline while its network is back, and the responses to these requests are what tell
+          // the connectivity check to run again.
+          LichessConnectionStatus.networkDown => HapticRefreshIndicator(
+            onRefresh: _refreshData,
+            child: const CustomScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Text('No internet connection.', style: Styles.noResultTextStyle),
+                  ),
+                ),
+              ],
+            ),
           ),
           // Nothing on this tab works without the server, so the outage message
           // takes the whole screen. Pulling to refresh is the way out of it:

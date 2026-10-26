@@ -30,6 +30,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'בית';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'האם לסיים את הסבב?';
@@ -1442,6 +1454,14 @@ class AppLocalizationsHe extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'תרגול של שורות וטורים מסוימים';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'ללמוד שחמט';
 
   @override
@@ -2500,7 +2520,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2528,6 +2548,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2926,9 +2949,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeCastling => 'הצרחה';
 
   @override
-  String get puzzleThemeEnPassant => 'הכאה דרך הילוכו';
-
-  @override
   String get puzzleThemeCastlingDescription => 'הביאו את המלך למקום מבטחים, והכינו את הצריח להתקפה.';
 
   @override
@@ -3020,6 +3040,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'טקטיקה במהלך השלב האחרון של המשחק.';
+
+  @override
+  String get puzzleThemeEnPassant => 'הכאה דרך הילוכו';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3819,6 +3842,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4445,6 +4471,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get noNetwork => 'לא מחובר';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'יריבים מועדפים';
 
   @override
@@ -4811,9 +4842,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reason => 'סיבה';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'רמאות';
 
   @override
@@ -4830,9 +4858,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5412,7 +5437,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get downloadImported => 'הורד משחק מיובא';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'הורדת כל המשחקים';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'חשבון הנקודות';
@@ -6179,7 +6210,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get showMeEverything => 'הראו לי הכל';
 
   @override
-  String get lichessPatronInfo => 'ליצ\'ס הוא ארגון לטובת הכלל ותוכנת קוד פתוח חינמית.\nכל עלויות התפעול, הפיתוח והתוכן ממומנות אך ורק על ידי תרומות משתמשים.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'אין כלום להצגה כאן, בינתיים.';
@@ -7032,9 +7063,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'רק תורמי לוח הלמידה יכולים לבקש ניתוח ממוחשב.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'קבל/י ניתוח צד־שרת מלא של המסעים העיקריים (mainline).';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'ניתן לבקש ניתוח ממוחשב רק פעם אחת, ולכן ודאו שהפרק הושלם.';
 
   @override
@@ -7251,9 +7279,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyStart => 'שמירה';
-
-  @override
-  String get studySave => 'שמירה';
 
   @override
   String get studyClearChat => 'ניקוי הצ\'אט';
@@ -7489,6 +7514,21 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'הלבן הובס, אבל השחור אינו יכול לנצח';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

@@ -93,7 +93,7 @@ class _AccountMenuScreenState()
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.read(defaultClientProvider);
+    final client = ref.read(imageClientProvider);
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
@@ -349,7 +349,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     void openMenu() => showAccountMenu(context);

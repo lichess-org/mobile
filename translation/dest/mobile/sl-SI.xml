@@ -23,7 +23,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Dober večer</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Dobra poteza, ampak obstaja boljša</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Domov</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Prenašalci v živo</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Prijavite se za ogled te strani.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Uganke brez povezave</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nova igra</string>
@@ -85,6 +84,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Prikaži okvir šahovnice</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Odzivnost na dotik</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Ko je nastavitev omogočena, bo naprava izvedla kratko vibracijo ko premaknete ali vzamete figuro.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Deli</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Deli PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Deli igro URL</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Deli pozicijo kot FEN</string>

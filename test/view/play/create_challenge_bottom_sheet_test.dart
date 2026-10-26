@@ -253,7 +253,7 @@ const _clockChallengeResponse =
 {
   "socketVersion": 0,
   "id": "$_clockChallengeId",
-  "url": "https://lichess.org/$_clockChallengeId",
+  "url": "https://lichess.org/game/$_clockChallengeId",
   "status": "created",
   "challenger": {
     "id": "testuser",
@@ -285,7 +285,7 @@ const _correspondenceChallengeCreatedResponse =
 {
   "socketVersion": 0,
   "id": "$_correspondenceChallengeId",
-  "url": "https://lichess.org/$_correspondenceChallengeId",
+  "url": "https://lichess.org/game/$_correspondenceChallengeId",
   "status": "created",
   "challenger": {
     "id": "testuser",
@@ -317,7 +317,7 @@ const _correspondenceChallengeDeclinedResponse =
 {
   "socketVersion": 1,
   "id": "$_correspondenceChallengeId",
-  "url": "https://lichess.org/$_correspondenceChallengeId",
+  "url": "https://lichess.org/game/$_correspondenceChallengeId",
   "status": "declined",
   "challenger": {
     "id": "testuser",

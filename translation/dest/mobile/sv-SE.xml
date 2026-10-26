@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Acceptera remi?</string>
   <string name="account" comment="The account screen title.">Konto</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoinställningar</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">De här preferenserna tillämpas på ditt Lichess-konto och kommer användas på alla enheter.</string>
@@ -8,6 +9,9 @@
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Brädinställningar</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Neka att ta tillbaka drag</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Rensa</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Kod</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Koden är %s tecken för lång.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopierat.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Rensa sparade drag</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Anpassa</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Avfärda</string>
@@ -18,8 +22,8 @@
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">God kväll, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Godkväll</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Bra drag, men det finns bättre</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hej</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hem</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Videokanaler från Lichess</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du måste vara inloggad för att se denna sida.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline pussel</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nytt parti</string>
@@ -28,14 +32,17 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Eller importera en PGN-fil</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Spela 2 på samma enhet</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Klistra in från urklippet</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antischack</string>
   <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blixt</string>
   <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
   <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Pussel</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3schack</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PNG kopierad.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spelare med \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Vänster</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Höger</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Övningsläge</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Förstora flyttad pjäs</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Föregående</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Vill du avsluta den här omgången?</string>
@@ -44,6 +51,7 @@
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lös så många pussel som möjligt på 3 minuter.</string>
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Spela pussel från dina favoritöppningar, eller välj ett tema.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Pussel</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">Betygsätt appen</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Senaste sökningar</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Ta bort bokmärke</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Serveranalys</string>
@@ -62,12 +70,16 @@
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Dela detta schackproblem</string>
   <string name="showComments" comment="Shown in the analysis screen.">Visa kommentarer</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Visa resultat</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Logga in med webbläsaren</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Logga in med e-post</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Något gick fel.</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Sluta visa hot</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemets färger</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianten %s är inte stödd i denna version.</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Visa spel</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Visa licenser</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Väntar på motståndare...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Titta</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Du kan inte utmana dig själv</string>
 </resources>

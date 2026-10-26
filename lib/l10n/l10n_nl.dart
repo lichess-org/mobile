@@ -30,6 +30,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Terugnames en hints toestaan';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled zwart';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Gevarenzone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Startscherm';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -276,6 +285,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePreviousPage => 'Vorige';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Wil je deze reeks beëindigen?';
 
   @override
@@ -387,7 +399,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Delen';
 
   @override
   String get mobileShareChallengeUrl => 'Uitdagingslink delen';
@@ -1421,6 +1433,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Alleen sommige kolommen & rijen oefenen';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Voer de coördinaat in';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Druk op $param om te starten';
+  }
+
+  @override
   String get learnLearnChess => 'Leer schaken';
 
   @override
@@ -2320,7 +2340,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesInGameOnly => 'Alleen tijdens partij';
 
   @override
-  String get preferencesExceptInGame => 'Uitgezonderd tijdens partijen';
+  String get preferencesExceptInGame => 'Behalve tijdens partij';
 
   @override
   String get preferencesChessClock => 'Schaakklok';
@@ -2479,7 +2499,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesInlineNotation => 'Geïntegreerde notatie';
 
   @override
-  String get preferencesShowServerAnalysis => 'Toon serveranalyse';
+  String get preferencesShowMainlineAnalysis => 'Toon analyse hoofdvariant';
 
   @override
   String get preferencesShowBestMoveArrows => 'Toon beste zet-pijlen';
@@ -2507,6 +2527,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Toon schaakbare koning';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Toon ingesloten stukken';
 
   @override
   String get preferencesDisclosureMode => 'Varianten verbergen';
@@ -2900,9 +2923,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokeren';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Breng de koning in veiligheid en zet de toren in voor een aanval.';
 
   @override
@@ -2994,6 +3014,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Tactiek in de slotfase van de partij.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion kan slaan die vanuit zijn beginpositie twee velden naar voren wordt gezet.';
@@ -3793,6 +3816,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get engineSettings => 'Computerinstellingen';
 
   @override
+  String get engine => 'Computer';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Computers van sterkst naar zwakst';
 
   @override
@@ -4419,6 +4445,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Vrienden online: $param1\nVrienden die spelen: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Favoriete tegenstanders';
 
   @override
@@ -4785,9 +4816,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get reason => 'Reden';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Valsspelen';
 
   @override
@@ -4804,9 +4832,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Als je in het Engels schrijft, kunnen we je melding sneller verwerken.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5386,7 +5411,13 @@ class AppLocalizationsNl extends AppLocalizations {
   String get downloadImported => 'Download de geïmporteerde partij';
 
   @override
+  String get downloadMyGames => 'Download mijn partijen';
+
+  @override
   String get downloadAllGames => 'Alle partijen downloaden';
+
+  @override
+  String get downloadResults => 'Download resultaten';
 
   @override
   String get crosstable => 'Onderlinge partijen';
@@ -5533,7 +5564,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get deviceTheme => 'Apparaatthema';
 
   @override
-  String get roundness => 'Ronde hoeken';
+  String get roundness => 'Ronding';
 
   @override
   String get backgroundImage => 'Achtergrondafbeelding';
@@ -6153,7 +6184,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get showMeEverything => 'Alles tonen';
 
   @override
-  String get lichessPatronInfo => 'Lichess is een organisatie zonder winstoogmerk en is volledig open en gratis (libre).\nAlle exploitatiekosten, ontwikkeling en inhoud worden enkel gefinancierd door donaties van gebruikers.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Hier is momenteel niets te zien.';
@@ -6963,9 +6994,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Alleen de bijdragers kunnen een computer analyse aanvragen.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Krijg een volledige computeranalyse van de hoofdvariant.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Zorg ervoor dat het hoofdstuk voltooid is. Je kunt slechts één keer een analyse aanvragen.';
 
   @override
@@ -7182,9 +7210,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get studySave => 'Opslaan';
 
   @override
   String get studyClearChat => 'Maak de chat leeg';
@@ -7420,6 +7445,21 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Witte nederlaag, maar Zwart kan niet winnen';
+
+  @override
+  String get studyAnalysisEditor => 'Analysebewerker';
+
+  @override
+  String get studyClearLocal => 'Lokale analyse wissen?';
+
+  @override
+  String get studyClearPublished => 'Gepubliceerde analyse wissen?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Vraag een serveranalyse aan';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyseer op je apparaat';
 
   @override
   String studyNbChapters(int count) {

@@ -14,7 +14,10 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart'
-    show getApplicationDocumentsDirectory, getApplicationSupportDirectory;
+    show
+        getApplicationCacheDirectory,
+        getApplicationDocumentsDirectory,
+        getApplicationSupportDirectory;
 
 typedef PreloadedData = ({
   PackageInfo packageInfo,
@@ -24,6 +27,7 @@ typedef PreloadedData = ({
   int engineMaxMemoryInMb,
   Directory? appDocumentsDirectory,
   Directory? appSupportDirectory,
+  Directory? imageCacheDirectory,
 });
 
 /// A provider that preloads various data needed throughout the app.
@@ -38,6 +42,7 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
     physicalMemory,
     appDocumentsDirectory,
     appSupportDirectory,
+    imageCacheDirectory,
   ) = await (
     PackageInfo.fromPlatform(),
     DeviceInfoPlugin().deviceInfo,
@@ -46,6 +51,7 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
     System.instance.getTotalRam(),
     _getDirectoryOrNull(getApplicationDocumentsDirectory),
     _getDirectoryOrNull(getApplicationSupportDirectory),
+    _getDirectoryOrNull(_createImageCacheDirectory),
   ).wait;
 
   final token = authUser?.token;
@@ -77,6 +83,7 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
     engineMaxMemoryInMb: engineMaxMemoryFor(physicalMemory ?? 256),
     appDocumentsDirectory: appDocumentsDirectory,
     appSupportDirectory: appSupportDirectory,
+    imageCacheDirectory: imageCacheDirectory,
   );
 }, name: 'PreloadedDataProvider');
 
@@ -96,6 +103,12 @@ Future<String> _readOrCreateSri() async {
     await SecureStorage.instance.deleteAll();
     return genRandomString(12);
   }
+}
+
+/// Creates, if needed, the directory where [imageClientProvider] caches the images it downloads.
+Future<Directory> _createImageCacheDirectory() async {
+  final cacheDirectory = await getApplicationCacheDirectory();
+  return await Directory('${cacheDirectory.path}/http_images').create(recursive: true);
 }
 
 /// Runs [getDirectory], returning `null` instead of throwing if it fails.

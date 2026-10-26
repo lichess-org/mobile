@@ -30,6 +30,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ablehne';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Startsite';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -274,6 +283,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Vorher';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
@@ -1421,6 +1433,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Üeb nur einigi Dateie und Räng';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
+
+  @override
   String get learnLearnChess => 'Lern Schach';
 
   @override
@@ -2479,7 +2499,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline-Notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Server-Analyse zeigä';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Pfiil für d\'beschti Züg zeige';
@@ -2507,6 +2527,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'En Schachbare König zeige';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Ermögliche, d\'Variante z\'verstäcke';
@@ -2900,9 +2923,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCastling => 'Rochade';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Bring de König in Sicherheit und schick de Turm in Agriff.';
 
   @override
@@ -2994,6 +3014,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'E Taktik für die letscht Fase vum Schpiel.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'E Taktik, wo d\'En Passant regle griift, bi dere en buur en gegnerische Buur cha schla, wenn dise vorher isch zwei Schritt glaufe.';
@@ -3793,6 +3816,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get engineSettings => 'Engine Ischtellige';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines vo stärkste bis schwächste';
 
   @override
@@ -4419,6 +4445,11 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Hüfigschti Gägner';
 
   @override
@@ -4785,9 +4816,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reason => 'Grund';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Bschiss';
 
   @override
@@ -4804,9 +4832,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Mir chönd dini Meldig schneller uf Änglisch bearbeite.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5386,7 +5411,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get downloadImported => 'Importierte Download';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'All Schpiel abelade';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Matchverlauf';
@@ -6153,7 +6184,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get showMeEverything => 'Zeig mer alles';
 
   @override
-  String get lichessPatronInfo => 'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Da gits im monumäntan nüt z\'gseh.';
@@ -6963,9 +6994,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Nur wer a dere Schtudie mit macht, chann e Coputeranalyse afordere.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Erhalt e vollschtändigi, serversitigi Computeranalyse vu de Hauptvariante.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Schtell sicher, dass das Kapitel vollschtändig isch. Die Analyse chann nur eimal agforderet werde.';
 
   @override
@@ -7182,9 +7210,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyStart => 'Schtart';
-
-  @override
-  String get studySave => 'Schpeichärä';
 
   @override
   String get studyClearChat => 'Tschätt löschä';
@@ -7420,6 +7445,21 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Wiss besiegt, aber Schwarz chann nöd günne';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

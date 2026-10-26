@@ -41,7 +41,7 @@ class PuzzleSession(final PuzzleSessionParams params) extends Notifier<PuzzleSes
     await _update((d) {
       final newAttempts = d.attempts.replaceFirstWhere(
         (p) => p.id == id,
-        (p) => p?.copyWith(win: win) ?? PuzzleAttempt(id: id, win: win),
+        (_) => PuzzleAttempt(id: id, win: win),
         addIfNotFound: true,
       );
       final newState = d.copyWith(

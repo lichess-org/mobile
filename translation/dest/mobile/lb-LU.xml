@@ -20,6 +20,7 @@
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Däi Benotzerkont läschen</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompakt</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detailléiert</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Meng Partien eroflueden</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filteren</string>
   <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Auer dréinen</string>
@@ -30,7 +31,6 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Gudden Zuch, mee et gëtt e besseren</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Moien</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startsäit</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-Streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du muss ageloggt sinn, fir dës Säit ze gesinn.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline-Puzzelen</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nei Partie</string>
@@ -102,7 +102,9 @@
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Dës Aufgab deelen</string>
   <string name="showComments" comment="Shown in the analysis screen.">Kommentarer weisen</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Resultat weisen</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Klengt Briet</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Et ass eppes schifgaang.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Kolleege sortéieren</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Drounge verstoppen</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemsfaarwen</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Ausgesinn</string>
@@ -110,6 +112,7 @@
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Op meng Placéierung sprangen</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">D\'Variant %s gëtt an dëser Versioun net ënnerstëtzt.</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Partie weisen</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Lizenz weisen</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Waarden, datt de Géigner bäitrëtt…</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kucken</string>
 </resources>

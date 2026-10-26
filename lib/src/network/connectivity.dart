@@ -105,6 +105,8 @@ class ConnectivityChangesNotifier() extends AsyncNotifier<ConnectivityStatus> {
   // next change.
   final _connectivityChangesThrottler = Throttler(kConnectivityThrottleDelay, trailing: true);
 
+  final _httpResponseThrottler = Throttler(kConnectivityThrottleDelay);
+
   /// Claimed by every check that starts and every write that decides whether the device is online.
   int _onlineStatusRevision = 0;
 
@@ -146,6 +148,7 @@ class ConnectivityChangesNotifier() extends AsyncNotifier<ConnectivityStatus> {
       _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
       _connectivityChangesThrottler.cancel();
+      _httpResponseThrottler.cancel();
     });
 
     _connectivitySubscription?.cancel();
@@ -222,6 +225,27 @@ class ConnectivityChangesNotifier() extends AsyncNotifier<ConnectivityStatus> {
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: connectivity changed: $result, isOnline: $newIsOnline');
       _setOnlineStatus(newIsOnline);
+    }
+  }
+
+  /// Called by the http clients for every response they receive, [url] being the request's.
+  void onHttpResponse(Uri? url) {
+    if (internetCheckUris.contains(url)) return;
+    if (_settledStatus?.isOnline != false) return;
+    _httpResponseThrottler(_onHttpResponse);
+  }
+
+  Future<void> _onHttpResponse() async {
+    final revision = _onlineStatusRevision;
+    // A response is a strong hint that the network is back, but not a proof: it may come from the
+    // http cache.
+    final newIsOnline = await isOnline(_defaultClient);
+
+    if (!_isCurrent(revision)) return;
+
+    if (newIsOnline) {
+      _logger.info('Connectivity status: http response received, isOnline: true');
+      _setOnlineStatus(true);
     }
   }
 
