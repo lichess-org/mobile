@@ -100,7 +100,7 @@ class const SideToPlayPiece({required final Side side}) extends ConsumerWidget {
       clipBehavior: Clip.none,
       children: [
         BrightnessHueFilter(
-          brightness: boardPrefs.brightness,
+          brightness: boardPrefs.effectiveBrightness(brightness),
           hue: boardPrefs.hue,
           child: Container(
             width: 50,

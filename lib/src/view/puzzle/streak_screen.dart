@@ -208,7 +208,10 @@ class _BodyState() extends ConsumerState<_Body> {
                     final isTablet = isTabletOrLarger(context);
 
                     final defaultSettings = boardPreferences
-                        .toBoardSettings(Variant.standard)
+                        .toBoardSettings(
+                          Variant.standard,
+                          appBrightness: Theme.of(context).brightness,
+                        )
                         .copyWith(
                           borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],

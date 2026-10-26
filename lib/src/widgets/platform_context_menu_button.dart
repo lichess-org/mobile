@@ -1,58 +1,17 @@
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/services.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart'
-    show appBarButtonGlassSettings, useLiquidGlass;
+import 'package:lichess_mobile/src/widgets/platform.dart' show ios27GlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassButton,
-        GlassDefaults,
         GlassMenu,
         GlassMenuController,
         GlassMenuDivider,
         GlassMenuItem,
         GlassMenuLabel,
-        LiquidGlassSettings,
         LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
-
-/// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint, a
-/// stronger blur and more saturation: like an iOS menu, the colors of the content show through.
-///
-/// The package default glass (white 12%) is too clear over light content: used by the glass menus
-/// and popovers in light mode ([menuGlassSettings]).
-const kLightMenuGlassSettings = LiquidGlassSettings(
-  blur: 20,
-  thickness: 10,
-  glassColor: Color(0x66FFFFFF),
-  lightAngle: GlassDefaults.lightAngle,
-  lightIntensity: 0.7,
-  ambientStrength: 0.4,
-  saturation: 1.8,
-  refractiveIndex: 0.7,
-  chromaticAberration: 0.0,
-);
-
-/// [kLightMenuGlassSettings] for dark mode: a fainter tint than the package default (white 8%
-/// instead of 12%), its saturation, and the same stronger blur (with the package default blur, the
-/// content shows through sharply).
-const kDarkMenuGlassSettings = LiquidGlassSettings(
-  blur: 20,
-  thickness: 10,
-  glassColor: Color(0x14FFFFFF),
-  lightAngle: GlassDefaults.lightAngle,
-  lightIntensity: 0.7,
-  ambientStrength: 0.4,
-  saturation: 1.2,
-  refractiveIndex: 0.7,
-  chromaticAberration: 0.0,
-);
-
-/// The glass of the liquid glass context menus and popovers.
-LiquidGlassSettings menuGlassSettings(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-    ? kLightMenuGlassSettings
-    : kDarkMenuGlassSettings;
 
 /// Width of the liquid glass context menus.
 const kGlassMenuWidth = 250.0;
@@ -228,7 +187,7 @@ class const ContextMenuIconButton({
     if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
-        settings: menuGlassSettings(context),
+        settings: ios27GlassSettings(context),
         semanticLabel: semanticsLabel,
         // The button is not glass itself: it sits in the glass capsule of the app bar.
         triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
@@ -277,7 +236,7 @@ class const ContextMenuTitleButton({
       final foregroundColor = ColorScheme.of(context).onSurface;
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
-        settings: menuGlassSettings(context),
+        settings: ios27GlassSettings(context),
         triggerBuilder: (context, toggleMenu) => Semantics(
           button: true,
           label: semanticsLabel,
@@ -285,7 +244,7 @@ class const ContextMenuTitleButton({
             onTap: toggleMenu,
             label: semanticsLabel,
             // The glass of the app bar buttons next to it.
-            settings: appBarButtonGlassSettings(context),
+            settings: ios27GlassSettings(context),
             height: _kGlassTitleButtonHeight,
             shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
             // The app bar is isolated, there is no parent glass layer to share.
@@ -410,7 +369,7 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
               morphFromZero: true,
               autoAdjustToScreen: true,
               menuWidth: kGlassMenuWidth,
-              settings: menuGlassSettings(context),
+              settings: ios27GlassSettings(context),
               items: glassMenuItems(context, widget.actions),
             ),
           ),

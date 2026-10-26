@@ -44,6 +44,8 @@ Future<void> bootstrapApp(LichessBindingBase Function() initializeBinding) async
 
   runApp(
     LiquidGlassWidgets.wrap(
+      theme: const .ios27(),
+      brightnessResolver: Theme.maybeBrightnessOf,
       child: ProviderScope(
         observers: [ProviderLogger()],
         retry: lichessProviderRetry,

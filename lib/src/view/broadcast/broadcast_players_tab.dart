@@ -179,7 +179,6 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
 
     return CustomScrollView(
       slivers: [
-        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         SliverSafeArea(
           bottom: false,
           sliver: SliverToBoxAdapter(

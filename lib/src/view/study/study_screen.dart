@@ -244,7 +244,7 @@ class const _PlaceholderBody({required final Widget child}) extends ConsumerWidg
           size: boardSize,
           settings: StaticChessboardSettings.fromBoardSettings(
             boardPrefs
-                .toBoardSettings(Variant.standard)
+                .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                 .copyWith(
                   borderRadius: borderRadius,
                   boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],

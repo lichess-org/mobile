@@ -75,7 +75,6 @@ class const BroadcastTeamsList(
     return switch (round) {
       AsyncData(:final value) => CustomScrollView(
         slivers: [
-          SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
           if (showTeamScores)
             SliverSafeArea(
               bottom: false,
