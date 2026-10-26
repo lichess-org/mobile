@@ -285,7 +285,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePreviousPage => 'Eelmine';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Kas soovid partii lõpetada?';

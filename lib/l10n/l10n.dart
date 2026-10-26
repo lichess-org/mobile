@@ -727,7 +727,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobilePuzzleHistoryDescription.
   ///
   /// In en, this message translates to:
-  /// **'Review your past puzzle attempts'**
+  /// **'Review your past puzzle attempts.'**
   String get mobilePuzzleHistoryDescription;
 
   /// No description provided for @mobilePuzzleStormConfirmEndRun.

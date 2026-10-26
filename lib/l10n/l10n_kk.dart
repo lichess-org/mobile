@@ -285,7 +285,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobilePreviousPage => 'Алдыңғы';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Осы кезеңді аяқтайсыз ба?';
