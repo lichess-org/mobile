@@ -11,15 +11,15 @@ Color opaqueModalColor(BuildContext context) =>
 
 /// The rounded liquid glass card of an iOS modal (action sheet, alert dialog, bottom sheet).
 ///
-/// With [solid], it is the package's flat opaque card instead, for a modal shown over busy content
-/// such as a board, which the glass would let show through too much.
+/// With [tinted], its glass is tinted with [opaqueModalColor], nearly opaque, for a modal shown over
+/// busy content such as a board, which the glass would let show through too much.
 ///
 /// Before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of the same shape.
 class const GlassModalCard({
   required final Widget child,
   final double borderRadius = 26.0,
   final EdgeInsetsGeometry? padding,
-  final bool solid = false,
+  final bool tinted = false,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -35,23 +35,16 @@ class const GlassModalCard({
       );
     }
 
-    if (solid) {
-      return GlassContainer.card(
-        surfaceStyle: .solid,
-        shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
-        clipBehavior: Clip.antiAlias,
-        padding: padding,
-        child: child,
-      );
-    }
-
     return GlassContainer(
       // A modal floats alone over the content, there is no parent glass layer to share.
       useOwnLayer: true,
       shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
       clipBehavior: Clip.antiAlias,
       padding: padding,
-      settings: ios27GlassSettings(context),
+      settings: tinted
+          ? ios27GlassSettings(context)
+                .copyWith(glassColor: opaqueModalColor(context).withValues(alpha: 0.85))
+          : ios27GlassSettings(context),
       child: child,
     );
   }
@@ -64,8 +57,8 @@ class const GlassDialogFrame({
   /// The width of an alert dialog by default.
   final double maxWidth = 300.0,
 
-  /// See [GlassModalCard.solid].
-  final bool solid = false,
+  /// See [GlassModalCard.tinted].
+  final bool tinted = false,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -77,7 +70,7 @@ class const GlassDialogFrame({
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: maxWidth),
             child: GlassModalCard(
-              solid: solid,
+              tinted: tinted,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
