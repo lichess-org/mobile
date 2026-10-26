@@ -78,8 +78,7 @@ class const MessageInputField({required final Widget field, super.key}) extends 
 /// care of the bottom safe area), or with no input bar when null.
 ///
 /// On iOS the messages scroll under the input bar, which floats over them at the bottom of the
-/// screen, over a blur of the messages ([BottomBarScrollEdgeEffect]), its field a
-/// [MessageInputField]. Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
+/// screen ([BottomBarScrollEdgeEffect]), its field a [MessageInputField]. Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
 /// ([BlurredBarBackground]). The bottom padding of the [MediaQuery] of [messages] is the height of
 /// the bar, that their scroll view must apply.
 class const MessageInputLayout({required final Widget messages, final Widget? input, super.key})

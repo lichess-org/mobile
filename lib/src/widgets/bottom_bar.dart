@@ -117,8 +117,8 @@ const double _kBottomBarButtonsMiddle = _kGlassBarTopPadding + _kGlassCapsuleHei
 const int _kBottomEdgeTintSteps = 8;
 
 /// The bottom edge of content scrolling under a [BottomBar] with [BottomBar.cupertinoGlass] that
-/// floats over it, on iOS 26 and later: the content under the bar is blurred, under a gradient of
-/// [color], so that its glass buttons stay readable, like an iOS scroll edge effect.
+/// floats over it, on iOS 26 and later: when [enabled], the content under the bar is blurred, under
+/// a gradient of [color], so that its glass buttons stay readable, like an iOS scroll edge effect.
 ///
 /// Before iOS 26, the bar has its own blur ([BlurredBarBackground]): [child] is shown as is.
 class const BottomBarScrollEdgeEffect({
@@ -128,11 +128,15 @@ class const BottomBarScrollEdgeEffect({
   /// The background color of the content, which tints the edge under the bar buttons.
   required final Color color,
   required final Widget child,
+
+  /// Whether the content under the bar is blurred and tinted. Defaults to false: the glass buttons
+  /// stand out enough from the content on their own.
+  final bool enabled = false,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!useLiquidGlass(context)) return child;
+    if (!enabled || !useLiquidGlass(context)) return child;
 
     final edgeHeight = barHeight + _kBottomEdgeFadeAboveBar;
     final tintOpacity = Theme.of(context).brightness == Brightness.light
