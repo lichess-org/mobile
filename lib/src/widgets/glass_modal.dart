@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoDialogRoute;
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassContainer, LiquidRoundedSuperellipse;
@@ -51,6 +52,11 @@ class const GlassModalCard({
 }
 
 /// The iOS frame of a dialog: a [GlassModalCard] centered on the screen.
+///
+/// With liquid glass, the card is painted through an [OverlayPortal], outside the dialog route's
+/// transition: the iOS dialog route ([showAdaptiveDialog]) fades its page in, which would show the
+/// glass more transparent until the end of the fade. The card scales in at full opacity instead,
+/// and fades out when the dialog closes.
 class const GlassDialogFrame({
   required final Widget child,
 
@@ -60,24 +66,56 @@ class const GlassDialogFrame({
   /// See [GlassModalCard.tinted].
   final bool tinted = false,
   super.key,
-}) extends StatelessWidget {
+}) extends StatefulWidget {
+  @override
+  State<GlassDialogFrame> createState() => _GlassDialogFrameState();
+}
+
+class _GlassDialogFrameState() extends State<GlassDialogFrame> {
+  final _portalController = OverlayPortalController();
+
+  /// The scale of the iOS dialog transition ([CupertinoDialogRoute]).
+  static final _scaleTween = Tween<double>(begin: 1.3, end: 1.0);
+
+  @override
+  void initState() {
+    super.initState();
+    _portalController.show();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    final frame = SafeArea(
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: maxWidth),
+            constraints: BoxConstraints(maxWidth: widget.maxWidth),
             child: GlassModalCard(
-              tinted: tinted,
+              tinted: widget.tinted,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
-              child: Material(type: MaterialType.transparency, child: child),
+              child: Material(type: MaterialType.transparency, child: widget.child),
             ),
           ),
         ),
+      ),
+    );
+
+    final animation = ModalRoute.of(context)?.animation;
+    if (!useLiquidGlass(context) || animation == null) {
+      return frame;
+    }
+
+    return OverlayPortal(
+      controller: _portalController,
+      overlayChildBuilder: (context) => AnimatedBuilder(
+        animation: animation,
+        builder: (context, child) => animation.status == AnimationStatus.reverse
+            ? Opacity(opacity: animation.value.clamp(0.0, 1.0), child: child)
+            : Transform.scale(scale: _scaleTween.evaluate(animation), child: child),
+        child: frame,
       ),
     );
   }
