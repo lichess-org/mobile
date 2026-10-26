@@ -24,7 +24,7 @@ class const PlatformTabBar({
   final bool inAppBar = true,
 
   /// Whether the iOS segmented control is liquid glass, as a control of a bar floating over the
-  /// content. A segmented control in the content (e.g. a header that is not pinned yet) is flat,
+  /// content. A segmented control in the content (e.g. in a header that scrolls away) is flat,
   /// like the iOS controls in content: the same control without its glass, on the text field fill
   /// ([GlassControlBackground]).
   ///

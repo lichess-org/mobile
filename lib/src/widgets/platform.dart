@@ -305,7 +305,6 @@ class const PlatformScaffold({
     final hasTintedAppBar =
         stickyAppBar &&
         extendBodyBehindAppBar &&
-        appBar!.scrolledUnderTint &&
         (!useLiquidGlass(context) ||
             (title != null && title is! SearchFieldHero && title is! PlatformSearchBar));
     final hasLargeTitle = hasTintedAppBar && title != null && appBar!.largeTitle;
@@ -774,11 +773,6 @@ class const PlatformAppBar({
   final bool compactButtons = false,
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
-
-  /// Whether the app bar is tinted on iOS while content is scrolled under it (see
-  /// [PlatformScaffold]). False for a screen whose pinned header paints the bar background itself
-  /// (e.g. pinned tabs before iOS 26).
-  final bool scrolledUnderTint = true,
 
   /// Whether the [title] is an iOS large title, at the top of the body of a [PlatformScaffold], and
   /// shown in the app bar once it is scrolled away, like a UIKit navigation bar large title.
