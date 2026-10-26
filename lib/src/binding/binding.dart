@@ -6,7 +6,7 @@ library;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
+import 'package:lichess_mobile/src/binding/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.

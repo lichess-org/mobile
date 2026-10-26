@@ -1,6 +1,5 @@
 import 'package:lichess_mobile/src/binding/binding.dart';
-import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
-import 'package:lichess_mobile/src/model/crashlytics/crashlytics_noop.dart';
+import 'package:lichess_mobile/src/binding/crashlytics.dart';
 
 /// Concrete implementation of [LichessBinding] for F-Droid.
 class FdroidLichessBinding() extends LichessBindingBase {
@@ -12,5 +11,5 @@ class FdroidLichessBinding() extends LichessBindingBase {
   Future<void> initializeFirebase() async {}
 
   @override
-  Crashlytics get firebaseCrashlytics => const FdroidCrashlytics();
+  Crashlytics get firebaseCrashlytics => const NoOpCrashlytics();
 }

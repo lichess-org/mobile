@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
-import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
+import 'package:lichess_mobile/src/binding/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The binding instance used in tests.
