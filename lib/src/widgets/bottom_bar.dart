@@ -396,15 +396,15 @@ double _glassBarBottomPadding(BuildContext context) => math.max(
 /// same width in a [BottomBarGroup].
 const double _kGlassIconButtonWidth = _kGlassCapsuleHeight;
 
+/// Opacity of the wash of the theme color of a prominent button in a liquid glass [BottomBar].
+const double _kGlassProminentWashAlpha = 0.65;
+
 /// A liquid glass capsule button of a [BottomBar] with [BottomBar.cupertinoGlass], as wide as its
 /// content.
 class const _GlassBottomBarCapsule({
   required final VoidCallback? onTap,
   required final Widget child,
   final bool prominent = false,
-
-  /// Whether the capsule pulses with a wash of the theme color, to draw attention to it.
-  final bool blink = false,
 
   /// Whether the capsule holds the buttons of a [BottomBarGroup], which handle the taps.
   final bool group = false,
@@ -416,77 +416,44 @@ class const _GlassBottomBarCapsule({
     final colorScheme = ColorScheme.of(context);
     final foregroundColor = prominent ? colorScheme.primary : colorScheme.onSurface;
     final glassSettings = ios27GlassSettings(context);
-    // A wash that shows on the light glass as well as on the dark one.
-    final washAlpha = Theme.of(context).brightness == Brightness.light ? 0.3 : 0.15;
-
-    Widget buildButton(double wash) => GlassButton.custom(
-      onTap: onTap ?? () {},
-      enabled: enabled,
-      // A prominent button gets a light wash of the theme color, with a label in that color, like an
-      // iOS tinted button.
-      settings: wash > 0
-          ? glassSettings.copyWith(
-              glassColor: Color.alphaBlend(
-                colorScheme.primary.withValues(alpha: washAlpha * wash),
-                glassSettings.glassColor,
-              ),
-            )
-          : glassSettings,
-      shape: const LiquidRoundedRectangle(borderRadius: 100),
-      // The bar has no glass layer to share.
-      useOwnLayer: true,
-      width: double.infinity,
-      height: _kGlassCapsuleHeight,
-      // The buttons of a group have their own semantics and focus.
-      excludeFromSemantics: group,
-      canRequestFocus: !group,
-      // A wide group stretches less, like an iOS toolbar group.
-      stretch: group ? 0.15 : 0.5,
-      child: Padding(
-        padding: padding,
-        child: IconTheme.merge(
-          data: IconThemeData(color: foregroundColor, size: _kGlassIconSize),
-          child: DefaultTextStyle.merge(
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: foregroundColor),
-            child: child,
-          ),
-        ),
-      ),
-    );
 
     // As wide as its content, within the width the bar gives it.
     return IntrinsicWidth(
       child: Opacity(
         opacity: enabled ? 1.0 : 0.4,
-        child: blink ? _Blink(builder: buildButton) : buildButton(prominent ? 1.0 : 0.0),
+        child: GlassButton.custom(
+          onTap: onTap ?? () {},
+          enabled: enabled,
+          settings: prominent
+              ? glassSettings.copyWith(
+                  glassColor: Color.alphaBlend(
+                    colorScheme.primary.withValues(alpha: _kGlassProminentWashAlpha),
+                    glassSettings.glassColor,
+                  ),
+                )
+              : glassSettings,
+          shape: const LiquidRoundedRectangle(borderRadius: 100),
+          // The bar has no glass layer to share.
+          useOwnLayer: true,
+          width: double.infinity,
+          height: _kGlassCapsuleHeight,
+          // The buttons of a group have their own semantics and focus.
+          excludeFromSemantics: group,
+          canRequestFocus: !group,
+          // A wide group stretches less, like an iOS toolbar group.
+          stretch: group ? 0.15 : 0.5,
+          child: Padding(
+            padding: padding,
+            child: IconTheme.merge(
+              data: IconThemeData(color: foregroundColor, size: _kGlassIconSize),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: foregroundColor),
+                child: child,
+              ),
+            ),
+          ),
+        ),
       ),
-    );
-  }
-}
-
-/// Builds a liquid glass button with a wash of the theme color that comes and goes, from 0 to 1.
-class const _Blink({required final Widget Function(double wash) builder}) extends StatefulWidget {
-  @override
-  State<_Blink> createState() => _BlinkState();
-}
-
-class _BlinkState() extends State<_Blink> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 2000),
-    vsync: this,
-  )..repeat(reverse: true);
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, _) => widget.builder(_controller.value),
     );
   }
 }
@@ -569,21 +536,26 @@ class const BottomBarButton({
                 onTap: onTap,
                 child: Opacity(
                   opacity: enabled ? 1.0 : 0.4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: blink
-                        ? _AnimatedInvertBackground(
-                            color: primary.withValues(alpha: 0.2),
+                  // A prominent slot has the wash and the icon color of a prominent capsule. A
+                  // blinking slot is prominent: glass buttons don't blink.
+                  child: prominent || blink
+                      ? DecoratedBox(
+                          decoration: ShapeDecoration(
+                            shape: const StadiumBorder(),
+                            color: primary.withValues(alpha: _kGlassProminentWashAlpha),
+                          ),
+                          child: IconTheme.merge(
+                            data: IconThemeData(color: primary),
                             child: groupSlot,
-                          )
-                        : groupSlot,
-                  ),
+                          ),
+                        )
+                      : groupSlot,
                 ),
               )
             : _GlassBottomBarCapsule(
                 onTap: onTap,
-                prominent: prominent,
-                blink: blink,
+                // A blinking button is prominent: glass buttons don't blink.
+                prominent: prominent || blink,
                 padding: iconOnly
                     ? const EdgeInsets.symmetric(
                         horizontal: (_kGlassIconButtonWidth - _kGlassIconSize) / 2,
