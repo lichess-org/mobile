@@ -183,7 +183,6 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 
     return CustomScrollView(
       slivers: [
-        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         if (hasComment)
           SliverSafeArea(
             bottom: false,

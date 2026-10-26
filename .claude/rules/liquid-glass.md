@@ -33,8 +33,7 @@ dropped, so keep it cheap:
 - Write every fallback branch as `if (!useLiquidGlass(context))` (or a ternary on it), deletable on
   its own while keeping the glass branch.
 - Put fallback code in the shared widgets (`lib/src/widgets/`, `tab_scaffold.dart`), next to the
-  glass code. Screens never branch on `useLiquidGlass`; the only exception is
-  `broadcast_round_screen.dart` (`PlatformAppBar.scrolledUnderTint`).
+  glass code. Screens never branch on `useLiquidGlass`.
 - Reuse what exists for a fallback (the Material path, a control's flat mode,
   `BlurredBarBackground`, `opaqueModalColor`). Never change glass code or a layout for it.
 - A new glass widget gets its fallback in the same shared widget. If a plain equivalent isn't

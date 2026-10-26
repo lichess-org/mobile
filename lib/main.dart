@@ -10,7 +10,8 @@ import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/service/app_log_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
+    show GlassThemeData, LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
 Future<void> main() async {
@@ -44,6 +45,8 @@ Future<void> main() async {
 
   runApp(
     LiquidGlassWidgets.wrap(
+      theme: const GlassThemeData.ios27(),
+      brightnessResolver: Theme.maybeBrightnessOf,
       child: ProviderScope(
         observers: [ProviderLogger()],
         retry: lichessProviderRetry,

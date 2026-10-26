@@ -23,12 +23,8 @@ class const PlatformTabBar({
   /// Whether the tabs are the bottom of an app bar, in its glass layer.
   final bool inAppBar = true,
 
-  /// Whether the glass segmented control is tinted on iOS ([tintedGlassSettings]), for busy content
-  /// scrolling under it, like boards.
-  final bool tintedGlass = false,
-
   /// Whether the iOS segmented control is liquid glass, as a control of a bar floating over the
-  /// content. A segmented control in the content (e.g. a header that is not pinned yet) is flat,
+  /// content. A segmented control in the content (e.g. in a header that scrolls away) is flat,
   /// like the iOS controls in content: the same control without its glass, on the text field fill
   /// ([GlassControlBackground]).
   ///
@@ -83,7 +79,6 @@ class const PlatformTabBar({
       child: GlassControlBackground(
         glass: isGlass,
         height: kGlassAppBarBottomControlHeight,
-        settings: tintedGlass ? tintedGlassSettings(context) : null,
         child: ListenableBuilder(
           listenable: tabController,
           builder: (context, _) => GlassSegmentedControl(

@@ -111,7 +111,7 @@ class _BodyState() extends ConsumerState<_Body> {
                   : defaultBoardSize;
 
               final settings = boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     autoQueenPromotion: false,
@@ -453,7 +453,7 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                     child: Theme.of(context).platform == TargetPlatform.iOS
                         // Shown over the board, which the glass would let show through too much.
                         ? GlassModalCard(
-                            tintOpacity: 0.85,
+                            tinted: true,
                             child: Material(
                               type: MaterialType.transparency,
                               child: SingleChildScrollView(

@@ -1,22 +1,25 @@
+import 'dart:math' as math;
+
 import 'package:flutter/rendering.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassContainer, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 
-/// Vertical padding around a message input field, at the bottom of a chat or conversation screen.
-double messageInputVerticalPadding(BuildContext context, {required double fallback}) =>
-    Theme.of(context).platform == TargetPlatform.iOS ? 12.0 : fallback;
+/// Space above a message input field on iOS, and below it the minimum space when the bottom safe
+/// area is smaller (e.g. above the keyboard), like a [BottomSearchBar].
+const double _kIOSMessageInputVerticalPadding = 8.0;
 
-/// Corner radius of the liquid glass background of a [MessageInputField] on iOS: a capsule around
+/// Corner radius of the liquid glass background of a [MessageInputBar] on iOS: a capsule around
 /// a single line field, and rounded corners around several lines, like the Messages input.
 const double _kGlassMessageInputRadius = 18.0;
 
 /// The decoration of a message input field, at the bottom of a chat or conversation screen.
 ///
 /// On iOS it is a slim capsule, like the Messages input. On iOS 26 and later ([useLiquidGlass]),
-/// the field has no fill nor border: its background is the glass of its [MessageInputField].
+/// the field has no fill nor border: its background is the glass of its [MessageInputBar].
 InputDecoration messageInputDecoration(
   BuildContext context, {
   required Widget suffixIcon,
@@ -48,38 +51,68 @@ InputDecoration messageInputDecoration(
   );
 }
 
-/// The message input [field] of a chat or conversation screen, decorated with
-/// [messageInputDecoration]: on iOS 26 and later ([useLiquidGlass]), it floats over the messages
-/// in a liquid glass capsule, like the Messages input.
-class const MessageInputField({required final Widget field, super.key}) extends StatelessWidget {
+/// The message input bar of a chat or conversation screen, around a [field] decorated with
+/// [messageInputDecoration], that takes care of the bottom safe area.
+///
+/// On iOS it is laid out like a [BottomSearchBar]. On iOS 26 and later ([useLiquidGlass]), the
+/// field floats over the messages in a liquid glass capsule, like the Messages input. Elsewhere,
+/// [fallbackVerticalPadding] is the space above and below the field.
+class const MessageInputBar({
+  required final Widget field,
+  required final double fallbackVerticalPadding,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!useLiquidGlass(context)) return field;
-
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: GlassContainer(
-            shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassMessageInputRadius),
-            // Like the bottom search fields.
-            settings: appBarButtonGlassSettings(context),
-            // Floats over the content, there is no parent glass layer to share.
-            useOwnLayer: true,
-            child: const SizedBox.expand(),
-          ),
+    if (Theme.of(context).platform != TargetPlatform.iOS) {
+      return SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: fallbackVerticalPadding),
+          child: field,
         ),
-        field,
-      ],
+      );
+    }
+
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          16.0,
+          _kIOSMessageInputVerticalPadding,
+          16.0,
+          math.max(MediaQuery.paddingOf(context).bottom, _kIOSMessageInputVerticalPadding),
+        ),
+        child: useLiquidGlass(context)
+            ? Stack(
+                children: [
+                  Positioned.fill(
+                    child: GlassContainer(
+                      shape: const LiquidRoundedSuperellipse(
+                        borderRadius: _kGlassMessageInputRadius,
+                      ),
+                      // Like the bottom search fields.
+                      settings: ios27GlassSettings(context),
+                      // Floats over the content, there is no parent glass layer to share.
+                      useOwnLayer: true,
+                      child: const SizedBox.expand(),
+                    ),
+                  ),
+                  field,
+                ],
+              )
+            : field,
+      ),
     );
   }
 }
 
-/// The [messages] of a chat or conversation screen, above its message [input] bar (which takes
-/// care of the bottom safe area), or with no input bar when null.
+/// The [messages] of a chat or conversation screen, above its message [input] bar (a
+/// [MessageInputBar]), or with no input bar when null.
 ///
 /// On iOS the messages scroll under the input bar, which floats over them at the bottom of the
-/// screen, over a blur of the messages ([BottomBarScrollEdgeEffect]), its field a
-/// [MessageInputField]. Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
+/// screen ([BottomBarScrollEdgeEffect]). Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
 /// ([BlurredBarBackground]). The bottom padding of the [MediaQuery] of [messages] is the height of
 /// the bar, that their scroll view must apply.
 class const MessageInputLayout({required final Widget messages, final Widget? input, super.key})

@@ -387,7 +387,6 @@ class const DailyPuzzle({super.key}) extends ConsumerWidget {
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
         return SmallBoardPreview(
-          dimInDarkMode: true,
           orientation: preview.orientation,
           fen: preview.initialFen,
           lastMove: preview.initialMove,
@@ -499,7 +498,6 @@ class const PuzzleAnglePreview({
                 ],
               ),
               child: SmallBoardPreview(
-                dimInDarkMode: true,
                 orientation: preview?.orientation ?? Side.white,
                 fen: preview?.initialFen ?? kEmptyFEN,
                 lastMove: preview?.initialMove,

@@ -12,12 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart'
     show NavigationSheetScope, showAdaptiveNavigationSheet;
 import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
-    show
-        ContextMenuIconButton,
-        glassMenuItems,
-        kDarkMenuGlassSettings,
-        kGlassMenuWidth,
-        kLightMenuGlassSettings;
+    show ContextMenuIconButton, glassMenuItems, kGlassMenuWidth;
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
@@ -155,16 +150,12 @@ const EdgeInsets kGlassAppBarBottomPadding = EdgeInsets.fromLTRB(16.0, 12.0, 16.
 /// Height of a control (segmented control, chips) in the `bottom` of a [PlatformAppBar] on iOS.
 const double kGlassAppBarBottomControlHeight = 36.0;
 
-/// Glass settings tinted like the iOS tab bar, for glass controls over busy content (boards): opaque
-/// enough that what is seen through the glass does not compete with the labels and icons.
-///
-/// In dark mode the tint is a theme surface color, so that the controls match the other surfaces
-/// of the screen (search fields, cards) instead of a fixed grey.
-LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSettings(
-  glassColor: Theme.of(context).brightness == Brightness.light
-      ? const Color(0xBFFFFFFF)
-      : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 0.8),
-);
+/// The package's iOS 27 `glassEffect(.regular)` glass, in the brightness of the app theme: the
+/// glass of every liquid glass widget of the app.
+LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light
+    : LiquidGlassSettings.ios27Dark;
 
 /// The capsule background of an iOS control (segmented control, search field) that is liquid glass
 /// in a bar floating over the content, and flat in the content, like the iOS controls there.
@@ -182,9 +173,6 @@ class const GlassControlBackground({
 
   /// The height of the control, which the capsule is rounded to.
   required final double height,
-
-  /// The glass settings, or the default ones when null.
-  final LiquidGlassSettings? settings,
   required final Widget child,
 }) extends StatelessWidget {
   @override
@@ -210,8 +198,8 @@ class const GlassControlBackground({
             child: GlassContainer(
               shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
               settings: glass
-                  ? settings
-                  : (settings ?? const LiquidGlassSettings()).copyWith(visibility: 0.0),
+                  ? ios27GlassSettings(context)
+                  : ios27GlassSettings(context).copyWith(visibility: 0.0),
               // Outside of an app bar, there is no parent glass layer to share. In an app bar,
               // which is isolated, its glass gets its own layer anyway.
               useOwnLayer: true,
@@ -239,40 +227,6 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
   @override
   bool updateShouldNotify(AppBarBottomGlassScope oldWidget) => glass != oldWidget.glass;
 }
-
-/// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, a bit clearer
-/// than the bottom bar buttons ([tintedGlassSettings]) yet standing out from the background, like
-/// the iOS navigation bar buttons (the package's light glass is nearly clear).
-///
-/// The menus of the pinned bar buttons get the glass of the buttons (the package has no setting of
-/// their own): the same blur and saturation as [kLightMenuGlassSettings], like an iOS menu.
-const _kLightAppBarButtonSettings = LiquidGlassSettings(
-  blur: 20,
-  glassColor: Color(0xB3FFFFFF),
-  saturation: 1.8,
-);
-
-/// [_kLightAppBarButtonSettings] for dark mode: the same tint, blur and saturation as
-/// [kDarkMenuGlassSettings], for the menus of the pinned bar buttons.
-const _kDarkAppBarButtonSettings = LiquidGlassSettings(
-  blur: 20,
-  glassColor: Color(0x14FFFFFF),
-  saturation: 1.2,
-);
-
-/// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
-/// laid out inside it (the search field below a large title), so that they look the same.
-///
-/// With a background theme, or when [tinted] (`PlatformAppBar.tintedGlass`), it is
-/// [tintedGlassSettings]: the barely tinted dark glass would show the image brightly. Otherwise,
-/// the buttons are white in light mode and light grey in dark mode, like the iOS navigation bar
-/// buttons.
-LiquidGlassSettings appBarButtonGlassSettings(BuildContext context, {bool tinted = false}) =>
-    tinted || _hasBackgroundTheme(context)
-    ? tintedGlassSettings(context)
-    : Theme.of(context).brightness == Brightness.light
-    ? _kLightAppBarButtonSettings
-    : _kDarkAppBarButtonSettings;
 
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
@@ -351,7 +305,6 @@ class const PlatformScaffold({
     final hasTintedAppBar =
         stickyAppBar &&
         extendBodyBehindAppBar &&
-        appBar!.scrolledUnderTint &&
         (!useLiquidGlass(context) ||
             (title != null && title is! SearchFieldHero && title is! PlatformSearchBar));
     final hasLargeTitle = hasTintedAppBar && title != null && appBar!.largeTitle;
@@ -821,15 +774,6 @@ class const PlatformAppBar({
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
 
-  /// Whether the glass buttons are tinted on iOS ([tintedGlassSettings]), for a screen whose
-  /// content scrolling under them is busy, like boards. They always are with a background theme.
-  final bool tintedGlass = false,
-
-  /// Whether the app bar is tinted on iOS while content is scrolled under it (see
-  /// [PlatformScaffold]). False for a screen whose pinned header paints the bar background itself
-  /// (e.g. pinned tabs before iOS 26).
-  final bool scrolledUnderTint = true,
-
   /// Whether the [title] is an iOS large title, at the top of the body of a [PlatformScaffold], and
   /// shown in the app bar once it is scrolled away, like a UIKit navigation bar large title.
   ///
@@ -859,7 +803,7 @@ class const PlatformAppBar({
       final glass = useLiquidGlass(context);
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
-      final buttonSettings = appBarButtonGlassSettings(context, tinted: tintedGlass);
+      final buttonSettings = ios27GlassSettings(context);
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
           MainTabScaffoldProperties.hasExtendedBody(context) &&
@@ -1131,7 +1075,7 @@ class const PlatformFloatingActionButton({
         // Tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
         // to let the content show through. The clear body mode keeps the exact color, with the
         // glass rim and specular highlights.
-        settings: LiquidGlassSettings(
+        settings: ios27GlassSettings(context).copyWith(
           glassColor: (fabTheme.backgroundColor ?? colorScheme.primaryContainer).withValues(
             alpha: 0.8,
           ),

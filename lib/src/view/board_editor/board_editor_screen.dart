@@ -148,7 +148,7 @@ class const _BoardEditor(
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs
-          .toBoardSettings(editorState.variant)
+          .toBoardSettings(editorState.variant, appBrightness: Theme.of(context).brightness)
           .copyWith(
             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
