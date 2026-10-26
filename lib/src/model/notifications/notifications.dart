@@ -73,7 +73,7 @@ sealed class const FcmMessage() {
         case 'challengeCreate':
           final challengeId = message.data['lichess.challengeId'] as String?;
           if (challengeId != null) {
-            return ChallengeCreateFcmMessage(
+            return CorresChallengeCreateFcmMessage(
               ChallengeId(challengeId),
               notification: message.notification,
             );
@@ -84,7 +84,7 @@ sealed class const FcmMessage() {
           final challengeId = message.data['lichess.challengeId'] as String?;
           final fullId = message.data['lichess.fullId'] as String?;
           if (challengeId != null && fullId != null) {
-            return ChallengeAcceptFcmMessage(
+            return CorresChallengeAcceptFcmMessage(
               ChallengeId(challengeId),
               GameFullId(fullId),
               notification: message.notification,
@@ -144,8 +144,10 @@ sealed class const FcmMessage() {
   LocalNotification? toLocalNotification() => switch (this) {
     final NewMessageFcmMessage m => NewMessageNotification.fromFcmMessage(m),
     final CorresGameUpdateFcmMessage m => CorresGameUpdateNotification.fromFcmMessage(m),
-    final ChallengeCreateFcmMessage m => ChallengeCreatedNotification.fromFcmMessage(m),
-    final ChallengeAcceptFcmMessage m => ChallengeAcceptedNotification.fromFcmMessage(m),
+    final CorresChallengeCreateFcmMessage m => CorresChallengeCreatedNotification.fromFcmMessage(m),
+    final CorresChallengeAcceptFcmMessage m => CorresChallengeAcceptedNotification.fromFcmMessage(
+      m,
+    ),
     final BroadcastRoundFcmMessage m => BroadcastRoundNotification.fromFcmMessage(m),
     final BroadcastPlayerFollowFcmMessage m => BroadcastPlayerFollowNotification.fromFcmMessage(m),
     final RecapFcmMessage m => RecapNotification.fromFcmMessage(m),
@@ -171,16 +173,22 @@ class const CorresGameUpdateFcmMessage(
   @override required final RemoteNotification? notification,
 }) extends FcmMessage;
 
-/// An [FcmMessage] sent when a challenge is created.
+/// An [FcmMessage] sent when a correspondence challenge is created.
+///
+/// The server sends it for any challenge without a clock (correspondence or unlimited), never for
+/// real time challenges.
 @immutable
-class const ChallengeCreateFcmMessage(
+class const CorresChallengeCreateFcmMessage(
   final ChallengeId id, {
   @override required final RemoteNotification? notification,
 }) extends FcmMessage;
 
-/// An [FcmMessage] sent when a challenge is accepted.
+/// An [FcmMessage] sent when a correspondence challenge is accepted.
+///
+/// The server sends it for any challenge without a clock (correspondence or unlimited), never for
+/// real time challenges, and only when the challenger plays white.
 @immutable
-class const ChallengeAcceptFcmMessage(
+class const CorresChallengeAcceptFcmMessage(
   final ChallengeId id,
   final GameFullId fullId, {
   @override required final RemoteNotification? notification,
@@ -236,10 +244,10 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 enum NotificationChannel(final String id, final Importance importance) {
   playban('playban', .defaultImportance),
   newMessage('newMessage', .defaultImportance),
-  corresGameUpdate('corresGameUpdate', .high),
-  challenge('challenge', .high),
-  challengeAccept('challengeAccept', .high),
-  challengeCreate('challengeCreate', .high),
+  corresGameUpdate('corresGameUpdate', .defaultImportance),
+  challenge('challenge', .high), // only real time challenges get high importance
+  corresChallengeAccept('corresChallengeAccept', .defaultImportance),
+  corresChallengeCreate('corresChallengeCreate', .defaultImportance),
   announce('announce', .defaultImportance),
   broadcast('broadcast', .defaultImportance),
   recap('recap', .defaultImportance);
@@ -248,7 +256,9 @@ enum NotificationChannel(final String id, final Importance importance) {
   String name(AppLocalizations l10n) => switch (this) {
     playban => 'Playban',
     newMessage => l10n.preferencesNotifyDirectMessage,
-    corresGameUpdate || challengeAccept || challengeCreate => l10n.preferencesNotifyGameEvent,
+    corresGameUpdate ||
+    corresChallengeAccept ||
+    corresChallengeCreate => l10n.preferencesNotifyGameEvent,
     announce => 'Lichess Announcements',
     challenge => l10n.preferencesNotifyChallenge,
     broadcast => l10n.broadcastBroadcasts,
@@ -344,9 +354,9 @@ sealed class const LocalNotification() {
       case 'newMessage':
         return NewMessageNotification.fromJson(json);
       case 'challengeAccept':
-        return ChallengeAcceptedNotification.fromJson(json);
+        return CorresChallengeAcceptedNotification.fromJson(json);
       case 'challengeCreate':
-        return ChallengeCreatedNotification.fromJson(json);
+        return CorresChallengeCreatedNotification.fromJson(json);
       case 'announce':
         return AnnounceNotification.fromJson(json);
       case 'broadcastRound':
@@ -508,10 +518,12 @@ class const CorresGameUpdateNotification(
   );
 }
 
-/// A notification for a challenge acceptance.
+/// A notification for the acceptance of a correspondence challenge.
 ///
-/// This notification is shown when a challenge is accepted on the server.
-class const ChallengeAcceptedNotification(
+/// Shown from a [CorresChallengeAcceptFcmMessage]. The server only sends it for challenges without
+/// a clock (correspondence or unlimited), and only when the challenger plays white: otherwise the
+/// opponent moves first and the challenger gets a [CorresGameUpdateNotification] instead.
+class const CorresChallengeAcceptedNotification(
   final GameFullId fullId,
   final String _title,
   final String _body,
@@ -520,17 +532,17 @@ class const ChallengeAcceptedNotification(
     final gameId = GameFullId.fromJson(json['fullId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
-    return ChallengeAcceptedNotification(gameId, title, body);
+    return CorresChallengeAcceptedNotification(gameId, title, body);
   }
 
-  factory fromFcmMessage(ChallengeAcceptFcmMessage message) {
+  factory fromFcmMessage(CorresChallengeAcceptFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeAcceptedNotification(message.fullId, title, body);
+    return CorresChallengeAcceptedNotification(message.fullId, title, body);
   }
 
   @override
-  NotificationChannel get channel => .challengeAccept;
+  NotificationChannel get channel => .corresChallengeAccept;
 
   @override
   String get payloadType => 'challengeAccept';
@@ -558,11 +570,13 @@ class const ChallengeAcceptedNotification(
   );
 }
 
-/// A notification for a challenge creation.
+/// A notification for the creation of a correspondence challenge.
 ///
-/// This notification is shown when a challenge is created on the server while the app is in the background.
-/// If the app is in the foreground, challenges are handled by WebSocket and a [ChallengeNotification] is shown instead.
-class const ChallengeCreatedNotification(
+/// Shown from a [CorresChallengeCreateFcmMessage] received while the app is in the background. The
+/// server only sends it for challenges without a clock (correspondence or unlimited). In the
+/// foreground, incoming challenges of any kind come through the socket and a
+/// [ChallengeNotification] is shown instead.
+class const CorresChallengeCreatedNotification(
   final ChallengeId challengeId,
   final String _title,
   final String _body,
@@ -571,17 +585,17 @@ class const ChallengeCreatedNotification(
     final challengeId = ChallengeId.fromJson(json['challengeId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
-    return ChallengeCreatedNotification(challengeId, title, body);
+    return CorresChallengeCreatedNotification(challengeId, title, body);
   }
 
-  factory fromFcmMessage(ChallengeCreateFcmMessage message) {
+  factory fromFcmMessage(CorresChallengeCreateFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeCreatedNotification(message.id, title, body);
+    return CorresChallengeCreatedNotification(message.id, title, body);
   }
 
   @override
-  NotificationChannel get channel => .challengeCreate;
+  NotificationChannel get channel => .corresChallengeCreate;
 
   @override
   String get payloadType => 'challengeCreate';
@@ -685,8 +699,9 @@ class const AnnounceNotification(
 
 /// A notification for a received challenge.
 ///
-/// This notification is shown when a challenge is received from the server through
-/// the web socket.
+/// Shown when a challenge, real time or correspondence, is received from the server through the
+/// socket while the app is in the foreground. It is the only notification for real time
+/// challenges: the server sends no FCM message for them.
 class const ChallengeNotification(final Challenge challenge) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final challenge = Challenge.fromJson(json['challenge'] as Map<String, dynamic>);

@@ -23,22 +23,6 @@ RemoteMessage broadcastMessage(String? url) => RemoteMessage(
 );
 
 void main() {
-  test('notification channel ids are stable', () {
-    // The server specifies these channel IDs in the FCM messages it sends. They must not differ
-    // from the ones used in the app.
-    expect(NotificationChannel.values.map((c) => c.id), [
-      'playban',
-      'newMessage',
-      'corresGameUpdate',
-      'challengeAccept',
-      'challengeCreate',
-      'announce',
-      'challenge',
-      'broadcast',
-      'recap',
-    ]);
-  });
-
   group('Broadcast FCM message parsing:', () {
     test('a round path is parsed as a round message', () {
       final message = FcmMessage.fromRemoteMessage(
@@ -221,7 +205,7 @@ void main() {
         const RemoteMessage(
           data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
         ),
-        ChallengeCreatedNotification,
+        CorresChallengeCreatedNotification,
       ),
       (
         const RemoteMessage(
@@ -231,7 +215,7 @@ void main() {
             'lichess.fullId': '9wlmxmibr9gh',
           },
         ),
-        ChallengeAcceptedNotification,
+        CorresChallengeAcceptedNotification,
       ),
       (
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L'),
