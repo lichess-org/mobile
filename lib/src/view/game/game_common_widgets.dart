@@ -57,60 +57,6 @@ void openGameScreen(
   }
 }
 
-class const GameBookmarkContextMenuAction({
-  required final GameId id,
-  required final bool bookmarked,
-  required final Future<void> Function() onToggleBookmark,
-  super.key,
-}) extends StatefulWidget {
-  @override
-  State<GameBookmarkContextMenuAction> createState() => _GameBookmarkContextMenuActionState();
-}
-
-class _GameBookmarkContextMenuActionState() extends State<GameBookmarkContextMenuAction> {
-  Future<void>? _pendingBookmarkAction;
-  late bool _bookmarked;
-
-  @override
-  void initState() {
-    _bookmarked = widget.bookmarked;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _pendingBookmarkAction,
-      builder: (context, snapshot) {
-        return ContextMenuAction(
-          icon: _bookmarked ? Icons.bookmark_remove_outlined : Icons.bookmark_add_outlined,
-          label: _bookmarked ? context.l10n.mobileRemoveBookmark : context.l10n.bookmarkThisGame,
-          onPressed: snapshot.connectionState == ConnectionState.waiting
-              ? null
-              : () async {
-                  try {
-                    final future = widget.onToggleBookmark();
-                    setState(() {
-                      _pendingBookmarkAction = future;
-                    });
-                    await future;
-                    if (context.mounted) {
-                      setState(() {
-                        _bookmarked = !_bookmarked;
-                      });
-                    }
-                  } catch (_) {
-                    if (context.mounted) {
-                      showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
-                    }
-                  }
-                },
-        );
-      },
-    );
-  }
-}
-
 /// Makes the game sharing actions of a "Share & export" submenu.
 ///
 /// The game URL can always be shared; the GIF and PGN exports are only available once the game is

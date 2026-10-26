@@ -119,6 +119,7 @@ final analysisControllerProvider = AsyncNotifierProvider.autoDispose
 
 ({Root root, UciPath path, Variant variant})? _savedStandalone;
 
+@visibleForTesting
 void clearSavedStandaloneAnalysis() {
   _savedStandalone = null;
 }
