@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -302,7 +301,7 @@ class _BroadcastRoundScreenState()
         ),
         // The tabs scroll under the glass bottom bar buttons.
         body: BottomBarScrollEdgeEffect(
-          barHeight: kBottomBarHeight + MediaQuery.paddingOf(context).bottom,
+          barHeight: BottomBar.heightOf(context),
           color: Theme.of(context).scaffoldBackgroundColor,
           child: NestedScrollView(
             headerSliverBuilder: (context, _) => [

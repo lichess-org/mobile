@@ -83,9 +83,7 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
     final floatingBar =
         Theme.of(context).platform == TargetPlatform.iOS &&
         MediaQuery.orientationOf(context) == Orientation.portrait;
-    final tableBottomInset = floatingBar
-        ? kBottomBarHeight + MediaQuery.paddingOf(context).bottom
-        : 0.0;
+    final tableBottomInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
     return SafeArea(
       // The bar below the table takes care of the bottom inset itself.

@@ -9,8 +9,8 @@ import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
 ///
-/// The height of the bar is always [kBottomBarHeight] and the font size scale factor is
-/// clamped to 1.4.
+/// The height of the bar is [kBottomBarHeight] above the bottom safe area, except for the liquid
+/// glass bar ([heightOf]), and the font size scale factor is clamped to 1.4.
 class BottomBar extends StatelessWidget {
   const new({
     required this.children,
@@ -44,6 +44,11 @@ class BottomBar extends StatelessWidget {
   /// draws itself as a [BottomBarGlassButton] there.
   static bool isGlass(BuildContext context) => _GlassBottomBarScope.isIn(context);
 
+  /// The height a bar with [cupertinoGlass] covers at the bottom of the screen, safe area included.
+  static double heightOf(BuildContext context) => useLiquidGlass(context)
+      ? _kGlassBarTopPadding + _kGlassCapsuleHeight + _glassBarBottomPadding(context)
+      : kBottomBarHeight + MediaQuery.paddingOf(context).bottom;
+
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -52,20 +57,37 @@ class BottomBar extends StatelessWidget {
     final ungrouped = glass
         ? children
         : children.expand((child) => child is BottomBarGroup ? child.children : [child]).toList();
-    final bar = BottomAppBar(
-      color: isIOS && cupertinoGlass ? Colors.transparent : null,
-      elevation: isIOS && cupertinoGlass ? 0.0 : null,
-      height: kBottomBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: glass
-          ? _GlassBottomBarScope(child: _GlassBarRow(children: children))
-          : Row(
+    final bar = glass
+        ? Material(
+            type: MaterialType.transparency,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  8.0,
+                  _kGlassBarTopPadding,
+                  8.0,
+                  _glassBarBottomPadding(context),
+                ),
+                child: SizedBox(
+                  height: _kGlassCapsuleHeight,
+                  child: _GlassBottomBarScope(child: _GlassBarRow(children: children)),
+                ),
+              ),
+            ),
+          )
+        : BottomAppBar(
+            color: isIOS && cupertinoGlass ? Colors.transparent : null,
+            elevation: isIOS && cupertinoGlass ? 0.0 : null,
+            height: kBottomBarHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Row(
               mainAxisAlignment: mainAxisAlignment,
               children: expandChildren
                   ? ungrouped.map((child) => Expanded(child: child)).toList()
                   : ungrouped,
             ),
-    );
+          );
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
@@ -89,7 +111,7 @@ const double _kBottomEdgeFadeAboveBar = 4.0;
 
 /// Distance from the top of a [BottomBar] to the vertical middle of its glass buttons, where the
 /// tint over the bottom edge blur reaches its full opacity.
-const double _kBottomBarButtonsMiddle = 8.0 + _kGlassCapsuleHeight / 2;
+const double _kBottomBarButtonsMiddle = _kGlassBarTopPadding + _kGlassCapsuleHeight / 2;
 
 /// Number of stops of the eased tint gradient over the bottom edge blur.
 const int _kBottomEdgeTintSteps = 8;
@@ -347,7 +369,24 @@ class const _GlassBottomBarGroupScope({required super.child}) extends InheritedW
   bool updateShouldNotify(_GlassBottomBarGroupScope oldWidget) => false;
 }
 
-const double _kGlassCapsuleHeight = 40.0;
+const double _kGlassCapsuleHeight = 48.0;
+
+/// Size of the icons of the liquid glass buttons of a [BottomBar].
+const double _kGlassIconSize = 24.0;
+
+/// Space above the buttons of a [BottomBar] with liquid glass buttons.
+const double _kGlassBarTopPadding = 8.0;
+
+/// How far the buttons of a [BottomBar] with liquid glass buttons reach into the bottom safe area,
+/// above the home indicator, like an iOS 26 toolbar.
+const double _kGlassBarSafeAreaOverlap = 8.0;
+
+/// Space below the buttons of a [BottomBar] with liquid glass buttons: the bottom safe area, minus
+/// [_kGlassBarSafeAreaOverlap], and at least [_kGlassBarTopPadding] (e.g. without a home indicator).
+double _glassBarBottomPadding(BuildContext context) => math.max(
+  MediaQuery.paddingOf(context).bottom - _kGlassBarSafeAreaOverlap,
+  _kGlassBarTopPadding,
+);
 
 /// Width of an icon button in a liquid glass [BottomBar]: a circle on its own, and a slot of the
 /// same width in a [BottomBarGroup].
@@ -402,7 +441,7 @@ class const _GlassBottomBarCapsule({
       child: Padding(
         padding: padding,
         child: IconTheme.merge(
-          data: IconThemeData(color: foregroundColor, size: 20.0),
+          data: IconThemeData(color: foregroundColor, size: _kGlassIconSize),
           child: DefaultTextStyle.merge(
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: foregroundColor),
             child: child,
@@ -508,7 +547,7 @@ class const BottomBarButton({
       // slot as wide as the icon alone.
       final groupSlot = Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: badgeLabel == null ? (_kGlassIconButtonWidth - 20.0) / 2 : 12.0,
+          horizontal: badgeLabel == null ? (_kGlassIconButtonWidth - _kGlassIconSize) / 2 : 12.0,
         ),
         child: Center(widthFactor: 1.0, child: badge),
       );
@@ -542,7 +581,9 @@ class const BottomBarButton({
                 prominent: prominent,
                 blink: blink,
                 padding: iconOnly
-                    ? const EdgeInsets.symmetric(horizontal: (_kGlassIconButtonWidth - 20.0) / 2)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: (_kGlassIconButtonWidth - _kGlassIconSize) / 2,
+                      )
                     : const EdgeInsets.symmetric(horizontal: 16.0),
                 child: content,
               ),
