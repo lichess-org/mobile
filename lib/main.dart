@@ -45,8 +45,6 @@ Future<void> main() async {
 
   runApp(
     LiquidGlassWidgets.wrap(
-      // The iOS 27 glass for the widgets without settings of their own, in the brightness of the
-      // app theme.
       theme: const GlassThemeData.ios27(),
       brightnessResolver: Theme.maybeBrightnessOf,
       child: ProviderScope(
