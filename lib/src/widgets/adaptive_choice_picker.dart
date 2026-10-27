@@ -8,7 +8,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// On Android, it shows a dialog with radio buttons.
 /// On iOS, it shows a liquid glass action sheet if the number of choices is less than or equal to 10.
-/// Otherwise, it shows a [CupertinoPicker].
+/// Otherwise, or when [forceWheelPicker] is true, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
   Widget? title,
@@ -16,6 +16,10 @@ Future<void> showChoicePicker<T>(
   required T selectedItem,
   required Widget Function(T choice) labelBuilder,
   void Function(T choice)? onSelectedItemChanged,
+
+  /// Whether iOS shows the [CupertinoPicker] wheel for any number of choices, e.g. to match a
+  /// neighbouring picker that has more choices.
+  bool forceWheelPicker = false,
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
@@ -63,7 +67,7 @@ Future<void> showChoicePicker<T>(
         },
       );
     case TargetPlatform.iOS:
-      if (choices.length <= 10) {
+      if (!forceWheelPicker && choices.length <= 10) {
         return showCupertinoActionSheet<void>(
           context: context,
           title: title,
