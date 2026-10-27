@@ -149,6 +149,7 @@ class NotificationService(final Ref _ref) {
     //
     // The server sends notifications to FCM registration tokens, not to the Firebase installation
     // IDs that `register()` and `onRegistered` replace them with.
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     _fcmTokenRefreshSubscription = LichessBinding.instance.firebaseMessaging.onTokenRefresh.listen((
       String token,
@@ -360,6 +361,7 @@ class NotificationService(final Ref _ref) {
       }
     }
     // The server sends notifications to FCM registration tokens (see `onTokenRefresh` above).
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     final token = await LichessBinding.instance.firebaseMessaging.getToken();
     if (token == null) {
