@@ -152,7 +152,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
             statGroupSpace,
             PerfStatsStreakCard(
               title: context.l10n.perfStatWinningStreak,
-              icon: Icons.local_fire_department,
               color: context.lichessColors.good,
               currentStreak: data.curWinStreak,
               maxStreak: data.maxWinStreak,
@@ -160,7 +159,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
             statGroupSpace,
             PerfStatsStreakCard(
               title: context.l10n.perfStatLosingStreak,
-              icon: Icons.local_fire_department,
               color: context.lichessColors.error,
               currentStreak: data.curLossStreak,
               maxStreak: data.maxLossStreak,

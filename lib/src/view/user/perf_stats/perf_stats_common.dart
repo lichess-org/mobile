@@ -22,6 +22,9 @@ String? formatPerfStatsStreakDates(UserStreak? streak) {
   final start = streak?.startGame?.finishedAt;
   final end = streak?.endGame?.finishedAt;
   if (start == null || end == null) return null;
+  if (start.year == end.year && start.month == end.month && start.day == end.day) {
+    return perfStatsDateFormat.format(start);
+  }
   if (start.year == end.year) {
     return '${DateFormat.MMMd().format(start)} – ${perfStatsDateFormat.format(end)}';
   }

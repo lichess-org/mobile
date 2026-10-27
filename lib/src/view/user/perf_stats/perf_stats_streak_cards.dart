@@ -6,112 +6,101 @@ import 'package:material_ui/material_ui.dart';
 
 class const PerfStatsStreakCard({
   required final String title,
-  required final IconData icon,
   required final Color color,
   required final UserStreak? currentStreak,
   required final UserStreak? maxStreak,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final current = currentStreak;
-    final best = maxStreak;
-    final currentValue = current == null || current.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, current);
-    final maxValue = best == null || best.isValueEmpty
-        ? '-'
-        : perfStatsStreakValueLabel(context, best);
-    final bestValue = perfStatsStreakValue(best);
-    final progress = bestValue == 0
-        ? 0.0
-        : (perfStatsStreakValue(current) / bestValue).clamp(0.0, 1.0);
-    final currentDates = formatPerfStatsStreakDates(current);
-    final maxDates = formatPerfStatsStreakDates(best);
-    final supportingStyle = TextStyle(
-      fontSize: perfStatsSupportingFontSize,
-      color: textShade(context, perfStatsSecondaryOpacity),
-    );
-
     return PerfStatsCard(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: .start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PerfStatsIconTile(icon, color: color),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 6),
-                    Text(
-                      currentValue,
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: color),
-                      semanticsLabel: currentValue == '-' ? context.l10n.none : null,
-                    ),
-                    Text(
-                      context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
-                      style: supportingStyle,
-                    ),
-                    if (currentDates != null) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        currentDates,
-                        style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: .w600)),
+          const SizedBox(height: 20),
+          _StreakDetails(
+            label: context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
+            streak: currentStreak,
+            color: color,
           ),
-          const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Expanded(
-                child: Text(
-                  context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
-                  style: supportingStyle,
-                ),
-              ),
-              Text(
-                maxValue,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: color),
-                textAlign: TextAlign.end,
-                semanticsLabel: maxValue == '-' ? context.l10n.none : null,
-              ),
-            ],
-          ),
-          if (maxDates != null) ...[
-            const SizedBox(height: 2),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                maxDates,
-                style: TextStyle(fontSize: 11, color: textShade(context, 0.5)),
-                textAlign: TextAlign.end,
-              ),
-            ),
-          ],
-          const SizedBox(height: 14),
-          ExcludeSemantics(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4.0),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 8.0,
-                backgroundColor: color.withValues(alpha: 0.15),
-                color: color,
-              ),
-            ),
+          const SizedBox(height: 24),
+          _StreakDetails(
+            label: context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
+            streak: maxStreak,
+            color: color,
           ),
         ],
       ),
+    );
+  }
+}
+
+class const _StreakDetails({
+  required final String label,
+  required final UserStreak? streak,
+  required final Color color,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final value = streak;
+    final isEmpty = value == null || value.isValueEmpty;
+    final count = isEmpty ? 0 : perfStatsStreakValue(value);
+    final dates = isEmpty ? null : formatPerfStatsStreakDates(value);
+    final visibleDots = count.clamp(0, 16);
+
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.7)),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                isEmpty ? '-' : perfStatsStreakValueLabel(context, value),
+                style: TextStyle(fontSize: 20, fontWeight: .w600, color: color),
+                textAlign: .end,
+                semanticsLabel: isEmpty ? context.l10n.none : null,
+              ),
+            ),
+          ],
+        ),
+        if (count > 0) ...[
+          const SizedBox(height: 10),
+          ExcludeSemantics(
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              crossAxisAlignment: .center,
+              children: [
+                for (var i = 0; i < visibleDots; i++)
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(color: color, shape: .circle),
+                  ),
+                if (count > visibleDots)
+                  Text(
+                    '+${context.l10n.nbGames(count - visibleDots)}',
+                    style: TextStyle(fontSize: perfStatsSupportingFontSize, color: color),
+                  ),
+              ],
+            ),
+          ),
+        ],
+        if (dates != null) ...[
+          const SizedBox(height: 10),
+          Text(
+            dates,
+            style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.85)),
+          ),
+        ],
+      ],
     );
   }
 }
