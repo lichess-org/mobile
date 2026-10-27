@@ -74,7 +74,8 @@ Future<void> initializeApp() async {
 
 Future<void> initializeLocalNotifications(Locale locale) async {
   final l10n = await AppLocalizations.delegate.load(locale);
-  await FlutterLocalNotificationsPlugin().initialize(
+  final plugin = FlutterLocalNotificationsPlugin();
+  await plugin.initialize(
     settings: InitializationSettings(
       android: const AndroidInitializationSettings('logo_black'),
       iOS: DarwinInitializationSettings(
@@ -90,6 +91,16 @@ Future<void> initializeLocalNotifications(Locale locale) async {
     onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
     // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
+
+  // Creating a channel that already exists only updates its name, so it is localized again if the
+  // locale has changed.
+  final android = plugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+  if (android != null) {
+    for (final channel in NotificationChannel.values) {
+      await android.createNotificationChannel(channel.androidChannel(l10n));
+    }
+  }
 }
 
 Future<void> preloadPieceImages() async {

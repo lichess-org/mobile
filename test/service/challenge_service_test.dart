@@ -174,7 +174,7 @@ void main() {
         result.captured[0],
         isA<NotificationDetails>()
             .having((details) => details.android?.channelId, 'channelId', 'challenge')
-            .having((d) => d.android?.importance, 'importance', Importance.max)
+            .having((d) => d.android?.importance, 'importance', Importance.high)
             .having((d) => d.android?.priority, 'priority', Priority.high),
       );
 

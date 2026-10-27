@@ -149,6 +149,7 @@ class NotificationService(final Ref _ref) {
     //
     // The server sends notifications to FCM registration tokens, not to the Firebase installation
     // IDs that `register()` and `onRegistered` replace them with.
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     _fcmTokenRefreshSubscription = LichessBinding.instance.firebaseMessaging.onTokenRefresh.listen((
       String token,
@@ -269,8 +270,8 @@ class NotificationService(final Ref _ref) {
       // Types with a local notification representation are never logged here.
       case NewMessageFcmMessage():
       case CorresGameUpdateFcmMessage():
-      case ChallengeCreateFcmMessage():
-      case ChallengeAcceptFcmMessage():
+      case CorresChallengeCreateFcmMessage():
+      case CorresChallengeAcceptFcmMessage():
       case BroadcastRoundFcmMessage():
       case BroadcastPlayerFollowFcmMessage():
       case RecapFcmMessage():
@@ -281,15 +282,15 @@ class NotificationService(final Ref _ref) {
   /// Whether a received message must be displayed as a local notification by the app.
   ///
   /// Messages received in background are displayed by the system, messages without a
-  /// platform notification have nothing to display, and a challenge creation received in
-  /// foreground is handled by the socket, which shows a [ChallengeNotification] with
+  /// platform notification have nothing to display, and a correspondence challenge creation
+  /// received in foreground is handled by the socket, which shows a [ChallengeNotification] with
   /// accept/decline actions instead.
   ///
   /// A platform notification with no title or body is malformed and is flagged with a
   /// severe log instead of being displayed as a blank notification.
   static bool _shouldShow(FcmMessage message, {required bool fromBackground}) {
     if (fromBackground) return false;
-    if (message is ChallengeCreateFcmMessage) return false;
+    if (message is CorresChallengeCreateFcmMessage) return false;
     final notification = message.notification;
     if (notification == null) return false;
     if (notification.title == null || notification.body == null) {
@@ -360,6 +361,7 @@ class NotificationService(final Ref _ref) {
       }
     }
     // The server sends notifications to FCM registration tokens (see `onTokenRefresh` above).
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     final token = await LichessBinding.instance.firebaseMessaging.getToken();
     if (token == null) {
