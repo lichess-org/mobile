@@ -462,6 +462,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileTheme => '主题';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => '尝试次数过多，请稍后重试。';
 
   @override

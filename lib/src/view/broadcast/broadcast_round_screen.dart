@@ -175,10 +175,10 @@ class _BroadcastRoundScreenState()
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    ({BroadcastRound round, bool? isSubscribed})? roundState,
+    AsyncValue<({BroadcastRound round, bool? isSubscribed})>? roundState,
   ) {
     return switch (roundState) {
-      final roundState? => PlatformScaffold(
+      AsyncData(value: (:final round, isSubscribed: final subscription)) => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
           // On iOS the title is in the header of the body, below the image, like the Music app.
@@ -220,7 +220,7 @@ class _BroadcastRoundScreenState()
                   )
                 : null;
             return [
-              if (roundState.isSubscribed case final isSubscribed?)
+              if (subscription case final isSubscribed?)
                 if (roundId != null)
                   SemanticIconButton(
                     icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
@@ -291,7 +291,7 @@ class _BroadcastRoundScreenState()
                     submenu: makeBroadcastShareMenuActions(
                       context,
                       asyncTournament.value?.data ?? widget.broadcast.tour,
-                      roundState.round,
+                      round,
                     ),
                   ),
                 ],
@@ -375,7 +375,28 @@ class _BroadcastRoundScreenState()
           _ => const BottomBar.empty(cupertinoGlass: true),
         },
       ),
-      null => PlatformScaffold(
+      AsyncError() => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: const PlatformAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Cannot load broadcast round'),
+              TextButton(
+                onPressed: () {
+                  final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                  if (roundId != null) {
+                    ref.invalidate(broadcastRoundControllerProvider(roundId));
+                  }
+                },
+                child: Text(context.l10n.retry),
+              ),
+            ],
+          ),
+        ),
+      ),
+      _ => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: const PlatformAppBar(),
         body: const Center(child: CircularProgressIndicator.adaptive()),
@@ -394,9 +415,14 @@ class _BroadcastRoundScreenState()
         // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
         final roundState = ref.watch(
           broadcastRoundControllerProvider(roundId).select(
-            (state) => switch (state.value) {
-              final value? => (round: value.round, isSubscribed: value.isSubscribed),
-              null => null,
+            (state) => switch (state) {
+              AsyncData(:final value) => AsyncData<({BroadcastRound round, bool? isSubscribed})>((
+                round: value.round,
+                isSubscribed: value.isSubscribed,
+              )),
+              AsyncError(:final error, :final stackTrace) =>
+                AsyncError<({BroadcastRound round, bool? isSubscribed})>(error, stackTrace),
+              AsyncLoading() => const AsyncLoading<({BroadcastRound round, bool? isSubscribed})>(),
             },
           ),
         );

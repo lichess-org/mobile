@@ -462,6 +462,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileTheme => 'Motyw';
 
   @override
+  String get mobileToBeAnnounced => 'To be announced';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Zbyt wiele prób. Spróbuj ponownie później.';
 
   @override
