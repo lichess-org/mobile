@@ -285,7 +285,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobilePreviousPage => 'Oldingi';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Urinishni yakunlamoqchimisiz?';

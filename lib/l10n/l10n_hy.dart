@@ -285,7 +285,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';

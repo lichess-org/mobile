@@ -285,7 +285,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePreviousPage => 'Înapoi';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';
