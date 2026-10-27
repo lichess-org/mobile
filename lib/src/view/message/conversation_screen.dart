@@ -74,7 +74,7 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
         titleSpacing: 0,
         title: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(widget.user, radius: 16),
+          leading: UserAvatar(widget.user, radius: 20),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () {
