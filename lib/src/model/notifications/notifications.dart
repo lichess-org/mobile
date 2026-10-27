@@ -19,21 +19,21 @@ import 'package:meta/meta.dart';
 /// On Android, all channels are created when the app starts, so that the FCM notifications
 /// displayed by the system don't fall back to the "Miscellaneous" channel.
 ///
-/// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
-/// never change.
-enum NotificationChannel(final String id, final Importance importance) {
-  playban('playban', .defaultImportance),
-  newMessage('newMessage', .defaultImportance),
-  corresGameUpdate('corresGameUpdate', .defaultImportance),
-  challenge('challenge', .high), // only real time challenges get high importance
-  corresChallengeAccept('corresChallengeAccept', .defaultImportance),
-  corresChallengeCreate('corresChallengeCreate', .defaultImportance),
-  announce('announce', .defaultImportance),
-  broadcast('broadcast', .defaultImportance),
-  recap('recap', .defaultImportance);
+/// The channel id is the enum value [name]. It is shared with the server, which sets it in the FCM
+/// messages, so the enum values must never be renamed.
+enum NotificationChannel(final Importance importance) {
+  playban(.defaultImportance),
+  newMessage(.defaultImportance),
+  corresGameUpdate(.defaultImportance),
+  challenge(.high), // only real time challenges get high importance
+  corresChallengeAccept(.defaultImportance),
+  corresChallengeCreate(.defaultImportance),
+  announce(.defaultImportance),
+  broadcast(.defaultImportance),
+  recap(.defaultImportance);
 
   /// The localized name of the channel, shown in the system notification settings.
-  String name(AppLocalizations l10n) => switch (this) {
+  String label(AppLocalizations l10n) => switch (this) {
     playban => 'Playban',
     newMessage => l10n.preferencesNotifyDirectMessage,
     corresGameUpdate ||
@@ -58,7 +58,7 @@ enum NotificationChannel(final String id, final Importance importance) {
 
   /// The Android channel to create on the device.
   AndroidNotificationChannel androidChannel(AppLocalizations l10n) =>
-      AndroidNotificationChannel(id, name(l10n), importance: importance);
+      AndroidNotificationChannel(name, label(l10n), importance: importance);
 }
 
 /// FCM Messages
@@ -294,7 +294,7 @@ sealed class const LocalNotification() {
   ///
   /// Corresponds to [AndroidNotificationDetails.channelId] for android and
   /// [DarwinNotificationDetails.threadIdentifier] for iOS.
-  String get channelId => channel.id;
+  String get channelId => channel.name;
 
   /// The Android details of the notification on its [channel].
   AndroidNotificationDetails _androidDetails(
@@ -302,8 +302,8 @@ sealed class const LocalNotification() {
     bool autoCancel = true,
     List<AndroidNotificationAction>? actions,
   }) => AndroidNotificationDetails(
-    channel.id,
-    channel.name(l10n),
+    channel.name,
+    channel.label(l10n),
     importance: channel.importance,
     priority: channel.priority,
     autoCancel: autoCancel,
