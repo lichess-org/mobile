@@ -396,9 +396,6 @@ double _glassBarBottomPadding(BuildContext context) => math.max(
 /// same width in a [BottomBarGroup].
 const double _kGlassIconButtonWidth = _kGlassCapsuleHeight;
 
-/// Opacity of the wash of the theme color of a prominent button in a liquid glass [BottomBar].
-const double _kGlassProminentWashAlpha = 0.65;
-
 /// A liquid glass capsule button of a [BottomBar] with [BottomBar.cupertinoGlass], as wide as its
 /// content.
 class const _GlassBottomBarCapsule({
@@ -413,9 +410,9 @@ class const _GlassBottomBarCapsule({
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final colorScheme = ColorScheme.of(context);
-    final foregroundColor = prominent ? colorScheme.primary : colorScheme.onSurface;
-    final glassSettings = ios27GlassSettings(context);
+    final foregroundColor = prominent
+        ? onProminentGlassColor(context)
+        : ColorScheme.of(context).onSurface;
 
     // As wide as its content, within the width the bar gives it.
     return IntrinsicWidth(
@@ -424,14 +421,7 @@ class const _GlassBottomBarCapsule({
         child: GlassButton.custom(
           onTap: onTap ?? () {},
           enabled: enabled,
-          settings: prominent
-              ? glassSettings.copyWith(
-                  glassColor: Color.alphaBlend(
-                    colorScheme.primary.withValues(alpha: _kGlassProminentWashAlpha),
-                    glassSettings.glassColor,
-                  ),
-                )
-              : glassSettings,
+          settings: prominent ? prominentGlassSettings(context) : ios27GlassSettings(context),
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.
           useOwnLayer: true,
@@ -472,7 +462,7 @@ class const BottomBarButton({
   final bool blink = false,
 
   /// Whether the button is the main action of the bar: on iOS, in a [BottomBar] with
-  /// [BottomBar.cupertinoGlass], its glass capsule is tinted with the theme color.
+  /// [BottomBar.cupertinoGlass], its glass capsule is tinted like a [PlatformFloatingActionButton].
   final bool prominent = false,
 
   /// In case we want to override the tooltip message. If null, the [label] will
@@ -536,16 +526,16 @@ class const BottomBarButton({
                 onTap: onTap,
                 child: Opacity(
                   opacity: enabled ? 1.0 : 0.4,
-                  // A prominent slot has the wash and the icon color of a prominent capsule. A
+                  // A prominent slot has the color and the icon color of a prominent capsule. A
                   // blinking slot is prominent: glass buttons don't blink.
                   child: prominent || blink
                       ? DecoratedBox(
                           decoration: ShapeDecoration(
                             shape: const StadiumBorder(),
-                            color: primary.withValues(alpha: _kGlassProminentWashAlpha),
+                            color: prominentGlassSettings(context).glassColor,
                           ),
                           child: IconTheme.merge(
-                            data: IconThemeData(color: primary),
+                            data: IconThemeData(color: onProminentGlassColor(context)),
                             child: groupSlot,
                           ),
                         )

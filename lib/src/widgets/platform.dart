@@ -157,6 +157,24 @@ LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
     ? LiquidGlassSettings.ios27Light
     : LiquidGlassSettings.ios27Dark;
 
+/// The glass of a prominent liquid glass button (floating action button, main action of a bottom
+/// bar): tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
+/// to let the content show through. The clear body mode keeps the exact color, with the glass rim
+/// and specular highlights.
+LiquidGlassSettings prominentGlassSettings(BuildContext context) =>
+    ios27GlassSettings(context).copyWith(
+      glassColor:
+          (FloatingActionButtonTheme.of(context).backgroundColor ??
+                  ColorScheme.of(context).primaryContainer)
+              .withValues(alpha: 0.8),
+      bodyMode: .clear,
+    );
+
+/// The color of the icon and label of a prominent liquid glass button ([prominentGlassSettings]).
+Color onProminentGlassColor(BuildContext context) =>
+    FloatingActionButtonTheme.of(context).foregroundColor ??
+    ColorScheme.of(context).onPrimaryContainer;
+
 /// The capsule background of an iOS control (segmented control, search field) that is liquid glass
 /// in a bar floating over the content, and flat in the content, like the iOS controls there.
 ///
@@ -1066,21 +1084,11 @@ class const PlatformFloatingActionButton({
   @override
   Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
-      final colorScheme = ColorScheme.of(context);
-      final fabTheme = FloatingActionButtonTheme.of(context);
-      final foregroundColor = fabTheme.foregroundColor ?? colorScheme.onPrimaryContainer;
+      final foregroundColor = onProminentGlassColor(context);
       return GlassButton.custom(
         onTap: onPressed,
         label: label,
-        // Tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
-        // to let the content show through. The clear body mode keeps the exact color, with the
-        // glass rim and specular highlights.
-        settings: ios27GlassSettings(context).copyWith(
-          glassColor: (fabTheme.backgroundColor ?? colorScheme.primaryContainer).withValues(
-            alpha: 0.8,
-          ),
-          bodyMode: .clear,
-        ),
+        settings: prominentGlassSettings(context),
         height: _kGlassFloatingButtonHeight,
         shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassFloatingButtonHeight / 2),
         // Floats alone over the content, there is no parent glass layer to share.
