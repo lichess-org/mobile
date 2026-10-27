@@ -14,6 +14,53 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart' show relativeDate;
 import 'package:meta/meta.dart';
 
+/// A notification channel, shared by one or more [LocalNotification] types and FCM messages.
+///
+/// On Android, all channels are created when the app starts, so that the FCM notifications
+/// displayed by the system don't fall back to the "Miscellaneous" channel.
+///
+/// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
+/// never change.
+enum NotificationChannel(final String id, final Importance importance) {
+  playban('playban', .defaultImportance),
+  newMessage('newMessage', .defaultImportance),
+  corresGameUpdate('corresGameUpdate', .defaultImportance),
+  challenge('challenge', .high), // only real time challenges get high importance
+  corresChallengeAccept('corresChallengeAccept', .defaultImportance),
+  corresChallengeCreate('corresChallengeCreate', .defaultImportance),
+  announce('announce', .defaultImportance),
+  broadcast('broadcast', .defaultImportance),
+  recap('recap', .defaultImportance);
+
+  /// The localized name of the channel, shown in the system notification settings.
+  String name(AppLocalizations l10n) => switch (this) {
+    playban => 'Playban',
+    newMessage => l10n.preferencesNotifyDirectMessage,
+    corresGameUpdate ||
+    corresChallengeAccept ||
+    corresChallengeCreate => l10n.preferencesNotifyGameEvent,
+    announce => 'Lichess Announcements',
+    challenge => l10n.preferencesNotifyChallenge,
+    broadcast => l10n.broadcastBroadcasts,
+    recap => 'Annual recap',
+  };
+
+  /// The notification priority matching the channel [importance].
+  ///
+  /// Android 8+ only uses the channel importance, the priority is set for consistency.
+  Priority get priority => switch (importance) {
+    .unspecified || .defaultImportance => .defaultPriority,
+    .none || .min => .min,
+    .low => .low,
+    .high => .high,
+    .max => .max,
+  };
+
+  /// The Android channel to create on the device.
+  AndroidNotificationChannel androidChannel(AppLocalizations l10n) =>
+      AndroidNotificationChannel(id, name(l10n), importance: importance);
+}
+
 /// FCM Messages
 ///////////////
 
@@ -233,53 +280,6 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 
 /// Local Notifications
 ///////////////////////
-
-/// A notification channel, shared by one or more [LocalNotification] types.
-///
-/// On Android, all channels are created when the app starts, so that the FCM notifications
-/// displayed by the system don't fall back to the "Miscellaneous" channel.
-///
-/// The channel [id]s are shared with the server, which sets them in the FCM messages, so they must
-/// never change.
-enum NotificationChannel(final String id, final Importance importance) {
-  playban('playban', .defaultImportance),
-  newMessage('newMessage', .defaultImportance),
-  corresGameUpdate('corresGameUpdate', .defaultImportance),
-  challenge('challenge', .high), // only real time challenges get high importance
-  corresChallengeAccept('corresChallengeAccept', .defaultImportance),
-  corresChallengeCreate('corresChallengeCreate', .defaultImportance),
-  announce('announce', .defaultImportance),
-  broadcast('broadcast', .defaultImportance),
-  recap('recap', .defaultImportance);
-
-  /// The localized name of the channel, shown in the system notification settings.
-  String name(AppLocalizations l10n) => switch (this) {
-    playban => 'Playban',
-    newMessage => l10n.preferencesNotifyDirectMessage,
-    corresGameUpdate ||
-    corresChallengeAccept ||
-    corresChallengeCreate => l10n.preferencesNotifyGameEvent,
-    announce => 'Lichess Announcements',
-    challenge => l10n.preferencesNotifyChallenge,
-    broadcast => l10n.broadcastBroadcasts,
-    recap => 'Annual recap',
-  };
-
-  /// The notification priority matching the channel [importance].
-  ///
-  /// Android 8+ only uses the channel importance, the priority is set for consistency.
-  Priority get priority => switch (importance) {
-    .unspecified || .defaultImportance => .defaultPriority,
-    .none || .min => .min,
-    .low => .low,
-    .high => .high,
-    .max => .max,
-  };
-
-  /// The Android channel to create on the device.
-  AndroidNotificationChannel androidChannel(AppLocalizations l10n) =>
-      AndroidNotificationChannel(id, name(l10n), importance: importance);
-}
 
 /// A notification shown to the user from the platform's notification system.
 @immutable
