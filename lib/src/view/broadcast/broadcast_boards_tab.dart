@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
@@ -39,24 +40,32 @@ class const BroadcastBoardsTab({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteFederation = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.favoriteFederation),
+    );
     final boards = ref.watch(
       broadcastRoundControllerProvider(roundId).select(
-        (state) => state.whenData(
-          (round) => (
+        (state) => state.whenData((round) {
+          final games = round.games.entries.where(
+            (entry) =>
+                (!showOnlyOngoingGames || entry.value.isOngoing) &&
+                (teamFilter == null ||
+                    Side.values.any((s) => entry.value.players[s]?.player.team == teamFilter)),
+          );
+          bool isFavorite(BroadcastGame game) =>
+              game.players.values.any((p) => p.player.federation == favoriteFederation);
+          // The games of the favorite federation come first, each group keeping the round order.
+          final orderedGames = favoriteFederation == null
+              ? games
+              : [
+                  ...games.where((e) => isFavorite(e.value)),
+                  ...games.whereNot((e) => isFavorite(e.value)),
+                ];
+          return (
             hasGames: round.games.isNotEmpty,
-            gameIds: round.games.entries
-                .where(
-                  (entry) =>
-                      (!showOnlyOngoingGames || entry.value.isOngoing) &&
-                      (teamFilter == null ||
-                          Side.values.any(
-                            (s) => entry.value.players[s]?.player.team == teamFilter,
-                          )),
-                )
-                .map((entry) => entry.key)
-                .toIList(),
-          ),
-        ),
+            gameIds: orderedGames.map((entry) => entry.key).toIList(),
+          );
+        }),
       ),
     );
 
@@ -245,6 +254,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
               final gameId = gameIds[index];
 
               return ObservedBoardThumbnail(
+                key: ValueKey(gameId),
                 roundId: widget.roundId,
                 gameId: gameId,
                 title: round?.name ?? '',
@@ -273,6 +283,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 }
 
 class const ObservedBoardThumbnail({
+  super.key,
   required final BroadcastRoundId roundId,
   required final BroadcastGameId gameId,
   required final String title,

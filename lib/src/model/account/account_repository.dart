@@ -98,5 +98,6 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     follow: BooleanPref(pick('follow').asBoolOrThrow()),
     challenge: Challenge.fromInt(pick('challenge').asIntOrThrow()),
     message: Message.fromInt(pick('message').asIntOrThrow()),
+    favoriteFederation: pick('favFed').letOrNull((p) => FederationId.fromCode(p.asStringOrThrow())),
   );
 }

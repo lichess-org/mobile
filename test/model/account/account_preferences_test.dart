@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -13,9 +14,9 @@ import '../../test_container.dart';
 import '../../test_helpers.dart';
 import '../auth/fake_auth_storage.dart';
 
-/// Builds a valid `/api/account/preferences` server response, with the `zen`
-/// value overridable so tests can assert parsing and refetching.
-String prefsResponse({int zen = 0}) =>
+/// Builds a valid `/api/account/preferences` server response, with the `zen` and `favFed` values
+/// overridable so tests can assert parsing and refetching.
+String prefsResponse({int zen = 0, String? favFed}) =>
     '''
 {
   "prefs": {
@@ -33,7 +34,7 @@ String prefsResponse({int zen = 0}) =>
     "confirmResign": 1,
     "zen": $zen,
     "pieceNotation": 0,
-    "ratings": 1
+    "ratings": 1${favFed != null ? ',\n    "favFed": "$favFed"' : ''}
   },
   "language": "en-GB"
 }
@@ -45,6 +46,7 @@ void main() {
       final prefs = defaultAccountPreferences.copyWith(
         showRatings: ShowRatings.no,
         clockSound: const BooleanPref(false),
+        favoriteFederation: const FederationId('FRA'),
       );
 
       // Encode the way local storage does, then inspect the primitive JSON.
@@ -58,6 +60,7 @@ void main() {
 
       expect(decoded.showRatings, ShowRatings.no);
       expect(decoded.clockSound.value, isFalse);
+      expect(decoded.favoriteFederation, const FederationId('FRA'));
     });
 
     test('falls back to defaults on malformed json', () {
@@ -187,6 +190,7 @@ void main() {
       expect(prefs.autoQueen, AutoQueen.premove);
       expect(prefs.challenge, Challenge.registered);
       expect(prefs.showRatings, ShowRatings.yes);
+      expect(prefs.favoriteFederation, isNull);
     });
 
     test('falls back to defaults when the server request fails', () async {

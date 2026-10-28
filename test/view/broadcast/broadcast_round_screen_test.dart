@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -277,6 +282,49 @@ void main() {
       // Filter cleared -> all results restored
       await pickTeam('All teams');
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
+    });
+
+    testWidgets('Test boards display favorite federation games first', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        defaultPreferences: {
+          PrefCategory.account.storageKey: jsonEncode(
+            defaultAccountPreferences
+                .copyWith(favoriteFederation: const FederationId('GER'))
+                .toJson(),
+          ),
+        },
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      // Load the account preferences
+      await tester.pump();
+
+      final thumbnails = tester
+          .widgetList<ObservedBoardThumbnail>(find.byType(ObservedBoardThumbnail))
+          .toList();
+
+      expect(thumbnails.length, greaterThanOrEqualTo(3));
+      // German players (Keymer in 22222222, Huschenbeth in gYg5KcBI) come first
+      expect(thumbnails[0].gameId, const BroadcastGameId('22222222'));
+      expect(thumbnails[1].gameId, const BroadcastGameId('gYg5KcBI'));
+      // Games without a german player come after
+      expect(thumbnails[2].gameId, const BroadcastGameId('11111111'));
     });
   });
 

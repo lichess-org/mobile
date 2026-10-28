@@ -2,7 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
@@ -15,6 +17,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_sheet.dart'
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
+import 'package:lichess_mobile/src/view/settings/broadcast_federation_choice_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -195,6 +198,9 @@ class _BroadcastRoundScreenState()
             final showEvalBar = ref.watch(
               broadcastPreferencesProvider.select((prefs) => prefs.showRoundEvaluationGauges),
             );
+            final favoriteFederation = ref.watch(
+              accountPreferencesProvider.select((prefs) => prefs.value?.favoriteFederation),
+            );
             // Only what the menu shows, so that game updates don't rebuild the app bar. The counts
             // are those of the selected team, whose games the filter choices apply to.
             final games = roundId != null
@@ -252,6 +258,12 @@ class _BroadcastRoundScreenState()
                     toggled: showEvalBar,
                     onPressed: () =>
                         ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar(),
+                  ),
+                  ContextMenuAction(
+                    label: 'Favorite federation',
+                    subtitle: favoriteFederation?.name ?? context.l10n.none,
+                    onPressed: () =>
+                        Navigator.of(context).push(BroadcastFederationChoiceScreen.buildRoute()),
                   ),
                   ContextMenuSection(
                     title: context.l10n.filterGames,
