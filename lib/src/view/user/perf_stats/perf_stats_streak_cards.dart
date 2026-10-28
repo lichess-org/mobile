@@ -12,23 +12,76 @@ class const PerfStatsStreakCard({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final current = currentStreak == null || currentStreak!.isValueEmpty
+        ? 0
+        : perfStatsStreakValue(currentStreak);
+    final best = maxStreak == null || maxStreak!.isValueEmpty ? 0 : perfStatsStreakValue(maxStreak);
+    final dotCount = (best > current ? best : current).clamp(0, 16);
+    final filledDots = best == 0
+        ? dotCount
+        : current == 0
+        ? 0
+        : (current / best * dotCount).ceil().clamp(0, dotCount);
+
     return PerfStatsCard(
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: .w600)),
-          const SizedBox(height: 20),
-          _StreakDetails(
-            label: context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
-            streak: currentStreak,
-            color: color,
+          Row(
+            children: [
+              PerfStatsIconTile(Icons.local_fire_department, color: color),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: .w600)),
+              ),
+            ],
           ),
-          const SizedBox(height: 24),
-          _StreakDetails(
-            label: context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
-            streak: maxStreak,
-            color: color,
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: .start,
+            children: [
+              Expanded(
+                child: _StreakDetails(
+                  label: context.l10n.perfStatCurrentStreak('').replaceAll(':', ''),
+                  streak: currentStreak,
+                  color: color,
+                  isCurrent: true,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: _StreakDetails(
+                  label: context.l10n.perfStatLongestStreak('').replaceAll(':', ''),
+                  streak: maxStreak,
+                  color: color,
+                  isCurrent: false,
+                ),
+              ),
+            ],
           ),
+          if (dotCount > 0) ...[
+            const SizedBox(height: 16),
+            ExcludeSemantics(
+              child: Row(
+                spacing: 6,
+                children: [
+                  for (var i = 0; i < dotCount; i++)
+                    Expanded(
+                      child: Align(
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: i < filledDots ? color : color.withValues(alpha: 0.18),
+                            shape: .circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -39,65 +92,35 @@ class const _StreakDetails({
   required final String label,
   required final UserStreak? streak,
   required final Color color,
+  required final bool isCurrent,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final value = streak;
     final isEmpty = value == null || value.isValueEmpty;
-    final count = isEmpty ? 0 : perfStatsStreakValue(value);
     final dates = isEmpty ? null : formatPerfStatsStreakDates(value);
-    final visibleDots = count.clamp(0, 16);
 
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: isCurrent ? .start : .end,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.7)),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                isEmpty ? '-' : perfStatsStreakValueLabel(context, value),
-                style: TextStyle(fontSize: 20, fontWeight: .w600, color: color),
-                textAlign: .end,
-                semanticsLabel: isEmpty ? context.l10n.none : null,
-              ),
-            ),
-          ],
+        Text(
+          isEmpty ? '-' : perfStatsStreakValueLabel(context, value),
+          style: TextStyle(fontSize: 26, fontWeight: .bold, color: color),
+          textAlign: isCurrent ? .start : .end,
+          semanticsLabel: isEmpty ? context.l10n.none : null,
         ),
-        if (count > 0) ...[
-          const SizedBox(height: 10),
-          ExcludeSemantics(
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              crossAxisAlignment: .center,
-              children: [
-                for (var i = 0; i < visibleDots; i++)
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(color: color, shape: .circle),
-                  ),
-                if (count > visibleDots)
-                  Text(
-                    '+${context.l10n.nbGames(count - visibleDots)}',
-                    style: TextStyle(fontSize: perfStatsSupportingFontSize, color: color),
-                  ),
-              ],
-            ),
-          ),
-        ],
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(fontSize: perfStatsSupportingFontSize, color: textShade(context, 0.7)),
+          textAlign: isCurrent ? .start : .end,
+        ),
         if (dates != null) ...[
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             dates,
             style: TextStyle(fontSize: perfStatsLabelFontSize, color: textShade(context, 0.85)),
+            textAlign: isCurrent ? .start : .end,
           ),
         ],
       ],

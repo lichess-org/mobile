@@ -20,7 +20,7 @@ void main() {
   );
 
   for (final count in [0, 1, 9, 16, 43]) {
-    testWidgets('shows $count games with capped dots and readable dates', (tester) async {
+    testWidgets('shows $count games with one compact dot strip and readable dates', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         surfaceSize: const Size(320, 844),
@@ -53,7 +53,7 @@ void main() {
       );
       expect(dots, findsNWidgets(count.clamp(0, 16)));
       expect(find.byType(LinearProgressIndicator), findsNothing);
-      expect(find.byType(Icon), findsNothing);
+      expect(find.byIcon(Icons.local_fire_department), findsOneWidget);
       if (count == 0) {
         expect(find.text('-'), findsNWidgets(2));
         for (final text in tester.widgetList<Text>(find.text('-'))) {
@@ -78,8 +78,85 @@ void main() {
           find.ancestor(of: dots.first, matching: find.byType(ExcludeSemantics)),
           findsOneWidget,
         );
-        if (count > 16) expect(find.text('+27 games'), findsOneWidget);
+        expect(find.textContaining('+'), findsNothing);
       }
+      expect(tester.takeException(), isNull);
+    }, variant: kPlatformVariant);
+  }
+
+  for (final (current, best, filled) in [(0, 16, 0), (1, 14, 1), (8, 16, 8), (43, 43, 16)]) {
+    testWidgets('compares $current current games with $best longest games in one strip', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(320, 844),
+        home: ListView(
+          children: [
+            PerfStatsStreakCard(
+              title: 'Winning streak',
+              color: Colors.green,
+              currentStreak: UserStreak.gameStreak(
+                gamesPlayed: current,
+                isValueEmpty: current == 0,
+                startGame: startGame,
+                endGame: endGame,
+              ),
+              maxStreak: UserStreak.gameStreak(
+                gamesPlayed: best,
+                isValueEmpty: false,
+                startGame: startGame,
+                endGame: endGame,
+              ),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      final dots = find.byWidgetPredicate(
+        (widget) =>
+            widget is DecoratedBox &&
+            widget.decoration is BoxDecoration &&
+            (widget.decoration as BoxDecoration).shape == BoxShape.circle,
+      );
+      final decorations = tester
+          .widgetList<DecoratedBox>(dots)
+          .map((widget) => widget.decoration as BoxDecoration);
+      expect(
+        decorations.where((decoration) => decoration.color == Colors.green),
+        hasLength(filled),
+      );
+      expect(dots, findsNWidgets(best.clamp(0, 16)));
+      final firstDotY = tester.getCenter(dots.first).dy;
+      for (final dot in dots.evaluate()) {
+        expect(tester.getCenter(find.byWidget(dot.widget)).dy, firstDotY);
+      }
+      final currentLabel = tester.getRect(
+        find.byWidgetPredicate(
+          (widget) => widget is Text && widget.data?.trim() == 'Current streak',
+        ),
+      );
+      final longestLabel = tester.getRect(
+        find.byWidgetPredicate(
+          (widget) => widget is Text && widget.data?.trim() == 'Longest streak',
+        ),
+      );
+      expect(currentLabel.right, lessThan(longestLabel.left));
+      final currentCount = tester.getRect(
+        find
+            .text(
+              current == 0
+                  ? '-'
+                  : current == 1
+                  ? '1 game'
+                  : '$current games',
+            )
+            .first,
+      );
+      final longestCount = tester.getRect(find.text('$best games').last);
+      expect(currentCount.top, longestCount.top);
+      expect(tester.getSize(find.byType(Card)).height, lessThan(320));
       expect(tester.takeException(), isNull);
     }, variant: kPlatformVariant);
   }
