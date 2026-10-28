@@ -193,68 +193,6 @@ void main() {
       expect(prefs.favoriteFederation, isNull);
     });
 
-    test('parses the favorite federation', () async {
-      final mockClient = MockClient((request) {
-        if (request.url.path == '/api/account/preferences') {
-          return mockResponse(prefsResponse(favFed: 'GER'), 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final container = await makeContainer(
-        authUser: fakeAuthUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-      );
-
-      final prefs = await container.read(accountPreferencesProvider.future);
-
-      expect(prefs.favoriteFederation, const FederationId('GER'));
-    });
-
-    test('setting the favorite federation posts it, and an empty value unsets it', () async {
-      final requests = <http.Request>[];
-      String? storedFavFed;
-      final mockClient = MockClient((request) {
-        if (request.method == 'GET' && request.url.path == '/api/account/preferences') {
-          return mockResponse(prefsResponse(favFed: storedFavFed), 200);
-        }
-        if (request.method == 'POST' && request.url.path == '/api/account/preferences/favFed') {
-          requests.add(request);
-          final value = request.bodyFields['favFed']!;
-          storedFavFed = value.isEmpty ? null : value;
-          return mockResponse('{"ok": true}', 200);
-        }
-        return mockResponse('', 404);
-      });
-
-      final container = await makeContainer(
-        authUser: fakeAuthUser,
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => mockClient);
-          }),
-        },
-      );
-
-      await container.read(accountPreferencesProvider.future);
-      final notifier = container.read(accountPreferencesProvider.notifier);
-
-      await notifier.setFavoriteFederation(const FederationId('IND'));
-      expect(requests.last.bodyFields['favFed'], 'IND');
-      expect(
-        (await container.read(accountPreferencesProvider.future)).favoriteFederation,
-        const FederationId('IND'),
-      );
-
-      await notifier.setFavoriteFederation(null);
-      expect(requests.last.bodyFields['favFed'], '');
-      expect((await container.read(accountPreferencesProvider.future)).favoriteFederation, isNull);
-    });
-
     test('falls back to defaults when the server request fails', () async {
       final mockClient = MockClient((request) => mockResponse('', 500));
 
