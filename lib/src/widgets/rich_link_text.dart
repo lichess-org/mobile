@@ -43,7 +43,7 @@ class _RichLinkTextState() extends State<RichLinkText> {
     // Not on onOpen: a recognizer's onTap reads widget.onOpen when tapped, so a new callback does
     // not need a new recognizer. Every caller passes an inline closure, so including it here would
     // relink the text on every parent rebuild.
-if (oldWidget.text != widget.text ||
+    if (oldWidget.text != widget.text ||
         oldWidget.linkifiers != widget.linkifiers ||
         (oldWidget.onOpen == null) != (widget.onOpen == null)) {
       _disposeRecognizers();
