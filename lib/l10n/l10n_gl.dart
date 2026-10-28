@@ -500,6 +500,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Non podes desafiarte a ti mesmo';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from teams you join will appear here.';
+
+  @override
+  String get mobileJoinTeams => 'Join teams';
+
+  @override
   String get activityActivity => 'Actividade';
 
   @override

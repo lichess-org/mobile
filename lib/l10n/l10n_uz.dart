@@ -500,6 +500,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Oʻzingizni chorlay olmaysiz';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from teams you join will appear here.';
+
+  @override
+  String get mobileJoinTeams => 'Join teams';
+
+  @override
   String get activityActivity => 'Faollik';
 
   @override
