@@ -39,10 +39,6 @@ instance to work on this project.
 
 If you work with a local lila, you will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws) (websocket server).
 
-### lila-gitpod
-
-The fastest and most straight-forward way to run your own lila is [lila-gitpod](https://github.com/lichess-org/lila-gitpod).
-
 ### lila-docker
 
 If you have Docker installed on your system, you will probably prefer to use [lila-docker](https://github.com/lichess-org/lila-docker).
@@ -166,25 +162,31 @@ flutter run \
 > [!NOTE]
 > If you use the production server, note that you will not be able to log in.
 
+### iOS
+
+#### When building from Xcode
+
+Some plugins require a higher iOS version than Flutter's default. Flutter regenerates
+`ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift` with its default iOS version on
+every `flutter pub get`, and only raises it to the project's deployment target during `flutter run` or
+`flutter build ios`. This file is generated and ignored by git, so there is nothing to commit.
+
+If you build from Xcode after a `flutter pub get`, the build can fail with an error like:
+
+```
+The package product 'flutter-onnxruntime' requires minimum platform version 16.0 for the iOS platform, but this
+target supports 15.0 (in target 'FlutterGeneratedPluginSwiftPackage')
+```
+
+To fix it, run this command before building from Xcode:
+
+```bash
+flutter build ios --config-only --debug
+```
+
+Using `flutter run` instead of Xcode avoids the problem, since it raises the version on every launch.
+
 ### Android
-
-#### When using lila-gitpod
-
-To access the lila instance from your device, you will need to make the port 8080 public. You can do so by running this command in your Gitpod workspace:
-
-```bash
-./lila-docker public
-```
-
-Then you can run the application with:
-
-```bash
-flutter run \
-  --dart-define=LICHESS_HOST=[lila_gitpod_host] \
-  --dart-define=LICHESS_WS_HOST=[lila_gitpod_host]
-```
-
-To find the host of your lila Gitpod instance, use the command `gp url 8080`. Just be careful to not include the full url in the hosts variables, you need to remove the https:// from the url.
 
 #### When using lila-docker
 

@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -38,90 +39,72 @@ class const BroadcastBoardsTab({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final round = ref.watch(broadcastRoundControllerProvider(roundId));
     final broadcastFederationCode = ref.watch(
       broadcastPreferencesProvider.select((p) => p.broadcastFederationCode),
     );
     final displayFederationGamesFirst = ref.watch(
       broadcastPreferencesProvider.select((p) => p.displayFederationGamesFirst),
     );
+    final favoriteFederation = displayFederationGamesFirst ? broadcastFederationCode : null;
+    final boards = ref.watch(
+      broadcastRoundControllerProvider(roundId).select(
+        (state) => state.whenData((round) {
+          final games = round.games.entries.where(
+            (entry) =>
+                (!showOnlyOngoingGames || entry.value.isOngoing) &&
+                (teamFilter == null ||
+                    Side.values.any((s) => entry.value.players[s]?.player.team == teamFilter)),
+          );
+          bool isFavorite(BroadcastGame game) =>
+              game.players.values.any((p) => p.player.federation == favoriteFederation);
+          // The games of the favorite federation come first, each group keeping the round order.
+          final orderedGames = favoriteFederation == null
+              ? games
+              : [
+                  ...games.where((e) => isFavorite(e.value)),
+                  ...games.whereNot((e) => isFavorite(e.value)),
+                ];
+          return (
+            hasGames: round.games.isNotEmpty,
+            gameIds: orderedGames.map((entry) => entry.key).toIList(),
+          );
+        }),
+      ),
+    );
 
-    return switch (round) {
-      AsyncData(:final value) => (() {
-        final filteredGames = _filteredGames(
-          value.games,
-          showOnlyOngoingGames,
-          teamFilter,
-          broadcastFederationCode,
-          displayFederationGamesFirst,
-        );
-        return value.games.isEmpty || filteredGames.isEmpty
-            ? Padding(
-                padding: Styles.bodyPadding,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.info, size: 30),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      value.games.isEmpty
-                          ? context.l10n.broadcastNoBoardsYet
-                          : 'No games matching filter criteria.',
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+    return switch (boards) {
+      AsyncData(value: (:final hasGames, :final gameIds)) =>
+        gameIds.isEmpty
+            ? BroadcastRoundTabPlaceholder(
+                Padding(
+                  padding: Styles.bodyPadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.info, size: 30),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        hasGames
+                            ? 'No games matching filter criteria.'
+                            : context.l10n.broadcastNoBoardsYet,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               )
             : BroadcastPreview(
-                games: filteredGames,
+                gameIds: gameIds,
                 tournamentId: tournamentId,
                 roundId: roundId,
-                title: value.round.name,
                 tournamentSlug: tournamentSlug,
-                roundSlug: value.round.slug,
-                customScoring: value.round.customScoring,
-                pinnedComment: value.round.pinnedComment,
                 teamFilter: teamFilter,
-              );
-      })(),
-      AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+              ),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Could not load broadcast: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
-  }
-
-  IList<BroadcastGame> _filteredGames(
-    IMap<BroadcastGameId, BroadcastGame> games,
-    bool showOnlyOngoingGames,
-    String? teamFilter,
-    FederationId? federationCode,
-    bool displayFederationGamesFirst,
-  ) {
-    final ongoingFiltered = showOnlyOngoingGames
-        ? games.values.where((game) => game.isOngoing).toIList()
-        : games.values.toIList();
-    final teamFiltered = teamFilter == null
-        ? ongoingFiltered
-        : ongoingFiltered
-              .where((game) => Side.values.any((s) => game.players[s]?.player.team == teamFilter))
-              .toIList();
-
-    if (federationCode != null && displayFederationGamesFirst) {
-      bool matchesFederation(BroadcastGame game) =>
-          Side.values.any((s) => game.players[s]?.player.federation == federationCode);
-      final favoriteGames = <BroadcastGame>[];
-      final otherGames = <BroadcastGame>[];
-      for (final game in teamFiltered) {
-        if (matchesFederation(game)) {
-          favoriteGames.add(game);
-        } else {
-          otherGames.add(game);
-        }
-      }
-      return [...favoriteGames, ...otherGames].toIList();
-    }
-
-    return teamFiltered;
   }
 }
 
@@ -129,12 +112,8 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   const new({
     required this.tournamentId,
     required this.roundId,
-    required this.games,
-    required this.title,
+    required this.gameIds,
     required this.tournamentSlug,
-    required this.roundSlug,
-    required this.customScoring,
-    required this.pinnedComment,
     required this.teamFilter,
   });
 
@@ -142,23 +121,16 @@ class BroadcastPreview extends ConsumerStatefulWidget {
   const new loading()
     : tournamentId = const BroadcastTournamentId(''),
       roundId = const BroadcastRoundId(''),
-      games = null,
-      title = '',
+      gameIds = null,
       tournamentSlug = '',
-      roundSlug = '',
-      customScoring = null,
-      pinnedComment = null,
       teamFilter = null;
 
   final BroadcastTournamentId tournamentId;
   final BroadcastRoundId roundId;
-  final IList<BroadcastGame>? games;
-  final String title;
+  final IList<BroadcastGameId>? gameIds;
   final String tournamentSlug;
-  final String roundSlug;
-  final BroadcastCustomScoring? customScoring;
-  final String? pinnedComment;
   final String? teamFilter;
+
   @override
   ConsumerState<BroadcastPreview> createState() => _BroadcastPreviewState();
 }
@@ -198,13 +170,27 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
-    final IList<BroadcastGame>? games = widget.games == null
-        ? null
-        : _searchQuery.isEmpty
-        ? widget.games
-        : widget.games!.where((game) => _containsPlayer(game, _searchQuery)).toIList();
-    final showSearchBar = widget.games != null && widget.games!.length > 6;
-    final hasComment = widget.pinnedComment != null && widget.pinnedComment!.isNotEmpty;
+
+    final round = ref.watch(
+      broadcastRoundControllerProvider(widget.roundId).select((state) => state.value?.round),
+    );
+    final searchQuery = _searchQuery;
+    final allGameIds = widget.gameIds;
+    // While searching, rebuilds only when the list of matching games changes.
+    final gameIds = allGameIds == null || searchQuery.isEmpty
+        ? allGameIds
+        : ref.watch(
+            broadcastRoundControllerProvider(widget.roundId).select(
+              (state) => allGameIds.where((gameId) {
+                final game = state.value?.games[gameId];
+                return game != null && _containsPlayer(game, searchQuery);
+              }).toIList(),
+            ),
+          );
+
+    final showSearchBar = widget.gameIds != null && widget.gameIds!.length > 6;
+    final pinnedComment = round?.pinnedComment;
+    final hasComment = pinnedComment != null && pinnedComment.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
     return CustomScrollView(
@@ -214,7 +200,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
             bottom: false,
             sliver: SliverPadding(
               padding: Styles.bodyPadding.copyWith(bottom: 0.0),
-              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: widget.pinnedComment!)),
+              sliver: SliverToBoxAdapter(child: _PinnedCommentCard(text: pinnedComment)),
             ),
           ),
 
@@ -223,9 +209,11 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
             top: !hasComment,
             bottom: false,
             sliver: SliverPadding(
-              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              // Closer to the tabs above it.
+              padding: Styles.bodyPadding.copyWith(top: hasComment ? null : 8.0, bottom: 0.0),
               sliver: SliverToBoxAdapter(
                 child: PlatformSearchBar(
+                  hintText: context.l10n.searchSearch,
                   controller: _searchController,
                   onChanged: (value) {
                     setState(() {
@@ -258,7 +246,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
                       ? boardThumbnailEvalGaugeAspectRatio * boardWithMaybeEvalBarWidth
                       : 0);
 
-              if (games == null) {
+              if (gameIds == null) {
                 return BoardThumbnail.loading(
                   size: boardSize,
                   header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
@@ -266,25 +254,23 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
                 );
               }
 
-              final game = games[index];
-              final playingSide = Setup.parseFen(game.fen).turn;
+              final gameId = gameIds[index];
 
               return ObservedBoardThumbnail(
-                key: ValueKey(game.id),
+                key: ValueKey(gameId),
                 roundId: widget.roundId,
-                game: game,
-                title: widget.title,
+                gameId: gameId,
+                title: round?.name ?? '',
                 tournamentId: widget.tournamentId,
                 tournamentSlug: widget.tournamentSlug,
-                roundSlug: widget.roundSlug,
+                roundSlug: round?.slug ?? '',
                 showEvaluationGauge: showEvaluationGauges,
                 boardSize: boardSize,
                 boardWithMaybeEvalBarWidth: boardWithMaybeEvalBarWidth,
-                playingSide: playingSide,
-                customScoring: widget.customScoring,
+                customScoring: round?.customScoring,
                 teamFilter: widget.teamFilter,
               );
-            }, childCount: games == null ? numberLoadingBoards : games.length),
+            }, childCount: gameIds == null ? numberLoadingBoards : gameIds.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: numberOfBoardsByRow,
               crossAxisSpacing: boardSpacing,
@@ -302,7 +288,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 class const ObservedBoardThumbnail({
   super.key,
   required final BroadcastRoundId roundId,
-  required final BroadcastGame game,
+  required final BroadcastGameId gameId,
   required final String title,
   required final BroadcastTournamentId tournamentId,
   required final String tournamentSlug,
@@ -310,7 +296,6 @@ class const ObservedBoardThumbnail({
   required final bool showEvaluationGauge,
   required final double boardSize,
   required final double boardWithMaybeEvalBarWidth,
-  required final Side playingSide,
   required final BroadcastCustomScoring? customScoring,
   required final String? teamFilter,
 }) extends ConsumerStatefulWidget {
@@ -323,20 +308,27 @@ class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnai
 
   @override
   Widget build(BuildContext context) {
+    final game = ref.watch(
+      broadcastRoundControllerProvider(widget.roundId)
+          .select((state) => state.value?.games[widget.gameId]),
+    );
+
+    if (game == null) return const SizedBox.shrink();
+
+    final playingSide = Setup.parseFen(game.fen).turn;
     final orientation = widget.teamFilter != null
-        ? widget.game.players.entries
+        ? game.players.entries
                   .firstWhereOrNull((entry) => entry.value.player.team == widget.teamFilter)
                   ?.key ??
               Side.white
         : Side.white;
+
     return VisibilityDetector(
-      key: ValueKey(widget.game.id),
+      key: ValueKey(widget.gameId),
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.3) {
           if (!isBoardVisible && context.mounted) {
-            ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .addObservedGame(widget.game.id);
+            ref.read(observedGamesControllerProvider(widget.roundId).notifier).add(widget.gameId);
             setState(() {
               isBoardVisible = true;
             });
@@ -344,8 +336,8 @@ class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnai
         } else {
           if (isBoardVisible && context.mounted) {
             ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .removeObservedGame(widget.game.id);
+                .read(observedGamesControllerProvider(widget.roundId).notifier)
+                .remove(widget.gameId);
             setState(() {
               isBoardVisible = false;
             });
@@ -359,7 +351,7 @@ class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnai
             BroadcastGameScreen.buildRoute(
               tournamentId: widget.tournamentId,
               roundId: widget.roundId,
-              gameId: widget.game.id,
+              gameId: widget.gameId,
               tournamentSlug: widget.tournamentSlug,
               roundSlug: widget.roundSlug,
               title: widget.title,
@@ -368,25 +360,25 @@ class _ObservedBoardThumbnailState() extends ConsumerState<ObservedBoardThumbnai
           );
         },
         orientation: orientation,
-        fen: widget.game.fen,
+        fen: game.fen,
         showEvaluationGauge: widget.showEvaluationGauge,
-        whiteWinningChances: (widget.game.cp != null || widget.game.mate != null)
-            ? ExternalEval(cp: widget.game.cp, mate: widget.game.mate).winningChances(Side.white)
+        whiteWinningChances: (game.cp != null || game.mate != null)
+            ? ExternalEval(cp: game.cp, mate: game.mate).winningChances(Side.white)
             : null,
-        lastMove: widget.game.lastMove,
+        lastMove: game.lastMove,
         size: widget.boardSize,
         header: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
-          game: widget.game,
+          game: game,
           side: orientation.opposite,
-          playingSide: widget.playingSide,
+          playingSide: playingSide,
           customScoring: widget.customScoring,
         ),
         footer: _PlayerWidget(
           width: widget.boardWithMaybeEvalBarWidth,
-          game: widget.game,
+          game: game,
           side: orientation,
-          playingSide: widget.playingSide,
+          playingSide: playingSide,
           customScoring: widget.customScoring,
         ),
       ),
@@ -439,8 +431,12 @@ class const _PlayerWidget({
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
+                  // The line height of the other texts, which the grid cell height is computed from.
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    height: _kPlayerWidgetTextStyle.height,
+                    fontWeight: .bold,
+                    color: game.status.colorFor(side, context),
+                  ),
                 )
               else if (clock != null)
                 CountdownClockBuilder(

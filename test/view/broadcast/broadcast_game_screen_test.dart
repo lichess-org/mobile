@@ -98,6 +98,38 @@ void main() {
       expect(find.text('Gokerkan, Cem Kaan'), findsOne);
     });
 
+    testWidgets('the bottom bar floats over the tab view on iOS only', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BroadcastGameScreen(
+          tournamentId: _tournamentId,
+          roundId: _roundId,
+          gameId: _gameId,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      final movesScrollView = find.descendant(
+        of: find.byType(TabBarView),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is SingleChildScrollView &&
+              widget.padding == EdgeInsets.only(bottom: bottomInset),
+        ),
+      );
+      expect(movesScrollView, findsOneWidget);
+    });
+
     testWidgets('board is oriented as white by default', variant: kPlatformVariant, (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

@@ -75,7 +75,7 @@ class _PieceSetScreenState() extends ConsumerState<PieceSetScreen> {
                 child: Stack(
                   children: [
                     BrightnessHueFilter(
-                      brightness: boardPrefs.brightness,
+                      brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
                       hue: boardPrefs.hue,
                       child: boardPrefs.boardTheme.thumbnail,
                     ),

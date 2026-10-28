@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
@@ -34,26 +35,16 @@ final _themesProvider =
       return (isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
     });
 
-class const PuzzleThemesScreen({super.key}) extends StatelessWidget {
+class const PuzzleThemesScreen({super.key}) extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleThemesScreen());
   }
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzlePuzzleThemes)),
-      body: const _Body(),
-    );
-  }
+  State<PuzzleThemesScreen> createState() => _PuzzleThemesScreenState();
 }
 
-class const _Body() extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState() extends ConsumerState<_Body> {
+class _PuzzleThemesScreenState() extends State<PuzzleThemesScreen> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -65,6 +56,47 @@ class _BodyState() extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final searchBar = PlatformSearchBar(
+      controller: _searchController,
+      hintText: context.l10n.search,
+      // On iOS, below the large title, sticking below the app bar buttons when scrolled.
+      inAppBar: isIOS,
+      onChanged: (String query) => setState(() => _searchQuery = query),
+      onClear: () {
+        _searchController.clear();
+        setState(() => _searchQuery = '');
+      },
+    );
+
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.puzzlePuzzleThemes),
+        largeTitle: true,
+        bottom: isIOS
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(kGlassAppBarBottomPadding.vertical + 44.0),
+                child: Padding(padding: kGlassAppBarBottomPadding, child: searchBar),
+              )
+            : null,
+      ),
+      body: _Body(
+        searchQuery: _searchQuery,
+        searchBar: isIOS
+            ? null
+            : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: searchBar,
+              ),
+      ),
+    );
+  }
+}
+
+class const _Body({required final String searchQuery, required final Widget? searchBar})
+    extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final themes = ref.watch(_themesProvider);
@@ -74,21 +106,8 @@ class _BodyState() extends ConsumerState<_Body> {
         final (hasConnectivity, savedThemes, onlineThemes, hasSavedOpenings) = data;
 
         final openingsAvailable = hasConnectivity || hasSavedOpenings;
-        final searchBar = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: PlatformSearchBar(
-            controller: _searchController,
-            hintText: context.l10n.search,
-            onChanged: (String query) => setState(() => _searchQuery = query),
-            onClear: () {
-              _searchController.clear();
-              setState(() => _searchQuery = '');
-            },
-          ),
-        );
-
-        if (_searchQuery.isNotEmpty) {
-          final query = _searchQuery.toLowerCase();
+        if (searchQuery.isNotEmpty) {
+          final query = searchQuery.toLowerCase();
           final matched = [
             for (final (_, categoryThemes) in list)
               for (final theme in categoryThemes)
@@ -99,7 +118,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
           return ListView(
             children: [
-              searchBar,
+              ?searchBar,
               ListSection(
                 hasLeading: true,
                 children: matched.map((theme) {
@@ -119,7 +138,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
         return ListView(
           children: [
-            searchBar,
+            ?searchBar,
             ListTile(
               enabled: openingsAvailable,
               title: Text(context.l10n.puzzleByOpenings),
@@ -183,10 +202,8 @@ class const _ThemeTile({
       ),
       onTap: isThemeAvailable
           ? () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(theme)));
+              Navigator.of(context)
+                  .pushHidingTabBar(PuzzleScreen.buildRoute(angle: PuzzleTheme(theme)));
             }
           : null,
     );

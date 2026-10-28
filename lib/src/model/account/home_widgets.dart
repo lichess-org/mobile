@@ -5,6 +5,8 @@ enum HomeEditableWidget(
   /// True if the widget should always be enabled and cannot be disabled.
   final bool alwaysEnabled,
 ) {
+  /// No longer shown (the greeting is in the app bar): kept so that stored preferences listing it
+  /// as disabled can still be read.
   hello(false),
   perfCards(false),
   friends(false),

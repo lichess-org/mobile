@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">قبول مساوی؟</string>
   <string name="account" comment="The account screen title.">حساب</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">تنظیمات حساب کاربری</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">این ترجیحات به حساب Lichess تان اعمال می‌شود و در همه دستگاه‌ها استفاده خواهد شد.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">افزودن به مطالعه</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">همه بازی‌ها</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">اجازهٔ برگردان و نَمار</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">مشکیِ دَنگابَف</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">تنظیمات تخته</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">رد درخواست برگرداندن</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">لغو پیشنهاد «برگردان»</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">چالش ایجاد شد: وقتی بازی شروع شود شما آگاهنده می‌شوید.\nمی‌توانید از زبانهٔ خانه به آن دسترسی داشته باشید.</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">موتورِ شطرنج</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">پاکسازی</string>
@@ -23,7 +27,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">عصر بخیر</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">حرکتِ خوب، اما بهتر هم هست</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">خانه</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">جَریانگرانِ زنده</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">برای دیدن این صفحه باید وارد شده باشید.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">معمای بُرون‌خط</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">بازی جدید</string>
@@ -61,7 +64,7 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">معماهایی را از گشایش دلخواه‌تان بازی کنید، یا موضوعی را برگزینید.</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">معماها</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">جستجوهای اخیر</string>
-  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">حذفِ نشانک</string>
+  <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">برچیدنِ نشانک</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">تحلیلِ کارساز</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">جای ساعت</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">پیشفرض‌ها</string>
@@ -100,7 +103,11 @@
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">تکمیلیده</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">به صفحه‌ی من برو</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">وَرتای %s در این نسخه پشتیبانی نمی‌شود.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">استفاده از مهره‌های متقارن</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">دیدنِ بازی</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">دیدنِ جوازها</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">در انتظار آمدن حریف...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تماشا</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">برای ورود، کدی را به رایانامه‌تان خواهیم فرستاد.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">نمی‌توانید به خودتان پیشنهاد بازی دهید</string>
 </resources>

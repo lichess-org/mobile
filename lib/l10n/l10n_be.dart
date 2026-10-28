@@ -30,6 +30,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Адхіліць';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileHomeTab => 'Галоўная';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Стрымеры ў эфіры';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -279,6 +285,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePreviousPage => 'Папярэдняя';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Жадаеце скончыць гэтую серыю?';
 
   @override
@@ -390,6 +399,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Калі актыўна, ваш дэвайс будзе крыху вібраваць калі вы паходзіце або пры ўзяцці фігуры.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -448,6 +460,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Дошка';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -1459,6 +1474,14 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Трэніравацца толькі з некаторымі слупкамі і радкамі';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Вучыцеся';
@@ -2519,7 +2542,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2547,6 +2570,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2952,9 +2978,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get puzzleThemeCastling => 'Ракіроўка';
 
   @override
-  String get puzzleThemeEnPassant => 'Узяцце на праходзе';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Адпраўце караля ў бяспеку і выведзіце ладдзю ў атаку.';
 
   @override
@@ -3046,6 +3069,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Тактыка на апошнім этапе гульні.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Узяцце на праходзе';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3845,6 +3871,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4471,6 +4500,11 @@ class AppLocalizationsBe extends AppLocalizations {
   String get noNetwork => 'Не ў сетцы';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Улюбленыя супернікі';
 
   @override
@@ -4837,9 +4871,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get reason => 'Прычына';
 
   @override
-  String get whatIsIheMatter => 'Што здарылася?';
-
-  @override
   String get cheat => 'Несумленная гульня';
 
   @override
@@ -4856,9 +4887,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Калі ласка, дадайце спасылку хаця б на адну гульню, дзе былі парушаны правілы.';
 
   @override
   String by(String param) {
@@ -5438,7 +5466,13 @@ class AppLocalizationsBe extends AppLocalizations {
   String get downloadImported => 'Спампаваць у арыгінальным выглядзе';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Спампаваць усе гульні';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Лік';
@@ -5813,7 +5847,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String challengeX(String param) {
-    return 'Выклікаў $param';
+    return 'Выклікаць $param';
   }
 
   @override
@@ -6205,7 +6239,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get showMeEverything => 'Паказаць усё';
 
   @override
-  String get lichessPatronInfo => 'Lichess - гэта дабрачынная і цалкам бясплатная праграма з адкрытым зыходным кодам.\nУсе аперацыйныя выдаткі, распрацоўка і шахматны кантэнт фінансуюцца выключна за кошт ахвяраванняў карыстальнікаў.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -7097,9 +7131,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Толькі рэдактары навучання могуць запрасіць камп\'ютарны аналіз.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Атрымайце поўны серверны кампутарны аналіз галоўнай лініі.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Пераканайцеся, што раздзел гатоў. Вы можаце запрасіць аналіз толькі адзін раз.';
 
   @override
@@ -7316,9 +7347,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get studyStart => 'Пачаць';
-
-  @override
-  String get studySave => 'Захаваць';
 
   @override
   String get studyClearChat => 'Ачысціць чат';
@@ -7554,6 +7582,21 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -1201,9 +1202,8 @@ class const InlineMove({
       onTap: params.notifier != null ? () => params.notifier?.userJump(path) : null,
       onLongPress: params.notifier != null
           ? () {
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
-                isDismissible: true,
                 isScrollControlled: true,
                 showDragHandle: true,
                 builder: (context) => _MoveContextMenu(
@@ -1348,11 +1348,11 @@ class const _MoveContextMenu({
             // The result token and trailing newline belong in a PGN file, not on the clipboard.
             final line = pgn.trimRight().replaceFirst(RegExp(r'\s*\*$'), '');
             // The bottom sheet can be disposed before the clipboard write completes.
-            final messenger = ScaffoldMessenger.of(context);
+            final snackBar = SnackBarPresenter.of(context);
             final copiedMessage = context.l10n.mobilePgnCopied;
             await Clipboard.setData(ClipboardData(text: line));
-            if (!messenger.mounted) return;
-            messenger.showSnackBar(SnackBar(content: Text(copiedMessage)));
+            if (!snackBar.mounted) return;
+            snackBar.show(copiedMessage);
           },
         ),
         BottomSheetContextMenuAction(

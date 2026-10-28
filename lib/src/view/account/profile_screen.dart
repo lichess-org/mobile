@@ -52,6 +52,8 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
     final online = ref.watch(isDeviceOnlineProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         titleSpacing: 0,
         title: account.when(
           data: (user) => user == null
@@ -66,20 +68,13 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
             semanticsLabel: context.l10n.editProfile,
             onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
           ),
-          account.when(
-            data: (user) => user == null
-                ? const SizedBox.shrink()
-                : SemanticIconButton(
-                    icon: const PlatformShareIcon(),
-                    semanticsLabel: 'Share profile',
-                    onPressed: () => launchShareDialog(
-                      context,
-                      ShareParams(uri: lichessUri('/@/${user.username}')),
-                    ),
-                  ),
-            loading: () => const SizedBox.shrink(),
-            error: (error, _) => const SizedBox.shrink(),
-          ),
+          if (account.value case final user?)
+            SemanticIconButton(
+              icon: const PlatformShareIcon(),
+              semanticsLabel: 'Share profile',
+              onPressed: () =>
+                  launchShareDialog(context, ShareParams(uri: lichessUri('/@/${user.username}'))),
+            ),
         ],
       ),
       body: account.when(
@@ -91,9 +86,6 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
           return HapticRefreshIndicator(
-            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                : 0.0,
             key: _refreshIndicatorKey,
             onRefresh: () => Future.wait([
               ref.refresh(accountProvider.future),

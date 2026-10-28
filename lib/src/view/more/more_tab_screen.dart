@@ -47,13 +47,11 @@ class const MoreTabScreen({super.key}) extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Theme.of(context).platform == TargetPlatform.iOS
               ? AppBarLichessTitle(
-                  iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                  iconSize:
+                      CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle.fontSize ?? 34,
                 )
               : const AppBarLichessTitle(),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),
@@ -91,7 +89,7 @@ class const _Body() extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.analysis),
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                onTap: () => Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     const AnalysisOptions.standalone(variant: Variant.standard),
                   ),
@@ -110,7 +108,7 @@ class const _Body() extends ConsumerWidget {
                     return;
                   }
 
-                  Navigator.of(context, rootNavigator: true).push(
+                  Navigator.of(context).pushHidingTabBar(
                     OpeningExplorerScreen.buildRoute(
                       const AnalysisOptions.pgn(
                         id: StringId('standalone_opening_explorer'),
@@ -129,7 +127,7 @@ class const _Body() extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 title: Text(context.l10n.boardEditor),
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                onTap: () => Navigator.of(context).pushHidingTabBar(
                   BoardEditorScreen.buildRoute((
                     initialVariant: Variant.standard,
                     initialFen: null,
@@ -144,7 +142,7 @@ class const _Body() extends ConsumerWidget {
                     : null,
                 title: Text(context.l10n.clock),
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(ClockToolScreen.buildRoute());
+                  Navigator.of(context).pushHidingTabBar(ClockToolScreen.buildRoute());
                 },
               ),
             ],
@@ -161,7 +159,7 @@ class const _Body() extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context, rootNavigator: true).push(PlayerScreen.buildRoute());
+                  Navigator.of(context).push(PlayerScreen.buildRoute());
                 },
               ),
               if (authUser != null)
@@ -173,7 +171,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(FriendScreen.buildRoute());
+                    Navigator.of(context).push(FriendScreen.buildRoute());
                   },
                 ),
             ],
@@ -196,7 +194,7 @@ class const _Body() extends ConsumerWidget {
                   leading: const Icon(Icons.info_outline),
                   title: Text(context.l10n.about),
                   onTap: () {
-                    Navigator.of(context, rootNavigator: true).push(AboutScreen.buildRoute());
+                    Navigator.of(context).push(AboutScreen.buildRoute());
                   },
                 ),
               ],

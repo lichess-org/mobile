@@ -9,7 +9,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Aceitar empate?';
 
   @override
   String get mobileAccount => 'Conta';
@@ -28,6 +28,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+
+  @override
+  String get mobileAppLogs => 'App logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -97,6 +100,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ignorar';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileHomeTab => 'Início';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Streamers em direto';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -279,6 +285,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Queres terminar esta sequência?';
 
   @override
@@ -390,6 +399,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Quando ativado, o dispositivo irá vibrar brevemente quando moves ou capturas uma peça.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -448,6 +460,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Tema';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -1419,6 +1434,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Pratica só algumas linhas & colunas';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Aprende xadrez';
@@ -2479,7 +2502,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get preferencesInlineNotation => 'Anotações compactas';
 
   @override
-  String get preferencesShowServerAnalysis => 'Mostrar análises do servidor';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Mostrar setas das melhores jogadas';
@@ -2507,6 +2530,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Mostrar rei em xeque';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Ativar esconder variante';
@@ -2900,9 +2926,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get puzzleThemeCastling => 'Roque';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Proteger o rei e trazer a torre para o ataque.';
 
   @override
@@ -2994,6 +3017,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Uma tática durante a última fase do jogo.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Um tático que envolve a regra de \"en passant\", onde um peão pode capturar um peão adversário que o ignorou. Isto acontece quando o Peão se encontra na posição inicial e se move duas casas.';
@@ -3793,6 +3819,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4419,6 +4448,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get noNetwork => 'Desligado';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Adversários favoritos';
 
   @override
@@ -4785,9 +4819,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Qual é o motivo?';
-
-  @override
   String get cheat => 'Batota';
 
   @override
@@ -4804,9 +4835,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Conseguimos processar o teu relatório mais rápido se escreveres em inglês.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Por favor, fornece-nos pelo menos um link para um jogo onde tenha havido batota.';
 
   @override
   String by(String param) {
@@ -5386,7 +5414,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get downloadImported => 'Transferir a partida importada';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Descarregar todos os jogos';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Tabela';
@@ -6153,7 +6187,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get showMeEverything => 'Mostra-me tudo';
 
   @override
-  String get lichessPatronInfo => 'Lichess é uma instituição de caridade e software de código aberto totalmente livre.\nTodos os custos operacionais, de desenvolvimento e conteúdo são financiados exclusivamente por doações de usuários.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Nada para ver aqui no momento.';
@@ -6963,9 +6997,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Apenas os colaboradores de estudo podem solicitar uma análise de computador.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Obtém uma análise completa da linha principal pelo servidor.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Certifica-te que o capítulo está completo. Só podes solicitar a análise uma vez.';
 
   @override
@@ -7182,9 +7213,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyStart => 'Iniciar';
-
-  @override
-  String get studySave => 'Guardar';
 
   @override
   String get studyClearChat => 'Limpar o chat';
@@ -7420,6 +7448,21 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Brancas perderam, mas Pretas não podem vencer';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {
@@ -7800,7 +7843,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileChapterName => 'Nome do capítulo';
 
   @override
-  String get mobileChessEngine => 'Motor de xadrez';
+  String get mobileChessEngine => 'Engine de xadrez';
 
   @override
   String get mobileChooseCustomBackground => 'Escolha um fundo personalizado';
@@ -7899,9 +7942,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'Este código é inválido ou expirou.';
-
-  @override
-  String get mobileLiveStreamers => 'Streamer do Lichess';
 
   @override
   String get mobileLocalDatabaseSize => 'Tamanho do banco de dados local';
@@ -8126,6 +8166,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileSettingsTouchFeedbackSubtitle => 'Quando habilitado, o dispositivo fará uma leve vibração quando você mover ou capturar uma peça.';
+
+  @override
+  String get mobileShare => 'Compartilhar';
 
   @override
   String get mobileShareChallengeUrl => 'Compartilhar URL do desafio';
@@ -10217,7 +10260,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesInlineNotation => 'Notação em linha';
 
   @override
-  String get preferencesShowServerAnalysis => 'Mostrar análise do servidor';
+  String get preferencesShowMainlineAnalysis => 'Mostrar análise principal';
 
   @override
   String get preferencesShowBestMoveArrows => 'Mostrar setas de melhores movimentos';
@@ -10247,6 +10290,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesShowCheckableKing => 'Mostrar rei possível de xeque';
 
   @override
+  String get preferencesShowTrappedPieces => 'Mostrar peças presas';
+
+  @override
   String get preferencesDisclosureMode => 'Permitir esconder variação';
 
   @override
@@ -10262,7 +10308,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesAnalysisSettings => 'Configurações de análise';
 
   @override
-  String get preferencesManeuverArrowsHelp => 'Sequência de lances de computador para uma peça';
+  String get preferencesManeuverArrowsHelp => 'Sequência de lances de engine para uma peça';
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Passe o mouse sobre as etiquetas de configuração para obter ajuda';
@@ -10638,9 +10684,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get puzzleThemeCastling => 'Roque';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Traga o seu rei para a segurança, e prepare sua torre para o ataque.';
 
   @override
@@ -10732,6 +10775,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get puzzleThemeEndgameDescription => 'Tática durante a última fase do jogo.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Uma tática que envolve a regra do en passant, na qual um peão pode capturar um peão adversário que acabou de avançar duas casas em seu movimento inicial, posicionando-se ao seu lado.';
@@ -11085,7 +11131,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get gameSetup => 'Configurar partida';
 
   @override
-  String get challengeAFriend => 'Desafie um amigo';
+  String get challengeAFriend => 'Desafiar um amigo';
 
   @override
   String get playAgainstComputer => 'Jogar contra o computador';
@@ -11097,7 +11143,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get createLobbyGame => 'Criar partida na sala de espera';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidar alguém para jogar, envie este URL';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'Para convidar alguém para jogar, envie este link';
 
   @override
   String get gameOver => 'Fim da partida';
@@ -11281,7 +11327,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get calculatingMoves => 'Calculando lances...';
 
   @override
-  String get engineFailed => 'Erro ao carregar o engine';
+  String get engineFailed => 'Erro ao carregar a engine';
 
   @override
   String get cloudAnalysis => 'Análise na nuvem';
@@ -11525,13 +11571,16 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get flipBoard => 'Girar o tabuleiro';
 
   @override
-  String get toggleLocalEngine => 'Alternar motor local';
+  String get toggleLocalEngine => 'Alternar engine local';
 
   @override
-  String get engineSettings => 'Configurações do motor';
+  String get engineSettings => 'Configurações de engine';
 
   @override
-  String get enginesFromStrongestToWeakest => 'Motores do mais forte ao mais fraco';
+  String get engine => 'Engine';
+
+  @override
+  String get enginesFromStrongestToWeakest => 'Engine mais forte até a mais fraca';
 
   @override
   String get illegalPosition => 'Posição ilegal';
@@ -12157,6 +12206,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get noNetwork => 'Sem conexão';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Amigos online: $param1\nAmigos jogando: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Adversários favoritos';
 
   @override
@@ -12523,9 +12577,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Qual é o motivo?';
-
-  @override
   String get cheat => 'Trapaça';
 
   @override
@@ -12542,9 +12593,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get processReportFasterInEnglish => 'Podemos processar sua denúncia mais rapidamente se você escrever em inglês.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Por favor, inclua pelo menos um link de uma partida para análise.';
 
   @override
   String by(String param) {
@@ -13124,7 +13172,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get downloadImported => 'Baixar partida importada';
 
   @override
+  String get downloadMyGames => 'Download das minhas partidas';
+
+  @override
   String get downloadAllGames => 'Baixar todas as partidas';
+
+  @override
+  String get downloadResults => 'Resultados do download';
 
   @override
   String get crosstable => 'Tabela';
@@ -13891,7 +13945,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get showMeEverything => 'Mostrar tudo';
 
   @override
-  String get lichessPatronInfo => 'O Lichess é uma organização beneficente e um software totalmente livre e de código aberto. Dependemos das doações dos usuários para cobrir nossos custos operacionais, desenvolvimento e conteúdo. Sem nossa generosa comunidade, não conseguiríamos manter o site funcionando. Obrigado por fazer parte da nossa comunidade!';
+  String get lichessPatronInfo => 'O Lichess é uma organização beneficente e um software inteiramente livre e de código aberto, totalmente gratuito. Dependemos das doações dos usuários para cobrir nossos custos operacionais, financiar o desenvolvimento e produzir conteúdo. Sem o apoio generoso da nossa comunidade, não conseguiríamos manter o site no ar. Obrigado por fazer parte dela!';
 
   @override
   String get nothingToSeeHere => 'Nada para ver aqui no momento.';
@@ -13951,6 +14005,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get preview => 'Pré-visualizar';
+
+  @override
+  String get done => 'Feito';
 
   @override
   String opponentLeftCounter(int count) {
@@ -14698,9 +14755,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get studyOnlyContributorsCanRequestAnalysis => 'Apenas os colaboradores de um estudo podem solicitar uma análise de computador.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Obter uma análise completa dos movimentos pelo servidor.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Certifique-se de que o capítulo está completo. Você só pode solicitar análise uma vez.';
 
   @override
@@ -14917,9 +14971,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyStart => 'Iniciar';
-
-  @override
-  String get studySave => 'Salvar';
 
   @override
   String get studyClearChat => 'Limpar conversação';
@@ -15155,6 +15206,21 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Brancas perderam, mas pretas não podem vencer';
+
+  @override
+  String get studyAnalysisEditor => 'Editor de análise';
+
+  @override
+  String get studyClearLocal => 'Limpar análise local?';
+
+  @override
+  String get studyClearPublished => 'Limpar análise publicada?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Solicitar uma análise do computador';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analise no seu dispositivo';
 
   @override
   String studyNbChapters(int count) {

@@ -1,12 +1,12 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/practice/practice_goal.dart';
 import 'package:lichess_mobile/src/model/practice/practice_progress.dart';
 import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -16,8 +16,9 @@ import 'package:lichess_mobile/src/view/practice/practice_engine_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_gamebook_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_lesson_chapter.dart';
 import 'package:lichess_mobile/src/view/practice/practice_study_icon.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -35,25 +36,27 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
     );
 
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
+          compactButtons: true,
+          // A long title, next to the actions.
+          centerTitle: false,
           title: Text(chapter.name),
-          actions: [
+          actionsBuilder: (context, ref) => [
             IconButton(
               icon: const Icon(Icons.list),
               tooltip: context.l10n.studyNbChapters(nbChapters),
-              onPressed: () => showModalBottomSheet<void>(
+              onPressed: () => showAdaptiveDraggableBottomSheet<void>(
                 context: context,
-                // Sized to its content, up to most of the screen: a long study scrolls, and the
-                // barrier left above it and the handle still close it.
-                isScrollControlled: true,
-                useSafeArea: true,
-                showDragHandle: true,
                 constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-                builder: (_) => _ChaptersSheet(current: chapter),
+                initialChildSize: 0.6,
+                snap: true,
+                builder: (_, scrollController) =>
+                    _ChaptersSheet(current: chapter, scrollController: scrollController),
               ),
             ),
-            const ToggleSoundButton(),
+            soundToggleButton(ref),
           ],
         ),
         body: switch (chapter) {
@@ -67,7 +70,10 @@ class const PracticeChapterScreen({required final PracticeChapter chapter, super
 }
 
 /// The chapters of the current chapter's study, to jump to any of them.
-class const _ChaptersSheet({required final PracticeChapter current}) extends ConsumerWidget {
+class const _ChaptersSheet({
+  required final PracticeChapter current,
+  required final ScrollController scrollController,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final study = ref.watch(practiceStructureProvider).value?.studyOf(current.id);
@@ -75,6 +81,7 @@ class const _ChaptersSheet({required final PracticeChapter current}) extends Con
     if (study == null) return const SizedBox.shrink();
 
     return BottomSheetScrollableContainer(
+      scrollController: scrollController,
       padding: const EdgeInsets.only(bottom: 16.0),
       children: [
         ListTile(
@@ -150,7 +157,7 @@ class const PracticeTable({required final List<Widget> children}) extends Statel
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: Styles.bodyPadding,
+      padding: Styles.bodyPadding.add(MediaQuery.paddingOf(context)),
       children: [
         for (final (index, child) in children.indexed) ...[
           if (index > 0) const SizedBox(height: 12.0),

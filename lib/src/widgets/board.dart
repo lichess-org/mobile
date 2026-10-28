@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/gestures.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays an interactive chessboard driven by a [ChessboardController].
@@ -33,7 +35,7 @@ class const BoardWidget({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final board = Chessboard(
+    final chessboard = Chessboard(
       key: boardKey,
       controller: controller,
       size: size,
@@ -42,6 +44,27 @@ class const BoardWidget({
       shapes: shapes,
       annotations: annotations,
       settings: settings,
+    );
+
+    // Chessground handles raw pointer events and doesn't enter the gesture arena.
+    // We use a RawGestureDetector to claim the pointer events for the board, so that they don't
+    // trigger a swipe gesture to pop the screen on iOS.
+    final board = RawGestureDetector(
+      gestures: {
+        _BoardPointerClaimRecognizer:
+            GestureRecognizerFactoryWithHandlers<_BoardPointerClaimRecognizer>(
+              _BoardPointerClaimRecognizer.new,
+              (recognizer) => recognizer.controller = controller,
+            ),
+      },
+      child: Theme.of(context).platform == TargetPlatform.android
+          ? AndroidBoardGesturesExclusion(
+              controller: controller,
+              orientation: orientation,
+              size: size,
+              child: chessboard,
+            )
+          : chessboard,
     );
 
     final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
@@ -66,6 +89,21 @@ class const BoardWidget({
 
     return board;
   }
+}
+
+/// Claims the pointers that touch an interactive board down, unless the promotion selector is
+/// shown: it is drawn inside the board and handles taps with gesture detectors, which must win.
+///
+/// A board that can't be played on doesn't claim its pointers, so that an edge swipe on it pops
+/// the screen.
+class _BoardPointerClaimRecognizer() extends EagerGestureRecognizer {
+  ChessboardController? controller;
+
+  @override
+  bool isPointerAllowed(PointerDownEvent event) =>
+      controller?.interactive == true &&
+      controller?.pendingPromotion == null &&
+      super.isPointerAllowed(event);
 }
 
 class const _ErrorWidget({required final String errorMessage}) extends StatelessWidget {

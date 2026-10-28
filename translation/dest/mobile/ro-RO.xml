@@ -48,7 +48,6 @@
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Acasă</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dacă un cont corespunde cu %1$s, i s-a trimis un cod de caractere %2$s. Verifică-ți inbox-ul și introdu codul de mai jos.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Codul este invalid sau a expirat.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Fluxuri live</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Dimensiunea bazei de date locale</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mută la eliberare</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Când mişcaţi o piesă prin apăsare, mutarea se face atunci când ridicaţi degetul, permițând glisarea pentru a selecta pătratul de destinaţie.</string>

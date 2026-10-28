@@ -48,7 +48,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings), largeTitle: true),
       body: ListView(
         children: [
           if (authUser != null)
@@ -97,7 +97,10 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(HomeTabScreen.buildRoute(editModeEnabled: true));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
                 },
               ),
               ListTile(
@@ -163,7 +166,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.http),
-                title: const Text('HTTP logs'),
+                title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
@@ -171,7 +174,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
-                title: const Text('App Logs'),
+                title: Text(context.l10n.mobileAppLogs),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,

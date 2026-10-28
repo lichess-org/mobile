@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -23,13 +23,15 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -46,8 +48,12 @@ class _StormScreenState() extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Storm')),
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
+          title: const Text('Puzzle Storm'),
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
+        ),
         body: const _Load(),
       ),
     );
@@ -143,10 +149,6 @@ class _BodyState() extends ConsumerState<_Body> {
           }
         });
       }
-
-      if (state.mode == StormMode.ended) {
-        clearAndroidBoardGesturesExclusion();
-      }
     });
 
     // Drive the board on position/interactivity changes without rebuilding it.
@@ -200,7 +202,10 @@ class _BodyState() extends ConsumerState<_Body> {
                       final isTablet = isTabletOrLarger(context);
 
                       final defaultSettings = boardPreferences
-                          .toBoardSettings(Variant.standard)
+                          .toBoardSettings(
+                            Variant.standard,
+                            appBrightness: Theme.of(context).brightness,
+                          )
                           .copyWith(
                             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
@@ -374,68 +379,63 @@ class _BodyState() extends ConsumerState<_Body> {
     );
 
     return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: _boardKey,
-            shouldExcludeGesturesOnFocusGained:
-                stormState.mode == StormMode.initial || stormState.mode == StormMode.running,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+        ? AndroidImmersiveModeWidget(
+            enabled:
+                (stormState.mode == StormMode.initial || stormState.mode == StormMode.running) &&
+                (boardPreferences.immersiveModeWhilePlaying ?? false),
             child: content,
           )
         : content;
   }
 }
 
-Future<void> _stormInfoDialogBuilder(BuildContext context) {
-  return showAdaptiveDialog(
+Future<void> _showStormInfo(BuildContext context) {
+  return showAdaptiveNavigationSheet<void>(
     context: context,
-    builder: (context) {
-      return AlertDialog.adaptive(
-        title: Text(context.l10n.aboutX('Puzzle Storm')),
-        content: const SingleChildScrollView(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
-                TextSpan(
-                  text: 'Each correct ',
-                  children: [
-                    TextSpan(
-                      text: 'move',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
-                    ),
-                  ],
-                ),
-                TextSpan(text: '\n\n'),
-                TextSpan(text: 'Bonus values:\n'),
-                TextSpan(text: '• 5 moves: +3s\n'),
-                TextSpan(text: '• 12 moves: +5s\n'),
-                TextSpan(text: '• 20 moves: +7s\n'),
-                TextSpan(text: '• 30 moves: +10s\n'),
-                TextSpan(text: '• Then +10s every 10 other moves.\n'),
-                TextSpan(text: '\n'),
-                TextSpan(
-                  text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
-                ),
-              ],
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.aboutX('Puzzle Storm'))),
+      body: ListView(
+        children: const [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Each puzzle grants one point. The goal is to get as many points as you can before the time runs out.',
+                  ),
+                  TextSpan(text: '\n\n'),
+                  TextSpan(text: 'Combo bar\n', style: TextStyle(fontSize: 18)),
+                  TextSpan(
+                    text: 'Each correct ',
+                    children: [
+                      TextSpan(
+                        text: 'move',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: ' fills the combo bar. When the bar is full, you get a time bonus, and you increase the value of the next bonus.',
+                      ),
+                    ],
+                  ),
+                  TextSpan(text: '\n\n'),
+                  TextSpan(text: 'Bonus values:\n'),
+                  TextSpan(text: '• 5 moves: +3s\n'),
+                  TextSpan(text: '• 12 moves: +5s\n'),
+                  TextSpan(text: '• 20 moves: +7s\n'),
+                  TextSpan(text: '• 30 moves: +10s\n'),
+                  TextSpan(text: '• Then +10s every 10 other moves.\n'),
+                  TextSpan(text: '\n'),
+                  TextSpan(
+                    text: 'When you play a wrong move, the combo bar is depleted, and you lose 10 seconds.',
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
         ],
-      );
-    },
+      ),
+    ),
   );
 }
 
@@ -677,13 +677,14 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
     final stormState = ref.watch(ctrl);
     final authUser = ref.watch(authControllerProvider);
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         if (stormState.mode == StormMode.initial)
           BottomBarButton(
             icon: Icons.info_outline,
             label: context.l10n.aboutX('Storm'),
             showLabel: true,
-            onTap: () => _stormInfoDialogBuilder(context),
+            onTap: () => _showStormInfo(context),
           ),
         BottomBarButton(
           icon: Icons.delete,
@@ -716,10 +717,9 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
             icon: Icons.history,
             label: context.l10n.stormHighscores,
             showLabel: true,
-            onTap: () => Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(StormDashboardModal.buildRoute(authUser.user)),
+            onTap: () =>
+                Navigator.of(context)
+                    .pushHidingTabBar(StormDashboardModal.buildRoute(authUser.user)),
           ),
       ],
     );
@@ -733,8 +733,9 @@ class const _RunStats(final StormRunStats stats) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),

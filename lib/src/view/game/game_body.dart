@@ -13,14 +13,15 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -33,10 +34,12 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_settings.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
@@ -95,6 +98,9 @@ class const GameBody({
       ctrlProvider,
       (prev, state) => _stateListener(prev, state, context: context, ref: ref),
     );
+
+    // Keeps the game's iOS Live Activity in sync while the game screen is open.
+    ref.watch(gameLiveActivityControllerProvider(gameId));
 
     // Only watch the coarse async phase here so a move (which changes the
     // GameState value but not the phase) does NOT rebuild the whole body. The
@@ -179,34 +185,26 @@ class const GameBody({
             if (context.mounted) {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    GameResultDialog(id: gameId, onNewOpponentCallback: onNewOpponentCallback),
+                builder: (_) => GameResultDialog(
+                  id: gameId,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                  onBackToTournamentCallback: (id) => _backToTournament(context, id),
+                  onAnalysisCallback: (options) =>
+                      Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
+                ),
                 barrierDismissible: true,
               );
             }
           },
         );
       }
-
-      // true when the game was loaded, playable, and just finished
-      if (prev?.value?.game.playable == true && state.requireValue.game.playable == false) {
-        clearAndroidBoardGesturesExclusion();
-      }
-      // true when the game was not loaded: handles rematches
-      else if (prev?.hasValue != true) {
-        if (game.meta.speed != Speed.correspondence && game.playable) {
-          setAndroidBoardGesturesExclusion(
-            boardKey,
-            withImmersiveMode:
-                ref.read(boardPreferencesProvider).immersiveModeWhilePlaying ?? false,
-          );
-        }
-      }
     }
 
     if (prev?.hasValue == true && state.hasValue) {
       if (state.requireValue.redirectGameId != null) {
-        // Be sure to pop any dialogs that might be on top of the game screen.
+        // Be sure to pop any dialogs and sheets that might be on top of the game screen: the
+        // dialogs are on the root navigator, the sheets on the game screen's.
+        Navigator.of(context, rootNavigator: true).popUntil((route) => route is! PopupRoute);
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
@@ -697,7 +695,7 @@ class const _GameBottomBar({
       }),
     );
 
-    if (data == null) return const BottomBar.empty();
+    if (data == null) return const BottomBar.empty(cupertinoGlass: true);
 
     final canShowChat =
         gamePrefs.enableChat == true &&
@@ -707,6 +705,7 @@ class const _GameBottomBar({
     final numPremoveLines = data.numPremoveLines;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -813,8 +812,14 @@ class const _GameBottomBar({
             onTap: () {
               showAdaptiveDialog<void>(
                 context: context,
-                builder: (context) =>
-                    GameResultDialog(id: id, onNewOpponentCallback: onNewOpponentCallback),
+                builder: (_) => GameResultDialog(
+                  id: id,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                  onBackToTournamentCallback: (tournamentId) =>
+                      _backToTournament(context, tournamentId),
+                  onAnalysisCallback: (options) =>
+                      Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
+                ),
                 barrierDismissible: true,
               );
             },
@@ -839,8 +844,12 @@ class const _GameBottomBar({
             icon: Icons.flag_outlined,
           ),
         if (canShowChat) ChatBottomBarButton(options: data.chatOptions!),
-        _MoveNavButton(id: id, forward: false),
-        _MoveNavButton(id: id, forward: true),
+        BottomBarGroup(
+          children: [
+            _MoveNavButton(id: id, forward: false),
+            _MoveNavButton(id: id, forward: true),
+          ],
+        ),
       ],
     );
   }
@@ -853,9 +862,8 @@ class const _GameBottomBar({
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () => showModalBottomSheet<void>(
+          onPressed: () => showAdaptiveBottomSheet<void>(
             context: context,
-            isDismissible: true,
             isScrollControlled: true,
             builder: (_) => GameSettings(id: id),
           ),
@@ -959,14 +967,12 @@ class const _GameBottomBar({
             isDestructiveAction: true,
             onPressed: () async {
               // dismissOnPress unmounts this context before the request
-              // completes, so capture the messenger now.
-              final messenger = ScaffoldMessenger.of(context);
+              // completes, so capture the snackbar presenter now.
+              final snackBar = SnackBarPresenter.of(context);
               try {
                 await ref.read(gameControllerProvider(id).notifier).cancelRematchChallenge();
               } catch (_) {
-                messenger.showSnackBar(
-                  const SnackBar(content: Text('Could not cancel the rematch challenge')),
-                );
+                snackBar.show('Could not cancel the rematch challenge');
               }
             },
           )
@@ -988,14 +994,12 @@ class const _GameBottomBar({
             dismissOnPress: true,
             onPressed: () async {
               // dismissOnPress unmounts this context before the request
-              // completes, so capture the messenger now.
-              final messenger = ScaffoldMessenger.of(context);
+              // completes, so capture the snackbar presenter now.
+              final snackBar = SnackBarPresenter.of(context);
               try {
                 await ref.read(gameControllerProvider(id).notifier).challengeRematch();
               } catch (_) {
-                messenger.showSnackBar(
-                  const SnackBar(content: Text('Could not send the rematch challenge')),
-                );
+                snackBar.show('Could not send the rematch challenge');
               }
             },
           ),
@@ -1121,7 +1125,7 @@ class const _GameNegotiationDialog({
       onAccept();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: title,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.accept)),
@@ -1145,12 +1149,33 @@ class const _ThreefoldDialog({required final GameFullId id}) extends ConsumerWid
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       content: content,
       actions: [
         PlatformDialogAction(onPressed: accept, child: Text(context.l10n.claimADraw)),
         PlatformDialogAction(onPressed: decline, child: Text(context.l10n.cancel)),
       ],
     );
+  }
+}
+
+/// Navigates back to the tournament of the game shown with [context].
+///
+/// If we came from the tournament screen (the usual case: we were on the tournament, the game was
+/// pushed on top and we played it), it is still in the navigation stack, so we pop back to it.
+/// Otherwise (e.g. the game was opened from the home recent games list) there is no tournament
+/// screen to go back to, so we push a fresh one.
+void _backToTournament(BuildContext context, TournamentId tournamentId) {
+  final navigator = Navigator.of(context);
+  if (routeStackObserverOf(navigator)
+          ?.containsRoute(TournamentScreen.routeName, arguments: tournamentId.value) ??
+      false) {
+    navigator.popUntil(
+      (route) =>
+          route.settings.name == TournamentScreen.routeName &&
+          route.settings.arguments == tournamentId.value,
+    );
+  } else {
+    navigator.pushHidingTabBar(TournamentScreen.buildRoute(tournamentId));
   }
 }

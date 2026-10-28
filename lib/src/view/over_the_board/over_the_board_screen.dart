@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -49,8 +50,9 @@ class const OverTheBoardScreen({
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: Text(context.l10n.mobileOverTheBoard),
         actions: [
           SemanticIconButton(
@@ -156,6 +158,8 @@ class _BodyState() extends ConsumerState<_Body> {
                     Navigator.pop(context);
                   });
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );
@@ -273,6 +277,7 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
     final clock = ref.watch(overTheBoardClockProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -295,33 +300,43 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
                   },
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
-        BottomBarButton(
-          label: 'Previous',
-          onTap: gameState.canGoBack
-              ? () {
-                  ref.read(overTheBoardGameControllerProvider.notifier).goBack();
-                  if (clock.active) {
-                    ref
-                        .read(overTheBoardClockProvider.notifier)
-                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                  }
-                }
-              : null,
-          icon: CupertinoIcons.chevron_back,
-        ),
-        BottomBarButton(
-          label: 'Next',
-          onTap: gameState.canGoForward
-              ? () {
-                  ref.read(overTheBoardGameControllerProvider.notifier).goForward();
-                  if (clock.active) {
-                    ref
-                        .read(overTheBoardClockProvider.notifier)
-                        .switchSide(newSideToMove: gameState.turn.opposite, addIncrement: false);
-                  }
-                }
-              : null,
-          icon: CupertinoIcons.chevron_forward,
+        BottomBarGroup(
+          children: [
+            BottomBarButton(
+              label: 'Previous',
+              onTap: gameState.canGoBack
+                  ? () {
+                      ref.read(overTheBoardGameControllerProvider.notifier).goBack();
+                      if (clock.active) {
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .switchSide(
+                              newSideToMove: gameState.turn.opposite,
+                              addIncrement: false,
+                            );
+                      }
+                    }
+                  : null,
+              icon: CupertinoIcons.chevron_back,
+            ),
+            BottomBarButton(
+              label: 'Next',
+              onTap: gameState.canGoForward
+                  ? () {
+                      ref.read(overTheBoardGameControllerProvider.notifier).goForward();
+                      if (clock.active) {
+                        ref
+                            .read(overTheBoardClockProvider.notifier)
+                            .switchSide(
+                              newSideToMove: gameState.turn.opposite,
+                              addIncrement: false,
+                            );
+                      }
+                    }
+                  : null,
+              icon: CupertinoIcons.chevron_forward,
+            ),
+          ],
         ),
         BottomBarButton(
           label: 'Takeback',

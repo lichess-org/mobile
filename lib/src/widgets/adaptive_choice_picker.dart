@@ -1,12 +1,14 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Shows a platform adaptive choice picker dialog
 ///
 /// On Android, it shows a dialog with radio buttons.
-/// On iOS, it shows a modal action sheet if the number of choices is less than or equal to 10.
-/// Otherwise, it shows a [CupertinoPicker].
+/// On iOS, it shows a liquid glass action sheet if the number of choices is less than or equal to 10.
+/// Otherwise, or when [forceWheelPicker] is true, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
   Widget? title,
@@ -14,6 +16,10 @@ Future<void> showChoicePicker<T>(
   required T selectedItem,
   required Widget Function(T choice) labelBuilder,
   void Function(T choice)? onSelectedItemChanged,
+
+  /// Whether iOS shows the [CupertinoPicker] wheel for any number of choices, e.g. to match a
+  /// neighbouring picker that has more choices.
+  bool forceWheelPicker = false,
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
@@ -61,30 +67,17 @@ Future<void> showChoicePicker<T>(
         },
       );
     case TargetPlatform.iOS:
-      if (choices.length <= 10) {
-        return showCupertinoModalPopup<void>(
+      if (!forceWheelPicker && choices.length <= 10) {
+        return showCupertinoActionSheet<void>(
           context: context,
-          builder: (context) {
-            return CupertinoActionSheet(
-              title: title,
-              actions: choices.map((value) {
-                return CupertinoActionSheetAction(
-                  onPressed: () {
-                    if (onSelectedItemChanged != null) {
-                      onSelectedItemChanged(value);
-                    }
-                    Navigator.of(context).pop();
-                  },
-                  child: labelBuilder(value),
-                );
-              }).toList(),
-              cancelButton: CupertinoActionSheetAction(
-                isDefaultAction: true,
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(context.l10n.cancel),
+          title: title,
+          actions: [
+            for (final value in choices)
+              BottomSheetAction(
+                makeLabel: (_) => labelBuilder(value),
+                onPressed: () => onSelectedItemChanged?.call(value),
               ),
-            );
-          },
+          ],
         );
       } else {
         return showCupertinoModalPopup<void>(
@@ -133,7 +126,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
     context: context,
     builder: (context) {
       Set<T> items = {...selectedItems};
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         contentPadding: const EdgeInsets.only(top: 12),
         scrollable: true,
         content: StatefulBuilder(
@@ -162,28 +155,17 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
             );
           },
         ),
-        actions: Theme.of(context).platform == TargetPlatform.iOS
-            ? [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ]
-            : [
-                TextButton(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ],
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+          PlatformDialogAction(
+            cupertinoIsDefaultAction: true,
+            onPressed: () => Navigator.of(context).pop(items),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
       );
     },
   );

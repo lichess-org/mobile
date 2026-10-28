@@ -8,10 +8,11 @@ import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -26,8 +27,15 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateChallengeBottomSheet({final LightUser? user, final String? positionFen})
-    extends ConsumerStatefulWidget {
+class const CreateChallengeBottomSheet({
+  final LightUser? user,
+  final String? positionFen,
+
+  /// The navigator where the game is pushed, by default the navigator of the sheet: for a sheet on
+  /// the root navigator, the navigator of the screen that presents it, so that the game is pushed
+  /// in the current tab and hides the tab bar there.
+  final NavigatorState? navigator,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
@@ -316,11 +324,11 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   // new GameScreen always runs build() and creates a fresh
                                   // challenge instead of showing the old GameCreatedState.
                                   ref.invalidate(gameScreenLoaderProvider(source));
-                                  Navigator.of(context)
-                                      .popUntil((route) => route is! ModalBottomSheetRoute);
+                                  final navigator = widget.navigator ?? Navigator.of(context);
+                                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
-                                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                  navigator.pushAndRemoveUntilHidingTabBar(
                                     GameScreen.buildRoute(source: source),
                                     (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                   );
@@ -346,10 +354,17 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
 
                               if (!context.mounted) return;
 
-                              Navigator.of(context)
-                                  .popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
-                              if (maybeDeclined != null) {
+                              if (maybeDeclined != null &&
+                                  Theme.of(context).platform == TargetPlatform.iOS) {
+                                // A glass toast holds a text message only.
+                                showSnackBar(
+                                  context,
+                                  '${context.l10n.challengeChallengeDeclined}\n${maybeDeclined.label(context.l10n)}',
+                                  duration: const Duration(seconds: 5),
+                                );
+                              } else if (maybeDeclined != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Column(
@@ -383,9 +398,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   ),
                                 );
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(context.l10n.mobileChallengeCreated)),
-                                );
+                                showSnackBar(context, context.l10n.mobileChallengeCreated);
                               }
                             } catch (e) {
                               if (context.mounted) {

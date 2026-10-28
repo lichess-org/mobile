@@ -45,6 +45,7 @@ class const PracticeEngineChapterBody({required final PracticeEngineChapter chap
         moves: [for (final step in state.steps) step.sanMove.san],
         table: _Table(state: state),
         bottomBar: BottomBar(
+          cupertinoGlass: true,
           children: [
             BottomBarButton(
               label: context.l10n.getAHint,

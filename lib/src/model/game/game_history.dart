@@ -6,7 +6,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 
 part 'game_history.freezed.dart';
@@ -108,12 +108,22 @@ class UserGameHistoryNotifier(final UserGameHistoryNotifierParams params)
       }
     });
 
-    ref.cacheFor(const Duration(minutes: 5));
+    final cacheLink = ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
       _bookmarkChangesSubscription?.cancel();
       _list.clear();
     });
 
+    try {
+      return await _fetchFirstPage();
+    } catch (_) {
+      // Don't keep an error: the history is fetched again when the screen is opened again.
+      cacheLink.close();
+      rethrow;
+    }
+  }
+
+  Future<UserGameHistoryState> _fetchFirstPage() async {
     final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
     final online = await ref.watch(

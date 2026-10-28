@@ -1,7 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_sheet.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_share_menu.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_teams_tab.dart';
@@ -21,23 +21,20 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
 enum BroadcastRoundTab() {
-  overview,
   boards,
   players,
   teams;
 
   static BroadcastRoundTab? tabOrNullFromString(String tab) {
     return switch (tab) {
-      'overview' => BroadcastRoundTab.overview,
       'boards' => BroadcastRoundTab.boards,
       'players' => BroadcastRoundTab.players,
       'teams' => BroadcastRoundTab.teams,
@@ -48,16 +45,7 @@ enum BroadcastRoundTab() {
 
 enum _BroadcastGameFilter() {
   all,
-  ongoing;
-
-  String l10n(AppLocalizations l10n) {
-    switch (this) {
-      case all:
-        return l10n.mobileAllGames;
-      case ongoing:
-        return l10n.broadcastOngoing;
-    }
-  }
+  ongoing,
 }
 
 class const BroadcastRoundScreenLoading({
@@ -95,13 +83,13 @@ class const BroadcastRoundScreenLoading({
         initialTab: initialTab,
         teamFilter: teamFilter,
       ),
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(title: const Text('')),
+      AsyncError(:final error) => PlatformScaffold(
+        appBar: const PlatformAppBar(title: Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => Scaffold(
-        appBar: AppBar(title: const Text('')),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+      _ => const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('')),
+        body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
@@ -130,15 +118,13 @@ class _BroadcastRoundScreenState()
   BroadcastRoundId? _selectedRoundId;
   String? _teamFilter;
 
-  bool roundLoaded = false;
-
   _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
   @override
   void initState() {
     super.initState();
     final hasTeamsTab = widget.broadcast.tour.teamTable == true;
-    final tabCount = hasTeamsTab ? 4 : 3;
+    final tabCount = hasTeamsTab ? 3 : 2;
 
     _tabController = TabController(
       initialIndex: widget.initialTab?.index ?? 0,
@@ -163,7 +149,7 @@ class _BroadcastRoundScreenState()
     if (_tabController.indexIsChanging) {
       final currentRoundId = _selectedRoundId ?? widget.broadcast.roundToLinkId;
 
-      ref.read(broadcastRoundControllerProvider(currentRoundId).notifier).clearObservedGames();
+      ref.read(observedGamesControllerProvider(currentRoundId).notifier).clear();
     }
   }
 
@@ -175,16 +161,15 @@ class _BroadcastRoundScreenState()
   }
 
   void setGameFilter(_BroadcastGameFilter filter, String? team) {
-    _tabController.index = 1;
+    _tabController.index = BroadcastRoundTab.boards.index;
     setState(() {
       this.filter = filter;
-      _teamFilter = team == context.l10n.broadcastAllTeams ? null : team;
+      _teamFilter = team;
     });
   }
 
   void setRoundId(BroadcastRoundId roundId) {
     setState(() {
-      roundLoaded = false;
       _selectedRoundId = roundId;
     });
   }
@@ -192,140 +177,222 @@ class _BroadcastRoundScreenState()
   Widget _buildContent(
     BuildContext context,
     AsyncValue<BroadcastTournament> asyncTournament,
-    AsyncValue<BroadcastRoundState> asyncRound,
+    AsyncValue<({BroadcastRound round, bool? isSubscribed})>? roundState,
   ) {
-    return switch (asyncRound) {
-      AsyncData(value: final roundState) => PlatformScaffold(
+    return switch (roundState) {
+      AsyncData(value: (:final round, isSubscribed: final subscription)) => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
         appBar: PlatformAppBar(
-          title: AppBarTitleText(
-            asyncTournament.value?.data.name ?? widget.broadcast.title,
-            maxLines: 2,
-          ),
-          bottom: TabBar(
-            controller: _tabController,
-            tabs: <Widget>[
-              Tab(text: context.l10n.broadcastOverview),
-              Tab(text: context.l10n.broadcastBoards),
-              Tab(text: context.l10n.players),
-              if (asyncTournament.value?.data.teamTable == true)
-                Tab(text: context.l10n.broadcastTeams),
-            ],
-          ),
-          actions: [
-            if (roundState.isSubscribed case final isSubscribed?)
-              if (_selectedRoundId ?? asyncTournament.value?.defaultRoundId case final roundId?)
-                SemanticIconButton(
-                  icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
-                  semanticsLabel: isSubscribed ? context.l10n.unsubscribe : context.l10n.subscribe,
-                  onPressed: () async {
-                    try {
-                      await ref
-                          .read(broadcastRoundControllerProvider(roundId).notifier)
-                          .setSubscribed(_selectedTournamentId, !isSubscribed);
-                    } catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(
-                          context,
-                          'Could not update the subscription',
-                          type: SnackBarType.error,
-                        );
+          // On iOS the title is in the header of the body, below the image, like the Music app.
+          title: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : AppBarTitleText(
+                  asyncTournament.value?.data.name ?? widget.broadcast.title,
+                  maxLines: 2,
+                ),
+          // A long title, next to the actions.
+          centerTitle: false,
+          actionsBuilder: (context, ref) {
+            final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+            final showEvalBar = ref.watch(
+              broadcastPreferencesProvider.select((prefs) => prefs.showRoundEvaluationGauges),
+            );
+            final federation = ref.watch(
+              broadcastPreferencesProvider.select((prefs) => prefs.broadcastFederationCode),
+            );
+            final displayFederationGamesFirst = ref.watch(
+              broadcastPreferencesProvider.select((prefs) => prefs.displayFederationGamesFirst),
+            );
+            // Only what the menu shows, so that game updates don't rebuild the app bar. The counts
+            // are those of the selected team, whose games the filter choices apply to.
+            final games = roundId != null
+                ? ref.watch(
+                    broadcastRoundControllerProvider(roundId).select((state) {
+                      final games = state.value?.games.values ?? const [];
+                      final teamGames = _teamFilter == null
+                          ? games
+                          : games.where(
+                              (g) => g.players.values.any((p) => p.player.team == _teamFilter),
+                            );
+                      return (
+                        all: teamGames.length,
+                        ongoing: teamGames.where((g) => g.isOngoing).length,
+                        teams: games
+                            .expand((g) => g.players.values.map((p) => p.player.team))
+                            .nonNulls
+                            .toIList()
+                            .removeDuplicates()
+                            .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase())),
+                      );
+                    }),
+                  )
+                : null;
+            return [
+              if (subscription case final isSubscribed?)
+                if (roundId != null)
+                  SemanticIconButton(
+                    icon: Icon(isSubscribed ? Icons.notifications : Icons.notifications_none),
+                    semanticsLabel: isSubscribed
+                        ? context.l10n.unsubscribe
+                        : context.l10n.subscribe,
+                    onPressed: () async {
+                      try {
+                        await ref
+                            .read(broadcastRoundControllerProvider(roundId).notifier)
+                            .setSubscribed(_selectedTournamentId, !isSubscribed);
+                      } catch (_) {
+                        if (context.mounted) {
+                          showSnackBar(
+                            context,
+                            'Could not update the subscription',
+                            type: SnackBarType.error,
+                          );
+                        }
                       }
-                    }
-                  },
-                ),
-            ContextMenuIconButton(
-              icon: const Icon(Icons.more_horiz),
-              semanticsLabel: context.l10n.menu,
-              actions: [
-                ContextMenuAction(
-                  icon: Icons.settings,
-                  label: context.l10n.settingsSettings,
-                  onPressed: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isDismissible: true,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
-                      builder: (_) => const _BroadcastSettingsBottomSheet(),
-                    );
-                  },
-                ),
-                ContextMenuAction(
-                  icon: Icons.filter_list,
-                  label: context.l10n.filterGames,
-                  onPressed: () {
-                    final games = asyncRound.value.games.values;
-                    final allCount = games.length;
-                    final ongoingCount = games.where((g) => g.isOngoing).length;
-                    final uniqueTeams = games
-                        .expand((g) => g.players.values.map((p) => p.player.team))
-                        .nonNulls
-                        .toIList()
-                        .removeDuplicates()
-                        .sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-                    final teams = uniqueTeams.isNotEmpty
-                        ? uniqueTeams.insert(0, context.l10n.broadcastAllTeams)
-                        : null;
-
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isDismissible: true,
-                      isScrollControlled: true,
-                      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.6),
-                      builder: (_) => _BroadcastGamesFilterBottomSheet(
-                        filter,
-                        _teamFilter,
-                        allGamesCount: allCount,
-                        ongoingGamesCount: ongoingCount,
-                        onGameFilterChange: setGameFilter,
-                        teams: teams,
+                    },
+                  ),
+              ContextMenuIconButton(
+                icon: const Icon(Icons.more_horiz),
+                semanticsLabel: context.l10n.menu,
+                actions: [
+                  ContextMenuAction(
+                    label: context.l10n.studyShowEvalBar,
+                    toggled: showEvalBar,
+                    onPressed: () =>
+                        ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar(),
+                  ),
+                  ContextMenuSection(
+                    title: 'Favorite federation',
+                    actions: [
+                      ContextMenuAction(
+                        label: context.l10n.broadcastFederation,
+                        subtitle: federation?.name ?? context.l10n.none,
+                        onPressed: () =>
+                            Navigator.of(context)
+                                .push(BroadcastFederationChoiceScreen.buildRoute()),
                       ),
-                    );
-                  },
-                ),
-                ContextMenuAction(
-                  icon: Theme.of(context).platform == TargetPlatform.iOS
-                      ? Icons.ios_share_outlined
-                      : Icons.share_outlined,
-                  label: context.l10n.studyShareAndExport,
-                  onPressed: () => showBroadcastShareMenu(
-                    context,
-                    asyncTournament.value?.data ?? widget.broadcast.tour,
-                    roundState.round,
+                      ContextMenuAction(
+                        label: 'Display games first',
+                        toggled: displayFederationGamesFirst,
+                        onPressed: federation != null
+                            ? () => ref
+                                  .read(broadcastPreferencesProvider.notifier)
+                                  .setDisplayFederationGamesFirst(!displayFederationGamesFirst)
+                            : null,
+                      ),
+                    ],
+                  ),
+                  ContextMenuSection(
+                    title: context.l10n.filterGames,
+                    actions: [
+                      ContextMenuAction(
+                        label: '${context.l10n.mobileAllGames} (${games?.all ?? 0})',
+                        selected: filter == .all,
+                        onPressed: () => setGameFilter(.all, _teamFilter),
+                      ),
+                      ContextMenuAction(
+                        label: '${context.l10n.broadcastOngoing} (${games?.ongoing ?? 0})',
+                        selected: filter == .ongoing,
+                        onPressed: () => setGameFilter(.ongoing, _teamFilter),
+                      ),
+                      if (games != null && games.teams.isNotEmpty)
+                        ContextMenuAction(
+                          label: context.l10n.teamTeam,
+                          subtitle: _teamFilter ?? context.l10n.broadcastAllTeams,
+                          onPressed: null,
+                          submenu: [
+                            for (final team in [null, ...games.teams])
+                              ContextMenuAction(
+                                label: team ?? context.l10n.broadcastAllTeams,
+                                selected: team == _teamFilter,
+                                onPressed: () => setGameFilter(filter, team),
+                              ),
+                          ],
+                        ),
+                    ],
+                  ),
+                  ContextMenuAction(
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
+                        ? Icons.ios_share_outlined
+                        : Icons.share_outlined,
+                    label: context.l10n.mobileShare,
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      asyncTournament.value?.data ?? widget.broadcast.tour,
+                      round,
+                    ),
+                  ),
+                ],
+              ),
+            ];
+          },
+        ),
+        // The tabs scroll under the glass bottom bar buttons.
+        body: BottomBarScrollEdgeEffect(
+          barHeight: BottomBar.heightOf(context),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: NestedScrollView(
+            headerSliverBuilder: (context, _) => [
+              SliverPadding(
+                // The body starts behind the app bar on iOS.
+                padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                sliver: SliverToBoxAdapter(
+                  child: _RoundHeader(
+                    title: Theme.of(context).platform == TargetPlatform.iOS
+                        ? asyncTournament.value?.data.name ?? widget.broadcast.title
+                        : null,
+                    imageUrl:
+                        asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+                    information: asyncTournament.value?.data.information,
+                    onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+                    tabController: _tabController,
+                    tabs: [
+                      context.l10n.broadcastBoards,
+                      context.l10n.players,
+                      if (asyncTournament.value?.data.teamTable == true)
+                        context.l10n.broadcastTeams,
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            BroadcastOverviewTab(broadcast: widget.broadcast, tournamentId: _selectedTournamentId),
-            switch (asyncTournament) {
-              AsyncData(:final value) => BroadcastBoardsTab(
-                tournamentId: _selectedTournamentId,
-                roundId: _selectedRoundId ?? value.defaultRoundId,
-                tournamentSlug: value.data.slug,
-                showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                teamFilter: _teamFilter,
               ),
-              _ => const SizedBox.shrink(),
-            },
-            BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-            if (asyncTournament.value?.data.teamTable == true) ...[
-              switch (asyncTournament) {
-                AsyncData(:final value) => BroadcastTeamsTab(
-                  roundId: _selectedRoundId ?? value.defaultRoundId,
-                  tournamentId: _selectedTournamentId,
-                  tournamentSlug: value.data.slug,
-                  showTeamScores: value.data.showTeamScores == true,
-                ),
-                _ => const SizedBox.shrink(),
-              },
             ],
-          ],
+            // The tabs are below the header, which has the app bar padding. The padding is the
+            // body's, with the bottom bar height, not the screen's.
+            body: Builder(
+              builder: (context) => MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    switch (asyncTournament) {
+                      AsyncData(:final value) => BroadcastBoardsTab(
+                        tournamentId: _selectedTournamentId,
+                        roundId: _selectedRoundId ?? value.defaultRoundId,
+                        tournamentSlug: value.data.slug,
+                        showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+                        teamFilter: _teamFilter,
+                      ),
+                      _ => const SizedBox.shrink(),
+                    },
+                    BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+                    if (asyncTournament.value?.data.teamTable == true) ...[
+                      switch (asyncTournament) {
+                        AsyncData(:final value) => BroadcastTeamsTab(
+                          roundId: _selectedRoundId ?? value.defaultRoundId,
+                          tournamentId: _selectedTournamentId,
+                          tournamentSlug: value.data.slug,
+                          showTeamScores: value.data.showTeamScores == true,
+                        ),
+                        _ => const SizedBox.shrink(),
+                      },
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         bottomNavigationBar: switch (asyncTournament) {
           AsyncData(:final value) => _BottomBar(
@@ -334,12 +401,33 @@ class _BroadcastRoundScreenState()
             setTournamentId: setTournamentId,
             setRoundId: setRoundId,
           ),
-          _ => const BottomBar.empty(),
+          _ => const BottomBar.empty(cupertinoGlass: true),
         },
+      ),
+      AsyncError() => PlatformScaffold(
+        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        appBar: const PlatformAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Cannot load broadcast round'),
+              TextButton(
+                onPressed: () {
+                  final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
+                  if (roundId != null) {
+                    ref.invalidate(broadcastRoundControllerProvider(roundId));
+                  }
+                },
+                child: Text(context.l10n.retry),
+              ),
+            ],
+          ),
+        ),
       ),
       _ => PlatformScaffold(
         extendBody: Theme.of(context).platform == TargetPlatform.iOS,
-        appBar: PlatformAppBar(title: AppBarTitleText(widget.broadcast.title, maxLines: 2)),
+        appBar: const PlatformAppBar(),
         body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
@@ -349,32 +437,137 @@ class _BroadcastRoundScreenState()
   Widget build(BuildContext context) {
     final asyncTour = ref.watch(broadcastTournamentProvider(_selectedTournamentId));
 
-    const loadingRound = AsyncValue<BroadcastRoundState>.loading();
-
     switch (asyncTour) {
       case AsyncData(value: final tournament):
-        // Eagerly initalize the round controller so it stays alive when switching tabs
-        // and to know if the round has games to show
-        final roundState = ref.watch(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-        );
+        final roundId = _selectedRoundId ?? tournament.defaultRoundId;
 
-        ref.listen(
-          broadcastRoundControllerProvider(_selectedRoundId ?? tournament.defaultRoundId),
-          (_, round) {
-            if (widget.initialTab == null && round.hasValue && !roundLoaded) {
-              roundLoaded = true;
-              if (round.value!.games.isNotEmpty) {
-                _tabController.index = 1;
-              }
-            }
-          },
+        // Only what the scaffold needs, so that game updates don't rebuild the whole screen.
+        final roundState = ref.watch(
+          broadcastRoundControllerProvider(roundId).select(
+            (state) => switch (state) {
+              AsyncData(:final value) => AsyncData<({BroadcastRound round, bool? isSubscribed})>((
+                round: value.round,
+                isSubscribed: value.isSubscribed,
+              )),
+              AsyncError(:final error, :final stackTrace) =>
+                AsyncError<({BroadcastRound round, bool? isSubscribed})>(error, stackTrace),
+              AsyncLoading() => const AsyncLoading<({BroadcastRound round, bool? isSubscribed})>(),
+            },
+          ),
         );
 
         return _buildContent(context, asyncTour, roundState);
       case _:
-        return _buildContent(context, asyncTour, loadingRound);
+        return _buildContent(context, asyncTour, null);
     }
+  }
+}
+
+/// The header of the round screen, which scrolls away with the tabs below it: the tournament image,
+/// title and a line of its information that opens the overview sheet.
+class const _RoundHeader({
+  /// Null when the title is in the app bar (Android).
+  required final String? title,
+  required final String? imageUrl,
+
+  /// Null while the tournament is loading.
+  required final BroadcastTournamentInformation? information,
+  required final VoidCallback onMorePressed,
+  required final TabController tabController,
+  required final List<String> tabs,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
+          child: Column(
+            children: [
+              if (imageUrl != null)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                    // Broadcast images are cropped to this ratio by the server.
+                    child: AspectRatio(
+                      aspectRatio: 2.0,
+                      child: HttpNetworkImageWidget(
+                        imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, _, _) =>
+                            ColoredBox(color: ColorScheme.of(context).surfaceContainer),
+                      ),
+                    ),
+                  ),
+                ),
+              if (title != null) ...[
+                const SizedBox(height: 16.0),
+                Text(
+                  title!,
+                  style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ] else
+                const SizedBox(height: 8.0),
+              if (information case final information?)
+                Row(
+                  // MORE is at the end of the last line.
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: DefaultTextStyle.merge(
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Up to 2 pieces of information per line, on 2 lines.
+                            for (final line in broadcastInformationTexts(
+                              information,
+                            ).take(4).slices(2))
+                              Text(line.join(' · ')),
+                          ],
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: onMorePressed,
+                      child: Text(
+                        context.l10n.more.toUpperCase(),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        ),
+        PlatformTabBar(tabs: tabs, controller: tabController, inAppBar: false, glass: false),
+      ],
+    );
+  }
+}
+
+/// A non-scrolling content for a tab of the round screen, such as a loading indicator or a message,
+/// centered in the space below the header.
+class const BroadcastRoundTabPlaceholder(final Widget child) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            child: Center(child: child),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -387,29 +580,23 @@ class const _BottomBar({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BottomBar(
-      cupertinoTransparent: true,
+      cupertinoGlass: true,
       children: [
         if (tournament.group != null)
-          TextButton(
-            onPressed: () => showModalBottomSheet<void>(
+          BottomBarTextButton(
+            onPressed: () => showAdaptiveDraggableBottomSheet<void>(
               context: context,
-              showDragHandle: true,
-              isScrollControlled: true,
-              isDismissible: true,
               constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-              builder: (_) => DraggableScrollableSheet(
-                initialChildSize: 0.4,
-                snap: true,
-                expand: false,
-                builder: (context, scrollController) {
-                  return _TournamentSelectorMenu(
-                    tournament: tournament,
-                    group: tournament.group!,
-                    scrollController: scrollController,
-                    setTournamentId: setTournamentId,
-                  );
-                },
-              ),
+              initialChildSize: 0.4,
+              snap: true,
+              builder: (context, scrollController) {
+                return _TournamentSelectorMenu(
+                  tournament: tournament,
+                  group: tournament.group!,
+                  scrollController: scrollController,
+                  setTournamentId: setTournamentId,
+                );
+              },
             ),
             child: Text(
               tournament.group!.firstWhere((g) => g.id == tournament.data.id).name,
@@ -417,26 +604,20 @@ class const _BottomBar({
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        TextButton(
-          onPressed: () => showModalBottomSheet<void>(
+        BottomBarTextButton(
+          onPressed: () => showAdaptiveDraggableBottomSheet<void>(
             context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            isDismissible: true,
             constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-            builder: (_) => DraggableScrollableSheet(
-              initialChildSize: 0.6,
-              snap: true,
-              expand: false,
-              builder: (context, scrollController) {
-                return _RoundSelectorMenu(
-                  selectedRoundId: roundId,
-                  rounds: tournament.rounds,
-                  scrollController: scrollController,
-                  setRoundId: setRoundId,
-                );
-              },
-            ),
+            initialChildSize: 0.6,
+            snap: true,
+            builder: (context, scrollController) {
+              return _RoundSelectorMenu(
+                selectedRoundId: roundId,
+                rounds: tournament.rounds,
+                scrollController: scrollController,
+                setRoundId: setRoundId,
+              );
+            },
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -472,8 +653,8 @@ class const _RoundSelectorMenu({
   ConsumerState<_RoundSelectorMenu> createState() => _RoundSelectorState();
 }
 
-final _dateFormatMonth = DateFormat.MMMd().add_jm();
-final _dateFormatYearMonth = DateFormat.yMMMd().add_jm();
+DateFormat get _dateFormatMonth => DateFormat.MMMd().add_jm();
+DateFormat get _dateFormatYearMonth => DateFormat.yMMMd().add_jm();
 
 class _RoundSelectorState() extends ConsumerState<_RoundSelectorMenu> {
   final currentRoundKey = GlobalKey();
@@ -561,208 +742,6 @@ class _TournamentSelectorState() extends ConsumerState<_TournamentSelectorMenu> 
             },
           ),
       ],
-    );
-  }
-}
-
-class const _BroadcastSettingsBottomSheet() extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_BroadcastSettingsBottomSheet> createState() =>
-      _BroadcastSettingsBottomSheetState();
-}
-
-class _BroadcastSettingsBottomSheetState() extends ConsumerState<_BroadcastSettingsBottomSheet> {
-  @override
-  Widget build(BuildContext context) {
-    final broadcastPreferences = ref.watch(broadcastPreferencesProvider);
-    final federation = broadcastPreferences.broadcastFederationCode;
-    final federationName = federation?.name ?? context.l10n.none;
-
-    return BottomSheetScrollableContainer(
-      children: [
-        ListSection(
-          header: const SettingsSectionTitle('Favorite federation'),
-          materialFilledCard: true,
-          children: [
-            SettingsListTile(
-              icon: federation != null
-                  ? Image.asset(federation.flagAsset, height: 16)
-                  : const Icon(Icons.public),
-              settingsLabel: Text(context.l10n.broadcastFederation),
-              settingsValue: federationName,
-              onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(BroadcastFederationChoiceScreen.buildRoute());
-              },
-            ),
-            SwitchSettingTile(
-              title: const Text('Display games first'),
-              value: broadcastPreferences.displayFederationGamesFirst,
-              onChanged: federation != null
-                  ? (value) => ref
-                        .read(broadcastPreferencesProvider.notifier)
-                        .setDisplayFederationGamesFirst(value)
-                  : null,
-            ),
-          ],
-        ),
-        ListSection(
-          header: SettingsSectionTitle(context.l10n.preferencesDisplay),
-          materialFilledCard: true,
-          children: [
-            SwitchSettingTile(
-              title: Text(context.l10n.studyShowEvalBar),
-              value: broadcastPreferences.showRoundEvaluationGauges,
-              onChanged: (value) {
-                ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar();
-              },
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class const _BroadcastGamesFilterBottomSheet(
-  final _BroadcastGameFilter selectedFilter,
-  final String? selectedTeam, {
-  required final int allGamesCount,
-  required final int ongoingGamesCount,
-  required final void Function(_BroadcastGameFilter filter, String? team) onGameFilterChange,
-  required final IList<String>? teams,
-}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_BroadcastGamesFilterBottomSheet> createState() =>
-      _BroadcastGamesFilterBottomSheetState();
-}
-
-class _BroadcastGamesFilterBottomSheetState()
-    extends ConsumerState<_BroadcastGamesFilterBottomSheet> {
-  late _BroadcastGameFilter filter;
-  late String? selectedTeam;
-  bool showingTeamPicker = false;
-
-  @override
-  void initState() {
-    super.initState();
-    filter = widget.selectedFilter;
-    selectedTeam = widget.selectedTeam;
-  }
-
-  @override
-  void didUpdateWidget(covariant _BroadcastGamesFilterBottomSheet oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    filter = widget.selectedFilter;
-    selectedTeam = widget.selectedTeam;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: !showingTeamPicker,
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && showingTeamPicker) {
-          setState(() => showingTeamPicker = false);
-        }
-      },
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 220),
-        transitionBuilder: (child, animation) {
-          final isTeamPicker = child.key == const ValueKey('team-picker');
-          final offset = Tween<Offset>(
-            begin: isTeamPicker ? const Offset(1, 0) : const Offset(-1, 0),
-            end: Offset.zero,
-          ).animate(animation);
-          return ClipRect(
-            child: SlideTransition(position: offset, child: child),
-          );
-        },
-        child: showingTeamPicker
-            ? KeyedSubtree(
-                key: const ValueKey('team-picker'),
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          tooltip: context.l10n.cancel,
-                          onPressed: () => setState(() => showingTeamPicker = false),
-                        ),
-                        title: Text(context.l10n.teamTeam),
-                      ),
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          children: [
-                            for (final team in widget.teams!)
-                              ListTile(
-                                selected: team == (selectedTeam ?? context.l10n.broadcastAllTeams),
-                                title: Text(team),
-                                onTap: () {
-                                  setState(() {
-                                    selectedTeam = team == context.l10n.broadcastAllTeams
-                                        ? null
-                                        : team;
-                                    showingTeamPicker = false;
-                                  });
-                                  widget.onGameFilterChange.call(filter, team);
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : KeyedSubtree(
-                key: const ValueKey('settings'),
-                child: BottomSheetScrollableContainer(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SettingsSectionTitle(context.l10n.filterGames),
-                          const SizedBox(height: 6),
-                          Filter<_BroadcastGameFilter>(
-                            filterType: FilterType.singleChoice,
-                            choices: _BroadcastGameFilter.values,
-                            choiceSelected: (choice) => filter == choice,
-                            choiceLabel: (category) {
-                              final label = category.l10n(context.l10n);
-                              final count = category == _BroadcastGameFilter.all
-                                  ? widget.allGamesCount
-                                  : widget.ongoingGamesCount;
-                              return Text('$label ($count)');
-                            },
-                            onSelected: (value, selected) {
-                              setState(() => filter = value);
-                              widget.onGameFilterChange.call(value, selectedTeam);
-                            },
-                          ),
-                          if (widget.teams != null)
-                            FilterChip(
-                              label: selectedTeam != null
-                                  ? Text('${context.l10n.teamTeam}: $selectedTeam')
-                                  : Text(context.l10n.teamTeam),
-                              selected: selectedTeam != null,
-                              showCheckmark: selectedTeam != null,
-                              onSelected: (_) => setState(() => showingTeamPicker = true),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-      ),
     );
   }
 }

@@ -108,6 +108,45 @@ void main() {
       expect(tag.originText, '@user123');
     });
 
+    test('detects hyphenated @username mention', () {
+      final result = linkify(
+        'hello @foo-bar how are you?',
+        linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+      );
+      final tag = result.firstWhere((e) => e is UserTagElement) as UserTagElement;
+      expect(tag.userTag, '@foo-bar');
+      final texts = result.whereType<TextElement>().map((e) => e.text).join();
+      expect(texts, 'hello  how are you?');
+    });
+
+    test('ends @username mention before trailing punctuation', () {
+      final result = linkify(
+        'ask @foo-bar. or @baz-qux!',
+        linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+      );
+      final tags = result.whereType<UserTagElement>().map((e) => e.userTag).toList();
+      expect(tags, ['@foo-bar', '@baz-qux']);
+      final texts = result.whereType<TextElement>().map((e) => e.text).join();
+      expect(texts, 'ask . or !');
+    });
+
+    test('keeps a trailing hyphen in @username mention, like lila', () {
+      final result = linkify(
+        'hello @foo-bar- ok',
+        linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+      );
+      final tag = result.firstWhere((e) => e is UserTagElement) as UserTagElement;
+      expect(tag.userTag, '@foo-bar-');
+    });
+
+    test('ignores @ words that cannot be a username', () {
+      final result = linkify(
+        '@a @lichess.org @foo@bar @abcdefghijklmnopqrstuvwxyz12345',
+        linkifiers: const [UrlLinkifier(), EmailLinkifier(), UserTagLinkifier()],
+      );
+      expect(result.any((e) => e is UserTagElement), isFalse);
+    });
+
     test('detects multiple URLs in text', () {
       final result = linkify('foo https://a.com bar https://b.com baz');
       final urls = result.whereType<UrlElement>().toList();

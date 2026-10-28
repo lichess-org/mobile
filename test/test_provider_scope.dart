@@ -13,36 +13,41 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
 import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show rootNavRouteStackObserver;
+import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/opening_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show rootNavRouteStackObserver, tabNavigatorObservers;
 import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show usePinnedNavBar;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import 'binding.dart';
-import 'model/analysis/fake_opening_service.dart';
-import 'model/common/service/fake_sound_service.dart';
 import 'model/engine/fake_engine.dart';
-import 'model/engine/fake_weights_service.dart';
+import 'model/game/fake_game_live_activity_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
+import 'service/fake_opening_service.dart';
+import 'service/fake_sound_service.dart';
+import 'service/fake_weights_service.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
 
@@ -109,6 +114,9 @@ class _FakeAppState() extends ConsumerState<_FakeApp> {
         MaterialLocalizationsEo.delegate,
         CupertinoLocalizationsEo.delegate,
       ],
+      // Mirror production (see app.dart): the app bar buttons of the routes are pinned.
+      builder: (context, child) =>
+          GlassNavigationShell(enabled: usePinnedNavBar(context), child: child!),
       home: widget.home,
       // Mirror production (see app.dart) so navigation logic relying on the
       // route stack observer behaves the same in tests.
@@ -163,6 +171,14 @@ Future<Widget> makeTestProviderScope(
 
   rootNavRouteStackObserver.clear();
   addTearDown(rootNavRouteStackObserver.clear);
+  void clearTabNavigatorObservers() {
+    for (final observer in tabNavigatorObservers.values) {
+      observer.clear();
+    }
+  }
+
+  clearTabNavigatorObservers();
+  addTearDown(clearTabNavigatorObservers);
 
   await tester.binding.setSurfaceSize(surfaceSize);
   addTearDown(() {
@@ -254,6 +270,9 @@ Future<Widget> makeTestProviderScope(
     thinkingTimeProvider: thinkingTimeProvider.overrideWithValue(const ThinkingTime.instant()),
     showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) => ShowRatings.yes),
     soundServiceProvider: soundServiceProvider.overrideWithValue(FakeSoundService()),
+    gameLiveActivityChannelProvider: gameLiveActivityChannelProvider.overrideWithValue(
+      FakeGameLiveActivityChannel(),
+    ),
     openingServiceProvider: openingServiceProvider.overrideWithValue(const FakeOpeningService()),
     preloadedDataProvider: preloadedDataProvider.overrideWith((ref) {
       return (
@@ -277,6 +296,7 @@ Future<Widget> makeTestProviderScope(
         engineMaxMemoryInMb: 256,
         appDocumentsDirectory: null,
         appSupportDirectory: null,
+        imageCacheDirectory: null,
       );
     }),
     ...?overrides,
