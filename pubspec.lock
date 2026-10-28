@@ -1026,10 +1026,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: "9a916e803059ceac80fddf4659a33f44327e9f1cbb5affad02148269124dad14"
+      sha256: fb03298a2a631d0edb44160f9bcc353a0877f22d1f115c0cf6ef5046eb55d7fb
       url: "https://pub.dev"
     source: hosted
-    version: "1.15.1"
+    version: "1.16.0"
   listen:
     dependency: transitive
     description:
@@ -1290,10 +1290,10 @@ packages:
     dependency: transitive
     description:
       name: posix
-      sha256: "6312deb534ce3812a1b454143740ffe721a17dc3a33bfc978f3a6d7bc5833edf"
+      sha256: "613646d076944f3acc125830af935b48d4b8a57a388691547bbfd25b434f4d63"
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.3"
+    version: "6.5.4"
   pub_semver:
     dependency: "direct main"
     description:
