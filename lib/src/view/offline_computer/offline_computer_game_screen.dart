@@ -865,6 +865,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
                         pieceAssets: boardPrefs.pieceSet.assets,
                         colorScheme: boardPrefs.boardTheme.colors,
                         brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
+                        contrast: boardPrefs.contrast,
                         hue: boardPrefs.hue,
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.all(Radius.circular(4)),

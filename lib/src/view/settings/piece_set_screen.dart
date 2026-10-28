@@ -74,7 +74,7 @@ class _PieceSetScreenState() extends ConsumerState<PieceSetScreen> {
                 constraints: const BoxConstraints(maxWidth: 264),
                 child: Stack(
                   children: [
-                    BrightnessHueFilter(
+                    ColorAdjustFilter(
                       brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
                       hue: boardPrefs.hue,
                       child: boardPrefs.boardTheme.thumbnail,

@@ -101,6 +101,7 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
         colorScheme: boardPrefs.boardTheme.colors,
         animationDuration: widget.animationDuration,
         hue: boardPrefs.hue,
+        contrast: boardPrefs.contrast,
         brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
       ),
     );

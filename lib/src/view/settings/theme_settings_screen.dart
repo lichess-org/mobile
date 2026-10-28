@@ -49,6 +49,7 @@ class const _Body() extends ConsumerStatefulWidget {
 
 class _BodyState() extends ConsumerState<_Body> {
   late double brightness;
+  late double contrast;
   late double hue;
 
   /// Whether the user has selected a custom background, even if none is set yet.
@@ -59,6 +60,7 @@ class _BodyState() extends ConsumerState<_Body> {
     super.initState();
     final boardPrefs = ref.read(boardPreferencesProvider);
     brightness = boardPrefs.brightness;
+    contrast = boardPrefs.contrast;
     hue = boardPrefs.hue;
   }
 
@@ -84,7 +86,9 @@ class _BodyState() extends ConsumerState<_Body> {
     final BackgroundColor? backgroundColor = generalPrefs.backgroundColor?.$1;
 
     final bool hasAjustedColors =
-        brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
+        brightness != kBoardDefaultBrightnessFilter ||
+        contrast != kBoardDefaultContrastFilter ||
+        hue != kBoardDefaultHueFilter;
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
@@ -101,6 +105,7 @@ class _BodyState() extends ConsumerState<_Body> {
               size: boardSize,
               boardPrefs: boardPrefs,
               brightness: isDimmed ? kBoardDimmedBrightnessFilter : brightness,
+              contrast: contrast,
               hue: hue,
             ),
           ),
@@ -283,6 +288,24 @@ class _BodyState() extends ConsumerState<_Body> {
                           ),
                         ),
                         ListTile(
+                          leading: const Icon(Icons.tonality),
+                          title: Slider.adaptive(
+                            min: 0.4,
+                            max: 2.0,
+                            value: contrast,
+                            onChanged: (value) {
+                              setState(() {
+                                contrast = value;
+                              });
+                            },
+                            onChangeEnd: (value) {
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .adjustColors(contrast: contrast);
+                            },
+                          ),
+                        ),
+                        ListTile(
                           leading: const Icon(Icons.invert_colors),
                           title: Slider.adaptive(
                             min: 0.0,
@@ -314,11 +337,16 @@ class _BodyState() extends ConsumerState<_Body> {
                               ? () {
                                   setState(() {
                                     brightness = kBoardDefaultBrightnessFilter;
+                                    contrast = kBoardDefaultContrastFilter;
                                     hue = kBoardDefaultHueFilter;
                                   });
                                   ref
                                       .read(boardPreferencesProvider.notifier)
-                                      .adjustColors(brightness: brightness, hue: hue);
+                                      .adjustColors(
+                                        brightness: brightness,
+                                        contrast: contrast,
+                                        hue: hue,
+                                      );
                                 }
                               : null,
                         ),
@@ -355,6 +383,7 @@ class const _BoardPreview({
   required final double size,
   required final BoardPrefs boardPrefs,
   required final double brightness,
+  required final double contrast,
   required final double hue,
 }) extends StatelessWidget {
   @override
@@ -378,6 +407,7 @@ class const _BoardPreview({
               .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
               .copyWith(
                 brightness: brightness,
+                contrast: contrast,
                 hue: hue,
                 borderRadius: Styles.boardBorderRadius,
                 boxShadow: boardShadows,

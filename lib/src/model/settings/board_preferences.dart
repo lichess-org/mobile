@@ -12,6 +12,7 @@ part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
 const kBoardDefaultBrightnessFilter = 1.0;
+const kBoardDefaultContrastFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
 /// The brightness filter of the boards when they are dimmed in dark mode.
@@ -133,14 +134,22 @@ class BoardPreferences() extends Notifier<BoardPrefs> with PreferencesStorage<Bo
     return save(state.copyWith(shapeColor: shapeColor));
   }
 
-  Future<void> adjustColors({double? brightness, double? hue}) {
-    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
+  Future<void> adjustColors({double? brightness, double? contrast, double? hue}) {
+    return save(
+      state.copyWith(
+        brightness: brightness ?? state.brightness,
+        contrast: contrast ?? state.contrast,
+        hue: hue ?? state.hue,
+      ),
+    );
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
-  @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
+  @Assert(
+    'brightness >= 0.2 && brightness <= 1.4, contrast >= 0.4 && contrast <= 2.0 && hue >= 0.0 && hue <= 360.0',
+  )
   const factory({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
@@ -190,6 +199,7 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
     /// On for new installs ([defaults]), off for stored preferences that predate the setting.
     @JsonKey(defaultValue: false) required bool dimInDarkMode,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
+    @JsonKey(defaultValue: kBoardDefaultContrastFilter) required double contrast,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
 
@@ -218,11 +228,14 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
     showBorder: false,
     dimInDarkMode: true,
     brightness: kBoardDefaultBrightnessFilter,
+    contrast: kBoardDefaultContrastFilter,
     hue: kBoardDefaultHueFilter,
   );
 
   bool get hasColorAdjustments =>
-      brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
+      brightness != kBoardDefaultBrightnessFilter ||
+      contrast != kBoardDefaultContrastFilter ||
+      hue != kBoardDefaultHueFilter;
 
   /// Whether the boards are dimmed when the app has the [appBrightness], overriding the
   /// [brightness] filter.
@@ -237,6 +250,7 @@ sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
       brightness: effectiveBrightness(appBrightness),
+      contrast: contrast,
       hue: hue,
       border: showBorder
           ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)

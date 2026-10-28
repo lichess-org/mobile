@@ -99,7 +99,7 @@ class const SideToPlayPiece({required final Side side}) extends ConsumerWidget {
       alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
-        BrightnessHueFilter(
+        ColorAdjustFilter(
           brightness: boardPrefs.effectiveBrightness(brightness),
           hue: boardPrefs.hue,
           child: Container(
