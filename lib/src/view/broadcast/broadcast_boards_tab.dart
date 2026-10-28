@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
@@ -39,13 +40,9 @@ class const BroadcastBoardsTab({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final broadcastFederationCode = ref.watch(
-      broadcastPreferencesProvider.select((p) => p.broadcastFederationCode),
+    final favoriteFederation = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.favoriteFederation),
     );
-    final displayFederationGamesFirst = ref.watch(
-      broadcastPreferencesProvider.select((p) => p.displayFederationGamesFirst),
-    );
-    final favoriteFederation = displayFederationGamesFirst ? broadcastFederationCode : null;
     final boards = ref.watch(
       broadcastRoundControllerProvider(roundId).select(
         (state) => state.whenData((round) {

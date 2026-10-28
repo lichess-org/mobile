@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
@@ -197,11 +198,8 @@ class _BroadcastRoundScreenState()
             final showEvalBar = ref.watch(
               broadcastPreferencesProvider.select((prefs) => prefs.showRoundEvaluationGauges),
             );
-            final federation = ref.watch(
-              broadcastPreferencesProvider.select((prefs) => prefs.broadcastFederationCode),
-            );
-            final displayFederationGamesFirst = ref.watch(
-              broadcastPreferencesProvider.select((prefs) => prefs.displayFederationGamesFirst),
+            final favoriteFederation = ref.watch(
+              accountPreferencesProvider.select((prefs) => prefs.value?.favoriteFederation),
             );
             // Only what the menu shows, so that game updates don't rebuild the app bar. The counts
             // are those of the selected team, whose games the filter choices apply to.
@@ -261,26 +259,11 @@ class _BroadcastRoundScreenState()
                     onPressed: () =>
                         ref.read(broadcastPreferencesProvider.notifier).toggleEvaluationBar(),
                   ),
-                  ContextMenuSection(
-                    title: 'Favorite federation',
-                    actions: [
-                      ContextMenuAction(
-                        label: context.l10n.broadcastFederation,
-                        subtitle: federation?.name ?? context.l10n.none,
-                        onPressed: () =>
-                            Navigator.of(context)
-                                .push(BroadcastFederationChoiceScreen.buildRoute()),
-                      ),
-                      ContextMenuAction(
-                        label: 'Display games first',
-                        toggled: displayFederationGamesFirst,
-                        onPressed: federation != null
-                            ? () => ref
-                                  .read(broadcastPreferencesProvider.notifier)
-                                  .setDisplayFederationGamesFirst(!displayFederationGamesFirst)
-                            : null,
-                      ),
-                    ],
+                  ContextMenuAction(
+                    label: 'Favorite federation',
+                    subtitle: favoriteFederation?.name ?? context.l10n.none,
+                    onPressed: () =>
+                        Navigator.of(context).push(BroadcastFederationChoiceScreen.buildRoute()),
                   ),
                   ContextMenuSection(
                     title: context.l10n.filterGames,

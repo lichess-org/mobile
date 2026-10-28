@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 part 'account_pref_types.freezed.dart';
@@ -28,6 +29,8 @@ sealed class const AccountPrefState._() with _$AccountPrefState implements Seria
     required BooleanPref follow,
     @JsonKey(unknownEnumValue: Challenge.registered) required Challenge challenge,
     @JsonKey(unknownEnumValue: Message.always) required Message message,
+    // broadcasts
+    FederationId? favoriteFederation,
   }) = _AccountPrefState;
 
   factory fromJson(Map<String, dynamic> json) {
@@ -60,6 +63,13 @@ final defaultAccountPreferences = AccountPrefState(
 abstract class AccountPref<T>() {
   T get value;
   String get toFormData;
+}
+
+/// The favorite FIDE federation, whose games are shown first in broadcast rounds.
+class const FavoriteFederation(@override final FederationId? value)
+    implements AccountPref<FederationId?> {
+  @override
+  String get toFormData => value?.value ?? '';
 }
 
 class const BooleanPref(@override final bool value) implements AccountPref<bool> {

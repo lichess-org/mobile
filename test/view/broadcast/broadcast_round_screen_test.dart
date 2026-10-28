@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -291,12 +291,9 @@ void main() {
         tester,
         home: BroadcastRoundScreen(broadcast: _liveBroadcast),
         defaultPreferences: {
-          PrefCategory.broadcast.storageKey: jsonEncode(
-            BroadcastPrefs.defaults
-                .copyWith(
-                  broadcastFederationCode: const FederationId('GER'),
-                  displayFederationGamesFirst: true,
-                )
+          PrefCategory.account.storageKey: jsonEncode(
+            defaultAccountPreferences
+                .copyWith(favoriteFederation: const FederationId('GER'))
                 .toJson(),
           ),
         },
@@ -313,6 +310,9 @@ void main() {
       await tester.pump();
 
       // Load the round
+      await tester.pump();
+
+      // Load the account preferences
       await tester.pump();
 
       final thumbnails = tester

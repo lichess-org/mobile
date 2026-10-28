@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
@@ -13,9 +14,9 @@ import '../../test_container.dart';
 import '../../test_helpers.dart';
 import '../auth/fake_auth_storage.dart';
 
-/// Builds a valid `/api/account/preferences` server response, with the `zen`
-/// value overridable so tests can assert parsing and refetching.
-String prefsResponse({int zen = 0}) =>
+/// Builds a valid `/api/account/preferences` server response, with the `zen` and `favFed` values
+/// overridable so tests can assert parsing and refetching.
+String prefsResponse({int zen = 0, String? favFed}) =>
     '''
 {
   "prefs": {
@@ -33,7 +34,7 @@ String prefsResponse({int zen = 0}) =>
     "confirmResign": 1,
     "zen": $zen,
     "pieceNotation": 0,
-    "ratings": 1
+    "ratings": 1${favFed != null ? ',\n    "favFed": "$favFed"' : ''}
   },
   "language": "en-GB"
 }
@@ -45,6 +46,7 @@ void main() {
       final prefs = defaultAccountPreferences.copyWith(
         showRatings: ShowRatings.no,
         clockSound: const BooleanPref(false),
+        favoriteFederation: const FederationId('FRA'),
       );
 
       // Encode the way local storage does, then inspect the primitive JSON.
@@ -58,6 +60,7 @@ void main() {
 
       expect(decoded.showRatings, ShowRatings.no);
       expect(decoded.clockSound.value, isFalse);
+      expect(decoded.favoriteFederation, const FederationId('FRA'));
     });
 
     test('falls back to defaults on malformed json', () {
@@ -187,6 +190,69 @@ void main() {
       expect(prefs.autoQueen, AutoQueen.premove);
       expect(prefs.challenge, Challenge.registered);
       expect(prefs.showRatings, ShowRatings.yes);
+      expect(prefs.favoriteFederation, isNull);
+    });
+
+    test('parses the favorite federation', () async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/account/preferences') {
+          return mockResponse(prefsResponse(favFed: 'GER'), 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeContainer(
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+
+      final prefs = await container.read(accountPreferencesProvider.future);
+
+      expect(prefs.favoriteFederation, const FederationId('GER'));
+    });
+
+    test('setting the favorite federation posts it, and an empty value unsets it', () async {
+      final requests = <http.Request>[];
+      String? storedFavFed;
+      final mockClient = MockClient((request) {
+        if (request.method == 'GET' && request.url.path == '/api/account/preferences') {
+          return mockResponse(prefsResponse(favFed: storedFavFed), 200);
+        }
+        if (request.method == 'POST' && request.url.path == '/api/account/preferences/favFed') {
+          requests.add(request);
+          final value = request.bodyFields['favFed']!;
+          storedFavFed = value.isEmpty ? null : value;
+          return mockResponse('{"ok": true}', 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeContainer(
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        },
+      );
+
+      await container.read(accountPreferencesProvider.future);
+      final notifier = container.read(accountPreferencesProvider.notifier);
+
+      await notifier.setFavoriteFederation(const FederationId('IND'));
+      expect(requests.last.bodyFields['favFed'], 'IND');
+      expect(
+        (await container.read(accountPreferencesProvider.future)).favoriteFederation,
+        const FederationId('IND'),
+      );
+
+      await notifier.setFavoriteFederation(null);
+      expect(requests.last.bodyFields['favFed'], '');
+      expect((await container.read(accountPreferencesProvider.future)).favoriteFederation, isNull);
     });
 
     test('falls back to defaults when the server request fails', () async {
