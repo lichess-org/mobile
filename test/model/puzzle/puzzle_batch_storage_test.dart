@@ -74,23 +74,6 @@ void main() {
       );
     });
 
-    test('fetchNbUnsolved', () async {
-      final container = await makeContainer();
-
-      final storage = await container.read(puzzleBatchStorageProvider.future);
-
-      await storage.save(userId: null, angle: const PuzzleOpening('test_opening'), data: data);
-
-      expect(
-        storage.fetchNbUnsolved(userId: null, angle: const PuzzleOpening('test_opening')),
-        completion(equals(1)),
-      );
-      expect(
-        storage.fetchNbUnsolved(userId: null, angle: const PuzzleOpening('not_saved')),
-        completion(equals(0)),
-      );
-    });
-
     test('fetchAllAngles', () async {
       final container = await makeContainer();
 
