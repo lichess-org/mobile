@@ -36,14 +36,52 @@ concurrency:
 permissions: read-all
 
 jobs:
+  analyze:
+    name: Format and analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: 🐦 Install flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          cache: true
+          flutter-version-file: pubspec.yaml
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Code generation
+        run: dart run build_runner build
+
+      - name: Verify formatting
+        run: |
+          mapfile -t lib_files < <(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )
+          mapfile -t test_files < <(find test -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
+          dart format --output=none --set-exit-if-changed "${lib_files[@]}"
+          dart format --output=none --set-exit-if-changed "${test_files[@]}"
+        # run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project source
+        run: flutter analyze
+
+      # - name: Run riverpod lint
+      #   run: dart run custom_lint
+
+  # The test files are split across parallel jobs. Each job compiles only its own files, which
+  # `--total-shards` does not do: it compiles every file in every shard and splits the test cases.
   unit-test:
-    name: Unit tests on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Unit tests (shard ${{ matrix.shard }})
+    runs-on: ubuntu-latest
     # A hung widget test otherwise occupies a runner until the 6 hour default.
     timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        shard: [0, 1, 2]
+    env:
+      TOTAL_SHARDS: 3
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -62,18 +100,10 @@ jobs:
       - name: Code generation
         run: dart run build_runner build
 
-      - name: Verify formatting
-        run: |
-          dart format --output=none --set-exit-if-changed $(find lib/src -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" -o -name "*lichess_icons.dart" \) )
-          dart format --output=none --set-exit-if-changed $(find test -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
-        # run: dart format --output=none --set-exit-if-changed .
-
-      - name: Analyze project source
-        run: flutter analyze
-
-      # - name: Run riverpod lint
-      #   run: dart run custom_lint
-
       - name: Run unit tests
-        run: flutter test
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          mapfile -t files < <(find test -name '*_test.dart' | sort | awk -v n="$TOTAL_SHARDS" -v i="$SHARD" 'NR % n == i')
+          flutter test "${files[@]}"
 
