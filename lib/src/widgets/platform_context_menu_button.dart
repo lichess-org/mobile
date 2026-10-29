@@ -195,24 +195,26 @@ class const ContextMenuIconButton({
       );
     }
 
-    return MenuAnchor(
-      crossAxisUnconstrained: false,
-      consumeOutsideTap: consumeOutsideTap,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.widthOf(context) * 0.6, MediaQuery.heightOf(context) * 0.8),
+    return _FallbackMenuTheme(
+      child: MenuAnchor(
+        crossAxisUnconstrained: false,
+        consumeOutsideTap: consumeOutsideTap,
+        style: MenuStyle(
+          maximumSize: WidgetStatePropertyAll(
+            Size(MediaQuery.widthOf(context) * 0.6, MediaQuery.heightOf(context) * 0.8),
+          ),
         ),
+        menuChildren: _materialMenuItems(context, actions),
+        builder: (BuildContext context, MenuController controller, Widget? child) {
+          return buildButton(() {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          });
+        },
       ),
-      menuChildren: _materialMenuItems(context, actions),
-      builder: (BuildContext context, MenuController controller, Widget? child) {
-        return buildButton(() {
-          if (controller.isOpen) {
-            controller.close();
-          } else {
-            controller.open();
-          }
-        });
-      },
     );
   }
 }
@@ -269,33 +271,35 @@ class const ContextMenuTitleButton({
       );
     }
 
-    return MenuAnchor(
-      crossAxisUnconstrained: false,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.widthOf(context) * 0.8, MediaQuery.heightOf(context) * 0.8),
+    return _FallbackMenuTheme(
+      child: MenuAnchor(
+        crossAxisUnconstrained: false,
+        style: MenuStyle(
+          maximumSize: WidgetStatePropertyAll(
+            Size(MediaQuery.widthOf(context) * 0.8, MediaQuery.heightOf(context) * 0.8),
+          ),
         ),
-      ),
-      menuChildren: _materialMenuItems(context, actions),
-      builder: (BuildContext context, MenuController controller, Widget? child) => Semantics(
-        button: true,
-        label: semanticsLabel,
-        child: InkWell(
-          onTap: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisSize: .min,
-              children: [
-                Flexible(child: title),
-                const Icon(Icons.arrow_drop_down),
-              ],
+        menuChildren: _materialMenuItems(context, actions),
+        builder: (BuildContext context, MenuController controller, Widget? child) => Semantics(
+          button: true,
+          label: semanticsLabel,
+          child: InkWell(
+            onTap: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisSize: .min,
+                children: [
+                  Flexible(child: title),
+                  const Icon(Icons.arrow_drop_down),
+                ],
+              ),
             ),
           ),
         ),
@@ -342,10 +346,12 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
   @override
   Widget build(BuildContext context) {
     if (!useLiquidGlass(context)) {
-      return MenuAnchor(
-        controller: _menuController,
-        menuChildren: _materialMenuItems(context, widget.actions),
-        child: GestureDetector(onLongPressStart: _onLongPressStart, child: widget.child),
+      return _FallbackMenuTheme(
+        child: MenuAnchor(
+          controller: _menuController,
+          menuChildren: _materialMenuItems(context, widget.actions),
+          child: GestureDetector(onLongPressStart: _onLongPressStart, child: widget.child),
+        ),
       );
     }
 
@@ -374,6 +380,29 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// The Material menus before iOS 26 ([useLiquidGlass]) take the card color, as the iOS light
+/// background is the default menu color. Elsewhere the theme is unchanged.
+class const _FallbackMenuTheme({required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardTheme.color;
+    if (Theme.of(context).platform != TargetPlatform.iOS ||
+        useLiquidGlass(context) ||
+        cardColor == null) {
+      return child;
+    }
+    final menuTheme = MenuTheme.of(context);
+    return MenuTheme(
+      data: MenuThemeData(
+        style: (menuTheme.style ?? const MenuStyle()).copyWith(
+          backgroundColor: WidgetStatePropertyAll(cardColor),
+        ),
+      ),
+      child: child,
     );
   }
 }
