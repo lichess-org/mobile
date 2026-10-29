@@ -201,14 +201,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.3"
-  cnativeapi:
-    dependency: transitive
-    description:
-      name: cnativeapi
-      sha256: c43703998995e132b0656d2b8a95ed2bedc6b22ccee2c827bcdc075e0330e319
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.10"
   code_assets:
     dependency: transitive
     description:
@@ -1094,22 +1086,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.19.6"
-  nativeapi:
-    dependency: transitive
-    description:
-      name: nativeapi
-      sha256: "118045bb549cb6fabad472a3a22a537e7310bbf20097350f5027808b4a5853ce"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.10"
-  nativeapi_flutter:
-    dependency: transitive
-    description:
-      name: nativeapi_flutter
-      sha256: "357a405c69212f5157da1bd3be183a53c2b841d0de0eb51f4a3947913712aec4"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.10"
   nm:
     dependency: transitive
     description:
@@ -1644,13 +1620,12 @@ packages:
     source: hosted
     version: "3.5.1"
   unifiedpush_linux:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: unifiedpush_linux
-      sha256: adda5b4bc40105d38421082bef5860df98a0817a98652dae10a449e84e7b4745
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
+      path: "packages/unifiedpush_linux_stub"
+      relative: true
+    source: path
+    version: "1.0.0"
   unifiedpush_platform_interface:
     dependency: transitive
     description:
@@ -1819,22 +1794,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  webcrypto:
-    dependency: transitive
-    description:
-      name: webcrypto
-      sha256: "6b43001c4110856ff7fa5e5e65e7b2d44bec1d8b54a4d84d5fa2c7622267c5c1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
-  webpush_encryption:
-    dependency: transitive
-    description:
-      name: webpush_encryption
-      sha256: "5b83272b91acda6ae515fcd980c94f06bf413702282497c5a68f5dfc64fed27f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   win32:
     dependency: transitive
     description:
@@ -1851,14 +1810,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  window_manager:
-    dependency: transitive
-    description:
-      name: window_manager
-      sha256: bdd6b1a2c1ce50f3bba7ffbaa0d5dc5feb6b6a24fd20269da4de90244f77a471
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   windows_file_picker:
     dependency: transitive
     description:
