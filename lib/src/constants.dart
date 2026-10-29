@@ -52,9 +52,8 @@ const double kCupertinoBarOpacity = 0.8;
 const kGoldenRatio = 1.61803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
-    ? <BoxShadow>[]
-    : kElevationToShadow[1]!;
+List<BoxShadow> get boardShadows =>
+    defaultTargetPlatform == .iOS ? const <BoxShadow>[] : kElevationToShadow[1]!;
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();

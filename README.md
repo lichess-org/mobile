@@ -35,6 +35,17 @@ dart run build_runner build
 flutter run -d all
 ```
 
+### Previewing the platform designs
+Run 
+```bash
+flutter run -t bin/device_preview.dart
+```
+to test the changes for different designes, easiest to run it on a big Table to easily test different deivces.
+
+In Flutter DevTools' **device_preview** tab, use the device picker to switch designs, the normal iOS device for liquid glass, **Lichess iOS <26 devices for the classical iOS design and any android device for the android design. 
+
+To open the devtools press `v` in the terminal where flutter is running.
+
 ## Running tests
 
 To run the tests, you can use the following command:
