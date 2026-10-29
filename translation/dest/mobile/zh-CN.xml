@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">添加到研习</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有对局</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">允许悔棋和提示</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">应用日志</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled 纯黑</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您确定吗？</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">您确定要下载 NNUE 文件 (%s) 吗？</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">自定义</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">提示：您可以在主屏幕上添加更多小组件，或移除不需要的！</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">取消</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">您确定要删除所有日志吗？</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">危险操作</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">删除您的账户</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">简洁模式</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">好着，但有更好的着法</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">您好</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">首页</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">网络日志</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">如果账户与 %1$s 匹配，系统已向该账户发送了一个 %2$s 位验证码。请检查您的收件箱并在下方输入验证码。</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">验证码无效或已过期！</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">本地数据库大小</string>
@@ -85,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">练习模式</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">放大拖动的棋子</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">上一页</string>
+  <string name="puzzleHistoryDescription" comment="puzzleHistoryDescription&#10;Subtitle of the puzzle history entry on the puzzles tab.&#10;&#10;&quot;Attempts&quot; refers to puzzles you have previously tried, whether successfully or failed.">回顾您的历史解题记录</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">您想结束本轮挑战吗？</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">暂无内容，请调整筛选条件</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">暂无内容，请先进行几轮 Puzzle Storm 挑战。</string>
