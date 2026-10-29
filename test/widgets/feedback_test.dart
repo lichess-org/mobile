@@ -1,7 +1,6 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassToast;
 import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
 
@@ -103,18 +102,18 @@ void main() {
         await tester.tap(find.text('Show'));
         await tester.pumpAndSettle();
         expect(find.byType(SnackBar), findsNothing);
-        expect(find.byType(GlassToast), findsOneWidget);
+        expect(find.byKey(const ValueKey('glass_toast')), findsOneWidget);
         expect(find.text('Message 1'), findsOneWidget);
 
         await tester.tap(find.text('Show'));
         await tester.pumpAndSettle();
-        expect(find.byType(GlassToast), findsOneWidget);
+        expect(find.byKey(const ValueKey('glass_toast')), findsOneWidget);
         expect(find.text('Message 1'), findsNothing);
         expect(find.text('Message 2'), findsOneWidget);
 
         await tester.pump(const Duration(seconds: 4));
         await tester.pumpAndSettle();
-        expect(find.byType(GlassToast), findsNothing);
+        expect(find.byKey(const ValueKey('glass_toast')), findsNothing);
       },
       variant: const TargetPlatformVariant({TargetPlatform.iOS}),
     );
@@ -125,7 +124,7 @@ void main() {
       await tester.tap(find.text('Show'));
       await tester.pumpAndSettle();
       expect(find.byType(SnackBar), findsOneWidget);
-      expect(find.byType(GlassToast), findsNothing);
+      expect(find.byKey(const ValueKey('glass_toast')), findsNothing);
       expect(find.text('Message'), findsOneWidget);
     }, variant: const TargetPlatformVariant({TargetPlatform.android}));
   });

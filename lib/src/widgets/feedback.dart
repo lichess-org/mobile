@@ -228,15 +228,6 @@ class _GlassToastPresenter(final OverlayState _overlay) implements SnackBarPrese
 
   @override
   void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration}) {
-    showGlassToast(
-      _overlay,
-      message,
-      type: switch (type) {
-        .error => .error,
-        .info => .info,
-        .success => .success,
-      },
-      duration: duration ?? const Duration(seconds: 4),
-    );
+    showGlassToast(_overlay, message, type: type, duration: duration ?? const Duration(seconds: 4));
   }
 }
