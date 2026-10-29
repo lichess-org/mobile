@@ -15,7 +15,7 @@ const kLichessWSSecret = String.fromEnvironment(
 
 const kLichessCDNHost = String.fromEnvironment(
   'LICHESS_CDN_HOST',
-  defaultValue: 'https://lichess1.org',
+  defaultValue: 'https://lichess.org',
 );
 
 const kLichessOpeningExplorerHost = String.fromEnvironment(
