@@ -54,29 +54,108 @@ void main() {
     });
   });
 
-  testWidgets('The tabs scroll away with the header', variant: kPlatformVariant, (tester) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      home: BroadcastRoundScreen(broadcast: _liveBroadcast),
-      overrides: {
-        lichessClientProvider: lichessClientProvider.overrideWith(
-          (ref) => LichessClient(_liveBroadcastClient(), ref),
+  testWidgets(
+    'The tabs scroll away with the header',
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(PlatformTabBar), findsOneWidget);
+
+      // Scroll the header and the tabs away
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -600));
+      await tester.pump();
+      expect(find.byType(PlatformTabBar), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Switching to a tab that is loading keeps the scroll position',
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -100));
+      await tester.pump();
+      final tabBarTop = tester.getTopLeft(find.byType(PlatformTabBar)).dy;
+
+      await tester.tap(find.text('Players'));
+      // The players are loading
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(tester.getTopLeft(find.byType(PlatformTabBar)).dy, tabBarTop);
+    },
+  );
+
+  testWidgets(
+    'The tab bar is pinned below the app bar once the header scrolled away',
+    variant: TargetPlatformVariant.only(TargetPlatform.android),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -600));
+      await tester.pump();
+      expect(find.byType(PlatformTabBar), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.byType(PlatformTabBar)).dy,
+        tester.getBottomLeft(find.byType(AppBar)).dy,
+      );
+      // With the scrolled under color of the app bar
+      final tabBarBackground = tester.widget<AnimatedContainer>(
+        find.ancestor(of: find.byType(PlatformTabBar), matching: find.byType(AnimatedContainer)),
+      );
+      final appBarMaterial = tester.widget<Material>(
+        find.descendant(of: find.byType(AppBar), matching: find.byType(Material)).first,
+      );
+      expect(
+        (tabBarBackground.decoration! as BoxDecoration).color,
+        ElevationOverlay.applySurfaceTint(
+          appBarMaterial.color!,
+          appBarMaterial.surfaceTintColor,
+          appBarMaterial.elevation,
         ),
-      },
-    );
-
-    await tester.pumpWidget(app);
-    // Load the tournament and the round
-    await tester.pump();
-    await tester.pump();
-
-    expect(find.byType(PlatformTabBar), findsOneWidget);
-
-    // Scroll the header and the tabs away
-    await tester.drag(find.byType(NestedScrollView), const Offset(0, -600));
-    await tester.pump();
-    expect(find.byType(PlatformTabBar), findsNothing);
-  });
+      );
+    },
+  );
 
   group('Test boards tab', () {
     testWidgets('Test boards tab with a finished tournament', variant: kPlatformVariant, (
@@ -536,7 +615,8 @@ void main() {
         findsOneWidget,
       );
 
-      expect(find.byType(Card), findsNWidgets(2));
+      // Two team match cards, plus the card holding the team results link.
+      expect(find.byType(Card), findsNWidgets(3));
     });
 
     testWidgets('Check team standings screen opens from teams tab', (tester) async {
