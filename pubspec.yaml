@@ -99,6 +99,11 @@ dev_dependencies:
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.6.0
 
+dependency_overrides:
+  # Keeps webcrypto out of the app: see packages/unifiedpush_linux_stub/pubspec.yaml.
+  unifiedpush_linux:
+    path: packages/unifiedpush_linux_stub
+
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
