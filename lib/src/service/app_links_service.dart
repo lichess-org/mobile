@@ -248,6 +248,13 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       case 'game':
         final gameRoutes = await _tryResolveGameLink(context, appLinkUri);
         if (gameRoutes != null) return gameRoutes;
+      // Legacy /gameid link, which lila still redirects to /game/gameid. It comes after the other
+      // cases so that a known route such as /training/white is never taken for a game.
+      case _ when _isLegacyGameLink(appLinkUri):
+        return await _tryResolveGameLink(
+          context,
+          appLinkUri.replace(pathSegments: ['game', ...appLinkUri.pathSegments]),
+        );
     }
 
     return null;
@@ -327,6 +334,13 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     }
     return false;
   }
+
+  /// Whether [appLinkUri] is a legacy `/gameid` or `/gameid/{color}` game link.
+  static bool _isLegacyGameLink(Uri appLinkUri) => switch (appLinkUri.pathSegments) {
+    // The length check comes first because the GameId constructor asserts it.
+    [final id] || [final id, 'black' || 'white'] => id.length == 8 && GameId(id).isValid,
+    _ => false,
+  };
 
   Future<List<Route<dynamic>>?> _tryResolveGameLink(BuildContext context, Uri appLinkUri) async {
     try {
