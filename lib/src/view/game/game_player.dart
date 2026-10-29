@@ -4,7 +4,6 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -235,21 +234,13 @@ class const GamePlayer({
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: shouldLinkToUserProfile
-                  ? Consumer(
-                      builder: (context, ref, _) {
-                        return GestureDetector(
-                          onTap: player.user != null
-                              ? () {
-                                  if (mePlaying) {
-                                    ref.invalidate(accountProvider);
-                                  }
-                                  Navigator.of(context)
-                                      .push(UserOrProfileScreen.buildRoute(player.user!));
-                                }
-                              : null,
-                          child: playerWidget,
-                        );
-                      },
+                  ? GestureDetector(
+                      onTap: player.user != null
+                          ? () =>
+                                Navigator.of(context)
+                                    .push(UserOrProfileScreen.buildRoute(player.user!))
+                          : null,
+                      child: playerWidget,
                     )
                   : playerWidget,
             ),
