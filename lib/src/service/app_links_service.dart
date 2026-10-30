@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/challenge_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -467,12 +468,17 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     return uri.host == expected.host && uri.port == expected.port;
   }
 
-  /// Handles link clicks in RichLinkText widgets throughout the app.
+  /// Handles link clicks in RichLinkText and Markdown widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
-    if (link is UrlElement && _isFirstPartyUrl(link.url)) {
-      // Handle Lichess links specifically
-      final appLinkUri = Uri.parse(link.url);
-      await handleAppLink(context, appLinkUri);
+    if (link is UrlElement) {
+      final uri = link.url.startsWith('/')
+          ? lichessUri('/').resolve(link.url)
+          : Uri.parse(link.url);
+      if (_isFirstPartyUrl(uri.toString())) {
+        await handleAppLink(context, uri);
+      } else {
+        await launchUrl(uri);
+      }
     } else if (link.originText.startsWith('@')) {
       final username = link.originText.substring(1);
       Navigator.of(context).push(
