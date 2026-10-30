@@ -157,6 +157,17 @@ LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
     ? LiquidGlassSettings.ios27Light
     : LiquidGlassSettings.ios27Dark;
 
+/// The glass of a liquid glass menu: thicker than the [ios27GlassSettings] of the button it morphs
+/// from.
+LiquidGlassSettings menuGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light.copyWith(
+        frost: 30,
+        frostOpacity: 0.94,
+        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, 12))],
+      )
+    : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
+
 /// The glass of a prominent liquid glass button (floating action button, main action of a bottom
 /// bar): tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
 /// to let the content show through. The clear body mode keeps the exact color, with the glass rim
@@ -912,6 +923,7 @@ class const PlatformAppBar({
               icon: glyph(icon, color),
               menuItems: glassMenuItems(context, actions),
               menuWidth: kGlassMenuWidth,
+              menuSettings: menuGlassSettings(context),
               label: semanticsLabel,
             ),
           AppBarIndicator() => GlassBarItem.custom(

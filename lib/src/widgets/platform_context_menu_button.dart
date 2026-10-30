@@ -1,7 +1,8 @@
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/services.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart' show ios27GlassSettings, useLiquidGlass;
+import 'package:lichess_mobile/src/widgets/platform.dart'
+    show ios27GlassSettings, menuGlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassButton,
@@ -30,9 +31,14 @@ const kGlassMenuWidth = 250.0;
 List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries) {
   final isCheckMenu = _actionsOf(entries).any((action) => action._hasCheckMark);
   // The package's title style (the theme text color at 90%), with the line height the menu sizes
-  // the items with (1.2, the app's is taller): the titles are measured with it.
-  final textColor = (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label)
-      .withValues(alpha: 0.9);
+  // the items with (1.2, the app's is taller): the titles are measured with it. In dark mode, the
+  // iOS label color (opaque white), like an iOS menu: the theme's off-white at 90% reads dim on the
+  // thick menu glass.
+  final textColor = Theme.of(context).brightness == Brightness.dark
+      ? CupertinoColors.label.darkColor
+      : (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label).withValues(
+          alpha: 0.9,
+        );
   final titleStyle = DefaultTextStyle.of(context).style
       .merge(TextStyle(color: textColor, fontSize: 17, fontWeight: FontWeight.w400, height: 1.2));
   // An iOS menu section title: footnote, in the secondary label color.
@@ -187,7 +193,7 @@ class const ContextMenuIconButton({
     if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
-        settings: ios27GlassSettings(context),
+        settings: menuGlassSettings(context),
         semanticLabel: semanticsLabel,
         // The button is not glass itself: it sits in the glass capsule of the app bar.
         triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
@@ -238,7 +244,7 @@ class const ContextMenuTitleButton({
       final foregroundColor = ColorScheme.of(context).onSurface;
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
-        settings: ios27GlassSettings(context),
+        settings: menuGlassSettings(context),
         triggerBuilder: (context, toggleMenu) => Semantics(
           button: true,
           label: semanticsLabel,
@@ -375,7 +381,7 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
               morphFromZero: true,
               autoAdjustToScreen: true,
               menuWidth: kGlassMenuWidth,
-              settings: ios27GlassSettings(context),
+              settings: menuGlassSettings(context),
               items: glassMenuItems(context, widget.actions),
             ),
           ),
