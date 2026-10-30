@@ -24,6 +24,8 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -336,6 +338,20 @@ void main() {
         isA<PuzzleScreen>()
             .having((s) => s.puzzleId, 'id', '61044')
             .having((s) => s.openCasual, 'openCasual', true),
+      );
+    });
+
+    testWidgets('resolves bare /training to PuzzleScreen with the mix angle', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/training');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle(); // Wait puzzle screen to load
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>()
+            .having((s) => s.puzzleId, 'id', isNull)
+            .having((s) => s.angle, 'angle', const PuzzleTheme(PuzzleThemeKey.mix)),
       );
     });
 

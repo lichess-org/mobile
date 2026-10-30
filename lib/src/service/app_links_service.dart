@@ -174,12 +174,12 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
         final playerId = playerName != null ? UserId.fromUserName(playerName) : null;
         return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
-        final id = appLinkUri.pathSegments[1];
+        final id = appLinkUri.pathSegments.getOrNull(1);
         return [
           PuzzleScreen.buildRoute(
-            angle: PuzzleAngle.fromKey('mix'),
-            puzzleId: PuzzleId(id),
-            openCasual: true,
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: id != null ? PuzzleId(id) : null,
+            openCasual: id != null,
           ),
         ];
       case 'editor':
