@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_faq.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
@@ -118,6 +119,9 @@ class const FeaturedTournamentsWidget({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // In edit mode the row already shows the widget's stable label.
+    final isEditing = IsEditingHome.isEditing(context);
+
     switch (featured) {
       case AsyncData(:final value):
         if (value.where((t) => t.isSupportedInApp).isEmpty) {
@@ -125,10 +129,12 @@ class const FeaturedTournamentsWidget({
         }
         return ListSection(
           hasLeading: true,
-          header: Text(context.l10n.openTournaments),
-          onHeaderTap: () {
-            Navigator.of(context).push(TournamentListScreen.buildRoute());
-          },
+          header: isEditing ? null : Text(context.l10n.openTournaments),
+          onHeaderTap: isEditing
+              ? null
+              : () {
+                  Navigator.of(context).push(TournamentListScreen.buildRoute());
+                },
           children: [
             for (final tournament in value)
               if (tournament.isSupportedInApp) _TournamentListItem(tournament: tournament),
@@ -137,6 +143,10 @@ class const FeaturedTournamentsWidget({
 
       case AsyncError(:final error):
         debugPrint('$error');
+        // In edit mode the row already shows the widget's stable label.
+        if (isEditing) {
+          return const SizedBox.shrink();
+        }
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load featured tournaments'),
@@ -145,7 +155,7 @@ class const FeaturedTournamentsWidget({
         return Shimmer(
           child: ShimmerLoading(
             isLoading: true,
-            child: ListSection.loading(itemsNumber: 5, header: true),
+            child: ListSection.loading(itemsNumber: 5, header: !isEditing),
           ),
         );
     }
