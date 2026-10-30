@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">本日の問題</string>
+    <string name="widget_community_title">コミュニティ</string>
+    <string name="widget_broadcast_title">イベント中継</string>
+</resources>

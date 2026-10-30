@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Kun masalasi</string>
+    <string name="widget_community_title">Hamjamiyat</string>
+    <string name="widget_broadcast_title">Translyatsiyalar</string>
+</resources>

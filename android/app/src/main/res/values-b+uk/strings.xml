@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Щоденна задача</string>
+    <string name="widget_community_title">Спільнота</string>
+    <string name="widget_broadcast_title">Трансляції</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_daily_puzzle_title">Taktikaufgabe des Tages</string>
+    <string name="widget_community_title">Gemeinschaft</string>
+    <string name="widget_broadcast_title">Übertragungen</string>
+</resources>
