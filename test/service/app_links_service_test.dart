@@ -621,6 +621,88 @@ void main() {
       );
     });
 
+    testWidgets('resolves legacy /gameid link for finished game with ply fragment', (
+      WidgetTester tester,
+    ) async {
+      // lichess.org/gameid#20 -> Opens analysis at move 20
+      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}#20');
+      final mockGameRepository = MockGameRepository();
+      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for analysis screen to load
+
+      expect(
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>()
+            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
+            .having((s) => s.options.initialMoveCursor, 'move number', 20)
+            .having((s) => s.options.orientation, 'player color', Side.white),
+      );
+    });
+
+    testWidgets('resolves legacy /gameid/black finished game link', (WidgetTester tester) async {
+      final uri = Uri.parse('https://lichess.org/${finishedGame.id.value}/black');
+      final mockGameRepository = MockGameRepository();
+      when(() => mockGameRepository.getGame(finishedGame.id)).thenAnswer((_) async => finishedGame);
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for analysis screen to load
+
+      expect(
+        tester.widget(find.byType(AnalysisScreen)),
+        isA<AnalysisScreen>()
+            .having((s) => s.options.gameId, 'id', finishedGame.id.value)
+            .having((s) => s.options.orientation, 'player color', Side.black),
+      );
+    });
+
+    testWidgets('does not take /training/{color} for a legacy game link', (
+      WidgetTester tester,
+    ) async {
+      // "training" is a valid game id, and "white" a valid puzzle id
+      final uri = Uri.parse('https://lichess.org/training/white');
+      final mockGameRepository = MockGameRepository();
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+        },
+      );
+      await tester.pumpAndSettle(); // Wait for puzzle screen to load
+
+      expect(
+        tester.widget(find.byType(PuzzleScreen)),
+        isA<PuzzleScreen>().having((s) => s.puzzleId, 'id', 'white'),
+      );
+      verifyNever(() => mockGameRepository.getGame(const GameId('training')));
+    });
+
+    testWidgets('does not take a path that is not 8 characters for a legacy game link', (
+      WidgetTester tester,
+    ) async {
+      final uri = Uri.parse('https://lichess.org/blog');
+      await triggerAppLink(tester, uri);
+      await tester.pumpAndSettle();
+
+      expect(find.text('test link'), findsOneWidget); // Still on the same screen
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('resolves /game/gameid link for imported game to analysis', (
       WidgetTester tester,
     ) async {
@@ -842,6 +924,31 @@ void main() {
       expect(find.text('Accept'), findsOneWidget);
       // challenges from link cannot be declined
       expect(find.text('Cancel'), findsOneWidget);
+    });
+
+    testWidgets('does not resolve legacy /challengeId link', (WidgetTester tester) async {
+      const challengeId = ChallengeId('abcdefgh');
+      final uri = Uri.parse('https://lichess.org/${challengeId.value}');
+      final mockGameRepository = MockGameRepository();
+      when(() => mockGameRepository.getGame(const GameId('abcdefgh')))
+          .thenThrow(Exception('Not found'));
+      final mockChallengeRepository = MockChallengeRepository();
+
+      await triggerAppLink(
+        tester,
+        uri,
+        overrides: {
+          gameRepositoryProvider: gameRepositoryProvider.overrideWith((_) => mockGameRepository),
+          challengeRepositoryProvider: challengeRepositoryProvider.overrideWith(
+            (_) => mockChallengeRepository,
+          ),
+        },
+      );
+      await tester.pumpAndSettle();
+
+      verify(() => mockGameRepository.getGame(const GameId('abcdefgh'))).called(1);
+      verifyNever(() => mockChallengeRepository.show(challengeId));
+      expect(find.text('test link'), findsOneWidget); // Still on the same screen
     });
 
     testWidgets('resolves /@/user link', (WidgetTester tester) async {
