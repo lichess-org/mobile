@@ -348,9 +348,13 @@ class const _TournamentInfoCard({required final Tournament tournament}) extends 
                 ),
               ),
             ],
-            if (tournament.description != null && tournament.description!.isNotEmpty) ...[
+            if (tournament.description?.trim().isNotEmpty == true ||
+                tournament.payouts?.trim().isNotEmpty == true) ...[
               const SizedBox(height: 10),
-              _ExpandableDescription(description: tournament.description!),
+              _ExpandableDescription(
+                description: tournament.description,
+                payouts: tournament.payouts,
+              ),
             ],
           ],
         ),
@@ -576,7 +580,10 @@ class const _TournamentHelp({required final TournamentState state}) extends Stat
 String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
     variants.map((variant) => variant.label(context.l10n)).join(', ');
 
-class const _ExpandableDescription({required final String description}) extends ConsumerWidget {
+class const _ExpandableDescription({
+  required final String? description,
+  required final String? payouts,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ExpansionTile(
@@ -589,15 +596,36 @@ class const _ExpandableDescription({required final String description}) extends 
       expandedCrossAxisAlignment: .start,
       expandedAlignment: .centerLeft,
       children: [
-        MarkdownBody(
-          data: description,
-          softLineBreak: true,
-          onTapLink: (text, url, title) {
-            if (url != null) {
-              launchUrl(Uri.parse(url));
-            }
-          },
-        ),
+        if (payouts?.trim().isNotEmpty == true) ...[
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: .start,
+            children: [
+              Semantics(
+                link: true,
+                child: GestureDetector(
+                  onTap: () => launchUrl(Uri.parse('https://$kLichessHost/page/lichess-prizes')),
+                  child: const Text('Prizes', style: Styles.linkStyle),
+                ),
+              ),
+              const Text(': '),
+              Expanded(child: Text(payouts!)),
+            ],
+          ),
+        ],
+        if (description?.trim().isNotEmpty == true) ...[
+          MarkdownBody(
+            data: description!,
+            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
+                .copyWith(a: Styles.linkStyle),
+            softLineBreak: true,
+            onTapLink: (text, url, title) {
+              if (url != null) {
+                launchUrl(Uri.parse(url));
+              }
+            },
+          ),
+        ],
       ],
     );
   }
