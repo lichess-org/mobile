@@ -1157,6 +1157,13 @@ void main() {
   });
 
   group('onLinkifyOpen', () {
+    testWidgets('routes a relative url to the in-app screen', (WidgetTester tester) async {
+      await triggerLinkifyOpen(tester, '/editor');
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardEditorScreen), findsOneWidget);
+    });
+
     testWidgets('routes a first-party url to the in-app screen', (WidgetTester tester) async {
       await triggerLinkifyOpen(tester, 'https://$kLichessHost/editor');
       await tester.pumpAndSettle();

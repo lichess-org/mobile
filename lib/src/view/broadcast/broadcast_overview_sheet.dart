@@ -5,12 +5,13 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 DateFormat get _dateFormatter => DateFormat.MMMd();
 
@@ -110,7 +111,7 @@ class const _BroadcastOverview({required final BroadcastTournamentId tournamentI
                     data: description,
                     onTapLink: (text, url, title) {
                       if (url == null) return;
-                      launchUrl(Uri.https('lichess.org').resolve(url));
+                      ref.read(appLinksServiceProvider).onLinkifyOpen(context, UrlElement(url));
                     },
                     softLineBreak: true,
                   ),
@@ -128,15 +129,19 @@ class const _BroadcastOverview({required final BroadcastTournamentId tournamentI
 }
 
 class const _BroadcastOverviewCard(final IconData iconData, final String text, [final Uri? website])
-    extends StatelessWidget {
+    extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
       margin: const EdgeInsets.all(4.0),
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(10)),
-        onTap: website != null ? () => launchUrl(website!) : null,
+        onTap: website != null
+            ? () => ref
+                  .read(appLinksServiceProvider)
+                  .onLinkifyOpen(context, UrlElement(website.toString()))
+            : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(

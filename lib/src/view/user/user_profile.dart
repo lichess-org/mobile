@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
@@ -127,7 +126,9 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: InkWell(
-                        onTap: () => launchUrl(link.url),
+                        onTap: () => ref
+                            .read(appLinksServiceProvider)
+                            .onLinkifyOpen(context, UrlElement(link.url.toString())),
                         child: Text(
                           link.site?.title ?? link.url.toString(),
                           style: Styles.linkStyle,
