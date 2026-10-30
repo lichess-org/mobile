@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -31,22 +31,19 @@ class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
-          Builder(
-            builder: (context) {
-              return SemanticIconButton(
-                icon: const Icon(Icons.settings),
-                semanticsLabel: context.l10n.settingsSettings,
-                onPressed: () => showModalBottomSheet<void>(
-                  context: context,
-                  showDragHandle: true,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
-              );
-            },
+          SemanticIconButton(
+            icon: const Icon(Icons.settings),
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+            ),
           ),
         ],
       ),
@@ -182,6 +179,7 @@ class _BodyState() extends ConsumerState<_Body> {
           ),
           if (!trainingState.trainingActive)
             BottomBar(
+              cupertinoGlass: true,
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,
@@ -191,7 +189,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 BottomBarButton(
                   icon: Icons.info_outline,
                   label: context.l10n.aboutX('Coordinate Training'),
-                  onTap: () => _coordinateTrainingInfoDialogBuilder(context),
+                  onTap: () => _showCoordinateTrainingInfo(context),
                 ),
               ],
             ),
@@ -402,7 +400,7 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
               orientation: widget.orientation,
               settings: StaticChessboardSettings.fromBoardSettings(
                 boardPrefs
-                    .toBoardSettings(Variant.standard)
+                    .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                     .copyWith(
                       enableCoordinates: trainingPrefs.showCoordinates,
                       borderRadius: widget.isTablet
@@ -430,46 +428,45 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
 }
 
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
-  return showModalBottomSheet<void>(
+  return showAdaptiveBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );
 }
 
-Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
-  return showAdaptiveDialog(
+Future<void> _showCoordinateTrainingInfo(BuildContext context) {
+  return showAdaptiveNavigationSheet<void>(
     context: context,
-    builder: (context) {
-      return AlertDialog.adaptive(
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
-        content: SingleChildScrollView(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
-                TextSpan(
-                  text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
-                ),
-                const TextSpan(text: '\n'),
-                TextSpan(
-                  text: '${context.l10n.coordinatesFindSquare}\n',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
-                TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
-              ],
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
+                  TextSpan(
+                    text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
+                  ),
+                  const TextSpan(text: '\n'),
+                  TextSpan(
+                    text: '${context.l10n.coordinatesFindSquare}\n',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
+                  TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
+                ],
+              ),
             ),
           ),
-        ),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
         ],
-      );
-    },
+      ),
+    ),
   );
 }

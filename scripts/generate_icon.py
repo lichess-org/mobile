@@ -7,9 +7,15 @@
 
 import fontforge
 import os
+import re
+import tempfile
 
 input_directory = "../lila/public/images/puzzle-themes"
 output_font_file = "assets/fonts/PuzzleIcons.ttf"
+
+# Some icons start with an invisible background square: <path fill="none" d="M0 0h512v512H0z"/>.
+# FontForge ignores the fill and imports it as a filled square that hides the icon, so drop it.
+invisible_background = re.compile(r'<path fill="none" d="M0 0h\d+v\d+H0z"[^>]*/>', re.IGNORECASE)
 
 
 font = fontforge.font()
@@ -29,7 +35,12 @@ for filename in os.listdir(input_directory):
         glyph_name = os.path.splitext(filename)[0]
         glyph = font.createChar(unicode_code_point, glyph_name)
 
-        glyph.importOutlines(svg_file_path)
+        with open(svg_file_path) as svg_file:
+            svg = invisible_background.sub("", svg_file.read())
+        with tempfile.NamedTemporaryFile("w", suffix=".svg") as cleaned_svg_file:
+            cleaned_svg_file.write(svg)
+            cleaned_svg_file.flush()
+            glyph.importOutlines(cleaned_svg_file.name)
 
         # This centers the svg inside the glyph otherwide it is off center
         bounding_box = glyph.boundingBox()
@@ -69,9 +80,7 @@ for filename in os.listdir(input_directory):
 dart_code = f"""\
 import 'package:flutter/widgets.dart';
 
-class PuzzleIcons {{
-  PuzzleIcons._();
-
+class PuzzleIcons._() {{
   static const _kFontFam = 'LichessPuzzleIcons';
   static const String? _kFontPkg = null;
 

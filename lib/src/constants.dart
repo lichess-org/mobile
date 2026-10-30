@@ -15,7 +15,7 @@ const kLichessWSSecret = String.fromEnvironment(
 
 const kLichessCDNHost = String.fromEnvironment(
   'LICHESS_CDN_HOST',
-  defaultValue: 'https://lichess1.org',
+  defaultValue: 'https://lichess.org',
 );
 
 const kLichessOpeningExplorerHost = String.fromEnvironment(
@@ -47,7 +47,6 @@ const kLichessBlueskyUrl = 'https://bsky.app/profile/lichess.org';
 const kLichessDiscordUrl = 'https://discord.gg/lichess';
 
 // UI
-const double kCupertinoBarBlurSigma = 30.0;
 const double kCupertinoBarOpacity = 0.8;
 
 const kGoldenRatio = 1.61803398875;

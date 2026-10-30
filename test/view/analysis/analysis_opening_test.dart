@@ -2,13 +2,13 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/service/opening_service.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../model/analysis/fake_opening_service.dart';
+import '../../service/fake_opening_service.dart';
 import '../../test_provider_scope.dart';
 
 String _epd(Position pos) => pos.fen.split(' ').take(4).join(' ');

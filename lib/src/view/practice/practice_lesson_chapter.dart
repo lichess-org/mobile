@@ -60,16 +60,21 @@ class _PracticeLessonChapterBodyState() extends ConsumerState<PracticeLessonChap
         ],
       ),
       bottomBar: BottomBar(
+        cupertinoGlass: true,
         children: [
-          BottomBarButton(
-            label: context.l10n.studyBack,
-            icon: CupertinoIcons.chevron_back,
-            onTap: _ply > 0 ? () => _goTo(_ply - 1) : null,
-          ),
-          BottomBarButton(
-            label: context.l10n.studyNext,
-            icon: CupertinoIcons.chevron_forward,
-            onTap: _ply < _mainline.length ? () => _goTo(_ply + 1) : null,
+          BottomBarGroup(
+            children: [
+              BottomBarButton(
+                label: context.l10n.studyBack,
+                icon: CupertinoIcons.chevron_back,
+                onTap: _ply > 0 ? () => _goTo(_ply - 1) : null,
+              ),
+              BottomBarButton(
+                label: context.l10n.studyNext,
+                icon: CupertinoIcons.chevron_forward,
+                onTap: _ply < _mainline.length ? () => _goTo(_ply + 1) : null,
+              ),
+            ],
           ),
           BottomBarButton(
             label: context.l10n.studyNextChapter,

@@ -30,6 +30,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Avvis';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileHomeTab => 'Hjem';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Direktestrømmere';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -279,6 +285,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobilePreviousPage => 'Forrige';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Vil du avslutte denne runden?';
 
   @override
@@ -390,6 +399,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Enheten vibrerer kort når du flytter en brikke.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -448,6 +460,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Tema';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -1419,6 +1434,14 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Øv på visse linjer og rader';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Lær deg sjakk';
@@ -2479,7 +2502,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesInlineNotation => 'Innebygd notasjon';
 
   @override
-  String get preferencesShowServerAnalysis => 'Vis serveranalyse';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Vis piler for beste trekk';
@@ -2507,6 +2530,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Vis sjakkbar konge';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Skjul varianter';
@@ -2900,9 +2926,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokade';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Få kongen i sikkerhet og gjør tårnet klart for angrep.';
 
   @override
@@ -2994,6 +3017,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'En taktikk i den siste fasen av partiet.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'En taktikk som bruker en passant-regelen, der en bonde kan slå en motstanderbonde som nettopp har flyttet to felt frem fra utgangsstillingen og havnet ved siden av den.';
@@ -3793,6 +3819,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get engineSettings => 'Innstillinger for sjakkmotor';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Sjakkmotorer fra sterkest til svakest';
 
   @override
@@ -4419,6 +4448,11 @@ class AppLocalizationsNb extends AppLocalizations {
   String get noNetwork => 'Frakoblet';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Favorittmotstandere';
 
   @override
@@ -4785,9 +4819,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get reason => 'Årsak';
 
   @override
-  String get whatIsIheMatter => 'Hva gjelder det?';
-
-  @override
   String get cheat => 'Juks';
 
   @override
@@ -4804,9 +4835,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Vi kan behandle rapporten din raskere hvis du skriver på engelsk.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Oppgi minst én lenke til et jukseparti.';
 
   @override
   String by(String param) {
@@ -5386,7 +5414,13 @@ class AppLocalizationsNb extends AppLocalizations {
   String get downloadImported => 'Last ned importen';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Last ned alle partiene';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Krysstabell';
@@ -6153,7 +6187,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get showMeEverything => 'Vis meg alt';
 
   @override
-  String get lichessPatronInfo => 'Lichess er en ideell forening, basert på fri programvare med åpen kildekode.\nAlle kostnader for drift, utvikling og innhold finansieres utelukkende av brukerbidrag.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Ingenting her for nå.';
@@ -6963,9 +6997,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Bare bidragsyterne til studien kan be om maskinanalyse.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Få full maskinanalyse av hovedvarianten fra serveren.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Sørg for at kapittelet er fullført. Du kan bare be om analyse én gang.';
 
   @override
@@ -7182,9 +7213,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get studySave => 'Lagre';
 
   @override
   String get studyClearChat => 'Fjern samtalen';
@@ -7420,6 +7448,21 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Hvitt tap, men svart kan ikke vinne';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

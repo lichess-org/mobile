@@ -12,6 +12,9 @@ import '../../test_provider_scope.dart';
 
 void main() {
   group('StreakScreen', () {
+    // iOS skipped: the liquid glass app bar wraps each `GlassBarItem.custom` in an unlabelled
+    // button (https://github.com/sdegenaar/liquid_glass_widgets/issues/432). Run it on iOS again
+    // once that is fixed.
     testWidgets('meets accessibility guidelines', (tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
 
@@ -29,7 +32,7 @@ void main() {
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
-    }, variant: kPlatformVariant);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
     testWidgets('Score is saved when exiting screen', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -76,10 +79,8 @@ void main() {
 
       expect(find.textContaining(RegExp('1\$')), findsOneWidget);
 
-      // Exit screen -> score should be saved
+      // Exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // Enter streak screen again -> previous score should be loaded
@@ -171,8 +172,6 @@ void main() {
 
       // exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // re-enter streak screen

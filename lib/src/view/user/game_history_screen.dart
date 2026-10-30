@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -13,7 +12,9 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -57,7 +58,7 @@ class const GameHistoryScreen({
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
             data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
-            loading: () => const ButtonLoadingIndicator(),
+            loading: () => const SizedBox.shrink(),
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
@@ -74,7 +75,7 @@ class const GameHistoryScreen({
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed: () =>
-          showModalBottomSheet<GameFilterState>(
+          showAdaptiveBottomSheet<GameFilterState>(
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
@@ -87,6 +88,9 @@ class const GameHistoryScreen({
           }),
     );
 
+    final displayMode = ref.watch(
+      gameHistoryPreferencesProvider.select((value) => value.displayMode),
+    );
     final displayModeButton = ContextMenuIconButton(
       consumeOutsideTap: true,
       icon: const Icon(Icons.more_horiz),
@@ -95,6 +99,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.ballot_outlined,
           label: context.l10n.mobileDisplayModeDetailed,
+          selected: displayMode == GameHistoryDisplayMode.detail,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -104,6 +109,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.list_outlined,
           label: context.l10n.mobileDisplayModeCompact,
+          selected: displayMode == GameHistoryDisplayMode.compact,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -114,7 +120,12 @@ class const GameHistoryScreen({
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
+      appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
+        title: title,
+        actions: [filterBtn, displayModeButton],
+      ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -258,7 +269,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
                               ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
+                                  Navigator.of(context).pushHidingTabBar(
                                     AnalysisScreen.buildRoute(
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,
@@ -316,10 +327,9 @@ class _BodyState() extends ConsumerState<_Body> {
                                               );
                                               final source = UserChallengeSource(request);
                                               ref.invalidate(gameScreenLoaderProvider(source));
-                                              Navigator.of(
-                                                context,
-                                                rootNavigator: true,
-                                              ).push(GameScreen.buildRoute(source: source));
+                                              Navigator.of(context).pushHidingTabBar(
+                                                GameScreen.buildRoute(source: source),
+                                              );
                                             }
                                           : null,
                                       icon: Icons.sync,
@@ -347,7 +357,7 @@ class _BodyState() extends ConsumerState<_Body> {
       },
       error: (e, s) {
         debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
-        return const Center(child: Text('Could not load Game History'));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(gameListProvider));
       },
       loading: () => const CenterLoadingIndicator(),
     );
@@ -385,7 +395,7 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
     Perf.racingKings,
     Perf.crazyhouse,
   ];
-  static const filterGroupSpace = SizedBox(height: 10.0);
+  static const filterGroupSpace = SizedBox(height: 12.0);
 
   @override
   Widget build(BuildContext context) {

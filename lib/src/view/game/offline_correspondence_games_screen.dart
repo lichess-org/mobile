@@ -3,11 +3,13 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -19,8 +21,8 @@ class const OfflineCorrespondenceGamesScreen({super.key}) extends ConsumerWidget
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: offlineGames.maybeWhen(
           data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
           orElse: () => const SizedBox.shrink(),
@@ -71,10 +73,9 @@ class const OfflineCorrespondenceGamePreview({
         ],
       ),
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (lastModified, game)));
+        Navigator.of(context).pushHidingTabBar(
+          OfflineCorrespondenceGameScreen.buildRoute(initialGame: (lastModified, game)),
+        );
       },
     );
   }

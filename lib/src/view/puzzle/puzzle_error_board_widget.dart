@@ -26,7 +26,10 @@ class const PuzzleErrorBoardWidget({final String? errorMessage}) extends Consume
                   final isTablet = isTabletOrLarger(context);
 
                   final defaultSettings = boardPreferences
-                      .toBoardSettings(Variant.standard)
+                      .toBoardSettings(
+                        Variant.standard,
+                        appBrightness: Theme.of(context).brightness,
+                      )
                       .copyWith(
                         borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],

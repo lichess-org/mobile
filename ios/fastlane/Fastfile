@@ -43,8 +43,11 @@ platform :ios do
       keychain_password: ENV["MATCH_KEYCHAIN_PASSWORD"],
     )
 
+    # Crashlytics symbols are only uploaded for the archive that ships to TestFlight. The build phase
+    # skips the upload for every other build.
     build_app(
       scheme: "Runner",
+      xcargs: "CRASHLYTICS_UPLOAD_SYMBOLS=YES",
     )
 
     app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)

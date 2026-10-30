@@ -8,10 +8,10 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -75,9 +75,6 @@ class const _PuzzleTabScaffold({required final Widget body}) extends ConsumerWid
         appBar: PlatformAppBar(
           title: Text(context.l10n.puzzles),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: body,
@@ -187,8 +184,7 @@ Widget _buildMainListItem(
         onTap: () {
           Navigator.of(
             context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+          ).pushHidingTabBar(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
         },
       );
     default:
@@ -196,7 +192,7 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: angle,
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(PuzzleScreen.buildRoute(angle: angle));
+          Navigator.of(context).pushHidingTabBar(PuzzleScreen.buildRoute(angle: angle));
         },
       );
   }
@@ -278,7 +274,7 @@ class const _PuzzleMenu() extends ConsumerWidget {
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
+                  Navigator.of(context).pushHidingTabBar(StreakScreen.buildRoute());
                 }
               : null,
         ),
@@ -289,7 +285,7 @@ class const _PuzzleMenu() extends ConsumerWidget {
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
+                  Navigator.of(context).pushHidingTabBar(StormScreen.buildRoute());
                 }
               : null,
         ),
@@ -306,13 +302,10 @@ class const _PuzzleMenu() extends ConsumerWidget {
           _PuzzleMenuListTile(
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
-            subtitle: 'Review your past puzzle attempts.',
+            subtitle: context.l10n.mobilePuzzleHistoryDescription,
             enabled: isOnline,
             onTap: isOnline
-                ? () => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(PuzzleHistoryScreen.buildRoute())
+                ? () => Navigator.of(context).pushHidingTabBar(PuzzleHistoryScreen.buildRoute())
                 : null,
           ),
         ],
@@ -434,7 +427,7 @@ class const DailyPuzzle({super.key}) extends ConsumerWidget {
           ),
           onTap: () {
             if (!context.mounted) return;
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzle: data),
             );
           },

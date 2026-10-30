@@ -8,18 +8,19 @@ import 'package:lichess_mobile/src/model/relation/relation_preferences.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -59,55 +60,33 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     final sort = ref.watch(
       relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
     );
-    var selectedSort = sort;
-
-    final sortButton = SemanticIconButton(
+    final sortButton = ContextMenuIconButton(
       icon: const Icon(Icons.sort),
       semanticsLabel: context.l10n.mobileSortFriends,
-      onPressed: () => showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
-        builder: (_) => StatefulBuilder(
-          builder: (context, setLocalState) {
-            return BottomSheetScrollableContainer(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                const SizedBox(height: 16.0),
-                Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
-                const SizedBox(height: 16.0),
-                Filter<FriendListSort>(
-                  filterType: FilterType.singleChoice,
-                  choices: FriendListSort.values,
-                  choiceSelected: (choice) => selectedSort == choice,
-                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                  onSelected: (value, selected) {
-                    if (_tabController.index == 0) {
-                      _tabController.animateTo(1, duration: kTabScrollDuration);
-                    }
-                    setLocalState(() {
-                      selectedSort = value;
-                    });
-                    ref.read(relationPreferencesProvider.notifier).setFriendSort(value);
-                  },
-                ),
-                const SizedBox(height: 16.0),
-              ],
-            );
-          },
-        ),
-      ),
+      actions: [
+        for (final choice in FriendListSort.values)
+          ContextMenuAction(
+            label: choice.l10n(context.l10n),
+            selected: choice == sort,
+            onPressed: () {
+              if (_tabController.index == 0) {
+                _tabController.animateTo(1, duration: kTabScrollDuration);
+              }
+              ref.read(relationPreferencesProvider.notifier).setFriendSort(choice);
+            },
+          ),
+      ],
     );
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
-        bottom: TabBar(
+        bottom: PlatformTabBar(
           controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.nbFriendsOnline(onlineFriendsCount)),
-            Tab(text: context.l10n.nbFollowing(followingCount)),
+          tabs: [
+            context.l10n.nbFriendsOnline(onlineFriendsCount),
+            context.l10n.nbFollowing(followingCount),
           ],
         ),
       ),
@@ -194,16 +173,15 @@ class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: user));
+                Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
           : null,
       onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
-      onLongPress: () => showModalBottomSheet<void>(
+      onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),

@@ -9,7 +9,7 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Ĉu akcepti egalvenkon?';
 
   @override
   String get mobileAccount => 'Konto';
@@ -30,18 +30,21 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
-  String get mobileAmoledBlack => 'Amoled black';
+  String get mobileAppLogs => 'App logs';
+
+  @override
+  String get mobileAmoledBlack => 'Nigra (AMOLED)';
 
   @override
   String get mobileAreYouSure => 'Ĉu vi certas?';
 
   @override
   String mobileAreYouSureDownloadNnue(String param) {
-    return 'Are you sure you want to download the NNUE file ($param)?';
+    return 'Ĉu vi certas, ke vi volas elŝuti la dosieron NNUE ($param)?';
   }
 
   @override
-  String get mobileBoardPositionLandscape => 'Board position in landscape mode';
+  String get mobileBoardPositionLandscape => 'Pozicio de tabulo en horizontala reĝimo';
 
   @override
   String get mobileBoardSettings => 'Agordoj de la tabulo';
@@ -59,7 +62,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileChallengeFromPosition => 'Challenge from position';
 
   @override
-  String get mobileChapterName => 'Chapter Name';
+  String get mobileChapterName => 'Nomo de ĉapitro';
 
   @override
   String get mobileChessEngine => 'Chess engine';
@@ -95,6 +98,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
+
+  @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
 
   @override
   String get mobileDangerZone => 'Danger zone';
@@ -155,15 +161,15 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileHomeTab => 'Hejmo';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Vivaj filmprezentistoj';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -205,7 +211,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileOverTheBoard => 'Ludi fizike kun aliulo';
 
   @override
-  String get mobilePasteFromClipboard => 'Paste from clipboard';
+  String get mobilePasteFromClipboard => 'Alglui el tondujo';
 
   @override
   String get mobilePerfShortAntichess => 'Antichess';
@@ -223,34 +229,34 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobilePerfShortChess960 => '960';
 
   @override
-  String get mobilePerfShortClassical => 'Classical';
+  String get mobilePerfShortClassical => 'Klasika';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Poŝta';
 
   @override
   String get mobilePerfShortCrazyhouse => 'Crazy';
 
   @override
-  String get mobilePerfShortFromPosition => 'From Pos.';
+  String get mobilePerfShortFromPosition => 'De poz.';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Hordo';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'RdlM';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'Puzlo';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'Vetkuro';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'Rapida';
 
   @override
-  String get mobilePerfShortThreeCheck => '3check';
+  String get mobilePerfShortThreeCheck => '3-ŝaka';
 
   @override
   String get mobilePerfShortUltraBullet => 'Ultra';
@@ -277,6 +283,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Ĉu vi volas fini ĉi tiun kuron?';
@@ -372,25 +381,28 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => 'Klaku du kvadratojn';
 
   @override
-  String get mobileSettingsPreferencesSaved => 'Your preferences have been saved in your Lichess account. They will be synchronized across all your devices.';
+  String get mobileSettingsPreferencesSaved => 'Viaj agordoj estis konservita en via konto de Lichess. Ili estos sinkronigita tra ĉiuj viaj aparatoj.';
 
   @override
-  String get mobileSettingsShapeDrawing => 'Shape drawing';
+  String get mobileSettingsShapeDrawing => 'Desegnado de figuro';
 
   @override
-  String get mobileSettingsShapeDrawingSubtitle => 'Draw shapes using two fingers: maintain one finger on an empty square and drag another finger to draw a shape.';
+  String get mobileSettingsShapeDrawingSubtitle => 'Desegni figuron per du fingroj: tenu unu sur malplena kvadrato kaj la trenu la alian por desegni figuron.';
 
   @override
-  String get mobileSettingsShowBorder => 'Show border';
+  String get mobileSettingsShowBorder => 'Montri konturon';
 
   @override
-  String get mobileSettingsTouchFeedback => 'Touch feedback';
+  String get mobileSettingsTouchFeedback => 'Reago al tuŝado';
 
   @override
-  String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
+  String get mobileSettingsTouchFeedbackSubtitle => 'Kiam ŝaltita, la aparato ete vibriĝos, se vi movos aŭ kaptos pecon.';
 
   @override
-  String get mobileShareChallengeUrl => 'Share challenge URL';
+  String get mobileShare => 'Share';
+
+  @override
+  String get mobileShareChallengeUrl => 'Konigi adreson al defio';
 
   @override
   String get mobileShareGamePGN => 'Kunhavigi PGN-on';
@@ -399,7 +411,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileShareGameURL => 'Kunhavigi ludan URL-on';
 
   @override
-  String get mobileShareLocalAnalysisPgn => 'Share local analysis PGN';
+  String get mobileShareLocalAnalysisPgn => 'Konigi PGN-dosieron de loka analizo';
 
   @override
   String get mobileSharePositionAsFEN => 'Kunhavigi pozicion kiel FEN-on';
@@ -411,52 +423,55 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileShowComments => 'Montri komentojn';
 
   @override
-  String get mobileShowEngineLines => 'Show engine lines';
+  String get mobileShowEngineLines => 'Montri liniojn de komputilo';
 
   @override
-  String get mobileShowEvaluationGauge => 'Show evaluation gauge';
+  String get mobileShowEvaluationGauge => 'Montri skalon de estimado';
 
   @override
   String get mobileShowResult => 'Montri rezulton';
 
   @override
-  String get mobileSignInWithBrowser => 'Sign in with the browser';
+  String get mobileSignInWithBrowser => 'Saluti per retumilo';
 
   @override
-  String get mobileSignInWithEmail => 'Sign in with an email';
+  String get mobileSignInWithEmail => 'Saluti per retpoŝto';
 
   @override
-  String get mobileSimpleDelay => 'Simple delay';
+  String get mobileSimpleDelay => 'Simpla prokrasto';
 
   @override
-  String get mobileSmallBoard => 'Small board';
+  String get mobileSmallBoard => 'Malgranda tabulo';
 
   @override
   String get mobileSomethingWentWrong => 'Io misfunkciis.';
 
   @override
-  String get mobileSortFriends => 'Sort friends';
+  String get mobileSortFriends => 'Ordigi amikojn';
 
   @override
-  String get mobileStopShowingThreat => 'Stop showing threat';
+  String get mobileStopShowingThreat => 'Ne montri minacon';
 
   @override
   String get mobileSystemColors => 'Sistemaj koloroj';
 
   @override
-  String get mobileTablebaseOffline => 'Tablebase is not available offline.';
+  String get mobileTablebaseOffline => 'Bazoj de ludfinoj ne haveblas senrete.';
 
   @override
   String get mobileTheme => 'Temo';
 
   @override
-  String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
-  String get mobileTournamentCompleted => 'Completed';
+  String get mobileTooManyLoginAttempts => 'Tro da provoj. Bonvolu reprovi poste.';
 
   @override
-  String get mobileTournamentJumpToMyPage => 'Jump to my page';
+  String get mobileTournamentCompleted => 'Finita';
+
+  @override
+  String get mobileTournamentJumpToMyPage => 'Salti al mia paĝo';
 
   @override
   String mobileUnsupportedVariant(String param) {
@@ -464,13 +479,13 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get mobileUseSymmetricPieces => 'Use symmetric pieces';
+  String get mobileUseSymmetricPieces => 'Uzi simetriajn ŝakpecojn';
 
   @override
   String get mobileViewGame => 'Rigardi ludon';
 
   @override
-  String get mobileViewLicenses => 'View licences';
+  String get mobileViewLicenses => 'Vidi permesilojn';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Atendante ke la kontraŭulo aliĝu...';
@@ -479,10 +494,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileWatchTab => 'Spekti';
 
   @override
-  String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';
+  String get mobileWeWillEmailYouCode => 'Ni retpoŝtas kodon al vi, per kiu vi povos saluti.';
 
   @override
-  String get mobileYouCannotChallengeYourself => 'You cannot challenge yourself';
+  String get mobileYouCannotChallengeYourself => 'Vi ne povas defii vin mem';
 
   @override
   String get activityActivity => 'Aktiveco';
@@ -736,7 +751,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'La ludanto(j) kun plej multaj poentoj ĉe la konkludo de la tempo de la turniro de la turniro estos anoncita venkanto(j).';
 
   @override
-  String get arenaHowArePlayersPaired => 'How are players paired?';
+  String get arenaHowArePlayersPaired => 'Kiel ludantoj estas parigitaj?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Komence de la turniro, ludantoj estas parigitaj laŭ ilia rango.\nTuj kiam vi finos ludon, revenu al la atendejo de la turniro: vi tiam estos parigita kun ludanto, kies rango estas proksima al la via. Ĉi tio certigas minimuman atendon, tamen vi eble ne alfrontos ĉiujn aliajn ludantojn en la turniro.\nLudu rapide kaj revenu al la atendejo por ludi pli da ludoj kaj venki pli da poentoj.';
@@ -824,7 +839,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaEditTeamBattle => 'Redakti teaman batalon';
 
   @override
-  String get arenaDefenderLabel => 'Defender:';
+  String get arenaDefenderLabel => 'Defendanto:';
 
   @override
   String get arenaPickYourTeam => 'Elektu vian teamon';
@@ -848,7 +863,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaTournamentStats => 'Turniraj statistikoj';
 
   @override
-  String get arenaRankAverageHelp => 'Your rank average represents your typical finishing position, relative to the total number of players in each tournament.\nThis is a measure of your tournament placement, not your general rating.\n\nFor example, a rank average of 3% means you typically finish in the top 3% (such as 30th place out of 1,000 players).';
+  String get arenaRankAverageHelp => 'Via ranga meznombro representas vian kutiman finan pozicion en turniroj, relative al kvanto de ludantoj en ciu turniro. Ĝi mezuras vian meton en turniroj, ne ĝeneralan rangon.\n\nEkzemple, ranga meznombro de 3% signifas, ke en turniroj vi kutime finiĝos en la 3% de plej bonaj ludantoj (ekzemple kiaj la 30a loko de 1000 ludantoj).';
 
   @override
   String get arenaMedians => 'medianoj';
@@ -889,7 +904,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaBerserkRate => 'Berserka procento';
 
   @override
-  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+  String get arenaLeaguesAndStreamerBattles => 'Ligoj & bataloj de tujelsendantoj';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1403,7 +1418,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get coordinatesShowCoordinates => 'Montri koordinatojn';
 
   @override
-  String get coordinatesShowCoordsOnAllSquares => 'Coordinates on every square';
+  String get coordinatesShowCoordsOnAllSquares => 'Koordinatoj sur ĉiu kvadrato';
 
   @override
   String get coordinatesShowPieces => 'Montri pecojn';
@@ -1418,7 +1433,15 @@ class AppLocalizationsEo extends AppLocalizations {
   String get coordinatesNameSquare => 'Nomu kvadraton';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Ekzerciĝi nur kun iuj kolumnoj kaj vicoj';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Lernu ŝakon';
@@ -2479,7 +2502,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2507,6 +2530,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2900,9 +2926,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzleThemeCastling => 'Aroko';
 
   @override
-  String get puzzleThemeEnPassant => 'Preterpasa kapto';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Alportu la reĝo en sekurecon, kaj lanĉu la turon por atako.';
 
   @override
@@ -2994,6 +3017,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktiko dum la lasta fazo de la ludo.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Preterpasa kapto';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3371,10 +3397,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get orLetYourOpponentScanQrCode => 'Aŭ lasi vian kontraŭulon skani ĉi tiun QR-kodon per la app';
 
   @override
-  String get reusableChallengeUrl => 'Reusable challenge URL';
+  String get reusableChallengeUrl => 'Reuzebla adreso de defio';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Porĉiama ligilo, per kiu iu povas defii vin kun ĉi tiuj agordoj.';
 
   @override
   String get waiting => 'Atendante';
@@ -3508,10 +3534,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get blackDidntMove => 'Nigro ne movis';
 
   @override
-  String get whiteAborted => 'White aborted the game';
+  String get whiteAborted => 'Blanko malaranĝis la ludon';
 
   @override
-  String get blackAborted => 'Black aborted the game';
+  String get blackAborted => 'Nigro malaranĝis la ludon';
 
   @override
   String get requestAComputerAnalysis => 'Peti komputilan analizon';
@@ -3630,12 +3656,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String minRatingX(String param) {
-    return 'Minimum rating of $param';
+    return 'Minimuma rango de $param';
   }
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Maksimuma rango de $param';
   }
 
   @override
@@ -3724,7 +3750,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get showVariationArrows => 'Montri variaĵojn sagojn';
 
   @override
-  String get visualMotifs => 'Visual motifs';
+  String get visualMotifs => 'Vidaj ŝablonoj';
 
   @override
   String get undefendedPieces => 'Nedefenditaj pecoj';
@@ -3739,13 +3765,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get multipleLines => 'Pluraj linioj';
 
   @override
-  String get multipleLinesDescription => 'Set number of evaluation lines and move arrows on the board';
+  String get multipleLinesDescription => 'Agordas nombron de linioj de estimado kaj sagoj de movoj sur la tabulo';
 
   @override
-  String get searchTime => 'Search time';
+  String get searchTime => 'Tempo de serĉo';
 
   @override
-  String get searchTimeDescription => 'Set time to evaluate fresh positions';
+  String get searchTimeDescription => 'Agordas tempon por estimi freŝajn poziciojn';
 
   @override
   String get threads => 'Fadenoj';
@@ -3754,7 +3780,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get threadsDescription => 'Elektu malsupre la nombron de fadenoj de via procesoro. La markoj indikas sekurajn elektojn';
 
   @override
-  String get threadsDescriptionMobile => 'More threads will use more battery for better analysis';
+  String get threadsDescriptionMobile => 'Pli da fadenoj konsumas pli da energio por pli bona analizo';
 
   @override
   String get cpus => 'Ĉefprocesoroj';
@@ -3763,7 +3789,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get memory => 'Memoro';
 
   @override
-  String get memoryDescription => 'Higher values may improve performance';
+  String get memoryDescription => 'Pli altaj valoroj povas plialtigi rendimenton';
 
   @override
   String get infiniteAnalysis => 'Senfina analizo';
@@ -3787,16 +3813,19 @@ class AppLocalizationsEo extends AppLocalizations {
   String get flipBoard => 'Rotacii tabulon';
 
   @override
-  String get toggleLocalEngine => 'Toggle local engine';
+  String get toggleLocalEngine => 'Baskuligi lokan ŝakkomputilon';
 
   @override
-  String get engineSettings => 'Engine settings';
+  String get engineSettings => 'Agordoj de ŝakkomputilo';
 
   @override
-  String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
+  String get engine => 'Ŝakkomputilo';
 
   @override
-  String get illegalPosition => 'Illegal position';
+  String get enginesFromStrongestToWeakest => 'Ŝakkomputiloj, ordigitaj ekde plej fortaj ĝis plej malfortaj';
+
+  @override
+  String get illegalPosition => 'Kontraŭleĝa pozicio';
 
   @override
   String get threefoldRepetition => 'Triobla ripeto';
@@ -3935,13 +3964,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get signupUsernameHint => 'Certigi, ke vi elektas uzantnomon, ke estas adekvata por ĉiu-aĝaj spektantoj. Vi ne povas ŝanĝi ĝin poste, kaj la administrantoj fermas ĉiujn ajn kontojn, kiuj havas malbonimpresajn uzantnomojn!';
 
   @override
-  String get signupEmailPromise => 'We will only send you emails about your account and never share your email.';
+  String get signupEmailPromise => 'Ni sendos al vi nur retpoŝtaĵojn pri via konto kaj neniam konigos vian retpoŝtadreson al aliuloj.';
 
   @override
   String get password => 'Pasvorto';
 
   @override
-  String get showPassword => 'Show password';
+  String get showPassword => 'Montri pasvorton';
 
   @override
   String get changePassword => 'Ŝanĝi pasvorton';
@@ -4013,11 +4042,11 @@ class AppLocalizationsEo extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => 'Atendu 5 minutojn kaj reŝargu vian retpoŝtan enirkeston.';
 
   @override
-  String get checkSpamOrJunkFolder => 'If you do not receive a confirmation email, check your Spam or Junk folder. Be sure to indicate messages from lichess.org as safe and \"not spam\", so you can stay informed of important communications.';
+  String get checkSpamOrJunkFolder => 'Se vi ne ricevis konfirman retpoŝton, rigardu je viaj dosierujoj \"Spamo\" aŭ \"Rubujo\". Vi devus agordi vian retpoŝton, por ke mesaĝoj de lichess.org estos ĉiam markita kaj sekuraj kaj \"ne spamo\", por ke vi ĉiam sciiĝos pri gravaj komunikoj.';
 
   @override
   String sendEmailForAccountVerification(String param) {
-    return 'If you can\'t find your confirmation email, send an email to $param and we\'ll confirm your account for you.';
+    return 'Se vi ne povas trovi konfirmon en via retpoŝto, sendu retpoŝtaĵon al $param kaj ni konfirmos vian konton por vi.';
   }
 
   @override
@@ -4061,10 +4090,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get cancel => 'Nuligi';
 
   @override
-  String get whiteRanOutOfTime => 'White ran out of time';
+  String get whiteRanOutOfTime => 'Blanko elĉerpis sian tempon';
 
   @override
-  String get blackRanOutOfTime => 'Black ran out of time';
+  String get blackRanOutOfTime => 'Nigro elĉerpis sian tempon';
 
   @override
   String get drawOfferSent => 'Egalvenka propono estis sendita';
@@ -4273,7 +4302,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+  String get cannotFilterByUnstableRating => 'Ne eblas filtri per rango, ĉar via rango ne estas stabila. Ludu rangajn ludojn por stabiligi ĝin.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4356,7 +4385,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get leaderboard => 'Sukcesotabulo';
 
   @override
-  String get positionAsImage => 'Position as image';
+  String get positionAsImage => 'Bildo de pozicio';
 
   @override
   String get gameAsGIF => 'Ludo kiel GIF';
@@ -4419,6 +4448,11 @@ class AppLocalizationsEo extends AppLocalizations {
   String get noNetwork => 'Nekonektita';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Amikoj enrete: $param1\nAmikoj ludantaj: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Plej ŝatataj kontraŭuloj';
 
   @override
@@ -4455,7 +4489,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get less => 'Less';
+  String get less => 'Malpli';
 
   @override
   String get more => 'Pli';
@@ -4593,7 +4627,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get randomChess960Position => 'Random Chess960 position';
+  String get randomChess960Position => 'Hazarda pozicio de Ŝako960';
 
   @override
   String get startPosition => 'Komenca aranĝo';
@@ -4665,7 +4699,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get makeAStudy => 'Por konservado kaj kunhavigo, konsideru fari studon.';
 
   @override
-  String get clearLocalData => 'Clear local data';
+  String get clearLocalData => 'Vakigi lokajn datumojn';
 
   @override
   String get previouslyOnLichessTV => 'Antaŭe ĉe Lichess-TV';
@@ -4695,19 +4729,19 @@ class AppLocalizationsEo extends AppLocalizations {
   String get onlineBots => 'Retaj robotoj';
 
   @override
-  String get aboutBotsOnLichess => 'About bots on Lichess';
+  String get aboutBotsOnLichess => 'Pri robotoj sur Lichess';
 
   @override
-  String get featuredBots => 'Featured bots';
+  String get featuredBots => 'Rekomendataj robotoj';
 
   @override
-  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+  String get tryPlayingTheseInnovativeChessEngines => 'Provu ludi kun tiuj novecajn ŝakkomputiloj! Ili estas niaj favoraj.';
 
   @override
-  String get communityBots => 'Community bots';
+  String get communityBots => 'Robotoj de komunumo';
 
   @override
-  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Aliaj ŝakkomputiloj, kreitaj de komunumo de Lichess. Ili estas provizitaj de ties kreantoj, kaj povas ne ĉiam esti surrete.';
 
   @override
   String get name => 'Nomo';
@@ -4761,13 +4795,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get reply => 'Respondi';
 
   @override
-  String get reopen => 'Reopen';
+  String get reopen => 'Remalfermi';
 
   @override
-  String get quote => 'Quote';
+  String get quote => 'Citi';
 
   @override
-  String get postEdited => 'edited';
+  String get postEdited => 'redaktita je';
 
   @override
   String get message => 'Mesaĝo';
@@ -4785,9 +4819,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get reason => 'Kialo';
 
   @override
-  String get whatIsIheMatter => 'Pri kio temas la raporto?';
-
-  @override
   String get cheat => 'Trompo';
 
   @override
@@ -4803,10 +4834,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get reportUsernameHelp => 'Klarigu kio estas ofenda en la nomo de tiu ĉi uzanto. Ne simple diru \"ĝi estas ofenda/maldeca\" sed rakontu al ni kiel vi atingis tiun konkludon, ĉefe se temas kaŝita ofendo, se ĝi ne estas en la angla, se ĝi apartenas al nenorma lingvaĵo aŭ se ĝi referas ion kulturan aŭ historian.';
 
   @override
-  String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Bonvolu doni almenaŭ unu ligilon al ludo por kontrolo.';
+  String get processReportFasterInEnglish => 'Ni traktos vian raporton pli rapide, se vi skribos ĝin en la angla.';
 
   @override
   String by(String param) {
@@ -4855,7 +4883,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get logInByEmail => 'Komenci seancon per retpoŝto';
 
   @override
-  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
+  String get emailLoginInstructions => 'Ni retpoŝtos al vi ligilon por ensaluto.';
 
   @override
   String get emailMeALink => 'Retpoŝte sendu al mi ligilon';
@@ -4930,10 +4958,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get never => 'Neniam';
 
   @override
-  String get defeatOnly => 'Defeat only';
+  String get defeatOnly => 'Nur malvenkoj';
 
   @override
-  String get drawAndDefeat => 'Draw and defeat';
+  String get drawAndDefeat => 'Malvenkoj kaj egalvenkoj';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -5118,13 +5146,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get really => 'vere';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Ĝisdatigoj de Lichess';
 
   @override
   String get contribute => 'Kontribui';
 
   @override
-  String get changelog => 'Changelog';
+  String get changelog => 'Ŝanĝoprotokolo';
 
   @override
   String get termsOfService => 'Uzkondiĉojn';
@@ -5136,7 +5164,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get sourceCode => 'Fontkodo';
 
   @override
-  String get blockAds => 'Block ads';
+  String get blockAds => 'Barado de reklamoj';
 
   @override
   String get simultaneousExhibitions => 'Samtempludaj ekspozicioj';
@@ -5189,7 +5217,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get create => 'Krei';
 
   @override
-  String get creatingASimul => 'Creating a simul lets you play against multiple opponents at the same time.';
+  String get creatingASimul => 'Kreado de samtempa ludo ebligos al vi ludi kun multaj kontraŭuloj samtempe.';
 
   @override
   String get simulVariantsHint => 'Se vi elektas multajn variaĵojn, ĉiu ludanto povas laŭvole elekti unu el la variaĵoj.';
@@ -5201,7 +5229,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get simulAddExtraTime => 'Vi povas aldoni plian tempon al via ŝakhorloĝo por helpi vian ludadon.';
 
   @override
-  String get extraClockTimeForHost => 'Extra clock time for the host:';
+  String get extraClockTimeForHost => 'Aldona tempo por la gastiganto:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Aldoni komencan tempon al via horloĝo por ĉiu ludanto, kiu aliĝis al la samtempludo.';
@@ -5234,7 +5262,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get keyGoToStartOrEnd => 'iri al komenco/fino';
 
   @override
-  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+  String get keyGoToPreviousOrNextLine => 'iri al (mal)sekva linio';
 
   @override
   String get keyCycleSelectedVariation => 'Cikligi elektan variaĵon';
@@ -5243,7 +5271,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get keyShowOrHideComments => '(mal)montri komentojn';
 
   @override
-  String get keyShowOrHideCurrentVariation => 'show/hide current variation';
+  String get keyShowOrHideCurrentVariation => '(mal)kaŝi aktualan variaĵon';
 
   @override
   String get keyEnterOrExitVariation => 'eniru/forlasu variaĵon';
@@ -5386,7 +5414,13 @@ class AppLocalizationsEo extends AppLocalizations {
   String get downloadImported => 'Elŝutu importitan';
 
   @override
+  String get downloadMyGames => 'Elŝuti miajn ludojn';
+
+  @override
   String get downloadAllGames => 'Elŝuti ĉiujn ludojn';
+
+  @override
+  String get downloadResults => 'Elŝuti rezultojn';
 
   @override
   String get crosstable => 'Kructabelo';
@@ -5449,7 +5483,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String activeSessionsDescription(String param1, String param2) {
-    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+    return 'Jen listo de aparatoj kaj aplikaĵoj, kiuj estas ensalutitaj en vian konton. Se vi vidas suspektindan aktivecon, vi devus <a href=\'$param1\'>kontroli retpoŝtadreson de restaŭrado de atingo</a> kaj <a href=\'$param2\'>ŝanĝi vian pasvorton</a>.';
   }
 
   @override
@@ -5471,7 +5505,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get noChallenges => 'Sen defioj.';
 
   @override
-  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
+  String get browserNotificationsDenied => 'Ŝprucfenestroj de sciigoj malŝaltitaj per agordoj de retumilo';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -5489,10 +5523,10 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get like => 'Like';
+  String get like => 'Mi ŝatas ĝin';
 
   @override
-  String get liked => 'Liked';
+  String get liked => 'Ŝatata';
 
   @override
   String get quickPairing => 'Rapida parado';
@@ -5518,7 +5552,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get background => 'Fono';
 
   @override
-  String get theme => 'Theme';
+  String get theme => 'Etoso';
 
   @override
   String get light => 'Hela';
@@ -5527,22 +5561,22 @@ class AppLocalizationsEo extends AppLocalizations {
   String get dark => 'Malhela';
 
   @override
-  String get picture => 'Picture';
+  String get picture => 'Bildo';
 
   @override
   String get deviceTheme => 'Ila etoso';
 
   @override
-  String get roundness => 'Roundness';
+  String get roundness => 'Rondigo';
 
   @override
-  String get backgroundImage => 'Background image';
+  String get backgroundImage => 'Fona bildo';
 
   @override
   String get backgroundImageUrl => 'Malantaŭografikaĵo URL:';
 
   @override
-  String get imageOpacity => 'Image opacity';
+  String get imageOpacity => 'Opakeco de bildo';
 
   @override
   String get board => 'Ŝaktabulo';
@@ -5614,7 +5648,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String perfRatingLabel(String param) {
-    return 'Rating: $param.';
+    return 'Rango: $param.';
   }
 
   @override
@@ -5768,7 +5802,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get showUnreadLichessMessage => 'Vi ricevis privatan mesaĝon de Lichess.';
 
   @override
-  String get readTheMessage => 'Read the message';
+  String get readTheMessage => 'Legi mesaĝon';
 
   @override
   String get sorry => 'Bedaŭrinde :(';
@@ -5833,7 +5867,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get edit => 'Redakti';
 
   @override
-  String get ultraBullet => 'UltraBullet';
+  String get ultraBullet => 'Ultrakuglo';
 
   @override
   String get bullet => 'Bullet';
@@ -5904,7 +5938,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get theForumEtiquette => 'la foruma etiketo';
 
   @override
-  String get pleaseBeNiceInTheForum => 'Please be nice in the forum.';
+  String get pleaseBeNiceInTheForum => 'Bonvolu esti plaĉa en la forumo.';
 
   @override
   String get thisTopicIsArchived => 'Ĉi tiu temo eniris la arkivon kaj oni ne plu rajtas respondi.';
@@ -6051,7 +6085,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String youCanFormatTextUsing(String param) {
-    return 'You can format text using $param.';
+    return 'Vi povas aranĝi tekston per $param.';
   }
 
   @override
@@ -6073,7 +6107,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get onlyTeamMembers => 'Nuraj teamaj membroj';
 
   @override
-  String get moveListNavigation => 'Move list navigation';
+  String get moveListNavigation => 'Navigacio tra movlisto';
 
   @override
   String get mouseTricks => 'Musaj lertaĵoj';
@@ -6126,7 +6160,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get resignTheGame => 'Rezignu la ludo';
 
   @override
-  String get youCantStartNewGame => 'You can\'t start a new game while it\'s your turn.';
+  String get youCantStartNewGame => 'Vi ne povas krei novan ludon dum via vico.';
 
   @override
   String get since => 'Ekde';
@@ -6153,7 +6187,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get showMeEverything => 'Ĉion montru al mi';
 
   @override
-  String get lichessPatronInfo => 'Lichess estas almoza kaj tute libera malfermitkoda programaro.\nĈiu funkciada elspezo, ellaborado, kaj enhavo estas financita sole de uzantajn donacojn.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Nenio videbla ĉi tie nuntempe.';
@@ -6187,7 +6221,7 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String thereAreNoResultsForX(String param) {
-    return 'No results for \"$param\"';
+    return 'Neniuj rezultoj por \"$param\"';
   }
 
   @override
@@ -6197,25 +6231,25 @@ class AppLocalizationsEo extends AppLocalizations {
   String get enPassant => 'Preterpasa kapto';
 
   @override
-  String get settings => 'Settings';
+  String get settings => 'Agordoj';
 
   @override
-  String get verifyingYourDevice => 'Verifying your device...';
+  String get verifyingYourDevice => 'Konfirmado de via aparato...';
 
   @override
-  String get chessOpenings => 'Chess openings';
+  String get chessOpenings => 'Ŝakludaj komencoj';
 
   @override
-  String get boards => 'Boards';
+  String get boards => 'Tabuloj';
 
   @override
-  String get write => 'Write';
+  String get write => 'Skribi';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Antaŭvido';
 
   @override
-  String get done => 'Done';
+  String get done => 'Farita';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6963,9 +6997,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Nur la kontribuantoj de la studo povas peti komputilan analizon.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Akiru kompletan servilan komputilan analizon de la ĉefa linio.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Certiĝu, ke la ĉapitro estas kompleta. Vi nur povas peti analizon unu foje.';
 
   @override
@@ -7014,7 +7045,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyCurrentChapterUrl => 'URL de tiu ĉi ĉapitro';
 
   @override
-  String get studyPasteToEmbedChapterInForumOrBlog => 'You can paste this in the forum or your Lichess blog to embed the chapter.';
+  String get studyPasteToEmbedChapterInForumOrBlog => 'Vi povas alglui ĝin en la forumo aŭ via blogo de Lichess por enkorpigi la ĉapitron.';
 
   @override
   String get studyStartAtInitialPosition => 'Starti ekde komenca pozicio';
@@ -7182,9 +7213,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get studyStart => 'Komenci';
-
-  @override
-  String get studySave => 'Konservi';
 
   @override
   String get studyClearChat => 'Vakigi babiladon';
@@ -7420,6 +7448,21 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

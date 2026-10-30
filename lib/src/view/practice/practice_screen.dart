@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
@@ -29,6 +30,7 @@ class const PracticeScreen({super.key}) extends ConsumerWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.practice),
+        largeTitle: true,
         actions: [
           if (progress case AsyncData(value: final progress) when !progress.isEmpty)
             ContextMenuIconButton(
@@ -102,14 +104,14 @@ class const _Body({
             children: [
               ListTile(
                 leading: PracticeStudyIcon(study: study),
-                title: Text(context.l10n.resumePractice),
+                title: Text(context.l10n.resumeLearning),
                 subtitle: Text(study.l10nName(context.l10n)),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                onTap: () =>
-                    Navigator.of(context)
-                        .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
+                onTap: () => Navigator.of(context).pushHidingTabBar(
+                  PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study)),
+                ),
               ),
             ],
           ),
@@ -146,7 +148,7 @@ class const _StudyTile({
       // Straight to the chapter to play: the others are a tap away in the chapter screen.
       onTap: () =>
           Navigator.of(context)
-              .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
+              .pushHidingTabBar(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
     );
   }
 }

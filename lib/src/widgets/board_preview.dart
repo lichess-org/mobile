@@ -79,7 +79,8 @@ class SmallBoardPreview extends ConsumerWidget {
                     settings: StaticChessboardSettings(
                       pieceAssets: boardPrefs.pieceSet.assets,
                       colorScheme: boardPrefs.boardTheme.colors,
-                      brightness: boardPrefs.brightness,
+                      brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
+                      contrast: boardPrefs.contrast,
                       hue: boardPrefs.hue,
                       enableCoordinates: false,
                       borderRadius: Styles.boardBorderRadius,
