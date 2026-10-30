@@ -7472,6 +7472,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Autentikasi dua-langkah';
 
   @override
+  String get tfaAuthenticationCode => 'Kode otentikasi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Buka aplikasi otentikasi dua faktor di perangkat anda untuk melihat kode otentikasi dan verifikasi identitas anda.';
+
+  @override
   String get timeagoJustNow => 'baru saja';
 
   @override

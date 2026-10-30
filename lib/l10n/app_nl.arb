@@ -2185,6 +2185,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Wedstrijd met {count} teams} other{Wedstrijd met {count} teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Eén leider per team} other{{count} leiders per team}}",
   "tfaTwoFactorAuth": "Tweestapsverificatie",
+  "tfaAuthenticationCode": "Verificatiecode",
+  "tfaOpenTwoFactorApp": "Open de tweestapsverificatie-app op uw apparaat om uw authenticatiecode te bekijken en uw identiteit te verifiëren.",
   "timeagoJustNow": "zojuist",
   "timeagoRightNow": "op dit moment",
   "timeagoCompleted": "voltooid",

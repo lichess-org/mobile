@@ -2035,6 +2035,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Battle of {count} team} other{Battle of {count} teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{One leader per team} other{{count} leaders per team}}",
   "tfaTwoFactorAuth": "Two-factor authentication",
+  "tfaAuthenticationCode": "Authentication code",
+  "tfaOpenTwoFactorApp": "Open the two-factor authentication app on your device to view your authentication code and verify your identity.",
   "timeagoJustNow": "just now",
   "timeagoRightNow": "right now",
   "timeagoCompleted": "completed",

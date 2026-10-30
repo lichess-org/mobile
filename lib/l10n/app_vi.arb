@@ -2165,6 +2165,8 @@
   "teamBattleOfNbTeams": "{count, plural, other{Trận chiến giữa {count} đội}}",
   "teamNbLeadersPerTeam": "{count, plural, other{mỗi đội lấy {count} người dẫn đầu}}",
   "tfaTwoFactorAuth": "Xác thực 2 bước",
+  "tfaAuthenticationCode": "Mã xác thực",
+  "tfaOpenTwoFactorApp": "Mở ứng dụng xác minh 2 bước trên thiết bị của bạn để xem mã xác minh của bạn và xác nhận danh tính.",
   "timeagoJustNow": "vừa mới đây",
   "timeagoRightNow": "ngay bây giờ",
   "timeagoCompleted": "đã hoàn thành",

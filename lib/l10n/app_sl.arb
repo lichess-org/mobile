@@ -2045,6 +2045,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Bitka {count} ekipe} =2{Bitka {count} ekip} few{Bitka {count} ekip} other{Bitka {count} ekip}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{En vodja na ekipo} =2{{count} vodji na ekipo} few{{count} vodje na ekipo} other{{count} vodij na ekipo}}",
   "tfaTwoFactorAuth": "Dvojna avtentikacija",
+  "tfaAuthenticationCode": "Avtentikacijska koda",
+  "tfaOpenTwoFactorApp": "V napravi odprite aplikacijo za dvostopenjsko preverjanje pristnosti, da si ogledate kodo za preverjanje pristnosti in preverite svojo identiteto.",
   "timeagoJustNow": "pravkar",
   "timeagoRightNow": "ta trenutek",
   "timeagoCompleted": "končano",

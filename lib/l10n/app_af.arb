@@ -1673,6 +1673,8 @@
   "teamTeam": "Span",
   "teamIncorrectEntryCode": "Verkeerde insluitings kode.",
   "tfaTwoFactorAuth": "Tweeledige verifikasie",
+  "tfaAuthenticationCode": "Verifikasie kode",
+  "tfaOpenTwoFactorApp": "Maak die twee-faktor verifikasie toep of jou toestel oop om die verifikasie kode te sien en jou identiteit te bevestig.",
   "timeagoJustNow": "sopas",
   "timeagoRightNow": "nou",
   "timeagoCompleted": "voltooi",

@@ -7543,6 +7543,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
 
   @override
+  String get tfaAuthenticationCode => 'Código de autenticação';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Abre a aplicação de autenticação de dois fatores no teu dispositivo para veres o código de autenticação e verificares a tua identidade.';
+
+  @override
   String get timeagoJustNow => 'agora mesmo';
 
   @override
@@ -15299,6 +15305,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticação de dois fatores';
+
+  @override
+  String get tfaAuthenticationCode => 'Código de autenticação';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Abra o aplicativo de autenticação de dois fatores no seu dispositivo para ver o código de autenticação e validar a sua identidade.';
 
   @override
   String get timeagoJustNow => 'agora há pouco';

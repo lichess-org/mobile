@@ -1938,6 +1938,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Batalo de {count} teamoj} other{Battle de {count} teamoj}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Unu gvidanto je teamo} other{{count} gvidantoj je teamo}}",
   "tfaTwoFactorAuth": "Dufaza aŭtentigo",
+  "tfaAuthenticationCode": "Aŭtentiga kodo",
+  "tfaOpenTwoFactorApp": "Malfermu la dufazan aŭtentigan apon en via aparato por vidi vian aŭtentigan kodon kaj kontrolu vian identecon.",
   "timeagoJustNow": "ĵus nun",
   "timeagoRightNow": "ĵuse",
   "timeagoCompleted": "finita",

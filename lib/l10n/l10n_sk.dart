@@ -7697,6 +7697,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Dvojstupňové overenie';
 
   @override
+  String get tfaAuthenticationCode => 'Overovací kód';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Otvorte aplikáciu na dvojstupňové overenie na Vašom zariadení, a zistite Váš overovací kód na overenie Vašej identity.';
+
+  @override
   String get timeagoJustNow => 'práve teraz';
 
   @override

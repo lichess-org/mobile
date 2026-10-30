@@ -2188,6 +2188,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Kampf von {count} Teams} other{Kampf von {count} Teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{{count} Führende pro Team} other{{count} Führende pro Team}}",
   "tfaTwoFactorAuth": "Zwei-Faktor-Authentifizierung",
+  "tfaAuthenticationCode": "Authentifizierungscode",
+  "tfaOpenTwoFactorApp": "Öffne auf deinem Gerät die App zur zweistufigen Authentifizierung, um deinen Authentifizierungscode anzuzeigen und deine Identität zu bestätigen.",
   "timeagoJustNow": "in Kürze",
   "timeagoRightNow": "gerade eben",
   "timeagoCompleted": "abgeschlossen",

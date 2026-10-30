@@ -2064,6 +2064,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Talde {count}en arteko txapelketa} other{{count} talderen arteko txapelketa}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Lider bat talde bakoitzeko} other{{count} lider talde bakoitzeko}}",
   "tfaTwoFactorAuth": "Bi faktoreko autentifikazioa",
+  "tfaAuthenticationCode": "Autentikazio kodea",
+  "tfaOpenTwoFactorApp": "Ireki bi faktoreko autentifikazio aplikazioa zure telefonoan, ikusi zure autentifikazio kodea eta idatzi hemen.",
   "timeagoJustNow": "orain",
   "timeagoRightNow": "orain",
   "timeagoCompleted": "amaituta",

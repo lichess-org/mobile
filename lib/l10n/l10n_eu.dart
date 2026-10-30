@@ -7543,6 +7543,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Bi faktoreko autentifikazioa';
 
   @override
+  String get tfaAuthenticationCode => 'Autentikazio kodea';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ireki bi faktoreko autentifikazio aplikazioa zure telefonoan, ikusi zure autentifikazio kodea eta idatzi hemen.';
+
+  @override
   String get timeagoJustNow => 'orain';
 
   @override

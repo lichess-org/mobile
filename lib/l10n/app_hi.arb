@@ -1631,6 +1631,8 @@
   "teamTeam": "टीम",
   "teamIncorrectEntryCode": "अवैध प्रवेश कूट",
   "tfaTwoFactorAuth": "दो-चरण प्रमाणीकरण",
+  "tfaAuthenticationCode": "प्रमाणीकरण कोड",
+  "tfaOpenTwoFactorApp": "अपना प्रमाणीकरण कोड देखने और अपनी पहचान सत्यापित करने के लिए अपने डिवाइस पर दो-कारक प्रमाणीकरण ऐप खोलें।",
   "timeagoJustNow": "अभी",
   "timeagoRightNow": "अभी",
   "timeagoCompleted": "पूर्ण",

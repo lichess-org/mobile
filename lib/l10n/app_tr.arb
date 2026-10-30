@@ -2188,6 +2188,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{{count} takımın çarpışması} other{{count} takımın savaşı}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Her takımda bir lider} other{{count} lider takım başına}}",
   "tfaTwoFactorAuth": "İki faktörlü kimlik doğrulama",
+  "tfaAuthenticationCode": "Kimlik doğrulama kodu",
+  "tfaOpenTwoFactorApp": "Doğrulama kodunu görüntüleyerek kimliğinizi doğrulamak için cihazınızdan iki faktörlü kimlik doğrulama uygulamasını açın.",
   "timeagoJustNow": "şu anda",
   "timeagoRightNow": "hemen şimdi",
   "timeagoCompleted": "tamamlanmış",

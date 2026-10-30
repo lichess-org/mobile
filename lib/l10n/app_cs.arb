@@ -1992,6 +1992,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Bitva {count} týmu} few{Bitva {count} týmů} many{Bitva {count} týmů} other{Bitva {count} týmů}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Jeden vedoucí na tým} few{{count} vedoucí na tým} many{{count} vedoucích na tým} other{{count} vedoucí na tým}}",
   "tfaTwoFactorAuth": "Dvoufázové ověření",
+  "tfaAuthenticationCode": "Ověřovací kód",
+  "tfaOpenTwoFactorApp": "Otevřete aplikaci pro dvoufázové ověřování na vašem zařízení a najděte svůj ověřovací kód.",
   "timeagoJustNow": "právě teď",
   "timeagoRightNow": "právě teď",
   "timeagoCompleted": "dokončeno",

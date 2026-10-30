@@ -2188,6 +2188,8 @@
   "teamBattleOfNbTeams": "{count, plural, other{{count}팀의 대국}}",
   "teamNbLeadersPerTeam": "{count, plural, other{팀 당 리더 {count}명}}",
   "tfaTwoFactorAuth": "2단계 인증",
+  "tfaAuthenticationCode": "인증 코드",
+  "tfaOpenTwoFactorApp": "2단계 인증 앱을 열어 인증 코드를 확인하세요.",
   "timeagoJustNow": "방금",
   "timeagoRightNow": "지금",
   "timeagoCompleted": "종료됨",

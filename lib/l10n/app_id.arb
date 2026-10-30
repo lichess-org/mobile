@@ -1694,6 +1694,8 @@
   "teamTeam": "Tim",
   "teamIncorrectEntryCode": "Kode masuk salah.",
   "tfaTwoFactorAuth": "Autentikasi dua-langkah",
+  "tfaAuthenticationCode": "Kode otentikasi",
+  "tfaOpenTwoFactorApp": "Buka aplikasi otentikasi dua faktor di perangkat anda untuk melihat kode otentikasi dan verifikasi identitas anda.",
   "timeagoJustNow": "baru saja",
   "timeagoRightNow": "sekarang",
   "timeagoCompleted": "telah selesai",

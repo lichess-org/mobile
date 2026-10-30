@@ -7614,6 +7614,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Divfaktoru autentifikācija';
 
   @override
+  String get tfaAuthenticationCode => 'Autentifikācijas kods';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Atveriet divu faktoru autentifikācijas aplikāciju savā ierīcē, lai skatītu autentifikācijas kodu un apliecinātu savu identitāti.';
+
+  @override
   String get timeagoJustNow => 'tikko';
 
   @override

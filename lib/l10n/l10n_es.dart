@@ -7543,6 +7543,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Autenticación en dos pasos';
 
   @override
+  String get tfaAuthenticationCode => 'Código de autenticación';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Abre la aplicación de autenticación en dos pasos en tu dispositivo para ver el código de autenticación y verificar tu identidad.';
+
+  @override
   String get timeagoJustNow => 'hace un momento';
 
   @override

@@ -7466,6 +7466,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tfaTwoFactorAuth => '双重认证';
 
   @override
+  String get tfaAuthenticationCode => '身份验证码';
+
+  @override
+  String get tfaOpenTwoFactorApp => '请在您的设备上打开双重认证应用，查看您的身份验证码以验证身份。';
+
+  @override
   String get timeagoJustNow => '即将开始';
 
   @override
@@ -14249,6 +14255,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get tfaTwoFactorAuth => '兩步驟驗證';
+
+  @override
+  String get tfaAuthenticationCode => '驗證碼';
+
+  @override
+  String get tfaOpenTwoFactorApp => '開啟您裝置上的雙重要素驗證應用程式，即可檢視驗證碼並驗證您的帳號';
 
   @override
   String get timeagoJustNow => '剛剛';

@@ -2129,6 +2129,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Μάχη {count} ομάδας} other{Μάχη {count} ομάδων}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Ένας αρχηγός ανά ομάδα} other{{count} αρχηγοί ανά ομάδα}}",
   "tfaTwoFactorAuth": "Έλεγχος ταυτότητας δύο παραγόντων",
+  "tfaAuthenticationCode": "Κωδικός ταυτοποίησης",
+  "tfaOpenTwoFactorApp": "Ανοίξτε την εφαρμογή ελέγχου ταυτότητας δύο παραγόντων στη συσκευή σας για να δείτε τον κωδικό ταυτοποίησης και να επαληθεύσετε την ταυτότητά σας.",
   "timeagoJustNow": "μόλις τώρα",
   "timeagoRightNow": "αυτή τη στιγμή",
   "timeagoCompleted": "ολοκληρώθηκε",
