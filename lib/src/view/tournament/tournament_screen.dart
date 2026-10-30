@@ -604,7 +604,7 @@ class const _ExpandableDescription({
               Semantics(
                 link: true,
                 child: GestureDetector(
-                  onTap: () => launchUrl(Uri.parse('https://$kLichessHost/page/lichess-prizes')),
+                  onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
                   child: const Text('Prizes', style: Styles.linkStyle),
                 ),
               ),
