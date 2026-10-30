@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_scree
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -181,6 +182,12 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
             puzzleId: id != null ? PuzzleId(id) : null,
             openCasual: id != null,
           ),
+        ];
+      case 'practice' when appLinkUri.pathSegments.length == 1:
+        return [PracticeScreen.buildRoute()];
+      case 'analysis' when appLinkUri.pathSegments.length == 1:
+        return [
+          AnalysisScreen.buildRoute(const AnalysisOptions.standalone(variant: Variant.standard)),
         ];
       case 'editor':
         final orientation = appLinkUri.queryParameters['color'] == 'black'
