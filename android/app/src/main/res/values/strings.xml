@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->
 <resources>
-    <string name="widget_broadcast_title">Lichess Broadcasts</string>
-    <string name="widget_broadcast_description">Shows ongoing and upcoming chess broadcasts.</string>
-    <string name="widget_live">LIVE</string>
-    <string name="widget_no_broadcasts">No active broadcasts</string>
+    <string name="daily_puzzle_title">Daily Puzzle</string>
+    <string name="broadcast_title">Broadcasts</string>
+    <string name="broadcast_description">Shows ongoing and upcoming chess broadcasts.</string>
+    <string name="live">LIVE</string>
+    <string name="no_broadcasts">No active broadcasts</string>
+    <string name="daily_puzzle_description">Shows daily puzzle</string>
+    <string name="no_dailyPuzzle">No New Puzzles</string>
+    <string name="daily_puzzle_error">Couldn\'t load puzzle</string>
 </resources>

@@ -164,7 +164,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
 
         if (item.isLive) {
             itemViews.setViewVisibility(R.id.item_live_indicator, View.VISIBLE)
-            itemViews.setTextViewText(R.id.item_status, "${context.getString(R.string.widget_live)} · ${item.roundName}")
+            itemViews.setTextViewText(R.id.item_status, "${context.getString(R.string.live)} · ${item.roundName}")
             itemViews.setTextColor(R.id.item_status, context.getColor(R.color.widget_live_indicator))
         } else {
             itemViews.setViewVisibility(R.id.item_live_indicator, View.GONE)
