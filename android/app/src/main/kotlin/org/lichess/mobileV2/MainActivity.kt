@@ -46,10 +46,14 @@ class MainActivity: FlutterActivity() {
     }
   }
 
-  // Reads the text of a shared/opened PGN file. The manifest only routes the
-  // chess-pgn mime types and *.pgn content URIs here, so we can read the stream
-  // directly without inspecting the mime type.
+  // Reads the text of a shared/opened PGN file or shared plain text.
   private fun readPgnFromIntent(intent: Intent?): String? {
+    if (intent?.action == Intent.ACTION_SEND) {
+      val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+      if (!text.isNullOrBlank()) {
+        return text
+      }
+    }
     val uri: Uri? = when (intent?.action) {
       Intent.ACTION_VIEW -> intent.data
       Intent.ACTION_SEND -> {
