@@ -4,7 +4,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -12,13 +14,17 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../model/game/game_socket_example_data.dart';
+import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -816,6 +822,105 @@ void main() {
         expect(find.byType(TournamentScreen), findsWidgets);
         // The tournament socket must be reconnected.
         expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+      },
+    );
+
+    testWidgets(
+      'Keeps the game socket when a pairing arrives while the chat is open',
+      variant: kPlatformVariant,
+      (WidgetTester tester) async {
+        const tournamentId = TournamentId('82QbxlJb');
+        const gameId = GameFullId('1234567890ab');
+
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(10),
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          }
+          if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
+              request.url.queryParameters['partial'] == 'true') {
+            return mockResponse(
+              makeReloadedTournamentJson(
+                me: (gameId: gameId, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(10),
+                page: 1,
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        // In the app, visibility changes are delivered by one 500ms timer shared by all the
+        // detectors, so they can land at any moment of a transition: each `notifyNow` below stands
+        // for that timer firing.
+        VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 500);
+
+        // The root navigator, where services open a tournament.
+        final navigator = tester.state<NavigatorState>(find.byType(Navigator).first);
+        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+
+        final socketPool = ProviderScope.containerOf(tester.element(find.byType(TournamentScreen)))
+            .read(socketPoolProvider);
+
+        navigator.push(
+          ChatScreen.buildRoute(
+            options: const TournamentChatOptions(id: tournamentId, writeable: true),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+        expect(find.byType(ChatScreen), findsOneWidget);
+
+        // The pairing pops the chat and pushes the game screen.
+        sendServerSocketMessages(TournamentController.socketUri(tournamentId), ['{"t": "reload"}']);
+        for (var i = 0; i < 12; i++) {
+          await tester.pump(const Duration(milliseconds: 8));
+        }
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Visibility is delivered ~100ms into the game screen transition.
+        VisibilityDetectorController.instance.notifyNow();
+        await tester.pump(const Duration(seconds: 1));
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Back from the game, the tournament socket is needed for the next pairing.
+        VisibilityDetectorController.instance.notifyNow();
+        navigator.pop();
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+        await tester.pump();
+        await tester.pump(kFakeWebSocketConnectionLag);
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+
+        // No visibility timer can be left pending at the end of the test.
+        VisibilityDetectorController.instance.notifyNow();
+        VisibilityDetectorController.instance.updateInterval = Duration.zero;
       },
     );
   });
