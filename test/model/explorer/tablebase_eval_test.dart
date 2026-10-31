@@ -84,17 +84,6 @@ void main() {
         );
       });
 
-      test('DTM=null falls back to ±10', () {
-        expect(
-          tablebaseEntryToCloudEval(_makeEntry(category: TablebaseCategory.win), whiteToMove)!.mate,
-          10,
-        );
-        expect(
-          tablebaseEntryToCloudEval(_makeEntry(category: TablebaseCategory.win), blackToMove)!.mate,
-          -10,
-        );
-      });
-
       test('syzygyWin behaves the same as win', () {
         final entry = _makeEntry(category: TablebaseCategory.syzygyWin, dtm: 7);
         expect(tablebaseEntryToCloudEval(entry, whiteToMove)!.mate, 4); // (7+1)~/2 = 4
@@ -120,28 +109,24 @@ void main() {
         expect(eval.cp, isNull);
       });
 
-      test('DTM=null falls back to ∓10', () {
-        expect(
-          tablebaseEntryToCloudEval(
-            _makeEntry(category: TablebaseCategory.loss),
-            whiteToMove,
-          )!.mate,
-          -10,
-        );
-        expect(
-          tablebaseEntryToCloudEval(
-            _makeEntry(category: TablebaseCategory.loss),
-            blackToMove,
-          )!.mate,
-          10,
-        );
-      });
-
       test('syzygyLoss behaves the same as loss', () {
         final entry = _makeEntry(category: TablebaseCategory.syzygyLoss, dtm: 6);
         expect(tablebaseEntryToCloudEval(entry, whiteToMove)!.mate, -3); // (6+1)~/2 = 3
         expect(tablebaseEntryToCloudEval(entry, blackToMove)!.mate, 3);
       });
+    });
+
+    test('a win or loss without DTM leaves the mate distance to the engine', () {
+      for (final category in const [
+        TablebaseCategory.win,
+        TablebaseCategory.syzygyWin,
+        TablebaseCategory.loss,
+        TablebaseCategory.syzygyLoss,
+      ]) {
+        final entry = _makeEntry(category: category);
+        expect(tablebaseEntryToCloudEval(entry, whiteToMove), isNull, reason: category.name);
+        expect(tablebaseEntryToCloudEval(entry, blackToMove), isNull, reason: category.name);
+      }
     });
 
     group('draw / cursedWin / blessedLoss → cp=0', () {
