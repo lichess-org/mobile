@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/pgn_text_guard.dart';
 import 'package:lichess_mobile/src/view/more/import_pgn_screen.dart';
 import 'package:logging/logging.dart';
 
@@ -47,6 +48,11 @@ class SharedPgnService(final Ref ref) {
   }
 
   void _handlePgn(String pgnText) {
+    if (!isPgnText(pgnText)) {
+      _logger.fine('Ignored shared text: payload is not a valid PGN');
+      return;
+    }
+
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
     ImportPgnScreen.handlePgnText(context, pgnText);
