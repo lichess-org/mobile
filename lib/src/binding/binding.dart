@@ -4,9 +4,8 @@
 /// @docImport 'package:lichess_mobile/src/binding/binding_play.dart';
 library;
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lichess_mobile/src/binding/crashlytics.dart';
+import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
@@ -74,20 +73,8 @@ abstract class LichessBinding() {
   /// This should be called only once before the app starts.
   Future<void> initializeFirebase();
 
-  /// Wraps [FirebaseMessaging.instance].
-  FirebaseMessaging get firebaseMessaging;
-
   /// Wraps [FirebaseCrashlytics.instance].
   Crashlytics get firebaseCrashlytics;
-
-  /// Wraps [FirebaseMessaging.onMessage].
-  Stream<RemoteMessage> get firebaseMessagingOnMessage;
-
-  /// Wraps [FirebaseMessaging.onMessageOpenedApp].
-  Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp;
-
-  /// Wraps [FirebaseMessaging.onBackgroundMessage].
-  void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
 }
 
 /// Base class for [LichessBinding] implementations, providing shared logic for the Play Store and
@@ -132,19 +119,4 @@ abstract class LichessBindingBase() extends LichessBinding {
     final appStarts = sharedPreferences.getInt(_kNumAppStartsKey) ?? 0;
     sharedPreferences.setInt(_kNumAppStartsKey, appStarts + 1);
   }
-
-  @override
-  FirebaseMessaging get firebaseMessaging => FirebaseMessaging.instance;
-
-  @override
-  void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler) {
-    FirebaseMessaging.onBackgroundMessage(handler);
-  }
-
-  @override
-  Stream<RemoteMessage> get firebaseMessagingOnMessage => FirebaseMessaging.onMessage;
-
-  @override
-  Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
-      FirebaseMessaging.onMessageOpenedApp;
 }
