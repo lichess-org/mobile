@@ -352,7 +352,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       steps: positionTree.branchesOn(curState.currentPath).map(Step.fromNode).toIList(),
     );
 
-    if (!work.threatMode) {
+    if (!work.threatMode && _evaluator.currentWork?.threatMode != true) {
       // If we have an already good enough eval in cache, skip the evaluation
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:

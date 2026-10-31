@@ -5,6 +5,20 @@ import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 Position position(String fen) => Chess.fromSetup(Setup.parseFen(fen));
 
 void main() {
+  group('threatModePosition', () {
+    test('clears en passant after a white double pawn push', () {
+      final afterE4 = Chess.initial.play(const NormalMove(from: .e2, to: .e4));
+      expect(afterE4.epSquare, Square.e3);
+
+      final threat = threatModePosition(afterE4);
+
+      expect(threat.turn, Side.white);
+      expect(threat.fen, 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2');
+      expect(threat.epSquare, isNull);
+      expect(threat.isLegal(const NormalMove(from: .d2, to: .e3)), isFalse);
+    });
+  });
+
   group('hasNonStandardMaterial', () {
     test('the initial position is standard material', () {
       expect(hasNonStandardMaterial(Chess.initial), isFalse);
