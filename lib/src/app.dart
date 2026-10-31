@@ -280,7 +280,12 @@ class _AppState() extends ConsumerState<Application> {
             // routes on iOS 26.
             child: GlassNavigationShell(
               enabled: usePinnedNavBar(context),
-              child: IconTheme(data: iconTheme, child: child!),
+              // The root navigator doesn't clip its pages, unlike the tab navigators: without this,
+              // a page moved by a transition is reported as fully visible to its `FocusDetector`.
+              child: IconTheme(
+                data: iconTheme,
+                child: ClipRect(child: child),
+              ),
             ),
           ),
         );
