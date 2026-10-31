@@ -93,6 +93,9 @@ class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleStreakScreen');
   late final ChessboardController _controller;
 
+  /// Whether completing a puzzle automatically moves on to the next one.
+  bool _autoNext = true;
+
   @override
   void initState() {
     super.initState();
@@ -144,6 +147,17 @@ class _BodyState() extends ConsumerState<_Body> {
     _controller.updatePosition(_buildGameData());
   }
 
+  void _onAutoNextChanged(bool value, PuzzleState puzzleState) {
+    setState(() => _autoNext = value);
+
+    // The puzzle may already be complete (for instance when the one-time skip
+    // solved it). Turning the switch on then continues the streak now, since the
+    // auto-advance listener will not run again for this result.
+    if (value && puzzleState.result == PuzzleResult.win && !widget.streak.finished) {
+      ref.read(puzzleStreakControllerProvider.notifier).next();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardPreferences = ref.watch(boardPreferencesProvider);
@@ -175,7 +189,9 @@ class _BodyState() extends ConsumerState<_Body> {
       if (previous?.result != PuzzleResult.lose && next.result == PuzzleResult.lose) {
         ref.read(puzzleStreakControllerProvider.notifier).gameOver();
       } else if (previous?.result != PuzzleResult.win && next.result == PuzzleResult.win) {
-        ref.read(puzzleStreakControllerProvider.notifier).next();
+        if (_autoNext) {
+          ref.read(puzzleStreakControllerProvider.notifier).next();
+        }
       }
     });
 
@@ -261,9 +277,22 @@ class _BodyState() extends ConsumerState<_Body> {
                                             onStreak: true,
                                           ),
                                         ),
-                                        Text(
-                                          context.l10n.puzzleRatingX(
-                                            puzzleState.puzzle.puzzle.rating.toString(),
+                                        ConstrainedBox(
+                                          constraints: const BoxConstraints(maxWidth: 200),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                context.l10n.puzzleRatingX(
+                                                  puzzleState.puzzle.puzzle.rating.toString(),
+                                                ),
+                                              ),
+                                              _AutoNextSwitch(
+                                                value: _autoNext,
+                                                onChanged: (value) =>
+                                                    _onAutoNextChanged(value, puzzleState),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                         const SizedBox(width: 16.0),
@@ -411,10 +440,20 @@ class _BodyState() extends ConsumerState<_Body> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      context.l10n.puzzleRatingX(
-                                        puzzleState.puzzle.puzzle.rating.toString(),
-                                      ),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          context.l10n.puzzleRatingX(
+                                            puzzleState.puzzle.puzzle.rating.toString(),
+                                          ),
+                                        ),
+                                        _AutoNextSwitch(
+                                          value: _autoNext,
+                                          onChanged: (value) =>
+                                              _onAutoNextChanged(value, puzzleState),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -445,6 +484,27 @@ class _BodyState() extends ConsumerState<_Body> {
             child: content,
           )
         : content;
+  }
+}
+
+class const _AutoNextSwitch({
+  required final bool value,
+  required final ValueChanged<bool> onChanged,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Switch(value: value, onChanged: onChanged),
+        const Text(
+          'Jump to Next Puzzle Immedietly!',
+          maxLines: 2,
+          style: TextStyle(fontSize: 12),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
   }
 }
 
