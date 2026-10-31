@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -101,7 +102,8 @@ class const _ChaptersSheet({
               if (chapter.id != current.id) {
                 // Replaced rather than pushed, so that going back always leads to the practice
                 // menu.
-                Navigator.of(context).pushReplacement(PracticeChapterScreen.buildRoute(chapter));
+                Navigator.of(context)
+                    .pushReplacementHidingTabBar(PracticeChapterScreen.buildRoute(chapter));
               }
             },
           ),
@@ -115,7 +117,7 @@ class const _ChaptersSheet({
 void goToNextPracticeChapter(BuildContext context, WidgetRef ref, PracticeChapter chapter) {
   final next = ref.read(practiceStructureProvider).value?.nextChapter(chapter.id);
   if (next != null) {
-    Navigator.of(context).pushReplacement(PracticeChapterScreen.buildRoute(next));
+    Navigator.of(context).pushReplacementHidingTabBar(PracticeChapterScreen.buildRoute(next));
   } else {
     Navigator.of(context).pop();
   }

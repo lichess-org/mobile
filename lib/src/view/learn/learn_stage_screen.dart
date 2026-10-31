@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -526,7 +527,8 @@ class const _StageComplete({required final LearnStage stage}) extends ConsumerWi
         if (next != null)
           FilledButton.icon(
             onPressed: () =>
-                Navigator.of(context).pushReplacement(LearnStageScreen.buildRoute(next)),
+                Navigator.of(context)
+                    .pushReplacementHidingTabBar(LearnStageScreen.buildRoute(next)),
             icon: const Icon(Icons.chevron_right),
             iconAlignment: IconAlignment.end,
             label: Text(l10n.learnNextX(next.title(l10n))),
