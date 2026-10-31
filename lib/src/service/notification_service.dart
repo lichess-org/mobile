@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -353,7 +353,7 @@ class NotificationService(final Ref _ref) {
   /// Returns true if the device was successfully registered, false otherwise.
   Future<bool> registerDevice() async {
     // For apple platforms, make sure the APNS token is available before making any FCM plugin API calls
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Platform.isIOS) {
       final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
       if (apnsToken == null) {
         _logger.warning('APNS token is null');

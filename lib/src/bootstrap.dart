@@ -13,7 +13,10 @@ import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-Future<void> bootstrapApp(LichessBindingBase Function() initializeBinding) async {
+Future<void> bootstrapApp(
+  LichessBindingBase Function() initializeBinding, {
+  Widget app = const AppInitializationScreen(),
+}) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = initializeBinding();
 
@@ -46,11 +49,7 @@ Future<void> bootstrapApp(LichessBindingBase Function() initializeBinding) async
     LiquidGlassWidgets.wrap(
       theme: const .ios27(),
       brightnessResolver: Theme.maybeBrightnessOf,
-      child: ProviderScope(
-        observers: [ProviderLogger()],
-        retry: lichessProviderRetry,
-        child: const AppInitializationScreen(),
-      ),
+      child: ProviderScope(observers: [ProviderLogger()], retry: lichessProviderRetry, child: app),
     ),
   );
 }

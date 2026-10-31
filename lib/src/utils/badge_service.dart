@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 
@@ -10,7 +10,7 @@ class const BadgeService._(final Logger _log) {
   static final instance = BadgeService._(Logger('BadgeService'));
 
   Future<void> setBadge(int value) async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
+    if (!Platform.isIOS) {
       return;
     }
 
