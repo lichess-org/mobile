@@ -11,8 +11,8 @@ import 'package:material_ui/material_ui.dart';
 /// The board of a puzzle screen, driven by the [PuzzleController] of [initialPuzzleContext].
 ///
 /// Owns the [ChessboardController] and keeps it in sync with the puzzle state and the board
-/// preferences without rebuilding the board. Give it a [GlobalKey] when the layout can move it
-/// around, so that the board state survives.
+/// preferences without rebuilding the board, and plays a premove once the opponent has replied.
+/// Give it a [GlobalKey] when the layout can move it around, so that the board state survives.
 class const PuzzleBoard({
   required final PuzzleContext initialPuzzleContext,
   required final double size,
@@ -42,7 +42,7 @@ class _PuzzleBoardState() extends ConsumerState<PuzzleBoard> {
     // The streak feeds new puzzles by swapping the puzzle context (and thus the controller
     // provider), so push the new puzzle onto the board.
     if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
-      _applyBoardUpdate();
+      _applyBoardUpdate(resetPremove: true);
     }
   }
 
@@ -79,8 +79,20 @@ class _PuzzleBoardState() extends ConsumerState<PuzzleBoard> {
   }
 
   /// Pushes the latest puzzle position to the board controller without rebuilding it.
-  void _applyBoardUpdate() {
-    _controller.updatePosition(_buildGameData());
+  void _applyBoardUpdate({bool resetPremove = false}) {
+    _controller.updatePosition(_buildGameData(), resetPremove: resetPremove);
+  }
+
+  /// Plays the queued premove, if any, once the opponent has replied and it is the user's turn.
+  void _tryExecutePremove() {
+    final ctrlProvider = puzzleControllerProvider(widget.initialPuzzleContext);
+    final state = ref.read(ctrlProvider);
+    if (state.mode != PuzzleMode.play || state.currentPosition.turn != state.pov) return;
+    tryExecutePremove(
+      _controller,
+      state.currentPosition,
+      (move) => ref.read(ctrlProvider.notifier).onUserMove(move),
+    );
   }
 
   @override
@@ -90,9 +102,22 @@ class _PuzzleBoardState() extends ConsumerState<PuzzleBoard> {
     // Drive the board on position/interactivity changes without rebuilding it.
     ref.listen(
       ctrlProvider.select(
-        (s) => (fen: s.currentPosition.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+        (s) => (
+          puzzleId: s.puzzle.puzzle.id,
+          fen: s.currentPosition.fen,
+          lastMoveUci: s.lastMove?.uci,
+          side: _playerSide(s),
+          ply: s.currentPosition.ply,
+        ),
       ),
-      (_, _) => _applyBoardUpdate(),
+      (previous, next) {
+        // A forward ply in the same puzzle is a new move (ours or the reply): keep the premove and
+        // try it. Anything else (takeback, solution, history, next puzzle) clears it.
+        final isForwardMove =
+            previous != null && previous.puzzleId == next.puzzleId && next.ply > previous.ply;
+        _applyBoardUpdate(resetPremove: !isForwardMove);
+        if (isForwardMove) _tryExecutePremove();
+      },
     );
     ref.listen(
       boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),

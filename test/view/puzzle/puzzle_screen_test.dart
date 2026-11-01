@@ -473,6 +473,142 @@ void main() {
       expect(find.text('Your turn'), findsOneWidget);
     });
 
+    testWidgets('plays a premove once the opponent has replied', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
+            return mockBatchStorage;
+          }),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load and the first move to be played
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      const orientation = Side.black;
+
+      await playMove(tester, 'g4', 'h4', orientation: orientation);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
+
+      // premove the recapture while waiting for the opponent's reply
+      await playMove(tester, 'b4', 'h4', orientation: orientation);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.b4, to: Square.h4)), isTrue);
+
+      // the opponent replies Qxh4 and the premove is played right away
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+
+      expect(boardHasPremove(tester, const NormalMove(from: Square.b4, to: Square.h4)), isFalse);
+      expect(boardHasPiece(tester, Square.h4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.b4, Piece.blackRook), isFalse);
+      expect(find.text('Success!'), findsOneWidget);
+
+      // called once to save solution and once after fetching a new puzzle
+      verify(saveDBReq).called(2);
+    });
+
+    testWidgets('clears the premove when a wrong move is taken back', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/puzzle/batch/mix') {
+          return mockResponse(batchOf1, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+          .thenAnswer((_) async => puzzle2);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: PuzzleScreen(
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+          puzzleId: puzzle2.puzzle.id,
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(mockClient, ref);
+          }),
+          puzzleBatchStorageProvider: puzzleBatchStorageProvider.overrideWith((ref) {
+            return mockBatchStorage;
+          }),
+          puzzleStorageProvider: puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+        },
+      );
+
+      Future<void> saveDBReq() => mockBatchStorage.save(
+        userId: null,
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        data: any(named: 'data'),
+      );
+      when(saveDBReq).thenAnswer((_) async {});
+      when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
+          .thenAnswer((_) async => batch);
+      when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle'))).thenAnswer((_) async {});
+
+      await tester.pumpWidget(app);
+
+      // wait for the puzzle to load and the first move to be played
+      await tester.pump(const Duration(milliseconds: 200));
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      const orientation = Side.black;
+
+      await playMove(tester, 'g4', 'f4', orientation: orientation);
+      expect(find.text("That's not the move!"), findsOneWidget);
+
+      // premove before the wrong move is taken back
+      await playMove(tester, 'f4', 'f1', orientation: orientation);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.f4, to: Square.f1)), isTrue);
+
+      // the wrong move is taken back: the position is not a continuation, so the premove is
+      // dropped instead of being played
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+
+      expect(boardHasPiece(tester, Square.g4, Piece.blackRook), isTrue);
+      expect(boardHasPiece(tester, Square.f1, Piece.blackRook), isFalse);
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).controller.premove, isNull);
+
+      // called once to save solution and once after fetching a new puzzle
+      verify(saveDBReq).called(2);
+    });
+
     for (final showRatings in ShowRatings.values) {
       testWidgets('fails a puzzle, (showRatings: $showRatings)', variant: kPlatformVariant, (
         tester,

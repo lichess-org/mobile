@@ -149,6 +149,7 @@ class _BodyState() extends ConsumerState<_Body> {
                         .copyWith(
                           borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                          enablePremoves: boardPreferences.premoves,
                           drawShape: DrawShapeOptions(
                             enable: boardPreferences.enableShapeDrawings,
                             newShapeColor: boardPreferences.shapeColor.color,
