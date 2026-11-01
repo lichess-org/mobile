@@ -53,6 +53,7 @@
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Rächts</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Vegrösserig vu de zogene Figur</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Vorher</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Bisherigi Lösigsversüech nomal aluege.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wottsch de Lauf beände?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nüt zum Zeige, bitte d\'Filter ändere</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.</string>
@@ -95,6 +96,7 @@
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Drohige nümme zeige</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Syschtem-Farbe</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Farbschema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Wird no bekannt g\'macht</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Komplett</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Gang uf mini Site</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variante %s wird in dere Version nöd underschtützt.</string>

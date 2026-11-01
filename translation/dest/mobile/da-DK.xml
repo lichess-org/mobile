@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Tilføj til studie</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle partier</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Tillad omtræk og tips</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">App-logs</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled-sort</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Er du sikker?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Er du sikker på du vil downloade NNUE filen (%s)?</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Tilpas</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Du kan tilføje flere widgets til startskærmen eller fjerne dem, du ikke har brug for!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Afvis</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Vil du slette alle logs?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Farezone</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Slet din konto</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompakt</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Godt træk, men der findes et bedre</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hej</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Hjem</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Netværkslogs</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Hvis en konto svarer til %1$s, er der sendt en %2$s-kode til den. Tjek din indbakke, og indtast koden nedenfor.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Denne kode er ugyldig eller er udløbet.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Størrelse på lokal database</string>
