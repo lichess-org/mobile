@@ -36,15 +36,15 @@ flutter run -d all
 ```
 
 ### Previewing the platform designs
-Run 
+
+To check the iOS and Android designs on any device, run the app in device preview:
+
 ```bash
 flutter run -t lib/device_preview_main.dart
 ```
-to test the changes for different designes, easiest to run it on a big Table to easily test different deivces.
 
-In Flutter DevTools' **device_preview** tab, use the device picker to switch designs, the normal iOS device for liquid glass, **Lichess iOS <26 devices for the classical iOS design and any android device for the android design. 
-
-To open the devtools press `v` in the terminal where flutter is running.
+See [Device preview](./docs/setting_dev_env.md#device-preview) for how to use it and its
+limitations.
 
 ## Running tests
 
