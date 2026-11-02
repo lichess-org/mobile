@@ -243,7 +243,7 @@ void main() {
         expect(
           result.captured[0],
           isA<NotificationDetails>()
-              .having((d) => d.android?.importance, 'importance', Importance.high)
+              .having((d) => d.android?.importance, 'importance', Importance.defaultImportance)
               .having((d) => d.android?.priority, 'priority', Priority.defaultPriority),
         );
       });
@@ -322,7 +322,7 @@ void main() {
 
       expect(responses, hasLength(1));
       final (response, notification) = responses.single;
-      expect(notification, isA<ChallengeCreatedNotification>());
+      expect(notification, isA<CorresChallengeCreatedNotification>());
       expect(response.id, notification.id);
       expect(response.payload, jsonEncode(notification.payload));
     });

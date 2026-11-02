@@ -131,6 +131,19 @@
                 <data android:pathPattern="/game/........" />
                 <data android:pathPattern="/game/......../black" />
                 <data android:pathPattern="/game/......../white" />
+
+                <!--
+                  Legacy game or challenge link: any 8-char path (e.g. /abcd1234).
+                  pathPattern cannot exclude known static 8-char routes (e.g. /analysis,
+                  /settings); the app resolver handles false positives by falling back to
+                  launchUrl. On Android 15+, exclusions are enforced server-side via
+                  dynamic_app_link_components in assetlinks.json.
+                -->
+                <data android:pathPattern="/........" />
+
+                <!-- Game with color POV -->
+                <data android:pathPattern="/......../black" />
+                <data android:pathPattern="/......../white" />
             </intent-filter>
             <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
         </activity>
@@ -152,6 +165,7 @@
 
         <receiver android:exported="false"
             android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
+
         <receiver android:name=".widgets.BroadcastWidgetProvider"
             android:label="@string/widget_broadcast_title"
             android:exported="true"

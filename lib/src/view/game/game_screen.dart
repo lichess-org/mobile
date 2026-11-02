@@ -343,7 +343,7 @@ class _GameScreenState() extends ConsumerState<GameScreen> {
           ),
           ExistingGameSource() => StandaloneGameLoadingContent(
             loadingParam: widget.loadingPosition,
-            userActionsBar: const BottomBar.empty(),
+            userActionsBar: const BottomBar.empty(cupertinoGlass: true),
           ),
         };
 

@@ -41,8 +41,8 @@ class const ConnectedIcon({
 
 /// App bar title for the user and profile screens.
 ///
-/// Shows the user's avatar and name, with a subtitle displaying the online
-/// status, or the time they were last seen active if offline.
+/// Shows the user's avatar and name, with a subtitle displaying the online status, or the time they
+/// were last seen active if offline.
 class const UserAppBarTitleWidget({
   required final LightUser user,
   required final bool isOnline,
@@ -59,7 +59,7 @@ class const UserAppBarTitleWidget({
     return Row(
       mainAxisSize: .min,
       children: [
-        UserAvatar(user, radius: 16),
+        UserAvatar(user, radius: 20),
         const SizedBox(width: 8),
         Flexible(
           child: Column(

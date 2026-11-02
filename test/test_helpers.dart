@@ -39,28 +39,21 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
-/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS,
-/// over a bottom edge blur of the content that starts above it, and is below the tab view
-/// elsewhere.
+/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS.
 ///
 /// Returns the bottom padding that the tab views must apply: the bar height on iOS, else 0.
 double expectBottomBarOverTabView(WidgetTester tester) {
   final barRect = tester.getRect(find.byType(BottomBar));
   final tabViewBottom = tester.getBottomLeft(find.byType(TabBarView)).dy;
-  final bottomEdgeBlur = find.byWidgetPredicate(
-    (widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom,
+  expect(
+    find.byWidgetPredicate((widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom),
+    findsNothing,
   );
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
     expect(tabViewBottom, greaterThan(barRect.top));
-    // The blur starts above the bar, to be strong at the top of its buttons.
-    expect(
-      tester.widget<GlassScrollEdgeEffect>(bottomEdgeBlur).bottomFadeHeight,
-      greaterThan(barRect.height),
-    );
     return barRect.height;
   } else {
     expect(tabViewBottom, barRect.top);
-    expect(bottomEdgeBlur, findsNothing);
     return 0.0;
   }
 }

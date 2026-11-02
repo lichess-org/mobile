@@ -285,7 +285,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobilePreviousPage => 'Предишна';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Искате ли да прекратите този опит?';
@@ -460,6 +460,9 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Тема';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';

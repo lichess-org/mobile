@@ -74,7 +74,7 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
         titleSpacing: 0,
         title: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(widget.user, radius: 16),
+          leading: UserAvatar(widget.user, radius: 20),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () {
@@ -398,16 +398,16 @@ class const _MessageContent({
       ),
     );
 
-    final linkSpan = buildTextSpan(
-      linkify(text, linkifiers: AppLinksService.kLichessLinkifiers),
-      style: TextStyle(color: textColor),
-      linkStyle: Styles.linkStyle,
-      onOpen: onLinkOpen,
-    );
-
     return Stack(
       children: [
-        Text.rich(TextSpan(children: [linkSpan, spacer])),
+        RichLinkText(
+          text: text,
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          style: TextStyle(color: textColor),
+          linkStyle: Styles.linkStyle,
+          onOpen: onLinkOpen,
+          trailing: spacer,
+        ),
         Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
@@ -465,35 +465,27 @@ class _MessageInputState() extends ConsumerState<_MessageInput> {
       },
     );
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: messageInputVerticalPadding(context, fallback: 6),
+    return MessageInputBar(
+      fallbackVerticalPadding: 6.0,
+      field: TextField(
+        decoration: messageInputDecoration(
+          context,
+          suffixIcon: sendButton,
+          hintText: isBlocked
+              ? 'This conversation is blocked.'
+              : isBot
+              ? 'Bot accounts cannot send nor receive messages.'
+              : !canPost
+              ? "${widget.user.name} doesn't accept new messages."
+              : null,
         ),
-        child: MessageInputField(
-          field: TextField(
-            decoration: messageInputDecoration(
-              context,
-              suffixIcon: sendButton,
-              hintText: isBlocked
-                  ? 'This conversation is blocked.'
-                  : isBot
-                  ? 'Bot accounts cannot send nor receive messages.'
-                  : !canPost
-                  ? "${widget.user.name} doesn't accept new messages."
-                  : null,
-            ),
-            controller: controller,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            minLines: 1,
-            maxLines: 4,
-            enableSuggestions: true,
-            readOnly: readOnly,
-          ),
-        ),
+        controller: controller,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        minLines: 1,
+        maxLines: 4,
+        enableSuggestions: true,
+        readOnly: readOnly,
       ),
     );
   }

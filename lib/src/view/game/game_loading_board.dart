@@ -209,7 +209,7 @@ class _OpenChallengeLoadingContentState() extends ConsumerState<OpenChallengeLoa
 
   @override
   Widget build(BuildContext context) {
-    final challengeLink = 'https://$kLichessHost/${widget.id}';
+    final challengeLink = 'https://$kLichessHost/game/${widget.id}';
     final authUser = ref.watch(authControllerProvider);
 
     final qrColor = ref.watch(currentBrightnessProvider) == Brightness.dark

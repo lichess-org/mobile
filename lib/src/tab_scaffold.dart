@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -11,9 +9,9 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart'
-    show BlurredBarBackground, tintedGlassSettings, useLiquidGlass, usePinnedNavBar;
+    show BlurredBarBackground, ios27GlassSettings, useLiquidGlass, usePinnedNavBar;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassNavigationShell, GlassScaffold, GlassTab, GlassTabBar, LiquidGlassSettings;
+    show GlassNavigationShell, GlassScaffold, GlassTab, GlassTabBar;
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
@@ -84,10 +82,7 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
     final glass = useLiquidGlass(context);
     // The package default indicator color in light mode.
     final indicatorColor = isDark ? const Color(0x80000000) : const Color(0x1A000000);
-    final glassSettings = isDark
-        // Tinted like the other glass controls ([tintedGlassSettings]): a theme surface color.
-        ? _kTabBarGlassSettings.copyWith(glassColor: tintedGlassSettings(context).glassColor)
-        : _kTabBarGlassSettings;
+    final glassSettings = ios27GlassSettings(context);
     // The glass, icons, labels and selection indicator of the glass tab bar are faded through its
     // own parameters with the same [visibility], since glass cannot be faded by an ancestor
     // [Opacity] and its content is not a child of its glass.
@@ -503,22 +498,6 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
     return result;
   }
 }
-
-/// The package defaults of the tab bar (`kBottomBarGlassDefaults`, not exported), with less blur and
-/// no desaturation, closer to the iOS 26 tab bar, which keeps the colors of the content behind it.
-/// The tint is more opaque than the package default, so that busy content (boards) seen through the
-/// bar does not compete with the tab labels.
-const _kTabBarGlassSettings = LiquidGlassSettings(
-  thickness: 30,
-  blur: 1,
-  chromaticAberration: 0.3,
-  lightIntensity: 0.6,
-  refractiveIndex: 1.59,
-  saturation: 1.0,
-  ambientStrength: 1,
-  lightAngle: 0.75 * math.pi,
-  glassColor: Color(0xBFFFFFFF),
-);
 
 /// The default height of the Material 3 [NavigationBar], above the bottom safe area.
 const double _kNavigationBarDefaultHeight = 80.0;

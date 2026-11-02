@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -179,6 +180,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
     final content = [
       if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      const _BroadcastCalendarCard(),
       if (isTablet)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +220,7 @@ class const _BroadcastWidget(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: Styles.verticalBodyPadding,
+      padding: const EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -246,6 +248,27 @@ class const _BroadcastWidget(
           },
         ],
       ),
+    );
+  }
+}
+
+class const _BroadcastCalendarCard() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.calendar_month),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastBroadcastCalendar),
+          subtitle: const Text('Upcoming and past tournaments'),
+          onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
+        ),
+      ],
     );
   }
 }

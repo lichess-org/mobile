@@ -977,7 +977,7 @@ const userProfileResponse =
             "total": 1058750639,
             "tv": 3015709
         },
-        "playing": "https://lichess.org/TQu312e7/black",
+        "playing": "https://lichess.org/game/TQu312e7/black",
         "profile": {
             "realName": "John Doe"
         },

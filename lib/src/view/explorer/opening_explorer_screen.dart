@@ -90,9 +90,7 @@ class const _Body({required final AnalysisOptions options, required final Analys
     final floatingBar =
         Theme.of(context).platform == TargetPlatform.iOS &&
         MediaQuery.orientationOf(context) == Orientation.portrait;
-    final bottomBarInset = floatingBar
-        ? kBottomBarHeight + MediaQuery.paddingOf(context).bottom
-        : 0.0;
+    final bottomBarInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
     // The body extends behind the app bar, so that the list scrolls under it in portrait (the app bar
     // is tinted once it is scrolled).

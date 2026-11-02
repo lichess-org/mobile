@@ -285,7 +285,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePreviousPage => 'Vorher';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
@@ -460,6 +460,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Farbschema';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';

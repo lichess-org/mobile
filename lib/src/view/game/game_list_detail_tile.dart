@@ -74,7 +74,6 @@ class const GameListDetailTile({
               children: [
                 if (game.lastFen != null)
                   BoardThumbnail(
-                    dimInDarkMode: true,
                     size: boardSize,
                     fen: game.lastFen!,
                     orientation: mySide,

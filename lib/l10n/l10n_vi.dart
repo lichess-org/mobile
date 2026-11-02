@@ -285,7 +285,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trước đó';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
@@ -460,6 +460,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Giao diện';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Quá nhiều lần thử. Vui lòng thử lại sau.';

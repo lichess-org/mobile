@@ -2,44 +2,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Returns a localized string with a single placeholder replaced by a widget.
-///
-/// The [textStyle] parameter can be used to style the displayed text parts of the localized string.
-///
-/// For example:
-/// ```dart
-/// String translationFun(String name) {
-///   return 'Hello, ${name}!';
-/// }
-/// // returns a text widget containing MyFancyWidget('Magnus') in place of the placeholder
-/// l10nWithWidget(translationFun, MyFancyWidget('Magnus'));
-/// ```
-Text l10nWithWidget<T extends Widget>(
-  String Function(String) l10nFunction,
-  T widget, {
-  TextStyle? textStyle,
-}) {
-  final localizedStringWithPlaceholder = l10nFunction('%s');
-
-  final parts = localizedStringWithPlaceholder.split('%s');
-
-  // Localized string did not actually contain the placeholder
-  if (parts[0] == localizedStringWithPlaceholder) {
-    return Text(localizedStringWithPlaceholder);
-  }
-
-  return Text.rich(
-    TextSpan(
-      children: <InlineSpan>[
-        if (parts[0].isNotEmpty) TextSpan(text: parts[0], style: textStyle),
-        if (parts[0] != localizedStringWithPlaceholder)
-          WidgetSpan(child: widget, alignment: PlaceholderAlignment.middle, style: textStyle),
-        if (parts.length > 1 && parts[1].isNotEmpty) TextSpan(text: parts[1], style: textStyle),
-      ],
-    ),
-  );
-}
-
 DateFormat get _dateFormatterWithYear => DateFormat.yMMMMd();
 DateFormat get _dateFormatterWithYearShort => DateFormat.yMMMd();
 DateFormat get _monthFormatterWithYear => DateFormat.yMMMM();

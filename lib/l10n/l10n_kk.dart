@@ -285,7 +285,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobilePreviousPage => 'Алдыңғы';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Осы кезеңді аяқтайсыз ба?';
@@ -460,6 +460,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Кескін';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';

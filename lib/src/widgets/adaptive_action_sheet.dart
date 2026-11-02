@@ -118,6 +118,7 @@ Future<T?> showCupertinoActionSheet<T>({
               children: [
                 Flexible(
                   child: GlassModalCard(
+                    tinted: true,
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -165,6 +166,7 @@ Future<T?> showCupertinoActionSheet<T>({
                 ),
                 const SizedBox(height: 8),
                 GlassModalCard(
+                  tinted: true,
                   child: _GlassActionSheetButton(
                     isDefaultAction: true,
                     onPressed: () => Navigator.of(context).pop(),

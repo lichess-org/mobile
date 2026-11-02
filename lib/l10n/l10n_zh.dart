@@ -285,7 +285,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePreviousPage => '上一页';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts';
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';
@@ -460,6 +460,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileTheme => '主题';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => '尝试次数过多，请稍后重试。';

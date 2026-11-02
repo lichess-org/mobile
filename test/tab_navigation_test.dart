@@ -87,6 +87,44 @@ void main() {
       expect(observer.tabBarVisibility.value, 1.0);
     });
 
+    testWidgets('a plain replacement of a route hiding the tab bar keeps it hidden', (
+      tester,
+    ) async {
+      await pumpNavigator(tester);
+
+      navigatorKey.currentState!.pushHidingTabBar(_TestRoute(const Text('chapter 1')));
+      await tester.pumpAndSettle();
+
+      final nextRoute = _TestRoute(const Text('chapter 2'));
+      navigatorKey.currentState!.pushReplacement(nextRoute);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(observer.tabBarVisibility.value, 0.0);
+
+      await tester.pumpAndSettle();
+      expect(observer.tabBarVisibility.value, 0.0);
+      expect(observer.hasTabBarHidingRoute, isTrue);
+      expect(observer.routeHidesTabBar(nextRoute), isTrue);
+
+      navigatorKey.currentState!.pop();
+      await tester.pumpAndSettle();
+      expect(observer.tabBarVisibility.value, 1.0);
+    });
+
+    testWidgets('a plain replacement of a route shown with the tab bar leaves it visible', (
+      tester,
+    ) async {
+      await pumpNavigator(tester);
+
+      navigatorKey.currentState!.push(_TestRoute(const Text('stats 1')));
+      await tester.pumpAndSettle();
+
+      navigatorKey.currentState!.pushReplacement(_TestRoute(const Text('stats 2')));
+      await tester.pumpAndSettle();
+      expect(observer.tabBarVisibility.value, 1.0);
+      expect(observer.hasTabBarHidingRoute, isFalse);
+    });
+
     testWidgets('popping everything down to the root shows the tab bar', (tester) async {
       await pumpNavigator(tester);
 

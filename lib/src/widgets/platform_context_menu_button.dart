@@ -2,57 +2,17 @@ import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoIcons, CupertinoTheme;
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart'
-    show appBarButtonGlassSettings, useLiquidGlass;
+    show ios27GlassSettings, menuGlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassButton,
-        GlassDefaults,
         GlassMenu,
         GlassMenuController,
         GlassMenuDivider,
         GlassMenuItem,
         GlassMenuLabel,
-        LiquidGlassSettings,
         LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
-
-/// The package's default menu glass (`glass_menu_internal.dart`), with a more opaque white tint, a
-/// stronger blur and more saturation: like an iOS menu, the colors of the content show through.
-///
-/// The package default glass (white 12%) is too clear over light content: used by the glass menus
-/// and popovers in light mode ([menuGlassSettings]).
-const kLightMenuGlassSettings = LiquidGlassSettings(
-  blur: 20,
-  thickness: 10,
-  glassColor: Color(0x66FFFFFF),
-  lightAngle: GlassDefaults.lightAngle,
-  lightIntensity: 0.7,
-  ambientStrength: 0.4,
-  saturation: 1.8,
-  refractiveIndex: 0.7,
-  chromaticAberration: 0.0,
-);
-
-/// [kLightMenuGlassSettings] for dark mode: a fainter tint than the package default (white 8%
-/// instead of 12%), its saturation, and the same stronger blur (with the package default blur, the
-/// content shows through sharply).
-const kDarkMenuGlassSettings = LiquidGlassSettings(
-  blur: 20,
-  thickness: 10,
-  glassColor: Color(0x14FFFFFF),
-  lightAngle: GlassDefaults.lightAngle,
-  lightIntensity: 0.7,
-  ambientStrength: 0.4,
-  saturation: 1.2,
-  refractiveIndex: 0.7,
-  chromaticAberration: 0.0,
-);
-
-/// The glass of the liquid glass context menus and popovers.
-LiquidGlassSettings menuGlassSettings(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-    ? kLightMenuGlassSettings
-    : kDarkMenuGlassSettings;
 
 /// Width of the liquid glass context menus.
 const kGlassMenuWidth = 250.0;
@@ -71,9 +31,14 @@ const kGlassMenuWidth = 250.0;
 List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries) {
   final isCheckMenu = _actionsOf(entries).any((action) => action._hasCheckMark);
   // The package's title style (the theme text color at 90%), with the line height the menu sizes
-  // the items with (1.2, the app's is taller): the titles are measured with it.
-  final textColor = (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label)
-      .withValues(alpha: 0.9);
+  // the items with (1.2, the app's is taller): the titles are measured with it. In dark mode, the
+  // iOS label color (opaque white), like an iOS menu: the theme's off-white at 90% reads dim on the
+  // thick menu glass.
+  final textColor = Theme.of(context).brightness == Brightness.dark
+      ? CupertinoColors.label.darkColor
+      : (CupertinoTheme.of(context).textTheme.textStyle.color ?? CupertinoColors.label).withValues(
+          alpha: 0.9,
+        );
   final titleStyle = DefaultTextStyle.of(context).style
       .merge(TextStyle(color: textColor, fontSize: 17, fontWeight: FontWeight.w400, height: 1.2));
   // An iOS menu section title: footnote, in the secondary label color.
@@ -236,24 +201,26 @@ class const ContextMenuIconButton({
       );
     }
 
-    return MenuAnchor(
-      crossAxisUnconstrained: false,
-      consumeOutsideTap: consumeOutsideTap,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.widthOf(context) * 0.6, MediaQuery.heightOf(context) * 0.8),
+    return _FallbackMenuTheme(
+      child: MenuAnchor(
+        crossAxisUnconstrained: false,
+        consumeOutsideTap: consumeOutsideTap,
+        style: MenuStyle(
+          maximumSize: WidgetStatePropertyAll(
+            Size(MediaQuery.widthOf(context) * 0.6, MediaQuery.heightOf(context) * 0.8),
+          ),
         ),
+        menuChildren: _materialMenuItems(context, actions),
+        builder: (BuildContext context, MenuController controller, Widget? child) {
+          return buildButton(() {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          });
+        },
       ),
-      menuChildren: _materialMenuItems(context, actions),
-      builder: (BuildContext context, MenuController controller, Widget? child) {
-        return buildButton(() {
-          if (controller.isOpen) {
-            controller.close();
-          } else {
-            controller.open();
-          }
-        });
-      },
     );
   }
 }
@@ -285,7 +252,7 @@ class const ContextMenuTitleButton({
             onTap: toggleMenu,
             label: semanticsLabel,
             // The glass of the app bar buttons next to it.
-            settings: appBarButtonGlassSettings(context),
+            settings: ios27GlassSettings(context),
             height: _kGlassTitleButtonHeight,
             shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
             // The app bar is isolated, there is no parent glass layer to share.
@@ -310,33 +277,35 @@ class const ContextMenuTitleButton({
       );
     }
 
-    return MenuAnchor(
-      crossAxisUnconstrained: false,
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size(MediaQuery.widthOf(context) * 0.8, MediaQuery.heightOf(context) * 0.8),
+    return _FallbackMenuTheme(
+      child: MenuAnchor(
+        crossAxisUnconstrained: false,
+        style: MenuStyle(
+          maximumSize: WidgetStatePropertyAll(
+            Size(MediaQuery.widthOf(context) * 0.8, MediaQuery.heightOf(context) * 0.8),
+          ),
         ),
-      ),
-      menuChildren: _materialMenuItems(context, actions),
-      builder: (BuildContext context, MenuController controller, Widget? child) => Semantics(
-        button: true,
-        label: semanticsLabel,
-        child: InkWell(
-          onTap: () {
-            if (controller.isOpen) {
-              controller.close();
-            } else {
-              controller.open();
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisSize: .min,
-              children: [
-                Flexible(child: title),
-                const Icon(Icons.arrow_drop_down),
-              ],
+        menuChildren: _materialMenuItems(context, actions),
+        builder: (BuildContext context, MenuController controller, Widget? child) => Semantics(
+          button: true,
+          label: semanticsLabel,
+          child: InkWell(
+            onTap: () {
+              if (controller.isOpen) {
+                controller.close();
+              } else {
+                controller.open();
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisSize: .min,
+                children: [
+                  Flexible(child: title),
+                  const Icon(Icons.arrow_drop_down),
+                ],
+              ),
             ),
           ),
         ),
@@ -383,10 +352,12 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
   @override
   Widget build(BuildContext context) {
     if (!useLiquidGlass(context)) {
-      return MenuAnchor(
-        controller: _menuController,
-        menuChildren: _materialMenuItems(context, widget.actions),
-        child: GestureDetector(onLongPressStart: _onLongPressStart, child: widget.child),
+      return _FallbackMenuTheme(
+        child: MenuAnchor(
+          controller: _menuController,
+          menuChildren: _materialMenuItems(context, widget.actions),
+          child: GestureDetector(onLongPressStart: _onLongPressStart, child: widget.child),
+        ),
       );
     }
 
@@ -415,6 +386,29 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
             ),
           ),
       ],
+    );
+  }
+}
+
+/// The Material menus before iOS 26 ([useLiquidGlass]) take the card color, as the iOS light
+/// background is the default menu color. Elsewhere the theme is unchanged.
+class const _FallbackMenuTheme({required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).cardTheme.color;
+    if (Theme.of(context).platform != TargetPlatform.iOS ||
+        useLiquidGlass(context) ||
+        cardColor == null) {
+      return child;
+    }
+    final menuTheme = MenuTheme.of(context);
+    return MenuTheme(
+      data: MenuThemeData(
+        style: (menuTheme.style ?? const MenuStyle()).copyWith(
+          backgroundColor: WidgetStatePropertyAll(cardColor),
+        ),
+      ),
+      child: child,
     );
   }
 }

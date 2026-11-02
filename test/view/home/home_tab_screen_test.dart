@@ -410,10 +410,7 @@ void main() {
       testWidgets('Not shown if already dismissed', (tester) async {
         final app = await makeTestProviderScope(tester, child: const Application());
 
-        TestLichessBinding.instance.sharedPreferences.setBool(
-          'app_hide_home_widget_customization_tip',
-          true,
-        );
+        testBinding.sharedPreferences.setBool('app_hide_home_widget_customization_tip', true);
 
         await tester.pumpWidget(app);
 
@@ -454,7 +451,7 @@ void main() {
       ) async {
         final app = await makeTestProviderScope(tester, child: const Application());
 
-        TestLichessBinding.instance.numAppStarts = kColdAppStartsHideCustomizationTipThreshold + 1;
+        testBinding.numAppStarts = kColdAppStartsHideCustomizationTipThreshold + 1;
 
         await tester.pumpWidget(app);
 

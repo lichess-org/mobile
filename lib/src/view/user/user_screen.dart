@@ -98,8 +98,7 @@ class _UserScreenState() extends ConsumerState<UserScreen> {
     final seenAt = userScreenData.maybeWhen(data: (data) => data.user.seenAt, orElse: () => null);
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        // A long title, next to the actions.
-        centerTitle: false,
+        centerTitle: false, // user name can be long
         titleSpacing: 0,
         title: UserAppBarTitleWidget(
           user: updatedLightUser ?? widget.user,

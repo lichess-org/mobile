@@ -233,7 +233,6 @@ class const _AccountSection() extends ConsumerWidget {
             trailing: isIOS ? const CupertinoListTileChevron() : null,
             enabled: isOnline,
             onTap: () {
-              ref.invalidate(accountProvider);
               Navigator.of(context).push(ProfileScreen.buildRoute());
             },
           ),

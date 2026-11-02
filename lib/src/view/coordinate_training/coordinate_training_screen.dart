@@ -400,7 +400,7 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
               orientation: widget.orientation,
               settings: StaticChessboardSettings.fromBoardSettings(
                 boardPrefs
-                    .toBoardSettings(Variant.standard)
+                    .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                     .copyWith(
                       enableCoordinates: trainingPrefs.showCoordinates,
                       borderRadius: widget.isTablet

@@ -77,7 +77,7 @@ class const BottomSearchBarButton({
         onTap: onPressed,
         label: semanticsLabel,
         // The glass of the search field next to it.
-        settings: appBarButtonGlassSettings(context),
+        settings: ios27GlassSettings(context),
         width: _kBottomSearchBarControlHeight,
         height: _kBottomSearchBarControlHeight,
         shape: const LiquidRoundedSuperellipse(borderRadius: _kBottomSearchBarControlHeight / 2),

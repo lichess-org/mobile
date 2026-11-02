@@ -280,7 +280,10 @@ class _ConfirmColorBackgroundScreenState() extends State<ConfirmColorBackgroundS
                           fen: kInitialFEN,
                           orientation: Side.white,
                           settings: StaticChessboardSettings.fromBoardSettings(
-                            widget.boardPrefs.toBoardSettings(Variant.standard),
+                            widget.boardPrefs.toBoardSettings(
+                              Variant.standard,
+                              appBrightness: Theme.of(context).brightness,
+                            ),
                           ),
                         ),
                       ),
@@ -475,7 +478,10 @@ class _ConfirmImageBackgroundScreenState() extends State<ConfirmImageBackgroundS
                         fen: kInitialFEN,
                         orientation: Side.white,
                         settings: StaticChessboardSettings.fromBoardSettings(
-                          widget.boardPrefs.toBoardSettings(Variant.standard),
+                          widget.boardPrefs.toBoardSettings(
+                            Variant.standard,
+                            appBrightness: Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                     ),
