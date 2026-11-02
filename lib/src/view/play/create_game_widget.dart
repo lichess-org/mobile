@@ -271,7 +271,7 @@ class const CreateGameWidget({
                   );
                 }
               : null,
-          label: Text(context.l10n.createLobbyGame),
+          label: Text(context.l10n.createAGame),
         ),
       ],
     );
