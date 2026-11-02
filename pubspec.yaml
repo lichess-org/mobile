@@ -35,7 +35,7 @@ dependencies:
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter
-  flutter_appauth: ^12.0.2
+  flutter_appauth: ^13.0.0
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
   flutter_local_notifications: ^22.3.0
@@ -49,7 +49,7 @@ dependencies:
   flutter_onnxruntime: ^1.9.0
   flutter_riverpod: ^3.4.2
   flutter_secure_storage: ^11.0.0
-  flutter_slidable: ^4.0.3
+  flutter_slidable: ^5.2.0
   flutter_spinkit: ^5.2.2
   freezed_annotation: ^3.1.0
   home_widget: ^0.10.0

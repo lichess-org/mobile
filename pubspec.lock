@@ -570,18 +570,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: "9bacc200937c61c7ed4e64ecee3fc0d4042133405a00b56de8fbe401aa16d228"
+      sha256: "6482ea76a8c617782574c33991bee0317fa1e699ddc833ce4fc3df88a672c7cb"
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
+    version: "13.0.0"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
       name: flutter_appauth_platform_interface
-      sha256: c88f8edf43bf3b2c8fed73a04ba78309f00c549306a27f5ef818d767701a6eb6
+      sha256: c79452f9886a915569bc2e9df3f43af24ebb921cddf3c1f4d647b27db28bfb3e
       url: "https://pub.dev"
     source: hosted
-    version: "12.1.0"
+    version: "13.0.0"
   flutter_displaymode:
     dependency: "direct main"
     description:
@@ -736,10 +736,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: ea369262929d3cc6ebf9d8a00c196127966f117fe433a5e5cb47fb08008ca203
+      sha256: "373a94a50169bc4732267539af312b3cc6c5ab5b5b240364163255ff4c9a8adc"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.3"
+    version: "5.2.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
