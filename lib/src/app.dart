@@ -51,10 +51,7 @@ const List<String> _kIosBlogWidgetKinds = [
 ];
 
 /// Application initialization and main entry point.
-class const AppInitializationScreen({
-  final Application application = const Application(),
-  super.key,
-}) extends ConsumerWidget {
+class const AppInitializationScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
@@ -65,7 +62,7 @@ class const AppInitializationScreen({
 
     switch (ref.watch(preloadedDataProvider)) {
       case AsyncData():
-        return application;
+        return const Application();
       case AsyncError(:final error, :final stackTrace):
         debugPrint('SEVERE: [App] could not initialize app; $error\n$stackTrace');
         return const SizedBox.shrink();
@@ -80,11 +77,7 @@ class const AppInitializationScreen({
 ///
 /// This widget is the root of the application and is responsible for setting up
 /// the theme, locale, and other global settings.
-class const Application({
-  final AnimationStyle? themeAnimationStyle,
-  final ThemeData Function(ThemeData)? themeOverride,
-  super.key,
-}) extends ConsumerStatefulWidget {
+class const Application({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<Application> createState() => _AppState();
 }
@@ -241,7 +234,7 @@ class _AppState() extends ConsumerState<Application> {
       ),
     );
     final boardTheme = ref.watch(boardPreferencesProvider.select((prefs) => prefs.boardTheme));
-    final baseTheme = makeAppTheme(
+    final theme = makeAppTheme(
       context,
       themeMode: themeConfig.$1,
       backgroundColor: themeConfig.$2,
@@ -249,13 +242,11 @@ class _AppState() extends ConsumerState<Application> {
       systemColors: themeConfig.$4,
       boardTheme: boardTheme,
     );
-    final theme = widget.themeOverride?.call(baseTheme) ?? baseTheme;
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      themeAnimationStyle: widget.themeAnimationStyle,
       // [AppLocalizations.localizationsDelegates] cannot be used: it is generated with the
       // `flutter_localizations` delegates, which localize the Flutter material and cupertino
       // libraries, not the `material_ui` and `cupertino_ui` ones the app is built with.

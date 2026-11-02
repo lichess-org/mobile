@@ -38,7 +38,7 @@ flutter run -d all
 ### Previewing the platform designs
 Run 
 ```bash
-flutter run -t bin/device_preview.dart
+flutter run -t lib/device_preview_main.dart
 ```
 to test the changes for different designes, easiest to run it on a big Table to easily test different deivces.
 

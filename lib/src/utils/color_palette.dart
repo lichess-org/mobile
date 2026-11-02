@@ -71,6 +71,10 @@ Future<void> loadSystemColors() async {
   _boardColorScheme = palettes != null ? _boardColorSchemeFromPalettes(palettes) : null;
 }
 
+// The getters below check `defaultTargetPlatform`, not `Platform.isAndroid`: using the system
+// colors is a design choice, so it follows the platform the app is styled for, which a debug
+// override can change.
+
 /// Get the system core palettes if available (android 12+ only).
 CorePalettes? getSystemCorePalettes() {
   return defaultTargetPlatform == .android ? _corePalettes : null;

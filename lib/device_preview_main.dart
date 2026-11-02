@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart'
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-/// Run with `flutter run -t bin/device_preview.dart`.
+/// Run with `flutter run -t lib/device_preview_main.dart`.
 Future<void> main() async {
   if (!kDebugMode) {
     throw UnsupportedError('The device preview entry point requires a debug build.');
@@ -28,27 +28,8 @@ Future<void> main() async {
   if (!Platform.isIOS) await LiquidGlassWidgets.initialize();
   await bootstrapApp(
     PlayLichessBinding.ensureInitialized,
-    app: const DevicePreviewApp(
-      child: AppInitializationScreen(
-        application: Application(
-          themeAnimationStyle: AnimationStyle.noAnimation,
-          themeOverride: previewTheme,
-        ),
-      ),
-    ),
+    app: const DevicePreviewApp(child: AppInitializationScreen()),
   );
-}
-
-/// Resolves list title styles so live platform switches can animate them safely.
-ThemeData previewTheme(ThemeData theme) {
-  final titleStyle = theme.listTileTheme.titleTextStyle;
-  return titleStyle == null
-      ? theme
-      : theme.copyWith(
-          listTileTheme: theme.listTileTheme.copyWith(
-            titleTextStyle: theme.textTheme.bodyMedium!.merge(titleStyle).copyWith(inherit: false),
-          ),
-        );
 }
 
 // Custom device presets shown in the DevTools device picker.
