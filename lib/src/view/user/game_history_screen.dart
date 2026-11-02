@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -31,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const GameHistoryScreen({
@@ -208,67 +208,68 @@ class _BodyState() extends ConsumerState<_Body> {
                 padding: EdgeInsets.symmetric(vertical: 32.0),
                 child: Center(child: Text('No games found')),
               )
-            : ListView.separated(
-                controller: _scrollController,
-                separatorBuilder: (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                    ? PlatformDivider(
-                        height: 1,
-                        cupertinoHasLeading: true,
-                        indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
-                      )
-                    : const SizedBox.shrink(),
-                itemCount: list.length + (state.isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (state.isLoading && index == list.length) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: CenterLoadingIndicator(),
-                    );
-                  } else if (state.hasError && state.hasMore && index == list.length) {
-                    // TODO: add a retry button
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: Center(child: Text('Could not load more games')),
-                    );
-                  }
+            : SwipeActionsScope(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  separatorBuilder: (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                      ? PlatformDivider(
+                          height: 1,
+                          cupertinoHasLeading: true,
+                          indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
+                        )
+                      : const SizedBox.shrink(),
+                  itemCount: list.length + (state.isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (state.isLoading && index == list.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: CenterLoadingIndicator(),
+                      );
+                    } else if (state.hasError && state.hasMore && index == list.length) {
+                      // TODO: add a retry button
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: Center(child: Text('Could not load more games')),
+                      );
+                    }
 
-                  final game = list[index].game;
-                  final pov = list[index].pov;
+                    final game = list[index].game;
+                    final pov = list[index].pov;
 
-                  Future<void> onPressedBookmark(BuildContext context) async {
-                    try {
-                      await ref
-                          .read(accountServiceProvider)
-                          .setGameBookmark(game.id, bookmark: !game.bookmarked!);
-                    } on Exception catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                    Future<void> onPressedBookmark(BuildContext context) async {
+                      try {
+                        await ref
+                            .read(accountServiceProvider)
+                            .setGameBookmark(game.id, bookmark: !game.bookmarked!);
+                      } on Exception catch (_) {
+                        if (context.mounted) {
+                          showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                        }
                       }
                     }
-                  }
 
-                  final item = list[index];
-                  final gameTile = switch (displayMode) {
-                    GameHistoryDisplayMode.compact => GameListTile(
-                      item: item,
-                      onPressedBookmark: onPressedBookmark,
-                    ),
-                    GameHistoryDisplayMode.detail => GameListDetailTile(
-                      item: item,
-                      onPressedBookmark: onPressedBookmark,
-                    ),
-                  };
+                    final item = list[index];
+                    final gameTile = switch (displayMode) {
+                      GameHistoryDisplayMode.compact => GameListTile(
+                        item: item,
+                        onPressedBookmark: onPressedBookmark,
+                      ),
+                      GameHistoryDisplayMode.detail => GameListDetailTile(
+                        item: item,
+                        onPressedBookmark: onPressedBookmark,
+                      ),
+                    };
 
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const StretchMotion(),
-                      children: [
-                        SlidableAction(
+                    final opponent = pov == Side.white ? game.black : game.white;
+
+                    return SwipeActions(
+                      startActions: [
+                        SwipeAction(
                           backgroundColor: ColorScheme.of(context).tertiaryContainer,
                           foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
-                              ? (_) {
+                              ? () {
                                   Navigator.of(context).pushHidingTabBar(
                                     AnalysisScreen.buildRoute(
                                       AnalysisOptions.archivedGame(
@@ -278,7 +279,7 @@ class _BodyState() extends ConsumerState<_Body> {
                                     ),
                                   );
                                 }
-                              : (_) {
+                              : () {
                                   showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
@@ -289,70 +290,51 @@ class _BodyState() extends ConsumerState<_Body> {
                           label: context.l10n.analysis,
                         ),
                       ],
-                    ),
-                    endActionPane: isLoggedIn
-                        ? ActionPane(
-                            motion: const StretchMotion(),
-                            children: [
-                              if (game.source == GameSource.friend)
-                                Builder(
-                                  builder: (context) {
-                                    final opponent = pov == Side.white ? game.black : game.white;
-                                    final sideChoice = pov == Side.white
-                                        ? SideChoice.black
-                                        : SideChoice.white;
-                                    final timeControl = game.clock != null
-                                        ? ChallengeTimeControlType.clock
-                                        : game.daysPerTurn != null
-                                        ? ChallengeTimeControlType.correspondence
-                                        : ChallengeTimeControlType.unlimited;
-                                    return SlidableAction(
-                                      backgroundColor: ColorScheme.of(context).primary,
-                                      foregroundColor: ColorScheme.of(context).onPrimary,
-                                      onPressed: opponent.user != null
-                                          ? (_) {
-                                              final request = ChallengeRequest(
-                                                destUser: opponent.user,
-                                                variant: game.variant,
-                                                rated: game.rated,
-                                                sideChoice: sideChoice,
-                                                timeControl: timeControl,
-                                                clock: game.clock != null
-                                                    ? (
-                                                        time: game.clock!.initial,
-                                                        increment: game.clock!.increment,
-                                                      )
-                                                    : null,
-                                                days: game.daysPerTurn,
-                                              );
-                                              final source = UserChallengeSource(request);
-                                              ref.invalidate(gameScreenLoaderProvider(source));
-                                              Navigator.of(context).pushHidingTabBar(
-                                                GameScreen.buildRoute(source: source),
-                                              );
-                                            }
-                                          : null,
-                                      icon: Icons.sync,
-                                      label: context.l10n.rematch,
-                                    );
-                                  },
-                                ),
-                              SlidableAction(
-                                backgroundColor: context.lichessColors.brag,
-                                onPressed: onPressedBookmark,
-                                icon: game.isBookmarked
-                                    ? Icons.bookmark_remove_outlined
-                                    : Icons.bookmark_add_outlined,
-                                label: game.isBookmarked
-                                    ? context.l10n.mobileRemoveBookmark
-                                    : context.l10n.bookmarkThisGame,
-                              ),
-                            ],
-                          )
-                        : null,
-                    child: gameTile,
-                  );
-                },
+                      endActions: [
+                        if (isLoggedIn)
+                          SwipeAction(
+                            backgroundColor: context.lichessColors.brag,
+                            onPressed: () => onPressedBookmark(context),
+                            icon: game.isBookmarked
+                                ? Icons.bookmark_remove_outlined
+                                : Icons.bookmark_add_outlined,
+                            label: game.isBookmarked
+                                ? context.l10n.mobileRemoveBookmark
+                                : context.l10n.bookmarkThisGame,
+                          ),
+                        if (isLoggedIn && game.source == GameSource.friend && opponent.user != null)
+                          SwipeAction(
+                            backgroundColor: ColorScheme.of(context).primary,
+                            foregroundColor: ColorScheme.of(context).onPrimary,
+                            onPressed: () {
+                              final request = ChallengeRequest(
+                                destUser: opponent.user,
+                                variant: game.variant,
+                                rated: game.rated,
+                                sideChoice: pov == Side.white ? SideChoice.black : SideChoice.white,
+                                timeControl: game.clock != null
+                                    ? ChallengeTimeControlType.clock
+                                    : game.daysPerTurn != null
+                                    ? ChallengeTimeControlType.correspondence
+                                    : ChallengeTimeControlType.unlimited,
+                                clock: game.clock != null
+                                    ? (time: game.clock!.initial, increment: game.clock!.increment)
+                                    : null,
+                                days: game.daysPerTurn,
+                              );
+                              final source = UserChallengeSource(request);
+                              ref.invalidate(gameScreenLoaderProvider(source));
+                              Navigator.of(context)
+                                  .pushHidingTabBar(GameScreen.buildRoute(source: source));
+                            },
+                            icon: Icons.sync,
+                            label: context.l10n.rematch,
+                          ),
+                      ],
+                      child: gameTile,
+                    );
+                  },
+                ),
               );
       },
       error: (e, s) {
