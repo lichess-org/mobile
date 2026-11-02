@@ -35,6 +35,17 @@ dart run build_runner build
 flutter run -d all
 ```
 
+### Previewing the platform designs
+
+To check the iOS and Android designs on any device, run the app in device preview:
+
+```bash
+flutter run -t lib/device_preview_main.dart
+```
+
+See [Device preview](./docs/setting_dev_env.md#device-preview) for how to use it and its
+limitations.
+
 ## Running tests
 
 To run the tests, you can use the following command:

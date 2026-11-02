@@ -4,7 +4,7 @@ import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoIcons, CupertinoTheme;
-import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter/foundation.dart' show ValueListenable, kDebugMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -33,7 +33,20 @@ import 'package:material_ui/material_ui.dart';
 /// Older iOS versions get the same layouts (large titles, scroll-aware bar tint, inset sheets...),
 /// with plain controls and opaque surfaces instead of glass ones.
 bool useLiquidGlass(BuildContext context) =>
-    Theme.of(context).platform == TargetPlatform.iOS && _isLiquidGlassSupported;
+    Theme.of(context).platform == TargetPlatform.iOS &&
+    ((kDebugMode ? DebugLiquidGlassOverride.maybeOf(context) : null) ?? _isLiquidGlassSupported);
+
+/// Overrides glass eligibility for a debug preview without changing the actual OS version.
+///
+/// Ignored in profile and release builds. Normal app entry points do not install this scope.
+class const DebugLiquidGlassOverride({required final bool enabled, required super.child, super.key})
+    extends InheritedWidget {
+  static bool? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DebugLiquidGlassOverride>()?.enabled;
+
+  @override
+  bool updateShouldNotify(DebugLiquidGlassOverride oldWidget) => enabled != oldWidget.enabled;
+}
 
 /// Whether the device runs iOS 26 or later, unless turned off with
 /// `--dart-define=NO_LIQUID_GLASS=true` (to check the older iOS design on an iOS 26 device).
