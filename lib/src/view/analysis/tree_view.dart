@@ -21,6 +21,8 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
     final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
     final currentNode =
         analysisState.root.branchesOn(analysisState.currentPath).lastOrNull ?? analysisState.root;
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final hasVariations = currentNode.children.length > 1;
     IMap<UciPath, int>? localMoveAnnotations;
     IMap<UciPath, ExternalEval>? localMoveEvaluations;
     if (options case Pgn(isComputerAnalysisAllowed: true)) {
@@ -43,7 +45,7 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
             child: Column(
               children: [
                 DebouncedPgnTreeView(
@@ -71,12 +73,16 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
             ),
           ),
         ),
-        VariationsBar(
-          currentNode: currentNode,
-          currentPath: analysisState.currentPath,
-          showAnnotations: enableServerAnalysis && prefs.showAnnotations,
-          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
-        ),
+        if (hasVariations)
+          Padding(
+            padding: EdgeInsets.only(bottom: bottomInset),
+            child: VariationsBar(
+              currentNode: currentNode,
+              currentPath: analysisState.currentPath,
+              showAnnotations: enableServerAnalysis && prefs.showAnnotations,
+              onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+            ),
+          ),
       ],
     );
   }

@@ -32,6 +32,7 @@ import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
@@ -44,7 +45,7 @@ class const StudyScreen({
   required final StudyOptions options,
   final bool openComputerAnalysis = false,
   super.key,
-}) extends StatelessWidget {
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(StudyOptions options, {bool openComputerAnalysis = false}) {
     return buildScreenRoute(
       screen: StudyScreen(options: options, openComputerAnalysis: openComputerAnalysis),
@@ -52,109 +53,216 @@ class const StudyScreen({
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _StudyScreenLoader(options: options, openComputerAnalysis: openComputerAnalysis);
-  }
+  ConsumerState<StudyScreen> createState() => _StudyScreenState();
 }
 
-class const _StudyScreenLoader({
-  required final StudyOptions options,
-  required final bool openComputerAnalysis,
-}) extends ConsumerWidget {
+class _StudyScreenState() extends ConsumerState<StudyScreen> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
-    switch (ref.watch(studyControllerProvider(options))) {
-      case AsyncData(:final value):
-        return _StudyScreen(
-          options: options,
-          studyState: value,
-          openComputerAnalysis: openComputerAnalysis,
-        );
-      case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study:', error, stackTrace);
-        return Scaffold(
-          appBar: AppBar(title: const Text('')),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
-                ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: Text('Failed to load study.'))],
-            ),
+  Widget build(BuildContext context) {
+    final asyncState = ref.watch(studyControllerProvider(widget.options));
+    final studyState = switch (asyncState) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+    if (asyncState case AsyncError(:final error, :final stackTrace)) {
+      _logger.severe('Cannot load study:', error, stackTrace);
+    }
+    final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
+
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: switch (asyncState) {
+          AsyncData(:final value) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (value.variant != Variant.standard && value.variant != Variant.fromPosition) ...[
+                Icon(value.variant.icon),
+                const SizedBox(width: 5.0),
+              ],
+              Flexible(child: AppBarTitleText(value.currentChapterTitle)),
+            ],
           ),
-        );
-      case _:
-        return Scaffold(
-          appBar: AppBar(
-            title: Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SizedBox(
-                  height: 24.0,
-                  width: 200.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+          AsyncError() => null,
+          _ => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
             ),
           ),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
+        },
+        actions: [
+          if (studyState case final state?)
+            ContextMenuIconButton(
+              semanticsLabel: 'Study menu',
+              icon: const Icon(Icons.more_horiz),
+              isCompact: true,
+              actions: [
+                if (isLoggedIn)
+                  ContextMenuAction(
+                    icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
+                    label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
+                    onPressed: () {
+                      ref.read(studyControllerProvider(widget.options).notifier).toggleLike();
+                    },
+                  ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share
+                      : Icons.share,
+                  label: context.l10n.studyShareAndExport,
+                  onPressed: () => showAdaptiveActionSheet<void>(
+                    context: context,
+                    actions: _shareSheetActions(state),
+                  ),
                 ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: CircularProgressIndicator.adaptive())],
+              ],
             ),
-          ),
+        ],
+      ),
+      body: switch (asyncState) {
+        AsyncData(:final value) => _TabbedBody(
+          options: widget.options,
+          studyState: value,
+          openComputerAnalysis: widget.openComputerAnalysis,
+        ),
+        AsyncError() => const _PlaceholderBody(child: Text('Failed to load study.')),
+        _ => const _PlaceholderBody(child: CircularProgressIndicator.adaptive()),
+      },
+    );
+  }
+
+  List<BottomSheetAction> _shareSheetActions(StudyState state) => [
+    BottomSheetAction(
+      makeLabel: (context) => Text(context.l10n.studyStudyUrl),
+      onPressed: () {
+        launchShareDialog(context, ShareParams(uri: lichessUri('/study/${state.study.id}')));
+      },
+    ),
+    BottomSheetAction(
+      makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
+      onPressed: () {
+        launchShareDialog(
+          context,
+          ShareParams(uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}')),
         );
-    }
+      },
+    ),
+    if (!state.gamebookActive) ...[
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.studyStudyPgn),
+        onPressed: () async {
+          try {
+            final pgn = await ref.read(studyRepositoryProvider).getStudyPgn(state.study.id);
+            if (mounted) launchShareDialog(context, ShareParams(text: pgn));
+          } catch (e) {
+            if (mounted) showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+          }
+        },
+      ),
+      BottomSheetAction(
+        makeLabel: (context) => Text(context.l10n.studyChapterPgn),
+        onPressed: () => launchShareDialog(context, ShareParams(text: state.pgn)),
+      ),
+      if (state.currentPosition != null)
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.positionAsImage),
+          onPressed: () async {
+            try {
+              final image = await ref
+                  .read(gameShareServiceProvider)
+                  .screenshotPosition(state.pov, state.currentPosition!.fen, state.lastMove);
+              if (mounted) {
+                launchShareDialog(
+                  context,
+                  ShareParams(
+                    files: [image],
+                    subject: context.l10n.puzzleFromGameLink(
+                      lichessUri('/study/${state.study.id}').toString(),
+                    ),
+                  ),
+                );
+              }
+            } catch (e) {
+              if (mounted) showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+            }
+          },
+        ),
+      BottomSheetAction(
+        makeLabel: (context) => const Text('GIF'),
+        onPressed: () async {
+          try {
+            final gif = await ref
+                .read(gameShareServiceProvider)
+                .chapterGif(state.study.id, state.study.chapter.id);
+            if (mounted) {
+              launchShareDialog(
+                context,
+                ShareParams(
+                  files: [gif],
+                  subject: context.l10n.studyChapterX(state.study.currentChapterMeta.name),
+                ),
+              );
+            }
+          } catch (e) {
+            debugPrint(e.toString());
+            if (mounted) showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+          }
+        },
+      ),
+    ],
+  ];
+}
+
+/// An empty board, while the study is loading or when it could not be loaded.
+class const _PlaceholderBody({required final Widget child}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final studyPrefs = ref.watch(studyPreferencesProvider);
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        pov: Side.white,
+        sideToMove: null,
+        boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
+          size: boardSize,
+          settings: StaticChessboardSettings.fromBoardSettings(
+            boardPrefs
+                .toBoardSettings(Variant.standard)
+                .copyWith(
+                  borderRadius: borderRadius,
+                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                ),
+          ),
+          orientation: Side.white,
+          fen: kEmptyFEN,
+        ),
+        smallBoard: studyPrefs.smallBoard,
+        children: [Center(child: child)],
+      ),
+    );
   }
 }
 
-class const _StudyScreen({
+class const _TabbedBody({
   required final StudyOptions options,
   required final StudyState studyState,
   required final bool openComputerAnalysis,
-}) extends ConsumerStatefulWidget {
+}) extends StatefulWidget {
   @override
-  ConsumerState<_StudyScreen> createState() => _StudyScreenState();
+  State<_TabbedBody> createState() => _TabbedBodyState();
 }
 
-class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
+class _TabbedBodyState() extends State<_TabbedBody> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
 
@@ -179,17 +287,15 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
   @override
   void initState() {
     super.initState();
-
     _initTabs();
   }
 
   @override
-  void didUpdateWidget(covariant _StudyScreen oldWidget) {
+  void didUpdateWidget(covariant _TabbedBody oldWidget) {
     if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
       _tabController.dispose();
       _initTabs();
     }
-
     super.didUpdateWidget(oldWidget);
   }
 
@@ -201,158 +307,7 @@ class _StudyScreenState() extends ConsumerState<_StudyScreen> with TickerProvide
 
   @override
   Widget build(BuildContext context) {
-    final variant = widget.studyState.variant;
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (variant != Variant.standard && variant != Variant.fromPosition) ...[
-              Icon(variant.icon),
-              const SizedBox(width: 5.0),
-            ],
-            Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
-          ],
-        ),
-        actions: [_StudyMenu(options: widget.options)],
-      ),
-      body: _Body(options: widget.options, tabController: _tabController, tabs: tabs),
-    );
-  }
-}
-
-class const _StudyMenu({required final StudyOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    final state = ref.watch(studyControllerProvider(options)).requireValue;
-
-    return ContextMenuIconButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
-      actions: [
-        if (authUser != null)
-          ContextMenuAction(
-            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
-            onPressed: () {
-              ref.read(studyControllerProvider(options).notifier).toggleLike();
-            },
-          ),
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
-          label: context.l10n.studyShareAndExport,
-          onPressed: () {
-            showAdaptiveActionSheet<void>(
-              context: context,
-              actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      context,
-                      ShareParams(uri: lichessUri('/study/${state.study.id}')),
-                    );
-                  },
-                ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      context,
-                      ShareParams(
-                        uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
-                      ),
-                    );
-                  },
-                ),
-                if (!state.gamebookActive) ...[
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: () async {
-                      try {
-                        final pgn = await ref
-                            .read(studyRepositoryProvider)
-                            .getStudyPgn(state.study.id);
-                        if (context.mounted) {
-                          launchShareDialog(context, ShareParams(text: pgn));
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () {
-                      launchShareDialog(context, ShareParams(text: state.pgn));
-                    },
-                  ),
-                  if (state.currentPosition != null)
-                    BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.positionAsImage),
-                      onPressed: () async {
-                        try {
-                          final image = await ref
-                              .read(gameShareServiceProvider)
-                              .screenshotPosition(
-                                state.pov,
-                                state.currentPosition!.fen,
-                                state.lastMove,
-                              );
-                          if (context.mounted) {
-                            launchShareDialog(
-                              context,
-                              ShareParams(
-                                files: [image],
-                                subject: context.l10n.puzzleFromGameLink(
-                                  lichessUri('/study/${state.study.id}').toString(),
-                                ),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                          }
-                        }
-                      },
-                    ),
-                  BottomSheetAction(
-                    makeLabel: (context) => const Text('GIF'),
-                    onPressed: () async {
-                      try {
-                        final gif = await ref
-                            .read(gameShareServiceProvider)
-                            .chapterGif(state.study.id, state.study.chapter.id);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            ShareParams(
-                              files: [gif],
-                              subject: context.l10n.studyChapterX(
-                                state.study.currentChapterMeta.name,
-                              ),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ],
-            );
-          },
-        ),
-      ],
-    );
+    return _Body(options: widget.options, tabController: _tabController, tabs: tabs);
   }
 }
 
