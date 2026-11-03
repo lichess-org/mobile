@@ -363,6 +363,9 @@ class _ContextMenuRegionState() extends State<ContextMenuRegion> {
 
     return Stack(
       clipBehavior: .none,
+      // The child gets the region's constraints unchanged, so that it can fill or align itself in
+      // them as it would without the menu (e.g. a chat bubble aligned to the right).
+      fit: .passthrough,
       children: [
         GestureDetector(
           onLongPressStart: _onLongPressStart,
