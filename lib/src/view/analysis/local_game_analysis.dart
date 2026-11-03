@@ -172,9 +172,7 @@ class _LocalGameAnalysisState() extends ConsumerState<LocalGameAnalysis> {
         if (_evaluations.length > 1)
           AcplChart(
             params: (
-              acplChartData: IList(
-                _evaluations.skip(1).map((eval) => ExternalEval(cp: eval.cp, mate: eval.mate)),
-              ),
+              acplChartData: localGameAnalysisChartData(widget.root, _evaluations),
               division: inferLocalGameDivision(widget.root),
               rootPly: widget.root.position.ply,
               currentNodePly: ref

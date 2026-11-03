@@ -19,6 +19,28 @@ final localGameAnalysisSessionProvider =
 String localGameAnalysisSessionKey(StringId contextId, ViewNode root) =>
     '${contextId.value}:${root.position.fen}:${root.mainline.map((branch) => branch.id).join()}';
 
+IList<ExternalEval> localGameAnalysisChartData(ViewNode root, IList<LocalEval> evaluations) {
+  final branches = root.mainline.toList(growable: false);
+  if (evaluations.length != branches.length + 1) {
+    throw ArgumentError.value(evaluations.length, 'evaluations', 'Must include every position.');
+  }
+
+  return IList([
+    for (final (index, branch) in branches.indexed)
+      _localGameAnalysisChartEval(branch.position, evaluations[index + 1]),
+  ]);
+}
+
+ExternalEval _localGameAnalysisChartEval(Position position, LocalEval evaluation) {
+  final outcome = position.outcome;
+  if (outcome == null) return ExternalEval(cp: evaluation.cp, mate: evaluation.mate);
+
+  final winner = outcome.winner;
+  return winner == null
+      ? const ExternalEval(cp: 0, mate: null)
+      : ExternalEval(cp: null, mate: winner == Side.white ? 1 : -1);
+}
+
 MoveVerdict? localMoveVerdictFor({
   required LocalEval before,
   required LocalEval after,

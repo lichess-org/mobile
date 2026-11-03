@@ -7,6 +7,21 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
 
 void main() {
+  test('uses the game outcome for the final checkmate chart point', () {
+    final game = Root.fromPgnMoves('e4 e5 Bc4 Nc6 Qh5 Nf6 Qxf7#');
+    final branches = game.view.mainline.toList(growable: false);
+    final evaluations = IList([
+      for (final position in [game.position, ...branches.map((branch) => branch.position)])
+        _eval(position, cp: -1000),
+    ]);
+
+    final chartData = localGameAnalysisChartData(game.view, evaluations);
+
+    expect(branches.last.position.outcome?.winner, Side.white);
+    expect(chartData.last.mate, 1);
+    expect(chartData.last.winningChances(Side.white), greaterThan(0));
+  });
+
   test('summarizes local move accuracy, centipawn loss, verdicts, and final expected score', () {
     final game = Root.fromPgnMoves('e4 e5');
     final branches = game.view.mainline.toList(growable: false);
