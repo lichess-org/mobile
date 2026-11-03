@@ -30,7 +30,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Terugnames en hints toestaan';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'App-logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled zwart';
@@ -100,7 +100,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Negeren';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Wil je alle logs verwijderen?';
 
   @override
   String get mobileDangerZone => 'Gevarenzone';
@@ -161,11 +161,11 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileHomeTab => 'Startscherm';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Netwerk-logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
+    return 'Als een account overeenkomt met $param1, is er een code met $param2 tekens gestuurd. Controleer je postvak en voer de code hieronder in.';
   }
 
   @override
@@ -285,7 +285,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobilePreviousPage => 'Vorige';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Bekijk je eerdere puzzelpogingen.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Wil je deze reeks beëindigen?';
@@ -321,7 +321,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSendMeACode => 'Stuur me een code';
 
   @override
-  String get mobileServerAnalysis => 'Server analyse';
+  String get mobileServerAnalysis => 'Serveranalyse';
 
   @override
   String get mobileSettingsClockPosition => 'Positie klok';
@@ -462,7 +462,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileTheme => 'Thema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Wordt nog bekendgemaakt';
 
   @override
   String get mobileTooManyLoginAttempts => 'Teveel pogingen. Probeer het later nog eens.';
@@ -898,7 +898,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaOnlyTitledHelp => 'Officiële titel vereist voor deelname aan het toernooi';
 
   @override
-  String get arenaTournamentPairingsAreNowClosed => 'De toernooiparingen zijn nu gesloten.';
+  String get arenaTournamentPairingsAreNowClosed => 'De toernooikoppelingen zijn nu gesloten.';
 
   @override
   String get arenaBerserkRate => 'Berserk-percentage';
@@ -3370,7 +3370,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Ik begrijp dat verwijderde accounts niet te herstellen zijn';
 
   @override
-  String get gameSetup => 'Spelinstellingen';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Daag een vriend uit';
@@ -4570,7 +4570,7 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String standByX(String param) {
-    return 'Sta klaar $param, spelers worden gepaard, maak je gereed!';
+    return 'Sta klaar $param, spelers worden gekoppeld, maak je gereed!';
   }
 
   @override
@@ -5954,7 +5954,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get youCannotPostYetPlaySomeGames => 'Je kunt nog geen post in de forums plaatsen. Speel eerst een paar partijen!';
+  String get youCannotPostYetPlaySomeGames => 'Je kunt nog geen berichten in de forums plaatsen. Speel eerst een paar partijen!';
 
   @override
   String get subscribe => 'Abonneren';
@@ -7417,7 +7417,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Laad een partij van het web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Plak een partij-link<br>(zoals lichess.org/7fHIU0XI)<br>om partijzetten in het hoofdstuk te laden.';
+  String get studyLoadGameFromTheWebText => 'Plak een partij-link<br>(zoals lichess.org/game/7fHIU0XI)<br>om zetten in het hoofdstuk te laden.';
 
   @override
   String get studyFromFenStringTitle => 'Van een FEN-tekenreeks';

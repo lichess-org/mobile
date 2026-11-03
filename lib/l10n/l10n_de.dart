@@ -30,7 +30,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Zugrücknahmen und Hinweise erlauben';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'App-Protokolle';
 
   @override
   String get mobileAmoledBlack => 'AMOLED-Schwarz';
@@ -100,7 +100,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ausblenden';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Möchtest du alle Protokolle löschen?';
 
   @override
   String get mobileDangerZone => 'Gefahrenbereich';
@@ -161,7 +161,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileHomeTab => 'Start';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Netzwerkprotokolle';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobilePreviousPage => 'Zurück';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Überprüfe deine letzten Puzzle-Versuche.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Möchtest du diesen Durchlauf beenden?';
@@ -462,7 +462,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileTheme => 'Erscheinungsbild';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Wird noch angekündigt';
 
   @override
   String get mobileTooManyLoginAttempts => 'Zu viele Versuche. Bitte versuche es später erneut.';
@@ -3370,7 +3370,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Ich verstehe, dass gelöschte Benutzerkonten nicht wiederhergestellt werden können';
 
   @override
-  String get gameSetup => 'Spieleinstellungen';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Einen Freund herausfordern';

@@ -30,7 +30,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Разрешить возвраты ходов и подсказки';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Техническая информация';
 
   @override
   String get mobileAmoledBlack => 'Глубокий чёрный (AMOLED)';
@@ -100,7 +100,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Отклонить';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Вы хотите удалить всю техническую информацию?';
 
   @override
   String get mobileDangerZone => 'Опасная зона';
@@ -161,7 +161,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileHomeTab => 'Главная';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'История сетевых запросов';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobilePreviousPage => 'Предыдущие';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Пересмотреть ваши прошлые попытки в головоломках.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Вы хотите завершить эту попытку?';
@@ -399,7 +399,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Когда включено, устройство будет вибрировать некоторое время при перемещении или захвате фигуры.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Поделиться';
 
   @override
   String get mobileShareChallengeUrl => 'Поделиться ссылкой на вызов';
@@ -462,7 +462,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileTheme => 'Оформление';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Будущие анонсы';
 
   @override
   String get mobileTooManyLoginAttempts => 'Слишком много попыток. Пожалуйста, попробуйте позже.';
@@ -1480,11 +1480,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Потренироваться только с некоторыми вертикалями и горизонталями';
 
   @override
-  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+  String get coordinatesEnterTheCoordinate => 'Введите координату';
 
   @override
   String coordinatesPressEnterToStart(String param) {
-    return 'Press $param to start';
+    return 'Нажмите $param, чтобы начать';
   }
 
   @override
@@ -3426,7 +3426,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Я понимаю, что удалённые аккаунты не подлежат восстановлению';
 
   @override
-  String get gameSetup => 'Параметры игры';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Бросить вызов другу';
@@ -6243,7 +6243,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get showMeEverything => 'Показать всё';
 
   @override
-  String get lichessPatronInfo => 'Lichess — это благотворительный проект и полностью бесплатное программное обеспечение с открытым исходным кодом. Мы зависим от пожертвований пользователей, которые покрывают наши операционные расходы, разработку и создание контента. Без нашего щедрого сообщества мы бы не смогли поддерживать работу сайта. Спасибо, что присоединились к нам!';
+  String get lichessPatronInfo => 'Lichess — это благотворительный проект и полностью свободное программное обеспечение с открытым исходным кодом. Мы зависим от пожертвований пользователей, которые покрывают наши операционные расходы, разработку и создание контента. Без нашего щедрого сообщества мы бы не смогли поддерживать работу сайта. Спасибо, что присоединились к нам!';
 
   @override
   String get nothingToSeeHere => 'Здесь ничего нет пока.';
@@ -7559,7 +7559,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Загрузить партию из интернета';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Вставьте URL-адрес партии<br>(например, lichess.org/7fHIU0XI),<br>чтобы загрузить ходы партии в главу.';
+  String get studyLoadGameFromTheWebText => 'Вставьте URL-адрес партии<br>(например, lichess.org/game/7fHIU0XI),<br>чтобы загрузить ходы в главу.';
 
   @override
   String get studyFromFenStringTitle => 'Из нотации FEN';

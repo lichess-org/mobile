@@ -30,7 +30,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Salli siirron peruutukset ja vihjeet';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Sovelluksen lokit';
 
   @override
   String get mobileAmoledBlack => 'Amoled-musta';
@@ -100,7 +100,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ohita';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Haluatko poistaa kaikki lokit?';
 
   @override
   String get mobileDangerZone => 'Vaaravyöhyke';
@@ -161,7 +161,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileHomeTab => 'Etusivu';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Verkon lokit';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -3370,7 +3370,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Ymmärrän, ettei poistettua tiliä voi palauttaa';
 
   @override
-  String get gameSetup => 'Pelin luonti';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Haasta kaveri';
@@ -4643,7 +4643,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String reportXToModerators(String param) {
-    return 'Ilmianna $param moderaattoreille';
+    return 'Tee $param:sta ilmoitus moderaattoreille';
   }
 
   @override
@@ -4810,7 +4810,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createTheTopic => 'Luo aihe';
 
   @override
-  String get reportAUser => 'Raportoi käyttäjä';
+  String get reportAUser => 'Ilmoita käyttäjä';
 
   @override
   String get user => 'Käyttäjä';
@@ -5134,7 +5134,7 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String aboutX(String param) {
-    return 'Tietoa $param';
+    return 'Tietoa ${param}istä';
   }
 
   @override
@@ -7417,7 +7417,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Lataa peli verkosta';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Kopioi pelin siirrot kappaleeseen liittämällä pelin URL<br>(esim. lichess.org/7fHIU0XI)<br>.';
+  String get studyLoadGameFromTheWebText => 'Kun liität Lichessissä pelatun pelin URL:n<br>(esim. lichess.org/game/7fHIU0XI)<br>, pelin siirrot latautuvat tutkielman lukuun.';
 
   @override
   String get studyFromFenStringTitle => 'Tuo FEN-asema';

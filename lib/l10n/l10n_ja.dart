@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'アプリログ';
 
   @override
   String get mobileAmoledBlack => 'AMOLED用ブラック';
@@ -100,7 +100,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '使わない';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'すべてのログを削除しますか？';
 
   @override
   String get mobileDangerZone => '要注意の操作';
@@ -161,7 +161,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileHomeTab => 'ホーム';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'ネットワークログ';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePreviousPage => '前';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => '過去のタクティクス問題の試行を再表示します。';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';
@@ -462,7 +462,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileTheme => 'テーマ';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => '発表待ち';
 
   @override
   String get mobileTooManyLoginAttempts => '試行回数が多すぎます。また後でどうぞ。';
@@ -3342,7 +3342,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => '私は削除されたアカウントが回復できないことを理解しています';
 
   @override
-  String get gameSetup => 'ゲームの設定';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '友達に挑戦';
@@ -7346,7 +7346,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'ウェブから棋譜を読み込み';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Lichess の対局の URL<br>（例：lichess.org/7fHIU0XI）<br>をペーストすると章内にその手順が読み込めます。';
+  String get studyLoadGameFromTheWebText => 'Lichess の対局の URL<br>（例：lichess.org/game/7fHIU0XI）<br>をペーストすると章内にその手順が読み込めます。';
 
   @override
   String get studyFromFenStringTitle => 'FEN の局面から';

@@ -30,7 +30,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Tillad omtræk og tips';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'App-logs';
 
   @override
   String get mobileAmoledBlack => 'Amoled-sort';
@@ -100,7 +100,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Afvis';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Vil du slette alle logs?';
 
   @override
   String get mobileDangerZone => 'Farezone';
@@ -161,7 +161,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileHomeTab => 'Hjem';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Netværkslogs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -3370,7 +3370,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Jeg forstår, at slettede konti ikke kan gendannes';
 
   @override
-  String get gameSetup => 'Opsætning af parti';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Spil mod en ven';

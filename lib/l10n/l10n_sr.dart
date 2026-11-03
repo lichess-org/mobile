@@ -3391,7 +3391,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Подешавања партије';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Изазови пријатеља';
