@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -149,6 +150,9 @@ class const DebouncedPgnTreeView({
   /// Local move-quality annotations keyed by their mainline path.
   final IMap<UciPath, int>? localMoveAnnotations,
 
+  /// Local evaluations after each move, keyed by their mainline path.
+  final IMap<UciPath, ExternalEval>? localMoveEvaluations,
+
   /// Whether to show comments associated with the moves.
   final bool shouldShowComments = true,
 
@@ -246,6 +250,7 @@ class _DebouncedPgnTreeViewState() extends ConsumerState<DebouncedPgnTreeView> {
         shouldShowComputerAnalysis: widget.shouldShowComputerAnalysis,
         shouldShowAnnotations: widget.shouldShowAnnotations,
         localMoveAnnotations: widget.localMoveAnnotations,
+        localMoveEvaluations: widget.localMoveEvaluations,
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
@@ -284,6 +289,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Local move-quality annotations keyed by their mainline path.
   IMap<UciPath, int>? localMoveAnnotations,
+
+  /// Local evaluations after each move, keyed by their mainline path.
+  IMap<UciPath, ExternalEval>? localMoveEvaluations,
 
   /// Whether to show comments associated with the moves.
   bool shouldShowComments,
@@ -469,6 +477,7 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
           oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
           oldWidget.params.localMoveAnnotations != widget.params.localMoveAnnotations ||
+          oldWidget.params.localMoveEvaluations != widget.params.localMoveEvaluations ||
           oldWidget.params.displayMode != widget.params.displayMode,
     );
   }
@@ -1195,7 +1204,7 @@ class const InlineMove({
     final ply = branch.position.ply;
 
     final eval = params.shouldShowComputerAnalysis && canShowEval
-        ? branch.eval ?? branch.serverEval
+        ? (params.localMoveEvaluations?[path] ?? branch.eval ?? branch.serverEval)
         : null;
 
     final isPremove =

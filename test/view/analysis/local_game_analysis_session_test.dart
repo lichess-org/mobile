@@ -24,6 +24,11 @@ void main() {
     expect(whiteAnalysis.accuracy, lessThan(100));
     expect(whiteAnalysis.phases?.opening, whiteAnalysis.accuracy);
     expect(summary.moveAnnotations[UciPath.fromIds([branches.first.id])], 4);
+    expect(summary.moveEvaluations[UciPath.fromIds([branches.first.id])]?.evalString, '-3.0');
+    expect(
+      summary.moveEvaluations[UciPath.fromIds([branches.first.id, branches.last.id])]?.evalString,
+      '-3.0',
+    );
     expect(
       summary.whiteExpectedScore,
       ((evaluations.last.winningChances(Side.white) + 1) * 50).round(),

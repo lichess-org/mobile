@@ -48,6 +48,7 @@ typedef LocalGameAnalysisSummary = ({
   PlayersAnalysis playersAnalysis,
   int whiteExpectedScore,
   IMap<UciPath, int> moveAnnotations,
+  IMap<UciPath, ExternalEval> moveEvaluations,
 });
 
 LocalGameAnalysisSummary localGameAnalysisSummary(ViewNode root, IList<LocalEval> evaluations) {
@@ -64,6 +65,7 @@ LocalGameAnalysisSummary localGameAnalysisSummary(ViewNode root, IList<LocalEval
   final middlegameStats = (_LocalPlayerAnalysisStats(), _LocalPlayerAnalysisStats());
   final endgameStats = (_LocalPlayerAnalysisStats(), _LocalPlayerAnalysisStats());
   final annotations = <UciPath, int>{};
+  final moveEvaluations = <UciPath, ExternalEval>{};
   var path = UciPath.empty;
 
   for (final (index, branch) in branches.indexed) {
@@ -84,6 +86,7 @@ LocalGameAnalysisSummary localGameAnalysisSummary(ViewNode root, IList<LocalEval
     final nag = localMoveVerdictNagFor(verdict);
     path = path + branch.id;
     if (nag != null) annotations[path] = nag;
+    moveEvaluations[path] = ExternalEval(cp: after.cp, mate: after.mate);
   }
 
   final finalEvaluation = evaluations.last;
@@ -107,6 +110,7 @@ LocalGameAnalysisSummary localGameAnalysisSummary(ViewNode root, IList<LocalEval
     ),
     whiteExpectedScore: whiteExpectedScore,
     moveAnnotations: IMap(annotations),
+    moveEvaluations: IMap(moveEvaluations),
   );
 }
 

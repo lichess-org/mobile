@@ -204,6 +204,10 @@ void main() {
       await tester.pumpAndSettle();
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).annotations, isEmpty);
       expect(find.text('Winning chances'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Moves played'));
+      await tester.pumpAndSettle();
+      expect(find.text('+0.2'), findsWidgets);
     });
 
     testWidgets('displays correct move and position', (tester) async {
