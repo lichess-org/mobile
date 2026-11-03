@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart'
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-/// Run with `flutter run -t lib/device_preview_main.dart`.
+/// Run with `flutter run -t lib/main_device_preview.dart`.
 Future<void> main() async {
   if (!kDebugMode) {
     throw UnsupportedError('The device preview entry point requires a debug build.');

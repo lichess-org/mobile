@@ -40,7 +40,7 @@ flutter run -d all
 To check the iOS and Android designs on any device, run the app in device preview:
 
 ```bash
-flutter run -t lib/device_preview_main.dart
+flutter run -t lib/main_device_preview.dart
 ```
 
 See [Device preview](./docs/setting_dev_env.md#device-preview) for how to use it and its
