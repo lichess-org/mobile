@@ -119,6 +119,9 @@ class _BroadcastRoundScreenState()
   BroadcastRoundId? _selectedRoundId;
   String? _teamFilter;
 
+  /// Whether the header has scrolled away and the tab bar is pinned below the app bar (Android).
+  final _isTabBarPinned = ValueNotifier(false);
+
   _BroadcastGameFilter filter = _BroadcastGameFilter.all;
 
   @override
@@ -143,6 +146,7 @@ class _BroadcastRoundScreenState()
   void dispose() {
     _tabController.removeListener(_onTabChanged);
     _tabController.dispose();
+    _isTabBarPinned.dispose();
     super.dispose();
   }
 
@@ -180,18 +184,59 @@ class _BroadcastRoundScreenState()
     AsyncValue<BroadcastTournament> asyncTournament,
     AsyncValue<({BroadcastRound round, bool? isSubscribed})>? roundState,
   ) {
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final roundHeader = _RoundHeader(
+      title: isIOS ? asyncTournament.value?.data.name ?? widget.broadcast.title : null,
+      imageUrl: asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
+      information: asyncTournament.value?.data.information,
+      onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
+    );
+    final tabBar = PlatformTabBar(
+      tabs: [
+        context.l10n.broadcastBoards,
+        context.l10n.players,
+        if (asyncTournament.value?.data.teamTable == true) context.l10n.broadcastTeams,
+      ],
+      controller: _tabController,
+      inAppBar: false,
+      glass: false,
+    );
+    final tabs = <Widget>[
+      switch (asyncTournament) {
+        AsyncData(:final value) => BroadcastBoardsTab(
+          tournamentId: _selectedTournamentId,
+          roundId: _selectedRoundId ?? value.defaultRoundId,
+          tournamentSlug: value.data.slug,
+          showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
+          teamFilter: _teamFilter,
+        ),
+        _ => const SliverToBoxAdapter(),
+      },
+      BroadcastPlayersTab(tournamentId: _selectedTournamentId),
+      if (asyncTournament.value?.data.teamTable == true) ...[
+        switch (asyncTournament) {
+          AsyncData(:final value) => BroadcastTeamsTab(
+            roundId: _selectedRoundId ?? value.defaultRoundId,
+            tournamentId: _selectedTournamentId,
+            tournamentSlug: value.data.slug,
+            showTeamScores: value.data.showTeamScores == true,
+          ),
+          _ => const SliverToBoxAdapter(),
+        },
+      ],
+    ];
+
     return switch (roundState) {
       AsyncData(value: (:final round, isSubscribed: final subscription)) => PlatformScaffold(
-        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        extendBody: isIOS,
         appBar: PlatformAppBar(
-          // On iOS the title is in the header of the body, below the image, like the Music app.
-          title: Theme.of(context).platform == TargetPlatform.iOS
+          // On iOS the title is in the header of the body, below the image.
+          title: isIOS
               ? null
               : AppBarTitleText(
                   asyncTournament.value?.data.name ?? widget.broadcast.title,
                   maxLines: 2,
                 ),
-          // A long title, next to the actions.
           centerTitle: false,
           actionsBuilder: (context, ref) {
             final roundId = _selectedRoundId ?? asyncTournament.value?.defaultRoundId;
@@ -295,9 +340,7 @@ class _BroadcastRoundScreenState()
                     ],
                   ),
                   ContextMenuAction(
-                    icon: Theme.of(context).platform == TargetPlatform.iOS
-                        ? Icons.ios_share_outlined
-                        : Icons.share_outlined,
+                    icon: isIOS ? Icons.ios_share_outlined : Icons.share_outlined,
                     label: context.l10n.mobileShare,
                     onPressed: null,
                     submenu: makeBroadcastShareMenuActions(
@@ -315,67 +358,91 @@ class _BroadcastRoundScreenState()
         body: BottomBarScrollEdgeEffect(
           barHeight: BottomBar.heightOf(context),
           color: Theme.of(context).scaffoldBackgroundColor,
-          child: NestedScrollView(
-            headerSliverBuilder: (context, _) => [
-              SliverPadding(
-                // The body starts behind the app bar on iOS.
-                padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
-                sliver: SliverToBoxAdapter(
-                  child: _RoundHeader(
-                    title: Theme.of(context).platform == TargetPlatform.iOS
-                        ? asyncTournament.value?.data.name ?? widget.broadcast.title
-                        : null,
-                    imageUrl:
-                        asyncTournament.value?.data.imageUrl ?? widget.broadcast.tour.imageUrl,
-                    information: asyncTournament.value?.data.information,
-                    onMorePressed: () => showBroadcastOverviewSheet(context, _selectedTournamentId),
-                    tabController: _tabController,
-                    tabs: [
-                      context.l10n.broadcastBoards,
-                      context.l10n.players,
-                      if (asyncTournament.value?.data.teamTable == true)
-                        context.l10n.broadcastTeams,
+          child: isIOS
+              // A single scroll view, the header and the selected tab, so that it scrolls no further
+              // than the content. The tabs don't swipe, like an iOS segmented control, and keep the
+              // scroll position. Built with the body's context, whose padding has the bar heights.
+              ? Builder(
+                  builder: (context) => CustomScrollView(
+                    slivers: [
+                      SliverPadding(
+                        // The body starts behind the app bar.
+                        padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+                        sliver: SliverToBoxAdapter(child: Column(children: [roundHeader, tabBar])),
+                      ),
+                      // The header has the app bar padding.
+                      MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListenableBuilder(
+                          listenable: _tabController,
+                          builder: (context, _) => tabs[_tabController.index],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ),
-            ],
-            // The tabs are below the header, which has the app bar padding. The padding is the
-            // body's, with the bottom bar height, not the screen's.
-            body: Builder(
-              builder: (context) => MediaQuery.removePadding(
-                context: context,
-                removeTop: true,
-                child: TabBarView(
-                  controller: _tabController,
-                  children: <Widget>[
-                    switch (asyncTournament) {
-                      AsyncData(:final value) => BroadcastBoardsTab(
-                        tournamentId: _selectedTournamentId,
-                        roundId: _selectedRoundId ?? value.defaultRoundId,
-                        tournamentSlug: value.data.slug,
-                        showOnlyOngoingGames: filter == _BroadcastGameFilter.ongoing,
-                        teamFilter: _teamFilter,
-                      ),
-                      _ => const SizedBox.shrink(),
-                    },
-                    BroadcastPlayersTab(tournamentId: _selectedTournamentId),
-                    if (asyncTournament.value?.data.teamTable == true) ...[
-                      switch (asyncTournament) {
-                        AsyncData(:final value) => BroadcastTeamsTab(
-                          roundId: _selectedRoundId ?? value.defaultRoundId,
-                          tournamentId: _selectedTournamentId,
-                          tournamentSlug: value.data.slug,
-                          showTeamScores: value.data.showTeamScores == true,
+                )
+              // The header scrolls away above the tabs, which swipe, and the tab bar is pinned
+              // below the app bar.
+              : NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    // The outer scroll view, whose content is the header.
+                    if (notification.depth == 0) {
+                      final metrics = notification.metrics;
+                      _isTabBarPinned.value =
+                          metrics.maxScrollExtent > 0 && metrics.pixels >= metrics.maxScrollExtent;
+                    }
+                    return false;
+                  },
+                  child: NestedScrollView(
+                    headerSliverBuilder: (context, _) => [
+                      SliverToBoxAdapter(child: roundHeader),
+                      SliverOverlapAbsorber(
+                        handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                        sliver: PinnedHeaderSliver(
+                          // Part of the app bar once pinned, with its scrolled under color.
+                          child: ValueListenableBuilder(
+                            valueListenable: _isTabBarPinned,
+                            builder: (context, isPinned, child) {
+                              final appBarTheme = AppBarTheme.of(context);
+                              final colorScheme = ColorScheme.of(context);
+                              // The color of a scrolled under Material 3 AppBar: its background,
+                              // with the surface tint of its elevation.
+                              final color = ElevationOverlay.applySurfaceTint(
+                                appBarTheme.backgroundColor ?? colorScheme.surfaceContainer,
+                                appBarTheme.surfaceTintColor ?? colorScheme.surfaceTint,
+                                appBarTheme.scrolledUnderElevation ?? 3.0,
+                              );
+                              return AnimatedContainer(
+                                duration: kThemeChangeDuration,
+                                color: color.withValues(alpha: isPinned ? 1.0 : 0.0),
+                                child: child,
+                              );
+                            },
+                            child: tabBar,
+                          ),
                         ),
-                        _ => const SizedBox.shrink(),
-                      },
+                      ),
                     ],
-                  ],
+                    body: Builder(
+                      builder: (context) => TabBarView(
+                        controller: _tabController,
+                        children: [
+                          for (final tab in tabs)
+                            CustomScrollView(
+                              slivers: [
+                                // Leaves room for the pinned tab bar.
+                                SliverOverlapInjector(
+                                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                                ),
+                                tab,
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ),
         bottomNavigationBar: switch (asyncTournament) {
           AsyncData(:final value) => _BottomBar(
@@ -388,7 +455,7 @@ class _BroadcastRoundScreenState()
         },
       ),
       AsyncError() => PlatformScaffold(
-        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        extendBody: isIOS,
         appBar: const PlatformAppBar(),
         body: Center(
           child: Column(
@@ -409,7 +476,7 @@ class _BroadcastRoundScreenState()
         ),
       ),
       _ => PlatformScaffold(
-        extendBody: Theme.of(context).platform == TargetPlatform.iOS,
+        extendBody: isIOS,
         appBar: const PlatformAppBar(),
         body: const Center(child: CircularProgressIndicator.adaptive()),
       ),
@@ -446,8 +513,8 @@ class _BroadcastRoundScreenState()
   }
 }
 
-/// The header of the round screen, which scrolls away with the tabs below it: the tournament image,
-/// title and a line of its information that opens the overview sheet.
+/// The header of the round screen, which scrolls away above the tab bar: the tournament image, title
+/// and a line of its information that opens the overview sheet.
 class const _RoundHeader({
   /// Null when the title is in the app bar (Android).
   required final String? title,
@@ -456,100 +523,95 @@ class const _RoundHeader({
   /// Null while the tournament is loading.
   required final BroadcastTournamentInformation? information,
   required final VoidCallback onMorePressed,
-  required final TabController tabController,
-  required final List<String> tabs,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
-          child: Column(
-            children: [
-              if (imageUrl != null)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 500),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                    // Broadcast images are cropped to this ratio by the server.
-                    child: AspectRatio(
-                      aspectRatio: 2.0,
-                      child: HttpNetworkImageWidget(
-                        imageUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, _, _) =>
-                            ColoredBox(color: ColorScheme.of(context).surfaceContainer),
-                      ),
+    return Padding(
+      padding: Styles.horizontalBodyPadding.copyWith(top: 16.0),
+      child: Column(
+        children: [
+          if (imageUrl != null)
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                // Broadcast images are cropped to this ratio by the server.
+                child: AspectRatio(
+                  aspectRatio: 2.0,
+                  child: HttpNetworkImageWidget(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, _, _) =>
+                        ColoredBox(color: ColorScheme.of(context).surfaceContainer),
+                  ),
+                ),
+              ),
+            ),
+          if (title != null) ...[
+            const SizedBox(height: 16.0),
+            Text(
+              title!,
+              style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ] else
+            const SizedBox(height: 8.0),
+          if (information case final information?)
+            Row(
+              // MORE is at the end of the last line.
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: DefaultTextStyle.merge(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Up to 2 pieces of information per line, on 2 lines.
+                        for (final line in broadcastInformationTexts(information).take(4).slices(2))
+                          Text(line.join(' · ')),
+                      ],
                     ),
                   ),
                 ),
-              if (title != null) ...[
-                const SizedBox(height: 16.0),
-                Text(
-                  title!,
-                  style: TextTheme.of(context).titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                TextButton(
+                  onPressed: onMorePressed,
+                  child: Text(
+                    context.l10n.more.toUpperCase(),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ] else
-                const SizedBox(height: 8.0),
-              if (information case final information?)
-                Row(
-                  // MORE is at the end of the last line.
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: DefaultTextStyle.merge(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Up to 2 pieces of information per line, on 2 lines.
-                            for (final line in broadcastInformationTexts(
-                              information,
-                            ).take(4).slices(2))
-                              Text(line.join(' · ')),
-                          ],
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: onMorePressed,
-                      child: Text(
-                        context.l10n.more.toUpperCase(),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
-        ),
-        PlatformTabBar(tabs: tabs, controller: tabController, inAppBar: false, glass: false),
-      ],
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
 
 /// A non-scrolling content for a tab of the round screen, such as a loading indicator or a message,
 /// centered in the space below the header.
+///
+/// It fills the space visible below the header, rather than the space below the whole header, so
+/// that switching to a tab that is loading keeps the scroll offset (iOS, where the tabs share the
+/// scroll view): the header isn't scrolled back into view.
 class const BroadcastRoundTabPlaceholder(final Widget child) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-            child: Center(child: child),
-          ),
+    return SliverLayoutBuilder(
+      builder: (context, constraints) => SliverToBoxAdapter(
+        child: Container(
+          // Taller than the visible space if the child doesn't fit in it.
+          constraints: BoxConstraints(minHeight: constraints.remainingPaintExtent),
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+          child: child,
         ),
-      ],
+      ),
     );
   }
 }

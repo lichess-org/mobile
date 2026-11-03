@@ -4,7 +4,7 @@ import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoIcons, CupertinoTheme;
-import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter/foundation.dart' show ValueListenable, kDebugMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -33,7 +33,20 @@ import 'package:material_ui/material_ui.dart';
 /// Older iOS versions get the same layouts (large titles, scroll-aware bar tint, inset sheets...),
 /// with plain controls and opaque surfaces instead of glass ones.
 bool useLiquidGlass(BuildContext context) =>
-    Theme.of(context).platform == TargetPlatform.iOS && _isLiquidGlassSupported;
+    Theme.of(context).platform == TargetPlatform.iOS &&
+    ((kDebugMode ? DebugLiquidGlassOverride.maybeOf(context) : null) ?? _isLiquidGlassSupported);
+
+/// Overrides glass eligibility for a debug preview without changing the actual OS version.
+///
+/// Ignored in profile and release builds. Normal app entry points do not install this scope.
+class const DebugLiquidGlassOverride({required final bool enabled, required super.child, super.key})
+    extends InheritedWidget {
+  static bool? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DebugLiquidGlassOverride>()?.enabled;
+
+  @override
+  bool updateShouldNotify(DebugLiquidGlassOverride oldWidget) => enabled != oldWidget.enabled;
+}
 
 /// Whether the device runs iOS 26 or later, unless turned off with
 /// `--dart-define=NO_LIQUID_GLASS=true` (to check the older iOS design on an iOS 26 device).
@@ -156,6 +169,17 @@ LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
     ? LiquidGlassSettings.ios27Light
     : LiquidGlassSettings.ios27Dark;
+
+/// The glass of a liquid glass menu: thicker than the [ios27GlassSettings] of the button it morphs
+/// from.
+LiquidGlassSettings menuGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light.copyWith(
+        frost: 30,
+        frostOpacity: 0.94,
+        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, 12))],
+      )
+    : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
 
 /// The glass of a prominent liquid glass button (floating action button, main action of a bottom
 /// bar): tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
@@ -912,6 +936,7 @@ class const PlatformAppBar({
               icon: glyph(icon, color),
               menuItems: glassMenuItems(context, actions),
               menuWidth: kGlassMenuWidth,
+              menuSettings: menuGlassSettings(context),
               label: semanticsLabel,
             ),
           AppBarIndicator() => GlassBarItem.custom(

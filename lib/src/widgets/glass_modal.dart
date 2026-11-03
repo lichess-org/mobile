@@ -12,8 +12,11 @@ Color opaqueModalColor(BuildContext context) =>
 
 /// The rounded liquid glass card of an iOS modal (action sheet, alert dialog, bottom sheet).
 ///
-/// With [tinted], its glass is tinted with [opaqueModalColor], nearly opaque, for a modal shown over
-/// busy content such as a board, which the glass would let show through too much.
+/// With [tinted], its glass is nearly opaque, for a modal shown over busy content such as a board,
+/// which the glass would let show through too much. It is tinted with [opaqueModalColor] in dark
+/// mode, and with the neutral color of the glass in light mode: there, the theme color would look
+/// too warm, and the glass only keeps a light color bright when it is neutral (a color with a hue
+/// takes the brightness of the dimmed content behind the modal).
 ///
 /// Before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of the same shape.
 class const GlassModalCard({
@@ -43,8 +46,13 @@ class const GlassModalCard({
       clipBehavior: Clip.antiAlias,
       padding: padding,
       settings: tinted
-          ? ios27GlassSettings(context)
-                .copyWith(glassColor: opaqueModalColor(context).withValues(alpha: 0.85))
+          ? ios27GlassSettings(context).copyWith(
+              glassColor:
+                  (Theme.of(context).brightness == .light
+                          ? ios27GlassSettings(context).glassColor
+                          : opaqueModalColor(context))
+                      .withValues(alpha: 0.85),
+            )
           : ios27GlassSettings(context),
       child: child,
     );

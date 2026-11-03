@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/service/notification_service/unifiedpush_serv
 
 void main() {
   bootstrapApp(
-    FdroidLichessBinding.ensureInitialized,
+    initializeBinding: FdroidLichessBinding.ensureInitialized,
     notificationServiceFactory: UnifiedPushService.new,
   );
 }

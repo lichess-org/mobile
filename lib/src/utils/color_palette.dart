@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:dynamic_system_colors/dynamic_system_colors.dart' show DynamicColorPlugin;
+import 'package:flutter/foundation.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 // Not exported by the `material_color_utilities` barrel file.
 import 'package:material_color_utilities/palettes/core_palettes.dart';
@@ -70,19 +71,23 @@ Future<void> loadSystemColors() async {
   _boardColorScheme = palettes != null ? _boardColorSchemeFromPalettes(palettes) : null;
 }
 
+// The getters below check `defaultTargetPlatform`, not `Platform.isAndroid`: using the system
+// colors is a design choice, so it follows the platform the app is styled for, which a debug
+// override can change.
+
 /// Get the system core palettes if available (android 12+ only).
 CorePalettes? getSystemCorePalettes() {
-  return _corePalettes;
+  return defaultTargetPlatform == .android ? _corePalettes : null;
 }
 
 /// Get the system color schemes, if available (android 12+).
 ColorSchemes? getDynamicColorSchemes() {
-  return _dynamicColorSchemes;
+  return defaultTargetPlatform == .android ? _dynamicColorSchemes : null;
 }
 
 /// Get the board colors based on the system core palettes, if available (android 12+).
 ChessboardColorScheme? getBoardColorScheme() {
-  return _boardColorScheme;
+  return defaultTargetPlatform == .android ? _boardColorScheme : null;
 }
 
 // --

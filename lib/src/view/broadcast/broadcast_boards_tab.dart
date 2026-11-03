@@ -30,7 +30,7 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
-/// A tab that displays the live games of a broadcast round.
+/// A tab that displays the live games of a broadcast round, as a sliver.
 class const BroadcastBoardsTab({
   required final BroadcastTournamentId tournamentId,
   required final BroadcastRoundId roundId,
@@ -190,7 +190,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     final hasComment = pinnedComment != null && pinnedComment.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
-    return CustomScrollView(
+    return SliverMainAxisGroup(
       slivers: [
         if (hasComment)
           SliverSafeArea(

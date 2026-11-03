@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
@@ -31,7 +31,7 @@ class FcmService(super.ref) extends NotificationService {
 
   @override
   Future<bool> register() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Platform.isIOS) {
       final apnsToken = await _fcmBinding.firebaseMessaging.getAPNSToken();
       if (apnsToken == null) {
         notificationLogger.warning('APNS token is null');

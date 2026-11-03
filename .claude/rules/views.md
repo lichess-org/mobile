@@ -18,7 +18,9 @@ navigator above `MainTabScaffold`. Deep links are resolved in `app_links.dart`.
   `rootNavigator: true`.
 - Push a full screen (game, puzzle, analysis, study, any board screen) with
   `Navigator.of(context).pushHidingTabBar(route)` (or `pushReplacementHidingTabBar` /
-  `pushAndRemoveUntilHidingTabBar`). `popUntilTabBarShown()` pops back to the screen below.
+  `pushAndRemoveUntilHidingTabBar`). `popUntilTabBarShown()` pops back to the screen below. Routes
+  pushed above such a screen, or replacing it, keep the tab bar hidden with a plain `push` /
+  `pushReplacement`.
 - Use the root navigator only for:
   - dialogs (Flutter's default) and fullscreen dialogs;
   - sheets and action sheets presented from a screen with the tab bar shown

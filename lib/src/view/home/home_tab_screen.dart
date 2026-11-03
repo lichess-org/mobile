@@ -632,7 +632,6 @@ class const _GreetingWidget(
     final greeting = '${isDayTime ? '☀️' : '🌙'} $text';
 
     void openProfile() {
-      ref.invalidate(accountProvider);
       Navigator.of(context).push(ProfileScreen.buildRoute());
     }
 

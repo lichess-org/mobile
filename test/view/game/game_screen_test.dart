@@ -2786,6 +2786,36 @@ void main() {
       // White pawn should appear on c4
       expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
     }, variant: kPlatformVariant);
+
+    testWidgets('pockets stay usable when the clock shows tenths with a large text size', (
+      tester,
+    ) async {
+      // Regression test for https://github.com/lichess-org/mobile/issues/3599: below 10 seconds
+      // the clock shows tenths, which made it wrap on two lines with a large text size. The taller
+      // clock pushed the pockets out of the player table, where they could not be touched.
+      await createTestGame(
+        tester,
+        variant: Variant.crazyhouse,
+        pgn: 'e4 d5 exd5 Qxd5',
+        youAre: Side.white,
+        clock: const (
+          running: false,
+          initial: Duration(minutes: 1),
+          increment: Duration.zero,
+          white: Duration(milliseconds: 9500),
+          black: Duration(milliseconds: 9500),
+          emerg: Duration(seconds: 10),
+        ),
+        textScaler: const TextScaler.linear(1.5),
+      );
+
+      expect(find.textContaining('0:09.5', findRichText: true), findsNWidgets(2));
+
+      await playDropMove(tester, Side.white, Role.pawn, 'c4');
+      await tester.pumpAndSettle();
+
+      expect(boardHasPiece(tester, Square.c4, Piece.whitePawn), isTrue);
+    }, variant: kPlatformVariant);
   });
 
   group('Widget rebuilds', () {
@@ -3258,11 +3288,22 @@ Future<void> createTestGame(
   /// An optional listenable fake web socket channel factory to use in place of the default one if
   /// we need to listen to the sent messages.
   ListenableFakeWebSocketChannelFactory? socketFactory,
+
+  /// An optional text scaler, to simulate the user's text size setting.
+  TextScaler? textScaler,
 }) async {
   const gameFullId = GameFullId('qVChCOTcHSeW');
+  const gameScreen = GameScreen(source: ExistingGameSource(gameFullId));
   final app = await makeTestProviderScopeApp(
     tester,
-    home: const GameScreen(source: ExistingGameSource(gameFullId)),
+    home: textScaler != null
+        ? Builder(
+            builder: (context) => MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaler: textScaler),
+              child: gameScreen,
+            ),
+          )
+        : gameScreen,
     defaultPreferences: defaultPreferences,
     overrides: {
       lichessClientProvider: lichessClientProvider.overrideWith(

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
@@ -47,7 +46,7 @@ final soundServiceProvider = Provider<SoundService>((Ref ref) {
   return service;
 }, name: 'SoundServiceProvider');
 
-final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
+final _extension = Platform.isIOS ? 'aifc' : 'mp3';
 
 const Set<Sound> _emtpySet = {};
 
@@ -137,7 +136,7 @@ Future<void> _loadSound(SoundTheme theme, Sound sound) async {
   } catch (_) {
     fullPath = '$standardPath/$file';
   }
-  if (defaultTargetPlatform == TargetPlatform.linux) {
+  if (Platform.isLinux) {
     await _linuxSoundPlayer.load(theme, soundId, fullPath);
   } else {
     await _soundEffectPlugin.load(soundId, fullPath);
@@ -160,7 +159,7 @@ class SoundService(final Ref _ref) {
                   ? GeneralPrefs.fromJson(jsonDecode(stored) as Map<String, dynamic>)
                   : GeneralPrefs.defaults)
               .soundTheme;
-      if (defaultTargetPlatform == TargetPlatform.linux) {
+      if (Platform.isLinux) {
         _linuxSoundPlayer.initialize();
       } else {
         await _soundEffectPlugin.initialize(maxStreams: _kMaxConcurrentStreams);
@@ -179,7 +178,7 @@ class SoundService(final Ref _ref) {
     if (!isEnabled || finalVolume == 0.0) {
       return;
     }
-    if (defaultTargetPlatform == TargetPlatform.linux) {
+    if (Platform.isLinux) {
       _linuxSoundPlayer.play(sound.name, volume: finalVolume);
     } else {
       _soundEffectPlugin.play(sound.name, volume: finalVolume);
@@ -197,7 +196,7 @@ class SoundService(final Ref _ref) {
   ///
   /// If [playSound] is true, a move sound will be played.
   Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
-    if (defaultTargetPlatform == TargetPlatform.linux) {
+    if (Platform.isLinux) {
       _linuxSoundPlayer.release();
     } else {
       await _soundEffectPlugin.release();
@@ -211,7 +210,7 @@ class SoundService(final Ref _ref) {
   }
 
   Future<void> release() async {
-    if (defaultTargetPlatform == TargetPlatform.linux) {
+    if (Platform.isLinux) {
       _linuxSoundPlayer.release();
     } else {
       await _soundEffectPlugin.release();

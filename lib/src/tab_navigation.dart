@@ -146,7 +146,8 @@ Animation<double>? _animationOf(Route<dynamic> route) =>
 /// [TabBarHidingNavigator.pushHidingTabBar].
 ///
 /// A route hiding the tab bar fades it out, and the routes pushed above it keep it hidden until it
-/// is popped. Its page is laid out over the whole screen, as if there was no tab bar.
+/// is popped. A route replacing it hides the tab bar too. Its page is laid out over the whole
+/// screen, as if there was no tab bar.
 ///
 /// It notifies its listeners when [hasTabBarHidingRoute] may have changed.
 class TabNavigatorObserver() extends RouteStackObserver with ChangeNotifier {
@@ -228,7 +229,9 @@ class TabNavigatorObserver() extends RouteStackObserver with ChangeNotifier {
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     pageRouteObserver.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-    if (oldRoute != null) _hidingRoutes.remove(oldRoute);
+    if (oldRoute != null && _hidingRoutes.remove(oldRoute) && newRoute != null) {
+      _hidingRoutes.add(newRoute);
+    }
     _update();
   }
 
@@ -343,6 +346,9 @@ extension TabBarHidingNavigator on NavigatorState {
 
   /// Replaces the current route with [newRoute], hiding the tab bar while it is shown. See
   /// [pushReplacement].
+  ///
+  /// It is only needed when the current route is shown with the tab bar: a plain [pushReplacement]
+  /// of a route hiding the tab bar keeps it hidden.
   Future<T?> pushReplacementHidingTabBar<T extends Object?, TO extends Object?>(
     Route<T> newRoute, {
     TO? result,

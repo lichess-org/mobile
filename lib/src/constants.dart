@@ -15,7 +15,7 @@ const kLichessWSSecret = String.fromEnvironment(
 
 const kLichessCDNHost = String.fromEnvironment(
   'LICHESS_CDN_HOST',
-  defaultValue: 'https://lichess1.org',
+  defaultValue: 'https://lichess.org',
 );
 
 const kLichessOpeningExplorerHost = String.fromEnvironment(
@@ -58,9 +58,8 @@ const double kCupertinoBarOpacity = 0.8;
 const kGoldenRatio = 1.61803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
-    ? <BoxShadow>[]
-    : kElevationToShadow[1]!;
+List<BoxShadow> get boardShadows =>
+    defaultTargetPlatform == .iOS ? const <BoxShadow>[] : kElevationToShadow[1]!;
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();

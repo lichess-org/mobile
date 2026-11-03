@@ -14,9 +14,10 @@ import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-Future<void> bootstrapApp(
-  LichessBindingBase Function() initializeBinding, {
+Future<void> bootstrapApp({
+  required LichessBindingBase Function() initializeBinding,
   required NotificationService Function(Ref) notificationServiceFactory,
+  Widget app = const AppInitializationScreen(),
 }) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = initializeBinding();
@@ -56,7 +57,7 @@ Future<void> bootstrapApp(
         overrides: [
           notificationServiceFactoryProvider.overrideWithValue(notificationServiceFactory),
         ],
-        child: const AppInitializationScreen(),
+        child: app,
       ),
     ),
   );

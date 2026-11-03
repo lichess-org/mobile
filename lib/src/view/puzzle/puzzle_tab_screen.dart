@@ -1,9 +1,7 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -31,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
@@ -137,27 +136,29 @@ class _MaterialTabBodyState() extends ConsumerState<_MaterialTabBody> {
         _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
     return _PuzzleTabScaffold(
-      body: isTablet
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AnimatedList(
-                    key: _listKey,
-                    initialItemCount: _angles.length,
-                    controller: puzzlesScrollController,
-                    itemBuilder: buildItem,
+      body: SwipeActionsScope(
+        child: isTablet
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AnimatedList(
+                      key: _listKey,
+                      initialItemCount: _angles.length,
+                      controller: puzzlesScrollController,
+                      itemBuilder: buildItem,
+                    ),
                   ),
-                ),
-                Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
-              ],
-            )
-          : AnimatedList(
-              key: _listKey,
-              controller: puzzlesScrollController,
-              initialItemCount: _angles.length,
-              itemBuilder: buildItem,
-            ),
+                  Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+                ],
+              )
+            : AnimatedList(
+                key: _listKey,
+                controller: puzzlesScrollController,
+                initialItemCount: _angles.length,
+                itemBuilder: buildItem,
+              ),
+      ),
     );
   }
 }
@@ -472,15 +473,13 @@ class const PuzzleAnglePreview({
           ? const Shimmer(
               child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
             )
-          : Slidable(
-              dragStartBehavior: DragStartBehavior.start,
-              enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
-              endActionPane: ActionPane(
-                motion: const StretchMotion(),
-                children: [
-                  SlidableAction(
+          : SwipeActions(
+              allowsFullSwipe: false,
+              endActions: [
+                if (angle != const PuzzleTheme(PuzzleThemeKey.mix))
+                  SwipeAction(
                     icon: Icons.delete,
-                    onPressed: (context) async {
+                    onPressed: () async {
                       final service = await ref.read(puzzleServiceProvider.future);
                       if (context.mounted) {
                         await service.deleteBatch(
@@ -490,13 +489,11 @@ class const PuzzleAnglePreview({
                         ref.invalidate(savedBatchesProvider);
                       }
                     },
-                    spacing: 8.0,
                     backgroundColor: context.lichessColors.error,
                     foregroundColor: Colors.white,
                     label: context.l10n.delete,
                   ),
-                ],
-              ),
+              ],
               child: SmallBoardPreview(
                 orientation: preview?.orientation ?? Side.white,
                 fen: preview?.initialFen ?? kEmptyFEN,
