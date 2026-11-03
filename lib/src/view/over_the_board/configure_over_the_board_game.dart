@@ -14,7 +14,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
@@ -292,7 +291,7 @@ class _ConfigureOverTheBoardGameSheetState()
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: PlatformFilledButton(
+          child: FilledButton(
             onPressed: _isPlayEnabled
                 ? () {
                     ref.read(overTheBoardClockProvider.notifier).setupClock(timeIncrement);

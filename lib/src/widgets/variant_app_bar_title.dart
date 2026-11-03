@@ -1,11 +1,9 @@
-import 'dart:io';
-
-import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays a variant [Icon] followed by its translated label, sized and colored to
 /// match the surrounding text style, with a description below. Intended for use as a [labelBuilder]
@@ -14,8 +12,9 @@ class const VariantLabel(final Variant variant, {super.key}) extends StatelessWi
   @override
   Widget build(BuildContext context) {
     final style = DefaultTextStyle.of(context).style;
-    final alignment = Platform.isAndroid ? CrossAxisAlignment.start : CrossAxisAlignment.center;
-    final descriptionStyle = Platform.isAndroid
+    final isAndroid = Theme.of(context).platform == TargetPlatform.android;
+    final alignment = isAndroid ? CrossAxisAlignment.start : CrossAxisAlignment.center;
+    final descriptionStyle = isAndroid
         ? TextStyle(
             height: 1.2,
             fontSize: 12.0,

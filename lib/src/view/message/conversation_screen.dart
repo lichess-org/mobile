@@ -44,18 +44,20 @@ class const ConversationScreen({super.key, required final LightUser user})
 }
 
 class _ConversationScreenState() extends ConsumerState<ConversationScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
   }
 
@@ -72,7 +74,7 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
         titleSpacing: 0,
         title: ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(widget.user, radius: 16),
+          leading: UserAvatar(widget.user, radius: 20),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
           subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
           onTap: () {
@@ -125,47 +127,39 @@ class const _Body({required final LightUser user}) extends ConsumerWidget {
     switch (messageStateAsync) {
       case AsyncData(:final value):
         final items = buildDisplayItems(value);
-        return Column(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: ListView.builder(
-                  // remove the automatic bottom padding of the ListView which is here taken care
-                  // of by the _MessageInput
-                  padding: MediaQuery.paddingOf(context).copyWith(bottom: 0),
-                  reverse: true,
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    switch (item) {
-                      case DateItem(:final date):
-                        return _DateBubble(date: date);
-                      case MessageItem(:final message, :final isMe):
-                        return _MessageBubble(
-                          message: message,
-                          isMe: isMe,
-                          groupLength: item.groupLength,
-                          groupIndex: item.groupIndex,
-                        );
-                      case GetMoreItem():
-                        return Center(
-                          child: TextButton(
-                            onPressed: () => ref
-                                .read(conversationControllerProvider(user.id).notifier)
-                                .getMore(),
-                            child: const Text('Load more'),
-                          ),
-                        );
-                      case ContactTypingItem():
-                        return _ContactTyping(user: user);
-                    }
-                  },
-                ),
-              ),
+        return MessageInputLayout(
+          input: _MessageInput(user: user, state: value),
+          messages: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: ListView.builder(
+              reverse: true,
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                switch (item) {
+                  case DateItem(:final date):
+                    return _DateBubble(date: date);
+                  case MessageItem(:final message, :final isMe):
+                    return _MessageBubble(
+                      message: message,
+                      isMe: isMe,
+                      groupLength: item.groupLength,
+                      groupIndex: item.groupIndex,
+                    );
+                  case GetMoreItem():
+                    return Center(
+                      child: TextButton(
+                        onPressed: () =>
+                            ref.read(conversationControllerProvider(user.id).notifier).getMore(),
+                        child: const Text('Load more'),
+                      ),
+                    );
+                  case ContactTypingItem():
+                    return _ContactTyping(user: user);
+                }
+              },
             ),
-            _MessageInput(user: user, state: value),
-          ],
+          ),
         );
       case AsyncError(error: final e, stackTrace: final st):
         debugPrint('Error loading messages for ${user.id}: $e\n$st');
@@ -311,7 +305,7 @@ class const _MessageBubble({
   Color _bubbleColor(BuildContext context) {
     return isMe
         ? ColorScheme.of(context).secondaryContainer
-        : ColorScheme.of(context).surfaceContainer;
+        : Theme.of(context).cardTheme.color ?? ColorScheme.of(context).surfaceContainer;
   }
 
   Color _textColor(BuildContext context) {
@@ -404,16 +398,16 @@ class const _MessageContent({
       ),
     );
 
-    final linkSpan = buildTextSpan(
-      linkify(text, linkifiers: AppLinksService.kLichessLinkifiers),
-      style: TextStyle(color: textColor),
-      linkStyle: Styles.linkStyle,
-      onOpen: onLinkOpen,
-    );
-
     return Stack(
       children: [
-        Text.rich(TextSpan(children: [linkSpan, spacer])),
+        RichLinkText(
+          text: text,
+          linkifiers: AppLinksService.kLichessLinkifiers,
+          style: TextStyle(color: textColor),
+          linkStyle: Styles.linkStyle,
+          onOpen: onLinkOpen,
+          trailing: spacer,
+        ),
         Positioned(right: 0, bottom: 0, child: Text(time, style: timeStyle)),
       ],
     );
@@ -471,33 +465,27 @@ class _MessageInputState() extends ConsumerState<_MessageInput> {
       },
     );
 
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: messageInputVerticalPadding(context, fallback: 6),
+    return MessageInputBar(
+      fallbackVerticalPadding: 6.0,
+      field: TextField(
+        decoration: messageInputDecoration(
+          context,
+          suffixIcon: sendButton,
+          hintText: isBlocked
+              ? 'This conversation is blocked.'
+              : isBot
+              ? 'Bot accounts cannot send nor receive messages.'
+              : !canPost
+              ? "${widget.user.name} doesn't accept new messages."
+              : null,
         ),
-        child: TextField(
-          decoration: messageInputDecoration(
-            context,
-            suffixIcon: sendButton,
-            hintText: isBlocked
-                ? 'This conversation is blocked.'
-                : isBot
-                ? 'Bot accounts cannot send nor receive messages.'
-                : !canPost
-                ? "${widget.user.name} doesn't accept new messages."
-                : null,
-          ),
-          controller: controller,
-          keyboardType: TextInputType.text,
-          textCapitalization: TextCapitalization.sentences,
-          minLines: 1,
-          maxLines: 4,
-          enableSuggestions: true,
-          readOnly: readOnly,
-        ),
+        controller: controller,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        minLines: 1,
+        maxLines: 4,
+        enableSuggestions: true,
+        readOnly: readOnly,
       ),
     );
   }

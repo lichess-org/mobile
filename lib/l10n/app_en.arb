@@ -6,6 +6,7 @@
   "mobileAddToStudy": "Add to study",
   "mobileAllGames": "All games",
   "mobileAllowTakebacksAndHints": "Allow takebacks and hints",
+  "mobileAppLogs": "App logs",
   "mobileAmoledBlack": "Amoled black",
   "mobileAreYouSure": "Are you sure?",
   "mobileAreYouSureDownloadNnue": "Are you sure you want to download the NNUE file ({param})?",
@@ -41,6 +42,7 @@
   "mobileCustomizeButton": "Customize",
   "mobileCustomizeHomeTip": "Tip: You can add more widgets to the Home Screen or remove those you don't need!",
   "mobileCustomizeHomeTipDismiss": "Dismiss",
+  "mobileDeleteAllLogsConfirmation": "Do you want to delete all logs?",
   "mobileDangerZone": "Danger zone",
   "mobileDeleteYourAccount": "Delete your account",
   "mobileDisplayModeCompact": "Compact",
@@ -73,6 +75,7 @@
   "mobileGoodMoveButThereIsBetter": "Good move, but there's better",
   "mobileHello": "Hello",
   "mobileHomeTab": "Home",
+  "mobileHttpLogs": "Network logs",
   "mobileIfAccountMatchesCodeSent": "If an account matches {param1}, a {param2} character code was sent to it. Check your inbox and enter the code below.",
   "@mobileIfAccountMatchesCodeSent": {
     "placeholders": {
@@ -129,6 +132,7 @@
   "mobilePracticeMode": "Practice mode",
   "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
   "mobilePreviousPage": "Previous",
+  "mobilePuzzleHistoryDescription": "Review your past puzzle attempts.",
   "mobilePuzzleStormConfirmEndRun": "Do you want to end this run?",
   "mobilePuzzleStormFilterNothingToShow": "Nothing to show, please change the filters",
   "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
@@ -166,6 +170,7 @@
   "mobileSettingsShowBorder": "Show border",
   "mobileSettingsTouchFeedback": "Touch feedback",
   "mobileSettingsTouchFeedbackSubtitle": "When enabled, the device will vibrate shortly when you move or capture a piece.",
+  "mobileShare": "Share",
   "mobileShareChallengeUrl": "Share challenge URL",
   "mobileShareGamePGN": "Share PGN",
   "mobileShareGameURL": "Share game URL",
@@ -186,6 +191,7 @@
   "mobileSystemColors": "System colors",
   "mobileTablebaseOffline": "Tablebase is not available offline.",
   "mobileTheme": "Theme",
+  "mobileToBeAnnounced": "To be announced",
   "mobileTooManyLoginAttempts": "Too many attempts. Please try again later.",
   "mobileTournamentCompleted": "Completed",
   "mobileTournamentJumpToMyPage": "Jump to my page",
@@ -809,6 +815,15 @@
   "coordinatesFindSquare": "Find square",
   "coordinatesNameSquare": "Name square",
   "coordinatesPracticeOnlySomeFilesAndRanks": "Practice only some files & ranks",
+  "coordinatesEnterTheCoordinate": "Enter the coordinate",
+  "coordinatesPressEnterToStart": "Press {param} to start",
+  "@coordinatesPressEnterToStart": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "learnLearnChess": "Learn chess",
   "learnByPlaying": "by playing!",
   "learnProgressX": "Progress: {param}",
@@ -1253,7 +1268,7 @@
   "preferencesBlindfold": "Blindfold",
   "preferencesShowClockOnTheLeft": "Show on the left on mobile devices",
   "preferencesInlineNotation": "Inline notation",
-  "preferencesShowServerAnalysis": "Show server analysis",
+  "preferencesShowMainlineAnalysis": "Show mainline analysis",
   "preferencesShowBestMoveArrows": "Show best move arrows",
   "preferencesShowManeuverArrows": "Show maneuver arrows",
   "preferencesShowGauge": "Show evaluation gauge",
@@ -1263,6 +1278,7 @@
   "preferencesShowUndefendedPieces": "Show undefended pieces",
   "preferencesShowPinnedPieces": "Show pinned pieces",
   "preferencesShowCheckableKing": "Show checkable king",
+  "preferencesShowTrappedPieces": "Show trapped pieces",
   "preferencesDisclosureMode": "Enable variation hiding",
   "preferencesGeneralSettings": "General",
   "preferencesMoveListSettings": "Move list",
@@ -1454,7 +1470,6 @@
   "puzzleThemeBodenMate": "Boden's mate",
   "puzzleThemeBodenMateDescription": "Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.",
   "puzzleThemeCastling": "Castling",
-  "puzzleThemeEnPassant": "En passant",
   "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
   "puzzleThemeCapturingDefender": "Capture the defender",
   "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
@@ -1486,6 +1501,7 @@
   "puzzleThemeDoubleCheckDescription": "Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent's king.",
   "puzzleThemeEndgame": "Endgame",
   "puzzleThemeEndgameDescription": "A tactic during the last phase of the game.",
+  "puzzleThemeEnPassant": "En passant",
   "puzzleThemeEnPassantAdjacentCaptureDescription": "A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.",
   "puzzleThemeEpauletteMate": "Epaulette mate",
   "puzzleThemeEpauletteMateDescription": "Two adjacent escape squares for a checked king are occupied by other pieces.",
@@ -1824,6 +1840,7 @@
   "flipBoard": "Flip board",
   "toggleLocalEngine": "Toggle local engine",
   "engineSettings": "Engine settings",
+  "engine": "Engine",
   "enginesFromStrongestToWeakest": "Engines from strongest to weakest",
   "illegalPosition": "Illegal position",
   "threefoldRepetition": "Threefold repetition",
@@ -2196,6 +2213,17 @@
   "retry": "Retry",
   "reconnecting": "Reconnecting",
   "noNetwork": "Offline",
+  "friendsOnlineAndPlaying": "Friends online: {param1}\nFriends playing: {param2}",
+  "@friendsOnlineAndPlaying": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
   "favoriteOpponents": "Favourite opponents",
   "follow": "Follow",
   "following": "Following",
@@ -2378,14 +2406,12 @@
   "reportAUser": "Report a user",
   "user": "User",
   "reason": "Reason",
-  "whatIsIheMatter": "What's the matter?",
   "cheat": "Cheat",
   "troll": "Troll",
   "other": "Other",
   "reportCheatBoostHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion.",
   "reportUsernameHelp": "Explain why this username is offensive. Don't just say \"it's offensive/inappropriate,\" but tell us how you came to this conclusion, especially if the offense is obscure, not in English, in slang, or a historical/cultural reference.",
   "processReportFasterInEnglish": "We can process your report faster if you write in English.",
-  "error_provideOneCheatedGameLink": "Please provide at least one link to a game for review.",
   "by": "by {param}",
   "@by": {
     "placeholders": {
@@ -2782,7 +2808,9 @@
   "downloadAnnotated": "Download annotated",
   "downloadRaw": "Download raw",
   "downloadImported": "Download imported",
+  "downloadMyGames": "Download my games",
   "downloadAllGames": "Download all games",
+  "downloadResults": "Download results",
   "crosstable": "Crosstable",
   "youCanAlsoScrollOverTheBoardToMoveInTheGame": "Scroll over the board to move in the game.",
   "scrollOverComputerVariationsToPreviewThem": "Scroll over computer variations to preview them.",
@@ -3277,7 +3305,7 @@
   "ourEventTips": "Our tips for organising events",
   "instructions": "Instructions",
   "showMeEverything": "Show me everything",
-  "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!\n  ",
+  "lichessPatronInfo": "Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!",
   "nothingToSeeHere": "Nothing to see here at the moment.",
   "stats": "Stats",
   "accessibility": "Accessibility",
@@ -3780,7 +3808,6 @@
   "studyAnnotateWithGlyphs": "Annotate with glyphs",
   "studyTheChapterIsTooShortToBeAnalysed": "The chapter is too short to be analysed.",
   "studyOnlyContributorsCanRequestAnalysis": "Only the study contributors can request a computer analysis.",
-  "studyGetAFullComputerAnalysis": "Get a full server-side computer analysis of the main line.",
   "studyMakeSureTheChapterIsComplete": "Make sure the chapter is complete. You can only request analysis once.",
   "studyAllSyncMembersRemainOnTheSamePosition": "All SYNC members remain on the same position",
   "studyShareChanges": "Share changes with spectators and save them on the server",
@@ -3882,7 +3909,6 @@
   "studyNoLetPeopleBrowseFreely": "No: let people browse freely",
   "studyPinnedStudyComment": "Pinned study comment",
   "studyStart": "Start",
-  "studySave": "Save",
   "studyClearChat": "Clear chat",
   "studyDeleteTheStudyChatHistory": "Delete the study chat history? There is no going back!",
   "studyDeleteStudy": "Delete study",
@@ -3996,6 +4022,11 @@
   "studyDoubleDefeat": "Double defeat",
   "studyBlackDefeatWhiteCanNotWin": "Black defeat, but White can't win",
   "studyWhiteDefeatBlackCanNotWin": "White defeat, but Black can't win",
+  "studyAnalysisEditor": "Analysis editor",
+  "studyClearLocal": "Clear local analysis?",
+  "studyClearPublished": "Clear published analysis?",
+  "studyRequestAServerAnalysis": "Request a server analysis",
+  "studyAnalyzeOnYourDevice": "Analyse on your device",
   "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
   "@studyNbChapters": {
     "placeholders": {

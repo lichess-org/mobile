@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -99,8 +100,22 @@ class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
               );
             },
           ),
-          LichessConnectionStatus.networkDown => const Center(
-            child: Text('No internet connection.', style: Styles.noResultTextStyle),
+          // Pulling to refresh is not gated on the connectivity status: the device may be marked
+          // offline while its network is back, and the responses to these requests are what tell
+          // the connectivity check to run again.
+          LichessConnectionStatus.networkDown => HapticRefreshIndicator(
+            onRefresh: _refreshData,
+            child: const CustomScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Text('No internet connection.', style: Styles.noResultTextStyle),
+                  ),
+                ),
+              ],
+            ),
           ),
           // Nothing on this tab works without the server, so the outage message
           // takes the whole screen. Pulling to refresh is the way out of it:
@@ -165,6 +180,7 @@ class _BodyState() extends ConsumerState<_Body> {
 
     final content = [
       if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      const _BroadcastCalendarCard(),
       if (isTablet)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +220,7 @@ class const _BroadcastWidget(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: Styles.verticalBodyPadding,
+      padding: const EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -232,6 +248,27 @@ class const _BroadcastWidget(
           },
         ],
       ),
+    );
+  }
+}
+
+class const _BroadcastCalendarCard() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.calendar_month),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastBroadcastCalendar),
+          subtitle: const Text('Upcoming and past tournaments'),
+          onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
+        ),
+      ],
     );
   }
 }
@@ -280,8 +317,8 @@ class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChann
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap: () => Navigator.of(context, rootNavigator: true)
-                      .push(
+                  onTap: () => Navigator.of(context)
+                      .pushHidingTabBar(
                         TvScreen.buildRoute(
                           channel: snapshot.channel,
                           gameId: snapshot.id,

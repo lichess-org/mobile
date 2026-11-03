@@ -57,12 +57,14 @@ class const ChatScreen({required final ChatOptions options}) extends ConsumerSta
 }
 
 class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
@@ -76,7 +78,7 @@ class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
   }
 
@@ -116,57 +118,65 @@ class _ChatScreenState() extends ConsumerState<ChatScreen> with RouteAware {
           // The context of the body, whose padding includes the glass app bar on iOS.
           body: Builder(
             builder: (context) {
-              final padding = MediaQuery.paddingOf(context);
-              return Column(
-                children: [
-                  // Display error if there is one, but still show the messages if they are
-                  // available
-                  if (chatState.hasError)
-                    Padding(
-                      padding: EdgeInsets.only(top: padding.top),
-                      child: Material(
-                        color: Theme.of(context).colorScheme.errorContainer,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            chatState.error.toString(),
-                            style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
-                            textAlign: TextAlign.center,
+              return MessageInputLayout(
+                input: widget.options.writeable ? _ChatBottomBar(options: widget.options) : null,
+                // The context of the messages, whose bottom padding is the input bar on iOS.
+                messages: Builder(
+                  builder: (context) {
+                    final padding = MediaQuery.paddingOf(context);
+                    return Column(
+                      children: [
+                        // Display error if there is one, but still show the messages if they are
+                        // available
+                        if (chatState.hasError)
+                          Padding(
+                            padding: EdgeInsets.only(top: padding.top),
+                            child: Material(
+                              color: Theme.of(context).colorScheme.errorContainer,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  chatState.error.toString(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.onErrorContainer,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () => FocusScope.of(context).unfocus(),
+                            // the top padding is taken by the error, if any
+                            child: ListView.builder(
+                              padding: padding.copyWith(top: chatState.hasError ? 0 : padding.top),
+                              reverse: true,
+                              itemCount: value.messages.length,
+                              itemBuilder: (context, index) {
+                                final message = value.messages[value.messages.length - index - 1];
+                                return (message.username == 'lichess')
+                                    ? _MessageAction(message: message.message)
+                                    : (message.username == authUser?.user.name)
+                                    ? _MessageBubble(
+                                        options: widget.options,
+                                        you: true,
+                                        message: message,
+                                      )
+                                    : _MessageBubble(
+                                        options: widget.options,
+                                        you: false,
+                                        message: message,
+                                        showUsername: widget.options.isPublic,
+                                      );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => FocusScope.of(context).unfocus(),
-                      // remove the automatic bottom padding of the ListView which is here taken
-                      // care of by the _ChatBottomBar; the top padding is taken by the error, if
-                      // any
-                      child: ListView.builder(
-                        padding: padding.copyWith(
-                          top: chatState.hasError ? 0 : padding.top,
-                          bottom: 0,
-                        ),
-                        reverse: true,
-                        itemCount: value.messages.length,
-                        itemBuilder: (context, index) {
-                          final message = value.messages[value.messages.length - index - 1];
-                          return (message.username == 'lichess')
-                              ? _MessageAction(message: message.message)
-                              : (message.username == authUser?.user.name)
-                              ? _MessageBubble(options: widget.options, you: true, message: message)
-                              : _MessageBubble(
-                                  options: widget.options,
-                                  you: false,
-                                  message: message,
-                                  showUsername: widget.options.isPublic,
-                                );
-                        },
-                      ),
-                    ),
-                  ),
-                  if (widget.options.writeable) _ChatBottomBar(options: widget.options),
-                ],
+                      ],
+                    );
+                  },
+                ),
               );
             },
           ),
@@ -190,8 +200,9 @@ class const _MessageBubble({
   required final ChatMessage message,
   final bool showUsername = false,
 }) extends ConsumerWidget {
-  Color _bubbleColor(BuildContext context) =>
-      you ? ColorScheme.of(context).secondary : ColorScheme.of(context).surfaceContainerHigh;
+  Color _bubbleColor(BuildContext context) => you
+      ? ColorScheme.of(context).secondary
+      : Theme.of(context).cardTheme.color ?? ColorScheme.of(context).surfaceContainerHigh;
 
   Color _textColor(BuildContext context) =>
       you ? ColorScheme.of(context).onSecondary : ColorScheme.of(context).onSurface;
@@ -322,27 +333,17 @@ class _ChatBottomBarState() extends ConsumerState<_ChatBottomBar> {
       ),
     );
     final placeholder = authUser != null ? context.l10n.talkInChat : context.l10n.loginToChat;
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: messageInputVerticalPadding(context, fallback: 8.0),
-        ),
-        child: TextField(
-          decoration: messageInputDecoration(
-            context,
-            suffixIcon: sendButton,
-            hintText: placeholder,
-          ),
-          controller: _textController,
-          keyboardType: TextInputType.text,
-          textCapitalization: TextCapitalization.sentences,
-          minLines: 1,
-          maxLines: 4,
-          enableSuggestions: true,
-          readOnly: authUser == null,
-        ),
+    return MessageInputBar(
+      fallbackVerticalPadding: 8.0,
+      field: TextField(
+        decoration: messageInputDecoration(context, suffixIcon: sendButton, hintText: placeholder),
+        controller: _textController,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        minLines: 1,
+        maxLines: 4,
+        enableSuggestions: true,
+        readOnly: authUser == null,
       ),
     );
   }

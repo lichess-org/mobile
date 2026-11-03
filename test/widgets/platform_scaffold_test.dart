@@ -1,7 +1,11 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassContainer;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
+    show GlassContainer, GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 import '../test_provider_scope.dart';
@@ -141,22 +145,27 @@ void main() {
     }, variant: const TargetPlatformVariant({TargetPlatform.android}));
   });
 
-  testWidgets('iOS app bar leading capsule is only as wide as its content', (tester) async {
+  testWidgets('iOS tab root app bar leading capsule is only as wide as its content', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       await makeTestProviderScopeApp(
         tester,
-        home: PlatformScaffold(
-          appBar: PlatformAppBar(
-            leading: BackButton(onPressed: () {}),
-            title: const Text('Title'),
+        home: MainTabScaffoldProperties(
+          extendBody: true,
+          child: PlatformScaffold(
+            appBar: PlatformAppBar(
+              leading: TextButton(onPressed: () {}, child: const Text('Edit')),
+              title: const Text('Title'),
+            ),
+            body: const SizedBox.shrink(),
           ),
-          body: const SizedBox.shrink(),
         ),
       ),
     );
     await tester.pumpAndSettle();
     final capsule = find.ancestor(
-      of: find.byType(BackButton),
+      of: find.byType(TextButton),
       matching: find.byType(GlassContainer),
     );
     expect(tester.getSize(capsule.first).width, lessThan(100));
@@ -198,4 +207,193 @@ void main() {
       expect(titleFontSize(tester), lessThan(34.0));
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
   });
+
+  group('iOS pinned app bar', () {
+    /// Pushes a screen with [appBar] from a home screen, and waits for its pinned buttons.
+    Future<void> pushScreen(WidgetTester tester, PlatformAppBar appBar) async {
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => PlatformScaffold(appBar: appBar, body: const SizedBox.shrink()),
+                ),
+              ),
+              child: const Text('Push'),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Push'));
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('pins the actions of a pushed screen above the navigator', (tester) async {
+      var taps = 0;
+      await pushScreen(
+        tester,
+        PlatformAppBar(
+          title: const Text('Title'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Settings',
+              onPressed: () => taps++,
+            ),
+          ],
+        ),
+      );
+
+      // The unpainted placeholder in the app bar, and the copy pinned by the shell.
+      expect(find.byIcon(Icons.settings), findsNWidgets(2));
+      expect(find.byIcon(Icons.settings).hitTestable(), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.settings).hitTestable());
+      expect(taps, 1);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('turns an icon button into a pinned item labelled by its tooltip', (tester) async {
+      final semantics = tester.ensureSemantics();
+      await pushScreen(
+        tester,
+        PlatformAppBar(
+          title: const Text('Title'),
+          actions: [
+            IconButton(icon: const Icon(Icons.settings), tooltip: 'Settings', onPressed: () {}),
+          ],
+        ),
+      );
+
+      expect(find.byType(IconButton), findsNothing);
+      expect(find.bySemanticsLabel('Settings'), findsOneWidget);
+      semantics.dispose();
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('turns a back button leading into the pinned back button', (tester) async {
+      var backs = 0;
+      await pushScreen(
+        tester,
+        PlatformAppBar(
+          leading: BackButton(onPressed: () => backs++),
+          title: const Text('Title'),
+        ),
+      );
+
+      expect(find.byType(BackButton), findsNothing);
+      await tester.tap(find.byIcon(CupertinoIcons.back).hitTestable());
+      await tester.pumpAndSettle();
+      expect(backs, 1);
+      // Its own action, instead of popping.
+      expect(find.text('Title'), findsWidgets);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('does not pin the actions of a tab root', (tester) async {
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          home: MainTabScaffoldProperties(
+            extendBody: true,
+            child: PlatformScaffold(
+              appBar: PlatformAppBar(
+                title: const Text('Title'),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    tooltip: 'Settings',
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+              body: const SizedBox.shrink(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.settings), findsOneWidget);
+      expect(find.byType(IconButton), findsOneWidget);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('a pinned action from actionsBuilder navigates on the navigator of its screen', (
+      tester,
+    ) async {
+      final tabNavigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          // Like a tab: a navigator with its own shell, below the root navigator.
+          home: GlassNavigationShell(
+            child: Navigator(
+              key: tabNavigatorKey,
+              onGenerateRoute: (_) => MaterialPageRoute<void>(
+                builder: (_) => PlatformScaffold(
+                  appBar: PlatformAppBar(
+                    title: const Text('Title'),
+                    // A custom item, built by the shell, out of the screen's route.
+                    actionsBuilder: (context, ref) => [
+                      TextButton(
+                        onPressed: () => Navigator.of(context)
+                            .push(MaterialPageRoute<void>(builder: (_) => const Text('Pushed'))),
+                        child: const Text('Push'),
+                      ),
+                    ],
+                  ),
+                  body: const SizedBox.shrink(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Push').hitTestable());
+      await tester.pumpAndSettle();
+
+      expect(find.text('Pushed'), findsOneWidget);
+      expect(tabNavigatorKey.currentState!.canPop(), isTrue);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets(
+      'a pinned action from actionsBuilder reads providers once its pinned copy is gone',
+      (tester) async {
+        int? value;
+        await pushScreen(
+          tester,
+          PlatformAppBar(
+            title: const Text('Title'),
+            // A custom item, disposed by the shell while the sheet is shown.
+            actionsBuilder: (context, ref) => [
+              TextButton(
+                onPressed: () => showAdaptiveBottomSheet<void>(
+                  context: context,
+                  builder: (_) => TextButton(
+                    onPressed: () => value = ref.read(_valueProvider),
+                    child: const Text('Read'),
+                  ),
+                ),
+                child: const Text('Share'),
+              ),
+            ],
+          ),
+        );
+
+        await tester.tap(find.text('Share').hitTestable());
+        await tester.pumpAndSettle();
+        // The shell gave the buttons back to the screen under the sheet: the pinned copy of the
+        // action is disposed.
+        expect(find.text('Share').hitTestable(), findsNothing);
+
+        await tester.tap(find.text('Read'));
+        await tester.pumpAndSettle();
+        expect(value, 42);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+    );
+  });
 }
+
+final _valueProvider = Provider<int>((ref) => 42);

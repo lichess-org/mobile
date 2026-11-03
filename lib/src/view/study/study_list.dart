@@ -1,5 +1,4 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
@@ -11,10 +10,11 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -24,6 +24,13 @@ class const StudyList({
   required final StudyCategory category,
   required final StudyListOrder order,
   required final void Function(BuildContext, StudyPageItem) onStudyTap,
+
+  /// Shown at the top of the list, such as the [StudyCategoryChips].
+  final Widget? header,
+
+  /// On iOS, the action next to the search field at the bottom of the screen, a
+  /// [BottomSearchBarButton]. Not used on other platforms.
+  final Widget? searchAction,
   super.key,
 }) extends ConsumerStatefulWidget {
   @override
@@ -34,6 +41,12 @@ class _StudyListState() extends ConsumerState<StudyList> {
   String? search;
 
   final _searchController = TextEditingController();
+
+  final _searchFocusNode = FocusNode();
+
+  /// Whether the current tap started while the search field had focus: it only dismisses the
+  /// keyboard (the search field unfocuses itself on a tap outside of it), and does not open a study.
+  bool _tapUnfocusesSearch = false;
 
   final _scrollController = ScrollController(keepScrollOffset: true);
 
@@ -77,6 +90,7 @@ class _StudyListState() extends ConsumerState<StudyList> {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -111,49 +125,90 @@ class _StudyListState() extends ConsumerState<StudyList> {
 
     final studiesAsync = ref.watch(paginatorProvider);
 
-    final searchBar = Padding(
-      padding: Styles.bodySectionPadding,
-      child: PlatformSearchBar(
-        controller: _searchController,
-        onClear: () => setState(() {
-          search = null;
-          _searchController.clear();
-        }),
-        hintText: search ?? context.l10n.searchSearch,
-        onSubmitted: (term) {
-          setState(() {
-            search = term;
-          });
-        },
-      ),
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    final searchBar = PlatformSearchBar(
+      controller: _searchController,
+      focusNode: _searchFocusNode,
+      onClear: () => setState(() {
+        search = null;
+        _searchController.clear();
+      }),
+      hintText: search ?? context.l10n.searchSearch,
+      onSubmitted: (term) {
+        setState(() {
+          search = term;
+        });
+      },
+      // On iOS, a glass search field floating at the bottom of the screen.
+      inAppBar: isIOS,
     );
 
-    return switch (studiesAsync) {
-      AsyncData(value: final studies) => ListView.separated(
-        shrinkWrap: true,
-        itemCount: studies.studies.length + 1,
-        controller: _scrollController,
-        separatorBuilder: (context, index) => index == 0
-            ? const SizedBox.shrink()
-            : Theme.of(context).platform == TargetPlatform.iOS
-            ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-            : const PlatformDivider(height: 1, color: Colors.transparent),
-        itemBuilder: (context, index) => index == 0
-            ? searchBar
-            : StudyListItem(
-                study: studies.studies[index - 1],
-                flairSize: 30.0,
-                onTap: widget.onStudyTap,
-              ),
-      ),
-      AsyncError() => FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider)),
-      _ => Column(
-        children: [
-          searchBar,
-          const Expanded(child: Center(child: CircularProgressIndicator.adaptive())),
-        ],
-      ),
-    };
+    // The header and the search bar stay the first items of the list while studies are loading, so
+    // that they keep their state (e.g. the scroll position of the chips).
+    final leadingItems = [
+      ?widget.header,
+      if (!isIOS) Padding(padding: Styles.bodySectionPadding, child: searchBar),
+    ];
+    final studies = studiesAsync.value?.studies;
+
+    final list = ListView.separated(
+      padding: MediaQuery.paddingOf(context)
+          .add(EdgeInsets.only(bottom: isIOS ? BottomSearchBar.heightOf(context) : 0.0)),
+      itemCount: leadingItems.length + (studies?.length ?? 1),
+      controller: _scrollController,
+      separatorBuilder: (context, index) => index < leadingItems.length || studies == null
+          ? const SizedBox.shrink()
+          : Theme.of(context).platform == TargetPlatform.iOS
+          ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+          : const PlatformDivider(height: 1, color: Colors.transparent),
+      itemBuilder: (context, index) {
+        if (index < leadingItems.length) return leadingItems[index];
+        if (studies != null) {
+          return StudyListItem(
+            study: studies[index - leadingItems.length],
+            flairSize: 30.0,
+            onTap: (context, study) {
+              if (!_tapUnfocusesSearch) widget.onStudyTap(context, study);
+            },
+          );
+        }
+        return SizedBox(
+          height: 300.0,
+          child: studiesAsync is AsyncError
+              ? FullScreenRetryRequest(onRetry: () => ref.invalidate(paginatorProvider))
+              : const Center(child: CircularProgressIndicator.adaptive()),
+        );
+      },
+    );
+
+    // The search field is unfocused on a tap outside of it, from the pointer down. Its focus is
+    // only updated after the pointer down event is dispatched, so it still has focus here.
+    final listener = Listener(
+      onPointerDown: (_) => _tapUnfocusesSearch = _searchFocusNode.hasFocus,
+      child: list,
+    );
+
+    if (!isIOS) return listener;
+
+    return Stack(
+      children: [
+        // The list scrolls under the glass search field.
+        Positioned.fill(
+          child: BottomBarScrollEdgeEffect(
+            barHeight: BottomSearchBar.heightOf(context),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: listener,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: BottomSearchBar(searchField: searchBar, action: widget.searchAction),
+        ),
+      ],
+    );
   }
 }
 
@@ -184,71 +239,48 @@ class const StudyListItem({
   }
 }
 
+/// The categories of studies, as a row of chips at the top of a [StudyList].
 class const StudyCategoryChips({
   required final IList<StudyCategory> categories,
   required final StudyCategory currentCategory,
   final Key? currentCategoryKey,
   required final void Function(StudyCategory) onCategorySelected,
   super.key,
-}) extends StatelessWidget implements PreferredSizeWidget {
-  // The app's theme platform is the default target platform.
-  @override
-  Size get preferredSize => Size.fromHeight(
-    defaultTargetPlatform == TargetPlatform.iOS
-        ? kGlassAppBarBottomControlHeight + kGlassAppBarBottomPadding.vertical
-        : 50.0,
-  );
-
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-    return PreferredSize(
-      preferredSize: preferredSize,
-      child: SizedBox(
-        height: preferredSize.height,
-        child: Padding(
-          // On iOS, the same space as the other controls in the app bar bottom.
-          padding: isIOS
-              ? EdgeInsets.only(
-                  top: kGlassAppBarBottomPadding.top,
-                  bottom: kGlassAppBarBottomPadding.bottom,
-                )
-              : const EdgeInsets.only(bottom: 6.0),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              spacing: 8.0,
-              children: categories.map((cat) {
-                final isSelected = currentCategory == cat;
-                if (isIOS) {
-                  return PlatformChoiceChip(
-                    key: isSelected ? currentCategoryKey : null,
-                    inAppBar: true,
-                    label: Text(cat.l10n(context.l10n)),
-                    selected: isSelected,
-                    onSelected: (_) {
-                      if (!isSelected) onCategorySelected(cat);
-                    },
-                  );
-                }
-                return ChoiceChip(
-                  key: cat == currentCategory ? currentCategoryKey : null,
-                  showCheckmark: false,
-                  label: Text(cat.l10n(context.l10n)),
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-                  selected: isSelected,
-                  onSelected: (selected) {
-                    if (selected) {
-                      onCategorySelected(cat);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-        ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.fromLTRB(16.0, isIOS ? 16.0 : 8.0, 16.0, 8.0),
+      child: Row(
+        spacing: 8.0,
+        children: categories.map((cat) {
+          final isSelected = currentCategory == cat;
+          if (isIOS) {
+            return PlatformChoiceChip(
+              key: isSelected ? currentCategoryKey : null,
+              label: Text(cat.l10n(context.l10n)),
+              selected: isSelected,
+              onSelected: (_) {
+                if (!isSelected) onCategorySelected(cat);
+              },
+            );
+          }
+          return ChoiceChip(
+            key: isSelected ? currentCategoryKey : null,
+            showCheckmark: false,
+            label: Text(cat.l10n(context.l10n)),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+            selected: isSelected,
+            onSelected: (selected) {
+              if (selected) {
+                onCategorySelected(cat);
+              }
+            },
+          );
+        }).toList(),
       ),
     );
   }

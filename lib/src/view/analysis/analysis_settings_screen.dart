@@ -25,108 +25,109 @@ class const AnalysisSettingsScreen(final AnalysisOptions options) extends Consum
     final asyncState = ref.watch(ctrlProvider);
     final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
 
-    switch (asyncState) {
-      case AsyncData(:final value):
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
-          body: ListView(
-            children: [
+    if (asyncState case AsyncError(:final error)) {
+      debugPrint('Error loading analysis: $error');
+    }
+
+    // The same tree in every state, so that the scaffold and its app bar are updated, not replaced,
+    // once the analysis is loaded.
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      body: switch (asyncState) {
+        AsyncData(:final value) => ListView(
+          children: [
+            ListSection(
+              children: [
+                SwitchSettingTile(
+                  title: Text(context.l10n.sound),
+                  value: isSoundEnabled,
+                  onChanged: (value) {
+                    ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+                  },
+                ),
+                SwitchSettingTile(
+                  title: Text(context.l10n.inlineNotation),
+                  value: prefs.inlineNotation,
+                  onChanged: (value) =>
+                      ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                ),
+                SwitchSettingTile(
+                  title: Text(context.l10n.mobileShowEngineLines),
+                  value: prefs.showEngineLines,
+                  onChanged: (value) =>
+                      ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
+                ),
+                SwitchSettingTile(
+                  title: Text(context.l10n.mobileSmallBoard),
+                  value: prefs.smallBoard,
+                  onChanged: (value) =>
+                      ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                ),
+                ListTile(
+                  title: Text(context.l10n.openingExplorer),
+                  onTap: () => showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    builder: (_) => const OpeningExplorerSettings(),
+                  ),
+                ),
+              ],
+            ),
+            if (value.isComputerAnalysisAllowed) ...[
               ListSection(
+                header: SettingsSectionTitle(context.l10n.computerAnalysis),
                 children: [
                   SwitchSettingTile(
-                    title: Text(context.l10n.sound),
-                    value: isSoundEnabled,
-                    onChanged: (value) {
-                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+                    title: Text(context.l10n.mobileServerAnalysis),
+                    value: prefs.enableServerAnalysis,
+                    onChanged: (_) {
+                      ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
                     },
                   ),
                   SwitchSettingTile(
-                    title: Text(context.l10n.inlineNotation),
-                    value: prefs.inlineNotation,
+                    title: Text(context.l10n.mobileShowEvaluationGauge),
+                    value: prefs.showEvaluationGauge,
                     onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleInlineNotation(),
+                        ref.read(analysisPreferencesProvider.notifier).toggleShowEvaluationGauge(),
                   ),
                   SwitchSettingTile(
-                    title: Text(context.l10n.mobileShowEngineLines),
-                    value: prefs.showEngineLines,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleShowEngineLines(),
+                    title: Text(context.l10n.toggleGlyphAnnotations),
+                    value: prefs.showAnnotations,
+                    onChanged: (_) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
                   ),
                   SwitchSettingTile(
-                    title: Text(context.l10n.mobileSmallBoard),
-                    value: prefs.smallBoard,
-                    onChanged: (value) =>
-                        ref.read(analysisPreferencesProvider.notifier).toggleSmallBoard(),
+                    title: Text(context.l10n.mobileShowComments),
+                    value: prefs.showPgnComments,
+                    onChanged: (_) =>
+                        ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
                   ),
-                  ListTile(
-                    title: Text(context.l10n.openingExplorer),
-                    onTap: () => showAdaptiveBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      showDragHandle: true,
-                      builder: (_) => const OpeningExplorerSettings(),
-                    ),
+                  SwitchSettingTile(
+                    title: Text(context.l10n.bestMoveArrow),
+                    value: prefs.showBestMoveArrow,
+                    onChanged: (value) =>
+                        ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
                   ),
                 ],
               ),
-              if (value.isComputerAnalysisAllowed) ...[
-                ListSection(
-                  header: SettingsSectionTitle(context.l10n.computerAnalysis),
-                  children: [
-                    SwitchSettingTile(
-                      title: Text(context.l10n.mobileServerAnalysis),
-                      value: prefs.enableServerAnalysis,
-                      onChanged: (_) {
-                        ref.read(analysisPreferencesProvider.notifier).toggleServerAnalysis();
-                      },
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.mobileShowEvaluationGauge),
-                      value: prefs.showEvaluationGauge,
-                      onChanged: (value) => ref
-                          .read(analysisPreferencesProvider.notifier)
-                          .toggleShowEvaluationGauge(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.toggleGlyphAnnotations),
-                      value: prefs.showAnnotations,
-                      onChanged: (_) =>
-                          ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.mobileShowComments),
-                      value: prefs.showPgnComments,
-                      onChanged: (_) =>
-                          ref.read(analysisPreferencesProvider.notifier).togglePgnComments(),
-                    ),
-                    SwitchSettingTile(
-                      title: Text(context.l10n.bestMoveArrow),
-                      value: prefs.showBestMoveArrow,
-                      onChanged: (value) =>
-                          ref.read(analysisPreferencesProvider.notifier).toggleShowBestMoveArrow(),
-                    ),
-                  ],
-                ),
-                EngineSettingsWidget(
-                  onSetEngineSearchTime: (value) {
-                    ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
-                  },
-                  onSetEngineCores: (value) {
-                    ref.read(ctrlProvider.notifier).setEngineCores(value);
-                  },
-                  onSetNumEvalLines: (value) {
-                    ref.read(ctrlProvider.notifier).setNumEvalLines(value);
-                  },
-                ),
-              ],
+              EngineSettingsWidget(
+                onSetEngineSearchTime: (value) {
+                  ref.read(ctrlProvider.notifier).setEngineSearchTime(value);
+                },
+                onSetEngineCores: (value) {
+                  ref.read(ctrlProvider.notifier).setEngineCores(value);
+                },
+                onSetNumEvalLines: (value) {
+                  ref.read(ctrlProvider.notifier).setNumEvalLines(value);
+                },
+              ),
             ],
-          ),
-        );
-      case AsyncError(:final error):
-        debugPrint('Error loading analysis: $error');
-        return const SizedBox.shrink();
-      case _:
-        return const CenterLoadingIndicator();
-    }
+          ],
+        ),
+        AsyncError() => const SizedBox.shrink(),
+        _ => const CenterLoadingIndicator(),
+      },
+    );
   }
 }

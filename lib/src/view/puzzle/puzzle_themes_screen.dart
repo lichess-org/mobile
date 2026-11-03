@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
@@ -201,10 +202,8 @@ class const _ThemeTile({
       ),
       onTap: isThemeAvailable
           ? () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(theme)));
+              Navigator.of(context)
+                  .pushHidingTabBar(PuzzleScreen.buildRoute(angle: PuzzleTheme(theme)));
             }
           : null,
     );

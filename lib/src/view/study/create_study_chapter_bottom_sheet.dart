@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -293,7 +292,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: PlatformFilledButton(
+          child: FilledButton(
             onPressed: _canSubmit()
                 ? () async {
                     final pgn = switch (_source) {

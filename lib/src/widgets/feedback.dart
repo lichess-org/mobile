@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -120,39 +119,6 @@ class const LagIndicator({
   }
 }
 
-class const OfflineBanner() extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    if (ref.watch(isDeviceOnlineProvider)) {
-      return const SizedBox.shrink();
-    }
-    return Material(
-      child: Container(
-        height: 40,
-        color: theme.colorScheme.tertiaryContainer,
-        child: Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: Row(
-            children: [
-              Icon(Icons.report_outlined, color: theme.colorScheme.onTertiaryContainer),
-              const SizedBox(width: 5),
-              Flexible(
-                child: Text(
-                  'Network connectivity unavailable.',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
 class const ButtonLoadingIndicator({super.key}) extends StatelessWidget {
@@ -262,15 +228,6 @@ class _GlassToastPresenter(final OverlayState _overlay) implements SnackBarPrese
 
   @override
   void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration}) {
-    showGlassToast(
-      _overlay,
-      message,
-      type: switch (type) {
-        .error => .error,
-        .info => .info,
-        .success => .success,
-      },
-      duration: duration ?? const Duration(seconds: 4),
-    );
+    showGlassToast(_overlay, message, type: type, duration: duration ?? const Duration(seconds: 4));
   }
 }

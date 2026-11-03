@@ -123,6 +123,7 @@ Future<ProviderContainer> makeContainer({
         engineMaxMemoryInMb: 256,
         appDocumentsDirectory: null,
         appSupportDirectory: null,
+        imageCacheDirectory: null,
       );
     }),
     ...?overrides,

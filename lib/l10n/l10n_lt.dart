@@ -30,6 +30,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Namai';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -276,6 +285,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
 
   @override
@@ -387,6 +399,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -445,6 +460,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Theme';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -1460,6 +1478,14 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Treniruotis tik kai kurias statines ir gulstines';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Išmokite šachmatus';
@@ -2520,7 +2546,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2548,6 +2574,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2951,9 +2980,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokiruotės';
 
   @override
-  String get puzzleThemeEnPassant => 'Kirtimas prasilenkiant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Parveskite karalių į saugią vietą ir panaudokite atakai bokštą.';
 
   @override
@@ -3045,6 +3071,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktika, skirta paskutinei žaidimo fazei.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Kirtimas prasilenkiant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3395,7 +3424,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Partijos nustatymai';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Teikite iššūkį draugui';
@@ -3842,6 +3871,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get engineSettings => 'Engine settings';
+
+  @override
+  String get engine => 'Engine';
 
   @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
@@ -4470,6 +4502,11 @@ class AppLocalizationsLt extends AppLocalizations {
   String get noNetwork => 'Neprisijungta';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Dažniausi varžovai';
 
   @override
@@ -4836,9 +4873,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get reason => 'Priežastis';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Sukčiaviavo';
 
   @override
@@ -4855,9 +4889,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5437,7 +5468,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get downloadImported => 'Siųstis importuotą';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Atsisiųsti visas partijas';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Susitikimai';
@@ -6204,7 +6241,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get showMeEverything => 'Rodyti viską';
 
   @override
-  String get lichessPatronInfo => 'Lichess yra labdara ir pilnai atviro kodo/libre projektas.\nVisos veikimo išlaidos, programavimas ir turinys yra padengti išskirtinai tik vartotojų parama.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Nieko naujo.';
@@ -7100,9 +7137,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Tik studijos talkininkai gali prašyti kompiuterio analizės.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Gaukite pilną pagrindinės linijos kompiuterio analizę.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Įsitikinkite, kad skyrius užbaigtas. Analizės galite prašyti tik kartą.';
 
   @override
@@ -7319,9 +7353,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyStart => 'Pradėti';
-
-  @override
-  String get studySave => 'Išsaugoti';
 
   @override
   String get studyClearChat => 'Išvalyti pokalbį';
@@ -7557,6 +7588,21 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

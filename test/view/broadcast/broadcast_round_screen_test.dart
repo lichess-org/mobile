@@ -1,16 +1,19 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_players_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -51,37 +54,108 @@ void main() {
     });
   });
 
-  testWidgets('The tabs stay pinned below the app bar', variant: kPlatformVariant, (tester) async {
-    final app = await makeTestProviderScopeApp(
-      tester,
-      home: BroadcastRoundScreen(broadcast: _liveBroadcast),
-      overrides: {
-        lichessClientProvider: lichessClientProvider.overrideWith(
-          (ref) => LichessClient(_liveBroadcastClient(), ref),
+  testWidgets(
+    'The tabs scroll away with the header',
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.byType(PlatformTabBar), findsOneWidget);
+
+      // Scroll the header and the tabs away
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -600));
+      await tester.pump();
+      expect(find.byType(PlatformTabBar), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Switching to a tab that is loading keeps the scroll position',
+    variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -100));
+      await tester.pump();
+      final tabBarTop = tester.getTopLeft(find.byType(PlatformTabBar)).dy;
+
+      await tester.tap(find.text('Players'));
+      // The players are loading
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(tester.getTopLeft(find.byType(PlatformTabBar)).dy, tabBarTop);
+    },
+  );
+
+  testWidgets(
+    'The tab bar is pinned below the app bar once the header scrolled away',
+    variant: TargetPlatformVariant.only(TargetPlatform.android),
+    (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament and the round
+      await tester.pump();
+      await tester.pump();
+
+      await tester.drag(find.byType(BoardThumbnail).first, const Offset(0, -600));
+      await tester.pump();
+      expect(find.byType(PlatformTabBar), findsOneWidget);
+      expect(
+        tester.getTopLeft(find.byType(PlatformTabBar)).dy,
+        tester.getBottomLeft(find.byType(AppBar)).dy,
+      );
+      // With the scrolled under color of the app bar
+      final tabBarBackground = tester.widget<AnimatedContainer>(
+        find.ancestor(of: find.byType(PlatformTabBar), matching: find.byType(AnimatedContainer)),
+      );
+      final appBarMaterial = tester.widget<Material>(
+        find.descendant(of: find.byType(AppBar), matching: find.byType(Material)).first,
+      );
+      expect(
+        (tabBarBackground.decoration! as BoxDecoration).color,
+        ElevationOverlay.applySurfaceTint(
+          appBarMaterial.color!,
+          appBarMaterial.surfaceTintColor,
+          appBarMaterial.elevation,
         ),
-      },
-    );
-
-    await tester.pumpWidget(app);
-    // Load the tournament and the round
-    await tester.pump();
-    await tester.pump();
-
-    final tabs = find.byType(PlatformTabBar);
-    final initialTop = tester.getTopLeft(tabs).dy;
-
-    // Scroll the header away
-    await tester.drag(find.byType(NestedScrollView), const Offset(0, -600));
-    await tester.pump();
-    final pinnedTop = tester.getTopLeft(tabs).dy;
-    expect(pinnedTop, lessThan(initialTop));
-    expect(pinnedTop, greaterThan(0));
-
-    // Scroll the boards under the tabs
-    await tester.drag(find.byType(NestedScrollView), const Offset(0, -300));
-    await tester.pump();
-    expect(tester.getTopLeft(tabs).dy, pinnedTop);
-  });
+      );
+    },
+  );
 
   group('Test boards tab', () {
     testWidgets('Test boards tab with a finished tournament', variant: kPlatformVariant, (
@@ -111,6 +185,45 @@ void main() {
 
       // Check that the right number of boards is displayed
       expect(find.byType(BoardThumbnail), findsNWidgets(4));
+    });
+
+    testWidgets('The boards fit without the evaluation gauges', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _finishedBroadcast),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_finishedBroadcastClient, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      // Load the tournament, the round, and draw the pinned app bar buttons.
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Evaluation gauge'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BoardThumbnail), findsNWidgets(4));
+      expect(
+        tester.widget<BoardThumbnail>(find.byType(BoardThumbnail).first).showEvaluationGauge,
+        isFalse,
+      );
+      // The result of a finished game, next to the players, fits in the grid cell (overflow errors
+      // are ignored in tests).
+      final thumbnail = find.byType(BoardThumbnail).first;
+      final footerResult = find.descendant(of: thumbnail, matching: find.text('½')).last;
+      expect(
+        tester.getBottomLeft(footerResult).dy,
+        lessThanOrEqualTo(tester.getBottomLeft(thumbnail).dy),
+      );
     });
 
     testWidgets('Test clocks are ticking with a live round', variant: kPlatformVariant, (
@@ -217,86 +330,80 @@ void main() {
 
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
 
-      await tester.tap(find.byType(ContextMenuIconButton));
-      await tester.pumpAndSettle();
+      Future<void> pickTeam(String team) async {
+        await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+        await tester.pumpAndSettle();
+        // The team submenu, in the games filter section of the menu.
+        expect(find.text('Filter games'), findsOneWidget);
+        await tester.tap(find.text('Team'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(team).last);
+        await tester.pumpAndSettle();
+      }
 
-      await tester.tap(find.text('Filter games'));
-      await tester.pumpAndSettle();
-      final teamChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.text('Team'),
-      );
-
-      expect(teamChip, findsOneWidget);
-
-      // Try to scroll the bottom sheet content to make the team chip visible
-      // Find the scrollable within the bottom sheet
-      await tester.scrollUntilVisible(teamChip, 100, scrollable: find.byType(Scrollable).first);
-
-      await tester.tap(teamChip);
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('All teams'), findsOneWidget);
-      expect(
-        find.descendant(
-          of: find.byKey(const ValueKey('team-picker')),
-          matching: find.byType(ListTile),
-        ),
-        findsNWidgets(5),
-      ); // Back + "All teams" + 3 teams
-
-      await tester.tap(find.text('Team C'));
-
+      // The pinned app bar buttons are drawn a frame later.
       await tester.pump();
-
-      expect(find.text('Team: Team C'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
+      await pickTeam('Team C');
 
       // Filtered to one game
-      final filteredGame = find.byType(BoardThumbnail);
-
-      expect(filteredGame, findsOneWidget);
+      expect(find.byType(BoardThumbnail), findsOneWidget);
       expect(tester.widget<BoardThumbnail>(find.byType(BoardThumbnail)).orientation, Side.black);
 
-      // Clear the filter by opening settings again
+      // The current team is shown below the submenu item, and the counts are those of its games.
       await tester.pump();
-      await tester.tap(find.byType(ContextMenuIconButton));
+      await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Filter games'));
+      expect(find.text('Team C'), findsOneWidget);
+      expect(find.text('All games (1)'), findsOneWidget);
+      await tester.tapAt(const Offset(10, 400));
       await tester.pumpAndSettle();
-
-      // Tap the team filter chip
-      final teamFilterChip = find.descendant(
-        of: find.byType(PlatformChoiceChip),
-        matching: find.byWidgetPredicate((widget) {
-          if (widget is Text) {
-            final text = widget.data;
-            return text != null && (text.startsWith('Team'));
-          }
-          return false;
-        }),
-      );
-      await tester.tap(teamFilterChip);
-
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('All teams'));
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Team'), findsOneWidget);
-
-      // Close the settings bottom sheet by tapping outside it
-      await tester.tapAt(const Offset(195, 100));
-
-      await tester.pump();
 
       // Filter cleared -> all results restored
+      await pickTeam('All teams');
       expect(find.byType(BoardThumbnail), findsNWidgets(2));
+    });
+
+    testWidgets('Test boards display favorite federation games first', variant: kPlatformVariant, (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: BroadcastRoundScreen(broadcast: _liveBroadcast),
+        defaultPreferences: {
+          PrefCategory.account.storageKey: jsonEncode(
+            defaultAccountPreferences
+                .copyWith(favoriteFederation: const FederationId('GER'))
+                .toJson(),
+          ),
+        },
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(_liveBroadcastClient(), ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // Load the tournament
+      await tester.pump();
+
+      // Load the round
+      await tester.pump();
+
+      // Load the account preferences
+      await tester.pump();
+
+      final thumbnails = tester
+          .widgetList<ObservedBoardThumbnail>(find.byType(ObservedBoardThumbnail))
+          .toList();
+
+      expect(thumbnails.length, greaterThanOrEqualTo(3));
+      // German players (Keymer in 22222222, Huschenbeth in gYg5KcBI) come first
+      expect(thumbnails[0].gameId, const BroadcastGameId('22222222'));
+      expect(thumbnails[1].gameId, const BroadcastGameId('gYg5KcBI'));
+      // Games without a german player come after
+      expect(thumbnails[2].gameId, const BroadcastGameId('11111111'));
     });
   });
 
@@ -508,7 +615,8 @@ void main() {
         findsOneWidget,
       );
 
-      expect(find.byType(Card), findsNWidgets(2));
+      // Two team match cards, plus the card holding the team results link.
+      expect(find.byType(Card), findsNWidgets(3));
     });
 
     testWidgets('Check team standings screen opens from teams tab', (tester) async {
@@ -572,6 +680,8 @@ void main() {
       await tester.pump();
       // Load the round
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
     }
 
     testWidgets('is not shown when logged out', variant: kPlatformVariant, (tester) async {
@@ -588,12 +698,13 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: false, recordedRequests: requests);
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.method, 'POST');
@@ -606,10 +717,11 @@ void main() {
       final requests = <http.Request>[];
       await pumpRoundScreen(tester, isSubscribed: true, recordedRequests: requests);
 
-      await tester.tap(find.byIcon(Icons.notifications));
+      await tester.tap(find.byIcon(Icons.notifications).hitTestable());
+      await tester.pump();
       await tester.pump();
 
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
 
       final request = requests.firstWhere((r) => r.url.path == '/broadcast/AQ28hmmO/subscribe');
       expect(request.url.queryParameters['set'], 'false');
@@ -638,18 +750,22 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pump();
       await tester.pump();
+      // The pinned app bar buttons are drawn a frame later.
+      await tester.pump();
 
-      await tester.tap(find.byIcon(Icons.notifications_none));
+      await tester.tap(find.byIcon(Icons.notifications_none).hitTestable());
+      await tester.pump();
       await tester.pump();
 
       // Toggled right away, while the request is still in flight...
-      expect(find.byIcon(Icons.notifications), findsOneWidget);
+      expect(find.byIcon(Icons.notifications).hitTestable(), findsOneWidget);
 
       await tester.pump(const Duration(seconds: 1));
       await tester.pump();
+      await tester.pump();
 
       // ...then reverted once the request failed.
-      expect(find.byIcon(Icons.notifications_none), findsOneWidget);
+      expect(find.byIcon(Icons.notifications_none).hitTestable(), findsOneWidget);
     });
   });
 }

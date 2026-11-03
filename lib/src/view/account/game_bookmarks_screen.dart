@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const GameBookmarksScreen({required final int nbBookmarks, super.key})
@@ -79,58 +80,57 @@ class _BodyState() extends ConsumerState<_Body> {
                 padding: EdgeInsets.symmetric(vertical: 32.0),
                 child: Center(child: Text('No games found')),
               )
-            : ListView.separated(
-                controller: _scrollController,
-                separatorBuilder: (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                    : const SizedBox.shrink(),
-                itemCount: list.length + (state.isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (state.isLoading && index == list.length) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: CenterLoadingIndicator(),
-                    );
-                  } else if (state.hasError && state.hasMore && index == list.length) {
-                    // TODO: add a retry button
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: Center(child: Text('Could not load more games')),
-                    );
-                  }
+            : SwipeActionsScope(
+                child: ListView.separated(
+                  controller: _scrollController,
+                  separatorBuilder: (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
+                  itemCount: list.length + (state.isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (state.isLoading && index == list.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: CenterLoadingIndicator(),
+                      );
+                    } else if (state.hasError && state.hasMore && index == list.length) {
+                      // TODO: add a retry button
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: Center(child: Text('Could not load more games')),
+                      );
+                    }
 
-                  final game = list[index].game;
-                  final pov = list[index].pov;
+                    final game = list[index].game;
+                    final pov = list[index].pov;
 
-                  Future<void> onRemoveBookmark(BuildContext context) async {
-                    try {
-                      await ref
-                          .read(accountServiceProvider)
-                          .setGameBookmark(game.id, bookmark: false);
-                      ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
-                    } on Exception catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                    Future<void> onRemoveBookmark(BuildContext context) async {
+                      try {
+                        await ref
+                            .read(accountServiceProvider)
+                            .setGameBookmark(game.id, bookmark: false);
+                        ref.read(gameBookmarksPaginatorProvider.notifier).removeBookmark(game.id);
+                      } on Exception catch (_) {
+                        if (context.mounted) {
+                          showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                        }
                       }
                     }
-                  }
 
-                  final gameTile = GameListTile(
-                    item: list[index],
-                    onPressedBookmark: onRemoveBookmark,
-                  );
+                    final gameTile = GameListTile(
+                      item: list[index],
+                      onPressedBookmark: onRemoveBookmark,
+                    );
 
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const StretchMotion(),
-                      children: [
-                        SlidableAction(
+                    return SwipeActions(
+                      startActions: [
+                        SwipeAction(
                           backgroundColor: ColorScheme.of(context).tertiaryContainer,
                           foregroundColor: ColorScheme.of(context).onTertiaryContainer,
                           onPressed: game.variant.isReadSupported
-                              ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
+                              ? () {
+                                  Navigator.of(context).pushHidingTabBar(
                                     AnalysisScreen.buildRoute(
                                       AnalysisOptions.archivedGame(
                                         orientation: pov,
@@ -139,7 +139,7 @@ class _BodyState() extends ConsumerState<_Body> {
                                     ),
                                   );
                                 }
-                              : (_) {
+                              : () {
                                   showSnackBar(
                                     context,
                                     'This variant is not supported yet.',
@@ -150,21 +150,18 @@ class _BodyState() extends ConsumerState<_Body> {
                           label: context.l10n.analysis,
                         ),
                       ],
-                    ),
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
+                      endActions: [
+                        SwipeAction(
                           backgroundColor: context.lichessColors.error,
-                          onPressed: onRemoveBookmark,
+                          onPressed: () => onRemoveBookmark(context),
                           icon: Icons.bookmark_remove_outlined,
                           label: context.l10n.mobileRemoveBookmark,
                         ),
                       ],
-                    ),
-                    child: gameTile,
-                  );
-                },
+                      child: gameTile,
+                    );
+                  },
+                ),
               );
       },
       error: (e, s) {

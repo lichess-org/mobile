@@ -1,16 +1,15 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors, CupertinoDynamicColor;
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, GlassQuality, LiquidGlassSettings, LiquidRoundedRectangle;
+    show GlassButton, GlassQuality, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A chip that can be selected: a Material [ChoiceChip] (or [FilterChip] when [multiple]) on
 /// Android, a pill on iOS.
 ///
-/// The iOS pill is liquid glass on a glass surface ([inAppBar], or a glass sheet), as a control
-/// floating on its own layer. Anywhere else, such as in an opaque sheet, it is the same pill, flat,
-/// on the control fill, like the iOS controls in content; and always before iOS 26
+/// The iOS pill is liquid glass in an app bar ([inAppBar]), as a control floating on its own layer.
+/// Anywhere else, such as in a sheet, it is the same pill, flat, on the control fill, like the iOS
+/// controls in content; and always before iOS 26
 /// ([useLiquidGlass]). Its selected state is a light primary tint with a primary label (the package
 /// `GlassChip` default selection is barely visible in light mode).
 class const PlatformChoiceChip({
@@ -53,15 +52,13 @@ class const PlatformChoiceChip({
 
     final colorScheme = ColorScheme.of(context);
     final enabled = onSelected != null;
-    final isOnGlassSheet = GlassSheetScope.isIn(context);
-    final glass = useLiquidGlass(context) && (inAppBar || isOnGlassSheet);
+    final glass = useLiquidGlass(context) && inAppBar;
     final pill = DecoratedBox(
       decoration: BoxDecoration(
         color: selected
             ? colorScheme.primary.withValues(alpha: 0.18)
-            // Without a shadow, a chip on a glass sheet needs a fill to stand out from it, like an
-            // iOS control in grouped content. A flat chip always does.
-            : isOnGlassSheet || !glass
+            // A flat chip needs a fill, like an iOS control in content.
+            : !glass
             ? CupertinoDynamicColor.resolve(CupertinoColors.tertiarySystemFill, context)
             : null,
         borderRadius: const BorderRadius.all(Radius.circular(100)),
@@ -92,13 +89,8 @@ class const PlatformChoiceChip({
                     onTap: () => onSelected?.call(!selected),
                     enabled: enabled,
                     shape: const LiquidRoundedRectangle(borderRadius: 100),
-                    // On a glass surface there is no parent glass layer to share.
+                    // In an app bar there is no parent glass layer to share.
                     useOwnLayer: true,
-                    // The package default glass, without the light mode drop shadow on a glass
-                    // sheet: the chip sits on the sheet, it does not float above it.
-                    settings: isOnGlassSheet
-                        ? const LiquidGlassSettings(shadowElevation: 0.0)
-                        : null,
                     quality: GlassQuality.standard,
                     interactionScale: 1.03,
                     stretch: 0.3,

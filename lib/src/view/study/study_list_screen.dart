@@ -3,12 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/study/create_study_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -50,13 +53,29 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
     ref.read(studyPreferencesProvider.notifier).setListOrder(newOrder);
   }
 
+  void _showCreateStudySheet(LightUser authUser) {
+    showAdaptiveBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      builder: (context) => CreateStudyBottomSheet(
+        user: authUser,
+        onStudyCreated: (context, studyId) =>
+            Navigator.of(context)
+                .pushHidingTabBar(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authUser = ref.watch(authControllerProvider)?.user;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(authUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
+        largeTitle: true,
         actions: [
           ContextMenuIconButton(
             consumeOutsideTap: true,
@@ -64,29 +83,36 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
             semanticsLabel: 'Sort studies',
             actions: [
               ContextMenuAction(
-                icon: order == StudyListOrder.hot ? Icons.check : null,
                 label: context.l10n.studyHot,
+                selected: order == StudyListOrder.hot,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.hot),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.newest ? Icons.check : null,
                 label: context.l10n.studyDateAddedNewest,
+                selected: order == StudyListOrder.newest,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.newest),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.updated ? Icons.check : null,
                 label: context.l10n.studyRecentlyUpdated,
+                selected: order == StudyListOrder.updated,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.updated),
               ),
               ContextMenuAction(
-                icon: order == StudyListOrder.popular ? Icons.check : null,
                 label: context.l10n.studyMostPopular,
+                selected: order == StudyListOrder.popular,
                 onPressed: () => _onStudyOrderChange(StudyListOrder.popular),
               ),
             ],
           ),
         ],
-        bottom: authUser != null
+      ),
+      body: StudyList(
+        category: category,
+        order: order,
+        onStudyTap: (context, study) =>
+            Navigator.of(context)
+                .pushHidingTabBar(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
+        header: authUser != null
             ? StudyCategoryChips(
                 categories: StudyCategory.values.lock,
                 currentCategory: category,
@@ -98,29 +124,18 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
                 },
               )
             : null,
+        searchAction: authUser != null
+            ? BottomSearchBarButton(
+                onPressed: () => _showCreateStudySheet(authUser),
+                icon: const Icon(Icons.add),
+                semanticsLabel: context.l10n.studyCreateStudy,
+              )
+            : null,
       ),
-      body: StudyList(
-        category: category,
-        order: order,
-        onStudyTap: (context, study) => Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
-      ),
-      floatingActionButton: authUser != null
+      // On iOS, the action is next to the search field at the bottom of the screen.
+      floatingActionButton: authUser != null && !isIOS
           ? PlatformFloatingActionButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                useRootNavigator: true,
-                builder: (context) => CreateStudyBottomSheet(
-                  user: authUser,
-                  onStudyCreated: (context, studyId) => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(StudyScreen.buildRoute((id: studyId, initialChapter: null))),
-                ),
-              ),
+              onPressed: () => _showCreateStudySheet(authUser),
               icon: const Icon(Symbols.school_rounded),
               label: context.l10n.studyCreateStudy,
             )

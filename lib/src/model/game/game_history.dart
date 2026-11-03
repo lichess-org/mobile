@@ -108,12 +108,22 @@ class UserGameHistoryNotifier(final UserGameHistoryNotifierParams params)
       }
     });
 
-    ref.cacheFor(const Duration(minutes: 5));
+    final cacheLink = ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
       _bookmarkChangesSubscription?.cancel();
       _list.clear();
     });
 
+    try {
+      return await _fetchFirstPage();
+    } catch (_) {
+      // Don't keep an error: the history is fetched again when the screen is opened again.
+      cacheLink.close();
+      rethrow;
+    }
+  }
+
+  Future<UserGameHistoryState> _fetchFirstPage() async {
     final authUser = ref.watch(authControllerProvider);
     final prefs = ref.watch(gameHistoryPreferencesProvider);
     final online = await ref.watch(

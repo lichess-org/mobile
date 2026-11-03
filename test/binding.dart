@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
+import 'package:lichess_mobile/src/binding/crashlytics.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The binding instance used in tests.
-TestLichessBinding get testBinding => TestLichessBinding.instance;
+TestLichessBinding get testBinding => LichessBinding.instance as TestLichessBinding;
 
 /// Lichess binding for testing.
 class TestLichessBinding() extends LichessBinding {
@@ -21,20 +21,7 @@ class TestLichessBinding() extends LichessBinding {
   /// throws without it.
   factory ensureInitialized() {
     TestWidgetsFlutterBinding.ensureInitialized();
-    if (_instance == null) {
-      TestLichessBinding();
-    }
-    return instance;
-  }
-
-  /// The single instance of the binding.
-  static TestLichessBinding get instance => LichessBinding.checkInstance(_instance);
-  static TestLichessBinding? _instance;
-
-  @override
-  void initInstance() {
-    super.initInstance();
-    _instance = this;
+    return LichessBinding.ensureInitialized(() => TestLichessBinding());
   }
 
   /// Set the initial values for shared preferences.
@@ -214,7 +201,7 @@ typedef FirebaseMessagingRequestPermissionCall = ({
   bool sound,
 });
 
-class FakeFirebaseCrashlytics() extends Fake implements FirebaseCrashlytics {
+class FakeFirebaseCrashlytics() extends Fake implements Crashlytics {
   /// Errors passed to [recordError], oldest first.
   final List<({Object? exception, StackTrace? stack, Object? reason, bool fatal})> recordedErrors =
       [];

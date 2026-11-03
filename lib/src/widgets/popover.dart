@@ -1,49 +1,10 @@
 import 'package:lichess_mobile/src/widgets/glass_modal.dart' show opaqueModalColor;
-import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
-import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show ios27GlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
 import 'package:material_ui/material_ui.dart';
 import 'package:popover/popover.dart' as popover;
 
 export 'package:popover/popover.dart' show PopoverDirection, PopoverTransition;
-
-/// Shows a `popover` popover anchored to the widget at [context], for [PlatformPopover].
-///
-/// The parameters mirror `popover`'s own `showPopover`, minus the ones the app has no use for.
-Future<T?> _showPopover<T extends Object?>({
-  required BuildContext context,
-  required WidgetBuilder bodyBuilder,
-  required Color backgroundColor,
-  popover.PopoverDirection direction = popover.PopoverDirection.bottom,
-  Color barrierColor = const Color(0x80000000),
-  Duration transitionDuration = const Duration(milliseconds: 200),
-  List<BoxShadow> shadow = const [BoxShadow(color: Color(0x1F000000), blurRadius: 5)],
-  double arrowWidth = 24,
-  double arrowHeight = 12,
-  double? width,
-  double? height,
-  Widget Function(Animation<double> animation, Widget child)? popoverTransitionBuilder,
-}) {
-  return popover.showPopover<T>(
-    context: context,
-    // `popover` wraps the body in Flutter's own [Material], which `material_ui` widgets do not
-    // recognize, so provide one they do. It is transparent because `popover` already paints
-    // [backgroundColor] behind it.
-    bodyBuilder: (context) =>
-        Material(type: MaterialType.transparency, child: bodyBuilder(context)),
-    direction: direction,
-    backgroundColor: backgroundColor,
-    barrierColor: barrierColor,
-    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-    transitionDuration: transitionDuration,
-    shadow: shadow,
-    arrowWidth: arrowWidth,
-    arrowHeight: arrowHeight,
-    width: width,
-    height: height,
-    popoverTransitionBuilder: popoverTransitionBuilder,
-  );
-}
 
 /// A widget that shows a popover anchored to it: a liquid glass popover that morphs out of the
 /// trigger on iOS 26 and later, and an opaque `popover` popover elsewhere.
@@ -72,11 +33,9 @@ class const PlatformPopover({
       return GlassPopover(
         popoverWidth: width ?? 180.0,
         settings: opaque
-            // The package default popover glass (as [kLightMenuGlassSettings]), with an opaque fill.
-            ? kLightMenuGlassSettings.copyWith(glassColor: opaqueModalColor(context))
-            : Theme.of(context).brightness == Brightness.light
-            ? kLightMenuGlassSettings
-            : null,
+            // The glass, with an opaque fill.
+            ? ios27GlassSettings(context).copyWith(glassColor: opaqueModalColor(context))
+            : ios27GlassSettings(context),
         // The trigger is not glass itself (e.g. it sits in the glass capsule of the app bar).
         triggerBuilder: triggerBuilder,
         // The glass popover is outside of any Material.
@@ -89,15 +48,25 @@ class const PlatformPopover({
     return Builder(
       builder: (context) => triggerBuilder(
         context,
-        () => _showPopover<void>(
+        () => popover.showPopover<void>(
           context: context,
-          bodyBuilder: bodyBuilder,
+          // `popover` does not wrap the body in a [Material], which `material_ui` widgets need. It
+          // is transparent because `popover` already paints the background behind it.
+          bodyBuilder: (context) =>
+              Material(type: MaterialType.transparency, child: bodyBuilder(context)),
           direction: direction,
           width: width,
-          backgroundColor:
-              DialogTheme.of(context).backgroundColor ??
-              ColorScheme.of(context).surfaceContainerHigh,
-          transitionDuration: Duration.zero,
+          barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          style: popover.PopoverStyle(
+            // The plain shape on every platform: the glass popover covers iOS 26 and later.
+            arrowStyle: .triangle,
+            // Like a card, so that it stands out from the background.
+            backgroundColor:
+                DialogTheme.of(context).backgroundColor ??
+                CardTheme.of(context).color ??
+                ColorScheme.of(context).surfaceContainerHigh,
+            transitionDuration: Duration.zero,
+          ),
           popoverTransitionBuilder: (_, child) => child,
         ),
       ),

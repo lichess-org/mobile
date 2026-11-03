@@ -30,7 +30,7 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-final _dateFormatter = DateFormat.yMMMd().add_Hm();
+DateFormat get _dateFormatter => DateFormat.yMMMd().add_Hm();
 
 /// A list tile for a game in a game list.
 class const GameListTile({
@@ -285,7 +285,7 @@ class const GameContextMenu({
                 onPressed: () {
                   launchShareDialog(
                     context,
-                    ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
+                    ShareParams(uri: lichessGameUri(game.id, orientation: orientation)),
                   );
                 },
                 icon: Theme.of(context).platform == TargetPlatform.iOS

@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
@@ -423,7 +423,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         )
                       : PlatformAppBar(
                           // A greeting without a name when logged out.
-                          title: _GreetingWidget(authUser?.user),
+                          title: _GreetingWidget(authUser?.user, isOnline: isOnline),
                           centerTitle: false,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
@@ -431,13 +431,15 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       ? content
                       : HapticRefreshIndicator(
                           key: _refreshKey,
-                          onRefresh: () => _refreshData(isOnline: isOnline),
+                          // Not gated on the connectivity status: the device may be marked
+                          // offline while its network is back, and the responses to these
+                          // requests are what tell the connectivity check to run again.
+                          onRefresh: () => _refreshData(isOnline: true),
                           child: content,
                         ),
                   floatingActionButton: widget.editModeEnabled || isTablet
                       ? null
                       : const FloatingPlayButton(),
-                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
                 ),
               ),
             );
@@ -474,8 +476,8 @@ class const _LichessMessageBanner() extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true)
-              .push(
+          Navigator.of(context)
+              .pushHidingTabBar(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
                 ),
@@ -612,10 +614,12 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
 );
 
 /// The greeting of the user, as the app bar title, which opens the profile when logged in.
+/// The greeting of the home app bar, with an "Offline" subtitle while the device is offline.
 class const _GreetingWidget(
   /// Null when logged out: the greeting has no name.
-  final LightUser? user,
-) extends ConsumerWidget {
+  final LightUser? user, {
+  required final bool isOnline,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDayTime = ref.watch(_isDayTimeProvider);
@@ -628,21 +632,34 @@ class const _GreetingWidget(
     final greeting = '${isDayTime ? '☀️' : '🌙'} $text';
 
     void openProfile() {
-      ref.invalidate(accountProvider);
       Navigator.of(context).push(ProfileScreen.buildRoute());
     }
 
     return InkWell(
       onTap: user != null ? openProfile : null,
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      child: Text(
-        greeting,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
-        style: Theme.of(context).platform == TargetPlatform.iOS
-            ? TextTheme.of(context).titleLarge
-            : null,
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            greeting,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
+            style: Theme.of(context).platform == TargetPlatform.iOS
+                ? TextTheme.of(context).titleLarge
+                : null,
+          ),
+          if (!isOnline)
+            Text(
+              context.l10n.noNetwork,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextTheme.of(context).bodySmall
+                  ?.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
       ),
     );
   }
@@ -714,7 +731,7 @@ class const _OngoingGamesCarousel(
           list: list,
           onTap: (index) {
             final game = list[index];
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
@@ -751,10 +768,9 @@ class const _OfflineCorrespondenceCarousel(
           list: data,
           onTap: (index) {
             final el = data[index];
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)));
+            Navigator.of(context).pushHidingTabBar(
+              OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)),
+            );
           },
           builder: (el) => OngoingGameCarouselItem(
             game: OngoingGame(

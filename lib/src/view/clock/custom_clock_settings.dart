@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/view/clock/clock_tool_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const CustomClockSettings({
@@ -98,14 +97,14 @@ class _CustomClockSettingsState() extends State<CustomClockSettings> {
           child: Row(
             children: [
               Expanded(
-                child: PlatformFilledButton(
+                child: FilledButton(
                   onPressed: () => _submit(context),
                   child: Text(context.l10n.mobileOkButton, style: Styles.bold),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: PlatformFilledButton(
+                child: FilledButton(
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text(context.l10n.cancel, style: Styles.bold),
                 ),

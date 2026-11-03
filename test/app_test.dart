@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:material_ui/material_ui.dart';
@@ -107,6 +108,37 @@ void main() {
     expect(find.text('Watch'), labelMatcher);
   });
 
+  testWidgets(
+    'hiding and showing the tab bar keeps the screens of the tab in place',
+    variant: kPlatformVariant,
+    (tester) async {
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      final tabNavigator = Navigator.of(tester.element(find.byType(HomeTabScreen)));
+      var deactivations = 0;
+      tabNavigator.push(
+        MaterialPageRoute<void>(
+          builder: (_) => _DeactivationCounter(onDeactivate: () => deactivations++),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      tabNavigator.pushHidingTabBar(
+        MaterialPageRoute<void>(builder: (_) => const Text('Hiding the tab bar')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Hiding the tab bar'), findsOneWidget);
+
+      tabNavigator.pop();
+      await tester.pumpAndSettle();
+
+      // The navigator of the tab was not moved in the tree, which would deactivate its screens.
+      expect(deactivations, 0);
+    },
+  );
+
   testWidgets('language support', (tester) async {
     for (final locale in AppLocalizations.supportedLocales) {
       final app = await makeTestProviderScope(
@@ -128,4 +160,21 @@ void main() {
       // expect(find.byType(HomeTabScreen), findsOneWidget, reason: 'Home loads with locale: $locale');
     }
   }, variant: kPlatformVariant);
+}
+
+class const _DeactivationCounter({required final VoidCallback onDeactivate})
+    extends StatefulWidget {
+  @override
+  State<_DeactivationCounter> createState() => _DeactivationCounterState();
+}
+
+class _DeactivationCounterState() extends State<_DeactivationCounter> {
+  @override
+  void deactivate() {
+    widget.onDeactivate();
+    super.deactivate();
+  }
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.shrink();
 }

@@ -15,57 +15,58 @@ final _logger = Logger('BoardFromImage');
 /// leave the final scaling to the engine's better filter, without decoding a full camera picture.
 const _maxPictureSide = 1288.0;
 
-/// A button that sets up the board from a photo of a chessboard, taken with the camera or picked
-/// from the photo library.
-class const BoardFromImageButton({super.key, required final void Function(String) onPlacementRead})
-    extends ConsumerWidget {
-  Future<void> _readFrom(BuildContext context, BoardReader reader, ImageSource source) async {
-    final XFile? picture;
-    try {
-      picture = await ImagePicker().pickImage(
-        source: source,
-        maxWidth: _maxPictureSide,
-        maxHeight: _maxPictureSide,
-        requestFullMetadata: false,
-      );
-    } catch (e, st) {
-      _logger.warning('Could not get a picture:', e, st);
-      return;
-    }
-    if (picture == null) return;
-    final bytes = await picture.readAsBytes();
-    if (!context.mounted) return;
-
-    final placement = await showDialog<String>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => _BoardFromImageDialog(bytes, reader),
-    );
-    if (placement != null) onPlacementRead(placement);
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final reader = ref.watch(boardReaderProvider);
-
-    return IconButton(
-      icon: const Icon(Icons.photo_camera_outlined),
-      tooltip: 'Camera',
-      onPressed: () => showAdaptiveActionSheet<void>(
-        context: context,
-        actions: [
-          BottomSheetAction(
-            makeLabel: (context) => const Text('Take a photo'),
-            onPressed: () => _readFrom(context, reader, ImageSource.camera),
-          ),
-          BottomSheetAction(
-            makeLabel: (context) => const Text('Choose a photo'),
-            onPressed: () => _readFrom(context, reader, ImageSource.gallery),
-          ),
-        ],
+/// Sets up the board from a photo of a chessboard, taken with the camera or picked from the photo
+/// library, as chosen in an action sheet.
+///
+/// The caller keeps the [reader] alive while it is used, by watching [boardReaderProvider].
+Future<void> showBoardFromImageSheet(
+  BuildContext context,
+  BoardReader reader, {
+  required void Function(String) onPlacementRead,
+}) {
+  return showAdaptiveActionSheet<void>(
+    context: context,
+    actions: [
+      BottomSheetAction(
+        makeLabel: (context) => const Text('Take a photo'),
+        onPressed: () => _readFrom(context, reader, ImageSource.camera, onPlacementRead),
       ),
+      BottomSheetAction(
+        makeLabel: (context) => const Text('Choose a photo'),
+        onPressed: () => _readFrom(context, reader, ImageSource.gallery, onPlacementRead),
+      ),
+    ],
+  );
+}
+
+Future<void> _readFrom(
+  BuildContext context,
+  BoardReader reader,
+  ImageSource source,
+  void Function(String) onPlacementRead,
+) async {
+  final XFile? picture;
+  try {
+    picture = await ImagePicker().pickImage(
+      source: source,
+      maxWidth: _maxPictureSide,
+      maxHeight: _maxPictureSide,
+      requestFullMetadata: false,
     );
+  } catch (e, st) {
+    _logger.warning('Could not get a picture:', e, st);
+    return;
   }
+  if (picture == null) return;
+  final bytes = await picture.readAsBytes();
+  if (!context.mounted) return;
+
+  final placement = await showDialog<String>(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => _BoardFromImageDialog(bytes, reader),
+  );
+  if (placement != null) onPlacementRead(placement);
 }
 
 enum _Step() {

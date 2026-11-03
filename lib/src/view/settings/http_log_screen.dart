@@ -60,7 +60,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
     final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('HTTP logs'),
+        title: Text(context.l10n.mobileHttpLogs),
         actions: [
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
@@ -69,8 +69,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  // TODO localize
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () =>
                       ref.read(httpLogPaginatorProvider(_searchQuery).notifier).deleteAll(),
                 );
@@ -149,13 +148,20 @@ class _HttpLogListState() extends ConsumerState<_HttpLogList> {
   }
 }
 
-final _logDateFormatter = DateFormat.yMd().add_Hms();
+DateFormat get _logDateFormatter => DateFormat.yMd().add_Hms();
 
 String _formatElapsed(Duration elapsed) {
   if (elapsed.inMilliseconds < 1000) {
     return '${elapsed.inMilliseconds}ms';
   }
   return '${(elapsed.inMilliseconds / 1000).toStringAsFixed(1)}s';
+}
+
+String _formatSize(int bytes) {
+  if (bytes < 1024) {
+    return '$bytes B';
+  }
+  return '${(bytes / 1024).toStringAsFixed(1)} kB';
 }
 
 class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extends StatelessWidget {
@@ -165,7 +171,8 @@ class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extend
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    final date = _logDateFormatter.format(httpLog.requestDateTime);
+    final tile = ListTile(
       dense: true,
       leading: SizedBox(
         width: 40,
@@ -211,10 +218,13 @@ class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extend
               : textShade(context, 0.7),
         ),
       ),
-      subtitle: Text(
-        _logDateFormatter.format(httpLog.requestDateTime),
-        style: TextStyle(color: textShade(context, 0.7), fontSize: 12),
-      ),
+      subtitle: Text(switch (httpLog) {
+        HttpLogEntry(cache: final cache?) => '$date (${cache.name} cache)',
+        HttpLogEntry(responseSize: final size?) => '$date (${_formatSize(size)})',
+        _ => date,
+      }, style: TextStyle(color: textShade(context, 0.7), fontSize: 12)),
     );
+    // Cached responses didn't hit the network: fade them so that network requests stand out.
+    return httpLog.fromCache ? Opacity(opacity: 0.6, child: tile) : tile;
   }
 }

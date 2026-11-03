@@ -6,10 +6,12 @@ import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoUiCompatibilityBri
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
@@ -37,6 +39,8 @@ import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show usePinnedNavBar;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
@@ -187,6 +191,11 @@ class _AppState() extends ConsumerState<Application> {
       }, fireImmediately: true);
     }
 
+    // [setupIntl] sets [Intl.defaultLocale] on startup: follow the app language from then on.
+    ref.listenManual(generalPreferencesProvider.select((prefs) => prefs.locale), (_, locale) {
+      Intl.defaultLocale = (locale ?? getSystemLocale(WidgetsBinding.instance)).toLanguageTag();
+    });
+
     // Listening to the settled status rather than to [isDeviceOnlineProvider]: both actions are
     // network calls, which must not be made on the optimistic assumption that a device whose
     // status is not known yet is online.
@@ -270,7 +279,12 @@ class _AppState() extends ConsumerState<Application> {
           child: CupertinoUiCompatibilityBridge(
             // The SDK themes of the bridges set their own icon theme (the Cupertino one with the
             // primary color): restore the app icon theme.
-            child: IconTheme(data: iconTheme, child: child!),
+            // Pins the app bar buttons of the root navigator's routes and morphs them between
+            // routes on iOS 26.
+            child: GlassNavigationShell(
+              enabled: usePinnedNavBar(context),
+              child: IconTheme(data: iconTheme, child: child!),
+            ),
           ),
         );
       },

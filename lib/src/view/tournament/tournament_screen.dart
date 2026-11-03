@@ -76,6 +76,8 @@ class const TournamentScreen({required final TournamentId id, final UserId? init
 }
 
 class _TournamentScreenState() extends ConsumerState<TournamentScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   @override
   void initState() {
     super.initState();
@@ -93,14 +95,36 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
+  }
+
+  /// Reopens the tournament socket if another screen took it.
+  ///
+  /// When another [TournamentScreen] for the same tournament is already in the route stack, the
+  /// controller is kept alive and its `build` doesn't re-run, so this is what reopens the socket
+  /// closed by the game we navigated through.
+  void _reopenSocketIfNeeded() {
+    if (mounted && ModalRoute.isCurrentOf(context) == true) {
+      ref.read(tournamentControllerProvider(widget.id).notifier).reopenSocketIfNeeded();
+    }
+  }
+
+  @override
+  void didPush() {
+    // Called by `subscribe`, from `didChangeDependencies`: not a time to invalidate a provider.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _reopenSocketIfNeeded());
+  }
+
+  @override
+  void didPopNext() {
+    _reopenSocketIfNeeded();
   }
 
   @override
@@ -121,12 +145,12 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
       tournamentControllerProvider(widget.id).select((value) => value.value?.currentGame),
       (prevGameId, currentGameId) {
         if (prevGameId != currentGameId && currentGameId != null) {
+          // The dialogs over the game (e.g. its result) are on the root navigator.
+          Navigator.of(context, rootNavigator: true).popUntil((route) => route is! PopupRoute);
           Navigator.of(context)
               .popUntil((route) => route.settings.name == TournamentScreen.routeName);
-          Navigator.of(
-            context,
-            rootNavigator: true,
-          ).push(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
+          Navigator.of(context)
+              .pushHidingTabBar(GameScreen.buildRoute(source: ExistingGameSource(currentGameId)));
         }
       },
     );
@@ -184,14 +208,14 @@ class const _Body({required final TournamentId id, required final TournamentStat
         : const SizedBox.shrink();
 
     return FocusDetector(
-      // Use `onFocusGained` (fires on the first focus too) rather than
-      // `onFocusRegained`: when a second `TournamentScreen` for the same
-      // tournament is pushed on top of a game, its `FocusDetector` gains focus
-      // for the first time, and the controller (kept alive, so `build` doesn't
-      // re-run) must reopen the socket that the game closed.
+      // Navigation is handled by the route callbacks of the screen state; this covers what they
+      // don't see: switching back to this tab, or bringing the app back to the foreground.
       onFocusGained: () {
-        if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).onFocusGained();
+        // Visibility changes are reported up to 500ms late, and a route being covered by a push
+        // may still be reported fully visible: only the top route may take the socket, or it
+        // would take it from the screen pushed on top of it (e.g. the game of a pairing).
+        if (context.mounted && ModalRoute.isCurrentOf(context) == true) {
+          ref.read(tournamentControllerProvider(id).notifier).reopenSocketIfNeeded();
         }
       },
       child: PlatformScaffold(
@@ -235,53 +259,58 @@ class const _Body({required final TournamentId id, required final TournamentStat
               ),
           ],
         ),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final isTabletLandscape =
-                constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
-            final listPadding = Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context));
-            return Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: isTabletLandscape
-                  ? Row(
-                      spacing: 16.0,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: ListView(
-                            padding: listPadding,
-                            children: [
-                              if (isIOS) _BodyTitle(state: state),
-                              _TournamentInfoCard(tournament: state.tournament),
-                              const SizedBox(height: 16),
-                              ...tournamentSecondaryInfoWidgets,
-                              bottomSheetSpacer,
-                            ],
+        // The list scrolls under the glass bottom bar buttons.
+        body: BottomBarScrollEdgeEffect(
+          barHeight: BottomBar.heightOf(context),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isTabletLandscape =
+                  constraints.maxWidth > constraints.maxHeight && isTabletOrLarger(context);
+              final listPadding = Styles.verticalBodyPadding.add(MediaQuery.paddingOf(context));
+              return Padding(
+                padding: Styles.horizontalBodyPadding,
+                child: isTabletLandscape
+                    ? Row(
+                        spacing: 16.0,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: ListView(
+                              padding: listPadding,
+                              children: [
+                                if (isIOS) _BodyTitle(state: state),
+                                _TournamentInfoCard(tournament: state.tournament),
+                                const SizedBox(height: 16),
+                                ...tournamentSecondaryInfoWidgets,
+                                bottomSheetSpacer,
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: ListView(
-                            padding: listPadding,
-                            children: [...standingWidgets, bottomSheetSpacer],
+                          Expanded(
+                            flex: 2,
+                            child: ListView(
+                              padding: listPadding,
+                              children: [...standingWidgets, bottomSheetSpacer],
+                            ),
                           ),
-                        ),
-                      ],
-                    )
-                  : ListView(
-                      padding: listPadding,
-                      children: [
-                        if (isIOS) _BodyTitle(state: state),
-                        _TournamentInfoCard(tournament: state.tournament),
-                        const SizedBox(height: 16),
-                        ...standingWidgets,
-                        const SizedBox(height: 16),
-                        ...tournamentSecondaryInfoWidgets,
-                        bottomSheetSpacer,
-                      ],
-                    ),
-            );
-          },
+                        ],
+                      )
+                    : ListView(
+                        padding: listPadding,
+                        children: [
+                          if (isIOS) _BodyTitle(state: state),
+                          _TournamentInfoCard(tournament: state.tournament),
+                          const SizedBox(height: 16),
+                          ...standingWidgets,
+                          const SizedBox(height: 16),
+                          ...tournamentSecondaryInfoWidgets,
+                          bottomSheetSpacer,
+                        ],
+                      ),
+              );
+            },
+          ),
         ),
         bottomSheet: showPairingStatus
             ? Material(
@@ -341,9 +370,13 @@ class const _TournamentInfoCard({required final Tournament tournament}) extends 
                 ),
               ),
             ],
-            if (tournament.description != null && tournament.description!.isNotEmpty) ...[
+            if (tournament.description?.trim().isNotEmpty == true ||
+                tournament.payouts?.trim().isNotEmpty == true) ...[
               const SizedBox(height: 10),
-              _ExpandableDescription(description: tournament.description!),
+              _ExpandableDescription(
+                description: tournament.description,
+                payouts: tournament.payouts,
+              ),
             ],
           ],
         ),
@@ -569,7 +602,10 @@ class const _TournamentHelp({required final TournamentState state}) extends Stat
 String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
     variants.map((variant) => variant.label(context.l10n)).join(', ');
 
-class const _ExpandableDescription({required final String description}) extends ConsumerWidget {
+class const _ExpandableDescription({
+  required final String? description,
+  required final String? payouts,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ExpansionTile(
@@ -582,15 +618,36 @@ class const _ExpandableDescription({required final String description}) extends 
       expandedCrossAxisAlignment: .start,
       expandedAlignment: .centerLeft,
       children: [
-        MarkdownBody(
-          data: description,
-          softLineBreak: true,
-          onTapLink: (text, url, title) {
-            if (url != null) {
-              launchUrl(Uri.parse(url));
-            }
-          },
-        ),
+        if (payouts?.trim().isNotEmpty == true) ...[
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: .start,
+            children: [
+              Semantics(
+                link: true,
+                child: GestureDetector(
+                  onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
+                  child: const Text('Prizes', style: Styles.linkStyle),
+                ),
+              ),
+              const Text(': '),
+              Expanded(child: Text(payouts!)),
+            ],
+          ),
+        ],
+        if (description?.trim().isNotEmpty == true) ...[
+          MarkdownBody(
+            data: description!,
+            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
+                .copyWith(a: Styles.linkStyle),
+            softLineBreak: true,
+            onTapLink: (text, url, title) {
+              if (url != null) {
+                launchUrl(Uri.parse(url));
+              }
+            },
+          ),
+        ],
       ],
     );
   }
@@ -954,7 +1011,7 @@ class const _FeaturedGame(final FeaturedGame featuredGame, final bool isSpectato
               ? () {
                   // If game is finished, go to analysis board
                   if (!featuredGame.active) {
-                    Navigator.of(context, rootNavigator: true).push(
+                    Navigator.of(context).pushHidingTabBar(
                       AnalysisScreen.buildRoute(
                         AnalysisOptions.archivedGame(
                           orientation: featuredGame.orientation,
@@ -964,7 +1021,7 @@ class const _FeaturedGame(final FeaturedGame featuredGame, final bool isSpectato
                     );
                   } else {
                     // If game is still in progress, go to TV view
-                    Navigator.of(context, rootNavigator: true).push(
+                    Navigator.of(context).pushHidingTabBar(
                       TvScreen.buildRoute(
                         gameId: featuredGame.id,
                         orientation: featuredGame.orientation,
@@ -1228,7 +1285,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
       cupertinoGlass: true,
       children: [
         if (widget.state.chatOptions != null && kidModeAsync.value == false)
-          ChatBottomBarButton(options: widget.state.chatOptions!, showLabel: true),
+          ChatBottomBarButton(options: widget.state.chatOptions!),
 
         if (widget.state.tournament.isFinished != true && authUser != null)
           if (joinOrLeaveInProgress)
@@ -1345,31 +1402,39 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
 }
 
 void _showPlayerDetails(BuildContext context, TournamentId tournamentId, UserId userId) {
-  showAdaptiveFullHeightBottomSheet<void>(
+  showAdaptiveNavigationSheet<void>(
     context: context,
-    title: _TournamentPlayerDetailsTitle(tournamentId: tournamentId, userId: userId),
-    builder: (context, scrollController) {
-      return Consumer(
-        builder: (context, ref, child) {
-          final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
-
-          return WhenRouteSettled(
-            ready: playerAsync.hasValue || playerAsync.hasError,
-            placeholder: const Center(child: CircularProgressIndicator.adaptive()),
-            builder: (context) => switch (playerAsync) {
-              AsyncData(value: final player) => _TournamentPlayerDetails(
-                player: player,
-                tournamentId: tournamentId,
-                scrollController: scrollController,
-              ),
-              AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
-              _ => const Center(child: CircularProgressIndicator.adaptive()),
-            },
-          );
-        },
-      );
-    },
+    builder: (_) => _TournamentPlayerDetailsScreen(tournamentId: tournamentId, userId: userId),
   );
+}
+
+/// The details of a player of the tournament: the first page of the player details sheet, or a
+/// page pushed in the team details sheet.
+class const _TournamentPlayerDetailsScreen({
+  required final TournamentId tournamentId,
+  required final UserId userId,
+}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final playerAsync = ref.watch(tournamentPlayerProvider((tournamentId, userId)));
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: _TournamentPlayerDetailsTitle(tournamentId: tournamentId, userId: userId),
+      ),
+      body: WhenRouteSettled(
+        ready: playerAsync.hasValue || playerAsync.hasError,
+        placeholder: const Center(child: CircularProgressIndicator.adaptive()),
+        builder: (context) => switch (playerAsync) {
+          AsyncData(value: final player) => _TournamentPlayerDetails(
+            player: player,
+            tournamentId: tournamentId,
+          ),
+          AsyncError(:final error) => Center(child: Text('Error loading player data: $error')),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
+        },
+      ),
+    );
+  }
 }
 
 /// The title of the player details sheet: the rank and name of the player, once loaded and the
@@ -1410,7 +1475,6 @@ class const _TournamentPlayerDetailsTitle({
 class const _TournamentPlayerDetails({
   required final TournamentPlayer player,
   required final TournamentId tournamentId,
-  required final ScrollController scrollController,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1418,13 +1482,14 @@ class const _TournamentPlayerDetails({
     final teamInfo = player.teamId != null
         ? tournamentState.value?.tournament.meta.teamBattle?.teams[player.teamId!]
         : null;
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.all(16).add(MediaQuery.paddingOf(context)),
       children: [
         if (teamInfo != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.only(bottom: 16.0),
             child: Row(
-              mainAxisSize: .min,
+              mainAxisAlignment: .center,
               children: [
                 Text(teamInfo.name, style: const TextStyle(fontWeight: .w500, fontSize: 14)),
                 const SizedBox(width: 8.0),
@@ -1439,75 +1504,66 @@ class const _TournamentPlayerDetails({
               ],
             ),
           ),
-        Expanded(
-          child: ListView(
-            controller: scrollController,
-            padding: const EdgeInsets.all(16)
-                .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
-            children: [
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      _StatRow(
-                        label: context.l10n.stormScore,
-                        value: '${player.score}',
-                        prefix: player.fire
-                            ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
-                            : null,
-                      ),
-                      if (player.performance != null)
-                        _StatRow(
-                          label: context.l10n.performance,
-                          value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
-                        ),
-                      if (player.stats.game > 0) ...[
-                        _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
-                        if (player.stats.win > 0)
-                          _StatRow(
-                            label: context.l10n.winRate,
-                            value: '${((player.stats.win / player.stats.game) * 100).round()}%',
-                          ),
-                        _StatRow(
-                          label: context.l10n.arenaBerserkRate,
-                          value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
-                        ),
-                      ],
-                      if (player.pairings.isNotEmpty)
-                        _StatRow(
-                          label: context.l10n.averageOpponent,
-                          value: '${_calculateAverageOpponentRating(player)}',
-                        ),
-                    ],
-                  ),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            child: Column(
+              children: [
+                _StatRow(
+                  label: context.l10n.stormScore,
+                  value: '${player.score}',
+                  prefix: player.fire
+                      ? Icon(LichessIcons.blitz, size: 15, color: context.lichessColors.brag)
+                      : null,
                 ),
-              ),
+                if (player.performance != null)
+                  _StatRow(
+                    label: context.l10n.performance,
+                    value: player.performance.toString() + (player.stats.game < 3 ? '?' : ''),
+                  ),
+                if (player.stats.game > 0) ...[
+                  _StatRow(label: context.l10n.gamesPlayed, value: '${player.stats.game}'),
+                  if (player.stats.win > 0)
+                    _StatRow(
+                      label: context.l10n.winRate,
+                      value: '${((player.stats.win / player.stats.game) * 100).round()}%',
+                    ),
+                  _StatRow(
+                    label: context.l10n.arenaBerserkRate,
+                    value: '${((player.stats.berserk / player.stats.game) * 100).round()}%',
+                  ),
+                ],
+                if (player.pairings.isNotEmpty)
+                  _StatRow(
+                    label: context.l10n.averageOpponent,
+                    value: '${_calculateAverageOpponentRating(player)}',
+                  ),
+              ],
+            ),
+          ),
+        ),
 
-              if (player.pairings.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                Text(context.l10n.games, style: Styles.sectionTitle),
-                const SizedBox(height: 8),
-                Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: Column(
-                    children: [
-                      ...player.pairings.asMap().entries.map(
-                        (entry) => _PairingTile(
-                          pairing: entry.value,
-                          tournamentId: tournamentId,
-                          player: player.user,
-                          index: entry.key,
-                          nbGames: player.pairings.length,
-                        ),
-                      ),
-                    ],
+        if (player.pairings.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Text(context.l10n.games, style: Styles.sectionTitle),
+          const SizedBox(height: 8),
+          Card(
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              children: [
+                ...player.pairings.asMap().entries.map(
+                  (entry) => _PairingTile(
+                    pairing: entry.value,
+                    tournamentId: tournamentId,
+                    player: player.user,
+                    index: entry.key,
+                    nbGames: player.pairings.length,
                   ),
                 ),
               ],
-            ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }
@@ -1567,7 +1623,7 @@ class const _PairingTile({
           ? () {
               // If game is finished (status neither started nor created), go to analysis board
               if (pairing.status != GameStatus.started && pairing.status != GameStatus.created) {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.archivedGame(
                       orientation: pairing.color,
@@ -1577,7 +1633,7 @@ class const _PairingTile({
                 );
               } else {
                 // If game is still in progress, go to TV view
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   TvScreen.buildRoute(
                     gameId: pairing.gameId,
                     orientation: pairing.color,
@@ -1626,11 +1682,13 @@ int _calculateAverageOpponentRating(TournamentPlayer player) {
 }
 
 void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId teamId) {
-  showAdaptiveFullHeightBottomSheet<void>(
+  showAdaptiveNavigationSheet<void>(
     context: context,
-    title: _TournamentTeamDetailsTitle(tournamentId: tournamentId, teamId: teamId),
-    builder: (context, scrollController) {
-      return Consumer(
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: _TournamentTeamDetailsTitle(tournamentId: tournamentId, teamId: teamId),
+      ),
+      body: Consumer(
         builder: (context, ref, child) {
           final teamAsync = ref.watch(tournamentTeamProvider((tournamentId, teamId)));
 
@@ -1641,15 +1699,14 @@ void _showTeamDetails(BuildContext context, TournamentId tournamentId, TeamId te
               AsyncData(value: final team) => _TournamentTeamDetails(
                 team: team,
                 tournamentId: tournamentId,
-                scrollController: scrollController,
               ),
               AsyncError(:final error) => Center(child: Text('Error loading team data: $error')),
               _ => const Center(child: CircularProgressIndicator.adaptive()),
             },
           );
         },
-      );
-    },
+      ),
+    ),
   );
 }
 
@@ -1685,7 +1742,6 @@ class const _TournamentTeamDetailsTitle({
 class const _TournamentTeamDetails({
   required final TournamentTeam team,
   required final TournamentId tournamentId,
-  required final ScrollController scrollController,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1693,9 +1749,7 @@ class const _TournamentTeamDetails({
     final nbLeaders = tournamentState.value?.tournament.meta.teamBattle?.nbLeaders;
 
     return ListView(
-      controller: scrollController,
-      padding: const EdgeInsets.all(16)
-          .add(EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom)),
+      padding: const EdgeInsets.all(16).add(MediaQuery.paddingOf(context)),
       children: [
         Card(
           child: Padding(
@@ -1783,9 +1837,15 @@ class const _TeamPlayerTile({
           ),
         ],
       ),
-      onTap: () {
-        _showPlayerDetails(context, tournamentId, player.user.id);
-      },
+      // In the team details sheet.
+      onTap: () => Navigator.of(context).push(
+        buildScreenRoute<void>(
+          screen: _TournamentPlayerDetailsScreen(
+            tournamentId: tournamentId,
+            userId: player.user.id,
+          ),
+        ),
+      ),
     );
   }
 }

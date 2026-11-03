@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const CorrespondenceChallengesScreen({super.key}) extends ConsumerStatefulWidget {
@@ -50,15 +52,13 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
           if (mounted) {
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(GameScreen.buildRoute(source: ExistingGameSource(gameFullId)));
+            Navigator.of(context)
+                .pushHidingTabBar(GameScreen.buildRoute(source: ExistingGameSource(gameFullId)));
           }
 
         case 'reload_seeks':
           if (mounted) {
-            ref.invalidate(correspondenceSeeksProvider);
+            ref.read(correspondenceSeeksProvider.notifier).reload();
           }
       }
     });
@@ -74,86 +74,92 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
   Widget build(BuildContext context) {
     final challengesAsync = ref.watch(correspondenceSeeksProvider);
     final authUser = ref.watch(authControllerProvider);
+    final supportedSeeks = challengesAsync.value
+        ?.where((seek) => seek.variant.isPlaySupported)
+        .toList();
 
-    switch (challengesAsync) {
-      case AsyncError():
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          body: const Center(child: Text('Could not load correspondence seeks')),
-        );
-      case AsyncData(value: final seeks):
-        final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          floatingActionButton: PlatformFloatingActionButton(
-            onPressed: () {
-              if (authUser == null) {
-                showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-                return;
-              }
-              showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return const CreateCorrespondenceGameBottomSheet();
-                },
-              ).then((_) {
-                ref.invalidate(correspondenceSeeksProvider);
-              });
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+      floatingActionButton: PlatformFloatingActionButton(
+        onPressed: () {
+          if (authUser == null) {
+            showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+            return;
+          }
+          showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return const CreateCorrespondenceGameBottomSheet();
             },
-            label: context.l10n.createAGame,
-            icon: const Icon(Icons.add_circle_outline),
-          ),
-          body: HapticRefreshIndicator(
-            key: _refreshKey,
-            onRefresh: () => ref.refresh(correspondenceSeeksProvider.future),
-            child: ListView.separated(
-              itemCount: supportedSeeks.length,
-              separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
-                  ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                  : const SizedBox.shrink(),
-              itemBuilder: (context, index) {
-                final seek = supportedSeeks[index];
-                final isMySeek = UserId.fromUserName(seek.username) == authUser?.user.id;
+          ).then((_) {
+            if (mounted) {
+              ref.read(correspondenceSeeksProvider.notifier).reload();
+            }
+          });
+        },
+        label: context.l10n.createAGame,
+        icon: const Icon(Icons.add_circle_outline),
+      ),
+      body: HapticRefreshIndicator(
+        key: _refreshKey,
+        onRefresh: () => ref.read(correspondenceSeeksProvider.notifier).reload(),
+        child: supportedSeeks != null
+            ? SwipeActionsScope(
+                child: ListView.separated(
+                  itemCount: supportedSeeks.length,
+                  separatorBuilder: (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
+                  itemBuilder: (context, index) {
+                    final seek = supportedSeeks[index];
+                    final isMySeek = UserId.fromUserName(seek.username) == authUser?.user.id;
 
-                return CorrespondenceChallengeListItem(
-                  seek: seek,
-                  challengerUser: LightUser(
-                    id: UserId.fromUserName(seek.username),
-                    name: seek.username,
-                    title: seek.title,
-                  ),
-                  onPressed: isMySeek
-                      ? null
-                      : authUser == null
-                      ? () {
-                          showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-                        }
-                      : () {
-                          showConfirmDialog<void>(
-                            context,
-                            title: Text(context.l10n.accept),
-                            isDestructiveAction: true,
-                            onConfirm: () {
-                              socketClient.send('joinSeek', seek.id.toString());
+                    return CorrespondenceChallengeListItem(
+                      seek: seek,
+                      challengerUser: LightUser(
+                        id: UserId.fromUserName(seek.username),
+                        name: seek.username,
+                        title: seek.title,
+                      ),
+                      onPressed: isMySeek
+                          ? null
+                          : authUser == null
+                          ? () {
+                              showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                            }
+                          : () {
+                              showConfirmDialog<void>(
+                                context,
+                                title: Text(context.l10n.accept),
+                                isDestructiveAction: true,
+                                onConfirm: () {
+                                  socketClient.send('joinSeek', seek.id.toString());
+                                },
+                              );
                             },
-                          );
-                        },
-                  onCancel: isMySeek
-                      ? () {
-                          socketClient.send('cancelSeek', seek.id.toString());
-                        }
-                      : null,
-                );
-              },
-            ),
-          ),
-        );
-      case _:
-        return PlatformScaffold(
-          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          body: const Center(child: CircularProgressIndicator.adaptive()),
-        );
-    }
+                      onCancel: isMySeek
+                          ? () {
+                              socketClient.send('cancelSeek', seek.id.toString());
+                            }
+                          : null,
+                    );
+                  },
+                ),
+              )
+            : challengesAsync is AsyncError
+            // scrollable, so that the error can be retried with a pull to refresh
+            ? LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: const Center(child: Text('Could not load correspondence seeks')),
+                  ),
+                ),
+              )
+            : const Center(child: CircularProgressIndicator.adaptive()),
+      ),
+    );
   }
 }

@@ -30,6 +30,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Početna';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -276,6 +285,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Želite li završiti ovu rundu?';
 
   @override
@@ -387,6 +399,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -445,6 +460,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Teme';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -1437,6 +1455,14 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Practice only some files & ranks';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Nauči šah';
@@ -2497,7 +2523,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2525,6 +2551,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2923,9 +2952,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get puzzleThemeCastling => 'Rokada';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Dovedi svog kralja na sigurno i postavi svog topa za napad.';
 
   @override
@@ -3017,6 +3043,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktički potezi u završnici.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3816,6 +3845,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get engineSettings => 'Engine settings';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
 
   @override
@@ -4442,6 +4474,11 @@ class AppLocalizationsHr extends AppLocalizations {
   String get noNetwork => 'Izvan mreže';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Omiljeni protivnici';
 
   @override
@@ -4808,9 +4845,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get reason => 'Razlog';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Varanje';
 
   @override
@@ -4827,9 +4861,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5409,7 +5440,13 @@ class AppLocalizationsHr extends AppLocalizations {
   String get downloadImported => 'Preuzmi uvezeno';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Download all games';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Tablica križanja';
@@ -6176,7 +6213,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get showMeEverything => 'Pokaži mi sve';
 
   @override
-  String get lichessPatronInfo => 'Lichess je dobrotvorni i potpuno besplatan softver otvorenog koda.\nSvi operativni troškovi, razvoj i sadržaj financiraju se isključivo donacijama korisnika.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Trenutno ovdje nema ništa za vidjeti.';
@@ -7029,9 +7066,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Samo suradnici u studiji mogu zahtijevati računalnu analizu.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Dobi potpunu analizu \"main-line\" od servera.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Budite sigurni da je poglavlje gotovo. Zahtjev za računalnom analizom se može dobiti samo jednom.';
 
   @override
@@ -7248,9 +7282,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get studySave => 'Spremi';
 
   @override
   String get studyClearChat => 'Očistite razgovor';
@@ -7486,6 +7517,21 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Poraz bijelog, ali crni ne može pobijediti';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

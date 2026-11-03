@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -24,18 +25,18 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/progression_widget.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -76,48 +77,29 @@ class const _Title({required final User user, required final Perf perf}) extends
               p.ratingDeviation < kClueLessDeviation;
         })
         .toList(growable: false);
-    return InkWell(
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(perf.icon),
-            Flexible(
-              child: AppBarTitleText(
-                ' ${context.l10n.perfStatPerfStats(perf.label(context.l10n))}',
-              ),
-            ),
-            const Icon(Icons.arrow_drop_down),
-          ],
-        ),
-      ),
-      onTap: () {
-        showAdaptiveActionSheet<void>(
-          context: context,
-          actions: allPerfs
-              .map((p) {
-                return BottomSheetAction(
-                  makeLabel: (context) => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(p.icon),
-                      const SizedBox(width: 6),
-                      Text(
-                        context.l10n.perfStatPerfStats(p.label(context.l10n)),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
-                  },
-                );
-              })
-              .toList(growable: false),
-        );
-      },
+    final title = Row(
+      mainAxisSize: .min,
+      spacing: 6.0,
+      children: [
+        Icon(perf.icon),
+        Flexible(child: AppBarTitleText(context.l10n.perfStatPerfStats(perf.label(context.l10n)))),
+      ],
+    );
+    if (allPerfs.isEmpty) return title;
+    return ContextMenuTitleButton(
+      semanticsLabel: context.l10n.perfStatPerfStats(perf.label(context.l10n)),
+      title: title,
+      actions: [
+        for (final p in allPerfs)
+          ContextMenuAction(
+            icon: p.icon,
+            label: context.l10n.perfStatPerfStats(p.label(context.l10n)),
+            onPressed: () {
+              Navigator.of(context)
+                  .pushReplacement(PerfStatsScreen.buildRoute(user: user, perf: p));
+            },
+          ),
+      ],
     );
   }
 }
@@ -634,7 +616,7 @@ class const _GameListWidget({
               final list = await ref.read(gameRepositoryProvider).getGamesByIds(gameIds);
               final gameData = list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted && gameData != null && gameData.variant.isReadSupported) {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.archivedGame(
                       orientation: user.id == gameData.white.user?.id ? Side.white : Side.black,

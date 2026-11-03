@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 /// Shows a short preview of the puzzle history.
 class const PuzzleHistoryPreview(
@@ -39,7 +40,7 @@ class const PuzzleHistoryPreview(
           return BoardThumbnail(
             size: boardWidth,
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pushHidingTabBar(
                 PuzzleScreen.buildRoute(
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
@@ -199,7 +200,7 @@ class const PuzzleHistoryBoard(final PuzzleHistoryEntry puzzle, final double boa
       child: BoardThumbnail(
         size: boardWidth,
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(
+          Navigator.of(context).pushHidingTabBar(
             PuzzleScreen.buildRoute(
               angle: const PuzzleTheme(PuzzleThemeKey.mix),
               puzzleId: puzzle.id,

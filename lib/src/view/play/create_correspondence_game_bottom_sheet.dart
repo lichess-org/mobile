@@ -15,8 +15,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -111,7 +109,7 @@ class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBotto
             if (account != null)
               ListTile(
                 title: Text(context.l10n.rated),
-                trailing: PlatformSwitch(
+                trailing: Switch.adaptive(
                   value: preferences.customVariant == Variant.standard && preferences.customRated,
                   onChanged: preferences.customVariant == Variant.standard
                       ? (bool value) {
@@ -136,7 +134,7 @@ class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBotto
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: PlatformFilledButton(
+                  child: FilledButton(
                     onPressed: snapshot.connectionState == ConnectionState.waiting
                         ? null
                         : () async {
@@ -158,8 +156,7 @@ class _CreateGameBodyState() extends ConsumerState<CreateCorrespondenceGameBotto
                               }
                             }
                             if (context.mounted) {
-                              Navigator.of(context)
-                                  .popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil((route) => route is! PopupRoute);
                             }
                           },
                     child: Text(context.l10n.createAGame),

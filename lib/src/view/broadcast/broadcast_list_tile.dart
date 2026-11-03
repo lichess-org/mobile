@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -159,7 +160,7 @@ class BroadcastListTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(BroadcastRoundScreen.buildRoute(broadcast));
+        Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(broadcast));
       },
       child: Padding(
         padding: _kPadding,

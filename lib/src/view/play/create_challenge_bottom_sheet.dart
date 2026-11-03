@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -22,14 +23,19 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateChallengeBottomSheet({final LightUser? user, final String? positionFen})
-    extends ConsumerStatefulWidget {
+class const CreateChallengeBottomSheet({
+  final LightUser? user,
+  final String? positionFen,
+
+  /// The navigator where the game is pushed, by default the navigator of the sheet: for a sheet on
+  /// the root navigator, the navigator of the screen that presents it, so that the game is pushed
+  /// in the current tab and hides the tab bar there.
+  final NavigatorState? navigator,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<CreateChallengeBottomSheet> createState() => _CreateChallengeBottomSheetState();
 }
@@ -285,7 +291,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
             if (account != null)
               ListTile(
                 title: Text(context.l10n.rated),
-                trailing: PlatformSwitch(
+                trailing: Switch.adaptive(
                   value: preferences.isRatedAllowed && preferences.rated,
                   onChanged: preferences.isRatedAllowed
                       ? (bool value) {
@@ -300,7 +306,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
               builder: (context, snapshot) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: PlatformFilledButton(
+                  child: FilledButton(
                     onPressed: timeControl == ChallengeTimeControlType.clock || widget.user == null
                         ? isValidTimeControl && isValidPosition
                               ? () {
@@ -318,11 +324,11 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                                   // new GameScreen always runs build() and creates a fresh
                                   // challenge instead of showing the old GameCreatedState.
                                   ref.invalidate(gameScreenLoaderProvider(source));
-                                  Navigator.of(context)
-                                      .popUntil((route) => route is! ModalBottomSheetRoute);
+                                  final navigator = widget.navigator ?? Navigator.of(context);
+                                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
                                   // Use pushAndRemoveUntil to clear any old GameScreen from
                                   // the navigation stack without removing unrelated routes.
-                                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+                                  navigator.pushAndRemoveUntilHidingTabBar(
                                     GameScreen.buildRoute(source: source),
                                     (route) => route is! ScreenRoute || route.screen is! GameScreen,
                                   );
@@ -348,8 +354,7 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
 
                               if (!context.mounted) return;
 
-                              Navigator.of(context)
-                                  .popUntil((route) => route is! ModalBottomSheetRoute);
+                              Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
                               if (maybeDeclined != null &&
                                   Theme.of(context).platform == TargetPlatform.iOS) {

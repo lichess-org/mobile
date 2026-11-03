@@ -3,17 +3,25 @@ import 'dart:math' as math;
 import 'dart:ui' show ColorFilter, ImageFilter;
 
 import 'package:cupertino_ui/cupertino_ui.dart'
-    show CupertinoColors, CupertinoDynamicColor, CupertinoTheme;
-import 'package:flutter/foundation.dart' show ValueListenable;
+    show CupertinoColors, CupertinoDynamicColor, CupertinoIcons, CupertinoTheme;
+import 'package:flutter/foundation.dart' show ValueListenable, kDebugMode;
+import 'package:flutter_riverpod/flutter_riverpod.dart' show ConsumerWidget, WidgetRef;
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart'
+    show NavigationSheetScope, showAdaptiveNavigationSheet;
+import 'package:lichess_mobile/src/widgets/buttons.dart' show SemanticIconButton;
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart'
+    show ContextMenuIconButton, glassMenuItems, kGlassMenuWidth;
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show
         GlassAppBar,
+        GlassBarItem,
+        GlassBarItemBackground,
         GlassButton,
         GlassContainer,
-        GlassIconButton,
+        GlassPinnedBarChrome,
         GlassScaffold,
         GlassScrollEdgeEffect,
         LiquidGlassSettings,
@@ -25,7 +33,20 @@ import 'package:material_ui/material_ui.dart';
 /// Older iOS versions get the same layouts (large titles, scroll-aware bar tint, inset sheets...),
 /// with plain controls and opaque surfaces instead of glass ones.
 bool useLiquidGlass(BuildContext context) =>
-    Theme.of(context).platform == TargetPlatform.iOS && _isLiquidGlassSupported;
+    Theme.of(context).platform == TargetPlatform.iOS &&
+    ((kDebugMode ? DebugLiquidGlassOverride.maybeOf(context) : null) ?? _isLiquidGlassSupported);
+
+/// Overrides glass eligibility for a debug preview without changing the actual OS version.
+///
+/// Ignored in profile and release builds. Normal app entry points do not install this scope.
+class const DebugLiquidGlassOverride({required final bool enabled, required super.child, super.key})
+    extends InheritedWidget {
+  static bool? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<DebugLiquidGlassOverride>()?.enabled;
+
+  @override
+  bool updateShouldNotify(DebugLiquidGlassOverride oldWidget) => enabled != oldWidget.enabled;
+}
 
 /// Whether the device runs iOS 26 or later, unless turned off with
 /// `--dart-define=NO_LIQUID_GLASS=true` (to check the older iOS design on an iOS 26 device).
@@ -33,6 +54,28 @@ bool useLiquidGlass(BuildContext context) =>
 /// Always true on other platforms, where the theme platform is iOS only in tests.
 final bool _isLiquidGlassSupported =
     !const bool.fromEnvironment('NO_LIQUID_GLASS') && (!Platform.isIOS || _iosMajorVersion() >= 26);
+
+/// Whether the [PlatformAppBar] buttons are pinned above the navigator, and morph into the next
+/// route's buttons during a push or pop, like a UIKit navigation bar: on iOS 26 and later.
+///
+/// Each navigator is wrapped in a `GlassNavigationShell` (the root one in `app.dart`, the tab ones
+/// in `tab_scaffold.dart`), which draws the pinned buttons. See [PlatformAppBar.actions].
+bool usePinnedNavBar(BuildContext context) => useLiquidGlass(context);
+
+/// Whether an icon button has a long press action, which a [GlassBarItem.icon] doesn't support.
+bool _hasLongPress(Widget button) => switch (button) {
+  IconButton(:final onLongPress) || SemanticIconButton(:final onLongPress) => onLongPress != null,
+  _ => false,
+};
+
+/// A non-interactive item of a [PlatformAppBar], such as a status indicator, as its leading.
+///
+/// On iOS it has no glass capsule around it, since it is not a button. Elsewhere it is [child] as
+/// is.
+class const AppBarIndicator({required final Widget child, super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => child;
+}
 
 int _iosMajorVersion() {
   // For example "Version 18.2 (Build 22C150)".
@@ -120,16 +163,41 @@ const EdgeInsets kGlassAppBarBottomPadding = EdgeInsets.fromLTRB(16.0, 12.0, 16.
 /// Height of a control (segmented control, chips) in the `bottom` of a [PlatformAppBar] on iOS.
 const double kGlassAppBarBottomControlHeight = 36.0;
 
-/// Glass settings tinted like the iOS tab bar, for glass controls over busy content (boards): opaque
-/// enough that what is seen through the glass does not compete with the labels and icons.
-///
-/// In dark mode the tint is a theme surface color, so that the controls match the other surfaces
-/// of the screen (search fields, cards) instead of a fixed grey.
-LiquidGlassSettings tintedGlassSettings(BuildContext context) => LiquidGlassSettings(
-  glassColor: Theme.of(context).brightness == Brightness.light
-      ? const Color(0xBFFFFFFF)
-      : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 0.8),
-);
+/// The package's iOS 27 `glassEffect(.regular)` glass, in the brightness of the app theme: the
+/// glass of every liquid glass widget of the app.
+LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light
+    : LiquidGlassSettings.ios27Dark;
+
+/// The glass of a liquid glass menu: thicker than the [ios27GlassSettings] of the button it morphs
+/// from.
+LiquidGlassSettings menuGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light.copyWith(
+        frost: 30,
+        frostOpacity: 0.94,
+        shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, 12))],
+      )
+    : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
+
+/// The glass of a prominent liquid glass button (floating action button, main action of a bottom
+/// bar): tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
+/// to let the content show through. The clear body mode keeps the exact color, with the glass rim
+/// and specular highlights.
+LiquidGlassSettings prominentGlassSettings(BuildContext context) =>
+    ios27GlassSettings(context).copyWith(
+      glassColor:
+          (FloatingActionButtonTheme.of(context).backgroundColor ??
+                  ColorScheme.of(context).primaryContainer)
+              .withValues(alpha: 0.8),
+      bodyMode: .clear,
+    );
+
+/// The color of the icon and label of a prominent liquid glass button ([prominentGlassSettings]).
+Color onProminentGlassColor(BuildContext context) =>
+    FloatingActionButtonTheme.of(context).foregroundColor ??
+    ColorScheme.of(context).onPrimaryContainer;
 
 /// The capsule background of an iOS control (segmented control, search field) that is liquid glass
 /// in a bar floating over the content, and flat in the content, like the iOS controls there.
@@ -147,9 +215,6 @@ class const GlassControlBackground({
 
   /// The height of the control, which the capsule is rounded to.
   required final double height,
-
-  /// The glass settings, or the default ones when null.
-  final LiquidGlassSettings? settings,
   required final Widget child,
 }) extends StatelessWidget {
   @override
@@ -175,8 +240,8 @@ class const GlassControlBackground({
             child: GlassContainer(
               shape: LiquidRoundedSuperellipse(borderRadius: borderRadius),
               settings: glass
-                  ? settings
-                  : (settings ?? const LiquidGlassSettings()).copyWith(visibility: 0.0),
+                  ? ios27GlassSettings(context)
+                  : ios27GlassSettings(context).copyWith(visibility: 0.0),
               // Outside of an app bar, there is no parent glass layer to share. In an app bar,
               // which is isolated, its glass gets its own layer anyway.
               useOwnLayer: true,
@@ -205,25 +270,12 @@ class const AppBarBottomGlassScope({required final bool glass, required super.ch
   bool updateShouldNotify(AppBarBottomGlassScope oldWidget) => glass != oldWidget.glass;
 }
 
-/// Glass settings of the [PlatformAppBar] buttons in light mode: translucent white, like the iOS
-/// navigation bar buttons (the package's light glass is nearly clear).
-const _kLightAppBarButtonSettings = LiquidGlassSettings(glassColor: Color(0x80FFFFFF));
-
-/// The glass of the [PlatformAppBar] buttons, and of the glass controls of the app bar that are not
-/// laid out inside it (the search field below a large title), so that they look the same.
-///
-/// With a background theme, or when [tinted] (`PlatformAppBar.tintedGlass`), it is
-/// [tintedGlassSettings]: the barely tinted dark glass would show the image brightly. In light mode,
-/// the buttons are white like the iOS navigation bar buttons. Otherwise, the package default.
-LiquidGlassSettings? appBarButtonGlassSettings(BuildContext context, {bool tinted = false}) =>
-    tinted || _hasBackgroundTheme(context)
-    ? tintedGlassSettings(context)
-    : Theme.of(context).brightness == Brightness.light
-    ? _kLightAppBarButtonSettings
-    : null;
-
 /// Height of the buttons of a [PlatformAppBar] with `compactButtons` on iOS.
 const double _kGlassCompactButtonHeight = 36.0;
+
+/// Gap below the buttons of a pinned [PlatformAppBar] with `compactButtons` and no `bottom`: its
+/// buttons have the shell's full toolbar height (see [usePinnedNavBar]).
+const double _kPinnedCompactButtonsGap = 6.0;
 
 /// A wrapper around [Scaffold] that sets properties to handle app bar and bottom navigation bar
 /// transparency on iOS.
@@ -295,12 +347,15 @@ class const PlatformScaffold({
     final hasTintedAppBar =
         stickyAppBar &&
         extendBodyBehindAppBar &&
-        appBar!.scrolledUnderTint &&
         (!useLiquidGlass(context) ||
             (title != null && title is! SearchFieldHero && title is! PlatformSearchBar));
     final hasLargeTitle = hasTintedAppBar && title != null && appBar!.largeTitle;
     final largeTitleHeight = hasLargeTitle ? _kLargeTitleHeight : 0.0;
-    final bottomHeight = appBar?.bottom?.preferredSize.height ?? 0.0;
+    final bottomHeight =
+        appBar?.bottom?.preferredSize.height ??
+        ((appBar?.compactButtons ?? false) && usePinnedNavBar(context)
+            ? _kPinnedCompactButtonsGap
+            : 0.0);
     // With a large title, the bottom of the app bar is below the large title, in the body.
     final appBarHeight = appBar != null
         ? _kGlassToolbarHeight + (hasLargeTitle ? 0.0 : bottomHeight)
@@ -618,18 +673,27 @@ class const BlurredBarBackground({
       color: CupertinoDynamicColor.resolve(CupertinoColors.separator, context),
       width: 1.0 / MediaQuery.devicePixelRatioOf(context),
     );
-    return ClipRect(
-      child: BackdropFilter(
-        filter: _barTintFilter(context),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: cupertinoBarTint(context, opacity: 0.4),
-            border: atBottom ? Border(top: hairline) : Border(bottom: hairline),
-          ),
-          child: child,
+    final blur = BackdropFilter(
+      filter: _barTintFilter(context),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cupertinoBarTint(context, opacity: 0.4),
+          border: atBottom ? Border(top: hairline) : Border(bottom: hairline),
         ),
+        child: child,
       ),
     );
+    // At the top of a navigation sheet, the blur gets the rounded corners of the sheet: the clip of
+    // the sheet doesn't clip it, only the clip right around it does.
+    final sheetCornerRadius = atBottom
+        ? 0.0
+        : NavigationSheetScope.maybeOf(context)?.topCornerRadius ?? 0.0;
+    return sheetCornerRadius > 0
+        ? ClipRSuperellipse(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(sheetCornerRadius)),
+            child: blur,
+          )
+        : ClipRect(child: blur);
   }
 }
 
@@ -716,7 +780,32 @@ class const PlatformAppBar({
   final Widget? title,
   final double? titleSpacing,
   final TextStyle? titleTextStyle,
+
+  /// The buttons at the end of the bar: [IconButton]s, [SemanticIconButton]s and
+  /// [ContextMenuIconButton]s created in the screen's build method, whose callbacks use the
+  /// screen's context and ref.
+  ///
+  /// Use [actionsBuilder] instead when a button watches providers that the screen doesn't watch
+  /// (only the app bar is rebuilt), or when a callback needs a ref that the screen doesn't have (a
+  /// [StatelessWidget]). Don't wrap a button in a widget class of its own for that. A widget class
+  /// that must be an action (e.g. a text button) takes its callbacks as parameters, created with
+  /// the screen's context and ref, instead of navigating, presenting or reading providers with its
+  /// own.
+  ///
+  /// Why: on iOS 26 and later, the buttons of a pushed screen (and its [leading]) are pinned above
+  /// the navigator, and morph into the next screen's buttons (see [usePinnedNavBar]). The button
+  /// types above become items of the shell, whose glyph morphs. Any other widget is a custom item,
+  /// which only cross-fades: the shell builds it out of the screen's route, where its own context
+  /// finds the wrong navigator, and disposes it while a sheet or a dialog is shown, so its own ref
+  /// can't be used in a callback.
   final List<Widget>? actions,
+
+  /// Builds the [actions], in place of [actions], with the context and the ref of the app bar,
+  /// which belong to the screen: callbacks navigate, present and read providers with them.
+  ///
+  /// For buttons that watch providers the screen doesn't watch, or when the screen has no ref (see
+  /// [actions]).
+  final List<Widget> Function(BuildContext context, WidgetRef ref)? actionsBuilder,
   final PreferredSizeWidget? bottom,
 
   /// Whether the buttons are smaller than the toolbar on iOS, leaving a gap below them.
@@ -727,15 +816,6 @@ class const PlatformAppBar({
   final bool? centerTitle,
   final bool automaticallyImplyLeading = true,
 
-  /// Whether the glass buttons are tinted on iOS ([tintedGlassSettings]), for a screen whose
-  /// content scrolling under them is busy, like boards. They always are with a background theme.
-  final bool tintedGlass = false,
-
-  /// Whether the app bar is tinted on iOS while content is scrolled under it (see
-  /// [PlatformScaffold]). False for a screen whose pinned header paints the bar background itself
-  /// (e.g. pinned tabs before iOS 26).
-  final bool scrolledUnderTint = true,
-
   /// Whether the [title] is an iOS large title, at the top of the body of a [PlatformScaffold], and
   /// shown in the app bar once it is scrolled away, like a UIKit navigation bar large title.
   ///
@@ -743,19 +823,29 @@ class const PlatformAppBar({
   /// [MediaQuery] leaves room for the large title. The [bottom] (e.g. a search field) is below the
   /// large title, and sticks below the app bar buttons once the large title is scrolled away.
   final bool largeTitle = false,
-}) extends StatelessWidget implements PreferredSizeWidget {
+}) extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => _PreferredAppBarSize(kToolbarHeight, bottom?.preferredSize.height);
 
+  /// Whether the app bar has a close button that closes the navigation sheet it is in: on the first
+  /// page of the sheet ([showAdaptiveNavigationSheet]), without a leading of its own.
+  bool _impliesSheetClose(BuildContext context) =>
+      automaticallyImplyLeading &&
+      leading == null &&
+      (ModalRoute.of(context)?.isFirst ?? false) &&
+      NavigationSheetScope.maybeOf(context) != null;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    assert(this.actions == null || actionsBuilder == null);
+    final actions = actionsBuilder?.call(context, ref) ?? this.actions;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       // An iOS 26 liquid glass navigation bar, meant to be used by [PlatformScaffold]. Before iOS
       // 26, the same bar with plain buttons.
       final glass = useLiquidGlass(context);
       final colorScheme = ColorScheme.of(context);
       final buttonHeight = compactButtons ? _kGlassCompactButtonHeight : _kGlassToolbarHeight;
-      final buttonSettings = appBarButtonGlassSettings(context, tinted: tintedGlass);
+      final buttonSettings = ios27GlassSettings(context);
       // The app bar of the root screen of a tab has a large title, like the iOS 26 main tabs.
       final isTabRoot =
           MainTabScaffoldProperties.hasExtendedBody(context) &&
@@ -764,27 +854,10 @@ class const PlatformAppBar({
           ? CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
           : AppBarTheme.of(context).titleTextStyle;
       final parentRoute = ModalRoute.of(context);
-      final impliedLeadingIcon = Icon(
-        parentRoute is PageRoute && parentRoute.fullscreenDialog
-            ? Icons.close_rounded
-            : Icons.arrow_back_ios_new_rounded,
-        color: colorScheme.onSurface,
-      );
-      final impliedLeading =
-          automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false)
-          ? glass
-                ? GlassIconButton(
-                    size: buttonHeight,
-                    icon: impliedLeadingIcon,
-                    semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: () => Navigator.maybePop(context),
-                  )
-                : IconButton(
-                    icon: impliedLeadingIcon,
-                    tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                    onPressed: () => Navigator.maybePop(context),
-                  )
-          : null;
+      final isFullscreenDialog = parentRoute is PageRoute && parentRoute.fullscreenDialog;
+      final impliesLeading =
+          automaticallyImplyLeading && (parentRoute?.impliesAppBarDismissal ?? false);
+      final impliesSheetClose = _impliesSheetClose(context);
       final largeTitleOffset = largeTitle ? _LargeTitleScrollScope.maybeOf(context) : null;
       final inlineTitle = largeTitleOffset != null && title != null
           ? ValueListenableBuilder(
@@ -797,43 +870,194 @@ class const PlatformAppBar({
               child: title,
             )
           : title;
+      final appBarTitle = inlineTitle != null
+          ? IconTheme.merge(
+              // Like the Material AppBar, so that icons in the title are not given the primary
+              // color.
+              data: IconThemeData(color: colorScheme.onSurface),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(color: colorScheme.onSurface)
+                    .merge(titleTextStyle ?? defaultTitleStyle),
+                // GlassAppBar leaves no gap between a centered title and the buttons around it,
+                // unlike a leading aligned one: the same gap is added here.
+                child: centerTitle ?? true
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: inlineTitle,
+                      )
+                    : inlineTitle,
+              ),
+            )
+          : null;
 
-      return GlassAppBar(
-        title: inlineTitle != null
-            ? IconTheme.merge(
-                // Like the Material AppBar, so that icons in the title are not given the primary
-                // color.
-                data: IconThemeData(color: colorScheme.onSurface),
-                child: DefaultTextStyle.merge(
-                  style: TextStyle(color: colorScheme.onSurface)
-                      .merge(titleTextStyle ?? defaultTitleStyle),
-                  // GlassAppBar leaves no gap between a centered title and the buttons around it,
-                  // unlike a leading aligned one: the same gap is added here.
-                  child: centerTitle ?? true
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: inlineTitle,
-                        )
-                      : inlineTitle,
+      // The buttons are pinned above the navigator by its GlassNavigationShell, which morphs them
+      // into the next route's buttons (see [usePinnedNavBar]). Not for a tab root, whose header
+      // scrolls away. Compact buttons get the shell's size, with a gap below them instead.
+      if (usePinnedNavBar(context) && !isTabRoot) {
+        final foregroundColor = colorScheme.onSurface;
+        // The shell builds the items in its own context: they get the themes of the screen and
+        // the icon color of the bar.
+        Widget captured(Widget child) => InheritedTheme.captureAll(
+          context,
+          IconTheme.merge(
+            data: IconThemeData(color: foregroundColor),
+            child: child,
+          ),
+        );
+        // The glyph of an icon or menu item, sized by the shell (no captured icon theme).
+        Widget glyph(Widget icon, Color? color) => IconTheme.merge(
+          data: IconThemeData(color: color ?? foregroundColor),
+          child: icon,
+        );
+        // Icon buttons and context menu buttons become the shell's own items, whose glyphs morph
+        // and whose capsule morphs into the menu. Anything else is a custom item, which
+        // cross-fades.
+        //
+        // Each item has an id, its slot counted from the edge the shell matches items from between
+        // routes (for the actions, the end of the list, or its start in RTL): it matches them as
+        // without an id, and an item built again keeps its identity.
+        GlassBarItem barItem(Widget action, Object id) => switch (action) {
+          IconButton(:final icon, :final onPressed, :final String? tooltip, :final color) ||
+          SemanticIconButton(
+            :final icon,
+            :final onPressed,
+            semanticsLabel: final String? tooltip,
+            :final color,
+          ) when !_hasLongPress(action) => GlassBarItem.icon(
+            id: id,
+            icon: glyph(icon, color),
+            onTap: onPressed ?? () {},
+            enabled: onPressed != null,
+            label: tooltip,
+          ),
+          ContextMenuIconButton(:final icon, :final color, :final semanticsLabel, :final actions) =>
+            GlassBarItem.menu(
+              id: id,
+              icon: glyph(icon, color),
+              menuItems: glassMenuItems(context, actions),
+              menuWidth: kGlassMenuWidth,
+              menuSettings: menuGlassSettings(context),
+              label: semanticsLabel,
+            ),
+          AppBarIndicator() => GlassBarItem.custom(
+            id: id,
+            background: GlassBarItemBackground.none,
+            child: captured(Center(child: action)),
+          ),
+          _ => GlassBarItem.custom(
+            id: id,
+            child: captured(
+              IconButtonTheme(
+                data: IconButtonThemeData(
+                  style: IconButton.styleFrom(foregroundColor: foregroundColor),
                 ),
+                // Centered in the capsule, like the other items, whatever its height (e.g. text).
+                child: Center(child: action),
+              ),
+            ),
+          ),
+        };
+        // A back button with an action of its own is the shell's back button.
+        final backButtonLeading = switch (leading) {
+          final BackButton button when parentRoute?.impliesAppBarDismissal ?? false => button,
+          _ => null,
+        };
+        return GlassPinnedBarChrome(
+          leading: [
+            if (leading != null && backButtonLeading == null)
+              barItem(leading!, const ('leading', 0))
+            else if (impliesLeading && isFullscreenDialog)
+              GlassBarItem.icon(
+                id: const ('leading', 0),
+                icon: const Icon(Icons.close_rounded),
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                onTap: () => Navigator.maybePop(context),
               )
-            : null,
+            else if (impliesSheetClose)
+              GlassBarItem.icon(
+                id: const ('leading', 0),
+                icon: const Icon(Icons.close_rounded),
+                label: MaterialLocalizations.of(context).closeButtonTooltip,
+                onTap: () => NavigationSheetScope.close(context),
+              ),
+          ],
+          actions: [
+            for (final (index, action) in (actions ?? const <Widget>[]).indexed)
+              barItem(action, (
+                'action',
+                Directionality.of(context) == TextDirection.ltr
+                    ? actions!.length - 1 - index
+                    : index,
+              )),
+          ],
+          backButton:
+              backButtonLeading != null || (automaticallyImplyLeading && !isFullscreenDialog),
+          onBack: backButtonLeading?.onPressed,
+          buttonSettings: buttonSettings,
+          horizontalInset: Styles.horizontalBodyPadding.left,
+          builder: (context, chrome) => GlassAppBar(
+            title: appBarTitle,
+            centerTitle: centerTitle ?? true,
+            leading: chrome.leading != null
+                ? Row(mainAxisSize: .min, children: [chrome.leading!])
+                : null,
+            actions: chrome.actions.isNotEmpty ? chrome.actions : null,
+            bottom: largeTitleOffset != null
+                ? null
+                : bottom ??
+                      (compactButtons
+                          ? const PreferredSize(
+                              preferredSize: Size.fromHeight(_kPinnedCompactButtonsGap),
+                              child: SizedBox.shrink(),
+                            )
+                          : null),
+            buttonSettings: buttonSettings,
+            toolbarHeight: _kGlassToolbarHeight,
+            padding: Styles.horizontalBodyPadding,
+          ),
+        );
+      }
+
+      // A tab root on iOS 26, which has no implied leading (it is the first route), or any screen
+      // before iOS 26. The implied back button has the pinned one's icon.
+      return GlassAppBar(
+        title: appBarTitle,
         centerTitle: centerTitle ?? true,
-        leading: leading != null
+        leading: leading is AppBarIndicator
+            // Only as wide as its content: GlassAppBar gives the leading slot the full bar width.
+            ? Row(mainAxisSize: .min, children: [leading!])
+            : leading != null
             ? _GlassBarCapsule(
                 height: buttonHeight,
                 glass: glass,
                 settings: buttonSettings,
                 children: [leading!],
               )
-            : impliedLeading,
-        actions: actions != null && actions!.isNotEmpty
+            : impliesLeading
+            ? IconButton(
+                icon: Icon(
+                  isFullscreenDialog ? Icons.close_rounded : CupertinoIcons.back,
+                  color: colorScheme.onSurface,
+                ),
+                tooltip: isFullscreenDialog
+                    ? MaterialLocalizations.of(context).closeButtonTooltip
+                    : MaterialLocalizations.of(context).backButtonTooltip,
+                onPressed: () => Navigator.maybePop(context),
+              )
+            : impliesSheetClose
+            ? IconButton(
+                icon: Icon(Icons.close_rounded, color: colorScheme.onSurface),
+                tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                onPressed: () => NavigationSheetScope.close(context),
+              )
+            : null,
+        actions: actions != null && actions.isNotEmpty
             ? [
                 _GlassBarCapsule(
                   height: buttonHeight,
                   glass: glass,
                   settings: buttonSettings,
-                  children: actions!,
+                  children: actions,
                 ),
               ]
             : null,
@@ -851,7 +1075,15 @@ class const PlatformAppBar({
       titleSpacing: titleSpacing,
       title: title,
       titleTextStyle: titleTextStyle,
-      leading: leading,
+      leading:
+          leading ??
+          (_impliesSheetClose(context)
+              ? IconButton(
+                  icon: const Icon(Icons.close),
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  onPressed: () => NavigationSheetScope.close(context),
+                )
+              : null),
       leadingWidth: leadingWidth,
       actions: actions,
       bottom: bottom,
@@ -877,21 +1109,11 @@ class const PlatformFloatingActionButton({
   @override
   Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
-      final colorScheme = ColorScheme.of(context);
-      final fabTheme = FloatingActionButtonTheme.of(context);
-      final foregroundColor = fabTheme.foregroundColor ?? colorScheme.onPrimaryContainer;
+      final foregroundColor = onProminentGlassColor(context);
       return GlassButton.custom(
         onTap: onPressed,
         label: label,
-        // Tinted to stand out over the content, like an iOS 26 prominent button, translucent enough
-        // to let the content show through. The clear body mode keeps the exact color, with the
-        // glass rim and specular highlights.
-        settings: LiquidGlassSettings(
-          glassColor: (fabTheme.backgroundColor ?? colorScheme.primaryContainer).withValues(
-            alpha: 0.8,
-          ),
-          bodyMode: .clear,
-        ),
+        settings: prominentGlassSettings(context),
         height: _kGlassFloatingButtonHeight,
         shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassFloatingButtonHeight / 2),
         // Floats alone over the content, there is no parent glass layer to share.

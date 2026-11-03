@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/localizations.dart';
@@ -32,8 +33,6 @@ class QuickActionService(final Ref ref) {
 
   final QuickActions quickActions = const QuickActions();
 
-  TargetPlatform get platform => defaultTargetPlatform;
-
   void start() {
     final recentSeeks = ref.read(recentGameSeekProvider).seeks;
     quickActions.initialize((String shortcutType) {
@@ -65,12 +64,12 @@ class QuickActionService(final Ref ref) {
       ShortcutItem(
         type: 'play_puzzles',
         localizedTitle: l10n.puzzleDesc,
-        icon: platform == TargetPlatform.iOS ? 'ExtensionIcon' : 'extension',
+        icon: Platform.isIOS ? 'ExtensionIcon' : 'extension',
       ),
       ShortcutItem(
         type: 'play_computer',
         localizedTitle: l10n.playAgainstComputer,
-        icon: platform == TargetPlatform.iOS ? 'ComputerIcon' : 'computer',
+        icon: Platform.isIOS ? 'ComputerIcon' : 'computer',
       ),
 
       ...recentSeeks.asMap().entries.map((entry) {
@@ -91,7 +90,7 @@ class QuickActionService(final Ref ref) {
           type: 'recent_seek_$index',
           localizedTitle: '$time+$increment $rated$variant',
           localizedSubtitle: l10n.recentGames,
-          icon: platform == TargetPlatform.iOS ? 'PlusIcon' : 'add_icon',
+          icon: Platform.isIOS ? 'PlusIcon' : 'add_icon',
         );
       }),
     ]);

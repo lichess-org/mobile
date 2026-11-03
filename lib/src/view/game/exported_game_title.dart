@@ -31,7 +31,7 @@ class const ExportedGameTitle({
   final String? importDate,
   super.key,
 }) extends StatelessWidget {
-  static final _tooltipFormatter = DateFormat.yMMMMd().add_jm();
+  static DateFormat get _tooltipFormatter => DateFormat.yMMMMd().add_jm();
 
   @override
   Widget build(BuildContext context) {

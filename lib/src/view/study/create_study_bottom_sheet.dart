@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
-import 'package:lichess_mobile/src/widgets/platform_switch.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const CreateStudyBottomSheet({
@@ -165,7 +163,7 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
                         ? context.l10n.studyYesKeepEveryoneOnTheSamePosition
                         : context.l10n.studyNoLetPeopleBrowseFreely,
                   ),
-                  trailing: PlatformSwitch(
+                  trailing: Switch.adaptive(
                     value: payload.sticky,
                     onChanged: (bool value) =>
                         setState(() => payload = payload.copyWith(sticky: value)),
@@ -177,7 +175,7 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: PlatformFilledButton(
+          child: FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
               if (!context.mounted) {

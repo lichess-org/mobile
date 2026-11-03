@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Lisää tutkielmaan</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kaikki pelit</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Salli siirron peruutukset ja vihjeet</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Sovelluksen lokit</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled-musta</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Oletko varma?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Haluatko varmasti ladata NNUE-tiedoston (%s)?</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Mukauta</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Vinkki: Voit lisätä etusivullesi lisää pienohjelmia tai poistaa ne, joita et tarvitse!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Ohita</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Haluatko poistaa kaikki lokit?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Vaaravyöhyke</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Poista käyttäjätilisi</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Tiivis</string>
@@ -46,9 +48,9 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Hyvä siirto, mutta parempikin olisi</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hei</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Etusivu</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Verkon lokit</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Jos %1$s täsmää käyttäjätiliin, %2$s-merkkinen koodi lähetettiin. Kurkkaa sähköpostisi ja syötä koodi alle.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Koodi ei kelpaa tai on vanhentunut.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-striimaajat</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Paikallisen tietokannan koko</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Siirrä pudottamalla</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Kun siirrät napauttamalla, kohderuutu määräytyy irrotushetken perusteella, mikä mahdollistaa kohderuudun vaihtamisen sormea liu\'uttamalla.</string>
@@ -123,6 +125,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Näytä reunukset</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Kosketuspalaute</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kun käytössä, laite värähtelee hieman kun siirrät tai lyöt nappulan.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Jaa</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Jaa haasteen URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaa PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaa pelin URL</string>
@@ -149,6 +152,7 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variantti %s ei ole tuettu tässä versiossa.</string>
   <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Käytä symmetrisiä nappuloita</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Näytä peli</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Näytä lisenssit</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seuraa</string>
   <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Lähetämme sähköpostiisi koodin, jolla voit kirjautua.</string>
