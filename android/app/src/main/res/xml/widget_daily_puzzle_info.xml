@@ -3,7 +3,7 @@
   android:description="@string/daily_puzzle_description"
   android:minWidth="300dp"
   android:minHeight="330dp"
-  android:updatePeriodMillis="3600000"
+  android:updatePeriodMillis="21600000"
   android:initialLayout="@layout/widget_daily_puzzle"
   android:resizeMode="none"
   android:widgetCategory="home_screen"
