@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
-import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
@@ -76,7 +75,8 @@ class _GameAnalysisBoardState()
       after: evaluations[currentPly + 1],
       branch: branch,
     );
-    return verdict == null ? null : makeAnnotation([_nagForVerdict(verdict)]);
+    final nag = localMoveVerdictNagFor(verdict);
+    return nag == null ? null : makeAnnotation([nag]);
   }
 
   @override
@@ -91,14 +91,6 @@ class _GameAnalysisBoardState()
     return pgnShapes;
   }
 }
-
-int _nagForVerdict(MoveVerdict verdict) => switch (verdict) {
-  .goodMove => 1,
-  .notBest => 5,
-  .inaccuracy => 6,
-  .mistake => 2,
-  .blunder => 4,
-};
 
 extension on PgnCommentShape {
   Shape get chessground {

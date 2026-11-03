@@ -93,7 +93,7 @@ class const AnalysisSettingsScreen(final AnalysisOptions options) extends Consum
                           ref.read(analysisPreferencesProvider.notifier).toggleAnnotations(),
                     ),
                     SwitchSettingTile(
-                      title: const Text('Show local move quality on board'),
+                      title: const Text('Show local move quality'),
                       value: prefs.showLocalMoveVerdicts,
                       onChanged: (_) =>
                           ref.read(analysisPreferencesProvider.notifier).toggleLocalMoveVerdicts(),

@@ -25,6 +25,9 @@ class const GameSummaryTable({
   /// White and Black player's analysis summary
   required final PlayersAnalysis playersAnalysis,
 
+  /// White's expected score from the final local evaluation, as a percentage.
+  final int? whiteExpectedScore,
+
   /// White player's lichess user, when known
   final LightUser? whiteUser,
 
@@ -179,6 +182,14 @@ class const GameSummaryTable({
                       ),
                     ),
                     _SummaryNumber(blackAnalysis.acpl.toString()),
+                  ],
+                ),
+              if (whiteExpectedScore case final expectedScore?)
+                TableRow(
+                  children: [
+                    _SummaryNumber('$expectedScore%'),
+                    const Center(heightFactor: 1.5, child: Text('Winning chances')),
+                    _SummaryNumber('${100 - expectedScore}%'),
                   ],
                 ),
             ],

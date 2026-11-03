@@ -146,6 +146,9 @@ class const DebouncedPgnTreeView({
   /// Whether to show NAG annotations like '!' and '??'.
   final bool shouldShowAnnotations = true,
 
+  /// Local move-quality annotations keyed by their mainline path.
+  final IMap<UciPath, int>? localMoveAnnotations,
+
   /// Whether to show comments associated with the moves.
   final bool shouldShowComments = true,
 
@@ -242,6 +245,7 @@ class _DebouncedPgnTreeViewState() extends ConsumerState<DebouncedPgnTreeView> {
       params: (
         shouldShowComputerAnalysis: widget.shouldShowComputerAnalysis,
         shouldShowAnnotations: widget.shouldShowAnnotations,
+        localMoveAnnotations: widget.localMoveAnnotations,
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
@@ -277,6 +281,9 @@ typedef _PgnTreeViewParams = ({
 
   /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
+
+  /// Local move-quality annotations keyed by their mainline path.
+  IMap<UciPath, int>? localMoveAnnotations,
 
   /// Whether to show comments associated with the moves.
   bool shouldShowComments,
@@ -461,6 +468,7 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
           oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
           oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
+          oldWidget.params.localMoveAnnotations != widget.params.localMoveAnnotations ||
           oldWidget.params.displayMode != widget.params.displayMode,
     );
   }
@@ -1175,13 +1183,15 @@ class const InlineMove({
     final san = branch.sanMove.san.startsWith('P')
         ? branch.sanMove.san.substring(1)
         : branch.sanMove.san;
-    final moveWithNag =
-        san +
-        (branch.nags != null && params.shouldShowAnnotations
-            ? moveAnnotationChar(branch.nags!)
-            : '');
+    final visibleNags = params.shouldShowAnnotations && branch.nags?.isNotEmpty == true
+        ? branch.nags
+        : switch (params.localMoveAnnotations?[path]) {
+            final localNag? => [localNag],
+            null => null,
+          };
+    final moveWithNag = san + (visibleNags != null ? moveAnnotationChar(visibleNags) : '');
 
-    final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
+    final nag = visibleNags?.firstOrNull;
     final ply = branch.position.ply;
 
     final eval = params.shouldShowComputerAnalysis && canShowEval

@@ -70,7 +70,7 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      const title = 'Show local move quality on board';
+      const title = 'Show local move quality';
       final tile = find.ancestor(of: find.text(title), matching: find.byType(ListTile));
       final switchFinder = find.descendant(of: tile, matching: find.byType(Switch));
       expect(tester.widget<Switch>(switchFinder).value, isTrue);
@@ -137,7 +137,7 @@ void main() {
       expect(find.text('Analyze game'), findsOneWidget);
     });
 
-    testWidgets('keeps local review and requires an account for server analysis', (tester) async {
+    testWidgets('does not offer server analysis in local computer analysis', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const AnalysisScreen(
@@ -159,18 +159,8 @@ void main() {
       final panelScrollable = find.byType(Scrollable).last;
       await tester.scrollUntilVisible(find.text('Analyze game'), 300, scrollable: panelScrollable);
       expect(find.text('Analyze game'), findsOneWidget);
-      await tester.ensureVisible(find.text('Request a computer analysis'));
-      await tester.pumpAndSettle();
-      expect(find.text('Request a computer analysis'), findsOneWidget);
-      expect(find.textContaining('private Lichess study'), findsOneWidget);
-
-      await tester.tap(find.text('Request a computer analysis'));
-      await tester.pumpAndSettle();
-
-      expect(find.textContaining('You need an account to do that'), findsOneWidget);
-      await tester.ensureVisible(find.text('Analyze game'));
-      await tester.pumpAndSettle();
-      expect(find.text('Analyze game'), findsOneWidget);
+      expect(find.text('Request a computer analysis'), findsNothing);
+      expect(find.textContaining('private Lichess study'), findsNothing);
     });
 
     testWidgets('reviews every PGN move with the local engine', (tester) async {
@@ -205,31 +195,15 @@ void main() {
       expect(find.byType(AcplChart), findsOneWidget);
       expect(find.byType(GameSummaryTable), findsOneWidget);
       final boardAnnotations = tester.widget<Chessboard>(find.byType(Chessboard)).annotations;
-      expect(boardAnnotations, contains(Square.e5));
-      expect(boardAnnotations[Square.e5]?.symbol, '!');
+      expect(boardAnnotations, isEmpty);
+      expect(find.text('Winning chances'), findsOneWidget);
+      expect(find.text('good moves'), findsNothing);
+      expect(find.text('Request a computer analysis'), findsNothing);
       final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
       await container.read(analysisPreferencesProvider.notifier).toggleLocalMoveVerdicts();
       await tester.pumpAndSettle();
       expect(tester.widget<Chessboard>(find.byType(Chessboard)).annotations, isEmpty);
-      await tester.scrollUntilVisible(
-        find.text('1. e4'),
-        300,
-        scrollable: find.byType(Scrollable).last,
-      );
-      expect(find.text('1. e4'), findsOneWidget);
-      expect(find.textContaining('good moves'), findsOneWidget);
-      await tester.scrollUntilVisible(
-        find.text('1... e5'),
-        300,
-        scrollable: find.byType(Scrollable).last,
-      );
-      expect(find.text('1... e5'), findsOneWidget);
-      await tester.scrollUntilVisible(
-        find.text('Request a computer analysis'),
-        300,
-        scrollable: find.byType(Scrollable).last,
-      );
-      expect(find.text('Request a computer analysis'), findsOneWidget);
+      expect(find.text('Winning chances'), findsOneWidget);
     });
 
     testWidgets('displays correct move and position', (tester) async {

@@ -1,10 +1,8 @@
 import 'dart:async';
 
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -14,19 +12,10 @@ import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
-import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/model/game/player.dart';
-import 'package:lichess_mobile/src/model/study/study.dart';
-import 'package:lichess_mobile/src/model/study/study_controller.dart';
-import 'package:lichess_mobile/src/model/study/study_repository.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
 import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
-import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:logging/logging.dart';
@@ -42,9 +31,21 @@ const _manualLocalReviewSearchTimeStep = Duration(milliseconds: 250);
 const _minimumManualLocalReviewSearchTime = Duration(milliseconds: 250);
 const _maximumManualLocalReviewSearchTime = Duration(seconds: 10);
 
-enum _LocalReviewSpeed { ultraBullet, bullet, blitz, rapid, thorough, manual }
+enum _LocalReviewSpeed() {
+  ultraBullet,
+  bullet,
+  blitz,
+  rapid,
+  thorough,
+  manual,
+}
 
-enum _LocalReviewStatus { ready, running, complete, error }
+enum _LocalReviewStatus() {
+  ready,
+  running,
+  complete,
+  error,
+}
 
 class const LocalGameAnalysis({
   required final AnalysisOptions options,
@@ -55,20 +56,19 @@ class const LocalGameAnalysis({
   ConsumerState<LocalGameAnalysis> createState() => _LocalGameAnalysisState();
 }
 
-class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
+class _LocalGameAnalysisState()
+    extends ConsumerState<LocalGameAnalysis>
     with SingleTickerProviderStateMixin {
   late final AnimationController _progressAnimationController;
   _LocalReviewStatus _status = .ready;
   int _positionsAnalyzed = 0;
   int _totalPositions = 0;
-  List<_MoveReview> _reviews = const [];
   String? _error;
   int _runId = 0;
   Completer<void>? _cancelSignal;
   PositionEvaluator? _evaluator;
   EvalWork? _activeWork;
   bool _isReviewing = false;
-  bool _isRequestingServerAnalysis = false;
   IList<LocalEval> _evaluations = const IListConst([]);
 
   String get _sessionKey => localGameAnalysisSessionKey(widget.options.contextId, widget.root);
@@ -80,7 +80,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
     final cached = ref.read(localGameAnalysisSessionProvider(_sessionKey));
     if (cached != null && cached.length == widget.root.mainline.length + 1) {
       _evaluations = cached;
-      _reviews = _makeReviews(cached);
       _status = .complete;
     }
   }
@@ -144,8 +143,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
             label: const Text('Analyze game'),
           ),
         ),
-        const SizedBox(height: 8.0),
-        _buildServerAnalysisButton(context, moves),
       ],
     );
   }
@@ -172,15 +169,9 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
   }
 
   Widget _buildComplete(BuildContext context) {
-    final goodMoves = _reviews
-        .where((review) => review.verdict == .goodMove || review.verdict == .notBest)
-        .length;
     final analysisState = ref.watch(analysisControllerProvider(widget.options)).requireValue;
     final enginePreferences = ref.watch(engineEvaluationPreferencesProvider);
-    final playersAnalysis = (
-      white: _playerAnalysisFor(Side.white),
-      black: _playerAnalysisFor(Side.black),
-    );
+    final summary = localGameAnalysisSummary(widget.root, _evaluations);
 
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -204,38 +195,11 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
                   .jumpToNthNodeOnMainline(index),
             ),
           ),
-        GameSummaryTable(pgnHeaders: analysisState.pgnHeaders, playersAnalysis: playersAnalysis),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(
-            '$goodMoves good moves · '
-            '${playersAnalysis.white.inaccuracies + playersAnalysis.black.inaccuracies} '
-            'inaccuracies · '
-            '${playersAnalysis.white.mistakes + playersAnalysis.black.mistakes} mistakes · '
-            '${playersAnalysis.white.blunders + playersAnalysis.black.blunders} blunders',
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
+        GameSummaryTable(
+          pgnHeaders: analysisState.pgnHeaders,
+          playersAnalysis: summary.playersAnalysis,
+          whiteExpectedScore: summary.whiteExpectedScore,
         ),
-        for (final review in _reviews)
-          Material(
-            type: MaterialType.transparency,
-            child: ListTile(
-              leading: Icon(
-                review.verdict?.icon ?? Icons.help_outline,
-                color: review.verdict?.color ?? Theme.of(context).disabledColor,
-              ),
-              title: Text(review.moveLabel),
-              subtitle: Text(review.evalLabel),
-              trailing: review.verdict != null ? Text(review.verdict!.label(context)) : null,
-              onTap: () => ref
-                  .read(analysisControllerProvider(widget.options).notifier)
-                  .userJump(
-                    UciPath.fromIds(
-                      widget.root.mainline.take(review.ply + 1).map((branch) => branch.id),
-                    ),
-                  ),
-            ),
-          ),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -248,8 +212,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
               ),
               const SizedBox(height: 16.0),
               _buildLocalReviewSettings(enginePreferences),
-              const SizedBox(height: 8.0),
-              _buildServerAnalysisButton(context, widget.root.mainline.length),
             ],
           ),
         ),
@@ -271,8 +233,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
           icon: const Icon(Icons.refresh),
           label: const Text('Try again'),
         ),
-        const SizedBox(height: 8.0),
-        _buildServerAnalysisButton(context, widget.root.mainline.length),
       ],
     );
   }
@@ -419,89 +379,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
     );
   }
 
-  Widget _buildServerAnalysisButton(BuildContext context, int moves) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        OutlinedButton.icon(
-          onPressed: moves >= 4 && !_isRequestingServerAnalysis ? _requestServerAnalysis : null,
-          icon: _isRequestingServerAnalysis
-              ? const SizedBox(
-                  width: 18.0,
-                  height: 18.0,
-                  child: CircularProgressIndicator.adaptive(strokeWidth: 2.0),
-                )
-              : const Icon(Icons.cloud_upload_outlined),
-          label: Text(context.l10n.requestAComputerAnalysis),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Text(
-            moves < 4
-                ? 'Server analysis requires at least four moves.'
-                : 'Uploads this game to a private Lichess study before requesting server analysis.',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<void> _requestServerAnalysis() async {
-    if (_isRequestingServerAnalysis) return;
-
-    final authUser = ref.read(authControllerProvider);
-    if (authUser == null) {
-      showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-      return;
-    }
-
-    final (pgn, orientation, variant) = switch (widget.options) {
-      Pgn(:final pgn, :final orientation, :final variant) => (pgn, orientation, variant),
-      _ => throw StateError('Server analysis requires a PGN game.'),
-    };
-
-    setState(() => _isRequestingServerAnalysis = true);
-    try {
-      final (studyId, chapterIds) = await ref
-          .read(studyRepositoryProvider)
-          .createStudy(
-            CreateStudyPayload(
-              name: '${authUser.user.name} - Game Analysis',
-              chat: StudyFeatureAccess.nobody,
-              cloneable: StudyFeatureAccess.nobody,
-              computer: StudyFeatureAccess.owner,
-              explorer: StudyFeatureAccess.nobody,
-              shareable: StudyFeatureAccess.nobody,
-              visibility: StudyVisibility.private,
-              sticky: false,
-            ),
-            CreateStudyChapterPayload(
-              pgn: pgn,
-              name: context.l10n.computerAnalysis,
-              orientation: orientation,
-              variant: variant,
-            ),
-          );
-      final chapterId = chapterIds.isNotEmpty ? chapterIds.first : null;
-      if (chapterId == null) {
-        throw StateError('The server created a study without a chapter.');
-      }
-
-      final studyOptions = (id: studyId, initialChapter: chapterId);
-      Navigator.of(context).push(StudyScreen.buildRoute(studyOptions, openComputerAnalysis: true));
-      await ref.read(studyControllerProvider(studyOptions).future);
-      await ref.read(studyControllerProvider(studyOptions).notifier).requestServerAnalysis();
-    } on Object catch (error, stackTrace) {
-      _logger.severe('Could not request server analysis for offline game', error, stackTrace);
-      if (mounted) {
-        showSnackBar(context, error.toString(), type: SnackBarType.error);
-      }
-    } finally {
-      if (mounted) setState(() => _isRequestingServerAnalysis = false);
-    }
-  }
-
   Future<void> _startReview() async {
     if (_isReviewing) return;
     final runId = ++_runId;
@@ -537,7 +414,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
       _status = .running;
       _positionsAnalyzed = 0;
       _totalPositions = totalPositions;
-      _reviews = const [];
       _error = null;
     });
 
@@ -568,13 +444,10 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
         if (ply < branches.length) path.write(branches[ply].id);
       }
 
-      final reviews = _makeReviews(evaluations.lock);
-
       if (!mounted || runId != _runId) return;
       setState(() {
         _status = .complete;
         _evaluations = evaluations.lock;
-        _reviews = reviews;
       });
       ref.read(localGameAnalysisSessionProvider(_sessionKey).notifier).evaluations = _evaluations;
     } on _LocalReviewCancelled {
@@ -729,59 +602,6 @@ class _LocalGameAnalysisState extends ConsumerState<LocalGameAnalysis>
   void _ensureActive(int runId) {
     if (!mounted || runId != _runId) throw const _LocalReviewCancelled();
   }
-
-  _MoveReview _makeReview({
-    required ViewBranch branch,
-    required LocalEval before,
-    required LocalEval after,
-    required int ply,
-  }) {
-    final moveNumber = before.position.fullmoves;
-    final movePrefix = before.position.turn == Side.white ? '$moveNumber.' : '$moveNumber...';
-    final verdict = localMoveVerdictFor(before: before, after: after, branch: branch);
-
-    return _MoveReview(
-      moveLabel: '$movePrefix ${branch.sanMove.san}',
-      evalLabel: '${before.evalString} → ${after.evalString}',
-      verdict: verdict,
-      side: before.position.turn,
-      ply: ply,
-    );
-  }
-
-  List<_MoveReview> _makeReviews(IList<LocalEval> evaluations) {
-    final branches = widget.root.mainline;
-    return [
-      for (final (index, branch) in branches.indexed)
-        _makeReview(
-          branch: branch,
-          before: evaluations[index],
-          after: evaluations[index + 1],
-          ply: index,
-        ),
-    ];
-  }
-
-  PlayerAnalysis _playerAnalysisFor(Side side) {
-    var inaccuracies = 0;
-    var mistakes = 0;
-    var blunders = 0;
-
-    for (final review in _reviews) {
-      if (review.side != side) continue;
-      switch (review.verdict) {
-        case .inaccuracy:
-          inaccuracies++;
-        case .mistake:
-          mistakes++;
-        case .blunder:
-          blunders++;
-        case _:
-          break;
-      }
-    }
-    return PlayerAnalysis(inaccuracies: inaccuracies, mistakes: mistakes, blunders: blunders);
-  }
 }
 
 _LocalReviewSpeed _localReviewSpeed(EngineEvaluationPrefState preferences) {
@@ -828,45 +648,4 @@ extension on _LocalReviewSpeed {
 
 final _logger = Logger('LocalGameAnalysis');
 
-class const _MoveReview({
-  required this.moveLabel,
-  required this.evalLabel,
-  required this.verdict,
-  required this.side,
-  required this.ply,
-}) {
-  final String moveLabel;
-  final String evalLabel;
-  final MoveVerdict? verdict;
-  final Side side;
-  final int ply;
-}
-
-final class _LocalReviewCancelled implements Exception {
-  const _LocalReviewCancelled();
-}
-
-extension on MoveVerdict {
-  IconData get icon => switch (this) {
-    .goodMove => Icons.check_circle,
-    .notBest => Icons.info,
-    .inaccuracy => Icons.help,
-    .mistake => Icons.error,
-    .blunder => Icons.cancel,
-  };
-
-  Color get color => switch (this) {
-    .goodMove || .notBest => LichessColors.good,
-    .inaccuracy => LichessColors.inaccuracy,
-    .mistake => LichessColors.mistake,
-    .blunder => LichessColors.blunder,
-  };
-
-  String label(BuildContext context) => switch (this) {
-    .goodMove => context.l10n.studyGoodMove,
-    .notBest => context.l10n.mobileGoodMoveButThereIsBetter,
-    .inaccuracy => context.l10n.inaccuracy,
-    .mistake => context.l10n.mistake,
-    .blunder => context.l10n.blunder,
-  };
-}
+final class const _LocalReviewCancelled() implements Exception;
