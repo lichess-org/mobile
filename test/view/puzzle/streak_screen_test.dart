@@ -182,6 +182,84 @@ void main() {
       expect(tester.widget<BottomBarButton>(skipButtonFinder).onTap, isNull);
     });
 
+    testWidgets('does not advance after skipping the last move when auto-next is off', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: const Text('Test Streak Screen')),
+            body: FilledButton(
+              child: const Text('Start Streak'),
+              onPressed: () => Navigator.of(
+                context,
+                rootNavigator: true,
+              ).push(buildScreenRoute<void>(screen: const StreakScreen())),
+            ),
+          ),
+        ),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      await tester.tap(find.text('Start Streak'));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Solve the first two moves of the first puzzle, leaving the one-time skip
+      // to play the last move and complete it.
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+
+      await tester.tap(findByTooltip('Skip this move'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // The skipped move completed the puzzle, but the streak did not advance.
+      expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+
+      // Turning auto-next on continues the streak.
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      expect(find.textContaining(RegExp('1\$')), findsOneWidget);
+    });
+
+    testWidgets('shows the auto-next switch in landscape', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(844, 390),
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      expect(find.byType(Switch), findsOneWidget);
+      expect(find.text('Jump to Next Puzzle Immedietly!'), findsOneWidget);
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isTrue);
+
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<Switch>(find.byType(Switch)).value, isFalse);
+    });
+
     testWidgets('failing first puzzle allows restart correctly', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
