@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Afegir a l\'estudi</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Totes les partides</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Permetre desfer els moviments i les pistes</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Registres de l\'aplicació</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Negre amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Estàs segur?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Esteu segurs que voleu descarregar el fitxer NNUE (%s)?</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Personalitza</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Truc: Podeu afegir més ginys a la pantalla d\'inici i eliminar els que no necessiteu!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Descarta</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Voleu suprimir tots els registres?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Zona perillosa</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Elimina el teu compte</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compacte</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Bona jugada, però n\'hi ha una de millor</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Hola</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Inici</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Registres de xarxa</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Si un compte és igual a %1$s, un %2$s codi de caràcters serà enviat. Comproveu la vostra bústia i introduïu el codi a continuació.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">El codi és invàlid o ha caducat.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Mida de la base de dades local</string>
@@ -85,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Mode pràctica</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Magnifica la peça arrossegada</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Anterior</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Revisa els teus intents de puzles anteriors.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Voleu acabar aquesta ronda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Res a mostrar, si us plau canvieu els filtres</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Res a mostrar. Fes algunes rondes al Puzzle Storm.</string>
@@ -143,6 +147,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Colors del sistema</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">La base de dades de jugada no està disponible sense connexió.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">S\'anunciarà</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Massa intents. Torneu-ho a provar més tard.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Finalitzat</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Anar a la meva pàgina</string>
