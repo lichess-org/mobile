@@ -47,13 +47,11 @@ class const MoreTabScreen({super.key}) extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Theme.of(context).platform == TargetPlatform.iOS
               ? AppBarLichessTitle(
-                  iconSize: Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
+                  iconSize:
+                      CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle.fontSize ?? 34,
                 )
               : const AppBarLichessTitle(),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),

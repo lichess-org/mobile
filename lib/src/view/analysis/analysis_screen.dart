@@ -37,6 +37,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
@@ -82,9 +83,11 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
             : VariantAppBarTitle(variant: value.variant, title: context.l10n.analysis);
 
         return WakelockWidget(
-          child: Scaffold(
+          child: PlatformScaffold(
+            extendBodyBehindAppBar: false,
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
+            appBar: PlatformAppBar(
+              compactButtons: true,
               title: appBarTitle,
               actions: [_AnalysisMenu(options: widget.options)],
             ),
@@ -99,10 +102,11 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
         _logger.severe('Cannot load analysis:', error, stackTrace);
         return FullScreenRetryRequest(onRetry: () => ref.invalidate(ctrlProvider));
       case _:
-        return Scaffold(
+        return const PlatformScaffold(
+          extendBodyBehindAppBar: false,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(title: const ExportedGameTitleLoading()),
-          body: const Center(child: CircularProgressIndicator.adaptive()),
+          appBar: PlatformAppBar(compactButtons: true, title: ExportedGameTitleLoading()),
+          body: Center(child: CircularProgressIndicator.adaptive()),
         );
     }
   }

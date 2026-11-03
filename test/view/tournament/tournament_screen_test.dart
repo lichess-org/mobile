@@ -1221,10 +1221,10 @@ void main() {
 
       // Tap on a team in the standings
       await tester.tap(find.text('Team one'));
-      // wait for the modal bottom sheet to appear
+      // Wait for the network request to complete, and the sheet to open: its content is shown
+      // once it is open.
       await tester.pump();
-      // wait for the network request to complete
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       // Verify team details are shown
       expect(find.text('Average rating'), findsOneWidget);

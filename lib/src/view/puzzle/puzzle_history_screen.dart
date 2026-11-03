@@ -70,7 +70,7 @@ class const PuzzleHistoryScreen() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory), largeTitle: true),
       body: const _Body(),
     );
   }

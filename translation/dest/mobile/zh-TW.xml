@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">是否同意和棋？</string>
   <string name="account" comment="The account screen title.">帳號</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">帳號設定</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">這些設定將應用於您帳號下的所有裝置。</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">加入學習</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有棋局</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">允許悔棋和提示</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">您確定嗎？</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">您確定要下載 NNUE檔案（%s）嗎？</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">橫向模式下的棋盤位置</string>
   <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">棋盤設定</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋請求</string>
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">挑戰已建立：對戰開始時您將收到通知。\n您可以在首頁分頁中查看。</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">章節名稱</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">象棋引擎</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">選擇背景</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">清除</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">已複製。</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">清除已儲存移動</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">自訂</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">提示：您可以將更多小工具新增至主畫面，或移除不需要的小工具！</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">關閉</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">危險區</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">刪除您的帳戶</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">精簡</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">詳細</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">你要接受挑戰嗎？</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">問題反饋</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">你好，%s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">你好</string>

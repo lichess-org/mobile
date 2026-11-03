@@ -8,7 +8,8 @@ import WidgetKit
 /// The app updates it while it runs. Once the app is suspended nothing updates it any more: the
 /// Runner plugin sets the `staleDate` to the predicted suspension time, and when `isStale` flips the
 /// view replaces the clocks with a "You left the game" warning. While the app runs but its game
-/// socket is down, the status shows "Reconnecting" instead.
+/// socket is down, the status shows "Reconnecting" instead. Once the game is over, the activity
+/// shows its result until the app removes it, shortly after.
 ///
 /// No `widgetURL`: tapping the activity just brings the app back, where the game screen is already
 /// open.
@@ -191,7 +192,16 @@ private struct StatusLine: View {
     let isStale: Bool
 
     var body: some View {
-        if isStale {
+        if let result = state.result {
+            Text(Self.title(of: result, myColor: myColor))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(
+                    result.isVictory(for: myColor)
+                        ? AnyShapeStyle(lichessGreen) : AnyShapeStyle(.primary)
+                )
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        } else if isStale {
             Label {
                 Text(
                     state.claimable
@@ -224,18 +234,39 @@ private struct StatusLine: View {
 
     private var isMyTurn: Bool { state.turn == myColor }
 
+    private static func title(
+        of result: GameActivityAttributes.Result, myColor: GameActivityAttributes.Side
+    ) -> LocalizedStringKey {
+        switch result {
+        case .draw: return "Draw"
+        case .aborted: return "Game aborted"
+        case .whiteWins, .blackWins: return result.isVictory(for: myColor) ? "Victory" : "Defeat"
+        }
+    }
+
     private var headline: LocalizedStringKey { isMyTurn ? "Your turn" : "Waiting for opponent" }
 }
 
 // MARK: - Dynamic Island
 
 /// The user's clock: in green while it runs, greyed out while it waits for the opponent. Once the
-/// user left the game, or while reconnecting, a warning icon instead.
+/// user left the game, or while reconnecting, a warning icon instead, and the score once the game
+/// is over.
 private struct CompactTrailingView: View {
     let context: ActivityViewContext<GameActivityAttributes>
 
     var body: some View {
-        if context.isStale {
+        if let result = context.state.result {
+            Group {
+                switch result {
+                case .whiteWins: Text(verbatim: "1-0")
+                case .blackWins: Text(verbatim: "0-1")
+                case .draw: Text(verbatim: "½-½")
+                case .aborted: Image(systemName: "xmark")
+                }
+            }
+            .font(.caption.weight(.semibold))
+        } else if context.isStale {
             LeftGameIcon()
         } else if context.state.isReconnecting {
             ReconnectingIcon()
@@ -318,7 +349,11 @@ private extension GameActivityAttributes {
 }
 
 private extension GameActivityAttributes.ContentState {
-    static func preview(turn: GameActivityAttributes.Side, reconnecting: Bool = false) -> Self {
+    static func preview(
+        turn: GameActivityAttributes.Side,
+        reconnecting: Bool = false,
+        result: GameActivityAttributes.Result? = nil
+    ) -> Self {
         Self(
             fen: "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R",
             lastMove: "b8c6",
@@ -327,9 +362,10 @@ private extension GameActivityAttributes.ContentState {
             whiteClock: 184_000,
             blackClock: 251_000,
             clockAt: Date.now.timeIntervalSince1970 * 1000,
-            clockRunning: true,
-            claimable: true,
+            clockRunning: result == nil,
+            claimable: result == nil,
             leftWarningDelay: 30_000,
+            result: result,
             reconnecting: reconnecting
         )
     }
@@ -341,6 +377,7 @@ private extension GameActivityAttributes.ContentState {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
     GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
+    GameActivityAttributes.ContentState.preview(turn: .black, result: .whiteWins)
 }
 
 #Preview("Compact", as: .dynamicIsland(.compact), using: GameActivityAttributes.preview) {
@@ -349,6 +386,7 @@ private extension GameActivityAttributes.ContentState {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
     GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
+    GameActivityAttributes.ContentState.preview(turn: .black, result: .whiteWins)
 }
 
 #Preview("Minimal", as: .dynamicIsland(.minimal), using: GameActivityAttributes.preview) {
@@ -357,4 +395,5 @@ private extension GameActivityAttributes.ContentState {
     GameActivityAttributes.ContentState.preview(turn: .white)
     GameActivityAttributes.ContentState.preview(turn: .black)
     GameActivityAttributes.ContentState.preview(turn: .white, reconnecting: true)
+    GameActivityAttributes.ContentState.preview(turn: .black, result: .whiteWins)
 }

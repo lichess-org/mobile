@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:material_ui/material_ui.dart';
@@ -31,9 +32,9 @@ class const PuzzleDashboardScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const SizedBox.shrink(), actions: const [DaysSelector()]),
-      body: const _Body(),
+    return const PlatformScaffold(
+      appBar: PlatformAppBar(actions: [DaysSelector()]),
+      body: _Body(),
     );
   }
 }

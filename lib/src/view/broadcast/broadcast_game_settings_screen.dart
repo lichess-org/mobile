@@ -7,7 +7,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -29,8 +31,8 @@ class const BroadcastGameSettingsScreen(
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final isSoundEnabled = ref.watch(generalPreferencesProvider).isSoundEnabled;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           ListSection(
@@ -62,11 +64,10 @@ class const BroadcastGameSettingsScreen(
               ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
-                onTap: () => showModalBottomSheet<void>(
+                onTap: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
                   showDragHandle: true,
-                  isDismissible: true,
                   builder: (_) => const OpeningExplorerSettings(),
                 ),
               ),

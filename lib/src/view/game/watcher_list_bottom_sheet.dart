@@ -7,6 +7,9 @@ import 'package:material_ui/material_ui.dart';
 class const WatcherListBottomSheet({
   required final int nbWatchers,
   required final IList<String> watcherNames,
+
+  /// The scroll controller of the sheet, which expands when the list is scrolled.
+  required final ScrollController scrollController,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -16,87 +19,50 @@ class const WatcherListBottomSheet({
     final shownNames = watcherNames.take(10).toList();
     final hiddenCount = watcherNames.length - shownNames.length;
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Drag handle
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-
-            // Title
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text('Spectators ($nbWatchers)', style: theme.textTheme.titleMedium),
-            ),
-            const SizedBox(height: 8),
-            const Divider(height: 1),
-
-            // Named watchers list
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: shownNames.length + (hiddenCount > 0 ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == shownNames.length) {
-                  return ListTile(
-                    dense: true,
-                    title: Text(
-                      'and $hiddenCount more...',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  );
-                }
-                return ListTile(
-                  dense: true,
-                  leading: const Icon(Icons.person_outline, size: 20),
-                  title: Text(shownNames[index]),
-                  onTap: () {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    Navigator.of(context, rootNavigator: true).push(
-                      UserOrProfileScreen.buildRoute(
-                        LightUser(
-                          id: UserId(shownNames[index].toLowerCase()),
-                          name: shownNames[index],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-
-            // Anonymous viewers
-            if (anonymousCount > 0)
-              ListTile(
-                dense: true,
-                leading: const Icon(Icons.visibility_outlined, size: 20),
-                title: Text(
-                  '$anonymousCount anonymous',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-
-            const SizedBox(height: 16),
-          ],
+    return ListView(
+      controller: scrollController,
+      padding: const EdgeInsets.only(bottom: 16),
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Spectators ($nbWatchers)', style: theme.textTheme.titleMedium),
         ),
-      ),
+        const SizedBox(height: 8),
+        const Divider(height: 1),
+        for (final name in shownNames)
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.person_outline, size: 20),
+            title: Text(name),
+            onTap: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.of(context, rootNavigator: true).push(
+                UserOrProfileScreen.buildRoute(
+                  LightUser(id: UserId(name.toLowerCase()), name: name),
+                ),
+              );
+            },
+          ),
+        if (hiddenCount > 0)
+          ListTile(
+            dense: true,
+            title: Text(
+              'and $hiddenCount more...',
+              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        if (anonymousCount > 0)
+          ListTile(
+            dense: true,
+            leading: const Icon(Icons.visibility_outlined, size: 20),
+            title: Text(
+              '$anonymousCount anonymous',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

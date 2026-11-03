@@ -16,6 +16,8 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
 sealed class CreateStudyChapterParams() {
@@ -173,23 +175,20 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                     onChanged: (value) => setState(() => chapterName = value),
                   ),
                 ),
-                // [expandedInsets] makes the button fill the available width, so its size does not
+                // [expandedInsets] makes the control fill the available width, so its size does not
                 // depend on which segment is selected
                 if (!_hasExistingPgn)
-                  SegmentedButton<_ChapterSource>(
+                  PlatformSegmentedControl<_ChapterSource>(
                     expandedInsets: const EdgeInsets.symmetric(horizontal: 20.0),
                     segments: [
-                      ButtonSegment(
-                        value: _ChapterSource.empty,
-                        label: Text(context.l10n.studyEmpty),
-                      ),
-                      const ButtonSegment(value: _ChapterSource.fen, label: Text('FEN')),
-                      const ButtonSegment(value: _ChapterSource.pgn, label: Text('PGN')),
+                      (_ChapterSource.empty, context.l10n.studyEmpty),
+                      (_ChapterSource.fen, 'FEN'),
+                      (_ChapterSource.pgn, 'PGN'),
                     ],
-                    selected: {_source},
-                    onSelectionChanged: (selection) {
+                    selected: _source,
+                    onChanged: (source) {
                       setState(() {
-                        _source = selection.first;
+                        _source = source;
                         errorText = null;
                         switch (_source) {
                           case _ChapterSource.empty:
@@ -294,7 +293,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: FilledButton(
+          child: PlatformFilledButton(
             onPressed: _canSubmit()
                 ? () async {
                     final pgn = switch (_source) {

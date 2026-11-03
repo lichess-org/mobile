@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -76,18 +77,21 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
 
     switch (challengesAsync) {
       case AsyncError():
-        return const Scaffold(body: Center(child: Text('Could not load correspondence seeks')));
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+          body: const Center(child: Text('Could not load correspondence seeks')),
+        );
       case AsyncData(value: final seeks):
         final supportedSeeks = seeks.where((seek) => seek.variant.isPlaySupported).toList();
         return PlatformScaffold(
           appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
-          floatingActionButton: FloatingActionButton.extended(
+          floatingActionButton: PlatformFloatingActionButton(
             onPressed: () {
               if (authUser == null) {
                 showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
                 return;
               }
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
@@ -97,7 +101,7 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
                 ref.invalidate(correspondenceSeeksProvider);
               });
             },
-            label: Text(context.l10n.createAGame),
+            label: context.l10n.createAGame,
             icon: const Icon(Icons.add_circle_outline),
           ),
           body: HapticRefreshIndicator(
@@ -146,7 +150,10 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
           ),
         );
       case _:
-        return const Scaffold(body: Center(child: CircularProgressIndicator.adaptive()));
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.correspondence)),
+          body: const Center(child: CircularProgressIndicator.adaptive()),
+        );
     }
   }
 }

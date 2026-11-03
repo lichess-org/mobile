@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
@@ -64,7 +65,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     final sortButton = SemanticIconButton(
       icon: const Icon(Icons.sort),
       semanticsLabel: context.l10n.mobileSortFriends,
-      onPressed: () => showModalBottomSheet<void>(
+      onPressed: () => showAdaptiveBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
@@ -73,10 +74,8 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
             return BottomSheetScrollableContainer(
               padding: const EdgeInsets.all(16.0),
               children: [
-                const SizedBox(height: 16.0),
-                Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
-                const SizedBox(height: 16.0),
                 Filter<FriendListSort>(
+                  filterName: 'Sort by',
                   filterType: FilterType.singleChoice,
                   choices: FriendListSort.values,
                   choiceSelected: (choice) => selectedSort == choice,
@@ -91,7 +90,6 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
                     ref.read(relationPreferencesProvider.notifier).setFriendSort(value);
                   },
                 ),
-                const SizedBox(height: 16.0),
               ],
             );
           },
@@ -103,11 +101,11 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
-        bottom: TabBar(
+        bottom: PlatformTabBar(
           controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.nbFriendsOnline(onlineFriendsCount)),
-            Tab(text: context.l10n.nbFollowing(followingCount)),
+          tabs: [
+            context.l10n.nbFriendsOnline(onlineFriendsCount),
+            context.l10n.nbFollowing(followingCount),
           ],
         ),
       ),
@@ -200,10 +198,9 @@ class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
             )
           : null,
       onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
-      onLongPress: () => showModalBottomSheet<void>(
+      onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),

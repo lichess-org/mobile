@@ -69,6 +69,14 @@ sealed class const GameLiveActivityAttributes._() with _$GameLiveActivityAttribu
   };
 }
 
+/// The result of a finished game, shown on the Live Activity.
+enum GameLiveActivityResult() {
+  whiteWins,
+  blackWins,
+  draw,
+  aborted,
+}
+
 /// The dynamic part of the game Live Activity.
 ///
 /// Must match `GameActivityAttributes.ContentState` in `ios/LichessWidgets/Game Live Activity/`.
@@ -95,10 +103,12 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     /// How long after lila counts the player as gone to warn them that they left the game, see
     /// [leftWarningDelayOf].
     Duration? leftWarningDelay,
+
+    /// The result of the game, once it is over.
+    GameLiveActivityResult? result,
   }) = _GameLiveActivityState;
 
-  /// The state of [game], which must be playable, with the clock times read from the game's live
-  /// clock at [now].
+  /// The state of [game], with the clock times read from the game's live clock at [now].
   factory fromGame(
     PlayableGame game, {
     required Duration whiteClock,
@@ -115,10 +125,22 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
       blackClock: blackClock,
       clockAt: now,
       // Same rule as the game clock: it starts once both players have moved.
-      clockRunning: game.clock != null && lastPosition.fullmoves > 1,
+      clockRunning: game.playable && game.clock != null && lastPosition.fullmoves > 1,
       claimable: isClaimable(game),
       leftWarningDelay: leftWarningDelayOf(game),
+      result: resultOf(game),
     );
+  }
+
+  /// The result of [game], or null while it is playable.
+  static GameLiveActivityResult? resultOf(PlayableGame game) {
+    if (game.playable) return null;
+    if (game.aborted) return .aborted;
+    return switch (game.winner) {
+      .white => .whiteWins,
+      .black => .blackWins,
+      null => .draw,
+    };
   }
 
   /// Whether lila would let the opponent claim victory if the user left [game] now.
@@ -137,12 +159,12 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
   /// the [claimGrace], so that the warning still comes before the claim if the grace is halved
   /// meanwhile (e.g. the opponent captures a piece).
   ///
-  /// Null to warn as soon as the app stops running: when no claim is possible, and in bullet, where
-  /// the grace is too short to wait for.
+  /// Null to warn as soon as the app stops running: when no claim is possible, and in bullet and
+  /// blitz, where the grace is too short to wait for.
   static Duration? leftWarningDelayOf(PlayableGame game) {
     if (!isClaimable(game)) return null;
     return switch (game.meta.speed) {
-      .blitz || .rapid || .classical => claimGrace(game) ~/ 2,
+      .rapid || .classical => claimGrace(game) ~/ 2,
       _ => null,
     };
   }
@@ -208,6 +230,7 @@ sealed class const GameLiveActivityState._() with _$GameLiveActivityState {
     'clockRunning': clockRunning,
     'claimable': claimable,
     'leftWarningDelay': leftWarningDelay?.inMilliseconds,
+    'result': result?.name,
   };
 }
 
@@ -284,11 +307,19 @@ class GameLiveActivityChannel._() {
     }
   }
 
-  /// Ends the activity and removes it at once.
-  Future<void> end(String id) async {
+  /// Ends the activity, showing [state] if given, and removes it after [dismissAfter].
+  Future<void> end(
+    String id, {
+    GameLiveActivityState? state,
+    Duration dismissAfter = Duration.zero,
+  }) async {
     if (!_isIOS) return;
     try {
-      await _channel.invokeMethod<void>('end', {'id': id});
+      await _channel.invokeMethod<void>('end', {
+        'id': id,
+        'state': state?.toJson(),
+        'dismissAfter': dismissAfter.inMilliseconds,
+      });
     } on PlatformException catch (e, st) {
       _log.severe('end failed', e, st);
     }

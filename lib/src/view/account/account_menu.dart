@@ -334,12 +334,17 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
 
+  /// Size of the button on iOS, where it fills the glass capsule of the navigation bar.
+  static const _cupertinoButtonSize = 44.0;
+  static const _cupertinoAvatarRadius = 20.0;
+
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
     final client = ref.watch(defaultClientProvider);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     void openMenu() {
       Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
@@ -351,20 +356,21 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
         count: unreadMessages,
         isLabelVisible: !kidMode && unreadMessages > 0,
         child: IconButton(
+          padding: isIOS ? EdgeInsets.zero : null,
+          constraints: isIOS
+              ? const BoxConstraints.tightFor(
+                  width: _cupertinoButtonSize,
+                  height: _cupertinoButtonSize,
+                )
+              : null,
           tooltip: value == null ? context.l10n.signIn : value.username,
           icon: value == null
               ? Icon(
                   Icons.account_circle_outlined,
-                  size: Theme.of(context).platform == TargetPlatform.iOS
-                      ? _cupertinoAnonIconSize
-                      : _materialAnonIconSize,
+                  size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
                 )
               : CircleAvatar(
-                  radius:
-                      (Theme.of(context).platform == TargetPlatform.iOS
-                          ? _cupertinoAnonIconSize / 2
-                          : _materialAnonIconSize / 2) +
-                      1,
+                  radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
                   foregroundImage: value.flair != null && !_errorLoadingFlair
                       ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                       : null,
@@ -380,11 +386,16 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
         ),
       ),
       _ => IconButton(
+        padding: isIOS ? EdgeInsets.zero : null,
+        constraints: isIOS
+            ? const BoxConstraints.tightFor(
+                width: _cupertinoButtonSize,
+                height: _cupertinoButtonSize,
+              )
+            : null,
         icon: Icon(
           Icons.account_circle_outlined,
-          size: Theme.of(context).platform == TargetPlatform.iOS
-              ? _cupertinoAnonIconSize
-              : _materialAnonIconSize,
+          size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
         ),
         tooltip: context.l10n.signIn,
         onPressed: openMenu,
@@ -404,8 +415,8 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.about)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.about)),
       body: ListView(
         children: [
           ListSection(

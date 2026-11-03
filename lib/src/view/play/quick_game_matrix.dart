@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -15,6 +14,8 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _kMatrixSpacing = 8.0;
@@ -135,7 +136,7 @@ class const _SectionChoices({
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
                 onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
-                        showModalBottomSheet<void>(
+                        showAdaptiveBottomSheet<void>(
                           context: context,
                           useRootNavigator: true,
                           isScrollControlled: true,
@@ -216,7 +217,7 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
               disabledControls.length +
               (customEnabled ? 1 : 0);
 
-          return AlertDialog.adaptive(
+          return PlatformAlertDialog(
             title: Text(context.l10n.quickPairing),
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
@@ -268,44 +269,25 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                 ],
               ),
             ),
-            actions: Theme.of(context).platform == TargetPlatform.iOS
-                ? [
-                    CupertinoDialogAction(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(context.l10n.cancel),
-                    ),
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                      onPressed: () {
-                        ref
-                            .read(homePreferencesProvider.notifier)
-                            .setTimeControlConfig(
-                              disabledTimeControls: IList(disabledControls),
-                              customButtonEnabled: customEnabled,
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(context.l10n.mobileOkButton),
-                    ),
-                  ]
-                : [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(context.l10n.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref
-                            .read(homePreferencesProvider.notifier)
-                            .setTimeControlConfig(
-                              disabledTimeControls: IList(disabledControls),
-                              customButtonEnabled: customEnabled,
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(context.l10n.mobileOkButton),
-                    ),
-                  ],
+            actions: [
+              PlatformDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(context.l10n.cancel),
+              ),
+              PlatformDialogAction(
+                cupertinoIsDefaultAction: true,
+                onPressed: () {
+                  ref
+                      .read(homePreferencesProvider.notifier)
+                      .setTimeControlConfig(
+                        disabledTimeControls: IList(disabledControls),
+                        customButtonEnabled: customEnabled,
+                      );
+                  Navigator.of(context).pop();
+                },
+                child: Text(context.l10n.mobileOkButton),
+              ),
+            ],
           );
         },
       );

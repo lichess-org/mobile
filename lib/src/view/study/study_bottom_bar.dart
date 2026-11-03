@@ -229,18 +229,12 @@ Future<void> _showStudySheet(
   BuildContext context, {
   required Widget Function(BuildContext, ScrollController) builder,
 }) {
-  return showModalBottomSheet<void>(
+  return showAdaptiveDraggableBottomSheet<void>(
     context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
-    isDismissible: true,
     constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-    builder: (_) => DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      snap: true,
-      expand: false,
-      builder: builder,
-    ),
+    initialChildSize: 0.6,
+    snap: true,
+    builder: builder,
   );
 }
 
@@ -433,7 +427,7 @@ class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
                 Navigator.of(context).pop();
                 if (!context.mounted) return;
 
-                showModalBottomSheet<void>(
+                showAdaptiveBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
                   useRootNavigator: true,

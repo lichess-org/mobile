@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -96,10 +97,14 @@ void main() {
 
     expect(find.byType(MainTabScaffold), findsOneWidget);
 
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Puzzles'), findsOneWidget);
-    expect(find.text('Learn'), findsOneWidget);
-    expect(find.text('Watch'), findsOneWidget);
+    // The iOS glass tab bar draws the labels a second time, inside its selection indicator.
+    final labelMatcher = debugDefaultTargetPlatformOverride == TargetPlatform.iOS
+        ? findsWidgets
+        : findsOneWidget;
+    expect(find.text('Home'), labelMatcher);
+    expect(find.text('Puzzles'), labelMatcher);
+    expect(find.text('Learn'), labelMatcher);
+    expect(find.text('Watch'), labelMatcher);
   });
 
   testWidgets('language support', (tester) async {

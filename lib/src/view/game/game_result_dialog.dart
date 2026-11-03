@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const GameResultDialog({
@@ -333,6 +334,10 @@ class const GameResult({required final BaseGame game, super.key}) extends Statel
 class const _ResultDialog({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      // Shown over the board, which the glass would let show through too much.
+      return GlassDialogFrame(tintOpacity: 0.85, child: child);
+    }
     final screenWidth = MediaQuery.widthOf(context);
     final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
     final sizedContent = SizedBox(

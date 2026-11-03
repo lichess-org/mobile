@@ -17,7 +17,7 @@
   <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Desafio criado: Você será notificado quando a partida começar.\nVocê pode acessá-lo pela aba de início.</string>
   <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Desafiar a partir desta posição</string>
   <string name="chapterName" comment="Label of the text field to name a new study chapter.">Nome do capítulo</string>
-  <string name="chessEngine" comment="Chess engine settings screen title.">Motor de xadrez</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Engine de xadrez</string>
   <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Escolha um fundo personalizado</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Limpar</string>
   <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">O código expira em 5 minutos e só pode ser usado uma vez.</string>

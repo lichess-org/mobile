@@ -1,3 +1,5 @@
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassSlider;
 import 'package:material_ui/material_ui.dart';
 
 /// Platform adaptive slider that allows for non-linear values.
@@ -39,6 +41,33 @@ class _NonLinearSliderState() extends State<NonLinearSlider> {
 
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS && GlassSheetScope.isIn(context)) {
+      // On a glass sheet, the iOS 26 slider with its glass thumb.
+      return Opacity(
+        opacity: widget.onChangeEnd != null ? 1 : 0.5,
+        child: GlassSlider(
+          value: _index.toDouble(),
+          max: widget.values.length.toDouble() - 1,
+          divisions: widget.values.length - 1,
+          activeColor: ColorScheme.of(context).primary,
+          // On the sheet's glass there is no parent glass layer to share.
+          useOwnLayer: true,
+          onChanged: widget.onChangeEnd != null
+              ? (double value) {
+                  final newIndex = value.round();
+                  if (newIndex == _index) return;
+                  setState(() {
+                    _index = newIndex;
+                  });
+                  widget.onChange?.call(widget.values[_index]);
+                }
+              : null,
+          onChangeEnd: (double value) {
+            widget.onChangeEnd?.call(widget.values[_index]);
+          },
+        ),
+      );
+    }
     return Opacity(
       opacity: Theme.of(context).platform != TargetPlatform.iOS || widget.onChangeEnd != null
           ? 1

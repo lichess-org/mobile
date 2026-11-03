@@ -6,9 +6,9 @@ import 'package:lichess_mobile/src/model/engine/opponent_level.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The engines a game can be played against, in the order the picker presents them: Stockfish
@@ -32,10 +32,7 @@ enum OpponentEngine({
   maia(
     name: 'Maia',
     iconAsset: 'assets/images/maia/icon.webp',
-    description:
-        'Maia is a human-like neural network chess engine. Maia Chess is an ongoing research '
-        'project aiming to make a more human-friendly, useful, and fun chess AI. For more '
-        'information go to maiachess.com.',
+    description: 'Maia is a human-like neural network chess engine.',
   );
 
   static OpponentEngine of(OpponentSpec spec) => switch (spec) {
@@ -52,35 +49,33 @@ class const OpponentIcon(final OpponentSpec spec, {final double size = 44, super
       Image.asset(OpponentEngine.of(spec).iconAsset, width: size, height: size);
 }
 
-/// Asks the user which computer to play, and returns the opponent they chose.
+/// The opponent part of a new game form: the engine (when the variant lets the user choose one),
+/// what it is, and its level, followed by [children] in the same section.
 ///
-/// The spec it returns is always playable: a Maia rating whose network could not be downloaded is
-/// swapped for the one that ships with the app rather than being handed back as a game that cannot
-/// start.
-Future<OpponentSpec?> showOpponentPicker(
-  BuildContext context, {
-  required OpponentSpec selected,
-  required Variant variant,
-}) {
-  return showModalBottomSheet<OpponentSpec>(
-    context: context,
-    isScrollControlled: true,
-    builder: (_) => _OpponentPickerSheet(selected: selected, variant: variant),
-  );
-}
-
-class const _OpponentPickerSheet({
+/// Every change of opponent is reported through [onChanged], including the ones the user did not
+/// make: a Maia rating whose network is no longer on the device, or could not be downloaded, is
+/// swapped for the one that ships with the app, so that [selected] is always playable once no
+/// download is running ([onDownloadingChanged]).
+class const OpponentSettings({
   required final OpponentSpec selected,
 
   /// The variant the game will be played in. Maia only knows standard chess, so for anything else
   /// there is nothing to choose between.
   required final Variant variant,
+  required final ValueChanged<OpponentSpec> onChanged,
+
+  /// Called when a Maia network starts (true) or stops (false) downloading.
+  required final ValueChanged<bool> onDownloadingChanged,
+
+  /// The other settings of the game, in the section of the opponent's level.
+  final List<Widget> children = const [],
+  super.key,
 }) extends ConsumerStatefulWidget {
   @override
-  ConsumerState<_OpponentPickerSheet> createState() => _OpponentPickerSheetState();
+  ConsumerState<OpponentSettings> createState() => _OpponentSettingsState();
 }
 
-class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
+class _OpponentSettingsState() extends ConsumerState<OpponentSettings> {
   late OpponentEngine _engine;
   late StockfishLevel _level;
   late MaiaRating _rating;
@@ -100,15 +95,9 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
   @override
   void initState() {
     super.initState();
-    _engine = _maiaAvailable ? OpponentEngine.of(widget.selected) : OpponentEngine.stockfish;
-    _level = switch (widget.selected) {
-      final StockfishOpponentSpec spec => spec.level,
-      MaiaOpponentSpec() => StockfishLevel.defaultLevel,
-    };
-    _rating = switch (widget.selected) {
-      final MaiaOpponentSpec spec => spec.rating,
-      StockfishOpponentSpec() => MaiaRating.defaultRating,
-    };
+    _level = StockfishLevel.defaultLevel;
+    _rating = MaiaRating.defaultRating;
+    _select(widget.selected);
     final initialRating = _rating;
     _weights.availableRatings().then((available) {
       // Nothing else ever looks at the networks an older version of the app left behind: no rating
@@ -120,14 +109,44 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
       setState(() => _available = available);
       if (available.contains(_rating)) return;
       if (_rating == initialRating) {
-        // The network of the rating the picker opened on is gone, e.g. deleted after it failed
-        // its checksum: fall back to the bundled one rather than download it unasked.
-        setState(() => _rating = MaiaRating.defaultRating);
+        // The network of the preferred rating is gone, e.g. deleted after it failed its checksum:
+        // fall back to the bundled one rather than download it unasked.
+        _update(() => _rating = MaiaRating.defaultRating);
       } else {
         // Picked before we knew what was on the device, so nothing fetched it yet.
         _ensure(_rating);
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(OpponentSettings oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // The form changed the opponent itself, e.g. back to Stockfish for a variant Maia cannot play.
+    if (widget.selected != _spec) setState(() => _select(widget.selected));
+  }
+
+  /// Shows [spec], keeping the level or rating of the other engine.
+  void _select(OpponentSpec spec) {
+    _engine = _maiaAvailable ? OpponentEngine.of(spec) : OpponentEngine.stockfish;
+    switch (spec) {
+      case StockfishOpponentSpec(:final level):
+        _level = level;
+      case MaiaOpponentSpec(:final rating):
+        _rating = rating;
+    }
+  }
+
+  OpponentSpec get _spec => switch (_engine) {
+    OpponentEngine.stockfish => StockfishOpponentSpec(_level),
+    OpponentEngine.maia => MaiaOpponentSpec(_rating),
+  };
+
+  /// Applies [change], and reports the opponent if it changed.
+  void _update(VoidCallback change) {
+    final before = _spec;
+    setState(change);
+    if (_spec != before) widget.onChanged(_spec);
   }
 
   /// Puts [rating]'s network on the device, if it is not there already.
@@ -141,10 +160,11 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
       _downloading = rating;
       _failed = null;
     });
+    widget.onDownloadingChanged(true);
     final path = await _weights.download(rating);
     if (!mounted) return;
 
-    setState(() {
+    _update(() {
       _downloading = null;
       if (path != null) {
         _available = {...?_available, rating};
@@ -153,28 +173,23 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
         _rating = MaiaRating.defaultRating;
       }
     });
+    widget.onDownloadingChanged(false);
   }
-
-  OpponentSpec get _spec => switch (_engine) {
-    OpponentEngine.stockfish => StockfishOpponentSpec(_level),
-    OpponentEngine.maia => MaiaOpponentSpec(_rating),
-  };
 
   @override
   Widget build(BuildContext context) {
-    return BottomSheetScrollableContainer(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (_maiaAvailable)
           Padding(
             padding: Styles.horizontalBodyPadding,
-            child: SegmentedButton<OpponentEngine>(
-              segments: [
-                for (final engine in OpponentEngine.values)
-                  ButtonSegment(value: engine, label: Text(engine.name)),
-              ],
-              selected: {_engine},
+            child: PlatformSegmentedControl<OpponentEngine>(
+              segments: [for (final engine in OpponentEngine.values) (engine, engine.name)],
+              selected: _engine,
               showSelectedIcon: false,
-              onSelectionChanged: (selection) => setState(() => _engine = selection.first),
+              onChanged: (engine) => _update(() => _engine = engine),
             ),
           ),
         Padding(padding: Styles.bodySectionPadding, child: _EngineDescription(_engine)),
@@ -184,7 +199,7 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
             switch (_engine) {
               OpponentEngine.stockfish => _StockfishLevelTile(
                 level: _level,
-                onChanged: (level) => setState(() => _level = level),
+                onChanged: (level) => _update(() => _level = level),
               ),
               OpponentEngine.maia => _MaiaRatingTile(
                 rating: _rating,
@@ -192,19 +207,13 @@ class _OpponentPickerSheetState() extends ConsumerState<_OpponentPickerSheet> {
                 downloading: _downloading,
                 failed: _failed,
                 onChanged: (rating) {
-                  setState(() => _rating = rating);
+                  _update(() => _rating = rating);
                   _ensure(rating);
                 },
               ),
             },
+            ...widget.children,
           ],
-        ),
-        Padding(
-          padding: Styles.bodySectionPadding,
-          child: FilledButton(
-            onPressed: _downloading != null ? null : () => Navigator.of(context).pop(_spec),
-            child: Text(context.l10n.ok, style: Styles.bold),
-          ),
         ),
       ],
     );
@@ -217,7 +226,7 @@ class const _EngineDescription(final OpponentEngine engine) extends StatelessWid
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(engine.iconAsset, width: 56, height: 56),
+        Image.asset(engine.iconAsset, width: 40, height: 40),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -241,7 +250,17 @@ class const _EngineDescription(final OpponentEngine engine) extends StatelessWid
 class const _StockfishLevelTile({
   required final StockfishLevel level,
   required final ValueChanged<StockfishLevel> onChanged,
-}) extends StatelessWidget {
+}) extends StatefulWidget {
+  @override
+  State<_StockfishLevelTile> createState() => _StockfishLevelTileState();
+}
+
+class _StockfishLevelTileState() extends State<_StockfishLevelTile> {
+  /// The level under the finger during a drag, reported only once the drag ends.
+  StockfishLevel? _dragged;
+
+  StockfishLevel get _shown => _dragged ?? widget.level;
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -251,16 +270,19 @@ class const _StockfishLevelTile({
           children: [
             TextSpan(
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              text: '${level.level}',
+              text: '${_shown.level}',
             ),
           ],
         ),
       ),
       subtitle: NonLinearSlider(
-        value: level.level,
+        value: _shown.level,
         values: StockfishLevel.values.map((l) => l.level).toList(),
-        onChange: (value) => onChanged(StockfishLevel.values[value.toInt() - 1]),
-        onChangeEnd: (value) => onChanged(StockfishLevel.values[value.toInt() - 1]),
+        onChange: (value) => setState(() => _dragged = StockfishLevel.values[value.toInt() - 1]),
+        onChangeEnd: (value) {
+          setState(() => _dragged = null);
+          widget.onChanged(StockfishLevel.values[value.toInt() - 1]);
+        },
       ),
     );
   }

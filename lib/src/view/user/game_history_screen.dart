@@ -74,7 +74,7 @@ class const GameHistoryScreen({
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed: () =>
-          showModalBottomSheet<GameFilterState>(
+          showAdaptiveBottomSheet<GameFilterState>(
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
@@ -114,7 +114,12 @@ class const GameHistoryScreen({
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
+      appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
+        title: title,
+        actions: [filterBtn, displayModeButton],
+      ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -385,7 +390,7 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
     Perf.racingKings,
     Perf.crazyhouse,
   ];
-  static const filterGroupSpace = SizedBox(height: 10.0);
+  static const filterGroupSpace = SizedBox(height: 12.0);
 
   @override
   Widget build(BuildContext context) {

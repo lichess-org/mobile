@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -27,8 +28,8 @@ class const ThemeSettingsScreen({super.key}) extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.mobileTheme), animateColor: true),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileTheme)),
       body: const _Body(),
     );
   }
@@ -90,7 +91,6 @@ class _BodyState() extends ConsumerState<_Body> {
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
     return SafeArea(
-      top: false,
       child: Column(
         children: [
           Padding(

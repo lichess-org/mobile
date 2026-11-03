@@ -52,6 +52,8 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
     final online = ref.watch(isDeviceOnlineProvider);
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         titleSpacing: 0,
         title: account.when(
           data: (user) => user == null
@@ -91,9 +93,6 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
           final recentGames = ref.watch(myRecentGamesProvider);
           final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
           return HapticRefreshIndicator(
-            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                : 0.0,
             key: _refreshIndicatorKey,
             onRefresh: () => Future.wait([
               ref.refresh(accountProvider.future),

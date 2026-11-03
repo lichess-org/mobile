@@ -411,18 +411,6 @@ class const _BroadcastCardContent({
                 icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                 actions: [
                   ContextMenuAction(
-                    icon: Icons.info,
-                    label: context.l10n.broadcastOverview,
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        BroadcastRoundScreen.buildRoute(
-                          broadcast,
-                          initialTab: BroadcastRoundTab.overview,
-                        ),
-                      );
-                    },
-                  ),
-                  ContextMenuAction(
                     icon: LichessIcons.chess_board,
                     label: context.l10n.broadcastBoards,
                     onPressed: () {

@@ -47,7 +47,6 @@ const kLichessBlueskyUrl = 'https://bsky.app/profile/lichess.org';
 const kLichessDiscordUrl = 'https://discord.gg/lichess';
 
 // UI
-const double kCupertinoBarBlurSigma = 30.0;
 const double kCupertinoBarOpacity = 0.8;
 
 const kGoldenRatio = 1.61803398875;

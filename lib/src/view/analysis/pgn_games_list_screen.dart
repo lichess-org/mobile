@@ -87,6 +87,7 @@ class _PgnGamesListScreenState() extends State<PgnGamesListScreen> {
                   padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8)),
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     onChanged: (value) {
                       setState(() {
                         _searchQuery = value;

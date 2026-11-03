@@ -490,7 +490,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Decline'), findsNothing);
-      // The built-in CupertinoActionSheet cancel button is present
+      // The action sheet cancel button is present
       expect(find.text('Cancel'), findsOneWidget);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
   });

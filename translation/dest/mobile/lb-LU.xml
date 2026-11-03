@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Remis akzeptéieren?</string>
   <string name="account" comment="The account screen title.">Kont</string>
   <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Kontoastellungen</string>
   <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Dës Astellunge ginn op däi Lichess-Kont applizéiert a gëlle fir all Apparater.</string>
@@ -9,23 +10,31 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Virschlag fir en Zuch zeréckzehuelen annuléieren</string>
   <string name="chessEngine" comment="Chess engine settings screen title.">Schach-Engine</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Läschen</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Code</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Kopéiert.</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespäicherten Zuch läschen</string>
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Upassen</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tipp: Du kanns weider Widgeten zum Startbildschierm bäisetzen oder déi ewechhuelen, déi s du net brauchs!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Verstoppen</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Geforenzon</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Däi Benotzerkont läschen</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompakt</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detailléiert</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filteren</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">Auer dréinen</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Moien, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Moien</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Gudden Owend, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Gudden Owend</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Gudden Zuch, mee et gëtt e besseren</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Moien</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startsäit</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live-Streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du muss ageloggt sinn, fir dës Säit ze gesinn.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline-Puzzelen</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Nei Partie</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Nächste Feeler</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keng Resultater</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du follows keng Benotzer.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
@@ -48,6 +57,7 @@
   <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Rapid</string>
   <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3Schach</string>
   <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">PGN kopéiert.</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spiller mat „%s“</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Lénks</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Riets</string>

@@ -28,6 +28,7 @@ class const LearnScreen({super.key}) extends ConsumerWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.chessBasics),
+        largeTitle: true,
         actions: [
           if ((progress.value?.percent ?? 0) > 0)
             ContextMenuIconButton(

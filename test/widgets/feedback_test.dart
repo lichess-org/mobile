@@ -1,8 +1,11 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassToast;
 import 'package:material_ui/material_ui.dart';
 import 'package:signal_strength_indicator/signal_strength_indicator.dart';
+
+import '../test_provider_scope.dart';
 
 void main() {
   group('LagIndicator', () {
@@ -74,5 +77,56 @@ void main() {
     test('throws assertion for lagRating above 4', () {
       expect(() => LagIndicator(lagRating: 5), throwsA(isA<AssertionError>()));
     });
+  });
+
+  group('showSnackBar', () {
+    Future<void> pumpApp(WidgetTester tester, void Function(BuildContext) onPressed) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => Center(
+              child: ElevatedButton(onPressed: () => onPressed(context), child: const Text('Show')),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+    }
+
+    testWidgets(
+      'shows a glass toast on iOS, replaced by the next one and dismissed after a while',
+      (WidgetTester tester) async {
+        var count = 0;
+        await pumpApp(tester, (context) => showSnackBar(context, 'Message ${++count}'));
+
+        await tester.tap(find.text('Show'));
+        await tester.pumpAndSettle();
+        expect(find.byType(SnackBar), findsNothing);
+        expect(find.byType(GlassToast), findsOneWidget);
+        expect(find.text('Message 1'), findsOneWidget);
+
+        await tester.tap(find.text('Show'));
+        await tester.pumpAndSettle();
+        expect(find.byType(GlassToast), findsOneWidget);
+        expect(find.text('Message 1'), findsNothing);
+        expect(find.text('Message 2'), findsOneWidget);
+
+        await tester.pump(const Duration(seconds: 4));
+        await tester.pumpAndSettle();
+        expect(find.byType(GlassToast), findsNothing);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+    );
+
+    testWidgets('shows a Material snackbar on Android', (WidgetTester tester) async {
+      await pumpApp(tester, (context) => showSnackBar(context, 'Message'));
+
+      await tester.tap(find.text('Show'));
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byType(GlassToast), findsNothing);
+      expect(find.text('Message'), findsOneWidget);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
   });
 }

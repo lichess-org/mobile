@@ -163,9 +163,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
-  String get mobileLiveStreamers => 'Streamers em direto';
-
-  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -4785,7 +4782,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Qual é o motivo?';
+  String get whatIsIheMatter => 'What\'s the matter?';
 
   @override
   String get cheat => 'Batota';
@@ -4806,7 +4803,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get processReportFasterInEnglish => 'Conseguimos processar o teu relatório mais rápido se escreveres em inglês.';
 
   @override
-  String get error_provideOneCheatedGameLink => 'Por favor, fornece-nos pelo menos um link para um jogo onde tenha havido batota.';
+  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -7800,7 +7797,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileChapterName => 'Nome do capítulo';
 
   @override
-  String get mobileChessEngine => 'Motor de xadrez';
+  String get mobileChessEngine => 'Engine de xadrez';
 
   @override
   String get mobileChooseCustomBackground => 'Escolha um fundo personalizado';
@@ -7899,9 +7896,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'Este código é inválido ou expirou.';
-
-  @override
-  String get mobileLiveStreamers => 'Streamer do Lichess';
 
   @override
   String get mobileLocalDatabaseSize => 'Tamanho do banco de dados local';
@@ -10262,7 +10256,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get preferencesAnalysisSettings => 'Configurações de análise';
 
   @override
-  String get preferencesManeuverArrowsHelp => 'Sequência de lances de computador para uma peça';
+  String get preferencesManeuverArrowsHelp => 'Sequência de lances de engine para uma peça';
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => 'Passe o mouse sobre as etiquetas de configuração para obter ajuda';
@@ -11281,7 +11275,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get calculatingMoves => 'Calculando lances...';
 
   @override
-  String get engineFailed => 'Erro ao carregar o engine';
+  String get engineFailed => 'Erro ao carregar a engine';
 
   @override
   String get cloudAnalysis => 'Análise na nuvem';
@@ -11525,13 +11519,13 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get flipBoard => 'Girar o tabuleiro';
 
   @override
-  String get toggleLocalEngine => 'Alternar motor local';
+  String get toggleLocalEngine => 'Alternar engine local';
 
   @override
-  String get engineSettings => 'Configurações do motor';
+  String get engineSettings => 'Configurações de engine';
 
   @override
-  String get enginesFromStrongestToWeakest => 'Motores do mais forte ao mais fraco';
+  String get enginesFromStrongestToWeakest => 'Engine mais forte até a mais fraca';
 
   @override
   String get illegalPosition => 'Posição ilegal';
@@ -12523,9 +12517,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get reason => 'Motivo';
 
   @override
-  String get whatIsIheMatter => 'Qual é o motivo?';
-
-  @override
   String get cheat => 'Trapaça';
 
   @override
@@ -12542,9 +12533,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get processReportFasterInEnglish => 'Podemos processar sua denúncia mais rapidamente se você escrever em inglês.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Por favor, inclua pelo menos um link de uma partida para análise.';
 
   @override
   String by(String param) {
@@ -13951,6 +13939,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get preview => 'Pré-visualizar';
+
+  @override
+  String get done => 'Feito';
 
   @override
   String opponentLeftCounter(int count) {

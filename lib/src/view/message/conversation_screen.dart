@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/message_input.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
@@ -473,12 +474,14 @@ class _MessageInputState() extends ConsumerState<_MessageInput> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: messageInputVerticalPadding(context, fallback: 6),
+        ),
         child: TextField(
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+          decoration: messageInputDecoration(
+            context,
             suffixIcon: sendButton,
-            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
             hintText: isBlocked
                 ? 'This conversation is blocked.'
                 : isBot

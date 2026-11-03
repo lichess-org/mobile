@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -70,19 +71,28 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
     final searchResultsAsync = ref.watch(messageSearchResultsProvider);
     final me = ref.watch(authControllerProvider)?.user;
 
-    return Scaffold(
-      appBar: AppBar(
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.inbox),
+        // On iOS, the search field is below the large title, and sticks below the bar buttons once
+        // the large title is scrolled away.
+        largeTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(
-            Theme.of(context).platform == TargetPlatform.iOS ? 52.0 : kToolbarHeight,
+            // The 44pt glass search field and its vertical padding.
+            isIOS ? kGlassAppBarBottomPadding.vertical + 44.0 : kToolbarHeight,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: isIOS
+                ? kGlassAppBarBottomPadding
+                : const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: controller,
               focusNode: focusNode,
               hintText: context.l10n.searchOrStartNewDiscussion,
+              inAppBar: true,
               onChanged: (value) {
                 onChangedDebouncer.call(() {
                   ref.read(messageSearchQueryProvider.notifier).state = value;

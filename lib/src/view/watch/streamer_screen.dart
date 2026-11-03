@@ -20,7 +20,7 @@ class const StreamerScreen({required final IList<Streamer> streamers}) extends S
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.mobileLiveStreamers)),
+      appBar: PlatformAppBar(title: Text(context.l10n.streamersMenu), largeTitle: true),
       body: ListView.separated(
         separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
             ? const PlatformDivider(height: 1, indent: 16 + _kThumbnailSize + 10)

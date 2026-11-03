@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_filled_button.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -119,7 +120,7 @@ class _ClockToolSettingsModalState() extends State<ClockToolSettingsModal> {
         ),
         Padding(
           padding: Styles.horizontalBodyPadding,
-          child: FilledButton(
+          child: PlatformFilledButton(
             onPressed: () => _submit(context),
             child: Text(context.l10n.mobileOkButton, style: Styles.bold),
           ),

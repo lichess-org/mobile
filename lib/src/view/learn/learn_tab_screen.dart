@@ -71,9 +71,6 @@ class const LearnTabScreen({super.key}) extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Text(context.l10n.learnMenu),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),
@@ -108,9 +105,6 @@ class const _Body() extends ConsumerWidget {
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
       child: HapticRefreshIndicator(
-        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-            ? MediaQuery.paddingOf(context).top + kToolbarHeight
-            : 0.0,
         onRefresh: () => _refreshData(ref),
         child: ListView(
           controller: learnScrollController,

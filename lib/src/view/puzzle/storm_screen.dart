@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
@@ -45,10 +46,11 @@ class const StormScreen({super.key}) extends ConsumerStatefulWidget {
 class _StormScreenState() extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
-    return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(actions: const [ToggleSoundButton()], title: const Text('Puzzle Storm')),
-        body: const _Load(),
+    return const WakelockWidget(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(actions: [ToggleSoundButton()], title: Text('Puzzle Storm')),
+        body: _Load(),
       ),
     );
   }
@@ -389,7 +391,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
-      return AlertDialog.adaptive(
+      return PlatformAlertDialog(
         title: Text(context.l10n.aboutX('Puzzle Storm')),
         content: const SingleChildScrollView(
           child: Text.rich(
@@ -733,8 +735,9 @@ class const _RunStats(final StormRunStats stats) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () => Navigator.of(context).pop(),

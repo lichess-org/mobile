@@ -162,6 +162,30 @@ flutter run \
 > [!NOTE]
 > If you use the production server, note that you will not be able to log in.
 
+### iOS
+
+#### When building from Xcode
+
+Some plugins require a higher iOS version than Flutter's default. Flutter regenerates
+`ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift` with its default iOS version on
+every `flutter pub get`, and only raises it to the project's deployment target during `flutter run` or
+`flutter build ios`. This file is generated and ignored by git, so there is nothing to commit.
+
+If you build from Xcode after a `flutter pub get`, the build can fail with an error like:
+
+```
+The package product 'flutter-onnxruntime' requires minimum platform version 16.0 for the iOS platform, but this
+target supports 15.0 (in target 'FlutterGeneratedPluginSwiftPackage')
+```
+
+To fix it, run this command before building from Xcode:
+
+```bash
+flutter build ios --config-only --debug
+```
+
+Using `flutter run` instead of Xcode avoids the problem, since it raises the version on every launch.
+
 ### Android
 
 #### When using lila-docker

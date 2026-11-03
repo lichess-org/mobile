@@ -484,12 +484,6 @@ abstract class AppLocalizations {
   /// **'This code is invalid or has expired.'**
   String get mobileInvalidOrExpiredLoginCode;
 
-  /// No description provided for @mobileLiveStreamers.
-  ///
-  /// In en, this message translates to:
-  /// **'Live streamers'**
-  String get mobileLiveStreamers;
-
   /// No description provided for @mobileLocalDatabaseSize.
   ///
   /// In en, this message translates to:

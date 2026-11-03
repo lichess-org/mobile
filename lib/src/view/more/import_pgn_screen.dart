@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
@@ -61,8 +62,8 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.importPgn)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.importPgn)),
       body: const _Body(),
     );
   }

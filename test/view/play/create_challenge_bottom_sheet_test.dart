@@ -202,7 +202,7 @@ void main() {
         expect(find.byType(CreateChallengeBottomSheet), findsNothing);
 
         // snackbar should show the challenge declined message
-        expect(find.text('Challenge declined.'), findsOneWidget);
+        expect(find.textContaining('Challenge declined.'), findsOneWidget);
       }, variant: kPlatformVariant);
     });
   });
