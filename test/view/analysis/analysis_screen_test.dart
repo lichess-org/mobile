@@ -186,12 +186,31 @@ void main() {
         scrollable: find.byType(Scrollable).last,
       );
       await tester.tap(find.text('Analyze game'));
-      for (var i = 0; i < 200 && find.byType(AcplChart).evaluate().isEmpty; i++) {
-        await tester.pump(const Duration(milliseconds: 100));
+      final progressValues = <double>[];
+      for (var i = 0; i < 600 && find.byType(AcplChart).evaluate().isEmpty; i++) {
+        await tester.pump(const Duration(milliseconds: 32));
         await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+        if (find.byType(LinearProgressIndicator).evaluate().isNotEmpty) {
+          final progress = tester
+              .widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator))
+              .value;
+          if (progress != null) progressValues.add(progress);
+        }
       }
       await tester.pumpAndSettle();
 
+      expect(progressValues, isNotEmpty);
+      for (var index = 1; index < progressValues.length; index++) {
+        expect(progressValues[index], greaterThanOrEqualTo(progressValues[index - 1]));
+      }
+      expect(
+        progressValues.any(
+          (progress) =>
+              progress > 0 && progress < 1 && (progress * 3 - (progress * 3).round()).abs() > 0.02,
+        ),
+        isTrue,
+        reason: 'Progress should animate between completed-position steps.',
+      );
       expect(find.byType(AcplChart), findsOneWidget);
       expect(find.byType(GameSummaryTable), findsOneWidget);
       final boardAnnotations = tester.widget<Chessboard>(find.byType(Chessboard)).annotations;

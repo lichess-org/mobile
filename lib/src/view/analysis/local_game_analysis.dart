@@ -56,10 +56,7 @@ class const LocalGameAnalysis({
   ConsumerState<LocalGameAnalysis> createState() => _LocalGameAnalysisState();
 }
 
-class _LocalGameAnalysisState()
-    extends ConsumerState<LocalGameAnalysis>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _progressAnimationController;
+class _LocalGameAnalysisState() extends ConsumerState<LocalGameAnalysis> {
   _LocalReviewStatus _status = .ready;
   int _positionsAnalyzed = 0;
   int _totalPositions = 0;
@@ -76,7 +73,6 @@ class _LocalGameAnalysisState()
   @override
   void initState() {
     super.initState();
-    _progressAnimationController = AnimationController(vsync: this);
     final cached = ref.read(localGameAnalysisSessionProvider(_sessionKey));
     if (cached != null && cached.length == widget.root.mainline.length + 1) {
       _evaluations = cached;
@@ -86,7 +82,6 @@ class _LocalGameAnalysisState()
 
   @override
   void dispose() {
-    _progressAnimationController.dispose();
     _cancelSignal?.complete();
     if (_activeWork != null && _evaluator?.currentWork == _activeWork) {
       _evaluator?.stop();
@@ -148,17 +143,15 @@ class _LocalGameAnalysisState()
   }
 
   Widget _buildRunning(BuildContext context) {
+    final progress = _totalPositions == 0 ? 0.0 : _positionsAnalyzed / _totalPositions;
     return ListView(
       padding: const EdgeInsets.all(16.0),
       children: [
-        AnimatedBuilder(
-          animation: _progressAnimationController,
-          builder: (context, child) {
-            final progress = _totalPositions == 0
-                ? 0.0
-                : (_positionsAnalyzed + _progressAnimationController.value) / _totalPositions;
-            return LinearProgressIndicator(value: progress);
-          },
+        TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0, end: progress),
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.linear,
+          builder: (context, value, child) => LinearProgressIndicator(value: value),
         ),
         const SizedBox(height: 12.0),
         Text('Analyzing position ${_positionsAnalyzed + 1} of $_totalPositions…'),
@@ -402,7 +395,6 @@ class _LocalGameAnalysisState()
     ];
     final totalPositions = branches.length + 1;
     final path = StringBuffer();
-    _progressAnimationController.duration = searchTime;
     final evaluatorSubscription = ref.listenManual(
       positionEvaluatorProvider(reviewContext),
       (previous, next) {},
@@ -421,7 +413,6 @@ class _LocalGameAnalysisState()
     try {
       for (var ply = 0; ply < totalPositions; ply++) {
         _ensureActive(runId);
-        _progressAnimationController.forward(from: 0.0);
         final work = EvalWork(
           id: reviewContext.id,
           variant: analysis.variant,
@@ -464,7 +455,6 @@ class _LocalGameAnalysisState()
       if (evaluator.currentWork == _activeWork) evaluator.stop();
       _activeWork = null;
       if (identical(_evaluator, evaluator)) _evaluator = null;
-      _progressAnimationController.stop();
       _isReviewing = false;
       if (mounted) setState(() {});
       if (mounted) ctrl.requestEval();
@@ -564,10 +554,6 @@ class _LocalGameAnalysisState()
       }
       if (searchTime < _localReviewRetrySearchTime) {
         const retryTime = _localReviewRetrySearchTime;
-        if (mounted && runId == _runId) {
-          _progressAnimationController.duration = retryTime;
-          _progressAnimationController.forward(from: 0.0);
-        }
         return await _evaluatePosition(
           ref,
           evaluator,
