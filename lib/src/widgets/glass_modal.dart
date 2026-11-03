@@ -61,6 +61,9 @@ class const GlassModalCard({
 
 /// The iOS frame of a dialog: a [GlassModalCard] centered on the screen.
 ///
+/// The card is always [GlassModalCard.tinted]: a dialog is read in one go and may be shown over
+/// any content, including a board, which would show through the default glass too much.
+///
 /// With liquid glass, the card is painted through an [OverlayPortal], outside the dialog route's
 /// transition: the iOS dialog route ([showAdaptiveDialog]) fades its page in, which would show the
 /// glass more transparent until the end of the fade. The card scales in at full opacity instead,
@@ -70,9 +73,6 @@ class const GlassDialogFrame({
 
   /// The width of an alert dialog by default.
   final double maxWidth = 300.0,
-
-  /// See [GlassModalCard.tinted].
-  final bool tinted = false,
   super.key,
 }) extends StatefulWidget {
   @override
@@ -100,7 +100,7 @@ class _GlassDialogFrameState() extends State<GlassDialogFrame> {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: widget.maxWidth),
             child: GlassModalCard(
-              tinted: widget.tinted,
+              tinted: true,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
