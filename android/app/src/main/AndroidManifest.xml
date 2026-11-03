@@ -178,8 +178,6 @@
                 android:resource="@xml/widget_broadcast_info" />
         </receiver>
 
-        <receiver android:exported="false"
-          android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
         <receiver android:name=".widgets.DailyPuzzleWidgetProvider"
             android:label="@string/daily_puzzle_title"
             android:exported="true"
