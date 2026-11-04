@@ -241,7 +241,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
           val pieceBitmap = pieceBitmap[piece]
           if(pieceBitmap != null){
             val inset = (sqrSize * 0.05f).toInt()
-            val pieceRect = Rect(left + inset, top + inset, left + sqrSize -inset, top + sqrSize - inset)
+            val pieceRect = Rect(left + inset, top + inset, left + sqrSize - inset, top + sqrSize - inset)
             canvas.drawBitmap(pieceBitmap, null, pieceRect, null)
           }
         }
