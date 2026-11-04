@@ -71,7 +71,7 @@ sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, Com
   const factory({
     required bool showVariationArrows,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
-    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
@@ -83,7 +83,7 @@ sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, Com
   static const defaults = StudyPrefs(
     showVariationArrows: false,
     showEvaluationGauge: true,
-    showEngineLines: true,
+    showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,

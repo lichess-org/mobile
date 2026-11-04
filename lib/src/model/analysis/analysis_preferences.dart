@@ -68,7 +68,7 @@ sealed class const AnalysisPrefs._()
   const factory({
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     required bool showEvaluationGauge,
-    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
     required bool showBestMoveArrow,
     required bool showAnnotations,
     required bool showPgnComments,
@@ -79,7 +79,7 @@ sealed class const AnalysisPrefs._()
   static const defaults = AnalysisPrefs(
     enableServerAnalysis: true,
     showEvaluationGauge: true,
-    showEngineLines: true,
+    showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,

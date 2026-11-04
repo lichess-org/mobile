@@ -103,8 +103,6 @@ class _AppState() extends ConsumerState<Application> {
     );
     final isTablet = mediaQueryData.size.shortestSide > FormFactor.tablet;
     final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
-    final showEngineLines =
-        isTablet || estimateHeightMinusBoard(mediaQueryData) > kSmallHeightMinusBoard - 30;
 
     // For tablets in portrait mode using the full board size makes the bottom analysis tabs tiny,
     // see https://github.com/lichess-org/mobile/issues/3150,
@@ -113,25 +111,13 @@ class _AppState() extends ConsumerState<Application> {
 
     await ref
         .read(analysisPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(analysisPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
+        .save(ref.read(analysisPreferencesProvider).copyWith(smallBoard: smallBoard));
     await ref
         .read(studyPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(studyPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
+        .save(ref.read(studyPreferencesProvider).copyWith(smallBoard: smallBoard));
     await ref
         .read(broadcastPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(broadcastPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
+        .save(ref.read(broadcastPreferencesProvider).copyWith(smallBoard: smallBoard));
 
     await prefs.setBool(kDoneScreenSizeInitKey, true);
   }

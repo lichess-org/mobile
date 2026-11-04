@@ -1198,8 +1198,8 @@ void main() {
     });
 
     group('Engine lines', () {
-      testWidgets('are displayed', (tester) async {
-        await makeEngineTestApp(tester);
+      testWidgets('are displayed if enabled', (tester) async {
+        await makeEngineTestApp(tester, showEngineLines: true);
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsOne);
@@ -1253,6 +1253,9 @@ void main() {
               EngineEvaluationPrefState.defaults
                   .copyWith(numEvalLines: 1, isEnabled: true)
                   .toJson(),
+            ),
+            PrefCategory.analysis.storageKey: jsonEncode(
+              AnalysisPrefs.defaults.copyWith(showEngineLines: true).toJson(),
             ),
           },
           home: const AnalysisScreen(
