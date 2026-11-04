@@ -269,12 +269,6 @@ void main() {
     testWidgets('shows the number of remaining puzzles when offline', (WidgetTester tester) async {
       when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
           .thenAnswer((_) async => twoPuzzlesBatch);
-      when(
-        () => mockBatchStorage.fetchNbUnsolved(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
-      ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
       when(() => mockBatchStorage.fetchAllAngles(userId: null))
           .thenAnswer((_) async => IList(const []));
 
@@ -308,12 +302,6 @@ void main() {
     ) async {
       when(() => mockBatchStorage.fetch(userId: null, angle: const PuzzleTheme(PuzzleThemeKey.mix)))
           .thenAnswer((_) async => twoPuzzlesBatch);
-      when(
-        () => mockBatchStorage.fetchNbUnsolved(
-          userId: null,
-          angle: const PuzzleTheme(PuzzleThemeKey.mix),
-        ),
-      ).thenAnswer((_) async => twoPuzzlesBatch.unsolved.length);
       when(() => mockBatchStorage.fetchAllAngles(userId: null))
           .thenAnswer((_) async => IList(const []));
 
