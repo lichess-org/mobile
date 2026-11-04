@@ -19,6 +19,11 @@ const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 /// Scale factor for the small board in portrait orientation.
 const kSmallBoardScale = 0.8;
 
+/// Horizontal margin around the board on phones in portrait orientation.
+///
+/// It makes the board smaller, which leaves more vertical space to the tab view.
+const kPhoneBoardSideMargin = 12.0;
+
 typedef BoardBuilder = Widget Function(
   BuildContext context,
   double boardSize,
@@ -294,9 +299,15 @@ class const AnalysisLayout({
             final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
             final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
 
+            final boardPadding = isTablet
+                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                : smallBoard
+                ? EdgeInsets.zero
+                : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+
             final boardSize =
                 defaultBoardSize -
-                (isTablet ? kTabletBoardTableSidePadding * 2 : 0) -
+                boardPadding.horizontal -
                 (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
 
             return Column(
@@ -306,9 +317,7 @@ class const AnalysisLayout({
               children: [
                 ?engineLines,
                 Padding(
-                  padding: isTablet
-                      ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                      : EdgeInsets.zero,
+                  padding: boardPadding,
                   child: Column(
                     children: [
                       if (pockets != null)

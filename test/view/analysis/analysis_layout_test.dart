@@ -97,7 +97,9 @@ void main() {
       final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       if (isPortrait) {
-        final expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
+        final expectedBoardSize = isTablet
+            ? surface.width - kTabletBoardTableSidePadding * 2
+            : surface.width - kPhoneBoardSideMargin * 2;
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
