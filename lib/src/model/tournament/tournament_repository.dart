@@ -25,7 +25,7 @@ class TournamentRepository(final http.Client client, final Aggregator aggregator
 
   Future<TournamentLists> getTournaments() {
     return client.readJson(
-      Uri(path: '/api/tournament'),
+      Uri(path: '/tournament'),
       headers: {'Accept': 'application/json'},
       mapper: (Map<String, dynamic> json) {
         return (
