@@ -3370,7 +3370,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Ойын пішімі';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Досты шақыру';

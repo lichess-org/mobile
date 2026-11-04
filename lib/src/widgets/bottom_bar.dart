@@ -98,9 +98,6 @@ class BottomBar extends StatelessWidget {
   }
 }
 
-/// Strongest blur of the content under a [BottomBar] floating over it, at the bottom of the screen.
-const double _kBottomEdgeBlurMaxSigma = 8.0;
-
 /// Opacity of the tint over the bottom edge blur, below the top of the bar buttons, in light and
 /// dark mode. The glass buttons stand out less over light content.
 const double _kBottomEdgeTintLightOpacity = 0.7;
@@ -151,8 +148,7 @@ class const BottomBarScrollEdgeEffect({
       children: [
         Positioned.fill(
           child: GlassScrollEdgeEffect(
-            style: .blur,
-            maxSigma: _kBottomEdgeBlurMaxSigma,
+            style: .soft,
             fadeTop: false,
             bottomFadeHeight: edgeHeight,
             child: child,
@@ -301,11 +297,14 @@ class const BottomBarTextButton({
 ///
 /// In a bar with [BottomBar.cupertinoGlass] on iOS, the group is one liquid glass capsule, like a
 /// group of iOS toolbar items, and its [BottomBarButton]s are icons in it, without a capsule or a
-/// label. Elsewhere, its [children] are laid out like the other buttons of the bar.
+/// label. A single button is shown as if it were not in a group. Elsewhere, its [children] are laid
+/// out like the other buttons of the bar.
 class const BottomBarGroup({required final List<Widget> children, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (children.length == 1) return children.single;
+
     if (!_GlassBottomBarScope.isIn(context)) {
       return Row(mainAxisSize: MainAxisSize.min, children: children);
     }
@@ -353,6 +352,17 @@ class const BottomBarGlassButton({
       ),
     );
   }
+}
+
+/// Gives the liquid glass buttons of a [BottomBar] with [BottomBar.cupertinoGlass] below it a
+/// thicker glass, more frosted, so that they stand out over busy content (e.g. the moves of an
+/// analysis), with [thickGlassSettings]. Prominent buttons keep their tinted glass.
+class const ThickBottomBarGlass({required super.child, super.key}) extends InheritedWidget {
+  static bool isIn(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ThickBottomBarGlass>() != null;
+
+  @override
+  bool updateShouldNotify(ThickBottomBarGlass oldWidget) => false;
 }
 
 /// Marks the buttons of a [BottomBar] with [BottomBar.cupertinoGlass] on iOS.
@@ -421,7 +431,11 @@ class const _GlassBottomBarCapsule({
         child: GlassButton.custom(
           onTap: onTap ?? () {},
           enabled: enabled,
-          settings: prominent ? prominentGlassSettings(context) : ios27GlassSettings(context),
+          settings: prominent
+              ? prominentGlassSettings(context)
+              : ThickBottomBarGlass.isIn(context)
+              ? thickGlassSettings(context)
+              : ios27GlassSettings(context),
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.
           useOwnLayer: true,

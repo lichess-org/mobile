@@ -4,12 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Number of characters of a login code.
 const _kLoginCodeLength = 6;
@@ -221,6 +223,12 @@ class _EmailFormState() extends ConsumerState<_EmailForm> {
               _ => submit,
             },
             child: Text(context.l10n.mobileSendMeACode),
+          ),
+          const SizedBox(height: 8.0),
+          // Signing up needs the website's captcha and email confirmation, so open its page.
+          TextButton(
+            onPressed: () => launchUrl(lichessUri('/signup')),
+            child: Text(context.l10n.signUp),
           ),
         ],
       ),

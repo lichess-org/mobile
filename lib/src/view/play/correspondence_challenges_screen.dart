@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const CorrespondenceChallengesScreen({super.key}) extends ConsumerStatefulWidget {
@@ -104,46 +105,48 @@ class _ChallengesBodyState() extends ConsumerState<CorrespondenceChallengesScree
         key: _refreshKey,
         onRefresh: () => ref.read(correspondenceSeeksProvider.notifier).reload(),
         child: supportedSeeks != null
-            ? ListView.separated(
-                itemCount: supportedSeeks.length,
-                separatorBuilder: (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                    ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
-                    : const SizedBox.shrink(),
-                itemBuilder: (context, index) {
-                  final seek = supportedSeeks[index];
-                  final isMySeek = UserId.fromUserName(seek.username) == authUser?.user.id;
+            ? SwipeActionsScope(
+                child: ListView.separated(
+                  itemCount: supportedSeeks.length,
+                  separatorBuilder: (context, index) =>
+                      Theme.of(context).platform == TargetPlatform.iOS
+                      ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                      : const SizedBox.shrink(),
+                  itemBuilder: (context, index) {
+                    final seek = supportedSeeks[index];
+                    final isMySeek = UserId.fromUserName(seek.username) == authUser?.user.id;
 
-                  return CorrespondenceChallengeListItem(
-                    seek: seek,
-                    challengerUser: LightUser(
-                      id: UserId.fromUserName(seek.username),
-                      name: seek.username,
-                      title: seek.title,
-                    ),
-                    onPressed: isMySeek
-                        ? null
-                        : authUser == null
-                        ? () {
-                            showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
-                          }
-                        : () {
-                            showConfirmDialog<void>(
-                              context,
-                              title: Text(context.l10n.accept),
-                              isDestructiveAction: true,
-                              onConfirm: () {
-                                socketClient.send('joinSeek', seek.id.toString());
-                              },
-                            );
-                          },
-                    onCancel: isMySeek
-                        ? () {
-                            socketClient.send('cancelSeek', seek.id.toString());
-                          }
-                        : null,
-                  );
-                },
+                    return CorrespondenceChallengeListItem(
+                      seek: seek,
+                      challengerUser: LightUser(
+                        id: UserId.fromUserName(seek.username),
+                        name: seek.username,
+                        title: seek.title,
+                      ),
+                      onPressed: isMySeek
+                          ? null
+                          : authUser == null
+                          ? () {
+                              showSnackBar(context, context.l10n.youNeedAnAccountToDoThat);
+                            }
+                          : () {
+                              showConfirmDialog<void>(
+                                context,
+                                title: Text(context.l10n.accept),
+                                isDestructiveAction: true,
+                                onConfirm: () {
+                                  socketClient.send('joinSeek', seek.id.toString());
+                                },
+                              );
+                            },
+                      onCancel: isMySeek
+                          ? () {
+                              socketClient.send('cancelSeek', seek.id.toString());
+                            }
+                          : null,
+                    );
+                  },
+                ),
               )
             : challengesAsync is AsyncError
             // scrollable, so that the error can be retried with a pull to refresh

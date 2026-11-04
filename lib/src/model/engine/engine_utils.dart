@@ -127,6 +127,7 @@ bool isLightStockfish(EngineSpec? spec) =>
 /// The (fake) position to use in threat mode searches.
 Position threatModePosition(Position position) => position.copyWith(
   turn: position.turn.opposite,
+  epSquare: null,
   halfmoves: position.halfmoves + 1,
   fullmoves: position.turn == Side.black ? position.fullmoves + 1 : position.fullmoves,
 );

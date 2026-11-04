@@ -791,7 +791,6 @@
   "settingsDeleteAccountWarning": "您的帳戶將從 Lichess 中移除，且無法復原。",
   "settingsCloseYourAccount": "關閉您的帳戶",
   "settingsDeleteAccountConfirmText": "我已了解刪除帳戶無法復原",
-  "gameSetup": "棋局設定",
   "challengeAFriend": "挑戰朋友",
   "playAgainstComputer": "人機對局",
   "gameMode": "遊戲模式",

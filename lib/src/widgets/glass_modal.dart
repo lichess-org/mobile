@@ -12,8 +12,11 @@ Color opaqueModalColor(BuildContext context) =>
 
 /// The rounded liquid glass card of an iOS modal (action sheet, alert dialog, bottom sheet).
 ///
-/// With [tinted], its glass is tinted with [opaqueModalColor], nearly opaque, for a modal shown over
-/// busy content such as a board, which the glass would let show through too much.
+/// With [tinted], its glass is nearly opaque, for a modal shown over busy content such as a board,
+/// which the glass would let show through too much. It is tinted with [opaqueModalColor] in dark
+/// mode, and with the neutral color of the glass in light mode: there, the theme color would look
+/// too warm, and the glass only keeps a light color bright when it is neutral (a color with a hue
+/// takes the brightness of the dimmed content behind the modal).
 ///
 /// Before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of the same shape.
 class const GlassModalCard({
@@ -43,8 +46,13 @@ class const GlassModalCard({
       clipBehavior: Clip.antiAlias,
       padding: padding,
       settings: tinted
-          ? ios27GlassSettings(context)
-                .copyWith(glassColor: opaqueModalColor(context).withValues(alpha: 0.85))
+          ? ios27GlassSettings(context).copyWith(
+              glassColor:
+                  (Theme.of(context).brightness == .light
+                          ? ios27GlassSettings(context).glassColor
+                          : opaqueModalColor(context))
+                      .withValues(alpha: 0.85),
+            )
           : ios27GlassSettings(context),
       child: child,
     );
@@ -52,6 +60,9 @@ class const GlassModalCard({
 }
 
 /// The iOS frame of a dialog: a [GlassModalCard] centered on the screen.
+///
+/// The card is always [GlassModalCard.tinted]: a dialog is read in one go and may be shown over
+/// any content, including a board, which would show through the default glass too much.
 ///
 /// With liquid glass, the card is painted through an [OverlayPortal], outside the dialog route's
 /// transition: the iOS dialog route ([showAdaptiveDialog]) fades its page in, which would show the
@@ -62,9 +73,6 @@ class const GlassDialogFrame({
 
   /// The width of an alert dialog by default.
   final double maxWidth = 300.0,
-
-  /// See [GlassModalCard.tinted].
-  final bool tinted = false,
   super.key,
 }) extends StatefulWidget {
   @override
@@ -92,7 +100,7 @@ class _GlassDialogFrameState() extends State<GlassDialogFrame> {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: widget.maxWidth),
             child: GlassModalCard(
-              tinted: widget.tinted,
+              tinted: true,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).

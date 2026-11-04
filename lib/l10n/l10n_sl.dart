@@ -30,7 +30,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Dnevniki aplikacije';
 
   @override
   String get mobileAmoledBlack => 'Amoled black';
@@ -100,7 +100,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Opusti';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Ali želite izbrisati vse dnevnike?';
 
   @override
   String get mobileDangerZone => 'Danger zone';
@@ -161,7 +161,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileHomeTab => 'Domov';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Omrežni dnevniki';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -462,7 +462,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Bo objavljeno';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -3426,7 +3426,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Razumem, da izbrisanih računov ni mogoče obnoviti';
 
   @override
-  String get gameSetup => 'Nastavitev igre';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Izzovite prijatelja';

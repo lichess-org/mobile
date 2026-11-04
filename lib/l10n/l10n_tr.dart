@@ -30,7 +30,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Hamleyi geri almaya ve ipuçlarına izin verir';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Uygulama kayıtları';
 
   @override
   String get mobileAmoledBlack => 'Amoled siyah';
@@ -100,7 +100,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Gizle';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Tüm kayıtları silmek istiyor musunuz?';
 
   @override
   String get mobileDangerZone => 'Tehlikeli bölge';
@@ -161,7 +161,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileHomeTab => 'Ana sayfa';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Bağlantı kayıtları';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobilePreviousPage => 'Önceki';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Geçmiş bulmaca denemelerinizi gözden geçirin.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bu oyunu bitirmek istiyor musun?';
@@ -462,7 +462,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Duyurulacak';
 
   @override
   String get mobileTooManyLoginAttempts => 'Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.';
@@ -2421,7 +2421,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesConfirmResignationAndDrawOffers => 'Oyundan çekilme ve beraberlik tekliflerini onayla';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rok atma şekli';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rok atma yöntemi';
 
   @override
   String get preferencesCastleByMovingTwoSquares => 'Şahı iki kare sürerek';
@@ -2430,10 +2430,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesCastleByMovingOntoTheRook => 'Şahı kalenin üstüne getirerek';
 
   @override
-  String get preferencesInputMovesWithTheKeyboard => 'Hamleleri Klavye ile yap';
+  String get preferencesInputMovesWithTheKeyboard => 'Klavyeyle hamle yap';
 
   @override
-  String get preferencesInputMovesWithVoice => 'Hamleleri sesinizle sağlayın';
+  String get preferencesInputMovesWithVoice => 'Sesle hamle yap';
 
   @override
   String get preferencesSnapArrowsToValidMoves => 'Sadece mümkün hamlelere ok çiz';
@@ -3370,7 +3370,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Silinen hesapların kurtarılamayacağını anlıyorum';
 
   @override
-  String get gameSetup => 'Oyun ayarları';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Bir arkadaşınıza meydan okuyun';
@@ -4643,7 +4643,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String reportXToModerators(String param) {
-    return '$param \'i Moderatörlere bildir';
+    return '$param kullanıcısını moderatörlere bildir';
   }
 
   @override
@@ -4916,10 +4916,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get privacyPolicy => 'Gizlilik politikası';
 
   @override
-  String get letOtherPlayersFollowYou => 'Diğer oyuncular seni takip etsin mi?';
+  String get letOtherPlayersFollowYou => 'Diğer oyuncular sizi takip edebilsin';
 
   @override
-  String get letOtherPlayersChallengeYou => 'Diğer oyuncular oyun teklif edebilsin';
+  String get letOtherPlayersChallengeYou => 'Diğer oyuncular size oyun teklif edebilsin';
 
   @override
   String get letOtherPlayersInviteYouToStudy => 'Diğer oyuncular sizi bir çalışmaya davet edebilsin';
@@ -5438,7 +5438,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get primaryColorArrowsHowTo => 'Ctrl veya shift = kırmızı; command, alt veya meta = mavi; her birinden bir tuş = sarı.';
 
   @override
-  String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj yollayabilsinler mi?';
+  String get letOtherPlayersMessageYou => 'Diğer oyuncular size mesaj gönderebilsin';
 
   @override
   String get receiveForumNotifications => 'Forumda sizden bahsedildiğinde bildirim alın';
@@ -5447,7 +5447,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shareYourInsightsData => 'Satranç oyun verilerinizi diğerleriyle paylaşın';
 
   @override
-  String get withNobody => 'Hiçkimse ile';
+  String get withNobody => 'Hiç kimse ile';
 
   @override
   String get withFriends => 'Yalnızca arkadaşlarımla';
@@ -7417,7 +7417,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Web\'den bir oyun yükle';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Bir oyun linki yapıştırın<br>(örneğin lichess.org/7fHIU0XI)<br>Oyun hamleleri bölüme yüklenir.';
+  String get studyLoadGameFromTheWebText => 'Bölüme oyun hamleleri yüklemek için bir oyun URL\'si<br>(örneğin lichess.org/game/7fHIU0XI)<br>yapıştırın.';
 
   @override
   String get studyFromFenStringTitle => 'Bir FEN dizisinden';
@@ -7556,8 +7556,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count saniyede',
-      one: '$count saniyede',
+      other: '$count saniye içinde',
+      one: '$count saniye içinde',
     );
     return '$_temp0';
   }
@@ -7567,8 +7567,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count dakikada',
-      one: '$count dakikada',
+      other: '$count dakika içinde',
+      one: '$count dakika içinde',
     );
     return '$_temp0';
   }

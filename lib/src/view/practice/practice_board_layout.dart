@@ -92,18 +92,16 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
         builder: (context, constraints) {
           final isTablet = isTabletOrLarger(context);
           final isLandscape = constraints.biggest.aspectRatio > 1;
-          final defaultBoardSize = constraints.biggest.shortestSide;
-          // The height left above a bar floating over the table.
-          final remainingHeight = constraints.maxHeight - tableBottomInset - defaultBoardSize;
-          final isPadded = isTablet || isLandscape || remainingHeight < kSmallHeightMinusBoard;
-          final boardSize = isPadded
-              ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-              : defaultBoardSize;
+          // Like the analysis board, the board never spans the whole screen width.
+          final boardPadding = isTablet || isLandscape
+              ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+              : isShortVerticalScreen(context)
+              ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+              : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+          final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
           final board = Padding(
-            padding: isPadded
-                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                : EdgeInsets.zero,
+            padding: boardPadding,
             child: BoardWidget(
               size: boardSize,
               orientation: widget.orientation,
@@ -112,8 +110,8 @@ class _PracticeBoardLayoutState() extends ConsumerState<PracticeBoardLayout> {
                   .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
-                    borderRadius: isPadded ? Styles.boardBorderRadius : BorderRadius.zero,
-                    boxShadow: isPadded ? boardShadows : const <BoxShadow>[],
+                    borderRadius: Styles.boardBorderRadius,
+                    boxShadow: boardShadows,
                   ),
               shapes: widget.shapes.unlock,
               onMove: (move, {viaDragAndDrop}) {

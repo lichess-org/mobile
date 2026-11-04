@@ -3370,7 +3370,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Ezabatutako kontuak ezin direla berreskuratu ulertzen dut';
 
   @override
-  String get gameSetup => 'Partidaren konfigurazioa';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Erronka jo lagun bati';
@@ -7417,7 +7417,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Kargatu partida bat webetik';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Itsatsi partidaren URLa <br>(adb.: lichess.org/7fHIU0XI)<br> partidaren jokaldiak kapituluan kargatzeko.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'FEN kate batetik';

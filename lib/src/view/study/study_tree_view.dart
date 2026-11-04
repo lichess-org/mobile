@@ -22,53 +22,37 @@ class const StudyTreeView(final StudyOptions options, {required final bool showT
     final studyPrefs = ref.watch(studyPreferencesProvider);
 
     final currentNode = root.branchesOn(studyState.currentPath).lastOrNull ?? root;
-    // The height of a bar floating over the view: the moves scroll under it, unless the variations
-    // bar is shown, which is kept above it.
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
-    final hasVariations = currentNode.children.length > 1;
-
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
-                sliver: SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      Expanded(
-                        child: DebouncedPgnTreeView(
-                          root: root,
-                          currentPath: studyState.currentPath,
-                          pgnRootComments: studyState.pgnRootComments,
-                          notifier: ref.read(studyControllerProvider(options).notifier),
-                          showTopDivider: showTopDivider,
-                          shouldShowAnnotations: studyPrefs.showAnnotations,
-                          displayMode: studyPrefs.inlineNotation ? .inlineNotation : .twoColumn,
-                        ),
-                      ),
-                    ],
+    return MovesWithVariationsBar(
+      currentNode: currentNode,
+      currentPath: studyState.currentPath,
+      showAnnotations: studyPrefs.showAnnotations,
+      onJump: (path) => ref.read(studyControllerProvider(options).notifier).userJump(path),
+      movesBuilder: (context, bottomPadding) => CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(bottom: bottomPadding),
+            sliver: SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Expanded(
+                    child: DebouncedPgnTreeView(
+                      root: root,
+                      currentPath: studyState.currentPath,
+                      pgnRootComments: studyState.pgnRootComments,
+                      notifier: ref.read(studyControllerProvider(options).notifier),
+                      showTopDivider: showTopDivider,
+                      shouldShowAnnotations: studyPrefs.showAnnotations,
+                      displayMode: studyPrefs.inlineNotation ? .inlineNotation : .twoColumn,
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        if (hasVariations)
-          Padding(
-            padding: EdgeInsets.only(bottom: bottomInset),
-            child: VariationsBar(
-              currentNode: currentNode,
-              currentPath: studyState.currentPath,
-              showAnnotations: studyPrefs.showAnnotations,
-              onJump: (path) => ref.read(studyControllerProvider(options).notifier).userJump(path),
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }

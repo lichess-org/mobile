@@ -105,6 +105,28 @@ class _TournamentScreenState() extends ConsumerState<TournamentScreen> with Rout
     super.dispose();
   }
 
+  /// Reopens the tournament socket if another screen took it.
+  ///
+  /// When another [TournamentScreen] for the same tournament is already in the route stack, the
+  /// controller is kept alive and its `build` doesn't re-run, so this is what reopens the socket
+  /// closed by the game we navigated through.
+  void _reopenSocketIfNeeded() {
+    if (mounted && ModalRoute.isCurrentOf(context) == true) {
+      ref.read(tournamentControllerProvider(widget.id).notifier).reopenSocketIfNeeded();
+    }
+  }
+
+  @override
+  void didPush() {
+    // Called by `subscribe`, from `didChangeDependencies`: not a time to invalidate a provider.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _reopenSocketIfNeeded());
+  }
+
+  @override
+  void didPopNext() {
+    _reopenSocketIfNeeded();
+  }
+
   @override
   void didPop() {
     if (mounted) {
@@ -186,14 +208,14 @@ class const _Body({required final TournamentId id, required final TournamentStat
         : const SizedBox.shrink();
 
     return FocusDetector(
-      // Use `onFocusGained` (fires on the first focus too) rather than
-      // `onFocusRegained`: when a second `TournamentScreen` for the same
-      // tournament is pushed on top of a game, its `FocusDetector` gains focus
-      // for the first time, and the controller (kept alive, so `build` doesn't
-      // re-run) must reopen the socket that the game closed.
+      // Navigation is handled by the route callbacks of the screen state; this covers what they
+      // don't see: switching back to this tab, or bringing the app back to the foreground.
       onFocusGained: () {
-        if (context.mounted) {
-          ref.read(tournamentControllerProvider(id).notifier).onFocusGained();
+        // Visibility changes are reported up to 500ms late, and a route being covered by a push
+        // may still be reported fully visible: only the top route may take the socket, or it
+        // would take it from the screen pushed on top of it (e.g. the game of a pairing).
+        if (context.mounted && ModalRoute.isCurrentOf(context) == true) {
+          ref.read(tournamentControllerProvider(id).notifier).reopenSocketIfNeeded();
         }
       },
       child: PlatformScaffold(
@@ -348,9 +370,13 @@ class const _TournamentInfoCard({required final Tournament tournament}) extends 
                 ),
               ),
             ],
-            if (tournament.description != null && tournament.description!.isNotEmpty) ...[
+            if (tournament.description?.trim().isNotEmpty == true ||
+                tournament.payouts?.trim().isNotEmpty == true) ...[
               const SizedBox(height: 10),
-              _ExpandableDescription(description: tournament.description!),
+              _ExpandableDescription(
+                description: tournament.description,
+                payouts: tournament.payouts,
+              ),
             ],
           ],
         ),
@@ -576,7 +602,10 @@ class const _TournamentHelp({required final TournamentState state}) extends Stat
 String _variantLabels(BuildContext context, Iterable<Variant> variants) =>
     variants.map((variant) => variant.label(context.l10n)).join(', ');
 
-class const _ExpandableDescription({required final String description}) extends ConsumerWidget {
+class const _ExpandableDescription({
+  required final String? description,
+  required final String? payouts,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ExpansionTile(
@@ -589,15 +618,36 @@ class const _ExpandableDescription({required final String description}) extends 
       expandedCrossAxisAlignment: .start,
       expandedAlignment: .centerLeft,
       children: [
-        MarkdownBody(
-          data: description,
-          softLineBreak: true,
-          onTapLink: (text, url, title) {
-            if (url != null) {
-              launchUrl(Uri.parse(url));
-            }
-          },
-        ),
+        if (payouts?.trim().isNotEmpty == true) ...[
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: .start,
+            children: [
+              Semantics(
+                link: true,
+                child: GestureDetector(
+                  onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
+                  child: const Text('Prizes', style: Styles.linkStyle),
+                ),
+              ),
+              const Text(': '),
+              Expanded(child: Text(payouts!)),
+            ],
+          ),
+        ],
+        if (description?.trim().isNotEmpty == true) ...[
+          MarkdownBody(
+            data: description!,
+            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
+                .copyWith(a: Styles.linkStyle),
+            softLineBreak: true,
+            onTapLink: (text, url, title) {
+              if (url != null) {
+                launchUrl(Uri.parse(url));
+              }
+            },
+          ),
+        ],
       ],
     );
   }

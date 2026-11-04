@@ -3368,7 +3368,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Khel ka shuruaat';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'दोस्त को चुनौती';
