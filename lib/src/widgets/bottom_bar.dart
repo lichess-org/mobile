@@ -301,11 +301,14 @@ class const BottomBarTextButton({
 ///
 /// In a bar with [BottomBar.cupertinoGlass] on iOS, the group is one liquid glass capsule, like a
 /// group of iOS toolbar items, and its [BottomBarButton]s are icons in it, without a capsule or a
-/// label. Elsewhere, its [children] are laid out like the other buttons of the bar.
+/// label. A single button is shown as if it were not in a group. Elsewhere, its [children] are laid
+/// out like the other buttons of the bar.
 class const BottomBarGroup({required final List<Widget> children, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (children.length == 1) return children.single;
+
     if (!_GlassBottomBarScope.isIn(context)) {
       return Row(mainAxisSize: MainAxisSize.min, children: children);
     }
