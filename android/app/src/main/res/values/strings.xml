@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="widget_broadcast_title">Lichess Broadcasts</string>
-    <string name="widget_broadcast_description">Shows ongoing and upcoming chess broadcasts.</string>
-    <string name="widget_live">LIVE</string>
-    <string name="widget_no_broadcasts">No active broadcasts</string>
-    <string name="widget_community_description">Shows news from the Community</string>
-  <string name="widget_no_community_news">No community news available</string>
-  <string name="widget_community_title">Community</string>
+    <string name="broadcast_title">Lichess Broadcasts</string>
+    <string name="broadcast_description">Shows ongoing and upcoming chess broadcasts.</string>
+    <string name="live">LIVE</string>
+    <string name="no_broadcasts">No active broadcasts</string>
+    <string name="community_description">Shows news from the Community</string>
+  <string name="no_community_news">No community news available</string>
+  <string name="community_title">Community</string>
 </resources>

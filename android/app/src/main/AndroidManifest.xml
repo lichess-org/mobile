@@ -179,8 +179,6 @@
         </receiver>
 
 
-        <receiver android:exported="false"
-          android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
         <receiver android:name=".widgets.CommunityWidgetProvider"
           android:label="@string/widget_community_title"
           android:exported="true"
