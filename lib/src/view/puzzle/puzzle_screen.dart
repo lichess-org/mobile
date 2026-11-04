@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -33,6 +32,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_board.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
@@ -41,7 +41,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
-import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -351,61 +350,7 @@ class const _Body({
 }
 
 class _BodyState() extends ConsumerState<_Body> {
-  late final ChessboardController _controller;
   bool _isBoardTurned = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = ChessboardController(game: _buildGameData());
-  }
-
-  @override
-  void didUpdateWidget(_Body oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // The streak feeds new puzzles by swapping the puzzle context (and thus the
-    // controller provider), so push the new puzzle onto the board.
-    if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
-      _applyBoardUpdate();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  PlayerSide _playerSide(PuzzleState state) {
-    return state.mode == PuzzleMode.load ||
-            state.currentPosition.isGameOver ||
-            (state.mode == PuzzleMode.play && state.canGoNext)
-        ? PlayerSide.none
-        : state.mode == PuzzleMode.view
-        ? PlayerSide.both
-        : state.pov == Side.white
-        ? PlayerSide.white
-        : PlayerSide.black;
-  }
-
-  GameData _buildGameData() {
-    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
-    final boardPreferences = ref.read(boardPreferencesProvider);
-    return buildGameData(
-      fen: state.currentPosition.fen,
-      variant: Variant.standard,
-      position: state.currentPosition,
-      playerSide: _playerSide(state),
-      lastMove: state.lastMove,
-      castlingMethod: boardPreferences.castlingMethod,
-      boardHighlights: boardPreferences.boardHighlights,
-    );
-  }
-
-  /// Pushes the latest puzzle position to the board controller without rebuilding it.
-  void _applyBoardUpdate() {
-    _controller.updatePosition(_buildGameData());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -422,30 +367,6 @@ class _BodyState() extends ConsumerState<_Body> {
           'solving more so your results can be saved.',
           type: SnackBarType.error,
         );
-      }
-    });
-
-    // Drive the board on position/interactivity changes without rebuilding it.
-    ref.listen(
-      ctrlProvider.select(
-        (s) => (fen: s.currentPosition.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
-      ),
-      (_, _) => _applyBoardUpdate(),
-    );
-    ref.listen(
-      boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
-      (_, _) => _applyBoardUpdate(),
-    );
-
-    // Clear drawn shapes when puzzle or position changes.
-    ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
-      if (previous != null && previous != next) {
-        _controller.clearDrawnShapes();
-      }
-    });
-    ref.listen(ctrlProvider.select((state) => state.currentPath), (previous, next) {
-      if (previous != null && previous != next) {
-        _controller.clearDrawnShapes();
       }
     });
 
@@ -469,6 +390,7 @@ class _BodyState() extends ConsumerState<_Body> {
               .copyWith(
                 borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                 boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                enablePremoves: boardPreferences.premoves,
                 drawShape: DrawShapeOptions(
                   enable: boardPreferences.enableShapeDrawings,
                   newShapeColor: boardPreferences.shapeColor.color,
@@ -488,13 +410,10 @@ class _BodyState() extends ConsumerState<_Body> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  BoardWidget(
-                    boardKey: widget.boardKey,
+                  PuzzleBoard(
+                    key: widget.boardKey,
+                    initialPuzzleContext: widget.initialPuzzleContext,
                     size: boardSize,
-                    controller: _controller,
-                    onMove: (move, {viaDragAndDrop}) {
-                      ref.read(ctrlProvider.notifier).onUserMove(move);
-                    },
                     orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
                     shapes: shapes,
                     settings: defaultSettings,
@@ -581,13 +500,10 @@ class _BodyState() extends ConsumerState<_Body> {
                   padding: isTablet
                       ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
                       : EdgeInsets.zero,
-                  child: BoardWidget(
-                    boardKey: widget.boardKey,
+                  child: PuzzleBoard(
+                    key: widget.boardKey,
+                    initialPuzzleContext: widget.initialPuzzleContext,
                     size: boardSize,
-                    controller: _controller,
-                    onMove: (move, {viaDragAndDrop}) {
-                      ref.read(ctrlProvider.notifier).onUserMove(move);
-                    },
                     orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
                     shapes: shapes,
                     settings: defaultSettings,

@@ -98,7 +98,7 @@ class _BodyState() extends ConsumerState<_Body> {
     // A new run swaps the storm data (and thus the controller provider), so push
     // the new position onto the board.
     if (oldWidget.data != widget.data) {
-      _applyBoardUpdate();
+      _applyBoardUpdate(resetPremove: true);
     }
   }
 
@@ -131,8 +131,20 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 
   /// Pushes the latest storm position to the board controller without rebuilding it.
-  void _applyBoardUpdate() {
-    _controller.updatePosition(_buildGameData());
+  void _applyBoardUpdate({bool resetPremove = false}) {
+    _controller.updatePosition(_buildGameData(), resetPremove: resetPremove);
+  }
+
+  /// Plays the queued premove, if any, once the opponent has replied and it is the user's turn.
+  void _tryExecutePremove() {
+    final ctrlProvider = stormControllerProvider((widget.data.puzzles, widget.data.timestamp));
+    final state = ref.read(ctrlProvider);
+    if (_playerSide(state) == PlayerSide.none || state.position.turn != state.pov) return;
+    tryExecutePremove(
+      _controller,
+      state.position,
+      (move) => ref.read(ctrlProvider.notifier).onUserMove(move),
+    );
   }
 
   @override
@@ -154,9 +166,22 @@ class _BodyState() extends ConsumerState<_Body> {
     // Drive the board on position/interactivity changes without rebuilding it.
     ref.listen(
       ctrlProvider.select(
-        (s) => (fen: s.position.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+        (s) => (
+          puzzleIndex: s.puzzleIndex,
+          fen: s.position.fen,
+          lastMoveUci: s.lastMove?.uci,
+          side: _playerSide(s),
+          ply: s.position.ply,
+        ),
       ),
-      (_, _) => _applyBoardUpdate(),
+      (previous, next) {
+        // A forward ply in the same puzzle is a new move (ours or the reply): keep the premove and
+        // try it. The next puzzle clears it.
+        final isForwardMove =
+            previous != null && previous.puzzleIndex == next.puzzleIndex && next.ply > previous.ply;
+        _applyBoardUpdate(resetPremove: !isForwardMove);
+        if (isForwardMove) _tryExecutePremove();
+      },
     );
     ref.listen(
       boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
@@ -209,6 +234,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           .copyWith(
                             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                            enablePremoves: boardPreferences.premoves,
                             drawShape: DrawShapeOptions(
                               enable: boardPreferences.enableShapeDrawings,
                               newShapeColor: boardPreferences.shapeColor.color,
