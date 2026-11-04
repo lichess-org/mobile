@@ -180,7 +180,7 @@
 
 
         <receiver android:name=".widgets.CommunityWidgetProvider"
-          android:label="@string/widget_community_title"
+          android:label="@string/community_title"
           android:exported="true"
           android:permission="android.permission.BIND_APPWIDGET">
           <intent-filter>
