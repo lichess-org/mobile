@@ -66,7 +66,7 @@ class const _ChannelsList({required final IList<TeamUpdatesByTeam> teams}) exten
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Updates from teams you join will appear here.',
+                        context.l10n.mobileTeamUpdatesEmptyDescription,
                         style: TextStyle(color: textShade(context, 0.6)),
                         textAlign: .center,
                       ),
@@ -74,7 +74,7 @@ class const _ChannelsList({required final IList<TeamUpdatesByTeam> teams}) exten
                       TextButton.icon(
                         onPressed: () => launchUrl(lichessUri('/team/all')),
                         icon: const OpenInNewIcon(),
-                        label: const Text('Join teams'),
+                        label: Text(context.l10n.mobileJoinTeams),
                       ),
                     ],
                   ),
