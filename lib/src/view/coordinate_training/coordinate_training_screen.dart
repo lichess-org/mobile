@@ -105,15 +105,15 @@ class _BodyState() extends ConsumerState<_Body> {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = isTabletOrLarger(context);
-                final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-
                 final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                // Like the analysis board, the board never spans the whole screen width.
+                final boardPadding = isTablet || direction == Axis.horizontal
+                    ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                    : isShortVerticalScreen(context)
+                    ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                    : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+                final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
                 return Flex(
                   direction: direction,
@@ -121,23 +121,25 @@ class _BodyState() extends ConsumerState<_Body> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        _TimeBar(
-                          maxWidth: boardSize,
-                          timeFractionElapsed: trainingState.timeFractionElapsed,
-                          color: trainingState.lastGuess == Guess.incorrect
-                              ? context.lichessColors.error
-                              : context.lichessColors.good,
-                        ),
-                        _TrainingBoard(
-                          boardSize: boardSize,
-                          isTablet: isTablet,
-                          orientation: trainingState.orientation,
-                          squareHighlights: squareHighlights,
-                          onGuess: _onGuess,
-                        ),
-                      ],
+                    Padding(
+                      padding: boardPadding,
+                      child: Column(
+                        children: [
+                          _TimeBar(
+                            maxWidth: boardSize,
+                            timeFractionElapsed: trainingState.timeFractionElapsed,
+                            color: trainingState.lastGuess == Guess.incorrect
+                                ? context.lichessColors.error
+                                : context.lichessColors.good,
+                          ),
+                          _TrainingBoard(
+                            boardSize: boardSize,
+                            orientation: trainingState.orientation,
+                            squareHighlights: squareHighlights,
+                            onGuess: _onGuess,
+                          ),
+                        ],
+                      ),
                     ),
                     if (trainingState.trainingActive)
                       _ScoreAndTrainingButton(
@@ -372,7 +374,6 @@ class const SettingsBottomSheet() extends ConsumerWidget {
 
 class const _TrainingBoard({
   required final double boardSize,
-  required final bool isTablet,
   required final Side orientation,
   required final void Function(Square) onGuess,
   required final IMap<Square, SquareHighlight> squareHighlights,
@@ -403,10 +404,8 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
                     .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                     .copyWith(
                       enableCoordinates: trainingPrefs.showCoordinates,
-                      borderRadius: widget.isTablet
-                          ? const BorderRadius.all(Radius.circular(4.0))
-                          : BorderRadius.zero,
-                      boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+                      borderRadius: Styles.boardBorderRadius,
+                      boxShadow: boardShadows,
                     ),
               ),
               onTouchedSquare: (square) {

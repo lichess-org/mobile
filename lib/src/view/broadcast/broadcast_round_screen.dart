@@ -356,7 +356,6 @@ class _BroadcastRoundScreenState()
         ),
         // The tabs scroll under the glass bottom bar buttons.
         body: BottomBarScrollEdgeEffect(
-          enabled: true,
           barHeight: BottomBar.heightOf(context),
           color: Theme.of(context).scaffoldBackgroundColor,
           child: isIOS

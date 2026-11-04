@@ -60,10 +60,6 @@ class StudyPreferencesNotifier() extends Notifier<StudyPrefs> with PreferencesSt
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -76,7 +72,6 @@ sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, Com
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
     @JsonKey(defaultValue: StudyListOrder.hot) required StudyListOrder listOrder,
   }) = _StudyPrefs;
 
@@ -88,7 +83,6 @@ sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, Com
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
     listOrder: StudyListOrder.hot,
   );
 

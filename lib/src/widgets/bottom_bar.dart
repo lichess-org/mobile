@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, GlassScrollEdgeEffect, LiquidGlassSettings, LiquidRoundedRectangle;
+    show GlassButton, GlassScrollEdgeEffect, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
@@ -356,7 +356,7 @@ class const BottomBarGlassButton({
 
 /// Gives the liquid glass buttons of a [BottomBar] with [BottomBar.cupertinoGlass] below it a
 /// thicker glass, more frosted, so that they stand out over busy content (e.g. the moves of an
-/// analysis). Prominent buttons keep their tinted glass.
+/// analysis), with [thickGlassSettings]. Prominent buttons keep their tinted glass.
 class const ThickBottomBarGlass({required super.child, super.key}) extends InheritedWidget {
   static bool isIn(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<ThickBottomBarGlass>() != null;
@@ -364,13 +364,6 @@ class const ThickBottomBarGlass({required super.child, super.key}) extends Inher
   @override
   bool updateShouldNotify(ThickBottomBarGlass oldWidget) => false;
 }
-
-/// The glass of the buttons of a [BottomBar] in a [ThickBottomBarGlass]: [ios27GlassSettings], more
-/// frosted.
-LiquidGlassSettings _thickGlassSettings(BuildContext context) =>
-    Theme.of(context).brightness == Brightness.light
-    ? LiquidGlassSettings.ios27Light.copyWith(frost: 30, frostOpacity: 0.94)
-    : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
 
 /// Marks the buttons of a [BottomBar] with [BottomBar.cupertinoGlass] on iOS.
 class const _GlassBottomBarScope({required super.child}) extends InheritedWidget {
@@ -441,7 +434,7 @@ class const _GlassBottomBarCapsule({
           settings: prominent
               ? prominentGlassSettings(context)
               : ThickBottomBarGlass.isIn(context)
-              ? _thickGlassSettings(context)
+              ? thickGlassSettings(context)
               : ios27GlassSettings(context),
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.

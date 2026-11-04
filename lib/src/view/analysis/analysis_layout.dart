@@ -21,12 +21,7 @@ const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 const kAnalysisBoardInnerMargin = 3.0;
 
 /// Scale factor for the small board in portrait orientation.
-const kSmallBoardScale = 0.8;
-
-/// Horizontal margin around the board on phones in portrait orientation.
-///
-/// It makes the board smaller, which leaves more vertical space to the tab view.
-const kPhoneBoardSideMargin = 12.0;
+const kSmallBoardScale = 0.7;
 
 typedef BoardBuilder = Widget Function(
   BuildContext context,
@@ -298,22 +293,20 @@ class const AnalysisLayout({
           } else {
             final boardPadding = isTablet
                 ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                : smallBoard
-                ? EdgeInsets.zero
+                : isShortVerticalScreen(context)
+                ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
                 : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
 
-            // The board and the eval gauge have rounded corners, with a gap between them, whenever
-            // the board does not span the whole screen width.
-            final roundedBoard = boardPadding != EdgeInsets.zero;
-            final gaugeGap = roundedBoard ? kAnalysisBoardInnerMargin : 0.0;
-
+            // The board, its eval gauge, header and footer are one centered column, as wide as the
+            // board and the gauge, whatever the board size. The board does not span the whole
+            // screen width, so it and the gauge have rounded corners, with a gap between them.
             final evalGaugeSize = engineGaugeBuilder != null
-                ? getEvalGaugeWidth(context) + gaugeGap
+                ? getEvalGaugeWidth(context) + kAnalysisBoardInnerMargin
                 : 0.0;
 
             final defaultBoardSize =
                 (smallBoard ? kSmallBoardScale : 1.0) *
-                (constraints.biggest.shortestSide - evalGaugeSize);
+                (constraints.biggest.shortestSide - boardPadding.horizontal - evalGaugeSize);
 
             // The height left above a bar floating over the content.
             final remainingHeight = constraints.maxHeight - tabViewBottomInset - defaultBoardSize;
@@ -321,9 +314,7 @@ class const AnalysisLayout({
             final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
 
             final boardSize =
-                defaultBoardSize -
-                boardPadding.horizontal -
-                (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
+                defaultBoardSize - (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -332,56 +323,59 @@ class const AnalysisLayout({
               children: [
                 ?engineLines,
                 Padding(
-                  padding: boardPadding,
-                  child: Column(
-                    children: [
-                      if (pockets != null)
-                        PocketsMenu(
-                          side: pov.opposite,
-                          sideToMove: sideToMove,
-                          playerSide: playerSide,
-                          pockets: pockets!,
-                          squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
-                        ),
-                      if (boardHeader != null)
-                        // This key is used to preserve the state of the board header when the pov changes
-                        SizedBox(
-                          key: ValueKey(pov.opposite),
-                          height: kAnalysisBoardHeaderOrFooterHeight,
-                          child: boardHeader,
-                        ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          boardBuilder(context, boardSize, roundedBoard ? tabletBoardRadius : null),
-                          if (engineGaugeBuilder != null) ...[
-                            SizedBox(width: gaugeGap),
-                            ClipRRect(
-                              borderRadius: roundedBoard ? tabletBoardRadius : BorderRadius.zero,
-                              child: SizedBox(
-                                height: boardSize,
-                                child: engineGaugeBuilder!(context),
+                  padding: EdgeInsets.symmetric(vertical: boardPadding.vertical / 2),
+                  child: SizedBox(
+                    width: boardSize + evalGaugeSize,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov.opposite,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                          ),
+                        if (boardHeader != null)
+                          // This key is used to preserve the state of the board header when the pov changes
+                          SizedBox(
+                            key: ValueKey(pov.opposite),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardHeader,
+                          ),
+                        Row(
+                          children: [
+                            boardBuilder(context, boardSize, tabletBoardRadius),
+                            if (engineGaugeBuilder != null) ...[
+                              const SizedBox(width: kAnalysisBoardInnerMargin),
+                              ClipRRect(
+                                borderRadius: tabletBoardRadius,
+                                child: SizedBox(
+                                  height: boardSize,
+                                  child: engineGaugeBuilder!(context),
+                                ),
                               ),
-                            ),
+                            ],
                           ],
-                        ],
-                      ),
-                      if (boardFooter != null)
-                        SizedBox(
-                          // This key is used to preserve the state of the board footer when the pov changes
-                          key: ValueKey(pov),
-                          height: kAnalysisBoardHeaderOrFooterHeight,
-                          child: boardFooter,
                         ),
-                      if (pockets != null)
-                        PocketsMenu(
-                          side: pov,
-                          sideToMove: sideToMove,
-                          playerSide: playerSide,
-                          pockets: pockets!,
-                          squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
-                        ),
-                    ],
+                        if (boardFooter != null)
+                          SizedBox(
+                            // This key is used to preserve the state of the board footer when the pov changes
+                            key: ValueKey(pov),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardFooter,
+                          ),
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(

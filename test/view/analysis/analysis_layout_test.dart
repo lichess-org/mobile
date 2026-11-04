@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -97,9 +98,11 @@ void main() {
       final boardSize = tester.getSize(find.byType(StaticChessboard));
 
       if (isPortrait) {
+        final isShortScreen = isShortVerticalScreen(tester.element(find.byType(AnalysisLayout)));
         final expectedBoardSize = isTablet
             ? surface.width - kTabletBoardTableSidePadding * 2
-            : surface.width - kPhoneBoardSideMargin * 2;
+            : surface.width -
+                  (isShortScreen ? kShortScreenBoardSideMargin : kPhoneBoardSideMargin) * 2;
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),

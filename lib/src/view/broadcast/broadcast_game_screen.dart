@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_summary.dart';
@@ -87,6 +88,9 @@ class _BroadcastGameScreenState()
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
 
+  /// Whether the board is small, once switched with the bottom bar button; not persisted.
+  bool? _smallBoard;
+
   @override
   void initState() {
     super.initState();
@@ -134,6 +138,7 @@ class _BroadcastGameScreenState()
             ),
             _ => const SizedBox.shrink(),
           };
+    final smallBoard = _smallBoard ?? isSmallBoardByDefault(context);
 
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
@@ -183,6 +188,8 @@ class _BroadcastGameScreenState()
         widget.roundSlug,
         tabController: _tabController,
         tabs: tabs,
+        smallBoard: smallBoard,
+        onToggleSmallBoard: () => setState(() => _smallBoard = !smallBoard),
       ),
     );
   }
@@ -230,6 +237,8 @@ class const _Body(
   final String? roundSlug, {
   required final TabController tabController,
   required final List<AnalysisTab> tabs,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -256,7 +265,7 @@ class const _Body(
               boardSize: boardSize,
               boardRadius: borderRadius,
             ),
-            smallBoard: broadcastPrefs.smallBoard,
+            smallBoard: smallBoard,
             boardHeader: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
@@ -292,6 +301,8 @@ class const _Body(
               gameId: gameId,
               tournamentSlug: tournamentSlug,
               roundSlug: roundSlug,
+              smallBoard: smallBoard,
+              onToggleSmallBoard: onToggleSmallBoard,
             ),
             bottomBarOverContent: true,
             children: [
@@ -319,46 +330,28 @@ class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final Broadca
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final currentNode = state.root.branchesOn(state.currentPath).lastOrNull ?? state.root;
-    // The height of a bar floating over the view: the moves scroll under it, unless the variations
-    // bar is shown, which is kept above it.
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
-    final hasVariations = currentNode.children.length > 1;
-
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
-            child: DebouncedPgnTreeView(
-              root: state.root,
-              currentPath: state.currentPath,
-              livePath: state.broadcastLivePath,
-              pgnRootComments: state.pgnRootComments,
-              // Avoid overlap with the divider of the tab bar
-              showTopDivider: false,
-              shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
-              shouldShowComments:
-                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
-              shouldShowAnnotations:
-                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-              notifier: ref.read(ctrlProvider.notifier),
-              displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
-            ),
-          ),
+    return MovesWithVariationsBar(
+      currentNode: currentNode,
+      currentPath: state.currentPath,
+      showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+      onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+      movesBuilder: (context, bottomPadding) => SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: DebouncedPgnTreeView(
+          root: state.root,
+          currentPath: state.currentPath,
+          livePath: state.broadcastLivePath,
+          pgnRootComments: state.pgnRootComments,
+          // Avoid overlap with the divider of the tab bar
+          showTopDivider: false,
+          shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
+          shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
+          shouldShowAnnotations:
+              broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+          notifier: ref.read(ctrlProvider.notifier),
+          displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
         ),
-        if (hasVariations)
-          Padding(
-            padding: EdgeInsets.only(bottom: bottomInset),
-            child: VariationsBar(
-              currentNode: currentNode,
-              currentPath: state.currentPath,
-              showAnnotations:
-                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-              onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
-            ),
-          ),
-      ],
+      ),
     );
   }
 }
@@ -662,6 +655,8 @@ class const _Clock({
 class const _BroadcastGameBottomBar({
   required final BroadcastRoundId roundId,
   required final BroadcastGameId gameId,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
   final String? tournamentSlug,
   final String? roundSlug,
 }) extends ConsumerWidget {
@@ -673,10 +668,16 @@ class const _BroadcastGameBottomBar({
     return BottomBar(
       cupertinoGlass: true,
       children: [
-        BottomBarButton(
-          label: context.l10n.menu,
-          onTap: () => _showMenu(context, ref),
-          icon: Icons.menu,
+        BottomBarGroup(
+          children: [
+            BottomBarButton(
+              label: context.l10n.menu,
+              onTap: () => _showMenu(context, ref),
+              icon: Icons.menu,
+            ),
+            if (canToggleBoardSize(context))
+              BoardSizeToggleButton(smallBoard: smallBoard, onTap: onToggleSmallBoard),
+          ],
         ),
         Builder(
           builder: (context) {

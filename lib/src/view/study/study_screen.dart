@@ -22,13 +22,16 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
+import 'package:lichess_mobile/src/view/study/study_chapters_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -68,6 +71,7 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
+        centerTitle: false,
         compactButtons: true,
         title: switch (asyncState) {
           AsyncData(value: final studyState) => Row(
@@ -78,7 +82,7 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
                 Icon(studyState.variant.icon),
                 const SizedBox(width: 5.0),
               ],
-              Flexible(child: AppBarTitleText(studyState.currentChapterTitle)),
+              Flexible(child: AppBarTitleText(studyState.currentChapterTitle, maxLines: 2)),
             ],
           ),
           AsyncError() => null,
@@ -99,7 +103,12 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
           ),
         },
         actions: [
-          if (studyState != null)
+          if (studyState != null) ...[
+            SemanticIconButton(
+              semanticsLabel: context.l10n.studyNbChapters(studyState.study.chapters.length),
+              icon: const Icon(Icons.menu_book),
+              onPressed: () => showStudyChaptersSheet(context, widget.options),
+            ),
             ContextMenuIconButton(
               semanticsLabel: 'Study menu',
               icon: const Icon(Icons.more_horiz),
@@ -122,6 +131,7 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
                 ),
               ],
             ),
+          ],
         ],
       ),
       body: switch (asyncState) {
@@ -234,7 +244,6 @@ class const _PlaceholderBody({required final Widget child}) extends ConsumerWidg
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
     return DefaultTabController(
       length: 1,
       child: AnalysisLayout(
@@ -253,7 +262,7 @@ class const _PlaceholderBody({required final Widget child}) extends ConsumerWidg
           orientation: Side.white,
           fen: kEmptyFEN,
         ),
-        smallBoard: studyPrefs.smallBoard,
+        smallBoard: isSmallBoardByDefault(context),
         children: [Center(child: child)],
       ),
     );
@@ -269,6 +278,9 @@ class const _TabbedBody({required final StudyOptions options, required final Stu
 class _TabbedBodyState() extends State<_TabbedBody> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
+
+  /// Whether the board is small, once switched with the bottom bar button; not persisted.
+  bool? _smallBoard;
 
   void _initTabs() {
     tabs = [
@@ -309,7 +321,14 @@ class _TabbedBodyState() extends State<_TabbedBody> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return _Body(options: widget.options, tabController: _tabController, tabs: tabs);
+    final smallBoard = _smallBoard ?? isSmallBoardByDefault(context);
+    return _Body(
+      options: widget.options,
+      tabController: _tabController,
+      tabs: tabs,
+      smallBoard: smallBoard,
+      onToggleSmallBoard: () => setState(() => _smallBoard = !smallBoard),
+    );
   }
 }
 
@@ -327,6 +346,8 @@ class const _Body({
   required final StudyOptions options,
   required final TabController tabController,
   required final List<AnalysisTab> tabs,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -346,7 +367,7 @@ class const _Body({
               child: Text(context.l10n.mobileUnsupportedVariant(variant.label(context.l10n))),
             ),
           ),
-          smallBoard: studyPrefs.smallBoard,
+          smallBoard: smallBoard,
           children: const [SizedBox.shrink()],
         ),
       );
@@ -382,7 +403,7 @@ class const _Body({
       sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
-      smallBoard: studyPrefs.smallBoard,
+      smallBoard: smallBoard,
       boardHeader: pov == Side.white ? playerWidgets.black : playerWidgets.white,
       boardFooter: pov == Side.white ? playerWidgets.white : playerWidgets.black,
       engineGaugeBuilder:
@@ -402,7 +423,11 @@ class const _Body({
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
           : null,
-      bottomBar: StudyBottomBar(options: options),
+      bottomBar: StudyBottomBar(
+        options: options,
+        smallBoard: smallBoard,
+        onToggleSmallBoard: onToggleSmallBoard,
+      ),
       bottomBarOverContent: true,
       pockets: studyState.currentPosition?.pockets,
       tabs: tabs,

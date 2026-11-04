@@ -60,6 +60,7 @@ class const PgnPlayerWidget({
       clock: clock,
       isSideToMove: isSideToMove,
       playerNameWidget: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           if (player.title != null) ...[
             Text(
@@ -73,23 +74,28 @@ class const PgnPlayerWidget({
             ),
             const SizedBox(width: 5),
           ],
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                player.name,
-                style: const TextStyle(fontWeight: .bold),
-                overflow: .ellipsis,
-              ),
-              if (player.rating != null) ...[
-                const SizedBox(width: 5),
-                Text(
-                  player.rating.toString(),
-                  overflow: .ellipsis,
-                  style: TextStyle(fontWeight: FontWeight.w400, color: textShade(context, 0.8)),
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Only the name shrinks, with an ellipsis, when the header is too narrow.
+                Flexible(
+                  child: Text(
+                    player.name,
+                    style: const TextStyle(fontWeight: .bold),
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                  ),
                 ),
+                if (player.rating != null) ...[
+                  const SizedBox(width: 5),
+                  Text(
+                    player.rating.toString(),
+                    style: TextStyle(fontWeight: FontWeight.w400, color: textShade(context, 0.8)),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ],
       ),
@@ -135,7 +141,7 @@ class const AnalysisPlayerWidget({
                   ),
                   const SizedBox(width: 16.0),
                 ],
-                playerNameWidget,
+                Flexible(child: playerNameWidget),
               ],
             ),
           ),
