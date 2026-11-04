@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/service/app_refresh_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -132,7 +133,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
 
         if (!hasRefreshed && !wasOnline && isNowOnline) {
           hasRefreshed = true;
-          _refreshData(isOnline: isNowOnline);
+          ref.read(appRefreshServiceProvider).refreshApp(isOnline: isNowOnline);
         }
 
         wasOnline = isNowOnline;
@@ -405,7 +406,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   if (duration.inSeconds < 10) {
                     return;
                   }
-                  _refreshData(isOnline: isOnline);
+                  ref.read(appRefreshServiceProvider).refreshApp(isOnline: isOnline);
                 }
               },
               child: _IsEditingHome(
@@ -434,7 +435,8 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                           // Not gated on the connectivity status: the device may be marked
                           // offline while its network is back, and the responses to these
                           // requests are what tell the connectivity check to run again.
-                          onRefresh: () => _refreshData(isOnline: true),
+                          onRefresh: () =>
+                              ref.read(appRefreshServiceProvider).refreshApp(isOnline: true),
                           child: content,
                         ),
                   floatingActionButton: widget.editModeEnabled || isTablet
@@ -447,24 +449,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
           error: (_, _) => const CenterLoadingIndicator(),
           loading: () => const CenterLoadingIndicator(),
         );
-  }
-
-  Future<void> _refreshData({required bool isOnline}) async {
-    try {
-      await Future.wait([
-        ref.refresh(myRecentGamesProvider.future),
-        if (isOnline) ref.refresh(challengesProvider.future),
-        if (isOnline) ref.refresh(unreadMessagesProvider.future),
-        if (isOnline) ref.refresh(accountProvider.future),
-        if (isOnline) ref.refresh(ongoingGamesProvider.future),
-        if (isOnline) ref.refresh(featuredTournamentsProvider.future),
-        if (isOnline) ref.refresh(followingCarouselProvider.future),
-      ]);
-    } catch (_) {
-      // Refreshing while the server is unavailable is expected to fail. Each
-      // provider surfaces its own error, and the failed responses are what keep
-      // the server status up to date, so there is nothing to do here.
-    }
   }
 }
 
