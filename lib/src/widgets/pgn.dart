@@ -675,7 +675,6 @@ class const _TwoColumnMainlinePart({
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final dividerColor = theme.dividerColor;
-    final brightness = theme.brightness;
     final textStyle = _baseTextStyle.copyWith(color: _textColor(context, 0.9));
 
     final threeDots = Container(padding: kInlineMovePadding, child: const Text('...'));
@@ -722,14 +721,10 @@ class const _TwoColumnMainlinePart({
         Container(
           padding: const EdgeInsets.only(top: 4, right: kViewHorizontalPadding, bottom: 4),
           decoration: BoxDecoration(
-            color: brightness == Brightness.dark
-                ? const Color(0x0BFFFFFF)
-                : const Color(0x05000000),
             border: Border(
               top: isFirstPart && !params.showTopDivider
                   ? BorderSide.none
                   : BorderSide(color: dividerColor),
-              bottom: BorderSide(color: dividerColor),
             ),
           ),
           child: Row(

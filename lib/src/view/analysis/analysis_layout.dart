@@ -140,7 +140,11 @@ class const AnalysisLayout({
     // The bar below the content takes care of the bottom inset itself.
     final tabViewBottomInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
-    final tabViewColor = ColorScheme.of(context).surfaceContainerLowest;
+    final colorScheme = ColorScheme.of(context);
+    // In light mode, a pure white tab view stands out too much from the background.
+    final tabViewColor = Theme.of(context).brightness == Brightness.light
+        ? Color.lerp(colorScheme.surface, colorScheme.surfaceContainerLowest, 0.5)!
+        : colorScheme.surfaceContainerLowest;
 
     final content = SafeArea(
       bottom: false,
