@@ -108,9 +108,8 @@ class const AnalysisPlayerWidget({
   Widget build(BuildContext context) {
     final resultString = result?.resultToString(side);
     final colorScheme = ColorScheme.of(context);
-    return Container(
+    return SizedBox(
       height: kAnalysisBoardHeaderOrFooterHeight,
-      padding: const EdgeInsets.only(left: 8.0),
       child: Row(
         children: [
           Expanded(
@@ -142,9 +141,13 @@ class const AnalysisPlayerWidget({
           ),
           if (clock != null)
             Container(
-              height: kAnalysisBoardHeaderOrFooterHeight,
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              color: isSideToMove ? colorScheme.secondaryContainer : null,
+              height: kAnalysisBoardHeaderOrFooterHeight - kAnalysisBoardInnerMargin * 2,
+              margin: const EdgeInsets.symmetric(vertical: kAnalysisBoardInnerMargin),
+              padding: const EdgeInsets.symmetric(horizontal: 6.0),
+              decoration: BoxDecoration(
+                color: isSideToMove ? colorScheme.secondaryContainer : null,
+                borderRadius: Styles.boardBorderRadius,
+              ),
               child: Center(
                 child: Text(
                   clock!.toHoursMinutesSeconds(showTenths: clock! < const Duration(minutes: 1)),

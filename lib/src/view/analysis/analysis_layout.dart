@@ -16,6 +16,10 @@ import 'package:material_ui/material_ui.dart';
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 
+/// The margin around a clock in the board header or footer, and between the board and the eval gauge
+/// in portrait orientation.
+const kAnalysisBoardInnerMargin = 3.0;
+
 /// Scale factor for the small board in portrait orientation.
 const kSmallBoardScale = 0.8;
 
@@ -288,7 +292,20 @@ class const AnalysisLayout({
               ),
             );
           } else {
-            final evalGaugeSize = engineGaugeBuilder != null ? getEvalGaugeWidth(context) : 0.0;
+            final boardPadding = isTablet
+                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                : smallBoard
+                ? EdgeInsets.zero
+                : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+
+            // The board and the eval gauge have rounded corners, with a gap between them, whenever
+            // the board does not span the whole screen width.
+            final roundedBoard = boardPadding != EdgeInsets.zero;
+            final gaugeGap = roundedBoard ? kAnalysisBoardInnerMargin : 0.0;
+
+            final evalGaugeSize = engineGaugeBuilder != null
+                ? getEvalGaugeWidth(context) + gaugeGap
+                : 0.0;
 
             final defaultBoardSize =
                 (smallBoard ? kSmallBoardScale : 1.0) *
@@ -298,12 +315,6 @@ class const AnalysisLayout({
             final remainingHeight = constraints.maxHeight - tabViewBottomInset - defaultBoardSize;
             final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
             final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
-
-            final boardPadding = isTablet
-                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                : smallBoard
-                ? EdgeInsets.zero
-                : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
 
             final boardSize =
                 defaultBoardSize -
@@ -330,47 +341,31 @@ class const AnalysisLayout({
                         ),
                       if (boardHeader != null)
                         // This key is used to preserve the state of the board header when the pov changes
-                        Container(
+                        SizedBox(
                           key: ValueKey(pov.opposite),
-                          decoration: BoxDecoration(
-                            borderRadius: isTablet
-                                ? tabletBoardRadius.copyWith(
-                                    bottomLeft: Radius.zero,
-                                    bottomRight: Radius.zero,
-                                  )
-                                : null,
-                          ),
-                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                           height: kAnalysisBoardHeaderOrFooterHeight,
                           child: boardHeader,
                         ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          boardBuilder(
-                            context,
-                            boardSize,
-                            isTablet && boardHeader == null && boardFooter != null
-                                ? tabletBoardRadius
-                                : null,
-                          ),
-                          if (engineGaugeBuilder != null)
-                            SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
+                          boardBuilder(context, boardSize, roundedBoard ? tabletBoardRadius : null),
+                          if (engineGaugeBuilder != null) ...[
+                            SizedBox(width: gaugeGap),
+                            ClipRRect(
+                              borderRadius: roundedBoard ? tabletBoardRadius : BorderRadius.zero,
+                              child: SizedBox(
+                                height: boardSize,
+                                child: engineGaugeBuilder!(context),
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                       if (boardFooter != null)
-                        Container(
+                        SizedBox(
                           // This key is used to preserve the state of the board footer when the pov changes
                           key: ValueKey(pov),
-                          decoration: BoxDecoration(
-                            borderRadius: isTablet
-                                ? tabletBoardRadius.copyWith(
-                                    topLeft: Radius.zero,
-                                    topRight: Radius.zero,
-                                  )
-                                : null,
-                          ),
-                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
                           height: kAnalysisBoardHeaderOrFooterHeight,
                           child: boardFooter,
                         ),

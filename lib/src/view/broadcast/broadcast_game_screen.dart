@@ -576,57 +576,58 @@ class const _PlayerWidget({
               );
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                if (game.isOver) ...[
-                  Text(
-                    resultString(customScoring, side, game.status),
-                    style: Theme.of(context).textTheme.bodyMedium
-                        ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
-                  ),
-                  const SizedBox(width: 16.0),
-                ],
-                Expanded(
-                  child: BroadcastPlayerWidget(
-                    player: player,
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+          child: Row(
+            children: [
+              if (game.isOver) ...[
+                Text(
+                  resultString(customScoring, side, game.status),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                 ),
-                if (liveClock != null || pastClock != null)
-                  Container(
-                    height: kAnalysisBoardHeaderOrFooterHeight,
+                const SizedBox(width: 16.0),
+              ],
+              Expanded(
+                child: BroadcastPlayerWidget(
+                  player: player,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              if (liveClock != null || pastClock != null)
+                Container(
+                  height: kAnalysisBoardHeaderOrFooterHeight - kAnalysisBoardInnerMargin * 2,
+                  margin: const EdgeInsets.symmetric(vertical: kAnalysisBoardInnerMargin),
+                  decoration: BoxDecoration(
                     color: isClockActive
                         ? ColorScheme.of(context).tertiaryContainer
                         : (side == sideToMove)
                         ? ColorScheme.of(context).secondaryContainer
                         : Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: Center(
-                        child: liveClock != null
-                            ? CountdownClockBuilder(
-                                timeLeft: liveClock,
-                                active: isClockActive,
-                                builder: (context, timeLeft) => _Clock(
-                                  timeLeft: timeLeft,
-                                  isSideToMove: side == sideToMove,
-                                  isClockActive: isClockActive,
-                                ),
-                                tickInterval: const Duration(seconds: 1),
-                                clockUpdatedAt: game.updatedClockAt,
-                              )
-                            : _Clock(
-                                timeLeft: pastClock!,
+                    borderRadius: Styles.boardBorderRadius,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                    child: Center(
+                      child: liveClock != null
+                          ? CountdownClockBuilder(
+                              timeLeft: liveClock,
+                              active: isClockActive,
+                              builder: (context, timeLeft) => _Clock(
+                                timeLeft: timeLeft,
                                 isSideToMove: side == sideToMove,
-                                isClockActive: false,
+                                isClockActive: isClockActive,
                               ),
-                      ),
+                              tickInterval: const Duration(seconds: 1),
+                              clockUpdatedAt: game.updatedClockAt,
+                            )
+                          : _Clock(
+                              timeLeft: pastClock!,
+                              isSideToMove: side == sideToMove,
+                              isClockActive: false,
+                            ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       case AsyncValue(:final error?):
