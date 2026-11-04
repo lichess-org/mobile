@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, GlassScrollEdgeEffect, LiquidRoundedRectangle;
+    show GlassButton, GlassScrollEdgeEffect, LiquidGlassSettings, LiquidRoundedRectangle;
 import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
@@ -98,9 +98,6 @@ class BottomBar extends StatelessWidget {
   }
 }
 
-/// Strongest blur of the content under a [BottomBar] floating over it, at the bottom of the screen.
-const double _kBottomEdgeBlurMaxSigma = 8.0;
-
 /// Opacity of the tint over the bottom edge blur, below the top of the bar buttons, in light and
 /// dark mode. The glass buttons stand out less over light content.
 const double _kBottomEdgeTintLightOpacity = 0.7;
@@ -151,8 +148,7 @@ class const BottomBarScrollEdgeEffect({
       children: [
         Positioned.fill(
           child: GlassScrollEdgeEffect(
-            style: .blur,
-            maxSigma: _kBottomEdgeBlurMaxSigma,
+            style: .soft,
             fadeTop: false,
             bottomFadeHeight: edgeHeight,
             child: child,
@@ -358,6 +354,24 @@ class const BottomBarGlassButton({
   }
 }
 
+/// Gives the liquid glass buttons of a [BottomBar] with [BottomBar.cupertinoGlass] below it a
+/// thicker glass, more frosted, so that they stand out over busy content (e.g. the moves of an
+/// analysis). Prominent buttons keep their tinted glass.
+class const ThickBottomBarGlass({required super.child, super.key}) extends InheritedWidget {
+  static bool isIn(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ThickBottomBarGlass>() != null;
+
+  @override
+  bool updateShouldNotify(ThickBottomBarGlass oldWidget) => false;
+}
+
+/// The glass of the buttons of a [BottomBar] in a [ThickBottomBarGlass]: [ios27GlassSettings], more
+/// frosted.
+LiquidGlassSettings _thickGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light.copyWith(frost: 30, frostOpacity: 0.94)
+    : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
+
 /// Marks the buttons of a [BottomBar] with [BottomBar.cupertinoGlass] on iOS.
 class const _GlassBottomBarScope({required super.child}) extends InheritedWidget {
   static bool isIn(BuildContext context) =>
@@ -424,7 +438,11 @@ class const _GlassBottomBarCapsule({
         child: GlassButton.custom(
           onTap: onTap ?? () {},
           enabled: enabled,
-          settings: prominent ? prominentGlassSettings(context) : ios27GlassSettings(context),
+          settings: prominent
+              ? prominentGlassSettings(context)
+              : ThickBottomBarGlass.isIn(context)
+              ? _thickGlassSettings(context)
+              : ios27GlassSettings(context),
           shape: const LiquidRoundedRectangle(borderRadius: 100),
           // The bar has no glass layer to share.
           useOwnLayer: true,

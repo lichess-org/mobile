@@ -404,12 +404,13 @@ class const AnalysisLayout({
         children: [
           Positioned.fill(
             child: BottomBarScrollEdgeEffect(
+              enabled: true,
               barHeight: tabViewBottomInset,
               color: tabViewColor,
               child: content,
             ),
           ),
-          Positioned(left: 0, right: 0, bottom: 0, child: bottomBar!),
+          Positioned(left: 0, right: 0, bottom: 0, child: ThickBottomBarGlass(child: bottomBar!)),
         ],
       );
     }
