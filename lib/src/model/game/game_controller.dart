@@ -350,6 +350,9 @@ class GameController(final GameFullId gameFullId)
         moveToConfirm: null,
       ),
     );
+
+    _playMoveFeedback(sanMove);
+
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,
