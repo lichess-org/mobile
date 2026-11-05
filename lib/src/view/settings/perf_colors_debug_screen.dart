@@ -160,7 +160,7 @@ const _timeControls = [
 ];
 
 /// HCT hues of the lichess colors the perf colors avoid.
-const _avoidedHues = [(23.0, 'red'), (73.0, 'gold'), (133.0, 'green')];
+const _avoidedHues = [(73.0, 'gold')];
 
 /// Paints the HCT hue wheel unrolled, at the perf colors chroma and tone: raw on the top row,
 /// harmonized with the scheme primary on the bottom row, with the avoided lichess hues above and

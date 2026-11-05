@@ -10,27 +10,28 @@ import 'package:material_ui/material_ui.dart';
 
 /// HCT hue of each [Perf] icon color.
 ///
-/// The hues stay clear of the lichess colors the app uses a lot (HCT hues: red 23, orange 40, gold
-/// 73, green 133).
+/// The hues are about 18° apart, all around the wheel but clear of the lichess brag gold (HCT hue
+/// 73), the color of tournament and top games icons shown next to perf icons. The time controls,
+/// often shown together, are the farthest apart.
 double _perfHue(Perf perf) => switch (perf) {
-  .ultraBullet => 355,
-  .bullet => 312,
-  .blitz => 270,
-  .rapid => 228,
-  .classical => 185,
-  .correspondence => 152,
-  .fromPosition => 98,
-  .chess960 => 205,
-  .antichess => 343,
-  .kingOfTheHill => 108,
-  .threeCheck => 5,
-  .atomic => 330,
-  .horde => 168,
-  .racingKings => 248,
-  .crazyhouse => 290,
-  .puzzle => 215,
-  .storm => 300,
-  .streak => 320,
+  .ultraBullet => 326,
+  .bullet => 2,
+  .blitz => 38,
+  .rapid => 128,
+  .classical => 200,
+  .correspondence => 272,
+  .fromPosition => 182,
+  .chess960 => 218,
+  .antichess => 344,
+  .kingOfTheHill => 110,
+  .threeCheck => 20,
+  .atomic => 290,
+  .horde => 164,
+  .racingKings => 254,
+  .crazyhouse => 146,
+  .puzzle => 236,
+  .storm => 308,
+  .streak => 92,
 };
 
 /// HCT chroma of all the perf colors.
