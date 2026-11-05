@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
 
 /// A no-op implementation for F-Droid.
-class const FdroidCrashlytics() implements Crashlytics {
+class const NoOpCrashlytics() implements Crashlytics {
   @override
   Future<void> recordError(
     dynamic exception,

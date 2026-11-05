@@ -12,5 +12,5 @@ class FdroidLichessBinding() extends LichessBindingBase {
   Future<void> initializeFirebase() async {}
 
   @override
-  Crashlytics get firebaseCrashlytics => const FdroidCrashlytics();
+  Crashlytics get firebaseCrashlytics => const NoOpCrashlytics();
 }

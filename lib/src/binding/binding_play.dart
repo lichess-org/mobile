@@ -1,5 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart' as firebase;
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/src/binding/binding.dart';
@@ -31,5 +31,5 @@ class PlayLichessBinding() extends LichessBindingBase with FcmBinding {
   }
 
   @override
-  Crashlytics get firebaseCrashlytics => PlayCrashlytics(FirebaseCrashlytics.instance);
+  Crashlytics get firebaseCrashlytics => FirebaseCrashlytics(firebase.FirebaseCrashlytics.instance);
 }

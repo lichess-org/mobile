@@ -1,9 +1,9 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart' as firebase;
 import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
 
 /// The implementation for the Play Store, delegating to the real Firebase Crashlytics.
-class PlayCrashlytics(final FirebaseCrashlytics _delegate) implements Crashlytics {
+class FirebaseCrashlytics(final firebase.FirebaseCrashlytics _delegate) implements Crashlytics {
   @override
   Future<void> recordError(
     dynamic exception,
