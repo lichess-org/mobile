@@ -51,11 +51,24 @@ ThemeData makeAppTheme(
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class const CustomTheme({required final Color rowEven, required final Color rowOdd})
-    extends ThemeExtension<CustomTheme> {
+class const CustomTheme({
+  required final Color rowEven,
+  required final Color rowOdd,
+
+  /// Background of the screens made of a plain list, whose rows are directly on the background
+  /// rather than in cards, when it differs from the scaffold background.
+  ///
+  /// On iOS light mode, the scaffold background is darker so that cards stand out, like the iOS
+  /// grouped lists, while plain lists have a lighter background, like the iOS plain lists.
+  final Color? plainListBackground,
+}) extends ThemeExtension<CustomTheme> {
   @override
-  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
-    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd, Color? plainListBackground}) {
+    return CustomTheme(
+      rowEven: rowEven ?? this.rowEven,
+      rowOdd: rowOdd ?? this.rowOdd,
+      plainListBackground: plainListBackground ?? this.plainListBackground,
+    );
   }
 
   @override
@@ -66,6 +79,7 @@ class const CustomTheme({required final Color rowEven, required final Color rowO
     return CustomTheme(
       rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
       rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+      plainListBackground: Color.lerp(plainListBackground, other.plainListBackground, t),
     );
   }
 }
@@ -187,7 +201,11 @@ ThemeData _makeDefaultTheme(
       // The rows are brighter than the background, like the cards, so that a card of rows still
       // stands out from it.
       if (isIOSLight)
-        CustomTheme(rowEven: cupertinoCardColor!, rowOdd: baseScheme.surfaceContainerLow),
+        CustomTheme(
+          rowEven: cupertinoCardColor!,
+          rowOdd: baseScheme.surfaceContainerLow,
+          plainListBackground: baseScheme.surfaceContainerLowest,
+        ),
     ],
   );
 

@@ -81,6 +81,7 @@ class _TournamentListScreenState()
         ref.invalidate(tournamentsProvider);
       },
       child: PlatformScaffold(
+        plainList: true,
         appBar: PlatformAppBar(
           title: Text(context.l10n.arenaArenaTournaments),
           actions: [
