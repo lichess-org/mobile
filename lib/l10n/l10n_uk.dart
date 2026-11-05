@@ -30,7 +30,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Дозволяти повернення ходів та підказки';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Журнали застосунку';
 
   @override
   String get mobileAmoledBlack => 'Темна aMOLED';
@@ -100,7 +100,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Прибрати';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Очистити журнал?';
 
   @override
   String get mobileDangerZone => 'Небезпечна зона';
@@ -161,7 +161,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileHomeTab => 'Головна';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Журнал мережі';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -1480,11 +1480,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Практикувати лише деякі ряди та стовпці';
 
   @override
-  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+  String get coordinatesEnterTheCoordinate => 'Уведіть координати';
 
   @override
   String coordinatesPressEnterToStart(String param) {
-    return 'Press $param to start';
+    return 'Натисніть $param, щоб почати';
   }
 
   @override
@@ -3426,7 +3426,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Я розумію, що видалені облікові записи неможливо відновити';
 
   @override
-  String get gameSetup => 'Налаштування гри';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Кинути виклик другові';
@@ -6243,7 +6243,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showMeEverything => 'Показати все';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
+  String get lichessPatronInfo => 'Lichess — це благодійне й повністю безплатне програмне забезпечення з відкритим кодом. Ми залежимо від пожертвувань користувачів, щоб покривати наші робочі витрати, підтримувати розробку й додавати вміст. Без нашої добродушної спільноти цей сайт не зміг би працювати. Дякуємо, що приєдналися до нас!';
 
   @override
   String get nothingToSeeHere => 'Поки тут нічого немає.';
@@ -7559,7 +7559,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Завантажити гру з інтернету';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Уставте URL на гру<br>(наприклад, lichess.org/7fHIU0XI)<br>, аби завантажити ходи гри в розділ.';
+  String get studyLoadGameFromTheWebText => 'Уведіть URL гри <br>(наприклад, lichess.org/game/7fHIU0XI)<br>, щоб завантажити ходи гри в розділ.';
 
   @override
   String get studyFromFenStringTitle => 'З рядка FEN';

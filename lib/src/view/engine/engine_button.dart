@@ -134,7 +134,11 @@ class _EngineButtonState() extends ConsumerState<EngineButton> {
                 spacing: 6.0,
                 children: [
                   chip,
-                  Text(engineLabel, style: engineLabelStyle),
+                  // The net size goes on its own line, to keep the capsule narrow.
+                  Text(
+                    engineLabel.replaceFirst(' $lightNetSizeMB', '\n$lightNetSizeMB'),
+                    style: engineLabelStyle.copyWith(height: 1.1),
+                  ),
                 ],
               ),
             )

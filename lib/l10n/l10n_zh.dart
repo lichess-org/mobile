@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '允许悔棋和提示';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => '应用日志';
 
   @override
   String get mobileAmoledBlack => 'Amoled 纯黑';
@@ -100,7 +100,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '取消';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => '您确定要删除所有日志吗？';
 
   @override
   String get mobileDangerZone => '危险操作';
@@ -161,7 +161,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileHomeTab => '首页';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => '网络日志';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobilePreviousPage => '上一页';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => '回顾您的历史解题记录';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '您想结束本轮挑战吗？';
@@ -462,7 +462,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileTheme => '主题';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => '待公布';
 
   @override
   String get mobileTooManyLoginAttempts => '尝试次数过多，请稍后重试。';
@@ -3342,7 +3342,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => '我了解已删除的账户无法恢复';
 
   @override
-  String get gameSetup => '对局设置';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '双人对弈';
@@ -7346,7 +7346,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => '从网页加载对局';
 
   @override
-  String get studyLoadGameFromTheWebText => '粘贴对局链接<br>（例如 lichess.org/7fHIU0XI）<br>以在章节中加载对局着法。';
+  String get studyLoadGameFromTheWebText => '粘贴对局链接<br>（例如 lichess.org/game/7fHIU0XI）<br>以在章节中加载对局着法。';
 
   @override
   String get studyFromFenStringTitle => '导入 FEN 代码';
@@ -10343,9 +10343,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get settingsDeleteAccountConfirmText => '我已了解刪除帳戶無法復原';
-
-  @override
-  String get gameSetup => '棋局設定';
 
   @override
   String get challengeAFriend => '挑戰朋友';

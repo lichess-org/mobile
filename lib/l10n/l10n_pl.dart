@@ -30,7 +30,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Zezwalaj na cofanie ruchów i podpowiedzi';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Logi aplikacji';
 
   @override
   String get mobileAmoledBlack => 'Czysta czerń';
@@ -100,7 +100,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Czy chcesz usunąć wszystkie logi?';
 
   @override
   String get mobileDangerZone => 'Strefa zagrożenia';
@@ -161,7 +161,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileHomeTab => 'Start';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Logi sieciowe';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePreviousPage => 'Wróć';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Przejrzyj swoje wcześniejsze próby rozwiązania zadania.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';
@@ -462,7 +462,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileTheme => 'Motyw';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Do ogłoszenia';
 
   @override
   String get mobileTooManyLoginAttempts => 'Zbyt wiele prób. Spróbuj ponownie później.';
@@ -987,7 +987,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastSubscribedBroadcasts => 'Subskrybowane transmisje';
 
   @override
-  String get broadcastAboutBroadcasts => 'O transmisji';
+  String get broadcastAboutBroadcasts => 'O transmisjach';
 
   @override
   String get broadcastHowToUseLichessBroadcasts => 'Jak korzystać z transmisji na Lichess.';
@@ -1018,7 +1018,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Opcjonalny długi opis transmisji. $param1 jest dostępny. Długość musi być mniejsza niż $param2 znaków.';
+    return 'Opcjonalny długi opis transmisji. Możesz użyć $param1 dla dodatkowych opcji formatowania. Długość musi być mniejsza niż $param2 znaków.';
   }
 
   @override
@@ -1450,7 +1450,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesACoordinateAppears => 'Wyświetlą się współrzędne, a Ty musisz kliknąć odpowiednie pole.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation => 'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. \"e4\").';
+  String get coordinatesASquareIsHighlightedExplanation => 'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. „e4”).';
 
   @override
   String get coordinatesYouHaveThirtySeconds => 'Masz 30 sekund, aby wskazać tak wiele pól, jak to możliwe!';
@@ -1477,7 +1477,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesNameSquare => 'Nazwij pole';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny & rzędy';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny i rzędy';
 
   @override
   String get coordinatesEnterTheCoordinate => 'Wprowadź współrzędne';
@@ -2126,7 +2126,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get perfStatNow => 'teraz';
 
   @override
-  String get practiceMakesPerfect => 'czyni z Ciebie mistrza szachów';
+  String get practiceMakesPerfect => 'czynią z Ciebie mistrza szachów';
 
   @override
   String get practiceSignUpToSaveYourProgress => 'Zarejestruj się, aby zapisać swoje postępy';
@@ -2171,7 +2171,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStNamThePin => 'Związanie';
 
   @override
-  String get practiceStNamTheSkewer => 'Szpila';
+  String get practiceStNamTheSkewer => 'Rożen';
 
   @override
   String get practiceStNamTheFork => 'Widełki';
@@ -2231,7 +2231,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStNam7thRankRookPawn => 'Pion wieżowy na siódmej linii';
 
   @override
-  String get practiceStNamBasicRookEndgames => 'Podstawowe końcowki wieżowe';
+  String get practiceStNamBasicRookEndgames => 'Podstawowe końcówki wieżowe';
 
   @override
   String get practiceStNamIntermediateRookEndings => 'Średniozaawansowane końcówki wieżowe';
@@ -2252,10 +2252,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStDesInteractiveLesson => 'Interaktywna lekcja';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Zwiąż, aby wygrać';
+  String get practiceStDesPinItToWinIt => 'Zwiąż, by wziąć';
 
   @override
-  String get practiceStDesYumSkewers => 'Mniam, szpile!';
+  String get practiceStDesYumSkewers => 'Mniam, rożen!';
 
   @override
   String get practiceStDesUseTheForkLuke => 'Niech widełki będą z tobą';
@@ -2291,7 +2291,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStDesLureAPieceToABadSquare => 'Zwab figurę na słabe pole';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promuj - ale nie do hetmana!';
+  String get practiceStDesPromoteButNotToAQueen => 'Promuj — ale nie do hetmana!';
 
   @override
   String get practiceStDesAPieceIsLostButItCanStillHelp => 'Figura stracona, ale nadal może być użyteczna';
@@ -3426,7 +3426,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Rozumiem, że usunięte konta nie są możliwe do odzyskania';
 
   @override
-  String get gameSetup => 'Ustawienia gry';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Rzuć wyzwanie znajomemu';
@@ -7559,7 +7559,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Zaimportuj partię z sieci';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Wklej adres URL partii<br>(na przykład lichess.org/7fHIU0XI), <br>aby załadować posunięcia partii do rozdziału.';
+  String get studyLoadGameFromTheWebText => 'Wklej adres URL partii<br>(jak lichess.org/game/7fHIU0XI)<br>, aby umieścić posunięcia partii w rozdziale.';
 
   @override
   String get studyFromFenStringTitle => 'Z zapisu FEN pozycji';

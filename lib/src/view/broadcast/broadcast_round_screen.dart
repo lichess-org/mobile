@@ -451,7 +451,7 @@ class _BroadcastRoundScreenState()
             setTournamentId: setTournamentId,
             setRoundId: setRoundId,
           ),
-          _ => const BottomBar.empty(cupertinoGlass: true),
+          _ => const ThickBottomBarGlass(child: BottomBar.empty(cupertinoGlass: true)),
         },
       ),
       AsyncError() => PlatformScaffold(
@@ -624,66 +624,68 @@ class const _BottomBar({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BottomBar(
-      cupertinoGlass: true,
-      children: [
-        if (tournament.group != null)
+    return ThickBottomBarGlass(
+      child: BottomBar(
+        cupertinoGlass: true,
+        children: [
+          if (tournament.group != null)
+            BottomBarTextButton(
+              onPressed: () => showAdaptiveDraggableBottomSheet<void>(
+                context: context,
+                constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
+                initialChildSize: 0.4,
+                snap: true,
+                builder: (context, scrollController) {
+                  return _TournamentSelectorMenu(
+                    tournament: tournament,
+                    group: tournament.group!,
+                    scrollController: scrollController,
+                    setTournamentId: setTournamentId,
+                  );
+                },
+              ),
+              child: Text(
+                tournament.group!.firstWhere((g) => g.id == tournament.data.id).name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           BottomBarTextButton(
             onPressed: () => showAdaptiveDraggableBottomSheet<void>(
               context: context,
               constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-              initialChildSize: 0.4,
+              initialChildSize: 0.6,
               snap: true,
               builder: (context, scrollController) {
-                return _TournamentSelectorMenu(
-                  tournament: tournament,
-                  group: tournament.group!,
+                return _RoundSelectorMenu(
+                  selectedRoundId: roundId,
+                  rounds: tournament.rounds,
                   scrollController: scrollController,
-                  setTournamentId: setTournamentId,
+                  setRoundId: setRoundId,
                 );
               },
             ),
-            child: Text(
-              tournament.group!.firstWhere((g) => g.id == tournament.data.id).name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    tournament.rounds.firstWhere((round) => round.id == roundId).name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 5.0),
+                switch (tournament.rounds.firstWhere((round) => round.id == roundId).status) {
+                  RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
+                  RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
+                  RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
+                },
+              ],
             ),
           ),
-        BottomBarTextButton(
-          onPressed: () => showAdaptiveDraggableBottomSheet<void>(
-            context: context,
-            constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-            initialChildSize: 0.6,
-            snap: true,
-            builder: (context, scrollController) {
-              return _RoundSelectorMenu(
-                selectedRoundId: roundId,
-                rounds: tournament.rounds,
-                scrollController: scrollController,
-                setRoundId: setRoundId,
-              );
-            },
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  tournament.rounds.firstWhere((round) => round.id == roundId).name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              const SizedBox(width: 5.0),
-              switch (tournament.rounds.firstWhere((round) => round.id == roundId).status) {
-                RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
-                RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.error),
-                RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
-              },
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

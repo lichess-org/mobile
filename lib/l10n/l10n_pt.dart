@@ -3370,7 +3370,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Configuração de jogo';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Desafiar um amigo';
@@ -7811,6 +7811,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileAllowTakebacksAndHints => 'Permitir voltar jogadas e dicas';
 
   @override
+  String get mobileAppLogs => 'Registros do aplicativo';
+
+  @override
   String get mobileAmoledBlack => 'Preto AMOLED';
 
   @override
@@ -7878,6 +7881,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get mobileCustomizeHomeTipDismiss => 'Dispensar';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Você deseja excluir todos os registros?';
+
+  @override
   String get mobileDangerZone => 'Área de risco';
 
   @override
@@ -7934,6 +7940,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileHomeTab => 'Início';
+
+  @override
+  String get mobileHttpLogs => 'Registros de rede';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -8055,6 +8064,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobilePreviousPage => 'Anterior';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Reveja suas tentativas em problemas recentes.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Você quer terminar essa tentativa?';
@@ -8229,6 +8241,9 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get mobileTheme => 'Tema';
+
+  @override
+  String get mobileToBeAnnounced => 'A ser anunciado';
 
   @override
   String get mobileTooManyLoginAttempts => 'Muitas tentativas. Tente novamente mais tarde.';
@@ -9200,6 +9215,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Praticar só algumas fileiras e colunas';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Insira a coordenada';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Pressione $param para começar';
+  }
 
   @override
   String get learnLearnChess => 'Aprenda xadrez';
@@ -11126,9 +11149,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Entendo que contas excluídas não podem ser recuperadas';
-
-  @override
-  String get gameSetup => 'Configurar partida';
 
   @override
   String get challengeAFriend => 'Desafiar um amigo';
@@ -14710,7 +14730,7 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   String get studyPleaseOnlyInvitePeopleYouKnow => 'Por favor, convide apenas pessoas que você conhece e que queiram participar efetivamente deste estudo.';
 
   @override
-  String get studySearchByUsername => 'Pesquisar por nome de usuário';
+  String get studySearchByUsername => 'Buscar por nome de usuário';
 
   @override
   String get studySpectator => 'Espectador';
@@ -15173,9 +15193,6 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyLoadGameFromTheWebTitle => 'Carregar uma partida da web';
-
-  @override
-  String get studyLoadGameFromTheWebText => 'Cole a URL de uma partida<br>(como lichess.org/7fHIU0XI)<br>para carregar os lances no capítulo.';
 
   @override
   String get studyFromFenStringTitle => 'De uma sequência FEN';

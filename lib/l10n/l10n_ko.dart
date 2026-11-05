@@ -30,7 +30,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => '수 무르기와 힌트 허용';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => '앱 로그';
 
   @override
   String get mobileAmoledBlack => 'AMOLED 블랙';
@@ -100,7 +100,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => '무시';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => '모든 로그를 지우시겠습니까?';
 
   @override
   String get mobileDangerZone => '위험 구역';
@@ -161,7 +161,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileHomeTab => '홈';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => '네트워크 로그';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePreviousPage => '이전';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => '이전 퍼즐 시도를 리뷰하십시오.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';
@@ -462,7 +462,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileTheme => '테마';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => '발표 예정';
 
   @override
   String get mobileTooManyLoginAttempts => '시도 횟수가 너무 많습니다. 나중에 다시 시도해 주세요.';
@@ -3342,7 +3342,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => '계정 삭제는 복구가 불가능함을 이해하였습니다';
 
   @override
-  String get gameSetup => '게임 설정';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '친구에게 도전';
@@ -7346,7 +7346,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => '웹에서 게임 불러오기';
 
   @override
-  String get studyLoadGameFromTheWebText => '챕터에 진행된 게임 수순을 불러오려면<br>게임 URL을 붙여넣으세요<br>(예시: lichess.org/7fHIU0XI).';
+  String get studyLoadGameFromTheWebText => '챕터에 진행된 게임 수순을 불러오려면<br>게임 URL을 붙여넣으세요<br>(예시: lichess.org/game/7fHIU0XI).';
 
   @override
   String get studyFromFenStringTitle => 'FEN으로부터 불러오기';

@@ -3426,7 +3426,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Vytvořit hru';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Vyzvi přítele';

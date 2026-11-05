@@ -9,18 +9,14 @@ import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/service/announce_service.dart';
@@ -87,59 +83,8 @@ class _AppState() extends ConsumerState<Application> {
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  // Adjusts some settings for small screens based on the MediaQuery data.
-  Future<void> _screenSizeBasedInitialization(WidgetRef ref) async {
-    // Bump version here in case we adjust the thresholds for screen size based initialization
-    // and want it to run again for users who already launched the app with a previous version.
-    const kDoneScreenSizeInitKey = 'done_screen_size_init_v1';
-
-    final prefs = LichessBinding.instance.sharedPreferences;
-    if (prefs.getBool(kDoneScreenSizeInitKey) == true) {
-      return;
-    }
-
-    final mediaQueryData = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.first,
-    );
-    final isTablet = mediaQueryData.size.shortestSide > FormFactor.tablet;
-    final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
-    final showEngineLines =
-        isTablet || estimateHeightMinusBoard(mediaQueryData) > kSmallHeightMinusBoard - 30;
-
-    // For tablets in portrait mode using the full board size makes the bottom analysis tabs tiny,
-    // see https://github.com/lichess-org/mobile/issues/3150,
-    // so use a small board there by default as well.
-    final smallBoard = isTablet || isSmallScreen;
-
-    await ref
-        .read(analysisPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(analysisPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-    await ref
-        .read(studyPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(studyPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-    await ref
-        .read(broadcastPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(broadcastPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-
-    await prefs.setBool(kDoneScreenSizeInitKey, true);
-  }
-
   @override
   void initState() {
-    _screenSizeBasedInitialization(ref);
-
     // Start services. The UI event coordinator comes first: it must be listening on the event bus
     // before any service has a chance to emit.
     ref.read(uiEventCoordinatorProvider).start();

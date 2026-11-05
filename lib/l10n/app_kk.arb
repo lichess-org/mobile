@@ -703,7 +703,6 @@
   "settingsManagedAccountCannotBeClosed": "Сіздің тіркелгіңіз біреудің басқаруында, сондықтан сіз оны жаба алмайсыз.",
   "settingsCantOpenSimilarAccount": "Кейін дәл сондай атпенен жаңа тіркелгі жасай алмайсыз (әріп үлкендігі басқаша болса да).",
   "settingsThisAccountIsClosed": "Бұл тіркелгі жабылды.",
-  "gameSetup": "Ойын пішімі",
   "challengeAFriend": "Досты шақыру",
   "playAgainstComputer": "Компьютермен ойнау",
   "createLobbyGame": "Ойын құру",

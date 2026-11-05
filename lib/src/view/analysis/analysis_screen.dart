@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
@@ -38,6 +39,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -227,6 +229,9 @@ class _TabbedBodyState() extends State<_TabbedBody> with SingleTickerProviderSta
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
 
+  /// Whether the board is small, once switched with the bottom bar button; not persisted.
+  bool? _smallBoard;
+
   @override
   void initState() {
     super.initState();
@@ -254,7 +259,14 @@ class _TabbedBodyState() extends State<_TabbedBody> with SingleTickerProviderSta
 
   @override
   Widget build(BuildContext context) {
-    return _Body(options: widget.options, controller: _tabController, tabs: tabs);
+    final smallBoard = _smallBoard ?? isSmallBoardByDefault(context);
+    return _Body(
+      options: widget.options,
+      controller: _tabController,
+      tabs: tabs,
+      smallBoard: smallBoard,
+      onToggleSmallBoard: () => setState(() => _smallBoard = !smallBoard),
+    );
   }
 }
 
@@ -262,6 +274,8 @@ class const _Body({
   required final AnalysisOptions options,
   required final TabController controller,
   required final List<AnalysisTab> tabs,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -342,7 +356,7 @@ class const _Body({
         sideToMove: analysisState.currentPosition.turn,
         boardBuilder: (context, boardSize, borderRadius) =>
             GameAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
-        smallBoard: analysisPrefs.smallBoard,
+        smallBoard: smallBoard,
         boardHeader: boardHeader,
         boardFooter: boardFooter,
         engineGaugeBuilder: showEvaluationGauge && analysisState.hasAvailableEval(enginePrefs)
@@ -360,7 +374,12 @@ class const _Body({
                 analysisState: analysisState,
               )
             : null,
-        bottomBar: _BottomBar(options: options, tabController: controller),
+        bottomBar: _BottomBar(
+          options: options,
+          tabController: controller,
+          smallBoard: smallBoard,
+          onToggleSmallBoard: onToggleSmallBoard,
+        ),
         bottomBarOverContent: true,
         pockets: analysisState.currentPosition.pockets,
         children: [
@@ -404,6 +423,10 @@ class const _Body({
           if (tabs.contains(AnalysisTab.moveTimes))
             ListView(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+                  child: ListSectionHeader(title: Text(context.l10n.moveTimes)),
+                ),
                 MoveTimesChart(
                   params: (
                     moveTimes: analysisState.chartMoveTimes,
@@ -447,6 +470,8 @@ class const _PlayerName({required final Player player}) extends StatelessWidget 
 class const _BottomBar({
   required final AnalysisOptions options,
   required final TabController tabController,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -456,17 +481,18 @@ class const _BottomBar({
     return BottomBar(
       cupertinoGlass: true,
       children: [
-        BottomBarButton(
-          label: context.l10n.menu,
-          onTap: () {
-            _showAnalysisMenu(context, ref);
-          },
-          icon: Icons.menu,
-        ),
-        BottomBarButton(
-          label: context.l10n.flipBoard,
-          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
-          icon: CupertinoIcons.arrow_2_squarepath,
+        BottomBarGroup(
+          children: [
+            BottomBarButton(
+              label: context.l10n.menu,
+              onTap: () {
+                _showAnalysisMenu(context, ref);
+              },
+              icon: Icons.menu,
+            ),
+            if (canToggleBoardSize(context))
+              BoardSizeToggleButton(smallBoard: smallBoard, onTap: onToggleSmallBoard),
+          ],
         ),
         if (analysisState.isComputerAnalysisAllowed)
           EngineToggleButton(
@@ -527,6 +553,10 @@ class const _BottomBar({
           makeLabel: (context) => Text(context.l10n.settingsSettings),
           onPressed: () =>
               Navigator.of(context).push(AnalysisSettingsScreen.buildRoute(options: options)),
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.flipBoard),
+          onPressed: () => ref.read(analysisControllerProvider(options).notifier).toggleBoard(),
         ),
         if (options case Standalone()) ...[
           BottomSheetAction(

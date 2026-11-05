@@ -285,7 +285,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Revizii viajn pasintaj provoj de puzloj.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Ĉu vi volas fini ĉi tiun kuron?';
@@ -462,7 +462,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileTheme => 'Temo';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Anoncotaj';
 
   @override
   String get mobileTooManyLoginAttempts => 'Tro da provoj. Bonvolu reprovi poste.';
@@ -1436,11 +1436,11 @@ class AppLocalizationsEo extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Ekzerciĝi nur kun iuj kolumnoj kaj vicoj';
 
   @override
-  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+  String get coordinatesEnterTheCoordinate => 'Enigu la koordinaton';
 
   @override
   String coordinatesPressEnterToStart(String param) {
-    return 'Press $param to start';
+    return 'Premu je $param por komenci';
   }
 
   @override
@@ -3370,7 +3370,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Agordoj de ludo';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Defii geamikon';
@@ -6187,7 +6187,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get showMeEverything => 'Ĉion montru al mi';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
+  String get lichessPatronInfo => 'Lichess estas almoza projekto kaj tute libera programaro kun malferma fontkodo. Ni dependas je donacoj de uzantoj, kiuj kovras niajn operaciajn elspezojn, programadon kaj kreadon de enhavo. Sen nia donacema komunumo, ni ne povos daŭri funkciigi la retejon. Dankon por via aligo!';
 
   @override
   String get nothingToSeeHere => 'Nenio videbla ĉi tie nuntempe.';
@@ -7384,7 +7384,7 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
-  String get studyAnnotatePositionTitle => 'Annotate a position';
+  String get studyAnnotatePositionTitle => 'Prinoti pozicion';
 
   @override
   String get studyAnnotatePositionText => 'Click the !? button, or right-click on the move list.<br>Annotation glyphs are shared and saved.';
@@ -7396,10 +7396,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyConclusionText => 'You can find your <a href=\'/study/mine/hot\'>previous studies</a> on your profile page.<br>There is also a <a href=\'//lichess.org/blog/V0KrLSkAAMo3hsi4/study-chess-the-lichess-way\'>blog post about studies</a>.<br>Power users might want to press \"?\" to see keyboard shortcuts.<br>Have fun!';
 
   @override
-  String get studyCreateChapterTitle => 'Let\'s create a study chapter';
+  String get studyCreateChapterTitle => 'Ni kreu ĉapitron de studo';
 
   @override
-  String get studyCreateChapterText => 'A study can have several chapters.<br>Each chapter has a distinct move tree <br>and can be created in various ways.';
+  String get studyCreateChapterText => 'Studo povas havi kelkajn ĉapitrojn.<br>Ĉiu ĉapitro havas ties propran arbon de movoj<br>kaj povas esti kreita en variaj manieroj.';
 
   @override
   String get studyFromInitialPositionTitle => 'Ekde komenca pozicio';
@@ -7441,28 +7441,28 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyChapterConclusionText => 'Chapters are saved forever.<br>Have fun organizing your chess content!';
 
   @override
-  String get studyDoubleDefeat => 'Double defeat';
+  String get studyDoubleDefeat => 'Duobla malvenko';
 
   @override
-  String get studyBlackDefeatWhiteCanNotWin => 'Black defeat, but White can\'t win';
+  String get studyBlackDefeatWhiteCanNotWin => 'Malvenko de nigro, sed blanko ne povas venki';
 
   @override
-  String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+  String get studyWhiteDefeatBlackCanNotWin => 'Malvenko de blanko, sed nigro ne povas venki';
 
   @override
-  String get studyAnalysisEditor => 'Analysis editor';
+  String get studyAnalysisEditor => 'Analiza redaktilo';
 
   @override
-  String get studyClearLocal => 'Clear local analysis?';
+  String get studyClearLocal => 'Ĉu forigi lokan analizon?';
 
   @override
-  String get studyClearPublished => 'Clear published analysis?';
+  String get studyClearPublished => 'Ĉu forigi publikigitan analizon?';
 
   @override
-  String get studyRequestAServerAnalysis => 'Request a server analysis';
+  String get studyRequestAServerAnalysis => 'Peti servilon por analizo';
 
   @override
-  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
+  String get studyAnalyzeOnYourDevice => 'Analizi sur via aparato';
 
   @override
   String studyNbChapters(int count) {

@@ -217,13 +217,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobilePerfShortAntichess => 'Antichess';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'אטומי';
 
   @override
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'קליע';
 
   @override
   String get mobilePerfShortChess960 => '960';
@@ -247,19 +247,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'פאזל';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'מירוץ';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'זריז';
 
   @override
   String get mobilePerfShortThreeCheck => '3check';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'אולטרה';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -3396,7 +3396,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'הגדרת משחק';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'זימון חבר למשחק';

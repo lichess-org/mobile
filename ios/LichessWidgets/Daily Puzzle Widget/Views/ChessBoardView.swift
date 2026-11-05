@@ -15,6 +15,10 @@ import WidgetKit
 /// layer, while pieces remain in the default (accented) layer and are tinted with the
 /// system accent colour — keeping them clearly visible.
 ///
+/// Live Activities pass `usesBoardImage: false`: the system doesn't display images larger than
+/// the activity's presentation, and the board textures are 1024 px, so image-backed themes are
+/// drawn with their light/dark square colours there instead.
+///
 /// Piece images are driven by `boardStyle.pieceSet`; all piece sets supported by
 /// the app are bundled in the widget extension's `Assets.xcassets`.
 struct ChessBoardView: View {
@@ -22,6 +26,7 @@ struct ChessBoardView: View {
     let lastMove: String?
     let flipped: Bool
     let boardStyle: ChessboardTheme
+    var usesBoardImage = true
 
     @Environment(\.widgetRenderingMode) private var renderingMode
 
@@ -64,7 +69,8 @@ struct ChessBoardView: View {
     var body: some View {
         let boardData = board
         let highlighted = highlightedSquares
-        let isSolidTheme = boardStyle.boardImageName == nil
+        let boardImageName = usesBoardImage ? boardStyle.boardImageName : nil
+        let isSolidTheme = boardImageName == nil
 
         GeometryReader { geo in
             let side = min(geo.size.width, geo.size.height)
@@ -76,7 +82,7 @@ struct ChessBoardView: View {
                 // Solid-colour themes: drawn square-by-square in the grid below.
                 // In accented/vibrant rendering modes the image is skipped so the
                 // widget container background shows through.
-                if !isTransparentMode, let imageName = boardStyle.boardImageName {
+                if !isTransparentMode, let imageName = boardImageName {
                     Image(imageName, bundle: ChessgroundAssets.bundle)
                         .resizable()
                         .frame(width: side, height: side)

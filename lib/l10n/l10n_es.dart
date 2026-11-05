@@ -30,7 +30,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permitir retroceder y pistas';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Registros de la aplicación';
 
   @override
   String get mobileAmoledBlack => 'Negro Amoled';
@@ -100,7 +100,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Descartar';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => '¿Quieres eliminar todos los registros?';
 
   @override
   String get mobileDangerZone => 'Zona de riesgo';
@@ -161,7 +161,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileHomeTab => 'Inicio';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Registros de red';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Revisa tus intentos anteriores en los ejercicios.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => '¿Quieres terminar esta ronda?';
@@ -462,7 +462,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Anuncio pendiente';
 
   @override
   String get mobileTooManyLoginAttempts => 'Demasiados intentos. Vuelve a intentarlo más tarde.';
@@ -3370,7 +3370,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Entiendo que las cuentas eliminadas no son recuperables';
 
   @override
-  String get gameSetup => 'Configuración de la partida';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Desafía a un amigo';
@@ -7417,7 +7417,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Cargar una partida desde un sitio web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Pegar enlace de partida<br>, como lichess.org/7fHIU0XI, <br>para cargar los movimientos en el capítulo.';
+  String get studyLoadGameFromTheWebText => 'Pega el enlace de una partida<br> (como lichess.org/7fHIU0XI) <br>para cargar los movimientos en el capítulo.';
 
   @override
   String get studyFromFenStringTitle => 'A partir de una cadena FEN';

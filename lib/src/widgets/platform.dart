@@ -175,10 +175,18 @@ LiquidGlassSettings ios27GlassSettings(BuildContext context) =>
 LiquidGlassSettings menuGlassSettings(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
     ? LiquidGlassSettings.ios27Light.copyWith(
-        frost: 30,
+        frost: 40,
+        thickness: 50,
         frostOpacity: 0.94,
         shadow: const [BoxShadow(color: Color(0x1F000000), blurRadius: 40, offset: Offset(0, 12))],
       )
+    : LiquidGlassSettings.ios27Dark.copyWith(frost: 40, thickness: 50, frostOpacity: 0.98);
+
+/// A thicker glass than [ios27GlassSettings], more frosted, for liquid glass buttons that must stand
+/// out over busy content (e.g. over the moves of an analysis).
+LiquidGlassSettings thickGlassSettings(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+    ? LiquidGlassSettings.ios27Light.copyWith(frost: 30, frostOpacity: 0.94)
     : LiquidGlassSettings.ios27Dark.copyWith(frost: 30, frostOpacity: 0.96);
 
 /// The glass of a prominent liquid glass button (floating action button, main action of a bottom
@@ -878,6 +886,9 @@ class const PlatformAppBar({
               child: DefaultTextStyle.merge(
                 style: TextStyle(color: colorScheme.onSurface)
                     .merge(titleTextStyle ?? defaultTitleStyle),
+                // GlassAppBar centers the title text whatever its alignment, which shows on a title
+                // of two lines: a leading aligned one is aligned to the start.
+                textAlign: centerTitle ?? true ? null : TextAlign.start,
                 // GlassAppBar leaves no gap between a centered title and the buttons around it,
                 // unlike a leading aligned one: the same gap is added here.
                 child: centerTitle ?? true

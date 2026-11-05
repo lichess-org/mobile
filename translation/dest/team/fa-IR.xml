@@ -39,6 +39,7 @@
   <string name="teamUpdates">روزامدهای تیم</string>
   <string name="subToTeamUpdates">برای روزامدهای تیم مشترک شوید</string>
   <string name="newTeamUpdate">روزامدهای جدیدِ تیم</string>
+  <string name="teamUpdatesPerWeek">شما می‌توانید تا %1$s روزامدِ تیم را هر هفته بفرستید. &lt;strong&gt;%2$s&lt;/strong&gt; روزامد تا %3$s باقی مانده است.</string>
   <string name="teamEvents">رویدادهای تیم</string>
   <string name="upcomingTeamEvents">رویدادهای پیشاروی تیم</string>
   <string name="teamsIlead">تیم هایی که رهبری می کنم</string>
@@ -53,6 +54,7 @@
   <string name="entryCodeDescriptionForLeader">کدی است که اعضای جدید برای ورود به تیم باید بدانند(اختیاری).</string>
   <string name="incorrectEntryCode">کد ورودی اشتباه است.</string>
   <string name="forumLabel">انجمنِ تیم</string>
+  <string name="forumVisibilityHelp">چه کسی می‌تواند انجمنِ تیم را در صفحهٔ تیم ببیند؟&lt;br&gt;فقط عضوهای تیم می‌توانند در انجمنِ تیم فرسته گذارند.</string>
   <string name="forumVisibilityNone">پنهانیدنِ انجمن</string>
   <string name="teamAlreadyExists">این تیم هم‌اکنون وجود دارد.</string>
   <string name="upcomingTournaments">مسابقات پیش رو</string>

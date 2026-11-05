@@ -3370,7 +3370,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Mängu seadistamine';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Kutse mängule';

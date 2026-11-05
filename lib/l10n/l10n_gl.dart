@@ -30,7 +30,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permitir rectificar xogadas e pistas';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Rexistros da aplicación';
 
   @override
   String get mobileAmoledBlack => 'Negro AMOLED';
@@ -100,7 +100,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Descartar';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Desexas borrar todos os rexistros?';
 
   @override
   String get mobileDangerZone => 'Zona de perigo';
@@ -161,7 +161,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileHomeTab => 'Inicio';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Rexistros de rede';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Revisa os teus crebacabezas anteriores.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Queres rematar esta quenda?';
@@ -462,7 +462,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Por determinar';
 
   @override
   String get mobileTooManyLoginAttempts => 'Demasiados intentos. Proba máis tarde.';
@@ -3370,7 +3370,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Entendo que as contas borradas non son recuperables';
 
   @override
-  String get gameSetup => 'Configuración da partida';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Desafiar a unha amizade';
@@ -7417,7 +7417,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Cargar unha partida dende a web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Pega o URL dunha partida<br>(coma lichess.org/7fHIU0XI)<br>para cargar a lista de xogadas no capítulo.';
+  String get studyLoadGameFromTheWebText => 'Pega a ligazón<br>(por exemplo lichess.org/game/7fHIU0XI)<br>para cargar as xogadas no capítulo.';
 
   @override
   String get studyFromFenStringTitle => 'A partires dunha cadea FEN';

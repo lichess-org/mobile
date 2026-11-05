@@ -44,12 +44,6 @@ class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidg
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines(),
               ),
-              SwitchSettingTile(
-                title: Text(context.l10n.mobileSmallBoard),
-                value: studyPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
                 onTap: () => showAdaptiveBottomSheet<void>(

@@ -65,6 +65,17 @@ const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kTabletBoardTableSidePadding = 16.0;
 
+/// Horizontal margin around the board on phones in portrait orientation, on screens where the board
+/// does not span the whole screen width (analysis, learn, practice...).
+///
+/// It makes the board smaller, which leaves more vertical space below it.
+const kPhoneBoardSideMargin = 12.0;
+
+/// Horizontal margin around the board on phones with a short screen (`isShortVerticalScreen`) in
+/// portrait orientation, wider than [kPhoneBoardSideMargin] to leave enough vertical space below
+/// the board.
+const kShortScreenBoardSideMargin = 32.0;
+
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
 

@@ -30,7 +30,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permite datul înapoi și sugestii';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Loguri aplicație';
 
   @override
   String get mobileAmoledBlack => 'Negru Amoled';
@@ -100,7 +100,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Renunță';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Doriţi să ştergeţi toate logurile?';
 
   @override
   String get mobileDangerZone => 'Zona de pericol';
@@ -115,7 +115,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileDisplayModeDetailed => 'Detaliat';
 
   @override
-  String get mobileDoYouAcceptChallenge => 'Accepti provocarea?';
+  String get mobileDoYouAcceptChallenge => 'Accepți provocarea?';
 
   @override
   String get mobileDownloadMyGames => 'Descarcă jocurile mele';
@@ -161,7 +161,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileHomeTab => 'Acasă';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Loguri rețea';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePreviousPage => 'Înapoi';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Examinați încercările puzzle din trecut.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Vrei să termini acest run?';
@@ -399,7 +399,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Când este activat, dispozitivul va vibra scurt când mutați sau capturați o piesă.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Distribuie';
 
   @override
   String get mobileShareChallengeUrl => 'Distribuie URL-ul provocării';
@@ -462,7 +462,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Urmează să fie anunțat';
 
   @override
   String get mobileTooManyLoginAttempts => 'Prea multe încercări. Te invităm să revii mai târziu.';
@@ -3398,7 +3398,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Înțeleg că odată șterse conturile nu sunt recuperabile';
 
   @override
-  String get gameSetup => 'Configurare joc';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -7488,7 +7488,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Încarcă un joc de pe web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Lipește o adresă URL a jocului<br>(ex: lichess.org/7fHIU0XI)<br>pentru a încărca mișcările din joc în capitol.';
+  String get studyLoadGameFromTheWebText => 'Lipește o adresă URL a jocului<br>(ex: lichess.org/game/7fHIU0XI)<br>pentru a încărca mișcările din joc în capitol.';
 
   @override
   String get studyFromFenStringTitle => 'Dintr-un text FEN';

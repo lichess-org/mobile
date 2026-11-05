@@ -3424,7 +3424,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Partijos nustatymai';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Teikite iššūkį draugui';

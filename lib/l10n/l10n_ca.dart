@@ -30,7 +30,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Permetre desfer els moviments i les pistes';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Registres de l\'aplicació';
 
   @override
   String get mobileAmoledBlack => 'Negre amoled';
@@ -100,7 +100,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Descarta';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Voleu suprimir tots els registres?';
 
   @override
   String get mobileDangerZone => 'Zona perillosa';
@@ -161,7 +161,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileHomeTab => 'Inici';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Registres de xarxa';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -285,7 +285,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobilePreviousPage => 'Anterior';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Revisa els teus intents de puzles anteriors.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Voleu acabar aquesta ronda?';
@@ -462,7 +462,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'S\'anunciarà';
 
   @override
   String get mobileTooManyLoginAttempts => 'Massa intents. Torneu-ho a provar més tard.';
@@ -3370,7 +3370,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Entenc que els comptes eliminats no es poden recuperar';
 
   @override
-  String get gameSetup => 'Configuració de la partida';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Repta un amic';
