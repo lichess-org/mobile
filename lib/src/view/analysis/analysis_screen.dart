@@ -129,6 +129,7 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
               lastMoveAt: archivedGame.data.lastMoveAt,
               isImport: archivedGame.source.isImport,
               importDate: archivedGame.data.importDate,
+              isTournament: archivedGame.data.arenaTournamentId != null,
             ),
             null when value != null => VariantAppBarTitle(
               variant: value.variant,

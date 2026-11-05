@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -29,6 +30,10 @@ class const ExportedGameTitle({
   /// The raw PGN date of an imported game, shown in place of [lastMoveAt], which is the date of
   /// the import itself.
   final String? importDate,
+
+  /// Whether the game was played in a tournament, for a game whose [meta] has no
+  /// [GameMeta.tournament] (an archived game).
+  final bool isTournament = false,
   super.key,
 }) extends StatelessWidget {
   static DateFormat get _tooltipFormatter => DateFormat.yMMMMd().add_jm();
@@ -59,7 +64,11 @@ class const ExportedGameTitle({
       mainAxisSize: .min,
       children: [
         Icon(
-          isImport ? Icons.cloud_upload_outlined : meta.perf.icon,
+          isImport
+              ? Icons.cloud_upload_outlined
+              : isTournament || meta.tournament != null
+              ? LichessIcons.tournament_cup
+              : meta.perf.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 8.0),

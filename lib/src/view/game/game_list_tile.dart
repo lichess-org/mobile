@@ -82,6 +82,8 @@ class const GameListTile({
     };
     final ratingDiff = showRatings ? me.ratingDiff : null;
 
+    final isTournament = game.arenaTournamentId != null;
+
     final isAborted = game.status == GameStatus.aborted || game.status == GameStatus.noStart;
     final resultColor = isAborted
         ? LichessColors.grey
@@ -124,12 +126,30 @@ class const GameListTile({
               GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
         );
       },
-      leading: Icon(game.isImported ? Icons.cloud_upload_outlined : game.perf.icon),
+      leading: Icon(
+        game.isImported
+            ? Icons.cloud_upload_outlined
+            : isTournament
+            ? LichessIcons.tournament_cup
+            : game.perf.icon,
+      ),
       title: title,
       subtitle: Text.rich(
         TextSpan(
-          text: date,
           children: [
+            // The leading icon shows the tournament, so show the speed next to the date.
+            if (isTournament) ...[
+              WidgetSpan(
+                alignment: .middle,
+                child: Icon(
+                  game.perf.icon,
+                  size: 14,
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              ),
+              const TextSpan(text: ' '),
+            ],
+            TextSpan(text: date),
             if (!game.isImported) ...[
               const TextSpan(text: '  '),
               TextSpan(
