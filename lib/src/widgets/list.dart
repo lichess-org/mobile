@@ -217,6 +217,58 @@ class const ListSectionHeader({
   }
 }
 
+/// A row of a card that looks like a [ListSection], for a long list built lazily (e.g. with
+/// [ListView.builder]), where a [ListSection] would build all its rows at once.
+///
+/// Consecutive rows form one card: the first row has its top corners rounded and the last row its
+/// bottom corners. On iOS, every row but the last is followed by a divider.
+class const ListSectionRow({
+  required final Widget child,
+
+  /// Whether this row is the first one of its card.
+  required final bool isFirst,
+
+  /// Whether this row is the last one of its card.
+  required final bool isLast,
+
+  /// Whether the iOS tiles have a leading widget.
+  final bool hasLeading = false,
+
+  /// Cupertino leading indent.
+  final double? leadingIndent,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final showDivider = !isLast && Theme.of(context).platform == TargetPlatform.iOS;
+    return Card(
+      margin: Styles.horizontalBodyPadding,
+      // Each row paints its own shadow, which would show between the rows.
+      elevation: 0,
+      clipBehavior: isFirst || isLast ? Clip.hardEdge : Clip.none,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: isFirst ? Styles.cardBorderRadius.topLeft : Radius.zero,
+          bottom: isLast ? Styles.cardBorderRadius.bottomLeft : Radius.zero,
+        ),
+      ),
+      child: showDivider
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                child,
+                PlatformDivider(
+                  height: 0,
+                  cupertinoHasLeading: hasLeading,
+                  cupertinoLeadingIndent: leadingIndent,
+                ),
+              ],
+            )
+          : child,
+    );
+  }
+}
+
 /// Platform agnostic divider widget.
 ///
 /// Useful to show a divider between [ListTile] widgets when using the
