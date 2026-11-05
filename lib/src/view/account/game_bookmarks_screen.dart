@@ -23,6 +23,7 @@ class const GameBookmarksScreen({required final int nbBookmarks, super.key})
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
       body: const _Body(),
     );
