@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_seek.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -37,7 +38,7 @@ class const ChallengeListItem({
 
     final isFromPosition = challenge.variant == Variant.fromPosition;
 
-    final leading = Icon(challenge.perf.icon);
+    final leading = Icon(challenge.perf.icon, color: challenge.perf.color(context));
     final trailing = challenge.challenger?.lagRating != null
         ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
         : null;

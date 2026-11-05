@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -69,7 +70,7 @@ class const OfflineCorrespondenceGamePreview({
           UserFullNameWidget(user: game.opponent!.user, style: Styles.boardPreviewTitle),
           if (game.myTimeLeft(lastModified) != null)
             Text(relativeDate(context.l10n, DateTime.now().add(game.myTimeLeft(lastModified)!))),
-          Icon(game.perf.icon, size: 32, color: DefaultTextStyle.of(context).style.color),
+          Icon(game.perf.icon, size: 32, color: game.perf.color(context)),
         ],
       ),
       onTap: () {

@@ -1,5 +1,6 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/broadcast_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
+import 'package:lichess_mobile/src/view/settings/perf_colors_debug_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/theme_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -172,6 +174,13 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
               ),
+              // TODO: remove the temporary perf colors screen.
+              if (kDebugMode)
+                ListTile(
+                  leading: const Icon(Icons.palette_outlined),
+                  title: const Text('Perf colors'),
+                  onTap: () => Navigator.of(context).push(PerfColorsDebugScreen.buildRoute()),
+                ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
                 title: Text(context.l10n.mobileAppLogs),

@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -80,7 +81,11 @@ class const UserActivityEntry({
         if (entry.games != null)
           for (final gameEntry in entry.games!.entries)
             _UserActivityListTile(
-              leading: Icon(gameEntry.key.icon, size: leadingIconSize),
+              leading: Icon(
+                gameEntry.key.icon,
+                size: leadingIconSize,
+                color: gameEntry.key.color(context),
+              ),
               title: context.l10n.activityPlayedNbGames(
                 gameEntry.value.win + gameEntry.value.draw + gameEntry.value.loss,
                 gameEntry.key.label(context.l10n),
@@ -125,7 +130,11 @@ class const UserActivityEntry({
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
-            leading: const Icon(LichessIcons.target, size: leadingIconSize),
+            leading: Icon(
+              Perf.puzzle.icon,
+              size: leadingIconSize,
+              color: Perf.puzzle.color(context),
+            ),
             title: context.l10n.activitySolvedNbPuzzles(entry.puzzles!.win + entry.puzzles!.loss),
             subtitle: RatingPrefAware(
               child: Row(
@@ -164,14 +173,18 @@ class const UserActivityEntry({
           ),
         if (entry.streak != null)
           _UserActivityListTile(
-            leading: const Icon(LichessIcons.streak, size: leadingIconSize),
+            leading: Icon(
+              Perf.streak.icon,
+              size: leadingIconSize,
+              color: Perf.streak.color(context),
+            ),
             title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.streak!.runs, 'Puzzle Streak'),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(win: entry.streak!.score, draw: 0, loss: 0),
           ),
         if (entry.storm != null)
           _UserActivityListTile(
-            leading: const Icon(LichessIcons.storm, size: leadingIconSize),
+            leading: Icon(Perf.storm.icon, size: leadingIconSize, color: Perf.storm.color(context)),
             title: context.l10n.stormPlayedNbRunsOfPuzzleStorm(entry.storm!.runs, 'Puzzle Storm'),
             subtitle: emptySubtitle,
             trailing: BriefGameResultBox(win: entry.storm!.score, draw: 0, loss: 0),
@@ -179,7 +192,11 @@ class const UserActivityEntry({
         if (entry.correspondenceEnds != null)
           for (final corresEndEntry in entry.correspondenceEnds!.entries)
             _UserActivityListTile(
-              leading: Icon(corresEndEntry.key.icon, size: leadingIconSize),
+              leading: Icon(
+                corresEndEntry.key.icon,
+                size: leadingIconSize,
+                color: corresEndEntry.key.color(context),
+              ),
               title: corresEndEntry.key == Perf.correspondence
                   ? context.l10n.activityCompletedNbGames(
                       corresEndEntry.value.win +
@@ -201,7 +218,11 @@ class const UserActivityEntry({
             ),
         if (entry.correspondenceMovesNb != null && entry.correspondenceGamesNb != null)
           _UserActivityListTile(
-            leading: const Icon(LichessIcons.correspondence, size: leadingIconSize),
+            leading: Icon(
+              Perf.correspondence.icon,
+              size: leadingIconSize,
+              color: Perf.correspondence.color(context),
+            ),
             title: context.l10n.activityPlayedNbMoves(entry.correspondenceMovesNb!),
             subtitle: Text(
               context.l10n.activityInNbCorrespondenceGames(entry.correspondenceGamesNb!),

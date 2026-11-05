@@ -2,6 +2,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 enum TvChannel(final IconData icon) {
@@ -21,6 +22,24 @@ enum TvChannel(final IconData icon) {
   ultraBullet(LichessIcons.ultrabullet),
   bot(LichessIcons.cogs),
   computer(LichessIcons.cogs);
+
+  /// The perf of the games played on this channel, if there is a single one.
+  Perf? get perf => switch (this) {
+    .bullet => .bullet,
+    .blitz => .blitz,
+    .rapid => .rapid,
+    .classical => .classical,
+    .chess960 => .chess960,
+    .kingOfTheHill => .kingOfTheHill,
+    .threeCheck => .threeCheck,
+    .antichess => .antichess,
+    .atomic => .atomic,
+    .horde => .horde,
+    .racingKings => .racingKings,
+    .crazyhouse => .crazyhouse,
+    .ultraBullet => .ultraBullet,
+    .best || .bot || .computer => null,
+  };
 
   String label(AppLocalizations l10n) {
     switch (this) {

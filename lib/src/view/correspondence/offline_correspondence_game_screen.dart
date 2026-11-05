@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/service/move_feedback.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -73,7 +74,7 @@ class const _Title(final OfflineCorrespondenceGame game) extends StatelessWidget
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(game.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        Icon(game.perf.icon, color: game.perf.color(context)),
         const SizedBox(width: 4.0),
         if (game.daysPerTurn != null)
           Text('${context.l10n.nbDays(game.daysPerTurn!)}$mode')

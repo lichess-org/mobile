@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -408,7 +409,7 @@ class const _GameTitle(
     return Row(
       mainAxisSize: .min,
       children: [
-        Icon(seek.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        Icon(seek.perf.icon, color: seek.perf.color(context)),
         const SizedBox(width: 4.0),
         Text('${seek.timeIncrement?.display}$mode'),
       ],
@@ -420,7 +421,7 @@ class const _GameTitle(
     return Row(
       mainAxisSize: .min,
       children: [
-        Icon(challenge.perf.icon, color: DefaultTextStyle.of(context).style.color),
+        Icon(challenge.perf.icon, color: challenge.perf.color(context)),
         const SizedBox(width: 4.0),
         if (challenge.timeIncrement != null)
           Text('${challenge.timeIncrement?.display}$mode')

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
-import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
@@ -25,7 +24,7 @@ class const LeaderboardWidget({required final AsyncValue<Top1Leaderboard> top1, 
           },
           children: [
             for (final entry in value.entries)
-              LeaderboardListTile(user: entry.value, perfIcon: entry.key.icon),
+              LeaderboardListTile(user: entry.value, perf: entry.key),
           ],
         ),
         AsyncError() => const Padding(

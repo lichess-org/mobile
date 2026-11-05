@@ -1,0 +1,111 @@
+import 'dart:math' as math;
+
+import 'package:dynamic_system_colors/dynamic_system_colors.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:material_ui/material_ui.dart';
+
+/// HCT hue of each [Perf] icon color.
+///
+/// The hues stay clear of the lichess colors the app uses a lot (HCT hues: red 23, orange 40, gold
+/// 73, green 133).
+double _perfHue(Perf perf) => switch (perf) {
+  .ultraBullet => 355,
+  .bullet => 312,
+  .blitz => 270,
+  .rapid => 228,
+  .classical => 185,
+  .correspondence => 152,
+  .fromPosition => 98,
+  .chess960 => 205,
+  .antichess => 343,
+  .kingOfTheHill => 108,
+  .threeCheck => 5,
+  .atomic => 330,
+  .horde => 168,
+  .racingKings => 248,
+  .crazyhouse => 290,
+  .puzzle => 215,
+  .storm => 300,
+  .streak => 320,
+};
+
+/// HCT chroma of all the perf colors.
+const double kPerfColorChroma = 44;
+
+/// HCT tone of the perf colors in [brightness].
+double perfColorTone(Brightness brightness) => brightness == Brightness.light ? 45 : 74;
+
+/// Icon colors of each [Perf], harmonized with the theme color scheme.
+@immutable
+class const PerfColors(final IMap<Perf, Color> colors) extends ThemeExtension<PerfColors> {
+  /// Builds the perf colors for [colorScheme]: same chroma and tone for all of them, so that
+  /// none stands out, a tone readable on the scheme surfaces, and hues shifted towards the scheme
+  /// primary color.
+  factory fromColorScheme(ColorScheme colorScheme) {
+    final tone = perfColorTone(colorScheme.brightness);
+    return PerfColors(
+      IMap({
+        for (final perf in Perf.values)
+          perf: Color(Hct.from(_perfHue(perf), kPerfColorChroma, tone).toInt())
+              .harmonizeWith(colorScheme.primary),
+      }),
+    );
+  }
+
+  Color of(Perf perf) => colors[perf]!;
+
+  @override
+  PerfColors copyWith({IMap<Perf, Color>? colors}) => PerfColors(colors ?? this.colors);
+
+  @override
+  PerfColors lerp(ThemeExtension<PerfColors>? other, double t) {
+    if (other is! PerfColors) {
+      return this;
+    }
+    return PerfColors(
+      IMap({for (final perf in Perf.values) perf: Color.lerp(of(perf), other.of(perf), t)!}),
+    );
+  }
+}
+
+extension PerfColorsBuildContext on BuildContext {
+  /// The icon colors of each [Perf] for the current theme.
+  PerfColors get perfColors =>
+      Theme.of(this).extension<PerfColors>() ?? PerfColors.fromColorScheme(ColorScheme.of(this));
+
+  /// [color] toned down to the chroma and tone of the perf colors, keeping its hue, so that an icon
+  /// of this color does not stand out next to perf icons (e.g. the brag color of a tournament cup).
+  Color perfToned(Color color) {
+    final hct = Hct.fromInt(color.toARGB32());
+    return Color(
+      Hct.from(
+        hct.hue,
+        math.min(hct.chroma, kPerfColorChroma),
+        perfColorTone(Theme.of(this).brightness),
+      ).toInt(),
+    );
+  }
+}
+
+extension PerfColor on Perf {
+  /// The HCT hue of this perf color, before it is harmonized with the theme.
+  double get colorHue => _perfHue(this);
+
+  /// The color of this perf icon in the current theme.
+  Color color(BuildContext context) => context.perfColors.of(this);
+}
+
+extension TvChannelColor on TvChannel {
+  /// The color of this channel icon in the current theme: the perf color of its games, the toned
+  /// brag color for the top games channel, and the toned color of the BOT title for the bot and
+  /// computer channels.
+  Color color(BuildContext context) => switch (this) {
+    .best => context.perfToned(context.lichessColors.brag),
+    .bot || .computer => context.perfToned(context.lichessColors.fancy),
+    _ => perf!.color(context),
+  };
+}

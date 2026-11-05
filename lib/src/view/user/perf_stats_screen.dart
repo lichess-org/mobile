@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -81,7 +82,7 @@ class const _Title({required final User user, required final Perf perf}) extends
       mainAxisSize: .min,
       spacing: 6.0,
       children: [
-        Icon(perf.icon),
+        Icon(perf.icon, color: perf.color(context)),
         Flexible(child: AppBarTitleText(context.l10n.perfStatPerfStats(perf.label(context.l10n)))),
       ],
     );
@@ -93,6 +94,7 @@ class const _Title({required final User user, required final Perf perf}) extends
         for (final p in allPerfs)
           ContextMenuAction(
             icon: p.icon,
+            iconColor: p.color(context),
             label: context.l10n.perfStatPerfStats(p.label(context.l10n)),
             onPressed: () {
               Navigator.of(context)

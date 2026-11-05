@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -130,7 +131,9 @@ class const GameListDetailTile({
                                             ? Icons.cloud_upload_outlined
                                             : game.perf.icon,
                                         size: subtitleFontSize + 3,
-                                        color: textShade(context, 0.7),
+                                        color: game.isImported
+                                            ? textShade(context, 0.7)
+                                            : game.perf.color(context),
                                       ),
                                     ],
                                   ),
@@ -170,7 +173,7 @@ class const GameListDetailTile({
                                     Icon(
                                       LichessIcons.tournament_cup,
                                       size: subtitleFontSize + 1,
-                                      color: textShade(context, Styles.subtitleOpacity),
+                                      color: context.perfToned(context.lichessColors.brag),
                                     ),
                                     const SizedBox(width: 4),
                                     Expanded(

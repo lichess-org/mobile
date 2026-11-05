@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -233,17 +233,6 @@ class _TournamentListBodyState() extends ConsumerState<_TournamentListBody> {
   }
 }
 
-Color? _iconColor(LightTournament tournament) {
-  return tournament.meta.maxRating != null
-      ? LichessColors.purple
-      : switch (tournament.meta.freq) {
-          TournamentFreq.hourly => LichessColors.green,
-          TournamentFreq.daily => LichessColors.blue,
-          TournamentFreq.monthly => LichessColors.red,
-          _ => null,
-        };
-}
-
 class const _TournamentListItem({required final LightTournament tournament})
     extends StatelessWidget {
   static DateFormat get _hourMinuteFormat => DateFormat.Hm();
@@ -251,7 +240,7 @@ class const _TournamentListItem({required final LightTournament tournament})
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(tournament.meta.perf.icon, color: _iconColor(tournament)),
+      leading: Icon(tournament.meta.perf.icon, color: tournament.meta.perf.color(context)),
       title: Text(tournament.meta.fullName, overflow: TextOverflow.ellipsis, maxLines: 2),
       subtitle: Text(
         '${tournament.meta.timeIncrement.display} ${tournament.meta.rated ? context.l10n.rated : context.l10n.broadcastUnrated} • ${context.l10n.nbMinutes(tournament.meta.duration.inMinutes)}',

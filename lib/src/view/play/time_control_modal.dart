@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -74,7 +76,11 @@ class const TimeControlModal({
                     const TimeIncrement(60, 1),
                     const TimeIncrement(120, 1),
                   ],
-                  title: _SectionTitle(title: context.l10n.bullet, icon: LichessIcons.bullet),
+                  title: _SectionTitle(
+                    title: context.l10n.bullet,
+                    icon: Perf.bullet.icon,
+                    iconColor: Perf.bullet.color(context),
+                  ),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -86,7 +92,11 @@ class const TimeControlModal({
                     TimeIncrement(300, 0),
                     TimeIncrement(300, 3),
                   ],
-                  title: _SectionTitle(title: context.l10n.blitz, icon: LichessIcons.blitz),
+                  title: _SectionTitle(
+                    title: context.l10n.blitz,
+                    icon: Perf.blitz.icon,
+                    iconColor: Perf.blitz.color(context),
+                  ),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -98,7 +108,11 @@ class const TimeControlModal({
                     TimeIncrement(900, 0),
                     TimeIncrement(900, 10),
                   ],
-                  title: _SectionTitle(title: context.l10n.rapid, icon: LichessIcons.rapid),
+                  title: _SectionTitle(
+                    title: context.l10n.rapid,
+                    icon: Perf.rapid.icon,
+                    iconColor: Perf.rapid.color(context),
+                  ),
                   onSelected: onSelected,
                 ),
                 _sectionSpacing,
@@ -110,7 +124,11 @@ class const TimeControlModal({
                     TimeIncrement(1800, 20),
                     TimeIncrement(3600, 0),
                   ],
-                  title: _SectionTitle(title: context.l10n.classical, icon: LichessIcons.classical),
+                  title: _SectionTitle(
+                    title: context.l10n.classical,
+                    icon: Perf.classical.icon,
+                    iconColor: Perf.classical.color(context),
+                  ),
                   onSelected: onSelected,
                 ),
               ],
@@ -276,6 +294,8 @@ class const _ChoiceChip({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Shrinks a label too wide for its chip (e.g. "30+20" in a narrow sheet) rather than wrapping it.
+    final label = FittedBox(fit: .scaleDown, child: this.label);
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       // Fills the width of its column, like the Material chip.
       return PlatformChoiceChip(
@@ -323,13 +343,16 @@ class const _ChoiceChip({
   }
 }
 
-class const _SectionTitle({required final String title, required final IconData icon})
-    extends StatelessWidget {
+class const _SectionTitle({
+  required final String title,
+  required final IconData icon,
+  final Color? iconColor,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 20.0),
+        Icon(icon, size: 20.0, color: iconColor),
         const SizedBox(width: 10),
         Text(title, style: _titleStyle),
       ],

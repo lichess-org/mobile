@@ -84,7 +84,7 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
         null when action.selected => const Icon(Icons.check),
         null =>
           icon != null
-              ? Icon(icon)
+              ? Icon(icon, color: action.iconColor)
               : isCheckMenu
               ? const Icon(Icons.check, color: Colors.transparent)
               : null,
@@ -432,6 +432,9 @@ class const ContextMenuSection({
 /// On iOS 26 and later, it is turned into a [GlassMenuItem] by the menu and never built.
 class const ContextMenuAction({
   final IconData? icon,
+
+  /// The color of the [icon], or null for the color of the menu items.
+  final Color? iconColor,
   required final String label,
 
   /// A line below the label, such as the current choice of a [submenu].
@@ -478,7 +481,7 @@ class const _MaterialMenuAction({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ContextMenuAction(:label, :subtitle, :icon, :selected) = action;
+    final ContextMenuAction(:label, :subtitle, :icon, :iconColor, :selected) = action;
     final child = subtitle != null
         ? Column(
             crossAxisAlignment: .start,
@@ -503,7 +506,7 @@ class const _MaterialMenuAction({
                 mainAxisSize: .min,
                 spacing: 12.0,
                 children: [
-                  Icon(icon),
+                  Icon(icon, color: iconColor),
                   Flexible(child: child),
                 ],
               )
@@ -518,10 +521,10 @@ class const _MaterialMenuAction({
             spacing: 12.0,
             children: [
               Icon(Icons.check, color: selected ? null : Colors.transparent),
-              if (icon != null) Icon(icon),
+              if (icon != null) Icon(icon, color: iconColor),
             ],
           )
-        : Icon(icon);
+        : Icon(icon, color: iconColor);
     if (action.submenu case final submenu?) {
       return SubmenuButton(
         leadingIcon: leadingIcon,
