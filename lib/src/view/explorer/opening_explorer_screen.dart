@@ -304,7 +304,6 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
         BottomBarButton(
           label: 'Flip',
           tooltip: context.l10n.flipBoard,
-          showLabel: true,
           onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
           icon: CupertinoIcons.arrow_2_squarepath,
         ),

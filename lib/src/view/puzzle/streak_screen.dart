@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
@@ -45,7 +46,14 @@ class const StreakScreen({super.key}) extends StatelessWidget {
       child: PlatformScaffold(
         extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(
-          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
+          actionsBuilder: (context, ref) => [
+            SemanticIconButton(
+              semanticsLabel: context.l10n.aboutX('Puzzle Streak'),
+              onPressed: () => _showStreakInfo(context),
+              icon: const Icon(Icons.info_outline),
+            ),
+            soundToggleButton(ref),
+          ],
           title: const Text('Puzzle Streak'),
         ),
         body: const _Load(),
@@ -391,13 +399,6 @@ class const _BottomBar({
       children: [
         if (!streak.finished)
           BottomBarButton(
-            icon: Icons.info_outline,
-            label: context.l10n.aboutX('Streak'),
-            showLabel: true,
-            onTap: () => _showStreakInfo(context),
-          ),
-        if (!streak.finished)
-          BottomBarButton(
             icon: Icons.skip_next,
             label: context.l10n.skipThisMove,
             showLabel: true,
@@ -471,18 +472,18 @@ class const _BottomBar({
       ],
     );
   }
+}
 
-  Future<void> _showStreakInfo(BuildContext context) {
-    return showAdaptiveNavigationSheet<void>(
-      context: context,
-      builder: (context) => PlatformScaffold(
-        appBar: PlatformAppBar(title: Text(context.l10n.aboutX('Puzzle Streak'))),
-        body: ListView(
-          children: [
-            Padding(padding: Styles.bodyPadding, child: Text(context.l10n.puzzleStreakDescription)),
-          ],
-        ),
+Future<void> _showStreakInfo(BuildContext context) {
+  return showAdaptiveNavigationSheet<void>(
+    context: context,
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.aboutX('Puzzle Streak'))),
+      body: ListView(
+        children: [
+          Padding(padding: Styles.bodyPadding, child: Text(context.l10n.puzzleStreakDescription)),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
