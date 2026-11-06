@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -36,23 +35,22 @@ double _perfHue(Perf perf) => switch (perf) {
 };
 
 /// HCT chroma of all the perf colors.
-const double kPerfColorChroma = 44;
+const double _kPerfColorChroma = 44;
 
 /// HCT tone of the perf colors in [brightness].
-double perfColorTone(Brightness brightness) => brightness == Brightness.light ? 45 : 74;
+double _perfColorTone(Brightness brightness) => brightness == Brightness.light ? 45 : 74;
 
-/// Icon colors of each [Perf], harmonized with the theme color scheme.
+/// Icon colors of each [Perf] for a theme color scheme.
 @immutable
 class const PerfColors(final IMap<Perf, Color> colors) extends ThemeExtension<PerfColors> {
-  /// Builds the perf colors for [colorScheme]: same chroma and tone for all of them, so that
-  /// none stands out, a tone readable on the scheme surfaces, and hues shifted towards the scheme
-  /// primary color.
+  /// Builds the perf colors for [colorScheme]: same chroma and tone for all of them, so that none
+  /// stands out, and a tone readable on the scheme surfaces.
   factory fromColorScheme(ColorScheme colorScheme) {
-    final tone = perfColorTone(colorScheme.brightness);
+    final tone = _perfColorTone(colorScheme.brightness);
     return PerfColors(
       IMap({
         for (final perf in Perf.values)
-          perf: Color(Hct.from(_perfHue(perf), kPerfColorChroma, tone).toInt()),
+          perf: Color(Hct.from(_perfHue(perf), _kPerfColorChroma, tone).toInt()),
       }),
     );
   }
@@ -85,17 +83,14 @@ extension PerfColorsBuildContext on BuildContext {
     return Color(
       Hct.from(
         hct.hue,
-        math.min(hct.chroma, kPerfColorChroma),
-        perfColorTone(Theme.of(this).brightness),
+        math.min(hct.chroma, _kPerfColorChroma),
+        _perfColorTone(Theme.of(this).brightness),
       ).toInt(),
     );
   }
 }
 
 extension PerfColor on Perf {
-  /// The HCT hue of this perf color, before it is harmonized with the theme.
-  double get colorHue => _perfHue(this);
-
   /// The color of this perf icon in the current theme.
   Color color(BuildContext context) => context.perfColors.of(this);
 }
