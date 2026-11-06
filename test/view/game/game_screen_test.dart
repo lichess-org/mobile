@@ -2319,7 +2319,7 @@ void main() {
       expect(findClockWithTime(Side.black, '0:52'), findsOneWidget);
     }, variant: kPlatformVariant);
 
-    testWidgets('onEmergency', (WidgetTester tester) async {
+    testWidgets('onEmergency uses the web threshold for short games', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
       when(() => mockSoundService.play(Sound.lowTime)).thenAnswer((_) async {});
       await createTestGame(
@@ -2327,22 +2327,25 @@ void main() {
         pgn: 'e4 e5',
         clock: const (
           running: true,
-          initial: Duration(minutes: 3),
-          increment: Duration(seconds: 2),
-          white: Duration(seconds: 40),
-          black: Duration(minutes: 3),
-          emerg: Duration(seconds: 30),
+          initial: Duration(seconds: 15),
+          increment: Duration.zero,
+          white: Duration(seconds: 15),
+          black: Duration(seconds: 15),
+          emerg: Duration(seconds: 10),
         ),
         overrides: {
           soundServiceProvider: soundServiceProvider.overrideWith((_) => mockSoundService),
         },
       );
       expect(
-        tester.widget<Clock>(findClockWithTime(Side.white, '0:40')).emergencyThreshold,
-        const Duration(seconds: 30),
+        tester.widget<Clock>(findClockWithTime(Side.white, '0:15')).emergencyThreshold,
+        const Duration(seconds: 3),
       );
-      await tester.pump(const Duration(seconds: 10));
-      expect(findClockWithTime(Side.white, '0:30'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 11));
+      expect(findClockWithTime(Side.white, '0:04.0'), findsOneWidget);
+      verifyNever(() => mockSoundService.play(Sound.lowTime));
+      await tester.pump(const Duration(seconds: 1));
+      expect(findClockWithTime(Side.white, '0:03.0'), findsOneWidget);
       verify(() => mockSoundService.play(Sound.lowTime)).called(1);
     }, variant: kPlatformVariant);
 
