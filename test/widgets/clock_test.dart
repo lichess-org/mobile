@@ -6,6 +6,41 @@ import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('Clock', () {
+    testWidgets('keeps emergency colors when the clock becomes inactive', (tester) async {
+      const style = ClockStyle(
+        textColor: Colors.black,
+        activeTextColor: Colors.blue,
+        emergencyTextColor: Colors.white,
+        backgroundColor: Colors.grey,
+        activeBackgroundColor: Colors.green,
+        emergencyBackgroundColor: Colors.red,
+      );
+
+      for (final active in [true, false]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Clock(
+              timeLeft: const Duration(seconds: 5),
+              active: active,
+              emergencyThreshold: const Duration(seconds: 10),
+              clockStyle: style,
+            ),
+          ),
+        );
+
+        final clockFinder = find.byType(Clock);
+        final container = tester.widget<Container>(
+          find.descendant(of: clockFinder, matching: find.byType(Container)),
+        );
+        final timeText = tester.widget<Text>(
+          find.descendant(of: clockFinder, matching: find.byType(Text)),
+        );
+
+        expect((container.decoration! as BoxDecoration).color, style.emergencyBackgroundColor);
+        expect(timeText.textSpan!.style?.color, style.emergencyTextColor);
+      }
+    });
+
     testWidgets('shows milliseconds when time < 1s and active is false', (
       WidgetTester tester,
     ) async {

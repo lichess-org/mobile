@@ -18,7 +18,7 @@ class const Clock({
   /// The time left to be displayed on the clock.
   required final Duration timeLeft,
 
-  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  /// If `true`, the active colors are used unless the clock is in emergency.
   final bool active = false,
 
   /// Clock style to use.
@@ -61,7 +61,7 @@ class const Clock({
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         color: timeLeft > Duration.zero
-            ? active
+            ? active || isEmergency
                   ? isEmergency
                         ? effectiveClockStyle.emergencyBackgroundColor
                         : effectiveClockStyle.activeBackgroundColor
@@ -84,7 +84,7 @@ class const Clock({
                     : '$minsDisplay:$secs',
                 style: TextStyle(
                   color: timeLeft > Duration.zero
-                      ? active
+                      ? active || isEmergency
                             ? isEmergency
                                   ? effectiveClockStyle.emergencyTextColor
                                   : effectiveClockStyle.activeTextColor
