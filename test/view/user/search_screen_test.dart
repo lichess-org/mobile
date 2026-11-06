@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -33,7 +34,10 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      await tester.enterText(find.byType(SearchBar), 'joh');
+      await tester.enterText(
+        find.descendant(of: find.byType(PlatformSearchBar), matching: find.byType(EditableText)),
+        'joh',
+      );
 
       // await debouce call
       await tester.pump(const Duration(milliseconds: 300));
@@ -68,7 +72,10 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      await tester.enterText(find.byType(SearchBar), 'johnny');
+      await tester.enterText(
+        find.descendant(of: find.byType(PlatformSearchBar), matching: find.byType(EditableText)),
+        'johnny',
+      );
       // await debouce call
       await tester.pump(const Duration(milliseconds: 300));
 

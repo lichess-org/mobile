@@ -17,6 +17,10 @@ class const RichLinkText({
   final int? maxLines,
   final TextOverflow overflow = TextOverflow.clip,
   final TextScaler? textScaler,
+
+  /// Appended after the text, inside the same paragraph. For a caller that overlays something on
+  /// the last line, such as a timestamp, and needs to reserve room for it.
+  final InlineSpan? trailing,
 }) extends StatefulWidget {
   @override
   State<RichLinkText> createState() => _RichLinkTextState();
@@ -36,9 +40,12 @@ class _RichLinkTextState() extends State<RichLinkText> {
   @override
   void didUpdateWidget(RichLinkText oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Not on onOpen: a recognizer's onTap reads widget.onOpen when tapped, so a new callback does
+    // not need a new recognizer. Every caller passes an inline closure, so including it here would
+    // relink the text on every parent rebuild.
     if (oldWidget.text != widget.text ||
         oldWidget.linkifiers != widget.linkifiers ||
-        oldWidget.onOpen != widget.onOpen) {
+        (oldWidget.onOpen == null) != (widget.onOpen == null)) {
       _disposeRecognizers();
       _elements = linkify(widget.text, linkifiers: widget.linkifiers);
       _createRecognizers();
@@ -80,10 +87,7 @@ class _RichLinkTextState() extends State<RichLinkText> {
             text: element.text,
             style:
                 widget.linkStyle ??
-                defaultStyle.copyWith(
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
-                ),
+                defaultStyle.copyWith(color: Colors.blueAccent, decoration: TextDecoration.none),
             recognizer: widget.onOpen != null ? _recognizers[recognizerIndex++] : null,
           ),
         );
@@ -92,8 +96,9 @@ class _RichLinkTextState() extends State<RichLinkText> {
       }
     }
 
+    final trailing = widget.trailing;
     return Text.rich(
-      TextSpan(children: children),
+      TextSpan(children: trailing == null ? children : [...children, trailing]),
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
       maxLines: widget.maxLines,
@@ -254,7 +259,12 @@ class const EmailLinkifier() extends Linkifier {
   }
 }
 
-final _userTagRegex = RegExp(r'^(.*?)(@[\w@]+(?:[.!][\w@]+)*)', caseSensitive: false, dotAll: true);
+// Same rule as lila's UserName.atRegex.
+final _userTagRegex = RegExp(
+  r'^(.*?)(@[\w-]{2,30}(?![@\w-]|\.\w))',
+  caseSensitive: false,
+  dotAll: true,
+);
 
 class const UserTagLinkifier() extends Linkifier {
   @override
@@ -318,31 +328,4 @@ List<LinkifyElement> linkify(String text, {List<Linkifier> linkifiers = defaultL
   }
 
   return elements;
-}
-
-TextSpan buildTextSpan(
-  List<LinkifyElement> elements, {
-  TextStyle? style,
-  TextStyle? linkStyle,
-  LinkCallback? onOpen,
-}) {
-  final children = <InlineSpan>[];
-
-  for (final element in elements) {
-    if (element is LinkableElement) {
-      children.add(
-        TextSpan(
-          text: element.text,
-          style: linkStyle,
-          recognizer: onOpen != null
-              ? (TapGestureRecognizer()..onTap = () => onOpen(element))
-              : null,
-        ),
-      );
-    } else {
-      children.add(TextSpan(text: element.text, style: style));
-    }
-  }
-
-  return TextSpan(children: children);
 }

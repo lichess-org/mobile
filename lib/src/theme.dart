@@ -51,11 +51,24 @@ ThemeData makeAppTheme(
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class const CustomTheme({required final Color rowEven, required final Color rowOdd})
-    extends ThemeExtension<CustomTheme> {
+class const CustomTheme({
+  required final Color rowEven,
+  required final Color rowOdd,
+
+  /// Background of the screens made of a plain list, whose rows are directly on the background
+  /// rather than in cards, when it differs from the scaffold background.
+  ///
+  /// On iOS light mode, the scaffold background is darker so that cards stand out, like the iOS
+  /// grouped lists, while plain lists have a lighter background, like the iOS plain lists.
+  final Color? plainListBackground,
+}) extends ThemeExtension<CustomTheme> {
   @override
-  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
-    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd, Color? plainListBackground}) {
+    return CustomTheme(
+      rowEven: rowEven ?? this.rowEven,
+      rowOdd: rowOdd ?? this.rowOdd,
+      plainListBackground: plainListBackground ?? this.plainListBackground,
+    );
   }
 
   @override
@@ -66,6 +79,7 @@ class const CustomTheme({required final Color rowEven, required final Color rowO
     return CustomTheme(
       rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
       rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+      plainListBackground: Color.lerp(plainListBackground, other.plainListBackground, t),
     );
   }
 }
@@ -126,9 +140,19 @@ ThemeData _makeDefaultTheme(
 
   final textTheme = isIOS ? kCupertinoDefaultTextTheme : null;
 
-  final theme = hasSystemColors
-      ? ThemeData.from(colorScheme: systemScheme, textTheme: textTheme)
-      : ThemeData.from(colorScheme: boardScheme, textTheme: textTheme);
+  final baseScheme = hasSystemColors ? systemScheme : boardScheme;
+
+  // On iOS light mode, like the iOS grouped lists, cards stand out brighter on a darker background.
+  final isIOSLight = isIOS && brightness == Brightness.light;
+  final theme = ThemeData.from(
+    colorScheme: isIOSLight
+        ? baseScheme.copyWith(surface: baseScheme.surfaceContainer)
+        : baseScheme,
+    textTheme: textTheme,
+  );
+  final cupertinoCardColor = isIOSLight
+      ? Color.lerp(baseScheme.surface, baseScheme.surfaceContainerLowest, 0.75)
+      : theme.colorScheme.surfaceContainerHigh;
 
   final isAmoled = themeMode == BackgroundThemeMode.amoled;
 
@@ -157,10 +181,8 @@ ThemeData _makeDefaultTheme(
     ),
     searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
-    listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
-    cardTheme: isIOS
-        ? _kCupertinoCardTheme.copyWith(color: theme.colorScheme.surfaceContainerHigh)
-        : null,
+    listTileTheme: _makeListTileTheme(theme.colorScheme, theme.textTheme, isIOS),
+    cardTheme: isIOS ? _kCupertinoCardTheme.copyWith(color: cupertinoCardColor) : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
     floatingActionButtonTheme: isIOS
         ? FloatingActionButtonThemeData(
@@ -174,7 +196,17 @@ ThemeData _makeDefaultTheme(
     menuTheme: isIOS ? _kCupertinoMenuThemeData : null,
     bottomSheetTheme: isIOS ? _kCupertinoBottomSheetTheme : null,
     sliderTheme: kSliderTheme,
-    extensions: [lichessCustomColors.harmonized(theme.colorScheme)],
+    extensions: [
+      lichessCustomColors.harmonized(theme.colorScheme),
+      // The rows are brighter than the background, like the cards, so that a card of rows still
+      // stands out from it.
+      if (isIOSLight)
+        CustomTheme(
+          rowEven: cupertinoCardColor!,
+          rowOdd: baseScheme.surfaceContainerLow,
+          plainListBackground: baseScheme.surfaceContainerLowest,
+        ),
+    ],
   );
 
   if (!isAmoled) return finalTheme;
@@ -224,7 +256,7 @@ ThemeData _makeBackgroundImageTheme({
       surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
     cupertinoOverrideTheme: _makeCupertinoThemeData(baseTheme.colorScheme, baseTheme.brightness),
-    listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
+    listTileTheme: _makeListTileTheme(baseTheme.colorScheme, baseTheme.textTheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
     bottomSheetTheme: (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData()).copyWith(
@@ -290,31 +322,31 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
+/// Capsule buttons, like the iOS 26 buttons.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(
-  style: ButtonStyle(
-    shape: WidgetStatePropertyAll(
-      RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-    ),
-  ),
+  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
 );
 
 const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
   style: MenuStyle(elevation: WidgetStatePropertyAll(0)),
 );
 
-ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
+ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, TextTheme textTheme, bool isIOS) {
   return ListTileThemeData(
     iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
+    // A complete style (`inherit: false`), like the Material default it replaces: [ListTile]
+    // animates its title style, and text styles with different `inherit` values cannot be
+    // interpolated when the platform changes at runtime (in the device preview).
     titleTextStyle: isIOS
-        ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
+        ? textTheme.bodyMedium!
+              .merge(
+                TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16),
+              )
+              .copyWith(inherit: false)
         : null,
     subtitleTextStyle: TextStyle(
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),
@@ -344,37 +376,45 @@ const _kCupertinoCardTheme = CardThemeData(
 
 const _kCupertinoSearchBarTheme = SearchBarThemeData(
   elevation: WidgetStatePropertyAll(0),
-  shape: WidgetStatePropertyAll(
-    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-  ),
+  shape: WidgetStatePropertyAll(StadiumBorder()),
   constraints: BoxConstraints(minHeight: 40, maxHeight: 40),
   padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 7)),
 );
 
+/// The corner radius of text fields on iOS.
+///
+/// A radius is clamped to half the height of the field: a single line field is a capsule, like the
+/// iOS 26 search and message fields, and a multiline one a rounded rectangle.
+const _kCupertinoInputBorderRadius = BorderRadius.all(Radius.circular(28));
+
 InputDecorationTheme _makeCupertinoInputDecorationTheme(ColorScheme colorScheme) {
   return InputDecorationTheme(
     filled: true,
-    fillColor: colorScheme.surfaceContainer.withValues(alpha: 0.7),
-    border: const OutlineInputBorder(),
+    // In light mode, a translucent darkening like the iOS system fills, which shows on both the
+    // background and the brighter cards.
+    fillColor: colorScheme.brightness == Brightness.light
+        ? colorScheme.onSurfaceVariant.withValues(alpha: 0.12)
+        : colorScheme.surfaceContainer.withValues(alpha: 0.7),
+    border: const OutlineInputBorder(borderRadius: _kCupertinoInputBorderRadius),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     disabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.1)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     errorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error.withValues(alpha: 0.5)),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderSide: BorderSide(color: colorScheme.error),
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      borderRadius: _kCupertinoInputBorderRadius,
     ),
   );
 }
@@ -392,8 +432,10 @@ CupertinoThemeData _makeCupertinoThemeData(ColorScheme colorScheme, Brightness b
       navTitleTextStyle: const CupertinoThemeData().textTheme.navTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
       ),
+      // Smaller than the iOS large title (34pt), so that longer (translated) titles fit on one line.
       navLargeTitleTextStyle: const CupertinoThemeData().textTheme.navLargeTitleTextStyle.copyWith(
         color: colorScheme.onSurface,
+        fontSize: 29.0,
       ),
     ),
     brightness: brightness,

@@ -1,6 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -14,6 +14,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/service/account_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -30,6 +32,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const GameHistoryScreen({
@@ -57,7 +60,7 @@ class const GameHistoryScreen({
         : filtersInUse.count == 0
         ? nbGamesAsync.when(
             data: (nbGames) => AppBarTitleText(context.l10n.nbGames(nbGames).localizeNumbers()),
-            loading: () => const ButtonLoadingIndicator(),
+            loading: () => const SizedBox.shrink(),
             error: (e, s) => AppBarTitleText(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context.l10n));
@@ -74,7 +77,7 @@ class const GameHistoryScreen({
       ),
       semanticsLabel: context.l10n.filterGames,
       onPressed: () =>
-          showModalBottomSheet<GameFilterState>(
+          showAdaptiveBottomSheet<GameFilterState>(
             context: context,
             useRootNavigator: true,
             isScrollControlled: true,
@@ -87,6 +90,9 @@ class const GameHistoryScreen({
           }),
     );
 
+    final displayMode = ref.watch(
+      gameHistoryPreferencesProvider.select((value) => value.displayMode),
+    );
     final displayModeButton = ContextMenuIconButton(
       consumeOutsideTap: true,
       icon: const Icon(Icons.more_horiz),
@@ -95,6 +101,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.ballot_outlined,
           label: context.l10n.mobileDisplayModeDetailed,
+          selected: displayMode == GameHistoryDisplayMode.detail,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -104,6 +111,7 @@ class const GameHistoryScreen({
         ContextMenuAction(
           icon: Icons.list_outlined,
           label: context.l10n.mobileDisplayModeCompact,
+          selected: displayMode == GameHistoryDisplayMode.compact,
           onPressed: () {
             ref
                 .read(gameHistoryPreferencesProvider.notifier)
@@ -114,7 +122,12 @@ class const GameHistoryScreen({
     );
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title, actions: [filterBtn, displayModeButton]),
+      appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
+        title: title,
+        actions: [filterBtn, displayModeButton],
+      ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
@@ -192,167 +205,211 @@ class _BodyState() extends ConsumerState<_Body> {
           gameHistoryPreferencesProvider.select((value) => value.displayMode),
         );
 
-        return list.isEmpty
-            ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.0),
-                child: Center(child: Text('No games found')),
-              )
-            : ListView.separated(
-                controller: _scrollController,
-                separatorBuilder: (context, index) =>
-                    Theme.of(context).platform == TargetPlatform.iOS
-                    ? PlatformDivider(
-                        height: 1,
-                        cupertinoHasLeading: true,
-                        indent: displayMode == GameHistoryDisplayMode.detail ? 0 : null,
-                      )
-                    : const SizedBox.shrink(),
-                itemCount: list.length + (state.isLoading ? 1 : 0),
-                itemBuilder: (context, index) {
-                  if (state.isLoading && index == list.length) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: CenterLoadingIndicator(),
-                    );
-                  } else if (state.hasError && state.hasMore && index == list.length) {
-                    // TODO: add a retry button
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 32.0),
-                      child: Center(child: Text('Could not load more games')),
-                    );
-                  }
+        if (list.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 32.0),
+            child: Center(child: Text('No games found')),
+          );
+        }
 
-                  final game = list[index].game;
-                  final pov = list[index].pov;
+        // The games are sorted by creation date, so the games of a day follow each other.
+        final rows = <_HistoryRow>[];
+        DateTime? currentDay;
+        for (var i = 0; i < list.length; i++) {
+          final createdAt = list[i].game.createdAt;
+          final day = DateTime(createdAt.year, createdAt.month, createdAt.day);
+          final isFirst = day != currentDay;
+          if (isFirst) {
+            rows.add(_DayHeaderRow(day));
+            currentDay = day;
+          }
+          final nextCreatedAt = i + 1 < list.length ? list[i + 1].game.createdAt : null;
+          final isLast =
+              nextCreatedAt == null ||
+              DateTime(nextCreatedAt.year, nextCreatedAt.month, nextCreatedAt.day) != day;
+          rows.add(_GameRow(index: i, isFirst: isFirst, isLast: isLast));
+        }
 
-                  Future<void> onPressedBookmark(BuildContext context) async {
-                    try {
-                      await ref
-                          .read(accountServiceProvider)
-                          .setGameBookmark(game.id, bookmark: !game.bookmarked!);
-                    } on Exception catch (_) {
-                      if (context.mounted) {
-                        showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
-                      }
-                    }
-                  }
-
-                  final item = list[index];
-                  final gameTile = switch (displayMode) {
-                    GameHistoryDisplayMode.compact => GameListTile(
-                      item: item,
-                      onPressedBookmark: onPressedBookmark,
-                    ),
-                    GameHistoryDisplayMode.detail => GameListDetailTile(
-                      item: item,
-                      onPressedBookmark: onPressedBookmark,
-                    ),
-                  };
-
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const StretchMotion(),
-                      children: [
-                        SlidableAction(
-                          backgroundColor: ColorScheme.of(context).tertiaryContainer,
-                          foregroundColor: ColorScheme.of(context).onTertiaryContainer,
-                          onPressed: game.variant.isReadSupported
-                              ? (_) {
-                                  Navigator.of(context, rootNavigator: true).push(
-                                    AnalysisScreen.buildRoute(
-                                      AnalysisOptions.archivedGame(
-                                        orientation: pov,
-                                        gameId: game.id,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              : (_) {
-                                  showSnackBar(
-                                    context,
-                                    'This variant is not supported yet.',
-                                    type: SnackBarType.info,
-                                  );
-                                },
-                          icon: Icons.biotech,
-                          label: context.l10n.analysis,
-                        ),
-                      ],
-                    ),
-                    endActionPane: isLoggedIn
-                        ? ActionPane(
-                            motion: const StretchMotion(),
-                            children: [
-                              if (game.source == GameSource.friend)
-                                Builder(
-                                  builder: (context) {
-                                    final opponent = pov == Side.white ? game.black : game.white;
-                                    final sideChoice = pov == Side.white
-                                        ? SideChoice.black
-                                        : SideChoice.white;
-                                    final timeControl = game.clock != null
-                                        ? ChallengeTimeControlType.clock
-                                        : game.daysPerTurn != null
-                                        ? ChallengeTimeControlType.correspondence
-                                        : ChallengeTimeControlType.unlimited;
-                                    return SlidableAction(
-                                      backgroundColor: ColorScheme.of(context).primary,
-                                      foregroundColor: ColorScheme.of(context).onPrimary,
-                                      onPressed: opponent.user != null
-                                          ? (_) {
-                                              final request = ChallengeRequest(
-                                                destUser: opponent.user,
-                                                variant: game.variant,
-                                                rated: game.rated,
-                                                sideChoice: sideChoice,
-                                                timeControl: timeControl,
-                                                clock: game.clock != null
-                                                    ? (
-                                                        time: game.clock!.initial,
-                                                        increment: game.clock!.increment,
-                                                      )
-                                                    : null,
-                                                days: game.daysPerTurn,
-                                              );
-                                              final source = UserChallengeSource(request);
-                                              ref.invalidate(gameScreenLoaderProvider(source));
-                                              Navigator.of(
-                                                context,
-                                                rootNavigator: true,
-                                              ).push(GameScreen.buildRoute(source: source));
-                                            }
-                                          : null,
-                                      icon: Icons.sync,
-                                      label: context.l10n.rematch,
-                                    );
-                                  },
-                                ),
-                              SlidableAction(
-                                backgroundColor: context.lichessColors.brag,
-                                onPressed: onPressedBookmark,
-                                icon: game.isBookmarked
-                                    ? Icons.bookmark_remove_outlined
-                                    : Icons.bookmark_add_outlined,
-                                label: game.isBookmarked
-                                    ? context.l10n.mobileRemoveBookmark
-                                    : context.l10n.bookmarkThisGame,
-                              ),
-                            ],
-                          )
-                        : null,
-                    child: gameTile,
+        return SwipeActionsScope(
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: rows.length + 1,
+            itemBuilder: (context, rowIndex) {
+              if (rowIndex == rows.length) {
+                if (state.isLoading) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: CenterLoadingIndicator(),
                   );
-                },
+                } else if (state.hasError && state.hasMore) {
+                  // TODO: add a retry button
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 32.0),
+                    child: Center(child: Text('Could not load more games')),
+                  );
+                }
+                return const SizedBox(height: 16.0);
+              }
+
+              final row = rows[rowIndex];
+              if (row case _DayHeaderRow(:final day)) {
+                return Padding(
+                  padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+                  child: ListSectionHeader(
+                    title: Text(
+                      _dayLabel(context, day),
+                      style: TextStyle(fontSize: 15, color: textShade(context, 0.6)),
+                    ),
+                  ),
+                );
+              }
+              final _GameRow(:index, :isFirst, :isLast) = row as _GameRow;
+
+              final game = list[index].game;
+              final pov = list[index].pov;
+
+              Future<void> onPressedBookmark(BuildContext context) async {
+                try {
+                  await ref
+                      .read(accountServiceProvider)
+                      .setGameBookmark(game.id, bookmark: !game.bookmarked!);
+                } on Exception catch (_) {
+                  if (context.mounted) {
+                    showSnackBar(context, 'Bookmark action failed', type: SnackBarType.error);
+                  }
+                }
+              }
+
+              final item = list[index];
+              final gameTile = switch (displayMode) {
+                GameHistoryDisplayMode.compact => GameListTile(
+                  item: item,
+                  onPressedBookmark: onPressedBookmark,
+                  timeOnly: true,
+                ),
+                GameHistoryDisplayMode.detail => GameListDetailTile(
+                  item: item,
+                  onPressedBookmark: onPressedBookmark,
+                  timeOnly: true,
+                ),
+              };
+
+              final opponent = pov == Side.white ? game.black : game.white;
+
+              return ListSectionRow(
+                isFirst: isFirst,
+                isLast: isLast,
+                hasLeading: displayMode == GameHistoryDisplayMode.compact,
+                child: SwipeActions(
+                  // The compact rows are too short for the labels.
+                  showLabels: displayMode == GameHistoryDisplayMode.detail,
+                  startActions: [
+                    SwipeAction(
+                      backgroundColor: ColorScheme.of(context).tertiaryContainer,
+                      foregroundColor: ColorScheme.of(context).onTertiaryContainer,
+                      onPressed: game.variant.isReadSupported
+                          ? () {
+                              Navigator.of(context).pushHidingTabBar(
+                                AnalysisScreen.buildRoute(
+                                  AnalysisOptions.archivedGame(orientation: pov, gameId: game.id),
+                                ),
+                              );
+                            }
+                          : () {
+                              showSnackBar(
+                                context,
+                                'This variant is not supported yet.',
+                                type: SnackBarType.info,
+                              );
+                            },
+                      icon: Icons.biotech,
+                      label: context.l10n.analysis,
+                    ),
+                  ],
+                  endActions: [
+                    if (isLoggedIn)
+                      SwipeAction(
+                        backgroundColor: context.lichessColors.brag,
+                        onPressed: () => onPressedBookmark(context),
+                        icon: game.isBookmarked
+                            ? Icons.bookmark_remove_outlined
+                            : Icons.bookmark_add_outlined,
+                        label: game.isBookmarked
+                            ? context.l10n.mobileRemoveBookmark
+                            : context.l10n.bookmarkThisGame,
+                      ),
+                    if (isLoggedIn && game.source == GameSource.friend && opponent.user != null)
+                      SwipeAction(
+                        backgroundColor: ColorScheme.of(context).primary,
+                        foregroundColor: ColorScheme.of(context).onPrimary,
+                        onPressed: () {
+                          final request = ChallengeRequest(
+                            destUser: opponent.user,
+                            variant: game.variant,
+                            rated: game.rated,
+                            sideChoice: pov == Side.white ? SideChoice.black : SideChoice.white,
+                            timeControl: game.clock != null
+                                ? ChallengeTimeControlType.clock
+                                : game.daysPerTurn != null
+                                ? ChallengeTimeControlType.correspondence
+                                : ChallengeTimeControlType.unlimited,
+                            clock: game.clock != null
+                                ? (time: game.clock!.initial, increment: game.clock!.increment)
+                                : null,
+                            days: game.daysPerTurn,
+                          );
+                          final source = UserChallengeSource(request);
+                          ref.invalidate(gameScreenLoaderProvider(source));
+                          Navigator.of(context)
+                              .pushHidingTabBar(GameScreen.buildRoute(source: source));
+                        },
+                        icon: Icons.sync,
+                        label: context.l10n.rematch,
+                      ),
+                  ],
+                  child: gameTile,
+                ),
               );
+            },
+          ),
+        );
       },
       error: (e, s) {
         debugPrint('SEVERE: [GameHistoryScreen] could not load game list');
-        return const Center(child: Text('Could not load Game History'));
+        return FullScreenRetryRequest(onRetry: () => ref.invalidate(gameListProvider));
       },
       loading: () => const CenterLoadingIndicator(),
     );
   }
 }
+
+String _dayLabel(BuildContext context, DateTime day) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final difference = today.difference(day).inDays;
+  return difference == 0
+      ? context.l10n.today
+      : difference == 1
+      ? context.l10n.yesterday
+      : difference < 15
+      ? relativeDate(context.l10n, day)
+      : DateFormat.yMMMd().format(day);
+}
+
+/// A row of the game history list: either the header of a day, or a game played that day.
+sealed class const _HistoryRow();
+
+class const _DayHeaderRow(final DateTime day) extends _HistoryRow;
+
+class const _GameRow({
+  required final int index,
+
+  /// Whether the game is the first one of its day.
+  required final bool isFirst,
+
+  /// Whether the game is the last one of its day.
+  required final bool isLast,
+}) extends _HistoryRow;
 
 class const _FilterGames({required final GameFilterState filter, required final LightUser? user})
     extends ConsumerStatefulWidget {
@@ -385,7 +442,7 @@ class _FilterGamesState() extends ConsumerState<_FilterGames> {
     Perf.racingKings,
     Perf.crazyhouse,
   ];
-  static const filterGroupSpace = SizedBox(height: 10.0);
+  static const filterGroupSpace = SizedBox(height: 12.0);
 
   @override
   Widget build(BuildContext context) {

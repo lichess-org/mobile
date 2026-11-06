@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 class const UserActivityWidget({
   required final AsyncValue<IList<UserActivity>> activity,

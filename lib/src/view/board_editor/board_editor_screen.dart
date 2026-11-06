@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
+import 'package:lichess_mobile/src/model/board_editor/board_vision.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/chess960.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -21,12 +22,14 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_filters.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_positions.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_positions_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_from_image.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_challenge_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/user/pick_player_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -45,23 +48,24 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardEditorState = ref.watch(boardEditorControllerProvider(params));
+    final boardReader = ref.watch(boardReaderProvider);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: VariantAppBarTitle(
           variant: boardEditorState.variant,
           title: context.l10n.boardEditor,
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
-            tooltip: 'FEN',
-            onPressed: () => showDialog<void>(
-              context: context,
-              builder: (_) => _FenDialog(
-                onFenLoaded: (fen) =>
-                    ref.read(boardEditorControllerProvider(params).notifier).loadFen(fen),
-              ),
+            icon: const Icon(Icons.photo_camera_outlined),
+            tooltip: 'Camera',
+            onPressed: () => showBoardFromImageSheet(
+              context,
+              boardReader,
+              onPlacementRead: (placement) =>
+                  ref.read(boardEditorControllerProvider(params).notifier).loadFen(placement),
             ),
           ),
           SemanticIconButton(
@@ -76,9 +80,16 @@ class const BoardEditorScreen({super.key, final BoardEditorControllerParams? par
           builder: (context, constraints) {
             final aspectRatio = constraints.biggest.aspectRatio;
 
-            final defaultBoardSize = constraints.biggest.shortestSide;
             final isTablet = isTabletOrLarger(context);
-            final boardSize = defaultBoardSize;
+            // The board and the two piece menus (one square thick each) must fit along the main
+            // axis, so the board can take at most 8/10 of the longest side.
+            final maxBoardSize = math.min(
+              constraints.biggest.shortestSide,
+              constraints.biggest.longestSide * 8 / 10,
+            );
+            final boardSize = isTablet
+                ? maxBoardSize - kTabletBoardTableSidePadding * 2
+                : maxBoardSize;
 
             final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
 
@@ -137,7 +148,7 @@ class const _BoardEditor(
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs
-          .toBoardSettings(editorState.variant)
+          .toBoardSettings(editorState.variant, appBrightness: Theme.of(context).brightness)
           .copyWith(
             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
@@ -263,6 +274,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
     final pieceCount = editorState.pieces.length;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           icon: Icons.menu,
@@ -301,8 +313,9 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                     final notifier = ref.read(editorController.notifier);
                     Navigator.of(context).push(
                       BoardEditorPositionsScreen.buildRoute(
-                        onPositionSelected: (position) => {
-                          notifier.loadFen(position.fen),
+                        params,
+                        onPositionSelected: (String position) => {
+                          notifier.loadFen(position),
                           Navigator.of(context).pop(),
                         },
                       ),
@@ -332,16 +345,15 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                               type: SnackBarType.error,
                             );
                           }
-                          showModalBottomSheet<void>(
+                          showAdaptiveBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             useRootNavigator: true,
-                            builder: (context) {
-                              return CreateChallengeBottomSheet(
-                                user: user,
-                                positionFen: editorState.fen,
-                              );
-                            },
+                            builder: (_) => CreateChallengeBottomSheet(
+                              user: user,
+                              positionFen: editorState.fen,
+                              navigator: Navigator.of(context),
+                            ),
                           );
                         },
                         title: Text(context.l10n.mobileChallengeFromPosition),
@@ -409,7 +421,7 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
         ),
         BottomBarButton(
           label: context.l10n.mobileFilters,
-          onTap: () => showModalBottomSheet<void>(
+          onTap: () => showAdaptiveBottomSheet<void>(
             context: context,
             builder: (BuildContext context) => BoardEditorFilters(params: params),
             showDragHandle: true,
@@ -437,73 +449,6 @@ class const _BottomBar(final BoardEditorControllerParams? params) extends Consum
                   .push(OverTheBoardScreen.buildRoute(initialVariant: variant, initialFen: fen)),
         ),
       ],
-    );
-  }
-}
-
-class const _FenDialog({required final void Function(String fen) onFenLoaded})
-    extends StatefulWidget {
-  @override
-  State<_FenDialog> createState() => _FenDialogState();
-}
-
-class _FenDialogState() extends State<_FenDialog> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pasteFromClipboard() async {
-    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data?.text == null || !mounted) return;
-
-    final text = data!.text!.trim();
-    if (text.isEmpty) return;
-
-    _controller.text = text;
-    try {
-      widget.onFenLoaded(_fenToLoad(Setup.parseFen(text)));
-    } on FenException {
-      showSnackBar(context, context.l10n.invalidFen, type: SnackBarType.error);
-    } finally {
-      Navigator.of(context, rootNavigator: true).pop();
-    }
-  }
-
-  /// The FEN to load into the editor for [setup].
-  ///
-  /// The position [setup] describes may be illegal: a missing king, the side
-  /// not to move in check, ... It is loaded all the same, as if the pieces had
-  /// been dragged onto the board, so that the user can fix it there.
-  static String _fenToLoad(Setup setup) {
-    try {
-      // Going through a Position drops what cannot be true of the board, such
-      // as an en passant square that no pawn could have created.
-      return Chess.fromSetup(setup).fen;
-    } on PositionSetupException {
-      return setup.fen;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: TextField(
-        controller: _controller,
-        readOnly: true,
-        onTap: _pasteFromClipboard,
-        decoration: InputDecoration(
-          hintText: context.l10n.pasteTheFenStringHere,
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.paste),
-            onPressed: _pasteFromClipboard,
-            tooltip: 'Paste from clipboard',
-          ),
-        ),
-      ),
     );
   }
 }

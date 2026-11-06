@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_settings.dart';
 import 'package:lichess_mobile/src/view/clock/custom_clock_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:material_ui/material_ui.dart';
@@ -292,7 +293,7 @@ class _ClockTileState() extends ConsumerState<ClockTile> with SingleTickerProvid
                             color: clockStyle.textColor,
                             onPressed: (clockState.started && !clockState.paused)
                                 ? null
-                                : () => showModalBottomSheet<void>(
+                                : () => showAdaptiveBottomSheet<void>(
                                     context: context,
                                     builder: (BuildContext context) => CustomClockSettings(
                                       clockType: clockState.options.type,

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -21,6 +23,10 @@ import 'package:material_ui/material_ui.dart';
 class const GameListDetailTile({
   required final LightExportedGameWithPov item,
   final Future<void> Function(BuildContext context)? onPressedBookmark,
+
+  /// Whether to show only the time of day the game started instead of its date, in a list grouped
+  /// by day.
+  final bool timeOnly = false,
 }) extends ConsumerWidget {
   Side get mySide => item.pov;
 
@@ -48,10 +54,9 @@ class const GameListDetailTile({
 
     return InkWell(
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           builder: (context) =>
               GameContextMenu(game: game, mySide: mySide, onPressedBookmark: onPressedBookmark),
@@ -80,12 +85,14 @@ class const GameListDetailTile({
                     lastMove: game.lastMove,
                   ),
                 Expanded(
-                  child: SizedBox(
-                    height: boardSize,
+                  // As high as the board, or higher if the text needs it (e.g. in a narrow card).
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: boardSize),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Column(
-                        mainAxisSize: MainAxisSize.max,
+                        // With the min height, spreads the text over the board height.
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -101,6 +108,8 @@ class const GameListDetailTile({
                                     // prefer the PGN date if we have it.
                                     (game.importDate != null
                                             ? formatPgnDate(game.importDate!)
+                                            : timeOnly
+                                            ? DateFormat.Hm().format(game.createdAt)
                                             : relativeDate(context.l10n, game.lastMoveAt))
                                         .toUpperCase(),
                                     style: dateStyle,
@@ -208,14 +217,17 @@ class const GameListDetailTile({
                                     children: [
                                       if (me.ratingDiff != null)
                                         switch (showRatingAsync) {
-                                          AsyncData(value: ShowRatings.yes) => TextSpan(
-                                            text:
-                                                ' (${me.ratingDiff == 0
-                                                    ? '±'
-                                                    : me.ratingDiff! > 0
-                                                    ? '+'
-                                                    : ''}${me.ratingDiff})',
-                                          ),
+                                          AsyncData(
+                                            value: ShowRatings.yes || ShowRatings.exceptInGame,
+                                          ) =>
+                                            TextSpan(
+                                              text:
+                                                  ' (${me.ratingDiff == 0
+                                                      ? '±'
+                                                      : me.ratingDiff! > 0
+                                                      ? '+'
+                                                      : ''}${me.ratingDiff})',
+                                            ),
 
                                           _ => const TextSpan(),
                                         },

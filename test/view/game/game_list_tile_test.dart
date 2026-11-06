@@ -1,4 +1,3 @@
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -61,8 +60,8 @@ void main() {
       expect(find.text('Fischer, Robert J. vs Spassky, Boris'), findsOneWidget);
       expect(find.text('August 31, 1972'), findsOneWidget);
       expect(find.byIcon(Icons.cloud_upload_outlined), findsOneWidget);
-      expect(find.byIcon(CupertinoIcons.plus_square_fill), findsNothing);
-      expect(find.byIcon(CupertinoIcons.minus_square_fill), findsNothing);
+      expect(find.textContaining('▲'), findsNothing);
+      expect(find.textContaining('▼'), findsNothing);
     });
 
     testWidgets('regular game shows the opponent and the result icon', (tester) async {
@@ -90,7 +89,8 @@ void main() {
       expect(find.text('Black'), findsOneWidget);
       expect(find.text('White vs Black'), findsNothing);
       expect(find.byIcon(Icons.cloud_upload_outlined), findsNothing);
-      expect(find.byIcon(CupertinoIcons.plus_square_fill), findsOneWidget);
+      // No rating change in a casual game: a symbol shows the result.
+      expect(find.textContaining('▲'), findsOneWidget);
     });
   });
 }

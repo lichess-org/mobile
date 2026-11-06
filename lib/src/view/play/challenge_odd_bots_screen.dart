@@ -9,12 +9,14 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget {
@@ -24,8 +26,8 @@ class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
       body: _ChallengeBody(bot),
     );
   }
@@ -256,7 +258,7 @@ class _ChallengeBodyState() extends ConsumerState<_ChallengeBody> {
             child: FilledButton(
               onPressed: fen != null
                   ? () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         GameScreen.buildRoute(
                           source: UserChallengeSource(
                             ChallengeRequest(

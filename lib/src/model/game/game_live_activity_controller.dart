@@ -8,6 +8,9 @@ import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 
+/// How long a finished game stays on the Live Activity, with its result, before it is removed.
+const _kDismissAfterGameOver = Duration(seconds: 15);
+
 /// A provider for [GameLiveActivityController].
 final gameLiveActivityControllerProvider = NotifierProvider.autoDispose
     .family<GameLiveActivityController, void, GameFullId>(
@@ -29,8 +32,9 @@ typedef _SyncKey = ({
 ///
 /// Lives as long as the game screen watches it. Starts the activity once the game is loaded, if it
 /// is eligible ([GameLiveActivityAttributes.isEligible]), updates it on moves and clock changes,
-/// and removes it at once when the game is over or when the game screen is left. Also reports the
-/// game socket's connection state, which the activity shows as "Reconnecting" while it is down.
+/// and ends it when the game is over (showing the result for [_kDismissAfterGameOver]) or when the
+/// game screen is left (removed at once). Also reports the game socket's connection state, which
+/// the activity shows as "Reconnecting" while it is down.
 class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<void> {
   late GameLiveActivityChannel _channel;
   StreamSubscription<({String id, LiveActivityState state})>? _stateSubscription;
@@ -141,22 +145,22 @@ class GameLiveActivityController(final GameFullId gameFullId) extends Notifier<v
     final game = gameState.game;
     _watchSocket();
 
-    final id = _activityId;
-    if (!game.playable) {
-      _done = true;
-      if (id != null) {
-        _activityId = null;
-        await _channel.end(id);
-      }
-      return;
-    }
-
     final content = GameLiveActivityState.fromGame(
       game,
       whiteClock: gameState.liveClock?.white.value ?? game.clock?.white ?? Duration.zero,
       blackClock: gameState.liveClock?.black.value ?? game.clock?.black ?? Duration.zero,
       now: DateTime.now(),
     );
+
+    final id = _activityId;
+    if (!game.playable) {
+      _done = true;
+      if (id != null) {
+        _activityId = null;
+        await _channel.end(id, state: content, dismissAfter: _kDismissAfterGameOver);
+      }
+      return;
+    }
 
     if (id == null) {
       if (!GameLiveActivityAttributes.isEligible(game) || !await _channel.isSupported()) {

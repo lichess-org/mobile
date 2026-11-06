@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:cronet_http/cronet_http.dart';
 import 'package:cupertino_http/cupertino_http.dart';
+import 'package:dartchess/dartchess.dart' show Side;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +15,7 @@ import 'package:http/http.dart'
         BaseClient,
         BaseRequest,
         BaseResponse,
+        BaseResponseWithUrl,
         Client,
         ClientException,
         Request,
@@ -23,10 +26,12 @@ import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/log/http_log_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/aggregator.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/server_status.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -36,6 +41,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 final _logger = Logger('HttpClient');
 
 const _maxCacheSize = 2 * 1024 * 1024;
+const _maxDiskCacheSize = 50 * 1024 * 1024;
 
 /// Request header marking a request whose failure is expected and must not pollute the logs.
 ///
@@ -55,6 +61,10 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
     ? Uri.http(kLichessHost, unencodedPath, queryParameters)
     : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
+/// Creates the Uri of the lichess page of the game [id], seen from [orientation] if given.
+Uri lichessGameUri(GameId id, {Side? orientation}) =>
+    lichessUri(orientation != null ? '/game/$id/${orientation.name}' : '/game/$id');
+
 /// The host of the lichess main server, without the port part.
 ///
 /// Other lichess services, such as the opening explorer, the tablebase or the
@@ -63,22 +73,34 @@ final _lichessMainHost = lichessUri('/').host;
 
 /// Creates the appropriate http client for the platform.
 ///
-/// Do not use directly, use [defaultClientProvider] or [lichessClientProvider] instead.
-class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
-  Client _createClient() {
+/// Do not use directly, use [defaultClientProvider], [imageClientProvider] or [lichessClientProvider]
+/// instead.
+class const HttpClientFactory({
+  final Client Function(Client client, {required bool diskCache})? wrapper,
+}) {
+  Client _createClient({Directory? diskCacheDirectory}) {
     const userAgent = 'Lichess Mobile';
     try {
       if (Platform.isAndroid) {
         final engine = CronetEngine.build(
-          cacheMode: CacheMode.memory,
-          cacheMaxSize: _maxCacheSize,
+          cacheMode: diskCacheDirectory != null ? .disk : .memory,
+          cacheMaxSize: diskCacheDirectory != null ? _maxDiskCacheSize : _maxCacheSize,
+          storagePath: diskCacheDirectory?.path,
           userAgent: userAgent,
           enableHttp2: true,
         );
         return CronetClient.fromCronetEngine(engine);
       } else if (Platform.isIOS || Platform.isMacOS) {
-        final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-          ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+        // An ephemeral session never writes its cache to disk.
+        final config = diskCacheDirectory != null
+            ? URLSessionConfiguration.defaultSessionConfiguration()
+            : URLSessionConfiguration.ephemeralSessionConfiguration();
+        config
+          ..cache = URLCache.withCapacity(
+            memoryCapacity: _maxCacheSize,
+            diskCapacity: diskCacheDirectory != null ? _maxDiskCacheSize : 0,
+            directory: diskCacheDirectory?.uri,
+          )
           ..httpAdditionalHeaders = {'User-Agent': userAgent};
         return CupertinoClient.fromSessionConfiguration(config);
       }
@@ -88,9 +110,13 @@ class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
     return IOClient(HttpClient()..userAgent = userAgent);
   }
 
-  Client call() {
-    final client = _createClient();
-    return wrapper?.call(client) ?? client;
+  /// Creates a client.
+  ///
+  /// With a [diskCacheDirectory], the client caches the responses on disk in that directory, which
+  /// must exist and not be used by any other client. Otherwise it caches them in memory only.
+  Client call({Directory? diskCacheDirectory}) {
+    final client = _createClient(diskCacheDirectory: diskCacheDirectory);
+    return wrapper?.call(client, diskCache: diskCacheDirectory != null) ?? client;
   }
 }
 
@@ -99,7 +125,22 @@ class const HttpClientFactory({final Client Function(Client client)? wrapper}) {
 /// Http clients created by this factory log all requests and responses to the database.
 final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
   return HttpClientFactory(
-    wrapper: (client) => _RegisterCallbackClient(
+    wrapper: (client, {required diskCache}) => wrapWithCallbacks(ref, client, diskCache: diskCache),
+  );
+});
+
+/// Wraps [client] in the callbacks of the clients created by [httpClientFactoryProvider].
+///
+/// They log all requests and responses to the database, and tell [ConnectivityChangesNotifier]
+/// about every response received.
+///
+/// [diskCache] tells whether [client] caches its responses on disk, to log which cache served a
+/// cached response.
+///
+/// Exposed so that tests overriding [httpClientFactoryProvider] can still go through them.
+@visibleForTesting
+Client wrapWithCallbacks(Ref ref, Client client, {bool diskCache = false}) =>
+    _RegisterCallbackClient(
       client,
       onRequest: (request) async {
         if (request.method == 'HEAD') return;
@@ -114,12 +155,27 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
         );
       },
       onResponse: (response) async {
+        if (ref.mounted && ref.exists(connectivityChangesProvider)) {
+          ref.read(connectivityChangesProvider.notifier).onHttpResponse(response.request?.url);
+        }
         if (response.request != null) {
           final httpLogStorage = await ref.read(httpLogStorageProvider.future);
           httpLogStorage.updateWithResponse(
             response.request!.hashCode.toString(),
             responseCode: response.statusCode,
             responseDateTime: DateTime.now(),
+            cache: isCachedResponse(response)
+                ? (diskCache ? HttpLogCache.disk : HttpLogCache.memory)
+                : null,
+          );
+        }
+      },
+      onResponseBody: (response, size) async {
+        if (response.request != null) {
+          final httpLogStorage = await ref.read(httpLogStorageProvider.future);
+          httpLogStorage.updateWithResponseSize(
+            response.request!.hashCode.toString(),
+            responseSize: size,
           );
         }
       },
@@ -135,9 +191,25 @@ final httpClientFactoryProvider = Provider<HttpClientFactory>((Ref ref) {
           );
         }
       },
-    ),
-  );
-});
+    );
+
+/// Whether [response] was served by the http client cache instead of the network.
+///
+/// Cronet (Android) tells it, including for a cached response revalidated over the network.
+/// The other clients (`cupertino_http` on iOS) don't, so it is guessed from the `Date` header.
+@visibleForTesting
+bool isCachedResponse(BaseResponse response, {DateTime? now}) {
+  if (response is CronetStreamedResponse) return response.wasCached;
+  if (response.statusCode != 200) return false;
+  final dateHeader = response.headers['date'];
+  if (dateHeader == null) return false;
+  try {
+    final date = HttpDate.parse(dateHeader);
+    return (now ?? DateTime.now()).difference(date) > const Duration(seconds: 60);
+  } on HttpException catch (_) {
+    return false;
+  }
+}
 
 /// The default http client.
 ///
@@ -157,6 +229,31 @@ final defaultClientProvider = Provider<DefaultClient>((Ref ref) {
   ref.onDispose(() => client.close());
   return client;
 }, name: 'DefaultHttpClientProvider');
+
+/// The http client used to download images, such as flairs or blog and broadcast images.
+///
+/// It is the same as [defaultClientProvider], except that it caches the responses on disk, so the
+/// images survive app restarts and are not evicted by other responses. It follows the cache
+/// headers of the responses: the lichess CDN serves its assets with a one year max-age.
+///
+/// Falls back to an in-memory cache if the cache directory could not be created.
+///
+/// Only one instance of this client is created and kept alive for the whole app.
+final imageClientProvider = Provider<DefaultClient>((Ref ref) {
+  final preloadedData = ref.read(preloadedDataProvider).requireValue;
+  final userAgent = makeUserAgent(
+    preloadedData.packageInfo,
+    preloadedData.deviceInfo,
+    preloadedData.sri,
+    null,
+  );
+  final client = DefaultClient(
+    ref.read(httpClientFactoryProvider)(diskCacheDirectory: preloadedData.imageCacheDirectory),
+    userAgent: userAgent,
+  );
+  ref.onDispose(() => client.close());
+  return client;
+}, name: 'ImageHttpClientProvider');
 
 /// The http client configured to make requests to the lichess API.
 ///
@@ -321,6 +418,7 @@ Future<bool> downloadFile(
 ///
 /// The [onRequest] callback is called before the request is sent.
 /// The [onResponse] callback is called after a response is received.
+/// The [onResponseBody] callback is called once the response body has been fully received.
 /// The [onError] callback is called when an error occurs during the request.
 ///
 ///
@@ -333,6 +431,9 @@ class _RegisterCallbackClient(
   final Client _inner, {
   final void Function(BaseRequest request)? onRequest,
   final void Function(BaseResponse response)? onResponse,
+
+  /// Called with the size in bytes of the response body, once it has been fully received.
+  final void Function(BaseResponse response, int size)? onResponseBody,
   final void Function(BaseRequest request, Object error, [StackTrace? stackTrace])? onError,
 }) extends BaseClient {
   @override
@@ -341,13 +442,53 @@ class _RegisterCallbackClient(
       onRequest?.call(request);
       final response = await _inner.send(request);
       onResponse?.call(response);
-      return response;
+      if (onResponseBody == null) return response;
+      var size = 0;
+      final stream = response.stream.transform(
+        StreamTransformer<List<int>, List<int>>.fromHandlers(
+          handleData: (chunk, sink) {
+            size += chunk.length;
+            sink.add(chunk);
+          },
+          handleDone: (sink) {
+            onResponseBody?.call(response, size);
+            sink.close();
+          },
+        ),
+      );
+      return _StreamedResponseWithUrl(
+        stream,
+        response.statusCode,
+        url: switch (response) {
+          BaseResponseWithUrl(:final url) => url,
+          _ => request.url,
+        },
+        contentLength: response.contentLength,
+        request: response.request,
+        headers: response.headers,
+        isRedirect: response.isRedirect,
+        persistentConnection: response.persistentConnection,
+        reasonPhrase: response.reasonPhrase,
+      );
     } catch (error, st) {
       onError?.call(request, error, st);
       rethrow;
     }
   }
 }
+
+/// A [StreamedResponse] that keeps the final url of the response it replaces.
+class _StreamedResponseWithUrl(
+  super.stream,
+  super.statusCode, {
+  @override required final Uri url,
+  super.contentLength,
+  super.request,
+  super.headers,
+  super.isRedirect,
+  super.persistentConnection,
+  super.reasonPhrase,
+}) extends StreamedResponse implements BaseResponseWithUrl;
 
 /// Lichess HTTP client.
 ///

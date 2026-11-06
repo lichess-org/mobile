@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -27,15 +28,17 @@ final playersAndTournamentProvider = FutureProvider.autoDispose
       return (players, tournament);
     });
 
-/// A tab that displays the players participating in a broadcast tournament.
+/// A tab that displays the players participating in a broadcast tournament, as a sliver.
 class const BroadcastPlayersTab({required final BroadcastTournamentId tournamentId})
     extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return switch (ref.watch(playersAndTournamentProvider(tournamentId))) {
       AsyncData(value: final data) => BroadcastPlayersList(data.$1, data.$2),
-      AsyncError(:final error) => Center(child: Text('Cannot load players data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load players data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -174,7 +177,7 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
 
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
-    return CustomScrollView(
+    return SliverMainAxisGroup(
       slivers: [
         SliverSafeArea(
           bottom: false,
@@ -184,8 +187,10 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
               children: [
                 if (showSearchBar)
                   Padding(
-                    padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+                    // Closer to the tabs above it.
+                    padding: Styles.bodyPadding.copyWith(top: 8.0, bottom: 0.0),
                     child: PlatformSearchBar(
+                      hintText: context.l10n.searchSearch,
                       controller: _searchController,
                       onChanged: (value) {
                         setState(() {
@@ -313,9 +318,8 @@ class const BroadcastPlayerRow({
 
     final BroadcastPlayerWithOverallResult(:player, :score, :played) = playerWithOverallResult;
 
-    showModalBottomSheet<void>(
+    showAdaptiveBottomSheet<void>(
       context: context,
-      isDismissible: true,
       isScrollControlled: true,
       builder: (context) {
         return BottomSheetScrollableContainer(

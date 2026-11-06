@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -144,7 +145,7 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
       if (friend.playing == true)
         IconButton.filledTonal(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: friend.user));
+            Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: friend.user));
           },
           icon: const Icon(Icons.live_tv_outlined),
           iconSize: iconSize,
@@ -163,10 +164,8 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
             icon: Icons.chat_bubble_outline,
             label: context.l10n.message,
             onPressed: () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(ConversationScreen.buildRoute(user: friend.user));
+              Navigator.of(context)
+                  .pushHidingTabBar(ConversationScreen.buildRoute(user: friend.user));
             },
           ),
           ContextMenuAction(

@@ -288,30 +288,28 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // switch to following tab and open sort sheet
+      // switch to following tab
       await tester.tap(find.text('4 following'));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Sort friends'));
-      await tester.pumpAndSettle();
 
-      // test alphabetical
-      await tester.tap(find.text('Alphabetical'));
-      await tester.pumpAndSettle();
+      // The sort menu closes when a sort is chosen.
+      Future<void> chooseSort(String label) async {
+        await tester.tap(find.byTooltip('Sort friends'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(label));
+        await tester.pumpAndSettle();
+      }
+
+      await chooseSort('Alphabetical');
       verifySortOrder(alphabetical);
 
-      // test ratingAsc
-      await tester.tap(find.text('Rating Ascending'));
-      await tester.pumpAndSettle();
+      await chooseSort('Rating Ascending');
       verifySortOrder(ratingAsc);
 
-      // test ratingDesc
-      await tester.tap(find.text('Rating Descending'));
-      await tester.pumpAndSettle();
+      await chooseSort('Rating Descending');
       verifySortOrder(ratingDesc);
 
-      // test lastSeen
-      await tester.tap(find.text('Last Seen'));
-      await tester.pumpAndSettle();
+      await chooseSort('Last Seen');
       verifySortOrder(lastSeen);
     });
   });

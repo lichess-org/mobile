@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -23,6 +24,7 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
@@ -62,13 +64,11 @@ class const UserScreen({required final LightUser user, super.key}) extends Consu
     if (isOddBot) {
       Navigator.of(context).push(ChallengeOddBotsScreen.buildRoute(user));
     } else {
-      showModalBottomSheet<void>(
+      showAdaptiveBottomSheet<void>(
         context: context,
         isScrollControlled: true,
         useRootNavigator: true,
-        builder: (context) {
-          return CreateChallengeBottomSheet(user: user);
-        },
+        builder: (_) => CreateChallengeBottomSheet(user: user, navigator: Navigator.of(context)),
       );
     }
   }
@@ -98,6 +98,7 @@ class _UserScreenState() extends ConsumerState<UserScreen> {
     final seenAt = userScreenData.maybeWhen(data: (data) => data.user.seenAt, orElse: () => null);
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        centerTitle: false, // user name can be long
         titleSpacing: 0,
         title: UserAppBarTitleWidget(
           user: updatedLightUser ?? widget.user,
@@ -179,9 +180,6 @@ class const _UserProfileListView(
     }
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       onRefresh: onRefresh,
       child: ListView(
         children: [
@@ -220,10 +218,7 @@ class const _UserProfileListView(
                 leading: const Icon(Icons.live_tv_outlined),
                 trailing: isPlayingLive == true ? const TextBadge(text: 'LIVE') : null,
                 onTap: () {
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(TvScreen.buildRoute(user: user.lightUser));
+                  Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: user.lightUser));
                 },
               ),
               if (authUser != null) ...[
@@ -244,10 +239,8 @@ class const _UserProfileListView(
                     leading: const Icon(Icons.chat_bubble_outline),
                     title: Text(context.l10n.composeMessage),
                     onTap: () {
-                      Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(ConversationScreen.buildRoute(user: user.lightUser));
+                      Navigator.of(context)
+                          .pushHidingTabBar(ConversationScreen.buildRoute(user: user.lightUser));
                     },
                   ),
                 if (user.followable == true && user.following != true)

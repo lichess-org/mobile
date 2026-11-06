@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
@@ -28,7 +30,7 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
-/// A tab that displays the live games of a broadcast round.
+/// A tab that displays the live games of a broadcast round, as a sliver.
 class const BroadcastBoardsTab({
   required final BroadcastTournamentId tournamentId,
   required final BroadcastRoundId roundId,
@@ -38,45 +40,54 @@ class const BroadcastBoardsTab({
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteFederation = ref.watch(
+      accountPreferencesProvider.select((prefs) => prefs.value?.favoriteFederation),
+    );
     final boards = ref.watch(
       broadcastRoundControllerProvider(roundId).select(
-        (state) => state.whenData(
-          (round) => (
+        (state) => state.whenData((round) {
+          final games = round.games.entries.where(
+            (entry) =>
+                (!showOnlyOngoingGames || entry.value.isOngoing) &&
+                (teamFilter == null ||
+                    Side.values.any((s) => entry.value.players[s]?.player.team == teamFilter)),
+          );
+          bool isFavorite(BroadcastGame game) =>
+              game.players.values.any((p) => p.player.federation == favoriteFederation);
+          // The games of the favorite federation come first, each group keeping the round order.
+          final orderedGames = favoriteFederation == null
+              ? games
+              : [
+                  ...games.where((e) => isFavorite(e.value)),
+                  ...games.whereNot((e) => isFavorite(e.value)),
+                ];
+          return (
             hasGames: round.games.isNotEmpty,
-            gameIds: round.games.entries
-                .where(
-                  (entry) =>
-                      (!showOnlyOngoingGames || entry.value.isOngoing) &&
-                      (teamFilter == null ||
-                          Side.values.any(
-                            (s) => entry.value.players[s]?.player.team == teamFilter,
-                          )),
-                )
-                .map((entry) => entry.key)
-                .toIList(),
-          ),
-        ),
+            gameIds: orderedGames.map((entry) => entry.key).toIList(),
+          );
+        }),
       ),
     );
 
     return switch (boards) {
       AsyncData(value: (:final hasGames, :final gameIds)) =>
         gameIds.isEmpty
-            ? Padding(
-                padding: Styles.bodyPadding,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.info, size: 30),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      hasGames
-                          ? 'No games matching filter criteria.'
-                          : context.l10n.broadcastNoBoardsYet,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+            ? BroadcastRoundTabPlaceholder(
+                Padding(
+                  padding: Styles.bodyPadding,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.info, size: 30),
+                      const SizedBox(height: 8.0),
+                      Text(
+                        hasGames
+                            ? 'No games matching filter criteria.'
+                            : context.l10n.broadcastNoBoardsYet,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               )
             : BroadcastPreview(
@@ -86,8 +97,10 @@ class const BroadcastBoardsTab({
                 tournamentSlug: tournamentSlug,
                 teamFilter: teamFilter,
               ),
-      AsyncError(:final error) => Center(child: Text('Could not load broadcast: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Could not load broadcast: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
@@ -177,7 +190,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
     final hasComment = pinnedComment != null && pinnedComment.isNotEmpty;
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
-    return CustomScrollView(
+    return SliverMainAxisGroup(
       slivers: [
         if (hasComment)
           SliverSafeArea(
@@ -193,9 +206,11 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
             top: !hasComment,
             bottom: false,
             sliver: SliverPadding(
-              padding: Styles.bodyPadding.copyWith(bottom: 0.0),
+              // Closer to the tabs above it.
+              padding: Styles.bodyPadding.copyWith(top: hasComment ? null : 8.0, bottom: 0.0),
               sliver: SliverToBoxAdapter(
                 child: PlatformSearchBar(
+                  hintText: context.l10n.searchSearch,
                   controller: _searchController,
                   onChanged: (value) {
                     setState(() {
@@ -239,6 +254,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
               final gameId = gameIds[index];
 
               return ObservedBoardThumbnail(
+                key: ValueKey(gameId),
                 roundId: widget.roundId,
                 gameId: gameId,
                 title: round?.name ?? '',
@@ -267,6 +283,7 @@ class _BroadcastPreviewState() extends ConsumerState<BroadcastPreview> {
 }
 
 class const ObservedBoardThumbnail({
+  super.key,
   required final BroadcastRoundId roundId,
   required final BroadcastGameId gameId,
   required final String title,
@@ -411,8 +428,12 @@ class const _PlayerWidget({
               if (game.isOver)
                 Text(
                   resultString(customScoring, side, game.status),
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
+                  // The line height of the other texts, which the grid cell height is computed from.
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    height: _kPlayerWidgetTextStyle.height,
+                    fontWeight: .bold,
+                    color: game.status.colorFor(side, context),
+                  ),
                 )
               else if (clock != null)
                 CountdownClockBuilder(

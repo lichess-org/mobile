@@ -163,7 +163,7 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
                         ? context.l10n.studyYesKeepEveryoneOnTheSamePosition
                         : context.l10n.studyNoLetPeopleBrowseFreely,
                   ),
-                  trailing: Switch(
+                  trailing: Switch.adaptive(
                     value: payload.sticky,
                     onChanged: (bool value) =>
                         setState(() => payload = payload.copyWith(sticky: value)),
@@ -181,7 +181,7 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
               if (!context.mounted) {
                 return;
               }
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 useRootNavigator: true,
