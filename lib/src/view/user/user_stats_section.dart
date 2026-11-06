@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/view/user/rating_history_chart.dart';
 import 'package:lichess_mobile/src/view/user/user_stat_cards.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Maximum number of perfs drawn in the rating history chart: one per line style, as they share
@@ -83,20 +84,58 @@ class const UserStatsSection({required final User user, required final bool isMe
 class const _RatingHistoryCard({required final User user}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(userRatingHistoryProvider(user.id)).value;
-    if (history == null) return const SizedBox.shrink();
+    bool isRated(Perf perf) {
+      final userPerf = user.perfs[perf];
+      return userPerf != null &&
+          userPerf.numberOfGamesOrRuns > 0 &&
+          userPerf.ratingDeviation < kClueLessDeviation;
+    }
+
+    final asyncHistory = ref.watch(userRatingHistoryProvider(user.id));
+    final history = asyncHistory.value;
+    if (history == null) {
+      // A skeleton of the chart while it loads, if the user has a perf it may draw.
+      final mayHaveChart = Perf.values.any(
+        (perf) => perf != .storm && perf != .streak && isRated(perf),
+      );
+      return asyncHistory.isLoading && mayHaveChart
+          ? const Padding(
+              padding: EdgeInsets.only(bottom: 12.0),
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Shimmer(
+                    child: ShimmerLoading(
+                      isLoading: true,
+                      child: Column(
+                        crossAxisAlignment: .stretch,
+                        children: [
+                          // the legend
+                          FractionallySizedBox(
+                            alignment: .centerLeft,
+                            widthFactor: 0.7,
+                            child: _SkeletonBox(height: 20.0),
+                          ),
+                          SizedBox(height: 16.0),
+                          AspectRatio(aspectRatio: 16 / 9, child: _SkeletonBox()),
+                          SizedBox(height: 12.0),
+                          // the date range control
+                          _SkeletonBox(height: 36.0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : const SizedBox.shrink();
+    }
 
     final historyByPerf = {
       for (final perfHistory in history)
         if (perfHistory.points.length > 1) perfHistory.perf: perfHistory.points,
     };
-    bool hasChartableHistory(Perf perf) {
-      final userPerf = user.perfs[perf];
-      return userPerf != null &&
-          userPerf.numberOfGamesOrRuns > 0 &&
-          userPerf.ratingDeviation < kClueLessDeviation &&
-          historyByPerf.containsKey(perf);
-    }
+    bool hasChartableHistory(Perf perf) => isRated(perf) && historyByPerf.containsKey(perf);
 
     // The most played game perfs, then puzzles if there is room left.
     final chartPerfs = [
@@ -128,6 +167,22 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
             ]),
             alwaysShowLegend: true,
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A rounded placeholder shape, painted by an enclosing [ShimmerLoading].
+class const _SkeletonBox({final double? height}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+      child: const DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
       ),
     );
