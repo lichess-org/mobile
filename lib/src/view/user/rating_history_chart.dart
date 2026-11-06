@@ -23,11 +23,15 @@ class const RatingHistorySeries({
 /// A line chart of the rating history of one or more perfs over a selectable date range.
 ///
 /// With a single series, the header shows the rating change over the range and the area below the
-/// line is filled. With several, the header is a legend giving each perf's rating and change.
+/// line is filled. With several, or if [alwaysShowLegend] is true, the header is a legend giving
+/// each perf's rating and change.
 ///
 /// Every series must have at least one point.
-class const RatingHistoryChart(final IList<RatingHistorySeries> series, {super.key})
-    extends StatefulWidget {
+class const RatingHistoryChart(
+  final IList<RatingHistorySeries> series, {
+  final bool alwaysShowLegend = false,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<RatingHistoryChart> createState() => _RatingHistoryChartState();
 }
@@ -108,7 +112,7 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
     final colorScheme = ColorScheme.of(context);
     final gridColor = colorScheme.onSurface.withValues(alpha: 0.08);
     final axisLabelStyle = TextStyle(color: textShade(context, 0.5), fontSize: 10);
-    final isSingle = widget.series.length == 1;
+    final isSingle = !widget.alwaysShowLegend && widget.series.length == 1;
     final chartDateFormatter = switch (_selectedRange) {
       DateRange.oneWeek || DateRange.oneMonth => DateFormat.MMMd(),
       DateRange.threeMonths || DateRange.oneYear || DateRange.allTime => DateFormat.yMMM(),

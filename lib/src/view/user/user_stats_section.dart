@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -76,7 +77,7 @@ class const UserStatsSection({required final User user, required final bool isMe
   }
 }
 
-/// The rating history of the user's most played perfs, in one chart.
+/// The rating history of the user's most played perfs, then puzzles, in one chart.
 ///
 /// Shows nothing while loading, on error, or if no perf has enough history to draw.
 class const _RatingHistoryCard({required final User user}) extends ConsumerWidget {
@@ -89,22 +90,26 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
       for (final perfHistory in history)
         if (perfHistory.points.length > 1) perfHistory.perf: perfHistory.points,
     };
-    final mostPlayedPerfs =
-        Perf.values
-            .where((perf) {
-              if (perf == Perf.puzzle || perf == Perf.storm || perf == Perf.streak) return false;
-              final userPerf = user.perfs[perf];
-              return userPerf != null &&
-                  userPerf.numberOfGamesOrRuns > 0 &&
-                  userPerf.ratingDeviation < kClueLessDeviation &&
-                  historyByPerf.containsKey(perf);
-            })
-            .toList(growable: false)
-          ..sort(
-            (a, b) =>
-                user.perfs[b]!.numberOfGamesOrRuns.compareTo(user.perfs[a]!.numberOfGamesOrRuns),
-          );
-    if (mostPlayedPerfs.isEmpty) return const SizedBox.shrink();
+    bool hasChartableHistory(Perf perf) {
+      final userPerf = user.perfs[perf];
+      return userPerf != null &&
+          userPerf.numberOfGamesOrRuns > 0 &&
+          userPerf.ratingDeviation < kClueLessDeviation &&
+          historyByPerf.containsKey(perf);
+    }
+
+    // The most played game perfs, then puzzles if there is room left.
+    final chartPerfs = [
+      ...Perf.values
+          .where((perf) => perf != .puzzle && perf != .storm && perf != .streak)
+          .where(hasChartableHistory)
+          .sortedByCompare(
+            (perf) => user.perfs[perf]!.numberOfGamesOrRuns,
+            (a, b) => b.compareTo(a),
+          ),
+      if (hasChartableHistory(.puzzle)) Perf.puzzle,
+    ];
+    if (chartPerfs.isEmpty) return const SizedBox.shrink();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
@@ -113,13 +118,14 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
           padding: const EdgeInsets.all(16.0),
           child: RatingHistoryChart(
             IList([
-              for (final perf in mostPlayedPerfs.take(_kMaxChartPerfs))
+              for (final perf in chartPerfs.take(_kMaxChartPerfs))
                 RatingHistorySeries(
                   perf: perf,
                   points: historyByPerf[perf]!,
                   color: perf.color(context),
                 ),
             ]),
+            alwaysShowLegend: true,
           ),
         ),
       ),
