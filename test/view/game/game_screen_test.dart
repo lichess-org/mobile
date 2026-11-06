@@ -723,7 +723,8 @@ void main() {
       expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
       // move is not yet played so it doesn't appear in the move list
       expect(find.text('Nf3'), findsNothing);
-      verifyNever(() => mockSoundService.play(Sound.move));
+      verify(() => mockSoundService.play(.move)).called(1);
+      verifyNever(() => mockSoundService.play(.confirmation));
 
       // confirm the move
       await tester.tap(find.byIcon(CupertinoIcons.checkmark_rectangle_fill));
@@ -733,7 +734,8 @@ void main() {
       expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
       // move appears in move list
       expect(find.text('Nf3'), findsOneWidget);
-      verify(() => mockSoundService.play(Sound.move)).called(1);
+      verify(() => mockSoundService.play(.confirmation)).called(1);
+      verifyNever(() => mockSoundService.play(.move));
     }, variant: kPlatformVariant);
 
     testWidgets('offer draw stays unavailable after the opponent declines it', (
