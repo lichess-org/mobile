@@ -125,6 +125,8 @@ class _BodyState() extends ConsumerState<_Body> {
                     );
 
                     return SwipeActions(
+                      // The compact rows are too short for the labels.
+                      showLabels: false,
                       startActions: [
                         SwipeAction(
                           backgroundColor: ColorScheme.of(context).tertiaryContainer,
