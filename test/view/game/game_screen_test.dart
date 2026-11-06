@@ -2356,7 +2356,7 @@ void main() {
         san: 'Nf3',
         clockAck: (
           white: const Duration(seconds: 30),
-          black: const Duration(seconds: 40),
+          black: const Duration(seconds: 13),
           lag: null,
         ),
         socketVersion: 1,
