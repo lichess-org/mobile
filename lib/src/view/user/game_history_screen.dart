@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -19,6 +20,7 @@ import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -93,31 +95,49 @@ class const GameHistoryScreen({
     final displayMode = ref.watch(
       gameHistoryPreferencesProvider.select((value) => value.displayMode),
     );
-    final displayModeButton = ContextMenuIconButton(
+    // Bookmarks are the logged in user's: link to them from their own games only.
+    final authUser = ref.watch(authControllerProvider);
+    final isMyHistory = authUser != null && (user == null || user!.id == authUser.user.id);
+    final nbBookmarks = isMyHistory
+        ? ref.watch(accountProvider.select((account) => account.value?.count?.bookmark)) ?? 0
+        : 0;
+    final menuButton = ContextMenuIconButton(
       consumeOutsideTap: true,
       icon: const Icon(Icons.more_horiz),
       semanticsLabel: context.l10n.menu,
       actions: [
-        ContextMenuAction(
-          icon: Icons.ballot_outlined,
-          label: context.l10n.mobileDisplayModeDetailed,
-          selected: displayMode == GameHistoryDisplayMode.detail,
-          onPressed: () {
-            ref
-                .read(gameHistoryPreferencesProvider.notifier)
-                .setDisplayMode(GameHistoryDisplayMode.detail);
-          },
+        ContextMenuSection(
+          actions: [
+            ContextMenuAction(
+              icon: Icons.ballot_outlined,
+              label: context.l10n.mobileDisplayModeDetailed,
+              selected: displayMode == GameHistoryDisplayMode.detail,
+              onPressed: () {
+                ref
+                    .read(gameHistoryPreferencesProvider.notifier)
+                    .setDisplayMode(GameHistoryDisplayMode.detail);
+              },
+            ),
+            ContextMenuAction(
+              icon: Icons.list_outlined,
+              label: context.l10n.mobileDisplayModeCompact,
+              selected: displayMode == GameHistoryDisplayMode.compact,
+              onPressed: () {
+                ref
+                    .read(gameHistoryPreferencesProvider.notifier)
+                    .setDisplayMode(GameHistoryDisplayMode.compact);
+              },
+            ),
+          ],
         ),
-        ContextMenuAction(
-          icon: Icons.list_outlined,
-          label: context.l10n.mobileDisplayModeCompact,
-          selected: displayMode == GameHistoryDisplayMode.compact,
-          onPressed: () {
-            ref
-                .read(gameHistoryPreferencesProvider.notifier)
-                .setDisplayMode(GameHistoryDisplayMode.compact);
-          },
-        ),
+        if (nbBookmarks > 0)
+          ContextMenuAction(
+            icon: Icons.bookmarks_outlined,
+            label: context.l10n.nbBookmarks(nbBookmarks),
+            onPressed: () {
+              Navigator.of(context).push(GameBookmarksScreen.buildRoute(nbBookmarks: nbBookmarks));
+            },
+          ),
       ],
     );
 
@@ -126,7 +146,7 @@ class const GameHistoryScreen({
         // A long title, next to the actions.
         centerTitle: false,
         title: title,
-        actions: [filterBtn, displayModeButton],
+        actions: [filterBtn, menuButton],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
