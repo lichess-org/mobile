@@ -11,20 +11,6 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
-// See https://pub.dev/packages/unifiedpush#the-build-fails-because-of-duplicate-classes
-configurations.all {
-    // Use the latest version published: https://central.sonatype.com/artifact/com.google.crypto.tink/tink-android
-    val tink = "com.google.crypto.tink:tink-android:1.17.0"
-    // You can also use the library declaration catalog
-    // val tink = libs.google.tink
-    resolutionStrategy {
-        force(tink)
-        dependencySubstitution {
-            substitute(module("com.google.crypto.tink:tink")).using(module(tink))
-        }
-    }
-}
-
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
 if (keystorePropertiesFile.exists()) {
@@ -98,6 +84,23 @@ flutter {
 }
 
 dependencies {
+    // See https://pub.dev/packages/unifiedpush#the-build-fails-because-of-duplicate-classes
+    //
+    // Applying this change only to the UnifiedPush connector's dependency metadata avoids affecting
+    // the tink-android dependency declared independently by other plugins, such as
+    // flutter_secure_storage.
+    components {
+        withModule("org.unifiedpush.android:connector") {
+            allVariants {
+                withDependencies {
+                    val tink = find { it.group == "com.google.crypto.tink" && it.name == "tink" }
+                    val version = originalTink.versionConstraint.requiredVersion
+                    remove(originalTink)
+                    add("com.google.crypto.tink:tink-android:$originalVersion")
+                }
+            }
+        }
+    }
     // Dependency required by flutter_local_notifications package
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("androidx.core:core-splashscreen:1.0.1")
