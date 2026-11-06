@@ -121,7 +121,7 @@ class const GameListDetailTile({
                                         Icon(
                                           CupertinoIcons.chart_bar_alt_fill,
                                           size: subtitleFontSize + 3,
-                                          color: textShade(context, 0.7),
+                                          color: textShade(context, 0.4),
                                         ),
                                         const SizedBox(width: 2),
                                       ],

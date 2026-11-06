@@ -161,7 +161,7 @@ class const GameListTile({
         ),
       ),
       trailing: me.analysis != null
-          ? Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5))
+          ? Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.3))
           : null,
     );
   }

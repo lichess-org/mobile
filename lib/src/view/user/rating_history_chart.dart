@@ -211,6 +211,10 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
                     );
+                    final perfLabelStyle = TextStyle(
+                      fontWeight: FontWeight.normal,
+                      color: colorScheme.onSurfaceVariant,
+                    );
                     final dateStyle = TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 11,
@@ -224,8 +228,9 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
                           children: [
                             if (!isSingle)
                               TextSpan(
-                                text: '● ',
-                                style: TextStyle(color: widget.series[touchedSpot.barIndex].color),
+                                text:
+                                    '${widget.series[touchedSpot.barIndex].perf.shortLabel(context.l10n)} ',
+                                style: perfLabelStyle,
                               ),
                             TextSpan(text: touchedSpot.y.toInt().toString()),
                             // the date, once, below the last rating
