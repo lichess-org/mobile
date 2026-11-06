@@ -10,13 +10,14 @@ import 'package:material_ui/material_ui.dart';
 
 /// HCT hue of each [Perf] icon color.
 ///
-/// The hues are about 18° apart, all around the wheel but clear of the lichess brag gold (HCT hue
-/// 73), the color of tournament and top games icons shown next to perf icons. The time controls,
-/// often shown together, are the farthest apart.
+/// The hues are spread all around the wheel but clear of the lichess brag gold (HCT hue 73), the
+/// color of tournament and top games icons shown next to perf icons. The time controls, often shown
+/// together, are the farthest apart: bullet leans towards crimson and blitz towards orange, so that
+/// they stay apart in the light theme, where the dark tone makes red hues hard to tell apart.
 double _perfHue(Perf perf) => switch (perf) {
-  .ultraBullet => 326,
-  .bullet => 2,
-  .blitz => 38,
+  .ultraBullet => 318,
+  .bullet => 354,
+  .blitz => 46,
   .rapid => 128,
   .classical => 200,
   .correspondence => 272,
@@ -51,8 +52,7 @@ class const PerfColors(final IMap<Perf, Color> colors) extends ThemeExtension<Pe
     return PerfColors(
       IMap({
         for (final perf in Perf.values)
-          perf: Color(Hct.from(_perfHue(perf), kPerfColorChroma, tone).toInt())
-              .harmonizeWith(colorScheme.primary),
+          perf: Color(Hct.from(_perfHue(perf), kPerfColorChroma, tone).toInt()),
       }),
     );
   }
