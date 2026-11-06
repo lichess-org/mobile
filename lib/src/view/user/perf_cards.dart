@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
-import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:material_ui/material_ui.dart';
 

@@ -8,12 +8,15 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
-import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_games_cards.dart';
+import 'package:lichess_mobile/src/view/user/perf_stats/perf_stats_screen.dart';
+import 'package:lichess_mobile/src/widgets/result_meter.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../model/auth/fake_auth_repository.dart';
-import '../../test_helpers.dart';
-import '../../test_provider_scope.dart';
+import '../../../model/auth/fake_auth_repository.dart';
+import '../../../network/fake_http_client_factory.dart';
+import '../../../test_helpers.dart';
+import '../../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
@@ -94,10 +97,89 @@ void main() {
 
       // rating
       expect(find.text('1500'), findsOneWidget);
+      expect(find.widgetWithText(Card, 'Rating deviation'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1515'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1336'), findsOneWidget);
 
       for (final val in requiredStatsValues) {
         expect(find.widgetWithText(Card, val), findsAtLeastNWidgets(1));
       }
+
+      // results meter
+      expect(find.byType(ResultMeter), findsOneWidget);
+      expect(find.text('40.0%'), findsNWidgets(2));
+      expect(find.text('20.0%'), findsOneWidget);
+
+      // games breakdown
+      expect(find.text('Rated'), findsOneWidget);
+      expect(find.text('60%'), findsOneWidget);
+      expect(find.text('20%'), findsOneWidget);
+
+      // average opponent and time spent playing
+      await tester.scrollUntilVisible(find.text('Average opponent'), 200);
+      expect(find.widgetWithText(Card, 'Average opponent'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1,401'), findsOneWidget);
+      expect(find.widgetWithText(Card, 'Time spent playing'), findsOneWidget);
+      expect(find.widgetWithText(Card, '16 minutes'), findsOneWidget);
+
+      // winning and losing streaks
+      await tester.scrollUntilVisible(find.text('Winning streak'), 200);
+      expect(find.widgetWithText(Card, 'Winning streak'), findsOneWidget);
+      expect(find.widgetWithText(Card, '9 games'), findsNWidgets(2));
+      await tester.scrollUntilVisible(find.text('Losing streak'), 200);
+      expect(find.widgetWithText(Card, 'Losing streak'), findsOneWidget);
+      expect(find.widgetWithText(Card, '3 games'), findsOneWidget);
+
+      // playing habits
+      await tester.scrollUntilVisible(find.text('Games played in a row'), 200);
+      expect(find.widgetWithText(Card, 'Games played in a row'), findsOneWidget);
+      expect(find.widgetWithText(Card, '7 games'), findsOneWidget);
+      await tester.scrollUntilVisible(find.text('Max time spent playing'), 200);
+      expect(find.widgetWithText(Card, 'Max time spent playing'), findsOneWidget);
+      expect(find.widgetWithText(Card, '1 hour, 27 minutes'), findsOneWidget);
+    }, variant: kPlatformVariant);
+
+    testWidgets('breakdown labels fit and values align on a narrow screen', (
+      WidgetTester tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(320, 844),
+        home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.scrollUntilVisible(find.text('Disconnections'), 100);
+
+      final card = find.byType(PerfStatsGamesBreakdownCard);
+      final columns = find.descendant(of: card, matching: find.byType(Column));
+      expect(columns, findsNWidgets(4));
+      double? valueTop;
+      double? percentTop;
+      for (var i = 0; i < 4; i++) {
+        final column = columns.at(i);
+        final texts = find.descendant(of: column, matching: find.byType(Text));
+        final label = tester.widget<Text>(texts.first);
+        expect(label.maxLines, 1);
+        expect(label.softWrap, isFalse);
+        expect(
+          tester.getRect(texts.first).width,
+          lessThanOrEqualTo(tester.getSize(column).width + 0.01),
+        );
+        final top = tester.getTopLeft(texts.at(1)).dy;
+        final percentageTop = tester.getTopLeft(texts.at(2)).dy;
+        valueTop ??= top;
+        percentTop ??= percentageTop;
+        expect(top, closeTo(valueTop, 0.01));
+        expect(percentageTop, closeTo(percentTop, 0.01));
+      }
+      expect(tester.takeException(), isNull);
     }, variant: kPlatformVariant);
 
     testWidgets('a perf with zero games does not crash the stat columns', (
@@ -143,7 +225,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // end of the current and of the longest winning streaks
-      final streakEnd = find.text('Jan 20, 2023');
+      final streakEnd = find.textContaining('Jan 20, 2023');
       await tester.scrollUntilVisible(
         streakEnd.first,
         200,
@@ -157,7 +239,7 @@ void main() {
       await container.read(generalPreferencesProvider.notifier).setLocale(const Locale('de'));
       await tester.pumpAndSettle();
 
-      expect(find.text('20. Jan. 2023'), findsWidgets);
+      expect(find.textContaining('20. Jan. 2023'), findsWidgets);
       expect(streakEnd, findsNothing);
     }, variant: kPlatformVariant);
   });
