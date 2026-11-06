@@ -9,7 +9,7 @@ import '../../test_provider_scope.dart';
 void main() {
   group('Tournament list screen', () {
     final mockClient = MockClient((request) {
-      if (request.url.path == '/api/tournament') {
+      if (request.url.path == '/tournament') {
         return mockResponse(kTournamentApiResponse, 200);
       }
       return mockResponse('', 404);
@@ -52,7 +52,7 @@ void main() {
   });
 }
 
-// curl -X GET 'https://lichess.org/api/tournament' -H "Accept: application/json" 2> /dev/null | jq | sed 's/≤/<=/g'
+// curl -X GET 'https://lichess.org/tournament' -H "Accept: application/json" 2> /dev/null | jq | sed 's/≤/<=/g'
 const kTournamentApiResponse = '''
 {
   "created": [
