@@ -43,6 +43,18 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "firebase"
+
+    productFlavors {
+        create("prod") {
+            dimension = "firebase"
+        }
+
+        create("dev") {
+            dimension = "firebase"
+        }
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String?
@@ -61,9 +73,6 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
-        }
-        debug {
-            applicationIdSuffix = ".debug"
         }
     }
 
