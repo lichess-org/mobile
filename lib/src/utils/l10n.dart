@@ -37,20 +37,29 @@ String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true
   final yearFormatter = shortDate ? _dateFormatterWithYearShort : _dateFormatterWithYear;
 
   if (diff.isNegative) {
-    return diff.inDays == 0
-        ? diff.inHours == 0
-              ? diff.inMinutes == 0
-                    ? l10n.timeagoRightNow
-                    : l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
-              : l10n.timeagoNbHoursAgo(diff.inHours.abs())
-        : diff.inDays == 1
+    if (diff.inDays == 0) {
+      return diff.inHours == 0
+          ? diff.inMinutes == 0
+                ? l10n.timeagoRightNow
+                : l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
+          : l10n.timeagoNbHoursAgo(diff.inHours.abs());
+    }
+    // Past a day, count calendar days rather than 24 hour periods, so that a date matches the day
+    // it falls on (e.g. 2 days ago at 22:00 is "2 days ago" at 08:00, not "Yesterday").
+    final local = date.toLocal();
+    final days = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+    ).difference(DateTime.utc(local.year, local.month, local.day)).inDays;
+    return days == 1
         ? l10n.yesterday
-        : diff.inDays.abs() <= 7
-        ? l10n.timeagoNbDaysAgo(diff.inDays.abs())
-        : diff.inDays.abs() <= 30
-        ? l10n.timeagoNbWeeksAgo((diff.inDays.abs() / 7).round())
-        : diff.inDays.abs() <= 365
-        ? l10n.timeagoNbMonthsAgo((diff.inDays.abs() / 30).round())
+        : days <= 7
+        ? l10n.timeagoNbDaysAgo(days)
+        : days <= 30
+        ? l10n.timeagoNbWeeksAgo((days / 7).round())
+        : days <= 365
+        ? l10n.timeagoNbMonthsAgo((days / 30).round())
         : yearFormatter.format(date);
   }
   return diff.inDays == 0

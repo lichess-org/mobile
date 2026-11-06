@@ -155,7 +155,7 @@ Client wrapWithCallbacks(Ref ref, Client client, {bool diskCache = false}) =>
         );
       },
       onResponse: (response) async {
-        if (ref.mounted && ref.exists(connectivityChangesProvider)) {
+        if (ref.mounted && ref.read(connectivityChangesProvider.exists)) {
           ref.read(connectivityChangesProvider.notifier).onHttpResponse(response.request?.url);
         }
         if (response.request != null) {

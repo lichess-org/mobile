@@ -78,6 +78,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     );
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],

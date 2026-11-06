@@ -2,6 +2,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
@@ -32,11 +33,17 @@ import 'package:share_plus/share_plus.dart';
 
 DateFormat get _dateFormatter => DateFormat.yMMMd().add_Hm();
 
+DateFormat get _timeFormatter => DateFormat.Hm();
+
 /// A list tile for a game in a game list.
 class const GameListTile({
   required final LightExportedGameWithPov item,
   final EdgeInsetsGeometry? padding,
   final Future<void> Function(BuildContext context)? onPressedBookmark,
+
+  /// Whether to show only the time of day the game started instead of its date, in a list grouped
+  /// by day.
+  final bool timeOnly = false,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,20 +51,8 @@ class const GameListTile({
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
 
-    Widget getResultIcon(LightExportedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
-        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
-      } else {
-        return game.winner == null
-            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
-            : game.winner == mySide
-            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
-            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
-      }
-    }
-
     // An imported game is not tied to a lichess account: the point of view is arbitrary, so show
-    // both players and no result icon.
+    // both players and no result.
     final title = game.isImported
         ? Text(
             context.l10n.resVsX(
@@ -74,11 +69,44 @@ class const GameListTile({
             rating: opponent.rating,
           );
 
-    final trailing = <Widget>[
-      if (me.analysis != null)
-        Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-      if (!game.isImported) getResultIcon(game, youAre),
-    ];
+    // For an imported game, `lastMoveAt` is the import date, so prefer the PGN date if we have it.
+    final date = game.importDate != null
+        ? formatPgnDate(game.importDate!, shortDate: false)
+        : timeOnly
+        ? _timeFormatter.format(game.createdAt)
+        : relativeDate(context.l10n, game.lastMoveAt, shortDate: false);
+
+    final showRatings = switch (ref.watch(showRatingsPrefProvider)) {
+      AsyncData(:final value) => value != ShowRatings.no,
+      _ => false,
+    };
+    final ratingDiff = showRatings ? me.ratingDiff : null;
+
+    final isTournament = game.arenaTournamentId != null;
+
+    final isAborted = game.status == GameStatus.aborted || game.status == GameStatus.noStart;
+    final resultColor = isAborted
+        ? LichessColors.grey
+        : game.winner == null
+        ? context.lichessColors.brag
+        : game.winner == youAre
+        ? context.lichessColors.good
+        : context.lichessColors.error;
+
+    // The rating change when there is one, else a symbol of the result.
+    final result = ratingDiff != null && !isAborted
+        ? ratingDiff > 0
+              ? '+$ratingDiff'
+              : ratingDiff == 0
+              ? '±0'
+              : '$ratingDiff'
+        : isAborted
+        ? '✕'
+        : game.winner == null
+        ? '½'
+        : game.winner == youAre
+        ? '▲'
+        : '▼';
 
     return ListTile(
       onTap: () => openGameScreen(
@@ -98,17 +126,43 @@ class const GameListTile({
               GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
         );
       },
-      leading: Icon(game.isImported ? Icons.cloud_upload_outlined : game.perf.icon),
-      title: title,
-      // For an imported game, `lastMoveAt` is the import date, so prefer the PGN date if we have it.
-      subtitle: Text(
-        game.importDate != null
-            ? formatPgnDate(game.importDate!, shortDate: false)
-            : relativeDate(context.l10n, game.lastMoveAt, shortDate: false),
+      leading: Icon(
+        game.isImported
+            ? Icons.cloud_upload_outlined
+            : isTournament
+            ? LichessIcons.tournament_cup
+            : game.perf.icon,
       ),
-      trailing: trailing.isEmpty
-          ? null
-          : Row(mainAxisSize: MainAxisSize.min, spacing: 5, children: trailing),
+      title: title,
+      subtitle: Text.rich(
+        TextSpan(
+          children: [
+            // The leading icon shows the tournament, so show the speed next to the date.
+            if (isTournament) ...[
+              WidgetSpan(
+                alignment: .middle,
+                child: Icon(
+                  game.perf.icon,
+                  size: 14,
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              ),
+              const TextSpan(text: ' '),
+            ],
+            TextSpan(text: date),
+            if (!game.isImported) ...[
+              const TextSpan(text: '  '),
+              TextSpan(
+                text: result,
+                style: TextStyle(color: resultColor, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ],
+        ),
+      ),
+      trailing: me.analysis != null
+          ? Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.3))
+          : null,
     );
   }
 }
