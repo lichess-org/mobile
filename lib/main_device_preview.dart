@@ -10,12 +10,13 @@ import 'package:flutter/foundation.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/binding/binding_play.dart';
 import 'package:lichess_mobile/src/bootstrap.dart';
+import 'package:lichess_mobile/src/service/notification_service/fcm_service.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart'
     show DebugLiquidGlassOverride, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-/// Run with `flutter run -t lib/device_preview_main.dart`.
+/// Run with `flutter run -t lib/main_device_preview.dart`.
 Future<void> main() async {
   if (!kDebugMode) {
     throw UnsupportedError('The device preview entry point requires a debug build.');
@@ -27,7 +28,8 @@ Future<void> main() async {
   // The preview can show iOS glass on any host.
   if (!Platform.isIOS) await LiquidGlassWidgets.initialize();
   await bootstrapApp(
-    PlayLichessBinding.ensureInitialized,
+    initializeBinding: PlayLichessBinding.ensureInitialized,
+    notificationServiceFactory: FcmService.new,
     app: const DevicePreviewApp(child: AppInitializationScreen()),
   );
 }
