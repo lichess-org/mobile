@@ -142,9 +142,14 @@ class const _ResultCount({
       crossAxisAlignment: .start,
       children: [
         Text(label, style: shadedStyle, maxLines: 1, overflow: .ellipsis),
-        Text(
-          count.toString().localizeNumbers(),
-          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: color),
+        FittedBox(
+          fit: .scaleDown,
+          alignment: .centerLeft,
+          child: Text(
+            count.toString().localizeNumbers(),
+            maxLines: 1,
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: color),
+          ),
         ),
         Text(_formatPercentage(count, total), style: shadedStyle),
       ],

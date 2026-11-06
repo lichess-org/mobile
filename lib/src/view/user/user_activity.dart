@@ -120,8 +120,6 @@ class const UserActivityEntry({
                 draw: gameEntry.value.draw,
                 loss: gameEntry.value.loss,
               ),
-              onTap: () => Navigator.of(context)
-                  .push(GameHistoryScreen.buildRoute(user: user, isOnline: user.isOnline == true)),
             ),
         if (entry.puzzles != null)
           _UserActivityListTile(
@@ -311,7 +309,7 @@ class const _ResultBox({required final int number, required final Color color})
       height: _boxSize,
       width: _boxSize,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.25),
+        color: color.withValues(alpha: 0.35),
         borderRadius: const BorderRadius.all(Radius.circular(3.0)),
       ),
       child: Padding(
@@ -345,7 +343,7 @@ class const BriefGameResultBox({
           children: [
             if (win != 0) _ResultBox(number: win, color: context.lichessColors.good),
             if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
-            if (draw != 0) _ResultBox(number: draw, color: context.lichessColors.brag),
+            if (draw != 0) _ResultBox(number: draw, color: Colors.grey),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
             if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
