@@ -6,21 +6,30 @@ import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('Clock', () {
-    testWidgets('keeps emergency colors when the clock becomes inactive', (tester) async {
+    testWidgets('dims inactive emergency clocks while preserving normal and flagged colors', (
+      tester,
+    ) async {
       const style = ClockStyle(
         textColor: Colors.black,
         activeTextColor: Colors.blue,
         emergencyTextColor: Colors.white,
         backgroundColor: Colors.grey,
         activeBackgroundColor: Colors.green,
-        emergencyBackgroundColor: Colors.red,
+        emergencyBackgroundColor: Color(0x80FF0000),
       );
 
-      for (final active in [true, false]) {
+      for (final (active, timeLeft, expectedBackground, expectedText) in const [
+        (true, Duration(seconds: 5), Color(0x80FF0000), Colors.white),
+        (false, Duration(seconds: 5), Color(0x40FF0000), Colors.black),
+        (true, Duration.zero, Color(0x80FF0000), Colors.white),
+        (false, Duration.zero, Color(0x80FF0000), Colors.white),
+        (true, Duration(seconds: 15), Colors.green, Colors.blue),
+        (false, Duration(seconds: 15), Colors.grey, Colors.black),
+      ]) {
         await tester.pumpWidget(
           MaterialApp(
             home: Clock(
-              timeLeft: const Duration(seconds: 5),
+              timeLeft: timeLeft,
               active: active,
               emergencyThreshold: const Duration(seconds: 10),
               clockStyle: style,
@@ -36,8 +45,11 @@ void main() {
           find.descendant(of: clockFinder, matching: find.byType(Text)),
         );
 
-        expect((container.decoration! as BoxDecoration).color, style.emergencyBackgroundColor);
-        expect(timeText.textSpan!.style?.color, style.emergencyTextColor);
+        expect(
+          (container.decoration! as BoxDecoration).color!.toARGB32(),
+          expectedBackground.toARGB32(),
+        );
+        expect(timeText.textSpan!.style?.color, expectedText);
       }
     });
 

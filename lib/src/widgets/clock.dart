@@ -24,8 +24,8 @@ class const Clock({
   /// Clock style to use.
   final ClockStyle? clockStyle,
 
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
-  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  /// If [timeLeft] is at or below [emergencyThreshold], the emergency background is used, dimmed
+  /// when the clock is inactive and still has time remaining.
   final Duration? emergencyThreshold,
   final ClockTenths? clockTenths,
 
@@ -56,6 +56,9 @@ class const Clock({
     final colorScheme = ColorScheme.of(context);
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
+    final emergencyBackgroundColor = effectiveClockStyle.emergencyBackgroundColor.withValues(
+      alpha: effectiveClockStyle.emergencyBackgroundColor.a * (active ? 1.0 : 0.5),
+    );
 
     return Container(
       decoration: BoxDecoration(
@@ -63,7 +66,7 @@ class const Clock({
         color: timeLeft > Duration.zero
             ? active || isEmergency
                   ? isEmergency
-                        ? effectiveClockStyle.emergencyBackgroundColor
+                        ? emergencyBackgroundColor
                         : effectiveClockStyle.activeBackgroundColor
                   : effectiveClockStyle.backgroundColor
             : effectiveClockStyle.emergencyBackgroundColor,
@@ -84,7 +87,7 @@ class const Clock({
                     : '$minsDisplay:$secs',
                 style: TextStyle(
                   color: timeLeft > Duration.zero
-                      ? active || isEmergency
+                      ? active
                             ? isEmergency
                                   ? effectiveClockStyle.emergencyTextColor
                                   : effectiveClockStyle.activeTextColor
