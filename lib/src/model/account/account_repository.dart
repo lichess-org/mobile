@@ -23,6 +23,7 @@ final kidModeProvider = FutureProvider.autoDispose<bool>((ref) async {
   return account?.kid ?? false;
 }, name: 'KidModeProvider');
 
+/// A provider for the [AccountRepository].
 final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   final client = ref.watch(lichessClientProvider);
   final aggregator = ref.watch(aggregatorProvider);
@@ -76,6 +77,7 @@ class AccountRepository(final LichessClient client, final Aggregator aggregator)
     await client.postRead(uri, body: {prefKey: pref.toFormData});
   }
 
+  /// Bookmark the game for the given `id` if `bookmark` is true else unbookmark it
   Future<void> bookmark(GameId id, {required bool bookmark}) async {
     final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
     await client.postRead(uri);
