@@ -7466,6 +7466,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tfaTwoFactorAuth => '2단계 인증';
 
   @override
+  String get tfaAuthenticationCode => '인증 코드';
+
+  @override
+  String get tfaOpenTwoFactorApp => '2단계 인증 앱을 열어 인증 코드를 확인하세요.';
+
+  @override
   String get timeagoJustNow => '방금';
 
   @override

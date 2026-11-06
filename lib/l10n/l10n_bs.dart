@@ -7620,6 +7620,12 @@ class AppLocalizationsBs extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Dvofaktorska provjera autentičnosti';
 
   @override
+  String get tfaAuthenticationCode => 'Kod za provjeru autentičnosti';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Otvorite aplikaciju za autentikaciju s dva faktora na Vašem uređaju da vidite Vaš kod za autentikaciju i potvrdite Vaš identitet.';
+
+  @override
   String get timeagoJustNow => 'upravo sada';
 
   @override

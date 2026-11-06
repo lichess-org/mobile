@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/settings/close_account_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -234,11 +235,10 @@ class _AccountPreferencesScreenState()
                   )
                 else
                   ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
+                    leading: const Icon(Symbols.dangerous),
                     title: Text(context.l10n.settingsCloseAccount),
-                    trailing: const OpenInNewIcon(),
                     onTap: () {
-                      launchUrl(lichessUri('/account/close'));
+                      Navigator.of(context).push(CloseAccountScreen.buildRoute());
                     },
                   ),
               ],

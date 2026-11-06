@@ -7543,6 +7543,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Mirëfilltësim dyfaktorësh';
 
   @override
+  String get tfaAuthenticationCode => 'Kod mirëfilltësimi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Që të shihni kodin tuaj të mirëfilltësimit dhe të verifikoni identitetin tuaj, hapni aplikacionin për mirëfilltësim dyfaktorësh në pajisjen tuaj.';
+
+  @override
   String get timeagoJustNow => 'tani';
 
   @override

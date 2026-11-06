@@ -87,6 +87,14 @@ class AuthController() extends Notifier<AuthUser?> {
     state = null;
   }
 
+  /// Clears the local session after the server has already revoked its token.
+  Future<void> signOutLocally() async {
+    await ref.read(authStorageProvider).delete();
+    if (!ref.mounted) return;
+    state = null;
+    _authEventsController.add(AuthEvent.signOut);
+  }
+
   /// Checks if the current authUser token is still valid.
   ///
   /// If the token is invalid, it deletes the authUser from storage.

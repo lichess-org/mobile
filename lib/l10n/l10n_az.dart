@@ -7541,6 +7541,12 @@ class AppLocalizationsAz extends AppLocalizations {
   String get tfaTwoFactorAuth => '2 mərhələli təsdiqləmə';
 
   @override
+  String get tfaAuthenticationCode => 'Kimlik təsdiqləmə kodu';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Kimlik təsdiqləmə koduna baxmaq və kimliyinizi təsdiqləmək üçün cihazınızdakı iki mərhələli kimlik təsdiqləmə tətbiqini açın.';
+
+  @override
   String get timeagoJustNow => 'elə indi';
 
   @override

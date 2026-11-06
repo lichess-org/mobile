@@ -7543,6 +7543,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
 
   @override
+  String get tfaAuthenticationCode => 'Kimlik doğrulama kodu';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Doğrulama kodunu görüntüleyerek kimliğinizi doğrulamak için cihazınızdan iki faktörlü kimlik doğrulama uygulamasını açın.';
+
+  @override
   String get timeagoJustNow => 'şu anda';
 
   @override

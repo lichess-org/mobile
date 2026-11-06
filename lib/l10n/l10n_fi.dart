@@ -7543,6 +7543,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Kaksivaiheinen tunnistautuminen';
 
   @override
+  String get tfaAuthenticationCode => 'Tunnistautumiskoodi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Avaa laitteessasi sovellus kaksivaiheiseen tunnistautumiseen, katso siitä tunnistautumiskoodisi ja vahvista henkilöllisyytesi.';
+
+  @override
   String get timeagoJustNow => 'juuri äsken';
 
   @override

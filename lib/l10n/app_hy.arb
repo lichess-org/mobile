@@ -1572,6 +1572,7 @@
   "teamIncorrectEntryCode": "Մուտքի սխալ կոդ։",
   "teamBattleOfNbTeams": "{count, plural, =1{{count} թիմով մրցաշար} other{{count} թիմով մրցաշար}}",
   "tfaTwoFactorAuth": "Երկգործոն նույնականացում",
+  "tfaAuthenticationCode": "Նույնականացման կոդ",
   "timeagoJustNow": "հենց հիմա",
   "timeagoRightNow": "հենց հիմա",
   "timeagoCompleted": "ավարտված",
