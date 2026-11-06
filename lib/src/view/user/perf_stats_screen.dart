@@ -139,7 +139,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                       RatingHistorySeries(
                         perf: perf,
                         points: ratingHistoryPerfData.points,
-                        color: Styles.chartColor(context),
+                        color: perf.color(context),
                       ),
                     ]),
                   ),
@@ -213,7 +213,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                             RatingHistorySeries(
                               perf: perf,
                               points: ratingHistoryPerfData.points,
-                              color: Styles.chartColor(context),
+                              color: perf.color(context),
                             ),
                           ]),
                         ),
