@@ -31,7 +31,7 @@ const kLichessTablebaseHost = String.fromEnvironment(
 const kLichessVapidPublicKey = String.fromEnvironment(
   'LICHESS_VAPID_PUBLIC_KEY',
   defaultValue:
-      'BGr5CL0QlEYa7qW7HLqe7DFkCeTsYMLsi1Db-5Vwt1QBIs6-WxN8066AjtP8S9u-w-CbleE8xWY-qQaNEMs7sAs',
+      'BKLo08qJgT9tmfl1dgFpvh5l-Dd17cpuqJ_ZWP-_mcfPjPns89Zjg3W49rrQR_AQJYzn4arFPiSb4_k0HM7NACA',
 );
 
 const kLichessCustomUriSchemeName = 'org.lichess.mobile';
