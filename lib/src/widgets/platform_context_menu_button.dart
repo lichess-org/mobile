@@ -176,27 +176,52 @@ class const ContextMenuIconButton({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget buildButton(VoidCallback onPressed) => IconButton(
-      onPressed: onPressed,
-      tooltip: semanticsLabel,
-      color: color,
-      icon: icon,
-      iconSize: isCompact ? 20.0 : null,
-      style: isCompact
-          ? IconButton.styleFrom(
-              visualDensity: VisualDensity.compact,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            )
-          : null,
+    return ContextMenuButton(
+      semanticsLabel: semanticsLabel,
+      actions: actions,
+      consumeOutsideTap: consumeOutsideTap,
+      builder: (context, onPressed) => IconButton(
+        onPressed: onPressed,
+        tooltip: semanticsLabel,
+        color: color,
+        icon: icon,
+        iconSize: isCompact ? 20.0 : null,
+        style: isCompact
+            ? IconButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              )
+            : null,
+      ),
     );
+  }
+}
 
+/// A platform agnostic button opening a context menu, built by [builder].
+///
+/// [builder] gets the callback toggling the menu, to call when the button is pressed. Use
+/// [ContextMenuIconButton] for an icon button.
+///
+/// On iOS 26 and later, the menu is a liquid glass menu that morphs out of the button. Elsewhere it
+/// is a Material menu.
+class const ContextMenuButton({
+  required final Widget Function(BuildContext context, VoidCallback onPressed) builder,
+  required final String semanticsLabel,
+  required final List<ContextMenuEntry> actions,
+
+  /// Whether to consume taps outside the menu to close it (only on Android).
+  final bool consumeOutsideTap = false,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
         settings: menuGlassSettings(context),
         semanticLabel: semanticsLabel,
-        // The button is not glass itself: it sits in the glass capsule of the app bar.
-        triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
+        // The button is not glass itself.
+        triggerBuilder: (context, toggleMenu) => builder(context, toggleMenu),
         items: glassMenuItems(context, actions),
       );
     }
@@ -212,7 +237,7 @@ class const ContextMenuIconButton({
         ),
         menuChildren: _materialMenuItems(context, actions),
         builder: (BuildContext context, MenuController controller, Widget? child) {
-          return buildButton(() {
+          return builder(context, () {
             if (controller.isOpen) {
               controller.close();
             } else {

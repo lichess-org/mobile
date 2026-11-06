@@ -1,15 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
@@ -102,18 +99,6 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
               ),
             if (user.createdAt != null)
               Text('${context.l10n.memberSince} ${DateFormat.yMMMMd().format(user.createdAt!)}'),
-            if (user.count != null) ...[
-              const SizedBox(height: 5),
-              Text(context.l10n.nbGames(user.count!.all).localizeNumbers()),
-            ],
-            if (user.playTime != null) ...[
-              const SizedBox(height: 5),
-              Text(
-                context.l10n.tpTimeSpentPlaying(
-                  user.playTime!.total.toDaysHoursMinutes(AppLocalizations.of(context)),
-                ),
-              ),
-            ],
             if (user.profile?.links != null) ...[
               const SizedBox(height: 10),
               Text(

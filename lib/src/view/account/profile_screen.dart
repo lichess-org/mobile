@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_bookmarks.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -15,10 +18,12 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/edit_profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
+import 'package:lichess_mobile/src/view/user/user_stats_section.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
@@ -28,6 +33,9 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
+
+/// The number of bookmarked games shown on the profile, the others are in [GameBookmarksScreen].
+const _kNbBookmarksShown = 5;
 
 class const ProfileScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
@@ -57,6 +65,7 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
         ref.invalidate(accountProvider);
         ref.invalidate(_accountActivityProvider);
         ref.invalidate(myRecentGamesProvider);
+        ref.invalidate(gameBookmarksPaginatorProvider);
       },
       child: PlatformScaffold(
         appBar: PlatformAppBar(
@@ -97,33 +106,49 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
             final activity = ref.watch(_accountActivityProvider);
             final recentGames = ref.watch(myRecentGamesProvider);
             final nbOfGames = ref.watch(userNumberOfGamesProvider(null)).value ?? 0;
+            final nbBookmarks = user.count?.bookmark ?? 0;
+            final bookmarks = nbBookmarks > 0 ? ref.watch(gameBookmarksPaginatorProvider) : null;
             return HapticRefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: () => Future.wait([
                 ref.refresh(accountProvider.future),
                 ref.refresh(_accountActivityProvider.future),
                 ref.refresh(myRecentGamesProvider.future),
+                if (nbBookmarks > 0) ref.refresh(gameBookmarksPaginatorProvider.future),
               ]),
               child: ListView(
                 children: [
                   UserProfileWidget(user: user),
                   const AccountPerfCards(),
-                  if (user.count != null && user.count!.bookmark > 0)
-                    ListSection(
+                  UserStatsSection(user: user, isMe: true),
+                  UserActivityWidget(activity: activity, user: user.lightUser),
+                  switch (bookmarks) {
+                    AsyncData(value: final state) when state.gameList.isNotEmpty => ListSection(
+                      header: Text(context.l10n.nbBookmarks(nbBookmarks)),
                       hasLeading: true,
+                      onHeaderTap: max(nbBookmarks, state.gameList.length) > _kNbBookmarksShown
+                          ? () {
+                              Navigator.of(context)
+                                  .push(GameBookmarksScreen.buildRoute(nbBookmarks: nbBookmarks));
+                            }
+                          : null,
                       children: [
-                        ListTile(
-                          title: Text(context.l10n.nbBookmarks(user.count!.bookmark)),
-                          leading: const Icon(Icons.bookmarks_outlined),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              GameBookmarksScreen.buildRoute(nbBookmarks: user.count!.bookmark),
-                            );
-                          },
-                        ),
+                        for (final item in state.gameList.take(_kNbBookmarksShown))
+                          GameListTile(item: item),
                       ],
                     ),
-                  UserActivityWidget(activity: activity, user: user.lightUser),
+                    AsyncLoading() => Shimmer(
+                      child: ShimmerLoading(
+                        isLoading: true,
+                        child: ListSection.loading(
+                          itemsNumber: min(nbBookmarks, _kNbBookmarksShown),
+                          header: true,
+                          hasLeading: true,
+                        ),
+                      ),
+                    ),
+                    _ => const SizedBox.shrink(),
+                  },
                   RecentGamesWidget(recentGames: recentGames, nbOfGames: nbOfGames, user: null),
                 ],
               ),
