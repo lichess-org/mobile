@@ -12,13 +12,28 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform_segmented_control.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// The rating history of one perf, drawn with [color] in a [RatingHistoryChart].
+/// The rating history of one perf, drawn with [color] and [lineStyle] in a [RatingHistoryChart].
 @immutable
 class const RatingHistorySeries({
   required final Perf perf,
   required final IList<UserRatingHistoryPoint> points,
   required final Color color,
+  final RatingHistoryLineStyle lineStyle = .solid,
 });
+
+/// The stroke pattern of a [RatingHistorySeries] line, which tells series of the same color apart.
+enum RatingHistoryLineStyle() {
+  solid,
+  dashed,
+  dotted;
+
+  /// The lengths of the dashes and gaps, before the round caps add a stroke width to each dash.
+  List<int>? get dashArray => switch (this) {
+    solid => null,
+    dashed => const [8, 6],
+    dotted => const [1, 6],
+  };
+}
 
 /// A line chart of the rating history of one or more perfs over a selectable date range.
 ///
@@ -179,6 +194,7 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
                     dotData: const FlDotData(show: false),
                     color: s.color,
                     barWidth: isSingle ? 2.5 : 2.0,
+                    dashArray: s.lineStyle.dashArray,
                     belowBarData: BarAreaData(
                       show: isSingle,
                       gradient: LinearGradient(
@@ -362,15 +378,9 @@ class const _LegendEntry({
       mainAxisSize: .min,
       spacing: 6.0,
       children: [
-        SizedBox(
-          width: 12.0,
-          height: 4.0,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: series.color,
-              borderRadius: const BorderRadius.all(Radius.circular(2.0)),
-            ),
-          ),
+        CustomPaint(
+          size: const Size(24.0, 4.0),
+          painter: _LegendLinePainter(color: series.color, lineStyle: series.lineStyle),
         ),
         Icon(series.perf.icon, size: 16.0, color: textShade(context, 0.7)),
         Text(series.perf.label(context.l10n), style: TextStyle(color: textShade(context, 0.7))),
@@ -383,6 +393,36 @@ class const _LegendEntry({
       ],
     );
   }
+}
+
+/// A short horizontal line in the color and stroke pattern of a series.
+class const _LegendLinePainter({
+  required final Color color,
+  required final RatingHistoryLineStyle lineStyle,
+}) extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = size.height * 0.6
+      ..strokeCap = .round;
+    final y = size.height / 2;
+    // Inset by the round caps, which extend past both ends of each dash.
+    final start = paint.strokeWidth / 2;
+    final end = size.width - paint.strokeWidth / 2;
+    final dashArray = lineStyle.dashArray;
+    if (dashArray == null) {
+      canvas.drawLine(Offset(start, y), Offset(end, y), paint);
+      return;
+    }
+    for (double x = start; x <= end; x += dashArray[0] + dashArray[1]) {
+      canvas.drawLine(Offset(x, y), Offset(min(x + dashArray[0], end), y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_LegendLinePainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.lineStyle != lineStyle;
 }
 
 enum DateRange() {

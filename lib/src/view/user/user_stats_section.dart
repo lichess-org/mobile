@@ -16,12 +16,9 @@ import 'package:lichess_mobile/src/view/user/rating_history_chart.dart';
 import 'package:lichess_mobile/src/view/user/user_stat_cards.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Maximum number of perfs drawn in the rating history chart.
-const _kMaxChartPerfs = 3;
-
-/// The colors of the rating history chart series, in order, for the light and dark themes.
-const _kLightSeriesColors = [Color(0xFF2A78D6), Color(0xFFEB6834), Color(0xFF1BAF7A)];
-const _kDarkSeriesColors = [Color(0xFF3987E5), Color(0xFFD95926), Color(0xFF199E70)];
+/// Maximum number of perfs drawn in the rating history chart: one per line style, as they share
+/// the same color.
+final _kMaxChartPerfs = RatingHistoryLineStyle.values.length;
 
 /// The stats of a user over all perfs: the rating history of the most played perfs, the game
 /// results and the time spent playing.
@@ -114,10 +111,6 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
     ];
     if (chartPerfs.isEmpty) return const SizedBox.shrink();
 
-    final colors = Theme.of(context).brightness == Brightness.dark
-        ? _kDarkSeriesColors
-        : _kLightSeriesColors;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Card(
@@ -126,7 +119,12 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
           child: RatingHistoryChart(
             IList([
               for (final (index, perf) in chartPerfs.take(_kMaxChartPerfs).indexed)
-                RatingHistorySeries(perf: perf, points: historyByPerf[perf]!, color: colors[index]),
+                RatingHistorySeries(
+                  perf: perf,
+                  points: historyByPerf[perf]!,
+                  color: Styles.chartColor(context),
+                  lineStyle: RatingHistoryLineStyle.values[index],
+                ),
             ]),
             alwaysShowLegend: true,
           ),
