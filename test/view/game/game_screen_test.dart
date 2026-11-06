@@ -2311,7 +2311,7 @@ void main() {
 
     testWidgets('onEmergency', (WidgetTester tester) async {
       final mockSoundService = MockSoundService();
-      when(() => mockSoundService.play(Sound.lowTime)).thenAnswer((_) async {});
+      when(() => mockSoundService.play(any())).thenAnswer((_) async {});
       await createTestGame(
         tester,
         pgn: 'e4 e5',
@@ -2334,6 +2334,35 @@ void main() {
       await tester.pump(const Duration(seconds: 10));
       expect(findClockWithTime(Side.white, '0:30'), findsOneWidget);
       verify(() => mockSoundService.play(Sound.lowTime)).called(1);
+
+      await playMoveWithServerAck(
+        testGameFullId,
+        tester,
+        'g1',
+        'f3',
+        san: 'Nf3',
+        clockAck: (
+          white: const Duration(seconds: 30),
+          black: const Duration(seconds: 40),
+          lag: null,
+        ),
+        socketVersion: 1,
+        ply: 3,
+      );
+
+      final opponentClockContainer = find.descendant(
+        of: findClock(.black),
+        matching: find.byType(Container),
+      );
+      final normalBackground =
+          tester.widget<Container>(opponentClockContainer).decoration! as BoxDecoration;
+
+      await tester.pump(const Duration(seconds: 11));
+
+      final emergencyBackground =
+          tester.widget<Container>(opponentClockContainer).decoration! as BoxDecoration;
+      expect(emergencyBackground.color, isNot(normalBackground.color));
+      verifyNever(() => mockSoundService.play(.lowTime));
     }, variant: kPlatformVariant);
 
     testWidgets('flags', (WidgetTester tester) async {
