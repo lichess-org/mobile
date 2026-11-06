@@ -94,9 +94,11 @@ dependencies {
             allVariants {
                 withDependencies {
                     val tink = find { it.group == "com.google.crypto.tink" && it.name == "tink" }
-                    val version = originalTink.versionConstraint.requiredVersion
-                    remove(originalTink)
-                    add("com.google.crypto.tink:tink-android:$originalVersion")
+                    if (tink != null) {
+                        val version = tink.versionConstraint.requiredVersion
+                        remove(tink)
+                        add("com.google.crypto.tink:tink-android:$version")
+                    }
                 }
             }
         }
