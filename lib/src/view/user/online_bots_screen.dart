@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -174,7 +175,7 @@ class const _BotRatings({required final User bot}) extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16.0, top: 4.0, bottom: 4.0),
             child: Row(
               children: [
-                Icon(perf.icon, size: 16),
+                Icon(perf.icon, size: 16, color: perf.color(context)),
                 const SizedBox(width: 4.0),
                 if (rating != null && nbGames > 0)
                   Text(

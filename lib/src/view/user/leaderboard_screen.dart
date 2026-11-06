@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -77,21 +78,20 @@ class const _Body() extends ConsumerWidget {
 
 /// A List Tile for the Leaderboard
 ///
-/// Optionaly Provide the [perfIcon] for the Variant of the List
-class const LeaderboardListTile({required final LeaderboardUser user, final IconData? perfIcon})
+/// Optionally provide the [perf] of the list, to show its icon and the user progress.
+class const LeaderboardListTile({required final LeaderboardUser user, final Perf? perf})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final perf = this.perf;
     return ListTile(
       onTap: () => _handleTap(context),
-      leading: perfIcon != null ? Icon(perfIcon) : null,
+      leading: perf != null ? Icon(perf.icon, color: perf.color(context)) : null,
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: UserFullNameWidget(user: user.lightUser),
       ),
-      trailing: perfIcon != null
-          ? _Progress(user.rating, user.progress)
-          : Text(user.rating.toString()),
+      trailing: perf != null ? _Progress(user.rating, user.progress) : Text(user.rating.toString()),
     );
   }
 
@@ -139,7 +139,7 @@ class const _Leaderboard(final List<LeaderboardUser> userList, final Perf perf)
         hasLeading: false,
         header: Row(
           children: [
-            Icon(perf.icon, color: context.lichessColors.brag),
+            Icon(perf.icon, color: perf.color(context)),
             const SizedBox(width: 10.0),
             Text(perf.label(context.l10n)),
           ],

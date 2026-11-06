@@ -2,6 +2,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:material_ui/material_ui.dart';
@@ -198,6 +199,7 @@ ThemeData _makeDefaultTheme(
     sliderTheme: kSliderTheme,
     extensions: [
       lichessCustomColors.harmonized(theme.colorScheme),
+      PerfColors.fromColorScheme(theme.colorScheme),
       // The rows are brighter than the background, like the cards, so that a card of rows still
       // stands out from it.
       if (isIOSLight)
@@ -318,7 +320,10 @@ ThemeData _makeBackgroundImageTheme({
     searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     splashFactory: isIOS ? NoSplash.splashFactory : null,
     sliderTheme: kSliderTheme,
-    extensions: [lichessCustomColors.harmonized(baseTheme.colorScheme)],
+    extensions: [
+      lichessCustomColors.harmonized(baseTheme.colorScheme),
+      PerfColors.fromColorScheme(baseTheme.colorScheme),
+    ],
   );
 }
 

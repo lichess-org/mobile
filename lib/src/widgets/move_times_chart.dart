@@ -5,7 +5,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 // painting labels.
 import 'package:intl/intl.dart' show Intl, NumberFormat;
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:material_ui/material_ui.dart';
@@ -108,13 +107,9 @@ class const MoveTimesChart({required final MoveTimesChartParams params, super.ke
                           blackColor: isLight ? outline : surface,
                           axisColor: colorScheme.outlineVariant,
                           lineColor: colorScheme.secondary,
-                          // The web client draws the remaining clocks in blue; the app's own
-                          // blue keeps that reading while still belonging here, one shade either
-                          // side of it so the line stays legible over the grey bars in both
-                          // themes.
-                          clockColor: isLight
-                              ? LichessColors.primary.shade600
-                              : LichessColors.primary.shade300,
+                          // The scheme primary has a tone per brightness that keeps the line
+                          // legible over the grey bars in both themes.
+                          clockColor: colorScheme.primary,
                           divisionColor: const Color(0xFF707070),
                           divisionLabelColor:
                               labelStyle?.color?.withValues(alpha: 0.3) ?? colorScheme.outline,

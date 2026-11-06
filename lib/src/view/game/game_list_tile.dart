@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/service/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -132,6 +133,11 @@ class const GameListTile({
             : isTournament
             ? LichessIcons.tournament_cup
             : game.perf.icon,
+        color: game.isImported
+            ? null
+            : isTournament
+            ? context.perfToned(context.lichessColors.brag)
+            : game.perf.color(context),
       ),
       title: title,
       subtitle: Text.rich(
@@ -141,11 +147,7 @@ class const GameListTile({
             if (isTournament) ...[
               WidgetSpan(
                 alignment: .middle,
-                child: Icon(
-                  game.perf.icon,
-                  size: 14,
-                  color: textShade(context, Styles.subtitleOpacity),
-                ),
+                child: Icon(game.perf.icon, size: 14, color: game.perf.color(context)),
               ),
               const TextSpan(text: ' '),
             ],
@@ -236,7 +238,7 @@ class const GameContextMenu({
                                   Icon(
                                     LichessIcons.tournament_cup,
                                     size: 13,
-                                    color: textShade(context, Styles.subtitleOpacity),
+                                    color: context.perfToned(context.lichessColors.brag),
                                   ),
                                   const SizedBox(width: 4),
                                   Expanded(

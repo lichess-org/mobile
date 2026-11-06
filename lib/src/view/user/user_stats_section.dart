@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,10 +19,6 @@ import 'package:material_ui/material_ui.dart';
 
 /// Maximum number of perfs drawn in the rating history chart.
 const _kMaxChartPerfs = 3;
-
-/// The colors of the rating history chart series, in order, for the light and dark themes.
-const _kLightSeriesColors = [Color(0xFF2A78D6), Color(0xFFEB6834), Color(0xFF1BAF7A)];
-const _kDarkSeriesColors = [Color(0xFF3987E5), Color(0xFFD95926), Color(0xFF199E70)];
 
 /// The stats of a user over all perfs: the rating history of the most played perfs, the game
 /// results and the time spent playing.
@@ -114,10 +111,6 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
     ];
     if (chartPerfs.isEmpty) return const SizedBox.shrink();
 
-    final colors = Theme.of(context).brightness == Brightness.dark
-        ? _kDarkSeriesColors
-        : _kLightSeriesColors;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Card(
@@ -125,8 +118,12 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
           padding: const EdgeInsets.all(16.0),
           child: RatingHistoryChart(
             IList([
-              for (final (index, perf) in chartPerfs.take(_kMaxChartPerfs).indexed)
-                RatingHistorySeries(perf: perf, points: historyByPerf[perf]!, color: colors[index]),
+              for (final perf in chartPerfs.take(_kMaxChartPerfs))
+                RatingHistorySeries(
+                  perf: perf,
+                  points: historyByPerf[perf]!,
+                  color: perf.color(context),
+                ),
             ]),
             alwaysShowLegend: true,
           ),

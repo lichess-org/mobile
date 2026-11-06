@@ -66,7 +66,6 @@ class const LichessCustomColors({
   required final Color error,
   required final Color fancy,
   required final Color purple,
-  required final Color primary,
 }) extends ThemeExtension<LichessCustomColors> {
   @override
   LichessCustomColors copyWith({
@@ -76,7 +75,6 @@ class const LichessCustomColors({
     Color? error,
     Color? fancy,
     Color? purple,
-    Color? primary,
   }) {
     return LichessCustomColors(
       cyan: cyan ?? this.cyan,
@@ -85,7 +83,6 @@ class const LichessCustomColors({
       error: error ?? this.error,
       fancy: fancy ?? this.fancy,
       purple: purple ?? this.purple,
-      primary: primary ?? this.primary,
     );
   }
 
@@ -101,7 +98,6 @@ class const LichessCustomColors({
       error: Color.lerp(error, other.error, t) ?? error,
       fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
       purple: Color.lerp(purple, other.purple, t) ?? purple,
-      primary: Color.lerp(primary, other.primary, t) ?? primary,
     );
   }
 
@@ -113,7 +109,6 @@ class const LichessCustomColors({
       error: error.harmonizeWith(colorScheme.primary),
       fancy: fancy.harmonizeWith(colorScheme.primary),
       purple: purple.harmonizeWith(colorScheme.primary),
-      primary: primary.harmonizeWith(colorScheme.primary),
     );
   }
 }
@@ -125,7 +120,6 @@ const lichessCustomColors = LichessCustomColors(
   error: LichessColors.error,
   fancy: LichessColors.fancy,
   purple: LichessColors.purple,
-  primary: LichessColors.primary,
 );
 
 extension CustomColorsBuildContext on BuildContext {

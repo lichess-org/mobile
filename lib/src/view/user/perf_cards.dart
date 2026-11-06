@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -102,7 +103,7 @@ class const PerfCards({
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(color: textShade(context, 0.7)),
                             ),
-                            Icon(perf.icon, color: textShade(context, 0.6)),
+                            Icon(perf.icon, color: perf.color(context)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.baseline,

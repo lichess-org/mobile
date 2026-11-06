@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -308,7 +309,7 @@ class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChann
               })
               .map((snapshot) {
                 return ListTile(
-                  leading: Icon(snapshot.channel.icon),
+                  leading: Icon(snapshot.channel.icon, color: snapshot.channel.color(context)),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,

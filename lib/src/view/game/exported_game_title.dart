@@ -3,6 +3,8 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -69,7 +71,11 @@ class const ExportedGameTitle({
               : isTournament || meta.tournament != null
               ? LichessIcons.tournament_cup
               : meta.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
+          color: isImport
+              ? DefaultTextStyle.of(context).style.color
+              : isTournament || meta.tournament != null
+              ? context.perfToned(context.lichessColors.brag)
+              : meta.perf.color(context),
         ),
         const SizedBox(width: 8.0),
         Flexible(

@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/theme.dart';
@@ -318,7 +319,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
                   height: 35,
                   width: double.infinity,
                   color: state.tournament.pairingsClosed
-                      ? context.lichessColors.primary
+                      ? ColorScheme.of(context).primary
                       : context.lichessColors.good,
                   child: Padding(
                     padding: Styles.horizontalBodyPadding,
@@ -327,7 +328,11 @@ class const _Body({required final TournamentId id, required final TournamentStat
                         state.tournament.pairingsClosed
                             ? context.l10n.arenaTournamentPairingsAreNowClosed
                             : context.l10n.standByX(authUser.user.name),
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: state.tournament.pairingsClosed
+                              ? ColorScheme.of(context).onPrimary
+                              : Colors.white,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -689,7 +694,7 @@ class const _TeamStanding(final TournamentState state) extends ConsumerWidget {
               title: Text(
                 context.l10n.arenaViewAllXTeams(totalTeams),
                 textAlign: .center,
-                style: TextStyle(color: context.lichessColors.primary),
+                style: TextStyle(color: ColorScheme.of(context).primary),
               ),
               onTap: () {
                 Navigator.of(context).push(_AllTeamsScreen.buildRoute(state.id, teamBattle));
@@ -906,7 +911,7 @@ class const _TournamentInfo(final Tournament tournament) extends StatelessWidget
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(tournament.meta.perf.icon, size: 36),
+        Icon(tournament.meta.perf.icon, size: 36, color: tournament.meta.perf.color(context)),
         const SizedBox(width: 10),
         Flexible(
           child: Column(

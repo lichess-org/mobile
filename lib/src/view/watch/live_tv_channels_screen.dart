@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -70,7 +71,7 @@ class const _Body() extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(game.channel.label(context.l10n), style: Styles.boardPreviewTitle),
-                  Icon(game.channel.icon, size: 32),
+                  Icon(game.channel.icon, size: 32, color: game.channel.color(context)),
                   UserFullNameWidget.player(
                     user: game.player.asPlayer.user,
                     aiLevel: game.player.asPlayer.aiLevel,

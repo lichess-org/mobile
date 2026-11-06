@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/perf_colors.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -55,11 +56,15 @@ class const _UserRating({required final IMap<Perf, UserPerf> perfs}) extends Sta
     if (userPerfs.isEmpty) return const SizedBox.shrink();
 
     final rating = perfs[userPerfs.first]?.rating.toString() ?? '?';
-    final icon = userPerfs.first.icon;
+    final perf = userPerfs.first;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [Icon(icon, size: 16), const SizedBox(width: 5), Text(rating)],
+      children: [
+        Icon(perf.icon, size: 16, color: perf.color(context)),
+        const SizedBox(width: 5),
+        Text(rating),
+      ],
     );
   }
 }
