@@ -1,5 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
@@ -108,6 +110,64 @@ void main() {
 
       expect(find.text(container.read(controllerProvider).currentCoord!.name), findsOneWidget);
       expect(find.text(container.read(controllerProvider).nextCoord!.name), findsOneWidget);
+    });
+
+    testWidgets('a score of 20 or more fits in its square with a large text size', (tester) async {
+      // Regression test for https://github.com/lichess-org/mobile/issues/3871: with a large text
+      // size, a two-digit score wrapped on two lines and the second digit was drawn outside of
+      // the square, white on the light background, so only "2" could be seen.
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: Builder(
+          builder: (context) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.5)),
+            child: const CoordinateTrainingScreen(),
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(StaticChessboard)));
+      final trainingPrefsNotifier = container.read(coordinateTrainingPreferencesProvider.notifier);
+      trainingPrefsNotifier.setMode(TrainingMode.findSquare);
+      trainingPrefsNotifier.setSideChoice(SideChoice.white);
+
+      await tester.tap(find.text('Start training'));
+      await tester.pumpAndSettle();
+
+      for (var i = 0; i < 20; i++) {
+        final currentCoord = container.read(coordinateTrainingControllerProvider).currentCoord;
+        await tester.tapAt(
+          squareOffset(currentCoord!, tester.getRect(find.byType(StaticChessboard))),
+        );
+        await tester.pump();
+      }
+      expect(container.read(coordinateTrainingControllerProvider).score, 20);
+
+      // Where each digit is actually drawn, in global coordinates: the Text's own box is clamped
+      // to the square, but the glyphs of an overflowing paragraph are painted outside of it.
+      final scoreText = find.text('20');
+      final paragraph = tester.renderObject<RenderParagraph>(scoreText);
+      final digitRects = paragraph
+          .getBoxesForSelection(const TextSelection(baseOffset: 0, extentOffset: 2))
+          .map((box) => MatrixUtils.transformRect(paragraph.getTransformTo(null), box.toRect()));
+      final squareRect = tester.getRect(
+        find.ancestor(of: scoreText, matching: find.byType(Container)).first,
+      );
+
+      expect(digitRects, isNotEmpty);
+      expect(
+        digitRects.map((r) => r.top).toSet(),
+        hasLength(1),
+        reason: 'both digits must be on the same line: $digitRects',
+      );
+      for (final rect in digitRects) {
+        expect(
+          squareRect.inflate(0.5).intersect(rect) == rect,
+          isTrue,
+          reason: 'digit $rect must be drawn inside the score square $squareRect',
+        );
+      }
     });
   });
 }
