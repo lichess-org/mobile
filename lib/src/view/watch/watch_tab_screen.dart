@@ -271,7 +271,6 @@ class const _BroadcastCalendarCard() extends StatelessWidget {
               ? const CupertinoListTileChevron()
               : null,
           title: Text(context.l10n.broadcastBroadcastCalendar),
-          subtitle: const Text('Upcoming and past tournaments'),
           onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
         ),
       ],
