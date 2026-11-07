@@ -21,17 +21,21 @@ class const RatingHistorySeries({
   final RatingHistoryLineStyle lineStyle = .solid,
 });
 
-/// The stroke pattern of a [RatingHistorySeries] line, which tells series of the same color apart.
+/// The stroke pattern of a [RatingHistorySeries] line, which tells series apart, even when their
+/// colors are hard to distinguish.
 enum RatingHistoryLineStyle() {
   solid,
   dashed,
-  dotted;
+  dotted,
+  dashDotted;
 
-  /// The lengths of the dashes and gaps, before the round caps add a stroke width to each dash.
+  /// The lengths of the dashes and gaps, alternately, before the round caps add a stroke width to
+  /// each dash.
   List<int>? get dashArray => switch (this) {
     solid => null,
     dashed => const [8, 6],
     dotted => const [1, 6],
+    dashDotted => const [12, 5, 1, 5],
   };
 }
 
@@ -63,6 +67,10 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
   /// One spot per day for each series, from its first point to [_lastDate]: the rating stays
   /// constant on days without games.
   late List<List<FlSpot>> _allSpots;
+
+  /// The side of the touch line the tooltip is on, away from the closest edge of the chart so that
+  /// it never has to shift over the line to fit.
+  FLHorizontalAlignment _tooltipAlignment = .right;
 
   double get _minX => max(0, _startDate(_selectedRange).difference(_firstDate).inDays.toDouble());
 
@@ -159,15 +167,25 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
         if (isSingle)
           _RatingChange(change: ratingChange(0) ?? 0, range: _selectedRange)
         else
-          Wrap(
-            spacing: 16.0,
-            runSpacing: 8.0,
+          // Two entries per line, in columns.
+          Column(
+            spacing: 8.0,
             children: [
-              for (final (index, s) in widget.series.indexed)
-                _LegendEntry(
-                  series: s,
-                  rating: visibleSpots[index].lastOrNull?.y.toInt(),
-                  change: ratingChange(index),
+              for (var row = 0; row < widget.series.length; row += 2)
+                Row(
+                  spacing: 12.0,
+                  children: [
+                    for (final index in [row, row + 1])
+                      Expanded(
+                        child: index < widget.series.length
+                            ? _LegendEntry(
+                                series: widget.series[index],
+                                rating: visibleSpots[index].lastOrNull?.y.toInt(),
+                                change: ratingChange(index),
+                              )
+                            : const SizedBox.shrink(),
+                      ),
+                  ],
                 ),
             ],
           ),
@@ -214,12 +232,24 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
               ),
               lineTouchData: LineTouchData(
                 touchSpotThreshold: double.infinity,
+                touchCallback: (_, response) {
+                  final x = response?.lineBarSpots?.firstOrNull?.x;
+                  if (x == null) return;
+                  final alignment = x > (minX + maxX) / 2
+                      ? FLHorizontalAlignment.left
+                      : FLHorizontalAlignment.right;
+                  if (alignment != _tooltipAlignment) {
+                    setState(() => _tooltipAlignment = alignment);
+                  }
+                },
                 getTouchLineEnd: (_, _) => double.infinity,
                 touchTooltipData: LineTouchTooltipData(
                   getTooltipColor: (_) => colorScheme.surfaceContainerHighest,
                   tooltipBorderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   tooltipPadding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   showOnTopOfTheChartBoxArea: true,
+                  tooltipHorizontalAlignment: _tooltipAlignment,
+                  tooltipHorizontalOffset: _tooltipAlignment == .left ? -8.0 : 8.0,
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   getTooltipItems: (touchedSpots) {
@@ -236,18 +266,29 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
                       fontSize: 11,
                       color: colorScheme.onSurfaceVariant,
                     );
+                    final series = [for (final spot in touchedSpots) widget.series[spot.barIndex]];
                     return [
                       for (final (index, touchedSpot) in touchedSpots.indexed)
                         LineTooltipItem(
                           '',
                           ratingStyle,
                           children: [
-                            if (!isSingle)
+                            if (!isSingle) ...[
+                              // The perf icon, in the color of its line, as a glyph of its icon
+                              // font.
                               TextSpan(
-                                text:
-                                    '${widget.series[touchedSpot.barIndex].perf.shortLabel(context.l10n)} ',
+                                text: String.fromCharCode(series[index].perf.icon.codePoint),
+                                style: perfLabelStyle.copyWith(
+                                  color: series[index].color,
+                                  fontFamily: series[index].perf.icon.fontFamily,
+                                  package: series[index].perf.icon.fontPackage,
+                                ),
+                              ),
+                              TextSpan(
+                                text: ' ${series[index].perf.shortLabel(context.l10n)} ',
                                 style: perfLabelStyle,
                               ),
+                            ],
                             TextSpan(text: touchedSpot.y.toInt().toString()),
                             // the date, once, below the last rating
                             if (index == touchedSpots.length - 1)
@@ -375,15 +416,20 @@ class const _LegendEntry({
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: .min,
-      spacing: 6.0,
+      spacing: 4.0,
       children: [
         CustomPaint(
-          size: const Size(24.0, 4.0),
+          size: const Size(20.0, 4.0),
           painter: _LegendLinePainter(color: series.color, lineStyle: series.lineStyle),
         ),
-        Icon(series.perf.icon, size: 16.0, color: textShade(context, 0.7)),
-        Text(series.perf.label(context.l10n), style: TextStyle(color: textShade(context, 0.7))),
+        Flexible(
+          child: Text(
+            series.perf.shortLabel(context.l10n),
+            maxLines: 1,
+            overflow: .ellipsis,
+            style: TextStyle(color: textShade(context, 0.7)),
+          ),
+        ),
         Text(rating?.toString() ?? '-', style: const TextStyle(fontWeight: FontWeight.bold)),
         if (change != null && change != 0)
           Text(
@@ -415,8 +461,11 @@ class const _LegendLinePainter({
       canvas.drawLine(Offset(start, y), Offset(end, y), paint);
       return;
     }
-    for (double x = start; x <= end; x += dashArray[0] + dashArray[1]) {
-      canvas.drawLine(Offset(x, y), Offset(min(x + dashArray[0], end), y), paint);
+    // Dashes and gaps alternate, cycling through the array.
+    var index = 0;
+    for (double x = start; x <= end; index = (index + 2) % dashArray.length) {
+      canvas.drawLine(Offset(x, y), Offset(min(x + dashArray[index], end), y), paint);
+      x += dashArray[index] + dashArray[index + 1];
     }
   }
 
