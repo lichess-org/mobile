@@ -215,6 +215,16 @@ class PositionEvaluator(
   /// The work being evaluated, if any.
   EvalWork? get currentWork => state.currentWork;
 
+  /// Whether the external engine the user chose is in use, including while it starts.
+  ///
+  /// False once it has fallen back to this device's engine.
+  bool get usesExternalEngine {
+    final id = _chosenExternalEngineId;
+    if (id == null) return false;
+    if (_resolvingSpec || _engineChoice?.externalEngineId != id) return true;
+    return _spec is ExternalEngineSpec;
+  }
+
   /// Stops the current evaluation.
   ///
   /// The engine stops computing further but the evaluation state is not cleared: it goes on

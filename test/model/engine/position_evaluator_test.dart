@@ -1334,6 +1334,39 @@ void main() {
       expect(service.state.spec, const StockfishSpec.light());
     });
 
+    test('uses the external engine from the moment it is chosen', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      expect(service.usesExternalEngine, isTrue);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.usesExternalEngine, isTrue);
+    });
+
+    test('does not use the external engine once it fell back to this device', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container, makeContext(variant: Variant.atomic));
+
+      service.evaluate(makeWork(variant: Variant.atomic));
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.fairy());
+      expect(service.usesExternalEngine, isFalse);
+    });
+
+    test('a logged out user does not use the external engine', () async {
+      final container = await makeContainer();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      expect(service.usesExternalEngine, isFalse);
+    });
+
     test('practice and offline games keep their own engine', () async {
       final container = await containerWithRegistration();
       await chooseExternalEngine(container, registration.id);
