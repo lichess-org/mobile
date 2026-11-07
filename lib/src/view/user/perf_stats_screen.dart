@@ -362,26 +362,26 @@ class const _Body({required final User user, required final Perf perf}) extends 
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
                 child: Column(
                   children: [
-                    _PlayingHabitRow(
+                    IconStatRow(
                       icon: Icons.schedule,
                       label: context.l10n.perfStatTimeSpentPlaying,
                       value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
                     ),
                     const Divider(height: 1.0),
-                    _PlayingHabitRow(
+                    IconStatRow(
                       icon: Icons.calendar_month_outlined,
                       label: context.l10n.perfStatGamesInARow,
                       value: _streakValue(context, data.maxPlayStreak),
-                      longest: data.maxPlayStreak,
-                      current: data.curPlayStreak,
+                      subtitle: _StreakDates(data.maxPlayStreak),
+                      valueCaption: _currentStreakCaption(context, data.curPlayStreak),
                     ),
                     const Divider(height: 1.0),
-                    _PlayingHabitRow(
+                    IconStatRow(
                       icon: Icons.timer_outlined,
                       label: context.l10n.perfStatMaxTimePlaying,
                       value: _streakValue(context, data.maxTimeStreak),
-                      longest: data.maxTimeStreak,
-                      current: data.curTimeStreak,
+                      subtitle: _StreakDates(data.maxTimeStreak),
+                      valueCaption: _currentStreakCaption(context, data.curTimeStreak),
                     ),
                   ],
                 ),
@@ -454,6 +454,12 @@ String _streakValue(BuildContext context, UserStreak? streak) => switch (streak)
   UserTimeStreak(:final timePlayed) => timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
   UserGameStreak(:final gamesPlayed) => context.l10n.nbGames(gamesPlayed),
 };
+
+/// The current streak, below the longest one, or null when there is none.
+String? _currentStreakCaption(BuildContext context, UserStreak? current) =>
+    current == null || current.isValueEmpty
+    ? null
+    : context.l10n.perfStatCurrentStreak(_streakValue(context, current));
 
 /// A card showing [header], with a button to show or hide [details] below it.
 class const _ExpandableCard({required final Widget header, required final Widget details})
@@ -630,48 +636,6 @@ class const _ResultStreakCard({
             ],
           ],
         ),
-      ),
-    );
-  }
-}
-
-class const _PlayingHabitRow({
-  required final IconData icon,
-  required final String label,
-  required final String value,
-  final UserStreak? longest,
-  final UserStreak? current,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final shadedStyle = TextStyle(
-      fontSize: _defaultStatFontSize,
-      color: textShade(context, _customOpacity),
-    );
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Row(
-        spacing: 12.0,
-        children: [
-          Icon(icon, color: textShade(context, _customOpacity)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [Text(label), _StreakDates(longest)],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: .end,
-            children: [
-              Text(value, style: Styles.sectionTitle),
-              if (current != null && !current!.isValueEmpty)
-                Text(
-                  context.l10n.perfStatCurrentStreak(_streakValue(context, current)),
-                  style: shadedStyle,
-                ),
-            ],
-          ),
-        ],
       ),
     );
   }

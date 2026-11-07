@@ -60,15 +60,30 @@ class const UserStatsSection({required final User user, required final bool isMe
               ),
             if (playTime != null) ...[
               const SizedBox(height: cardSpacing),
-              IconStatCard(
-                icon: Icons.schedule,
-                label: context.l10n.perfStatTimeSpentPlaying,
-                value: playTime.total.toDaysHoursMinutes(AppLocalizations.of(context)),
-                caption: playTime.tv > Duration.zero
-                    ? context.l10n.tpTimeSpentOnTV(
-                        playTime.tv.toDaysHoursMinutes(AppLocalizations.of(context)),
-                      )
-                    : null,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  child: Column(
+                    children: [
+                      IconStatRow(
+                        icon: Icons.schedule,
+                        label: context.l10n.perfStatTimeSpentPlaying,
+                        value: playTime.total.toDaysHoursMinutes(AppLocalizations.of(context)),
+                      ),
+                      if (playTime.tv > Duration.zero) ...[
+                        const Divider(height: 1.0),
+                        IconStatRow(
+                          icon: Icons.live_tv_outlined,
+                          // The translation ends with the time: "Time featured on TV: {param}".
+                          label: context.l10n
+                              .tpTimeSpentOnTV('')
+                              .replaceFirst(RegExp(r'[\s:：]+$'), ''),
+                          value: playTime.tv.toDaysHoursMinutes(AppLocalizations.of(context)),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ],
           ],

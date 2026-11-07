@@ -193,3 +193,43 @@ class const IconStatCard({
     );
   }
 }
+
+/// A row of a stats card: an icon, a label with an optional [subtitle] below it, and a value with
+/// an optional [valueCaption] below it.
+///
+/// Rows are meant to be stacked in a [Card], separated by dividers.
+class const IconStatRow({
+  required final IconData icon,
+  required final String label,
+  required final String value,
+  final Widget? subtitle,
+  final String? valueCaption,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Row(
+        spacing: 12.0,
+        children: [
+          Icon(icon, color: textShade(context, _shadeOpacity)),
+          Expanded(
+            child: Column(crossAxisAlignment: .start, children: [Text(label), ?subtitle]),
+          ),
+          Column(
+            crossAxisAlignment: .end,
+            children: [
+              Text(value, style: Styles.sectionTitle),
+              if (valueCaption != null)
+                Text(
+                  valueCaption!,
+                  style: TextStyle(fontSize: 12.0, color: textShade(context, _shadeOpacity)),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
