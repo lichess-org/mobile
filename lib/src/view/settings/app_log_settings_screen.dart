@@ -70,6 +70,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
     final logs = asyncState.value?.logs ?? [];
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.mobileAppLogs),
         actions: [
