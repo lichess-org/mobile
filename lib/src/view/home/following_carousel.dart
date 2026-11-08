@@ -92,6 +92,7 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
                                 UserFullNameWidget(
                                   user: friend.user,
                                   style: const TextStyle(fontWeight: .w500, fontSize: 16),
+                                  shouldShowOnline: friend.user.isOnline == true,
                                 ),
                                 FittedBox(
                                   fit: BoxFit.scaleDown,
