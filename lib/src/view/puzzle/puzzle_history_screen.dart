@@ -26,6 +26,7 @@ class const PuzzleHistoryPreview(
   final IList<PuzzleHistoryEntry> history, {
   final int? maxRows,
   final bool? shouldOpenCasualPuzzleRun,
+  final bool showRatings = false,
   super.key,
 }) extends ConsumerWidget {
   @override
@@ -53,7 +54,12 @@ class const PuzzleHistoryPreview(
             lastMove: lastMove,
             footer: Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: Row(children: [_PuzzleResult(e)]),
+              child: Row(
+                children: [
+                  _PuzzleResult(e),
+                  if (showRatings) ...[const SizedBox(width: 8), Text(e.rating.toString())],
+                ],
+              ),
             ),
           );
         }).toList();
