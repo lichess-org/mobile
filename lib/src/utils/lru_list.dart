@@ -4,11 +4,8 @@ import 'dart:collection';
 ///
 /// The items are ordered by their insertion time, with the most recently added item at the end.
 /// If the list exceeds its capacity when extended via [put], the least recently added item is removed.
-class LRUList<T> {
-  final int capacity;
+class LRUList<T>({required final int capacity}) {
   final LinkedList<_LRUListEntry<T>> _list = LinkedList<_LRUListEntry<T>>();
-
-  LRUList({required this.capacity});
 
   /// Add the [value] to the end of the list. If the list exceeds its capacity, the least recently used item is removed.
   void put(T value) {
@@ -26,8 +23,4 @@ class LRUList<T> {
   Iterable<T> get values => _list.map((entry) => entry.value);
 }
 
-final class _LRUListEntry<T> extends LinkedListEntry<_LRUListEntry<T>> {
-  final T value;
-
-  _LRUListEntry(this.value);
-}
+final class _LRUListEntry<T>(final T value) extends LinkedListEntry<_LRUListEntry<T>>;

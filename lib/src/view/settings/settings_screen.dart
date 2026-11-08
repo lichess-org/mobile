@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_log_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/broadcast_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
@@ -24,15 +26,14 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
-
+class const SettingsScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const SettingsScreen());
   }
@@ -47,7 +48,7 @@ class SettingsScreen extends ConsumerWidget {
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings), largeTitle: true),
       body: ListView(
         children: [
           if (authUser != null)
@@ -79,25 +80,6 @@ class SettingsScreen extends ConsumerWidget {
                   Navigator.of(context).push(SoundSettingsScreen.buildRoute());
                 },
               ),
-              SettingsListTile(
-                enabled: !generalPrefs.isForcedDarkMode,
-                icon: const Icon(Icons.brightness_medium_outlined),
-                settingsLabel: Text(context.l10n.background),
-                settingsValue: generalPrefs.isForcedDarkMode
-                    ? BackgroundThemeMode.dark.title(context.l10n)
-                    : generalPrefs.themeMode.title(context.l10n),
-                onTap: () {
-                  showChoicePicker(
-                    context,
-                    choices: BackgroundThemeMode.values,
-                    selectedItem: generalPrefs.themeMode,
-                    labelBuilder: (t) => Text(t.title(context.l10n)),
-                    onSelectedItemChanged: (BackgroundThemeMode? value) => ref
-                        .read(generalPreferencesProvider.notifier)
-                        .setBackgroundThemeMode(value ?? BackgroundThemeMode.system),
-                  );
-                },
-              ),
               ListTile(
                 leading: const Icon(Icons.palette_outlined),
                 title: Text(context.l10n.mobileTheme),
@@ -115,7 +97,10 @@ class SettingsScreen extends ConsumerWidget {
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
-                  Navigator.of(context).push(HomeTabScreen.buildRoute(editModeEnabled: true));
+                  Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(HomeTabScreen.buildRoute(editModeEnabled: true));
                 },
               ),
               ListTile(
@@ -130,12 +115,22 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.memory_outlined),
-                title: const Text('Chess engine'),
+                title: Text(context.l10n.mobileChessEngine, overflow: TextOverflow.ellipsis),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
                   Navigator.of(context).push(EngineSettingsScreen.buildRoute());
+                },
+              ),
+              ListTile(
+                leading: const Icon(LichessIcons.radio_tower_lichess),
+                title: Text(context.l10n.broadcastBroadcasts, overflow: .ellipsis),
+                trailing: Theme.of(context).platform == .iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(BroadcastSettingsScreen.buildRoute());
                 },
               ),
               SettingsListTile(
@@ -166,17 +161,20 @@ class SettingsScreen extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.storage_outlined),
-                title: const Text('Local database size'),
+                title: Text(context.l10n.mobileLocalDatabaseSize),
                 trailing: dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
               ),
               ListTile(
                 leading: const Icon(Icons.http),
-                title: const Text('HTTP logs'),
+                title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
-                title: const Text('App Logs'),
+                title: Text(context.l10n.mobileAppLogs),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
@@ -186,7 +184,7 @@ class SettingsScreen extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.star_outline),
-                title: const Text('Rate this app'),
+                title: Text(context.l10n.mobileRateThisApp),
                 onTap: () async {
                   final isAndroid = Theme.of(context).platform == TargetPlatform.android;
                   final launched = await launchUrl(
@@ -204,6 +202,7 @@ class SettingsScreen extends ConsumerWidget {
                     );
                   }
                 },
+                trailing: const OpenInNewIcon(),
               ),
             ],
           ),

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/tv/tv_game_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -21,23 +22,24 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TvScreen extends ConsumerStatefulWidget {
-  const TvScreen({this.channel, this.initialGame, this.user, super.key})
-    : assert(channel != null || user != null, 'Either channel or user must be provided');
-
-  final TvChannel? channel;
-  final (GameId id, Side orientation)? initialGame;
-  final LightUser? user;
+class const TvScreen({
+  final TvChannel? channel,
+  final (GameId id, Side orientation)? initialGame,
+  final LightUser? user,
+  super.key,
+}) extends ConsumerStatefulWidget {
+  this : assert(channel != null || user != null, 'Either channel or user must be provided');
 
   static Route<dynamic> buildRoute({
     TvChannel? channel,
@@ -58,7 +60,7 @@ class TvScreen extends ConsumerStatefulWidget {
   ConsumerState<TvScreen> createState() => _TvScreenState();
 }
 
-class _TvScreenState extends ConsumerState<TvScreen> {
+class _TvScreenState() extends ConsumerState<TvScreen> {
   TvControllerParams get _tvControllerParams =>
       (channel: widget.channel, initialGame: widget.initialGame, userId: widget.user?.id);
 
@@ -86,19 +88,20 @@ class _TvScreenState extends ConsumerState<TvScreen> {
         }
       },
       child: WakelockWidget(
-        child: Scaffold(
-          appBar: AppBar(
+        child: PlatformScaffold(
+          extendBodyBehindAppBar: false,
+          appBar: PlatformAppBar(
             title: widget.channel != null
                 ? Text('${widget.channel!.label(context.l10n)} TV')
                 : Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: .min,
                     children: [
-                      UserFullNameWidget(user: widget.user),
-                      const SizedBox(width: 4.0),
                       const Icon(Icons.live_tv),
+                      const SizedBox(width: 4.0),
+                      Flexible(child: UserFullNameWidget(user: widget.user)),
                     ],
                   ),
-            actions: const [ToggleSoundButton()],
+            actionsBuilder: (context, ref) => [soundToggleButton(ref)],
           ),
           body: SafeArea(
             child: Column(
@@ -129,19 +132,12 @@ class _TvScreenState extends ConsumerState<TvScreen> {
 
 /// Displays the watched game once [TvController] has resolved which game to
 /// watch.
-class _TvGameBody extends ConsumerWidget {
-  const _TvGameBody({
-    required this.channel,
-    required this.gameParams,
-    required this.whiteClockKey,
-    required this.blackClockKey,
-  });
-
-  final TvChannel? channel;
-  final TvGameControllerParams gameParams;
-  final GlobalKey whiteClockKey;
-  final GlobalKey blackClockKey;
-
+class const _TvGameBody({
+  required final TvChannel? channel,
+  required final TvGameControllerParams gameParams,
+  required final GlobalKey whiteClockKey,
+  required final GlobalKey blackClockKey,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameCtrl = tvGameControllerProvider(gameParams);
@@ -245,6 +241,7 @@ class _TvGameBody extends ConsumerWidget {
                 )
               : null,
           userActionsBar: BottomBar(
+            cupertinoGlass: true,
             children: [
               BottomBarButton(
                 label: context.l10n.flipBoard,
@@ -256,40 +253,42 @@ class _TvGameBody extends ConsumerWidget {
                   label: context.l10n.viewTournament,
                   icon: LichessIcons.tournament_cup,
                   onTap: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TournamentScreen.buildRoute(game.meta.tournament!.id));
+                    Navigator.of(context)
+                        .pushHidingTabBar(TournamentScreen.buildRoute(game.meta.tournament!.id));
                   },
                 ),
               if (canShowChat) ChatBottomBarButton(options: chatOptions),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoBack()
-                    ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-previous'),
-                  onTap: ref.read(gameCtrl.notifier).canGoBack()
-                      ? () => ref.read(gameCtrl.notifier).cursorBackward()
-                      : null,
-                  label: 'Previous',
-                  icon: CupertinoIcons.chevron_back,
-                  showTooltip: false,
-                ),
-              ),
-              RepeatButton(
-                onLongPress: ref.read(gameCtrl.notifier).canGoForward()
-                    ? () => ref.read(gameCtrl.notifier).cursorForward()
-                    : null,
-                child: BottomBarButton(
-                  key: const ValueKey('goto-next'),
-                  icon: CupertinoIcons.chevron_forward,
-                  label: context.l10n.next,
-                  onTap: ref.read(gameCtrl.notifier).canGoForward()
-                      ? () => ref.read(gameCtrl.notifier).cursorForward()
-                      : null,
-                  showTooltip: false,
-                ),
+              BottomBarGroup(
+                children: [
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoBack()
+                        ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-previous'),
+                      onTap: ref.read(gameCtrl.notifier).canGoBack()
+                          ? () => ref.read(gameCtrl.notifier).cursorBackward()
+                          : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
+                  ),
+                  RepeatButton(
+                    onLongPress: ref.read(gameCtrl.notifier).canGoForward()
+                        ? () => ref.read(gameCtrl.notifier).cursorForward()
+                        : null,
+                    child: BottomBarButton(
+                      key: const ValueKey('goto-next'),
+                      icon: CupertinoIcons.chevron_forward,
+                      label: context.l10n.next,
+                      onTap: ref.read(gameCtrl.notifier).canGoForward()
+                          ? () => ref.read(gameCtrl.notifier).cursorForward()
+                          : null,
+                      showTooltip: false,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -304,9 +303,7 @@ class _TvGameBody extends ConsumerWidget {
   }
 }
 
-class _TvLoadingBoard extends StatelessWidget {
-  const _TvLoadingBoard();
-
+class const _TvLoadingBoard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Shimmer(
@@ -322,9 +319,7 @@ class _TvLoadingBoard extends StatelessWidget {
   }
 }
 
-class _TvErrorBoard extends StatelessWidget {
-  const _TvErrorBoard();
-
+class const _TvErrorBoard() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const GameLayout(

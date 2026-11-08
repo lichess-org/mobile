@@ -26,7 +26,7 @@ final databaseProvider = FutureProvider<Database>((Ref ref) async {
     databaseFactory = databaseFactoryFfi;
   }
   final dbPath = await _databasePath;
-  return openAppDatabase(databaseFactory, dbPath);
+  return await openAppDatabase(databaseFactory, dbPath);
 }, name: 'DatabaseProvider');
 
 /// Returns the database path including filename.
@@ -55,7 +55,7 @@ final getDbSizeInBytesProvider = FutureProvider<int>((Ref ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
   final dbFile = File(dbPath);
 
-  return dbFile.length();
+  return await dbFile.length();
 }, name: 'GetDbSizeInBytesProvider');
 
 /// Opens the app database.
@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 5,
+      version: 9,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -91,8 +91,11 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
-        _createHttpLogTableV4(batch);
+        _createGameTableIndexesV6(batch);
+        _createHttpLogTableV9(batch);
         _createAppLogTableV5(batch);
+        _createLearnProgressTableV7(batch);
+        _createPracticeProgressTableV8(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -104,10 +107,21 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _updatePuzzleBatchTableToV3(batch);
         }
         if (oldVersion < 4) {
-          _createHttpLogTableV4(batch);
+          _createHttpLogTableV9(batch);
+        } else if (oldVersion < 9) {
+          _updateHttpLogTableToV9(batch);
         }
         if (oldVersion < 5) {
           _createAppLogTableV5(batch);
+        }
+        if (oldVersion < 6) {
+          _createGameTableIndexesV6(batch);
+        }
+        if (oldVersion < 7) {
+          _createLearnProgressTableV7(batch);
+        }
+        if (oldVersion < 8) {
+          _createPracticeProgressTableV8(batch);
         }
         await batch.commit();
       },
@@ -185,6 +199,13 @@ void _createGameTableV2(Batch batch) {
     ''');
 }
 
+void _createGameTableIndexesV6(Batch batch) {
+  batch.execute('''
+    CREATE INDEX IF NOT EXISTS idx_game_user_lastModified
+    ON game(userId, lastModified DESC)
+    ''');
+}
+
 void _createChatReadMessagesTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS chat_read_messages');
   batch.execute('''
@@ -197,7 +218,7 @@ void _createChatReadMessagesTableV1(Batch batch) {
     ''');
 }
 
-void _createHttpLogTableV4(Batch batch) {
+void _createHttpLogTableV9(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS http_log');
   batch.execute('''
     CREATE TABLE http_log(
@@ -209,9 +230,16 @@ void _createHttpLogTableV4(Batch batch) {
     responseCode INTEGER,
     responseDateTime TEXT,
     lastModified TEXT NOT NULL,
-    errorMessage TEXT
+    errorMessage TEXT,
+    cache TEXT,
+    responseSize INTEGER
   )
     ''');
+}
+
+void _updateHttpLogTableToV9(Batch batch) {
+  batch.execute('ALTER TABLE http_log ADD COLUMN cache TEXT');
+  batch.execute('ALTER TABLE http_log ADD COLUMN responseSize INTEGER');
 }
 
 void _createAppLogTableV5(Batch batch) {
@@ -227,6 +255,32 @@ void _createAppLogTableV5(Batch batch) {
     error TEXT,
     stackTrace TEXT,
     lastModified TEXT NOT NULL
+  )
+    ''');
+}
+
+void _createLearnProgressTableV7(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS learn_progress');
+  batch.execute('''
+    CREATE TABLE learn_progress(
+    stageKey TEXT NOT NULL,
+    levelId INTEGER NOT NULL,
+    score INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT,
+    PRIMARY KEY (stageKey, levelId)
+  )
+    ''');
+}
+
+void _createPracticeProgressTableV8(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS practice_progress');
+  batch.execute('''
+    CREATE TABLE practice_progress(
+    chapterId TEXT NOT NULL PRIMARY KEY,
+    nbMoves INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT
   )
     ''');
 }

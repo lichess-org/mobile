@@ -18,12 +18,7 @@ final broadcastRepositoryProvider = Provider<BroadcastRepository>((ref) {
   return BroadcastRepository(client, aggregator);
 }, name: 'BroadcastRepositoryProvider');
 
-class BroadcastRepository {
-  BroadcastRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class BroadcastRepository(final LichessClient client, final Aggregator aggregator) {
   Future<BroadcastList> getBroadcasts({int page = 1}) {
     return aggregator.readJson(
       Uri(path: '/api/broadcast/top', queryParameters: {'page': page.toString()}),
@@ -100,6 +95,22 @@ class BroadcastRepository {
       Uri(path: 'broadcast/$tournamentId/teams/standings'),
       mapper: (json) => _teamStandingFromPick(pick(json).required()),
     );
+  }
+
+  Future<IList<Broadcast>> getCalendar({required int year, required int month}) async {
+    final broadcasts = await client.readJsonList(
+      Uri(path: '/api/broadcast/calendar/$year/$month'),
+      mapper: (json) => _broadcastFromPick(pick(json).required()),
+    );
+    final sorted = broadcasts.toList(growable: false)
+      ..sort((a, b) {
+        final aStart = a.round.startsAt;
+        final bStart = b.round.startsAt;
+        if (aStart == null) return bStart == null ? 0 : 1;
+        if (bStart == null) return -1;
+        return aStart.compareTo(bStart);
+      });
+    return sorted.toIList();
   }
 
   /// Subscribes to, or unsubscribes from, a tournament.
@@ -298,7 +309,7 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     name: pick('name').asStringOrNull(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
-    federation: pick('fed').asStringOrNull(),
+    federation: pick('fed').asFederationIdOrNull(),
     fideId: pick('fideId').asFideIdOrNull(),
     team: pick('team').asStringOrNull(),
   );
@@ -382,9 +393,9 @@ StatByFideTC pickStats(RequiredPick pick) {
   final rapid = pick('rapid').asIntOrNull();
   final blitz = pick('blitz').asIntOrNull();
   return {
-    if (standard != null) BroadcastFideTC.standard: standard,
-    if (rapid != null) BroadcastFideTC.rapid: rapid,
-    if (blitz != null) BroadcastFideTC.blitz: blitz,
+    BroadcastFideTC.standard: ?standard,
+    BroadcastFideTC.rapid: ?rapid,
+    BroadcastFideTC.blitz: ?blitz,
   }.lock;
 }
 

@@ -1,80 +1,80 @@
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum FilterType {
-  /// Only one choice is intended to be selected at a time. Uses [ChoiceChip] to display choices.
+enum FilterType() {
+  /// Only one choice is intended to be selected at a time ([ChoiceChip] on Android).
   singleChoice,
 
-  /// Multiple choices can be selected at the same time. Uses [FilterChip] to display choices.
+  /// Multiple choices can be selected at the same time ([FilterChip] on Android).
   multipleChoice,
 }
 
-/// Displays a row of choices that can be selected or deselected.
-class Filter<T extends Enum> extends StatelessWidget {
-  const Filter({
-    this.filterName,
-    required this.filterType,
-    required this.choices,
-    this.showCheckmark = true,
-    required this.choiceSelected,
-    required this.choiceLabel,
-    required this.onSelected,
-  });
-
+/// Displays a group of choices that can be selected or deselected, under an optional title.
+///
+/// This is the layout of every group of chips in a sheet: [FilterTitle], then the chips.
+class const Filter<T>({
   /// Will be displayed above the choices as a title.
-  final String? filterName;
+  final String? filterName,
 
   /// Controls how choices in a [Filter] are displayed.
-  final FilterType filterType;
+  required final FilterType filterType,
 
   /// The choices that will be displayed.
-  final Iterable<T> choices;
+  required final Iterable<T> choices,
 
   /// Whether to show a checkmark next to selected choices.
-  final bool showCheckmark;
+  final bool showCheckmark = true,
 
   /// Called to determine whether a choice is currently selected.
-  final bool Function(T choice) choiceSelected;
+  required final bool Function(T choice) choiceSelected,
 
   /// Determines label to display for the given choice.
-  final Widget Function(T choice) choiceLabel;
+  required final Widget Function(T choice) choiceLabel,
+
+  /// Determines the tooltip of the given choice, if any.
+  final String? Function(T choice)? choiceTooltip,
 
   /// Called when a choice is selected or deselected.
-  final void Function(T value, bool selected) onSelected;
-
+  required final void Function(T value, bool selected) onSelected,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (filterName != null) ...[
-          Text(filterName!, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 10),
-        ],
+        if (filterName != null) FilterTitle(filterName!),
         SizedBox(
           width: double.infinity,
           child: Wrap(
             spacing: 8.0,
+            // The glass chips have no tap target margin, unlike the Material ones.
+            runSpacing: Theme.of(context).platform == TargetPlatform.iOS ? 8.0 : 0.0,
             children: choices
                 .map(
-                  (choice) => switch (filterType) {
-                    FilterType.singleChoice => ChoiceChip(
-                      label: choiceLabel(choice),
-                      selected: choiceSelected(choice),
-                      onSelected: (value) => onSelected(choice, value),
-                      showCheckmark: showCheckmark,
-                    ),
-                    FilterType.multipleChoice => FilterChip(
-                      label: choiceLabel(choice),
-                      selected: choiceSelected(choice),
-                      onSelected: (value) => onSelected(choice, value),
-                      showCheckmark: showCheckmark,
-                    ),
-                  },
+                  (choice) => PlatformChoiceChip(
+                    label: choiceLabel(choice),
+                    selected: choiceSelected(choice),
+                    onSelected: (value) => onSelected(choice, value),
+                    multiple: filterType == FilterType.multipleChoice,
+                    showCheckmark: showCheckmark,
+                    tooltip: choiceTooltip?.call(choice),
+                  ),
                 )
                 .toList(growable: false),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// The title of a group of chips (see [Filter]), for groups that don't fit in a [Filter].
+class const FilterTitle(final String title, {super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Text(title, style: const TextStyle(fontSize: 18)),
     );
   }
 }

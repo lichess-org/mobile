@@ -25,7 +25,7 @@
   <string name="cantChangeMore">Wir können nicht mehr als die Groß-/Kleinschreibung ändern. Aus technischen Gründen ist es schlichtweg unmöglich.</string>
   <string name="orCloseAccount">Du kannst jedoch dein Konto schließen und ein neues erstellen.</string>
   <string name="wantClearHistory">Ich möchte meinen Verlauf oder meine Wertung löschen</string>
-  <string name="cantClearHistory">Es ist nicht möglich deinen Spiel-, Puzzleverlauf oder deine Wertung zu löschen.</string>
+  <string name="cantClearHistoryOrResetRatings">Es ist nicht möglich deinen Partie-, Puzzle-Verlauf oder deine Wertungszahlen zurückzusetzen.</string>
   <string name="wantReport">Ich möchte einen Spieler melden</string>
   <string name="toReportAPlayerUseForm">Benutze das Meldeformular, um einen Spieler zu melden</string>
   <string name="youCanAlsoReachReportPage">Du erreichst diese Seite ebenfalls, indem du den %s Meldeknopf auf einer Profilseite klickst.</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">Stelle sicher, dass du ein gewertetes Spiel spielst. Ungewertete Spiele beeinflussen nicht die Spielerwertungen.</string>
   <string name="botRatingAbuse">Wenn ein Spieler gegen einen Bot spielt, kann es unter Umständen passieren, dass ein Sieg in einem gewertetem Spiel keine Punkte einbringt, falls der Spieler den Bot dazu benutzt, Wertungspunkte anzuhäufen.</string>
   <string name="errorPage">Fehlerseite</string>
-  <string name="reportErrorPage">Falls du eine Fehlerseite entdeckt hast kannst du sie melden:</string>
+  <string name="reportTheBug">Du kannst ihn melden:</string>
+  <string name="securityVulnerability">Sicherheitslücke</string>
+  <string name="otherBug">Anderes Problem</string>
   <string name="learnHowToMakeBroadcasts">Lerne deine eigenen Übertragungen auf Lichess zu machen</string>
   <string name="banAppeal">Einspruch gegen einen Bann oder IP-Beschränkung</string>
   <string name="engineAppeal">Markierung für Computerunterstützung/Betrug</string>

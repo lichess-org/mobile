@@ -14,21 +14,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A Wifi icon representing that the user is currently connected (online) or not.
-class ConnectedIcon extends StatelessWidget {
-  const ConnectedIcon({
-    required this.isConnected,
-    this.shouldShowIsOnGameLabels = false,
-    this.size,
-    super.key,
-  });
-
-  final bool isConnected;
+class const ConnectedIcon({
+  required final bool isConnected,
 
   /// Whether to show "is on game" labels in tooltips.
-  final bool shouldShowIsOnGameLabels;
-
-  final double? size;
-
+  final bool shouldShowIsOnGameLabels = false,
+  final double? size,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = isConnected
@@ -37,9 +30,10 @@ class ConnectedIcon extends StatelessWidget {
     return Tooltip(
       message: label,
       child: Icon(
-        isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.3),
+        isConnected ? Symbols.circle : Symbols.wifi_off,
+        color: isConnected ? context.lichessColors.good : textShade(context, 0.3),
         size: size,
+        fill: 1,
       ),
     );
   }
@@ -47,17 +41,16 @@ class ConnectedIcon extends StatelessWidget {
 
 /// App bar title for the user and profile screens.
 ///
-/// Shows the user's avatar and name, with a subtitle displaying the online
-/// status, or the time they were last seen active if offline.
-class UserAppBarTitleWidget extends StatelessWidget {
-  const UserAppBarTitleWidget({required this.user, required this.isOnline, this.seenAt, super.key});
-
-  final LightUser user;
-  final bool isOnline;
+/// Shows the user's avatar and name, with a subtitle displaying the online status, or the time they
+/// were last seen active if offline.
+class const UserAppBarTitleWidget({
+  required final LightUser user,
+  required final bool isOnline,
 
   /// The last time the user was seen active, shown when [isOnline] is false.
-  final DateTime? seenAt;
-
+  final DateTime? seenAt,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subtitleTextStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
@@ -66,7 +59,7 @@ class UserAppBarTitleWidget extends StatelessWidget {
     return Row(
       mainAxisSize: .min,
       children: [
-        UserAvatar(user, radius: 16),
+        UserAvatar(user, radius: 20),
         const SizedBox(width: 8),
         Flexible(
           child: Column(
@@ -104,12 +97,7 @@ class UserAppBarTitleWidget extends StatelessWidget {
 }
 
 /// A wing icon representing a Lichess patron with its chosen color.
-class PatronIcon extends StatelessWidget {
-  const PatronIcon({this.color, this.size, super.key});
-
-  final int? color;
-  final double? size;
-
+class const PatronIcon({final int? color, final double? size, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = DefaultTextStyle.of(context).style;
@@ -155,7 +143,7 @@ class PatronIcon extends StatelessWidget {
 
 /// Displays a user name, title, flair (optional) with an optional rating.
 class UserFullNameWidget extends ConsumerWidget {
-  const UserFullNameWidget({
+  const new({
     required this.user,
     this.name,
     this.aiLevel,
@@ -170,7 +158,7 @@ class UserFullNameWidget extends ConsumerWidget {
     super.key,
   });
 
-  const UserFullNameWidget.player({
+  const new player({
     required this.user,
     this.name,
     required this.aiLevel,
@@ -305,22 +293,18 @@ class UserFullNameWidget extends ConsumerWidget {
 ///
 /// Shows the user's flair if available, otherwise their initials with a
 /// deterministic background color derived from the first letter of their name.
-class UserAvatar extends ConsumerStatefulWidget {
-  const UserAvatar(this.user, {this.radius = 20.0, super.key});
-
-  final LightUser user;
-  final double radius;
-
+class const UserAvatar(final LightUser user, {final double radius = 20.0, super.key})
+    extends ConsumerStatefulWidget {
   @override
   ConsumerState<UserAvatar> createState() => _UserAvatarState();
 }
 
-class _UserAvatarState extends ConsumerState<UserAvatar> {
+class _UserAvatarState() extends ConsumerState<UserAvatar> {
   bool _errorLoadingFlair = false;
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
     final user = widget.user;
     final initial = user.name[0].toUpperCase();
     final showFlair = user.flair != null && !_errorLoadingFlair;

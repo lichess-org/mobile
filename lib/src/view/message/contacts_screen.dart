@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -33,9 +35,7 @@ const _emptySearchResult = SearchResult(
   users: IListConst([]),
 );
 
-class ContactsScreen extends ConsumerStatefulWidget {
-  const ContactsScreen({super.key});
-
+class const ContactsScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<ContactsScreen> createState() => _ContactsScreenState();
 
@@ -44,7 +44,7 @@ class ContactsScreen extends ConsumerStatefulWidget {
   }
 }
 
-class _ContactsScreenState extends ConsumerState<ContactsScreen> {
+class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
   final onChangedDebouncer = Debouncer(const Duration(milliseconds: 300));
   final controller = TextEditingController();
   final focusNode = FocusNode();
@@ -56,10 +56,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 
   Future<void> pushConversationScreen(LightUser user) async {
-    await Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(ConversationScreen.buildRoute(user: user));
+    await Navigator.of(context).pushHidingTabBar(ConversationScreen.buildRoute(user: user));
     ref.invalidate(contactsProvider);
     ref.read(messageSearchQueryProvider.notifier).state = '';
     controller.clear();
@@ -72,19 +69,29 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
     final searchResultsAsync = ref.watch(messageSearchResultsProvider);
     final me = ref.watch(authControllerProvider)?.user;
 
-    return Scaffold(
-      appBar: AppBar(
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    return PlatformScaffold(
+      plainList: true,
+      appBar: PlatformAppBar(
         title: Text(context.l10n.inbox),
+        // On iOS, the search field is below the large title, and sticks below the bar buttons once
+        // the large title is scrolled away.
+        largeTitle: true,
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(
-            Theme.of(context).platform == TargetPlatform.iOS ? 52.0 : kToolbarHeight,
+            // The 44pt glass search field and its vertical padding.
+            isIOS ? kGlassAppBarBottomPadding.vertical + 44.0 : kToolbarHeight,
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: isIOS
+                ? kGlassAppBarBottomPadding
+                : const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: PlatformSearchBar(
               controller: controller,
               focusNode: focusNode,
               hintText: context.l10n.searchOrStartNewDiscussion,
+              inAppBar: true,
               onChanged: (value) {
                 onChangedDebouncer.call(() {
                   ref.read(messageSearchQueryProvider.notifier).state = value;
@@ -121,11 +128,7 @@ class _ContactsScreenState extends ConsumerState<ContactsScreen> {
   }
 }
 
-class _SearchCategoryTitle extends StatelessWidget {
-  const _SearchCategoryTitle(this.title);
-
-  final String title;
-
+class const _SearchCategoryTitle(final String title) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -135,11 +138,8 @@ class _SearchCategoryTitle extends StatelessWidget {
   }
 }
 
-class ContactsListView extends ConsumerWidget {
-  const ContactsListView({required this.openConvo, super.key});
-
-  final void Function(LightUser user) openConvo;
-
+class const ContactsListView({required final void Function(LightUser user) openConvo, super.key})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contactsAsync = ref.watch(contactsProvider);
@@ -170,13 +170,12 @@ class ContactsListView extends ConsumerWidget {
   }
 }
 
-class ContactTile extends StatelessWidget {
-  const ContactTile(this.contact, this.me, {required this.openConvo, super.key});
-
-  final Contact contact;
-  final LightUser me;
-  final void Function(LightUser user) openConvo;
-
+class const ContactTile(
+  final Contact contact,
+  final LightUser me, {
+  required final void Function(LightUser user) openConvo,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final unreadStyle = TextStyle(
@@ -186,9 +185,8 @@ class ContactTile extends StatelessWidget {
     final isRead = contact.lastMessage.read || contact.lastMessage.userId == me.id;
 
     return ListTile(
-      contentPadding: Theme.of(
-        context,
-      ).listTileTheme.contentPadding?.add(const EdgeInsets.symmetric(vertical: 4.0)),
+      contentPadding: Theme.of(context).listTileTheme.contentPadding
+          ?.add(const EdgeInsets.symmetric(vertical: 4.0)),
       leading: UserAvatar(contact.user),
       title: UserFullNameWidget(user: contact.user, showFlair: false, showPatron: true),
       subtitle: Text(contact.lastMessage.text),
@@ -218,12 +216,11 @@ class ContactTile extends StatelessWidget {
   }
 }
 
-class UserTile extends ConsumerWidget {
-  const UserTile(this.user, {required this.openConvo, super.key});
-
-  final LightUser user;
-  final void Function(LightUser user) openConvo;
-
+class const UserTile(
+  final LightUser user, {
+  required final void Function(LightUser user) openConvo,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(

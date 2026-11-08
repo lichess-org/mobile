@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -16,7 +17,8 @@ final gameSetupPreferencesProvider = NotifierProvider<GameSetupPreferences, Game
   name: 'GameSetupPreferencesProvider',
 );
 
-class GameSetupPreferences extends Notifier<GameSetupPrefs>
+class GameSetupPreferences()
+    extends Notifier<GameSetupPrefs>
     with SessionPreferencesStorage<GameSetupPrefs> {
   @override
   @protected
@@ -55,10 +57,8 @@ class GameSetupPreferences extends Notifier<GameSetupPrefs>
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
-  const GameSetupPrefs._();
-
-  const factory GameSetupPrefs({
+sealed class const GameSetupPrefs._() with _$GameSetupPrefs implements Serializable {
+  const factory({
     required TimeIncrement timeIncrement,
     required int customDaysPerTurn,
     required Variant customVariant,
@@ -105,7 +105,7 @@ sealed class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
     return (min, max);
   }
 
-  factory GameSetupPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$GameSetupPrefsFromJson(json);
     } catch (_) {

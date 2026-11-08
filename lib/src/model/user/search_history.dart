@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +15,7 @@ final searchHistoryProvider = NotifierProvider<SearchHistory, SearchHistoryState
   name: 'SearchHistoryProvider',
 );
 
-class SearchHistory extends Notifier<SearchHistoryState> {
+class SearchHistory() extends Notifier<SearchHistoryState> {
   static const maxHistory = 10;
 
   String _storageKey(AuthUser? authUser) => 'search.history.${authUser?.user.id ?? '**anon**'}';
@@ -59,8 +59,7 @@ class SearchHistory extends Notifier<SearchHistoryState> {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class SearchHistoryState with _$SearchHistoryState {
-  const factory SearchHistoryState({required IList<String> history}) = _SearchHistoryState;
+  const factory({required IList<String> history}) = _SearchHistoryState;
 
-  factory SearchHistoryState.fromJson(Map<String, dynamic> json) =>
-      _$SearchHistoryStateFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SearchHistoryStateFromJson(json);
 }

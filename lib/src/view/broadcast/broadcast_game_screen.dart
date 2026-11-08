@@ -9,9 +9,9 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_settings_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_summary.dart';
@@ -30,7 +31,6 @@ import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
-
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -38,33 +38,24 @@ import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class BroadcastGameScreen extends ConsumerStatefulWidget {
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final String? title;
+class const BroadcastGameScreen({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug,
+  final String? title,
 
   /// The side to view the board from, if it should differ from the default (white).
-  final Side? initialPov;
-
-  const BroadcastGameScreen({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-    this.title,
-    this.initialPov,
-  });
-
+  final Side? initialPov,
+}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({
     BroadcastTournamentId? tournamentId,
     required BroadcastRoundId roundId,
@@ -91,10 +82,14 @@ class BroadcastGameScreen extends ConsumerStatefulWidget {
   ConsumerState<BroadcastGameScreen> createState() => _BroadcastGameScreenState();
 }
 
-class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
+class _BroadcastGameScreenState()
+    extends ConsumerState<BroadcastGameScreen>
     with SingleTickerProviderStateMixin {
   late final List<AnalysisTab> tabs;
   late final TabController _tabController;
+
+  /// Whether the board is small, once switched with the bottom bar button; not persisted.
+  bool? _smallBoard;
 
   @override
   void initState() {
@@ -143,16 +138,45 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
             ),
             _ => const SizedBox.shrink(),
           };
+    final smallBoard = _smallBoard ?? isSmallBoardByDefault(context);
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
+        compactButtons: true,
         title: title,
         actions: [
-          _BroadcastGameMenu(
-            roundId: widget.roundId,
-            gameId: widget.gameId,
-            tournamentSlug: widget.tournamentSlug,
-            roundSlug: widget.roundSlug,
+          ContextMenuIconButton(
+            icon: const Icon(Icons.more_horiz),
+            semanticsLabel: context.l10n.menu,
+            actions: [
+              ContextMenuAction(
+                icon: Theme.of(context).platform == TargetPlatform.iOS
+                    ? Icons.ios_share_outlined
+                    : Icons.share_outlined,
+                label: context.l10n.mobileShareGameURL,
+                onPressed: () {
+                  launchShareDialog(
+                    context,
+                    ShareParams(
+                      uri: lichessUri(
+                        '/broadcast/${widget.tournamentSlug ?? '-'}/${widget.roundSlug ?? '-'}/${widget.roundId}/${widget.gameId}',
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ContextMenuAction(
+                icon: Icons.description_outlined,
+                label: context.l10n.mobileShareGamePGN,
+                onPressed: _sharePgn,
+              ),
+              ContextMenuAction(
+                icon: Icons.gif_outlined,
+                label: context.l10n.gameAsGIF,
+                onPressed: _shareGif,
+              ),
+            ],
           ),
         ],
       ),
@@ -164,108 +188,58 @@ class _BroadcastGameScreenState extends ConsumerState<BroadcastGameScreen>
         widget.roundSlug,
         tabController: _tabController,
         tabs: tabs,
+        smallBoard: smallBoard,
+        onToggleSmallBoard: () => setState(() => _smallBoard = !smallBoard),
       ),
     );
   }
-}
 
-class _BroadcastGameMenu extends ConsumerWidget {
-  const _BroadcastGameMenu({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
+  Future<void> _sharePgn() async {
+    try {
+      final pgnOnly = await ref
+          .read(broadcastRepositoryProvider)
+          .getGamePgn(widget.roundId, widget.gameId, withAnalysisSummary: false);
+      if (mounted) {
+        launchShareDialog(context, ShareParams(text: pgnOnly.pgn));
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+      }
+    }
+  }
 
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ContextMenuIconButton(
-      icon: const Icon(Icons.more_horiz),
-      semanticsLabel: context.l10n.menu,
-      actions: [
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS
-              ? Icons.ios_share_outlined
-              : Icons.share_outlined,
-          label: context.l10n.mobileShareGameURL,
-          onPressed: () {
-            launchShareDialog(
-              context,
-              ShareParams(
-                uri: lichessUri(
-                  '/broadcast/${tournamentSlug ?? '-'}/${roundSlug ?? '-'}/$roundId/$gameId',
-                ),
-              ),
-            );
-          },
-        ),
-        ContextMenuAction(
-          icon: Icons.description_outlined,
-          label: context.l10n.mobileShareGamePGN,
-          onPressed: () async {
-            try {
-              final pgnOnly = await ref
-                  .read(broadcastRepositoryProvider)
-                  .getGamePgn(roundId, gameId, withAnalysisSummary: false);
-              if (context.mounted) {
-                launchShareDialog(context, ShareParams(text: pgnOnly.pgn));
-              }
-            } catch (e) {
-              if (context.mounted) {
-                showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-              }
-            }
-          },
-        ),
-        ContextMenuAction(
-          icon: Icons.gif_outlined,
-          label: context.l10n.gameAsGIF,
-          onPressed: () async {
-            try {
-              final gif = await ref.read(gameShareServiceProvider).chapterGif(roundId, gameId);
-              if (context.mounted) {
-                launchShareDialog(
-                  context,
-                  ShareParams(fileNameOverrides: ['$gameId.gif'], files: [gif]),
-                );
-              }
-            } catch (e) {
-              debugPrint(e.toString());
-              if (context.mounted) {
-                showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-              }
-            }
-          },
-        ),
-      ],
-    );
+  Future<void> _shareGif() async {
+    try {
+      final gif = await ref
+          .read(gameShareServiceProvider)
+          .chapterGif(widget.roundId, widget.gameId);
+      if (mounted) {
+        launchShareDialog(
+          context,
+          ShareParams(fileNameOverrides: ['${widget.gameId}.gif'], files: [gif]),
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      if (mounted) {
+        showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+      }
+    }
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(
-    this.tournamentId,
-    this.roundId,
-    this.gameId,
-    this.tournamentSlug,
-    this.roundSlug, {
-    required this.tabController,
-    required this.tabs,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body(
+  final BroadcastTournamentId? tournamentId,
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final String? tournamentSlug,
+  final String? roundSlug, {
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId)))) {
@@ -291,7 +265,7 @@ class _Body extends ConsumerWidget {
               boardSize: boardSize,
               boardRadius: borderRadius,
             ),
-            smallBoard: broadcastPrefs.smallBoard,
+            smallBoard: smallBoard,
             boardHeader: _PlayerWidget(
               tournamentId: tournamentId,
               roundId: roundId,
@@ -312,14 +286,12 @@ class _Body extends ConsumerWidget {
             engineLines:
                 isLocalEvaluationEnabled && broadcastPrefs.showEngineLines && numEvalLines > 0
                 ? EngineLines(
-                    filters: (id: state.evaluationContext.id, path: state.currentPath),
+                    filters: (context: state.evaluationContext, path: state.currentPath),
                     analysisState: state,
                     onTapMove: ref
                         .read(
-                          broadcastAnalysisControllerProvider((
-                            roundId: roundId,
-                            gameId: gameId,
-                          )).notifier,
+                          broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId))
+                              .notifier,
                         )
                         .onUserMove,
                   )
@@ -329,7 +301,10 @@ class _Body extends ConsumerWidget {
               gameId: gameId,
               tournamentSlug: tournamentSlug,
               roundSlug: roundSlug,
+              smallBoard: smallBoard,
+              onToggleSmallBoard: onToggleSmallBoard,
             ),
+            bottomBarOverContent: true,
             children: [
               _PgnTagsView(roundId, gameId),
               _OpeningExplorerTab(roundId, gameId),
@@ -346,12 +321,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _BroadcastGameTreeView extends ConsumerWidget {
-  const _BroadcastGameTreeView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _BroadcastGameTreeView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -359,42 +330,33 @@ class _BroadcastGameTreeView extends ConsumerWidget {
 
     final broadcastPrefs = ref.watch(broadcastPreferencesProvider);
     final currentNode = state.root.branchesOn(state.currentPath).lastOrNull ?? state.root;
-
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            child: DebouncedPgnTreeView(
-              root: state.root,
-              currentPath: state.currentPath,
-              livePath: state.broadcastLivePath,
-              pgnRootComments: state.pgnRootComments,
-              // Avoid overlap with the divider of the tab bar
-              showTopDivider: false,
-              shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
-              shouldShowComments:
-                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
-              shouldShowAnnotations:
-                  broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-              notifier: ref.read(ctrlProvider.notifier),
-              displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
-            ),
-          ),
-        ),
-
-        VariationsBar(
-          currentNode: currentNode,
+    return MovesWithVariationsBar(
+      currentNode: currentNode,
+      currentPath: state.currentPath,
+      showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+      onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+      movesBuilder: (context, bottomPadding) => SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: DebouncedPgnTreeView(
+          root: state.root,
           currentPath: state.currentPath,
-          showAnnotations: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
-          onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+          livePath: state.broadcastLivePath,
+          pgnRootComments: state.pgnRootComments,
+          // Avoid overlap with the divider of the tab bar
+          showTopDivider: false,
+          shouldShowComputerAnalysis: broadcastPrefs.enableServerAnalysis,
+          shouldShowComments: broadcastPrefs.enableServerAnalysis && broadcastPrefs.showPgnComments,
+          shouldShowAnnotations:
+              broadcastPrefs.enableServerAnalysis && broadcastPrefs.showAnnotations,
+          notifier: ref.read(ctrlProvider.notifier),
+          displayMode: broadcastPrefs.inlineNotation ? .inlineNotation : .twoColumn,
         ),
-      ],
+      ),
     );
   }
 }
 
-enum PgnTags {
+enum PgnTags(final String tagName, {required final bool isLink}) {
   white('White', isLink: false),
   whiteElo('WhiteElo', isLink: false),
   whiteTitle('WhiteTitle', isLink: false),
@@ -409,11 +371,6 @@ enum PgnTags {
   event('Event', isLink: false),
   round('Round', isLink: false);
 
-  const PgnTags(this.tagName, {required this.isLink});
-
-  final String tagName;
-  final bool isLink;
-
   String? buildUrl(String value) {
     if (value.isEmpty) return null;
     switch (this) {
@@ -426,12 +383,8 @@ enum PgnTags {
   }
 }
 
-class _PgnTagsView extends ConsumerWidget {
-  const _PgnTagsView(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _PgnTagsView(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -439,7 +392,8 @@ class _PgnTagsView extends ConsumerWidget {
     final pgnHeaders = state.pgnHeaders;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+      // Scrolls under a bar floating over it.
+      padding: EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0 + MediaQuery.paddingOf(context).bottom),
       child: Table(
         columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
         defaultVerticalAlignment: TableCellVerticalAlignment.top,
@@ -486,12 +440,8 @@ class _PgnTagsView extends ConsumerWidget {
   }
 }
 
-class _OpeningExplorerTab extends ConsumerWidget {
-  const _OpeningExplorerTab(this.roundId, this.gameId);
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const _OpeningExplorerTab(final BroadcastRoundId roundId, final BroadcastGameId gameId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
@@ -513,22 +463,17 @@ class _OpeningExplorerTab extends ConsumerWidget {
   }
 }
 
-class BroadcastAnalysisBoard extends AnalysisBoard {
-  const BroadcastAnalysisBoard({
-    required this.roundId,
-    required this.gameId,
-    required super.boardSize,
-    super.boardRadius,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-
+class const BroadcastAnalysisBoard({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<BroadcastAnalysisBoard> createState() => _BroadcastAnalysisBoardState();
 }
 
-class _BroadcastAnalysisBoardState
+class _BroadcastAnalysisBoardState()
     extends AnalysisBoardState<BroadcastAnalysisBoard, BroadcastAnalysisState, BroadcastPrefs> {
   @override
   BroadcastAnalysisState? readCurrentState() => ref
@@ -539,10 +484,8 @@ class _BroadcastAnalysisBoardState
   void listenToStateChanges(
     void Function(BroadcastAnalysisState? prev, BroadcastAnalysisState? next) listener,
   ) => ref.listenManual<BroadcastAnalysisState?>(
-    broadcastAnalysisControllerProvider((
-      roundId: widget.roundId,
-      gameId: widget.gameId,
-    )).select((v) => v.value),
+    broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+        .select((v) => v.value),
     listener,
   );
 
@@ -561,36 +504,30 @@ class _BroadcastAnalysisBoardState
   @override
   void onUserMove(Move move) => ref
       .read(
-        broadcastAnalysisControllerProvider((
-          roundId: widget.roundId,
-          gameId: widget.gameId,
-        )).notifier,
+        broadcastAnalysisControllerProvider((roundId: widget.roundId, gameId: widget.gameId))
+            .notifier,
       )
       .onUserMove(move);
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(BroadcastAnalysisState state) => state.currentPosition.fen;
 }
 
-enum _PlayerWidgetPosition { bottom, top }
+enum _PlayerWidgetPosition() {
+  bottom,
+  top,
+}
 
-class _PlayerWidget extends ConsumerWidget {
-  const _PlayerWidget({
-    this.tournamentId,
-    required this.roundId,
-    required this.gameId,
-    required this.widgetPosition,
-  });
-
-  final BroadcastTournamentId? tournamentId;
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final _PlayerWidgetPosition widgetPosition;
-
+class const _PlayerWidget({
+  final BroadcastTournamentId? tournamentId,
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required final _PlayerWidgetPosition widgetPosition,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(broadcastRoundGameProvider((roundId: roundId, gameId: gameId)))) {
@@ -632,59 +569,58 @@ class _PlayerWidget extends ConsumerWidget {
               );
             }
           },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                if (game.isOver) ...[
-                  Text(
-                    resultString(customScoring, side, game.status),
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: .bold,
-                      color: game.status.colorFor(side, context),
-                    ),
-                  ),
-                  const SizedBox(width: 16.0),
-                ],
-                Expanded(
-                  child: BroadcastPlayerWidget(
-                    player: player,
-                    textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+          child: Row(
+            children: [
+              if (game.isOver) ...[
+                Text(
+                  resultString(customScoring, side, game.status),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(fontWeight: .bold, color: game.status.colorFor(side, context)),
                 ),
-                if (liveClock != null || pastClock != null)
-                  Container(
-                    height: kAnalysisBoardHeaderOrFooterHeight,
+                const SizedBox(width: 16.0),
+              ],
+              Expanded(
+                child: BroadcastPlayerWidget(
+                  player: player,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              if (liveClock != null || pastClock != null)
+                Container(
+                  height: kAnalysisBoardHeaderOrFooterHeight - kAnalysisBoardInnerMargin * 2,
+                  margin: const EdgeInsets.symmetric(vertical: kAnalysisBoardInnerMargin),
+                  decoration: BoxDecoration(
                     color: isClockActive
                         ? ColorScheme.of(context).tertiaryContainer
                         : (side == sideToMove)
                         ? ColorScheme.of(context).secondaryContainer
                         : Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      child: Center(
-                        child: liveClock != null
-                            ? CountdownClockBuilder(
-                                timeLeft: liveClock,
-                                active: isClockActive,
-                                builder: (context, timeLeft) => _Clock(
-                                  timeLeft: timeLeft,
-                                  isSideToMove: side == sideToMove,
-                                  isClockActive: isClockActive,
-                                ),
-                                tickInterval: const Duration(seconds: 1),
-                                clockUpdatedAt: game.updatedClockAt,
-                              )
-                            : _Clock(
-                                timeLeft: pastClock!,
+                    borderRadius: Styles.boardBorderRadius,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                    child: Center(
+                      child: liveClock != null
+                          ? CountdownClockBuilder(
+                              timeLeft: liveClock,
+                              active: isClockActive,
+                              builder: (context, timeLeft) => _Clock(
+                                timeLeft: timeLeft,
                                 isSideToMove: side == sideToMove,
-                                isClockActive: false,
+                                isClockActive: isClockActive,
                               ),
-                      ),
+                              tickInterval: const Duration(seconds: 1),
+                              clockUpdatedAt: game.updatedClockAt,
+                            )
+                          : _Clock(
+                              timeLeft: pastClock!,
+                              isSideToMove: side == sideToMove,
+                              isClockActive: false,
+                            ),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         );
       case AsyncValue(:final error?):
@@ -695,13 +631,11 @@ class _PlayerWidget extends ConsumerWidget {
   }
 }
 
-class _Clock extends StatelessWidget {
-  const _Clock({required this.timeLeft, required this.isSideToMove, required this.isClockActive});
-
-  final Duration timeLeft;
-  final bool isSideToMove;
-  final bool isClockActive;
-
+class const _Clock({
+  required final Duration timeLeft,
+  required final bool isSideToMove,
+  required final bool isClockActive,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -718,30 +652,32 @@ class _Clock extends StatelessWidget {
   }
 }
 
-class _BroadcastGameBottomBar extends ConsumerWidget {
-  const _BroadcastGameBottomBar({
-    required this.roundId,
-    required this.gameId,
-    this.tournamentSlug,
-    this.roundSlug,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final String? tournamentSlug;
-  final String? roundSlug;
-
+class const _BroadcastGameBottomBar({
+  required final BroadcastRoundId roundId,
+  required final BroadcastGameId gameId,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
+  final String? tournamentSlug,
+  final String? roundSlug,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = broadcastAnalysisControllerProvider((roundId: roundId, gameId: gameId));
     final broadcastAnalysisState = ref.watch(ctrlProvider).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
-        BottomBarButton(
-          label: context.l10n.menu,
-          onTap: () => _showMenu(context, ref),
-          icon: Icons.menu,
+        BottomBarGroup(
+          children: [
+            BottomBarButton(
+              label: context.l10n.menu,
+              onTap: () => _showMenu(context, ref),
+              icon: Icons.menu,
+            ),
+            if (canToggleBoardSize(context))
+              BoardSizeToggleButton(smallBoard: smallBoard, onTap: onToggleSmallBoard),
+          ],
         ),
         Builder(
           builder: (context) {
@@ -751,7 +687,7 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
               builder: (context, snapshot) {
                 return EngineButton(
                   filters: (
-                    id: broadcastAnalysisState.evaluationContext.id,
+                    context: broadcastAnalysisState.evaluationContext,
                     path: broadcastAnalysisState.currentPath,
                   ),
                   savedEval: broadcastAnalysisState.currentNode.eval,
@@ -771,25 +707,29 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
             );
           },
         ),
-        RepeatButton(
-          onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            label: context.l10n.next,
-            onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                label: context.l10n.next,
+                onTap: broadcastAnalysisState.canGoNext ? () => _moveForward(ref) : null,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -805,9 +745,9 @@ class _BroadcastGameBottomBar extends ConsumerWidget {
       actions: [
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.settingsSettings),
-          onPressed: () => Navigator.of(
-            context,
-          ).push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
+          onPressed: () =>
+              Navigator.of(context)
+                  .push(BroadcastGameSettingsScreen.buildRoute(roundId: roundId, gameId: gameId)),
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),

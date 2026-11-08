@@ -51,11 +51,8 @@ double scaleMoveTime(Duration moveTime) {
 ///
 /// White's moves are drawn above the axis and black's below it, with the remaining clock of each
 /// player overlaid as a line. Tapping the chart seeks the board to the matching ply.
-class MoveTimesChart extends StatelessWidget {
-  const MoveTimesChart({required this.params, super.key});
-
-  final MoveTimesChartParams params;
-
+class const MoveTimesChart({required final MoveTimesChartParams params, super.key})
+    extends StatelessWidget {
   /// Index in the series of the currently viewed move, or null if the current node is not a move
   /// on the main line.
   int? get _currentIndex {
@@ -177,35 +174,22 @@ class MoveTimesChart extends StatelessWidget {
 
 typedef _DivisionLabels = ({String opening, String middlegame, String endgame});
 
-class _MoveTimesPainter extends CustomPainter {
-  _MoveTimesPainter({
-    required this.params,
-    required this.currentIndex,
-    required this.whiteColor,
-    required this.blackColor,
-    required this.axisColor,
-    required this.lineColor,
-    required this.clockColor,
-    required this.divisionColor,
-    required this.divisionLabelColor,
-    required this.divisionLabels,
-  });
-
-  final MoveTimesChartParams params;
-  final int? currentIndex;
-  final Color whiteColor;
-  final Color blackColor;
-  final Color axisColor;
+class _MoveTimesPainter({
+  required final MoveTimesChartParams params,
+  required final int? currentIndex,
+  required final Color whiteColor,
+  required final Color blackColor,
+  required final Color axisColor,
 
   /// Color of the current ply cursor.
-  final Color lineColor;
+  required final Color lineColor,
 
   /// Color of the remaining clock lines.
-  final Color clockColor;
-  final Color divisionColor;
-  final Color divisionLabelColor;
-  final _DivisionLabels divisionLabels;
-
+  required final Color clockColor,
+  required final Color divisionColor,
+  required final Color divisionLabelColor,
+  required final _DivisionLabels divisionLabels,
+}) extends CustomPainter {
   /// Whether the move at [index] was played by white.
   bool _isWhiteMove(int index) => (params.rootPly + index + 1).isOdd;
 

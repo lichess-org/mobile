@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
@@ -26,11 +26,7 @@ final savedStreakScoreProvider = FutureProvider.autoDispose<int?>((Ref ref) asyn
 });
 
 /// Local storage for the current puzzle streak.
-class StreakStorage {
-  const StreakStorage(this.ref, this.userId);
-  final Ref ref;
-  final UserId? userId;
-
+class const StreakStorage(final Ref ref, final UserId? userId) {
   Future<PuzzleStreak?> loadActiveStreak() async {
     final stored = _store.getString(_storageKey);
     if (stored == null) {

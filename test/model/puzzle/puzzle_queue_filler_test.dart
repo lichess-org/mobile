@@ -24,16 +24,12 @@ import '../../test_helpers.dart';
 // real user id. Anonymous behaviour is covered by its own no-op test.
 const _user = UserId('testUser');
 
-class _MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
+class _MockPuzzleBatchStorage() extends Mock implements PuzzleBatchStorage;
 
 /// A [PuzzlePreferences] that returns a fixed, unclamped offline queue length,
 /// so tests can drive the fill with small (cheap) values that the real,
 /// [kMinOfflinePuzzles]-clamped preference could never produce.
-class _FakePuzzlePreferences extends PuzzlePreferences {
-  _FakePuzzlePreferences(this._nbOfflinePuzzles);
-
-  final int _nbOfflinePuzzles;
-
+class _FakePuzzlePreferences(final int _nbOfflinePuzzles) extends PuzzlePreferences {
   @override
   PuzzlePrefs build() => PuzzlePrefs(
     id: null,
@@ -203,9 +199,9 @@ void main() {
         if (request.method == 'GET' && request.url.path == '/api/puzzle/batch/mix') {
           nbReq++;
           await Future<void>.delayed(const Duration(milliseconds: 20));
-          return mockResponse(_batchOf1.replaceFirst('"20yWT"', '"pz$nbReq"'), 200);
+          return await mockResponse(_batchOf1.replaceFirst('"20yWT"', '"pz$nbReq"'), 200);
         }
-        return mockResponse('', 404);
+        return await mockResponse('', 404);
       });
 
       final container = await makeTestContainer(mockClient, nbOfflinePuzzles: 2);
@@ -328,9 +324,9 @@ void main() {
                 unsolved: IList(const []),
               ),
             );
-            return mockResponse(_batchOf1, 200);
+            return await mockResponse(_batchOf1, 200);
           }
-          return mockResponse('', 404);
+          return await mockResponse('', 404);
         }),
       );
       final storage = await container.read(puzzleBatchStorageProvider.future);

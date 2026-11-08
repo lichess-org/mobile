@@ -25,7 +25,7 @@
   <string name="cantChangeMore">No podemos cambiar más que las mayúsculas/minúsculas. Por razones técnicas, es totalmente imposible.</string>
   <string name="orCloseAccount">Sin embargo, puedes cerrar tu cuenta actual y crear una nueva.</string>
   <string name="wantClearHistory">Quiero borrar mi historial o puntuación</string>
-  <string name="cantClearHistory">No puedes borrar tu historial de partidas, ejercicios o puntuaciones.</string>
+  <string name="cantClearHistoryOrResetRatings">No es posible borrar tu historial de partidas y ejercicios, o restablecer tus valoraciones.</string>
   <string name="wantReport">Quiero denunciar a un jugador</string>
   <string name="toReportAPlayerUseForm">Para denunciar a un jugador utiliza el formulario de denuncia</string>
   <string name="youCanAlsoReachReportPage">También puedes acceder a esa página pulsando el botón de denuncia %s en un perfil.</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">Asegúrate de haber jugado una partida por puntuación. Las partidas amistosas no afectan a las puntuaciones de los jugadores.</string>
   <string name="botRatingAbuse">Al jugar contra una cuenta de bot, puede que una partida por puntos no se contabilice si se determina que el jugador abusa del bot para conseguir puntos.</string>
   <string name="errorPage">Página de error</string>
-  <string name="reportErrorPage">Si una página te da error, puedes reportarla:</string>
+  <string name="reportTheBug">Puedes reportarlo:</string>
+  <string name="securityVulnerability">Vulnerabilidad de seguridad</string>
+  <string name="otherBug">Otro error</string>
   <string name="learnHowToMakeBroadcasts">Aprende cómo hacer tus propias emisiones en Lichess</string>
   <string name="banAppeal">Apelar por un bloqueo o una restricción de IP</string>
   <string name="engineAppeal">Motor o marca de trampa</string>

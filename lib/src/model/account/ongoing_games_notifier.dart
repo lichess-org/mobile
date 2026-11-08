@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
-class OngoingGamesNotifier extends AsyncNotifier<IList<OngoingGame>> {
+class OngoingGamesNotifier() extends AsyncNotifier<IList<OngoingGame>> {
   @override
   Future<IList<OngoingGame>> build() {
     final authUser = ref.watch(authControllerProvider);

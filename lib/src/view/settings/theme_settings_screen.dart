@@ -1,5 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -16,20 +17,19 @@ import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ThemeSettingsScreen extends ConsumerWidget {
-  const ThemeSettingsScreen({super.key});
-
+class const ThemeSettingsScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ThemeSettingsScreen());
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.mobileTheme), animateColor: true),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.mobileTheme)),
       body: const _Body(),
     );
   }
@@ -42,25 +42,39 @@ String shapeColorL10n(ShapeColor shapeColor) => switch (shapeColor) {
   ShapeColor.yellow => 'Yellow',
 };
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   late double brightness;
+  late double contrast;
   late double hue;
 
-  bool openAdjustColorSection = false;
+  /// Whether the user has selected a custom background, even if none is set yet.
+  bool customBackgroundSelected = false;
 
   @override
   void initState() {
     super.initState();
     final boardPrefs = ref.read(boardPreferencesProvider);
     brightness = boardPrefs.brightness;
+    contrast = boardPrefs.contrast;
     hue = boardPrefs.hue;
+  }
+
+  /// Opens the custom background selection screen.
+  ///
+  /// Only an actual background color or image makes the background custom, so any transient
+  /// selection is discarded when the user comes back without having picked one.
+  Future<void> pickCustomBackground() async {
+    await Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
+    if (mounted) {
+      setState(() {
+        customBackgroundSelected = false;
+      });
+    }
   }
 
   @override
@@ -68,13 +82,21 @@ class _BodyState extends ConsumerState<_Body> {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    final bool isCustomBackground = generalPrefs.isForcedDarkMode || customBackgroundSelected;
+    final BackgroundColor? backgroundColor = generalPrefs.backgroundColor?.$1;
+
     final bool hasAjustedColors =
-        brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
+        brightness != kBoardDefaultBrightnessFilter ||
+        contrast != kBoardDefaultContrastFilter ||
+        hue != kBoardDefaultHueFilter;
 
     final boardSize = isTabletOrLarger(context) ? 350.0 : 200.0;
 
+    // Dimming the boards in dark mode overrides the brightness filter.
+    final isDimmed = boardPrefs.isDimmed(Theme.of(context).brightness);
+    final disabledSliderColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.38);
+
     return SafeArea(
-      top: false,
       child: Column(
         children: [
           Padding(
@@ -82,7 +104,8 @@ class _BodyState extends ConsumerState<_Body> {
             child: _BoardPreview(
               size: boardSize,
               boardPrefs: boardPrefs,
-              brightness: brightness,
+              brightness: isDimmed ? kBoardDimmedBrightnessFilter : brightness,
+              contrast: contrast,
               hue: hue,
             ),
           ),
@@ -102,25 +125,64 @@ class _BodyState extends ConsumerState<_Body> {
                         },
                       ),
                     SettingsListTile(
-                      icon: const Icon(Icons.wallpaper),
+                      icon: const Icon(Icons.brightness_medium_outlined),
                       settingsLabel: Text(context.l10n.background),
-                      settingsValue: generalPrefs.backgroundColor != null
-                          ? generalPrefs.backgroundColor!.$1.label
-                          : (generalPrefs.backgroundImage != null ? 'Image' : 'Default'),
-                      onTap: () {
-                        Navigator.of(context).push(BackgroundChoiceScreen.buildRoute());
+                      settingsValue: isCustomBackground
+                          ? backgroundColor?.label ??
+                                (generalPrefs.backgroundImage != null
+                                    ? context.l10n.backgroundImage
+                                    : context.l10n.mobileCustomizeButton)
+                          : generalPrefs.themeMode.title(context.l10n),
+                      trailing: backgroundColor != null
+                          ? _ColorCircle(color: backgroundColor.darker)
+                          : null,
+                      onTap: () async {
+                        // The picker outlives this screen when switching away from a custom
+                        // background, so the labels must not depend on this context.
+                        final l10n = context.l10n;
+                        bool newlyCustom = false;
+                        await showChoicePicker<BackgroundThemeMode?>(
+                          context,
+                          // A null choice means a custom background.
+                          choices: const [...BackgroundThemeMode.values, null],
+                          selectedItem: isCustomBackground ? null : generalPrefs.themeMode,
+                          labelBuilder: (t) => Text(t?.title(l10n) ?? l10n.mobileCustomizeButton),
+                          onSelectedItemChanged: (BackgroundThemeMode? value) {
+                            newlyCustom = value == null && !isCustomBackground;
+                            if (mounted) {
+                              setState(() {
+                                customBackgroundSelected = value == null;
+                              });
+                            }
+                            if (value != null) {
+                              final notifier = ref.read(generalPreferencesProvider.notifier);
+                              if (generalPrefs.isForcedDarkMode) {
+                                // Preferences are only applied to the state once they are
+                                // written, so the two updates must be sequenced, or the second
+                                // one would overwrite the first with a stale state.
+                                notifier
+                                    .setBackground(backgroundColor: null, backgroundImage: null)
+                                    .then((_) => notifier.setBackgroundThemeMode(value));
+                              } else {
+                                notifier.setBackgroundThemeMode(value);
+                              }
+                            }
+                          },
+                        );
+                        // Let the user pick their background right away.
+                        if (newlyCustom && context.mounted) {
+                          await pickCustomBackground();
+                        }
                       },
                     ),
-                    if (generalPrefs.backgroundColor != null ||
-                        generalPrefs.backgroundImage != null)
+                    if (isCustomBackground)
                       ListTile(
-                        leading: const Icon(Icons.cancel),
-                        title: const Text('Reset background'),
-                        onTap: () {
-                          ref
-                              .read(generalPreferencesProvider.notifier)
-                              .setBackground(backgroundColor: null, backgroundImage: null);
-                        },
+                        leading: const Icon(Icons.wallpaper),
+                        title: Text(context.l10n.mobileChooseCustomBackground),
+                        trailing: Theme.of(context).platform == TargetPlatform.iOS
+                            ? const CupertinoListTileChevron()
+                            : null,
+                        onTap: pickCustomBackground,
                       ),
                     SettingsListTile(
                       icon: const Icon(LichessIcons.chess_board),
@@ -128,6 +190,14 @@ class _BodyState extends ConsumerState<_Body> {
                       settingsValue: boardPrefs.boardTheme.label,
                       onTap: () {
                         Navigator.of(context).push(BoardChoiceScreen.buildRoute());
+                      },
+                    ),
+                    SwitchSettingTile(
+                      leading: const Icon(Icons.dark_mode_outlined),
+                      title: const Text('Dim board in dark mode'),
+                      value: boardPrefs.dimInDarkMode,
+                      onChanged: (value) {
+                        ref.read(boardPreferencesProvider.notifier).toggleDimInDarkMode();
                       },
                     ),
                     SettingsListTile(
@@ -140,24 +210,16 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                     SettingsListTile(
                       icon: const Icon(LichessIcons.arrow_full_upperright),
-                      settingsLabel: const Text('Drawn shape color'),
-                      explanation:
-                          'This color is only used for shapes drawn by hand using two fingers.',
+                      settingsLabel: Text(context.l10n.mobileSettingsDrawnShapeColor),
+                      explanation: context.l10n.mobileSettingsDrawnShapeColorHelp,
                       settingsValue: shapeColorL10n(boardPrefs.shapeColor),
+                      trailing: _ColorCircle(color: boardPrefs.shapeColor.color),
                       onTap: () {
                         showChoicePicker(
                           context,
                           choices: ShapeColor.values,
                           selectedItem: boardPrefs.shapeColor,
-                          labelBuilder: (t) => Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(text: shapeColorL10n(t)),
-                                const TextSpan(text: '   '),
-                                WidgetSpan(child: Container(width: 15, height: 15, color: t.color)),
-                              ],
-                            ),
-                          ),
+                          labelBuilder: (t) => _ColorCircle(color: t.color),
                           onSelectedItemChanged: (ShapeColor? value) {
                             ref
                                 .read(boardPreferencesProvider.notifier)
@@ -175,9 +237,8 @@ class _BodyState extends ConsumerState<_Body> {
                       },
                     ),
                     SwitchSettingTile(
-                      // TODO translate
                       leading: const Icon(Icons.border_outer),
-                      title: const Text('Show border'),
+                      title: Text(context.l10n.mobileSettingsShowBorder),
                       value: boardPrefs.showBorder,
                       onChanged: (value) {
                         ref.read(boardPreferencesProvider.notifier).toggleBorder();
@@ -186,58 +247,110 @@ class _BodyState extends ConsumerState<_Body> {
                   ],
                 ),
                 ListSection(
-                  header: SettingsSectionTitle(context.l10n.advancedSettings),
                   hasLeading: true,
                   children: [
-                    ListTile(
-                      leading: const Icon(Icons.brightness_6),
-                      title: Slider.adaptive(
-                        min: 0.2,
-                        max: 1.4,
-                        value: brightness,
-                        onChanged: (value) {
-                          setState(() {
-                            brightness = value;
-                          });
-                        },
-                        onChangeEnd: (value) {
-                          ref
-                              .read(boardPreferencesProvider.notifier)
-                              .adjustColors(brightness: brightness);
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.invert_colors),
-                      title: Slider.adaptive(
-                        min: 0.0,
-                        max: 360.0,
-                        value: hue,
-                        onChanged: (value) {
-                          setState(() {
-                            hue = value;
-                          });
-                        },
-                        onChangeEnd: (value) {
-                          ref.read(boardPreferencesProvider.notifier).adjustColors(hue: hue);
-                        },
-                      ),
-                    ),
-                    ListTile(
-                      enabled: hasAjustedColors,
-                      leading: const Icon(Icons.cancel),
-                      title: Text(context.l10n.boardReset),
-                      onTap: hasAjustedColors
-                          ? () {
-                              setState(() {
-                                brightness = kBoardDefaultBrightnessFilter;
-                                hue = kBoardDefaultHueFilter;
-                              });
+                    ExpansionTile(
+                      leading: const Icon(Icons.tune),
+                      title: Text(context.l10n.advancedSettings),
+                      shape: const Border(),
+                      collapsedShape: const Border(),
+                      children: [
+                        ListTile(
+                          enabled: !isDimmed,
+                          leading: const Icon(Icons.brightness_6),
+                          subtitle: isDimmed
+                              ? const Text('Not available while "Dim board in dark mode" is on')
+                              : null,
+                          title: Slider.adaptive(
+                            min: 0.2,
+                            max: 1.4,
+                            value: brightness,
+                            // The Cupertino slider has no disabled colors.
+                            activeColor: isDimmed ? disabledSliderColor : null,
+                            thumbColor: isDimmed
+                                ? Color.alphaBlend(
+                                    disabledSliderColor,
+                                    ColorScheme.of(context).surface,
+                                  )
+                                : null,
+                            onChanged: isDimmed
+                                ? null
+                                : (value) {
+                                    setState(() {
+                                      brightness = value;
+                                    });
+                                  },
+                            onChangeEnd: (value) {
                               ref
                                   .read(boardPreferencesProvider.notifier)
-                                  .adjustColors(brightness: brightness, hue: hue);
-                            }
-                          : null,
+                                  .adjustColors(brightness: brightness);
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.tonality),
+                          title: Slider.adaptive(
+                            min: 0.4,
+                            max: 2.0,
+                            value: contrast,
+                            onChanged: (value) {
+                              setState(() {
+                                contrast = value;
+                              });
+                            },
+                            onChangeEnd: (value) {
+                              ref
+                                  .read(boardPreferencesProvider.notifier)
+                                  .adjustColors(contrast: contrast);
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.invert_colors),
+                          title: Slider.adaptive(
+                            min: 0.0,
+                            max: 360.0,
+                            value: hue,
+                            onChanged: (value) {
+                              setState(() {
+                                hue = value;
+                              });
+                            },
+                            onChangeEnd: (value) {
+                              ref.read(boardPreferencesProvider.notifier).adjustColors(hue: hue);
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          enabled: hasAjustedColors,
+                          leading: Icon(
+                            Icons.clear,
+                            color: hasAjustedColors ? lichessCustomColors.error : null,
+                          ),
+                          title: Text(
+                            context.l10n.boardReset,
+                            style: TextStyle(
+                              color: hasAjustedColors ? lichessCustomColors.error : null,
+                            ),
+                          ),
+                          onTap: hasAjustedColors
+                              ? () {
+                                  setState(() {
+                                    brightness = kBoardDefaultBrightnessFilter;
+                                    contrast = kBoardDefaultContrastFilter;
+                                    hue = kBoardDefaultHueFilter;
+                                  });
+                                  ref
+                                      .read(boardPreferencesProvider.notifier)
+                                      .adjustColors(
+                                        brightness: brightness,
+                                        contrast: contrast,
+                                        hue: hue,
+                                      );
+                                }
+                              : null,
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -250,19 +363,29 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _BoardPreview extends StatelessWidget {
-  const _BoardPreview({
-    required this.size,
-    required this.boardPrefs,
-    required this.brightness,
-    required this.hue,
-  });
+/// A small circle filled with [color], to preview a color setting.
+class const _ColorCircle({required final Color color}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20.0,
+      height: 20.0,
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: ColorScheme.of(context).outlineVariant),
+      ),
+    );
+  }
+}
 
-  final BoardPrefs boardPrefs;
-  final double brightness;
-  final double hue;
-  final double size;
-
+class const _BoardPreview({
+  required final double size,
+  required final BoardPrefs boardPrefs,
+  required final double brightness,
+  required final double contrast,
+  required final double hue,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -281,9 +404,10 @@ class _BoardPreview extends StatelessWidget {
         },
         settings: StaticChessboardSettings.fromBoardSettings(
           boardPrefs
-              .toBoardSettings(Variant.standard)
+              .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
               .copyWith(
                 brightness: brightness,
+                contrast: contrast,
                 hue: hue,
                 borderRadius: Styles.boardBorderRadius,
                 boxShadow: boardShadows,

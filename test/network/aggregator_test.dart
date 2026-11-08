@@ -35,12 +35,12 @@ void main() {
         }),
       },
     );
-    return container.read(aggregatorProvider);
+    return await container.read(aggregatorProvider);
   }
 
   Future<Aggregator> mockClientAggregator(MockClient client) async {
     final container = await lichessClientContainer(client);
-    return container.read(aggregatorProvider);
+    return await container.read(aggregatorProvider);
   }
 
   final String aggrInterval = '${kAggregationInterval.inMilliseconds}ms';
@@ -82,34 +82,31 @@ void main() {
       },
     );
 
-    test(
-      'supported uris will still aggregate if the group is not complete but has more than half of the target group',
-      () async {
-        int requestsCount = 0;
+    test('supported uris will still aggregate if the group is not complete but has more than half of the target group', () async {
+      int requestsCount = 0;
 
-        final mockClient = MockClient((request) {
-          requestsCount++;
-          if (request.url.path == '/api/mobile/watch') {
-            return mockResponse(watchEndpointResponse, 200);
-          }
-          return mockResponse('', 404);
-        });
+      final mockClient = MockClient((request) {
+        requestsCount++;
+        if (request.url.path == '/api/mobile/watch') {
+          return mockResponse(watchEndpointResponse, 200);
+        }
+        return mockResponse('', 404);
+      });
 
-        final aggregator = await mockClientAggregator(mockClient);
+      final aggregator = await mockClientAggregator(mockClient);
 
-        final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
-        final tvUri = Uri(path: '/api/tv/channels');
+      final broadcastUri = Uri(path: '/api/broadcast/top', queryParameters: {'page': '1'});
+      final tvUri = Uri(path: '/api/tv/channels');
 
-        final [broadcasts, channels] = await Future.wait([
-          aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
-          aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
-        ]);
+      final [broadcasts, channels] = await Future.wait([
+        aggregator.readJson(broadcastUri, atomicMapper: broadcastListFromServerJson),
+        aggregator.readJson(tvUri, atomicMapper: tvChannelsFromServerJson),
+      ]);
 
-        expect(requestsCount, 1);
-        expect(broadcasts, isA<BroadcastList>());
-        expect(channels, isA<TvChannels>());
-      },
-    );
+      expect(requestsCount, 1);
+      expect(broadcasts, isA<BroadcastList>());
+      expect(channels, isA<TvChannels>());
+    });
 
     test('supported uris will not aggregate if group has less than half of target group', () async {
       int requestsCount = 0;
@@ -437,7 +434,7 @@ const homeEndpointResponse = '''
     {"id":"g2bzFol8","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553626465,"lastMoveAt":1673553936657,"status":"resign","players":{"white":{"user":{"name":"SchallUndRausch","id":"schallundrausch"},"rating":1751,"ratingDiff":-5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1767,"ratingDiff":5}},"winner":"black","clock":{"initial":180,"increment":2,"totalTime":260},"lastFen":"r7/pppk4/4p1B1/3pP3/6Pp/q1P1P1nP/P1QK1r2/R5R1 w - - 1 1"},
     {"id":"9WLmxmiB","rated":true,"variant":"standard","speed":"blitz","perf":"blitz","createdAt":1673553299064,"lastMoveAt":1673553615438,"status":"resign","players":{"white":{"user":{"name":"Dr-Alaakour","id":"dr-alaakour"},"rating":1806,"ratingDiff":5},"black":{"user":{"name":"Thibault","patron":true,"id":"thibault"},"rating":1772,"ratingDiff":-5}},"winner":"white","clock":{"initial":180,"increment":0,"totalTime":180},"lastFen":"2b1Q1k1/p1r4p/1p2p1p1/3pN3/2qP4/P4R2/1P3PPP/4R1K1 b - - 0 1"}
   ],
-  "challenges": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ], "out": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ] },
+  "challenges": {"in": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/game/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ], "out": [ { "socketVersion": 0, "id": "H9fIRZUk", "url": "https://lichess.org/game/H9fIRZUk", "status": "created", "challenger": { "id": "bot1", "name": "Bot1", "rating": 1500, "title": "BOT", "provisional": true, "online": true, "lag": 4 }, "destUser": { "id": "bobby", "name": "Bobby", "rating": 1635, "title": "GM", "provisional": true, "online": true, "lag": 4 }, "variant": { "key": "standard", "name": "Standard", "short": "Std" }, "rated": true, "speed": "rapid", "timeControl": { "type": "clock", "limit": 600, "increment": 0, "show": "10+0" }, "color": "random", "finalColor": "black", "perf": { "icon": "", "name": "Rapid" }, "direction": "out" } ] },
   "tournaments": {"featured": []},
   "inbox": {
     "unread": 5

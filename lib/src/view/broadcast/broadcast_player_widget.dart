@@ -1,21 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
-class BroadcastPlayerWidget extends ConsumerWidget {
-  const BroadcastPlayerWidget({
-    required this.player,
-    this.showFederation = true,
-    this.showRating = true,
-    this.textStyle,
-  });
-
-  final BroadcastPlayer player;
-  final bool showFederation;
-  final bool showRating;
-  final TextStyle? textStyle;
-
+class const BroadcastPlayerWidget({
+  required final BroadcastPlayer player,
+  final bool showFederation = true,
+  final bool showRating = true,
+  final TextStyle? textStyle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final BroadcastPlayer(:federation, :title, :name, :rating) = player;
@@ -24,7 +18,7 @@ class BroadcastPlayerWidget extends ConsumerWidget {
       children: [
         if (federation != null && showFederation) ...[
           Image.asset(
-            'assets/images/fide-fed/$federation.webp',
+            federation.flagAsset,
             height: ((textStyle ?? DefaultTextStyle.of(context).style).fontSize ?? 14) - 2,
           ),
           const SizedBox(width: 5),

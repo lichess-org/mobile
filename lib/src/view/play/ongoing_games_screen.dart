@@ -1,19 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class OngoingGamesScreen extends ConsumerWidget {
-  const OngoingGamesScreen({super.key});
-
+class const OngoingGamesScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const OngoingGamesScreen());
   }
@@ -21,19 +22,19 @@ class OngoingGamesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: ongoingGames.maybeWhen(
           data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
           orElse: () => const SizedBox.shrink(),
         ),
       ),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ongoingGames = ref.watch(ongoingGamesProvider);
@@ -49,12 +50,11 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class OngoingGamePreview extends ConsumerWidget {
-  const OngoingGamePreview({required this.game, this.padding, super.key});
-
-  final OngoingGame game;
-  final EdgeInsetsGeometry? padding;
-
+class const OngoingGamePreview({
+  required final OngoingGame game,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
@@ -88,7 +88,7 @@ class OngoingGamePreview extends ConsumerWidget {
         ],
       ),
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context).pushHidingTabBar(
           GameScreen.buildRoute(
             source: ExistingGameSource(game.fullId),
             loadingPosition: (

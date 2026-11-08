@@ -31,9 +31,9 @@ const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
 const _emptyPosts = IListConst<BlogPost>([]);
 
 class BlogCarousel extends StatefulWidget {
-  const BlogCarousel({required this.posts, required this.worker, super.key}) : _isLoading = false;
+  const new({required this.posts, required this.worker, super.key}) : _isLoading = false;
 
-  const BlogCarousel.loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
+  const new loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
 
   final IList<BlogPost> posts;
   final ImageColorWorker worker;
@@ -54,7 +54,7 @@ class BlogCarousel extends StatefulWidget {
   State<BlogCarousel> createState() => _BlogCarouselState();
 }
 
-class _BlogCarouselState extends State<BlogCarousel> {
+class _BlogCarouselState() extends State<BlogCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -129,7 +129,7 @@ class _BlogCarouselState extends State<BlogCarousel> {
 }
 
 class BlogCarouselItem extends ConsumerStatefulWidget {
-  const BlogCarouselItem({
+  const new({
     required this.carouselWidth,
     required this.post,
     required this.flexWeights,
@@ -137,7 +137,7 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
     super.key,
   });
 
-  BlogCarouselItem.loading({
+  new loading({
     required this.carouselWidth,
     required this.flexWeights,
     required this.worker,
@@ -159,14 +159,14 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BlogCarouselItem> createState() => _BlogCarouselItemState();
 }
 
-class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
+class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.post.imageUrl?.toString();
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBlogImage;
 
   @override
@@ -175,7 +175,7 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -272,14 +272,12 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd();
+DateFormat get _dateFormat => DateFormat.MMMd();
 
-class _BlogCardContent extends StatelessWidget {
-  const _BlogCardContent({required this.post, required this._cardColors});
-
-  final BlogPost post;
-  final _CardColors? _cardColors;
-
+class const _BlogCardContent({
+  required final BlogPost post,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleColor = _cardColors?.onPrimaryContainer;
@@ -288,52 +286,49 @@ class _BlogCardContent extends StatelessWidget {
     return Padding(
       padding: kBlogCardItemContentPadding,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 6.0,
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            spacing: 4.0,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  UserFullNameWidget(
-                    user: post.author,
-                    showPatron: false,
-                    showFlair: false,
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                  ),
-                  Text(
-                    _dateFormat.format(post.createdAt),
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
-                    overflow: TextOverflow.clip,
-                    softWrap: false,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6.0),
-              Text.rich(
-                maxLines: 3,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: post.title,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        height: 1.0,
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: UserFullNameWidget(
+                  user: post.author,
+                  showPatron: false,
+                  showFlair: false,
+                  style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
                 ),
-                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                _dateFormat.format(post.createdAt),
+                style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                maxLines: 1,
               ),
             ],
+          ),
+          Text.rich(
+            maxLines: 3,
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: post.title,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

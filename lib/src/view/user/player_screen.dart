@@ -15,9 +15,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PlayerScreen extends ConsumerWidget {
-  const PlayerScreen({super.key});
-
+class const PlayerScreen({super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PlayerScreen());
   }
@@ -34,29 +32,31 @@ class PlayerScreen extends ConsumerWidget {
         }
       },
       child: PlatformScaffold(
-        appBar: PlatformAppBar(title: Text(context.l10n.players)),
-        body: _Body(),
+        appBar: PlatformAppBar(
+          title: Text(context.l10n.players),
+          largeTitle: true,
+          actions: [
+            SearchHeroButton(
+              heroTag: SearchScreen.heroTag,
+              onPressed: () => Navigator.of(context).push(
+                SearchScreen.buildRoute(
+                  onUserTap: (user) {
+                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: const _Body(),
       ),
     );
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class const _Body() extends ConsumerWidget {
   @override
-  ConsumerState<_Body> createState() => _BodyState();
-}
-
-class _BodyState extends ConsumerState<_Body> {
-  final _focusNode = _AlwaysDisabledFocusNode();
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
     final onlineFriends = ref.watch(onlineFriendsProvider);
     final onlineBots = ref.watch(onlineBotsProvider);
@@ -64,29 +64,10 @@ class _BodyState extends ConsumerState<_Body> {
 
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: PlatformSearchBar(
-            hintText: context.l10n.searchSearch,
-            focusNode: _focusNode,
-            onTap: () => Navigator.of(context).push(
-              SearchScreen.buildRoute(
-                onUserTap: (user) {
-                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
-                },
-              ),
-            ),
-          ),
-        ),
         if (authUser != null) OnlineFriendsWidget(onlineFriends: onlineFriends),
         OnlineBotsWidget(onlineBots: onlineBots),
         RatingPrefAware(child: LeaderboardWidget(top1: top1)),
       ],
     );
   }
-}
-
-class _AlwaysDisabledFocusNode extends FocusNode {
-  @override
-  bool get hasFocus => false;
 }

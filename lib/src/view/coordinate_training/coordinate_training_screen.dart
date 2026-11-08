@@ -20,35 +20,30 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class CoordinateTrainingScreen extends StatelessWidget {
-  const CoordinateTrainingScreen({super.key});
-
+class const CoordinateTrainingScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const CoordinateTrainingScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: Text(context.l10n.coordinatesCoordinateTraining),
         actions: [
-          Builder(
-            builder: (context) {
-              return SemanticIconButton(
-                icon: const Icon(Icons.settings),
-                semanticsLabel: context.l10n.settingsSettings,
-                onPressed: () => showModalBottomSheet<void>(
-                  context: context,
-                  showDragHandle: true,
-                  builder: (BuildContext context) => const _CoordinateTrainingMenu(),
-                ),
-              );
-            },
+          SemanticIconButton(
+            icon: const Icon(Icons.settings),
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              showDragHandle: true,
+              builder: (BuildContext context) => const _CoordinateTrainingMenu(),
+            ),
           ),
         ],
       ),
@@ -57,14 +52,12 @@ class CoordinateTrainingScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   Square? highlightLastGuess;
 
   Timer? highlightTimer;
@@ -112,15 +105,15 @@ class _BodyState extends ConsumerState<_Body> {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = isTabletOrLarger(context);
-                final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-
                 final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                // Like the analysis board, the board never spans the whole screen width.
+                final boardPadding = isTablet || direction == Axis.horizontal
+                    ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                    : isShortVerticalScreen(context)
+                    ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                    : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+                final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
                 return Flex(
                   direction: direction,
@@ -128,23 +121,25 @@ class _BodyState extends ConsumerState<_Body> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        _TimeBar(
-                          maxWidth: boardSize,
-                          timeFractionElapsed: trainingState.timeFractionElapsed,
-                          color: trainingState.lastGuess == Guess.incorrect
-                              ? context.lichessColors.error
-                              : context.lichessColors.good,
-                        ),
-                        _TrainingBoard(
-                          boardSize: boardSize,
-                          isTablet: isTablet,
-                          orientation: trainingState.orientation,
-                          squareHighlights: squareHighlights,
-                          onGuess: _onGuess,
-                        ),
-                      ],
+                    Padding(
+                      padding: boardPadding,
+                      child: Column(
+                        children: [
+                          _TimeBar(
+                            maxWidth: boardSize,
+                            timeFractionElapsed: trainingState.timeFractionElapsed,
+                            color: trainingState.lastGuess == Guess.incorrect
+                                ? context.lichessColors.error
+                                : context.lichessColors.good,
+                          ),
+                          _TrainingBoard(
+                            boardSize: boardSize,
+                            orientation: trainingState.orientation,
+                            squareHighlights: squareHighlights,
+                            onGuess: _onGuess,
+                          ),
+                        ],
+                      ),
                     ),
                     if (trainingState.trainingActive)
                       _ScoreAndTrainingButton(
@@ -186,6 +181,7 @@ class _BodyState extends ConsumerState<_Body> {
           ),
           if (!trainingState.trainingActive)
             BottomBar(
+              cupertinoGlass: true,
               children: [
                 BottomBarButton(
                   label: context.l10n.menu,
@@ -195,7 +191,7 @@ class _BodyState extends ConsumerState<_Body> {
                 BottomBarButton(
                   icon: Icons.info_outline,
                   label: context.l10n.aboutX('Coordinate Training'),
-                  onTap: () => _coordinateTrainingInfoDialogBuilder(context),
+                  onTap: () => _showCoordinateTrainingInfo(context),
                 ),
               ],
             ),
@@ -220,13 +216,11 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _TimeBar extends StatelessWidget {
-  const _TimeBar({required this.maxWidth, required this.timeFractionElapsed, required this.color});
-
-  final double maxWidth;
-  final double? timeFractionElapsed;
-  final Color color;
-
+class const _TimeBar({
+  required final double maxWidth,
+  required final double? timeFractionElapsed,
+  required final Color color,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -240,9 +234,7 @@ class _TimeBar extends StatelessWidget {
   }
 }
 
-class _CoordinateTrainingMenu extends ConsumerWidget {
-  const _CoordinateTrainingMenu();
-
+class const _CoordinateTrainingMenu() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
@@ -272,19 +264,12 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
   }
 }
 
-class _ScoreAndTrainingButton extends ConsumerWidget {
-  const _ScoreAndTrainingButton({
-    required this.scoreSize,
-    required this.score,
-    required this.onPressed,
-    required this.label,
-  });
-
-  final double scoreSize;
-  final int score;
-  final VoidCallback onPressed;
-  final String label;
-
+class const _ScoreAndTrainingButton({
+  required final double scoreSize,
+  required final int score,
+  required final VoidCallback onPressed,
+  required final String label,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingState = ref.watch(coordinateTrainingControllerProvider);
@@ -307,15 +292,11 @@ class _ScoreAndTrainingButton extends ConsumerWidget {
   }
 }
 
-class _Score extends StatelessWidget {
-  const _Score({required this.size, required this.color, required this.score});
-
-  final int score;
-
-  final double size;
-
-  final Color color;
-
+class const _Score({
+  required final double size,
+  required final Color color,
+  required final int score,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -338,12 +319,8 @@ class _Score extends StatelessWidget {
   }
 }
 
-class _Button extends StatelessWidget {
-  const _Button({required this.onPressed, required this.label});
-
-  final VoidCallback onPressed;
-  final String label;
-
+class const _Button({required final VoidCallback onPressed, required final String label})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilledButton(
@@ -353,9 +330,7 @@ class _Button extends StatelessWidget {
   }
 }
 
-class SettingsBottomSheet extends ConsumerWidget {
-  const SettingsBottomSheet();
-
+class const SettingsBottomSheet() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
@@ -397,30 +372,17 @@ class SettingsBottomSheet extends ConsumerWidget {
   }
 }
 
-class _TrainingBoard extends ConsumerStatefulWidget {
-  const _TrainingBoard({
-    required this.boardSize,
-    required this.isTablet,
-    required this.orientation,
-    required this.onGuess,
-    required this.squareHighlights,
-  });
-
-  final double boardSize;
-
-  final bool isTablet;
-
-  final Side orientation;
-
-  final void Function(Square) onGuess;
-
-  final IMap<Square, SquareHighlight> squareHighlights;
-
+class const _TrainingBoard({
+  required final double boardSize,
+  required final Side orientation,
+  required final void Function(Square) onGuess,
+  required final IMap<Square, SquareHighlight> squareHighlights,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TrainingBoard> createState() => _TrainingBoardState();
 }
 
-class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
+class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -439,13 +401,11 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
               orientation: widget.orientation,
               settings: StaticChessboardSettings.fromBoardSettings(
                 boardPrefs
-                    .toBoardSettings(Variant.standard)
+                    .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                     .copyWith(
                       enableCoordinates: trainingPrefs.showCoordinates,
-                      borderRadius: widget.isTablet
-                          ? const BorderRadius.all(Radius.circular(4.0))
-                          : BorderRadius.zero,
-                      boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+                      borderRadius: Styles.boardBorderRadius,
+                      boxShadow: boardShadows,
                     ),
               ),
               onTouchedSquare: (square) {
@@ -467,46 +427,45 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
 }
 
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
-  return showModalBottomSheet<void>(
+  return showAdaptiveBottomSheet<void>(
     context: context,
     builder: (BuildContext context) => const SettingsBottomSheet(),
   );
 }
 
-Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
-  return showAdaptiveDialog(
+Future<void> _showCoordinateTrainingInfo(BuildContext context) {
+  return showAdaptiveNavigationSheet<void>(
     context: context,
-    builder: (context) {
-      return AlertDialog.adaptive(
+    builder: (context) => PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.aboutX(context.l10n.coordinatesCoordinateTraining)),
-        content: SingleChildScrollView(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
-                TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
-                TextSpan(
-                  text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
-                ),
-                const TextSpan(text: '\n'),
-                TextSpan(
-                  text: '${context.l10n.coordinatesFindSquare}\n',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
-                TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
-              ],
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: '${context.l10n.coordinatesKnowingTheChessBoard}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesMostChessCourses}\n'),
+                  TextSpan(text: '  • ${context.l10n.coordinatesTalkToYourChessFriends}\n'),
+                  TextSpan(
+                    text: '  • ${context.l10n.coordinatesYouCanAnalyseAGameMoreEffectively}\n',
+                  ),
+                  const TextSpan(text: '\n'),
+                  TextSpan(
+                    text: '${context.l10n.coordinatesFindSquare}\n',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(text: '${context.l10n.coordinatesACoordinateAppears}\n'),
+                  TextSpan(text: '${context.l10n.coordinatesYouHaveThirtySeconds}\n'),
+                ],
+              ),
             ),
           ),
-        ),
-        actions: [
-          PlatformDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.mobileOkButton),
-          ),
         ],
-      );
-    },
+      ),
+    ),
   );
 }

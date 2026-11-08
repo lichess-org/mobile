@@ -1,15 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
-enum PuzzleDifficulty {
+enum PuzzleDifficulty(final int ratingDelta) {
   easiest(-600),
   easier(-300),
   normal(0),
   harder(300),
-  hardest(600);
-
-  final int ratingDelta;
-  const PuzzleDifficulty(this.ratingDelta);
+  hardest(600),
 }
 
 String puzzleDifficultyL10n(BuildContext context, PuzzleDifficulty difficulty) {

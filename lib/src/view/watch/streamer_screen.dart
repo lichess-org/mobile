@@ -12,11 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 const _kThumbnailSize = 75.0;
 
-class StreamerScreen extends StatelessWidget {
-  const StreamerScreen({required this.streamers});
-
-  final IList<Streamer> streamers;
-
+class const StreamerScreen({required final IList<Streamer> streamers}) extends StatelessWidget {
   static Route<dynamic> buildRoute(IList<Streamer> streamers) {
     return buildScreenRoute(screen: StreamerScreen(streamers: streamers));
   }
@@ -24,7 +20,8 @@ class StreamerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.mobileLiveStreamers)),
+      plainList: true,
+      appBar: PlatformAppBar(title: Text(context.l10n.streamersMenu), largeTitle: true),
       body: ListView.separated(
         separatorBuilder: (context, index) => Theme.of(context).platform == TargetPlatform.iOS
             ? const PlatformDivider(height: 1, indent: 16 + _kThumbnailSize + 10)
@@ -41,21 +38,14 @@ class StreamerScreen extends StatelessWidget {
   }
 }
 
-class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({
-    required this.streamer,
-    this.maxSubtitleLines = 1,
-    this.thumbnailSize = _kThumbnailSize,
-    this.isPreview = true,
-  });
-
-  final Streamer streamer;
-  final int maxSubtitleLines;
-  final double thumbnailSize;
+class const StreamerListTile({
+  required final Streamer streamer,
+  final int maxSubtitleLines = 1,
+  final double thumbnailSize = _kThumbnailSize,
 
   /// Whether to return a more compact version of the tile.
-  final bool isPreview;
-
+  final bool isPreview = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final codes = streamer.lang.split('-');

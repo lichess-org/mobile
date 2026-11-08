@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -20,7 +21,9 @@ import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -28,19 +31,22 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Account menu screen opened by [AccountMenuButton].
+/// Opens the account menu ([AccountMenuScreen]).
 ///
-/// On Android it is pushed as a full-screen page. On iOS it is presented
-/// inside a [CupertinoSheetRoute] with nested navigation.
-class AccountMenuScreen extends ConsumerStatefulWidget {
-  const AccountMenuScreen({super.key});
+/// On iOS it is the first page of a navigation sheet ([showAdaptiveNavigationSheet]) covering the
+/// tab bar, in which the screens it opens are pushed. On Android it is pushed as a full-screen page
+/// sliding from the right.
+Future<void> showAccountMenu(BuildContext context) {
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
+    return showAdaptiveNavigationSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      builder: (_) => const AccountMenuScreen(),
+    );
+  }
 
-  static Route<void> buildRoute(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return buildScreenRoute(screen: const AccountMenuScreen());
-    }
-
-    return PageRouteBuilder<void>(
+  return Navigator.of(context).push(
+    PageRouteBuilder<void>(
       pageBuilder: (_, a, b) => const AccountMenuScreen(),
       transitionsBuilder: (_, animation, b, child) {
         final tween = Tween(
@@ -49,14 +55,19 @@ class AccountMenuScreen extends ConsumerStatefulWidget {
         ).chain(CurveTween(curve: Curves.easeInOut));
         return SlideTransition(position: animation.drive(tween), child: child);
       },
-    );
-  }
+    ),
+  );
+}
 
+/// Account menu screen, opened by [AccountMenuButton] with [showAccountMenu].
+class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
 
-class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with WidgetsBindingObserver {
+class _AccountMenuScreenState()
+    extends ConsumerState<AccountMenuScreen>
+    with WidgetsBindingObserver {
   bool _errorLoadingFlair = false;
   bool _pendingKidModeRefresh = false;
 
@@ -82,7 +93,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.read(defaultClientProvider);
+    final client = ref.read(imageClientProvider);
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
@@ -93,10 +104,12 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
     final kidMode = account.value?.kid ?? false;
     final LightUser? user = account.value?.lightUser ?? authUser?.user;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
+    final unreadTeamUpdates = ref.watch(unreadTeamUpdatesCountProvider).value ?? 0;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.mobileAccount),
+        // On iOS the close button of the sheet is implied.
         automaticallyImplyLeading: Theme.of(context).platform == TargetPlatform.iOS,
         actions: [
           if (Theme.of(context).platform != TargetPlatform.iOS)
@@ -144,7 +157,6 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                   ),
                   enabled: isOnline,
                   onTap: () {
-                    ref.invalidate(accountProvider);
                     _navigate(context, ProfileScreen.buildRoute());
                   },
                 ),
@@ -179,7 +191,7 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
           ],
           ListSection(
             children: [
-              if (user != null && account.hasValue && !kidMode)
+              if (user != null && account.hasValue && !kidMode) ...[
                 ListTile(
                   leading: Badge.count(
                     isLabelVisible: unreadMessages > 0,
@@ -195,6 +207,22 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
                     _navigate(context, ContactsScreen.buildRoute());
                   },
                 ),
+                ListTile(
+                  leading: Badge.count(
+                    isLabelVisible: unreadTeamUpdates > 0,
+                    count: unreadTeamUpdates,
+                    child: const Icon(Icons.groups_outlined),
+                  ),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.teamTeamUpdates),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, TeamUpdatesScreen.buildRoute());
+                  },
+                ),
+              ],
               ListTile(
                 leading: const Icon(Icons.settings_outlined),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -299,34 +327,31 @@ class _AccountMenuScreenState extends ConsumerState<AccountMenuScreen> with Widg
   }
 }
 
-/// Avatar button that opens the account menu.
-///
-/// On Android opens [AccountMenuScreen] as a full-screen page sliding from the
-/// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
-/// nested navigation.
-class AccountMenuButton extends ConsumerStatefulWidget {
-  const AccountMenuButton({super.key});
-
+/// Avatar button that opens the account menu ([showAccountMenu]).
+class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
 }
 
-class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
+class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   bool _errorLoadingFlair = false;
 
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
+
+  /// Size of the button on iOS, where it fills the glass capsule of the navigation bar.
+  static const _cupertinoButtonSize = 44.0;
+  static const _cupertinoAvatarRadius = 20.0;
 
   @override
   Widget build(BuildContext context) {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-    void openMenu() {
-      Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
-    }
+    void openMenu() => showAccountMenu(context);
 
     return switch (account) {
       AsyncData(:final value) => Badge.count(
@@ -334,20 +359,21 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
         count: unreadMessages,
         isLabelVisible: !kidMode && unreadMessages > 0,
         child: IconButton(
+          padding: isIOS ? EdgeInsets.zero : null,
+          constraints: isIOS
+              ? const BoxConstraints.tightFor(
+                  width: _cupertinoButtonSize,
+                  height: _cupertinoButtonSize,
+                )
+              : null,
           tooltip: value == null ? context.l10n.signIn : value.username,
           icon: value == null
               ? Icon(
                   Icons.account_circle_outlined,
-                  size: Theme.of(context).platform == TargetPlatform.iOS
-                      ? _cupertinoAnonIconSize
-                      : _materialAnonIconSize,
+                  size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
                 )
               : CircleAvatar(
-                  radius:
-                      (Theme.of(context).platform == TargetPlatform.iOS
-                          ? _cupertinoAnonIconSize / 2
-                          : _materialAnonIconSize / 2) +
-                      1,
+                  radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
                   foregroundImage: value.flair != null && !_errorLoadingFlair
                       ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                       : null,
@@ -363,11 +389,16 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
         ),
       ),
       _ => IconButton(
+        padding: isIOS ? EdgeInsets.zero : null,
+        constraints: isIOS
+            ? const BoxConstraints.tightFor(
+                width: _cupertinoButtonSize,
+                height: _cupertinoButtonSize,
+              )
+            : null,
         icon: Icon(
           Icons.account_circle_outlined,
-          size: Theme.of(context).platform == TargetPlatform.iOS
-              ? _cupertinoAnonIconSize
-              : _materialAnonIconSize,
+          size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
         ),
         tooltip: context.l10n.signIn,
         onPressed: openMenu,
@@ -377,25 +408,25 @@ class _AccountMenuButtonState extends ConsumerState<AccountMenuButton> {
 }
 
 /// About screen with links to various lichess resources and legal information.
-class AboutScreen extends ConsumerWidget {
-  const AboutScreen({super.key});
-
+class const AboutScreen({super.key}) extends ConsumerWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const AboutScreen());
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(isDeviceOnlineProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.about)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.about), largeTitle: true),
       body: ListView(
         children: [
           ListSection(
             hasLeading: true,
             children: [
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.info_outlined),
                 title: Text(context.l10n.aboutX('Lichess')),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -406,6 +437,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.feedback_outlined),
                 title: Text(context.l10n.mobileFeedbackButton),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -416,6 +448,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.article_outlined),
                 title: Text(context.l10n.termsOfService),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -426,6 +459,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.privacy_tip_outlined),
                 title: Text(context.l10n.privacyPolicy),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -441,6 +475,7 @@ class AboutScreen extends ConsumerWidget {
             hasLeading: true,
             children: [
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Symbols.database),
                 title: Text(context.l10n.database),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -451,6 +486,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.code_outlined),
                 title: Text(context.l10n.sourceCode),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -461,6 +497,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.bug_report_outlined),
                 title: Text(context.l10n.contribute),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -471,6 +508,7 @@ class AboutScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
+                enabled: isOnline,
                 leading: const Icon(Icons.star_border_outlined),
                 title: Text(context.l10n.thankYou),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -487,7 +525,7 @@ class AboutScreen extends ConsumerWidget {
             children: [
               ListTile(
                 leading: const Icon(Icons.copyright_outlined),
-                title: const Text('View licences'),
+                title: Text(context.l10n.mobileViewLicenses),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,

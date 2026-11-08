@@ -174,7 +174,7 @@ void main() {
   group('ConversationController socket events', () {
     Future<ConversationState> loadState(ProviderContainer container) async {
       container.listen(conversationControllerProvider(_userId), (_, _) {});
-      return container.read(conversationControllerProvider(_userId).future);
+      return await container.read(conversationControllerProvider(_userId).future);
     }
 
     test('adds incoming message from open contact', () async {

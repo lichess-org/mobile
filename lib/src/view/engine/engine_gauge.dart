@@ -2,8 +2,8 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:material_ui/material_ui.dart';
@@ -19,38 +19,16 @@ double getEvalGaugeFontSize(BuildContext context) {
   return isTabletOrLarger(context) ? _kEvalGaugeFontSize : _kEvalGaugeFontSize - 2.0;
 }
 
-typedef EngineGaugeParams = ({
-  bool isLocalEngineAvailable,
-
-  /// Orientation of the board.
-  Side orientation,
-
-  /// Position to evaluate.
-  Position position,
-
-  /// Cached evaluation to display when the current evaluation is not available.
-  ClientEval? savedEval,
-
-  /// Server evaluation to display when the current evaluation and the cached evaluation is not available.
-  ExternalEval? serverEval,
-
-  /// Filters to identify the correct engine evaluation provider instance.
-  EngineEvaluationFilters filters,
-});
-
-class EngineGauge extends ConsumerWidget {
-  const EngineGauge({required this.params, super.key});
-
-  final EngineGaugeParams params;
-
+class const EngineGauge({required final EngineGaugeParams params, super.key})
+    extends ConsumerWidget {
+  /// The color of black's share of the gauge: a dark tone of the color scheme, in both light and
+  /// dark themes.
   static Color backgroundColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-      ? lighten(ColorScheme.of(context).surface, .07)
-      : lighten(ColorScheme.of(context).onSurface, .17);
+      ColorScheme.of(context).onSecondaryFixedVariant;
 
-  static Color valueColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
-      ? darken(ColorScheme.of(context).onSurface, .1)
-      : darken(ColorScheme.of(context).surface, .01);
+  /// The color of white's share of the gauge: a light tone of the color scheme, in both light and
+  /// dark themes.
+  static Color valueColor(BuildContext context) => ColorScheme.of(context).secondaryFixedDim;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,13 +51,11 @@ class EngineGauge extends ConsumerWidget {
   }
 }
 
-class _EvalGauge extends StatefulWidget {
-  const _EvalGauge({required this.position, required this.orientation, this.eval});
-
-  final Position position;
-  final Eval? eval;
-  final Side orientation;
-
+class const _EvalGauge({
+  required final Position position,
+  required final Side orientation,
+  final Eval? eval,
+}) extends StatefulWidget {
   double? get whiteWinningChances => eval?.winningChances(Side.white);
   double? get animationValue => position.outcome != null
       ? position.outcome!.winner == null
@@ -95,7 +71,7 @@ class _EvalGauge extends StatefulWidget {
   State<_EvalGauge> createState() => _EvalGaugeState();
 }
 
-class _EvalGaugeState extends State<_EvalGauge> {
+class _EvalGaugeState() extends State<_EvalGauge> {
   double fromValue = 0.5;
 
   Eval? oldEval;
@@ -128,7 +104,9 @@ class _EvalGaugeState extends State<_EvalGauge> {
         : evalDisplay;
 
     final evalStyle = TextStyle(
-      color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
+      color: toValue >= 0.5
+          ? ColorScheme.of(context).onSecondaryFixed.withValues(alpha: 0.7)
+          : ColorScheme.of(context).secondaryFixed,
       fontSize: getEvalGaugeFontSize(context),
       letterSpacing: -0.8,
       fontWeight: FontWeight.bold,
@@ -183,19 +161,12 @@ class _EvalGaugeState extends State<_EvalGauge> {
   }
 }
 
-class _EvalGaugeVerticalPainter extends CustomPainter {
-  const _EvalGaugeVerticalPainter({
-    required this.backgroundColor,
-    required this.valueColor,
-    required this.value,
-    required this.orientation,
-  });
-
-  final Color backgroundColor;
-  final Color valueColor;
-  final double value;
-  final Side orientation;
-
+class const _EvalGaugeVerticalPainter({
+  required final Color backgroundColor,
+  required final Color valueColor,
+  required final double value,
+  required final Side orientation,
+}) extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()

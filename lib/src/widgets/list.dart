@@ -7,7 +7,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// Use to show a limited number of items.
 class ListSection extends StatelessWidget {
-  const ListSection({
+  const new({
     super.key,
     required this.children,
     this.header,
@@ -23,22 +23,18 @@ class ListSection extends StatelessWidget {
     this.backgroundColor,
   }) : _isLoading = false;
 
-  ListSection.loading({
-    required int itemsNumber,
-    bool header = false,
-    this.margin,
-    this.hasLeading = false,
-  }) : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
-       onHeaderTap = null,
-       headerTrailing = null,
-       header = header ? const SizedBox.shrink() : null,
-       footer = null,
-       dense = false,
-       leadingIndent = null,
-       materialFilledCard = false,
-       clipBehavior = Clip.hardEdge,
-       backgroundColor = null,
-       _isLoading = true;
+  new loading({required int itemsNumber, bool header = false, this.margin, this.hasLeading = false})
+    : children = [for (int i = 0; i < itemsNumber; i++) const SizedBox.shrink()],
+      onHeaderTap = null,
+      headerTrailing = null,
+      header = header ? const SizedBox.shrink() : null,
+      footer = null,
+      dense = false,
+      leadingIndent = null,
+      materialFilledCard = false,
+      clipBehavior = Clip.hardEdge,
+      backgroundColor = null,
+      _isLoading = true;
 
   /// Usually a list of [ListTile] widgets
   final List<Widget> children;
@@ -146,7 +142,7 @@ class ListSection extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (footer != null) footer!,
+                  ?footer,
                 ],
               ),
             ),
@@ -182,17 +178,16 @@ class ListSection extends StatelessWidget {
 }
 
 /// A header for a [ListSection].
-class ListSectionHeader extends StatelessWidget {
-  const ListSectionHeader({super.key, required this.title, this.onTap, this.trailing});
-
-  final Widget title;
+class const ListSectionHeader({
+  super.key,
+  required final Widget title,
 
   /// A callback to be called when the header is tapped.
-  final VoidCallback? onTap;
+  final VoidCallback? onTap,
 
   /// A widget to show at the end of the header (only if [onTap] is null).
-  final Widget? trailing;
-
+  final Widget? trailing,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OpacityButton(
@@ -213,11 +208,63 @@ class ListSectionHeader extends StatelessWidget {
                   Icon(Icons.chevron_right, size: 16, color: ColorScheme.of(context).primary),
                 ],
               )
-            else if (trailing != null)
-              trailing!,
+            else
+              ?trailing,
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A row of a card that looks like a [ListSection], for a long list built lazily (e.g. with
+/// [ListView.builder]), where a [ListSection] would build all its rows at once.
+///
+/// Consecutive rows form one card: the first row has its top corners rounded and the last row its
+/// bottom corners. On iOS, every row but the last is followed by a divider.
+class const ListSectionRow({
+  required final Widget child,
+
+  /// Whether this row is the first one of its card.
+  required final bool isFirst,
+
+  /// Whether this row is the last one of its card.
+  required final bool isLast,
+
+  /// Whether the iOS tiles have a leading widget.
+  final bool hasLeading = false,
+
+  /// Cupertino leading indent.
+  final double? leadingIndent,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final showDivider = !isLast && Theme.of(context).platform == TargetPlatform.iOS;
+    return Card(
+      margin: Styles.horizontalBodyPadding,
+      // Each row paints its own shadow, which would show between the rows.
+      elevation: 0,
+      clipBehavior: isFirst || isLast ? Clip.hardEdge : Clip.none,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: isFirst ? Styles.cardBorderRadius.topLeft : Radius.zero,
+          bottom: isLast ? Styles.cardBorderRadius.bottomLeft : Radius.zero,
+        ),
+      ),
+      child: showDivider
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                child,
+                PlatformDivider(
+                  height: 0,
+                  cupertinoHasLeading: hasLeading,
+                  cupertinoLeadingIndent: leadingIndent,
+                ),
+              ],
+            )
+          : child,
     );
   }
 }
@@ -226,28 +273,18 @@ class ListSectionHeader extends StatelessWidget {
 ///
 /// Useful to show a divider between [ListTile] widgets when using the
 /// [ListView.separated] constructor.
-class PlatformDivider extends StatelessWidget {
-  const PlatformDivider({
-    this.height,
-    this.thickness,
-    this.indent,
-    this.endIndent,
-    this.color,
-    this.cupertinoHasLeading = false,
-    this.cupertinoLeadingIndent,
-  });
-
-  final double? height;
-  final double? thickness;
-  final double? indent;
-  final double? endIndent;
-  final Color? color;
+class const PlatformDivider({
+  final double? height,
+  final double? thickness,
+  final double? indent,
+  final double? endIndent,
+  final Color? color,
 
   /// Set to true if the cupertino tiles have a leading widget, to adapt the
   /// divider margin.
-  final bool cupertinoHasLeading;
-  final double? cupertinoLeadingIndent;
-
+  final bool cupertinoHasLeading = false,
+  final double? cupertinoLeadingIndent,
+}) extends StatelessWidget {
   static const _defaultListTileLeadingWidth = 40.0;
 
   @override
@@ -274,75 +311,26 @@ class PlatformDivider extends StatelessWidget {
   }
 }
 
-typedef RemovedItemBuilder<T> =
-    Widget Function(T item, BuildContext context, Animation<double> animation);
+typedef RemovedItemBuilder<T> = Widget Function(
+  T item,
+  BuildContext context,
+  Animation<double> animation,
+);
 
 /// Keeps a Dart [List] in sync with an [AnimatedList].
 ///
 /// The [insert] and [removeAt] methods apply to both the internal list and
 /// the animated list that belongs to [listKey].
-class AnimatedListModel<E> {
-  AnimatedListModel({
-    required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<E>? initialItems,
-    int? itemsOffset,
-  }) : _items = List<E>.from(initialItems ?? <E>[]),
-       itemsOffset = itemsOffset ?? 0;
-
-  final GlobalKey<AnimatedListState> listKey;
-  final RemovedItemBuilder<E> removedItemBuilder;
-  final List<E> _items;
-  final int itemsOffset;
+class AnimatedListModel<E>({
+  required final GlobalKey<AnimatedListState> listKey,
+  required final RemovedItemBuilder<E> removedItemBuilder,
+  Iterable<E>? initialItems,
+  int? itemsOffset,
+}) {
+  final List<E> _items = List<E>.from(initialItems ?? <E>[]);
+  final int itemsOffset = itemsOffset ?? 0;
 
   AnimatedListState? get _animatedList => listKey.currentState;
-
-  void prepend(E item) {
-    _items.insert(0, item);
-    _animatedList!.insertItem(itemsOffset);
-  }
-
-  void insert(int index, E item) {
-    _items.insert(index - itemsOffset, item);
-    _animatedList!.insertItem(index);
-  }
-
-  E removeAt(int index) {
-    final E removedItem = _items.removeAt(index - itemsOffset);
-    if (removedItem != null) {
-      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
-        return removedItemBuilder(removedItem, context, animation);
-      });
-    }
-    return removedItem;
-  }
-
-  int get length => _items.length + itemsOffset;
-
-  E operator [](int index) => _items[index - itemsOffset];
-
-  int indexOf(E item) => _items.indexOf(item) + itemsOffset;
-}
-
-/// Keeps a Dart [List] in sync with a [SliverAnimatedList].
-///
-/// The [insert] and [removeAt] methods apply to both the internal list and
-/// the animated list that belongs to [listKey].
-class SliverAnimatedListModel<E> {
-  SliverAnimatedListModel({
-    required this.listKey,
-    required this.removedItemBuilder,
-    Iterable<E>? initialItems,
-    int? itemsOffset,
-  }) : _items = List<E>.from(initialItems ?? <E>[]),
-       itemsOffset = itemsOffset ?? 0;
-
-  final GlobalKey<SliverAnimatedListState> listKey;
-  final RemovedItemBuilder<E> removedItemBuilder;
-  final List<E> _items;
-  final int itemsOffset;
-
-  SliverAnimatedListState? get _animatedList => listKey.currentState;
 
   void prepend(E item) {
     _items.insert(0, item);

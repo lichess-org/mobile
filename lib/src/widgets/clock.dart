@@ -14,39 +14,28 @@ const _kClockHundredsFontSize = 18.0;
 /// A stateless widget that displays the time left on the clock.
 ///
 /// For a clock widget that automatically counts down, see [CountdownClockBuilder].
-class Clock extends StatelessWidget {
-  const Clock({
-    required this.timeLeft,
-    this.active = false,
-    this.clockStyle,
-    this.emergencyThreshold,
-    this.clockTenths,
-    this.padLeft = false,
-    this.padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-    super.key,
-  });
-
+class const Clock({
   /// The time left to be displayed on the clock.
-  final Duration timeLeft;
+  required final Duration timeLeft,
 
-  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
-  final bool active;
-
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
-  /// its background color to [ClockStyle.emergencyBackgroundColor].
-  final Duration? emergencyThreshold;
+  /// If `true`, the active colors are used unless the clock is in emergency.
+  final bool active = false,
 
   /// Clock style to use.
-  final ClockStyle? clockStyle;
+  final ClockStyle? clockStyle,
 
-  final ClockTenths? clockTenths;
+  /// If [timeLeft] is at or below [emergencyThreshold], the emergency background is used, dimmed
+  /// when the clock is inactive and still has time remaining.
+  final Duration? emergencyThreshold,
+  final ClockTenths? clockTenths,
 
   /// Whether to pad with a leading zero (default is `false`).
-  final bool padLeft;
+  final bool padLeft = false,
 
   /// Padding around the clock.
-  final EdgeInsets padding;
-
+  final EdgeInsets padding = const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hours = timeLeft.inHours;
@@ -57,7 +46,7 @@ class Clock extends StatelessWidget {
     final showTenths = switch (clockTenths) {
       ClockTenths.never => false,
       ClockTenths.lessThan10s || null => timeLeft < const Duration(seconds: 10),
-      ClockTenths.always => true,
+      ClockTenths.always => timeLeft < const Duration(hours: 1),
     };
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
@@ -67,85 +56,80 @@ class Clock extends StatelessWidget {
     final colorScheme = ColorScheme.of(context);
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
+    final emergencyBackgroundColor = effectiveClockStyle.emergencyBackgroundColor.withValues(
+      alpha: effectiveClockStyle.emergencyBackgroundColor.a * (active ? 1.0 : 0.5),
+    );
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        // TODO improve this
-        final fontScaleFactor = maxWidth < 90 ? 0.8 : 1.0;
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color: timeLeft > Duration.zero
-                ? active
-                      ? isEmergency
-                            ? effectiveClockStyle.emergencyBackgroundColor
-                            : effectiveClockStyle.activeBackgroundColor
-                      : effectiveClockStyle.backgroundColor
-                : effectiveClockStyle.emergencyBackgroundColor,
-          ),
-          child: Padding(
-            padding: padding,
-            child: MediaQuery.withClampedTextScaling(
-              maxScaleFactor: kMaxClockTextScaleFactor,
-              child: Text.rich(
-                TextSpan(
-                  text: hours > 0
-                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                      : '$minsDisplay:$secs',
-                  style: TextStyle(
-                    color: timeLeft > Duration.zero
-                        ? active
-                              ? isEmergency
-                                    ? effectiveClockStyle.emergencyTextColor
-                                    : effectiveClockStyle.activeTextColor
-                              : effectiveClockStyle.textColor
-                        : effectiveClockStyle.emergencyTextColor,
-                    fontSize: _kClockFontSize * fontScaleFactor,
-                    height: isShortVerticalScreen(context) ? 1.0 : null,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                  children: [
-                    if (showTenths)
-                      TextSpan(
-                        text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                        style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
-                      ),
-                    if (!active && timeLeft < const Duration(seconds: 1))
-                      TextSpan(
-                        text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                        style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
-                      ),
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: timeLeft > Duration.zero
+            ? active || isEmergency
+                  ? isEmergency
+                        ? emergencyBackgroundColor
+                        : effectiveClockStyle.activeBackgroundColor
+                  : effectiveClockStyle.backgroundColor
+            : effectiveClockStyle.emergencyBackgroundColor,
+      ),
+      child: Padding(
+        padding: padding,
+        // The clock must stay on one line: wrapping (e.g. when tenths show up below 10 seconds
+        // with a large text size) makes it taller and pushes away the widgets below it, such as
+        // the crazyhouse pockets. Shrink it to fit the available width instead.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: kMaxClockTextScaleFactor,
+            child: Text.rich(
+              TextSpan(
+                text: hours > 0
+                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                    : '$minsDisplay:$secs',
+                style: TextStyle(
+                  color: timeLeft > Duration.zero
+                      ? active
+                            ? isEmergency
+                                  ? effectiveClockStyle.emergencyTextColor
+                                  : effectiveClockStyle.activeTextColor
+                            : effectiveClockStyle.textColor
+                      : effectiveClockStyle.emergencyTextColor,
+                  fontSize: _kClockFontSize,
+                  height: isShortVerticalScreen(context) ? 1.0 : null,
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
+                children: [
+                  if (showTenths)
+                    TextSpan(
+                      text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                      style: const TextStyle(fontSize: _kClockTenthFontSize),
+                    ),
+                  if (!active && timeLeft < const Duration(seconds: 1))
+                    TextSpan(
+                      text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                      style: const TextStyle(fontSize: _kClockHundredsFontSize),
+                    ),
+                ],
               ),
+              maxLines: 1,
+              softWrap: false,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
 @immutable
-class ClockStyle {
-  const ClockStyle({
-    required this.textColor,
-    required this.activeTextColor,
-    required this.emergencyTextColor,
-    required this.backgroundColor,
-    required this.activeBackgroundColor,
-    required this.emergencyBackgroundColor,
-  });
-
-  final Color textColor;
-  final Color activeTextColor;
-  final Color emergencyTextColor;
-  final Color backgroundColor;
-  final Color activeBackgroundColor;
-  final Color emergencyBackgroundColor;
-
-  factory ClockStyle.defaultStyle(
+class const ClockStyle({
+  required final Color textColor,
+  required final Color activeTextColor,
+  required final Color emergencyTextColor,
+  required final Color backgroundColor,
+  required final Color activeBackgroundColor,
+  required final Color emergencyBackgroundColor,
+}) {
+  factory defaultStyle(
     Brightness brightness,
     ColorScheme colorScheme,
     LichessCustomColors lichessColors,
@@ -182,45 +166,36 @@ typedef ClockWidgetBuilder = Widget Function(BuildContext, Duration);
 /// The clock will stop counting down when [active] is set to `false`.
 ///
 /// The clock will stop counting down when the time left reaches zero.
-class CountdownClockBuilder extends StatefulWidget {
-  const CountdownClockBuilder({
-    required this.timeLeft,
-    required this.active,
-    required this.builder,
-    this.delay,
-    this.tickInterval = const Duration(milliseconds: 100),
-    this.clockUpdatedAt,
-    super.key,
-  });
-
+class const CountdownClockBuilder({
   /// The duration left on the clock.
-  final Duration timeLeft;
+  required final Duration timeLeft,
+
+  /// If `true`, the clock starts counting down.
+  required final bool active,
+
+  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
+  required final ClockWidgetBuilder builder,
 
   /// The delay before the clock starts counting down.
   ///
   /// This can be used to implement lag compensation.
-  final Duration? delay;
+  final Duration? delay,
 
   /// The interval at which the clock updates the UI.
-  final Duration tickInterval;
+  final Duration tickInterval = const Duration(milliseconds: 100),
 
   /// The time at which the clock was updated.
   ///
   /// Use this parameter to synchronize the clock with the time at which the clock
   /// event was received from the server and to compensate for UI lag.
-  final DateTime? clockUpdatedAt;
-
-  /// If `true`, the clock starts counting down.
-  final bool active;
-
-  /// A [ClockWidgetBuilder] that builds the clock on each tick with the new [timeLeft] value.
-  final ClockWidgetBuilder builder;
-
+  final DateTime? clockUpdatedAt,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<CountdownClockBuilder> createState() => _CountdownClockState();
 }
 
-class _CountdownClockState extends State<CountdownClockBuilder> {
+class _CountdownClockState() extends State<CountdownClockBuilder> {
   Timer? _timer;
   Timer? _delayTimer;
   Duration timeLeft = Duration.zero;

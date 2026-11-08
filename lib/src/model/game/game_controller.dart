@@ -8,9 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -19,11 +18,8 @@ import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -35,6 +31,10 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
+import 'package:lichess_mobile/src/service/correspondence_service.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 
@@ -75,11 +75,9 @@ bool _submitMoveEnabledForSpeed(SubmitMove submitMove, Speed speed) {
   };
 }
 
-class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> {
-  GameController(this.gameFullId);
-
-  final GameFullId gameFullId;
-
+class GameController(final GameFullId gameFullId)
+    extends AsyncNotifier<GameState>
+    with ChatMixin<GameState> {
   final _logger = Logger('GameController');
 
   StreamSubscription<SocketEvent>? _socketSubscription;
@@ -223,7 +221,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 
     _wasInBackground = true;
 
-    // real time games need the socket to stay connected otherwise lichess will think the player leaved
+    // real time games need the socket to stay connected otherwise lichess will think the player left
     // correspondence games can and should close the socket when the app is in background (because lichess won't send the push notification update when the player is still connected to the socket)
     if (state.requireValue.game.meta.speed == Speed.correspondence) {
       _socketClient.close();
@@ -252,11 +250,6 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
   void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
-      return;
-    }
-
     final (Position, String) sanResult;
     try {
       sanResult = curState.game.lastPosition.makeSan(move);
@@ -272,6 +265,13 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
     }
     final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, move);
+
+    if (curState.shouldConfirmMove && isPremove != true) {
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
+      return;
+    }
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
@@ -352,6 +352,9 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
         moveToConfirm: null,
       ),
     );
+
+    ref.read(soundServiceProvider).play(.confirmation);
+
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,
@@ -919,9 +922,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
         final side = pick(data['color']).asSideOrNull();
-        final newClock = pick(
-          data['total'],
-        ).letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
+        final newClock = pick(data['total'])
+            .letOrNull((it) => Duration(milliseconds: it.asIntOrThrow() * 10));
         final curState = state.requireValue;
 
         if (side != null && newClock != null) {
@@ -993,7 +995,7 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
           curState.copyWith(
             lastDrawOfferAtPly: side != null && side == curState.game.youAre
                 ? curState.game.lastPly
-                : null,
+                : curState.lastDrawOfferAtPly,
             game: curState.game.copyWith(
               white: curState.game.white.copyWith(
                 offeringDraw: side == null ? null : side == Side.white,
@@ -1152,10 +1154,8 @@ class GameController extends AsyncNotifier<GameState> with ChatMixin<GameState> 
 typedef LiveGameClock = ({ValueListenable<Duration> white, ValueListenable<Duration> black});
 
 @freezed
-sealed class GameState with _$GameState, ChatMixinState {
-  const GameState._();
-
-  const factory GameState({
+sealed class const GameState._() with _$GameState, ChatMixinState {
+  const factory({
     @Default(0) int nbWatchers,
     @Default(IList<String>.empty()) IList<String> watcherNames,
     required GameFullId gameFullId,

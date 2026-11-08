@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 part 'challenge.freezed.dart';
 part 'challenge.g.dart';
 
-abstract mixin class BaseChallenge {
+abstract mixin class BaseChallenge() {
   Variant get variant;
   Speed get speed;
   ChallengeTimeControlType get timeControl;
@@ -34,10 +34,8 @@ abstract mixin class BaseChallenge {
 
 /// A challenge already created server-side.
 @Freezed(fromJson: true, toJson: true)
-sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
-  const Challenge._();
-
-  const factory Challenge({
+sealed class const Challenge._() with _$Challenge, BaseChallenge implements BaseChallenge {
+  const factory({
     int? socketVersion,
     required ChallengeId id,
     GameFullId? gameFullId,
@@ -57,13 +55,13 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
     GameId? rematchOf,
   }) = _Challenge;
 
-  factory Challenge.fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$ChallengeFromJson(json);
 
-  factory Challenge.fromServerJson(Map<String, dynamic> json) {
+  factory fromServerJson(Map<String, dynamic> json) {
     return _challengeFromPick(pick(json).required());
   }
 
-  factory Challenge.fromPick(RequiredPick pick) => _challengeFromPick(pick);
+  factory fromPick(RequiredPick pick) => _challengeFromPick(pick);
 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
@@ -110,10 +108,10 @@ sealed class Challenge with _$Challenge, BaseChallenge implements BaseChallenge 
 
 /// A challenge request to play a game with another user.
 @freezed
-sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements BaseChallenge {
-  const ChallengeRequest._();
-
-  const factory ChallengeRequest({
+sealed class const ChallengeRequest._()
+    with _$ChallengeRequest, BaseChallenge
+    implements BaseChallenge {
+  const factory({
     // If null, it's an open challenge that anyone (even anonymous users) can accept.
     LightUser? destUser,
     required Variant variant,
@@ -154,14 +152,14 @@ sealed class ChallengeRequest with _$ChallengeRequest, BaseChallenge implements 
 /// - [ChallengeResponseCancelled]: The challenge was cancelled.
 /// - [ChallengeResponseAccepted]: The challenge was accepted and a game was created.
 /// - [ChallengeResponseDeclined]: The challenge was declined.
-sealed class ChallengeResponse {}
+sealed class ChallengeResponse();
 
 /// The [ChallengeResponse] when challenge was cancelled.
 @freezed
 sealed class ChallengeResponseCancelled
     with _$ChallengeResponseCancelled
     implements ChallengeResponse {
-  const factory ChallengeResponseCancelled() = _ChallengeResponseCancelled;
+  const factory() = _ChallengeResponseCancelled;
 }
 
 /// The [ChallengeResponse] when challenge was accepted and a game was created.
@@ -169,8 +167,7 @@ sealed class ChallengeResponseCancelled
 sealed class ChallengeResponseAccepted
     with _$ChallengeResponseAccepted
     implements ChallengeResponse {
-  const factory ChallengeResponseAccepted({required GameFullId gameFullId}) =
-      _ChallengeResponseAccepted;
+  const factory({required GameFullId gameFullId}) = _ChallengeResponseAccepted;
 }
 
 /// The [ChallengeResponse] when challenge was declined.
@@ -178,17 +175,24 @@ sealed class ChallengeResponseAccepted
 sealed class ChallengeResponseDeclined
     with _$ChallengeResponseDeclined
     implements ChallengeResponse {
-  const factory ChallengeResponseDeclined({
-    required Challenge challenge,
-    required ChallengeDeclineReason? declineReason,
-  }) = _ChallengeResponseDeclined;
+  const factory({required Challenge challenge, required ChallengeDeclineReason? declineReason}) =
+      _ChallengeResponseDeclined;
 }
 
-enum ChallengeDirection { outward, inward }
+enum ChallengeDirection() {
+  outward,
+  inward,
+}
 
-enum ChallengeStatus { created, offline, canceled, declined, accepted }
+enum ChallengeStatus() {
+  created,
+  offline,
+  canceled,
+  declined,
+  accepted,
+}
 
-enum ChallengeTimeControlType {
+enum ChallengeTimeControlType() {
   unlimited,
   clock,
   correspondence;
@@ -200,7 +204,7 @@ enum ChallengeTimeControlType {
   };
 }
 
-enum ChallengeDeclineReason {
+enum ChallengeDeclineReason() {
   generic,
   later,
   tooFast,
@@ -243,12 +247,14 @@ extension ChallengeExtension on Pick {
         case 'inward' || 'in':
           return ChallengeDirection.inward;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeDirection: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeDirection",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeDirection");
+    throw PickException.fromPick(this, "can't be casted to ChallengeDirection");
   }
 
   ChallengeDirection? asChallengeDirectionOrNull() {
@@ -278,12 +284,14 @@ extension ChallengeExtension on Pick {
         case 'accepted':
           return ChallengeStatus.accepted;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeStatus: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeStatus",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to ChallengeStatus");
+    throw PickException.fromPick(this, "can't be casted to ChallengeStatus");
   }
 
   ChallengeStatus? asChallengeStatusOrNull() {
@@ -309,14 +317,14 @@ extension ChallengeExtension on Pick {
         case 'correspondence':
           return ChallengeTimeControlType.correspondence;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeTimeControlType: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to ChallengeTimeControlType",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeTimeControlType",
-    );
+    throw PickException.fromPick(this, "can't be casted to ChallengeTimeControlType");
   }
 
   ChallengeTimeControlType? asChallengeTimeControlTypeOrNull() {
@@ -342,12 +350,14 @@ extension ChallengeExtension on Pick {
         case 'black':
           return SideChoice.black;
         default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to SideChoice: invalid string.",
+          throw PickException.fromPick(
+            this,
+            "can't be casted to SideChoice",
+            detail: 'invalid string',
           );
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to SideChoice");
+    throw PickException.fromPick(this, "can't be casted to SideChoice");
   }
 
   SideChoice? asSideChoiceOrNull() {
@@ -367,14 +377,14 @@ extension ChallengeExtension on Pick {
     if (value is String) {
       return ChallengeDeclineReason.values.firstWhere(
         (element) => element.name.toLowerCase() == value,
-        orElse: () => throw PickException(
-          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        orElse: () => throw PickException.fromPick(
+          this,
+          "can't be casted to ChallengeDeclineReason",
+          detail: 'invalid string',
         ),
       );
     }
-    throw PickException(
-      "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason",
-    );
+    throw PickException.fromPick(this, "can't be casted to ChallengeDeclineReason");
   }
 
   ChallengeDeclineReason? asDeclineReasonOrNull() {

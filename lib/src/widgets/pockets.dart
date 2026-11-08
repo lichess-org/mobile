@@ -6,46 +6,34 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Visualization of captured pieces in variants like Crazyhouse.
-class PocketsMenu extends ConsumerWidget {
-  const PocketsMenu({
-    required this.pockets,
-    required this.side,
-    required this.sideToMove,
-    required this.playerSide,
-    required this.squareSize,
-    this.isUpsideDown = false,
-    this.premoveDropRole,
-    this.pieceAssets,
-  });
-
-  final Pockets pockets;
-
-  final Side side;
+class const PocketsMenu({
+  required final Pockets pockets,
+  required final Side side,
 
   /// If this is equal to [side] and matches [playerSide], pieces from the pockets are can be dragged onto the board to make a move.
-  final Side? sideToMove;
+  required final Side? sideToMove,
 
   /// Which side can interact with the board. If this matches [side] and [sideToMove], pieces from the pockets can be dragged onto the board to make a move.
-  final PlayerSide playerSide;
+  required final PlayerSide playerSide,
 
   /// Size of a square on the chessboard.
   ///
   /// Pieces in the pockets are rendered at the same size as pieces on the board.
-  final double squareSize;
+  required final double squareSize,
 
   /// Whether the menu is currently rendered upside down by the parent widget.
   ///
   /// This is used to also flip the drag feedback widget when dragging a piece onto the board.
-  final bool isUpsideDown;
+  final bool isUpsideDown = false,
 
   /// If non-null and [side] is the opposite of [sideToMove], the pocket with this role will be highlighted.
-  final Role? premoveDropRole;
+  final Role? premoveDropRole,
 
   /// Optionally overrides pieces assets used to render the pieces in the pockets.
   ///
   /// If null, the piece assets from the current board preferences are used.
-  final PieceAssets? pieceAssets;
-
+  final PieceAssets? pieceAssets,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -98,25 +86,15 @@ class PocketsMenu extends ConsumerWidget {
   }
 }
 
-class _Pocket extends StatelessWidget {
-  const _Pocket({
-    required this.role,
-    required this.count,
-    required this.interactive,
-    required this.side,
-    required this.squareSize,
-    required this.pieceAssets,
-    required this.isUpsideDown,
-  });
-
-  final Role role;
-  final int count;
-  final bool interactive;
-  final Side side;
-  final double squareSize;
-  final PieceAssets pieceAssets;
-  final bool isUpsideDown;
-
+class const _Pocket({
+  required final Role role,
+  required final int count,
+  required final bool interactive,
+  required final Side side,
+  required final double squareSize,
+  required final PieceAssets pieceAssets,
+  required final bool isUpsideDown,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final piece = Piece(role: role, color: side);

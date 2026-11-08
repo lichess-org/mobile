@@ -14,10 +14,12 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_calendar_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_carousel.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
@@ -55,96 +57,100 @@ final featuredChannelsProvider = FutureProvider.autoDispose<IList<TvGameSnapshot
       .toIList();
 });
 
-class WatchTabScreen extends ConsumerStatefulWidget {
-  const WatchTabScreen({super.key});
-
+class const WatchTabScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   _WatchScreenState createState() => _WatchScreenState();
 }
 
-class _WatchScreenState extends ConsumerState<WatchTabScreen> {
+class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
+  DateTime? _focusLostAt;
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
-      if (prev != BottomTab.watch && current == BottomTab.watch) {
-        ref.invalidate(broadcastsPaginatorProvider);
-        ref.invalidate(featuredChannelsProvider);
-        if (!(ref.read(kidModeProvider).value ?? false)) {
-          ref.invalidate(liveStreamersProvider);
-        }
-      }
-    });
-
     final connectionStatus = ref.watch(lichessConnectionStatusProvider);
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+    return FocusDetector(
+      onFocusLost: () {
+        _focusLostAt = DateTime.now();
+      },
+      onFocusRegained: () {
+        if (context.mounted && _focusLostAt != null) {
+          final duration = DateTime.now().difference(_focusLostAt!);
+          if (duration.inSeconds < 10) {
+            return;
+          }
+          _refreshData();
         }
       },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.watch),
-          centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
-          actions: const [AccountMenuButton()],
-        ),
-        body: switch (connectionStatus) {
-          LichessConnectionStatus.online => OrientationBuilder(
-            builder: (context, orientation) {
-              return HapticRefreshIndicator(
-                edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                    ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                    : 0.0,
-                key: _androidRefreshKey,
-                onRefresh: _refreshData,
-                child: _Body(orientation),
-              );
-            },
-          ),
-          LichessConnectionStatus.networkDown => const Center(
-            child: Text('No internet connection.', style: Styles.noResultTextStyle),
-          ),
-          // Nothing on this tab works without the server, so the outage message
-          // takes the whole screen. Pulling to refresh is the way out of it:
-          // the requests it makes update the server status on their own.
-          LichessConnectionStatus.serverMaintenance ||
-          LichessConnectionStatus.serverDown => HapticRefreshIndicator(
-            edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                : 0.0,
-            onRefresh: _refreshData,
-            child: const CustomScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
-            ),
-          ),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, _) {
+          if (!didPop) {
+            ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+          }
         },
+        child: PlatformScaffold(
+          appBar: PlatformAppBar(
+            title: Text(context.l10n.watch),
+            centerTitle: false,
+            actions: const [AccountMenuButton()],
+          ),
+          body: switch (connectionStatus) {
+            LichessConnectionStatus.online => OrientationBuilder(
+              builder: (context, orientation) {
+                return HapticRefreshIndicator(
+                  key: _androidRefreshKey,
+                  onRefresh: _refreshData,
+                  child: _Body(orientation),
+                );
+              },
+            ),
+            // Pulling to refresh is not gated on the connectivity status: the device may be marked
+            // offline while its network is back, and the responses to these requests are what tell
+            // the connectivity check to run again.
+            LichessConnectionStatus.networkDown => HapticRefreshIndicator(
+              onRefresh: _refreshData,
+              child: const CustomScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text('No internet connection.', style: Styles.noResultTextStyle),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Nothing on this tab works without the server, so the outage message
+            // takes the whole screen. Pulling to refresh is the way out of it:
+            // the requests it makes update the server status on their own.
+            LichessConnectionStatus.serverMaintenance ||
+            LichessConnectionStatus.serverDown => HapticRefreshIndicator(
+              onRefresh: _refreshData,
+              child: const CustomScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
+              ),
+            ),
+          },
+        ),
       ),
     );
   }
 
   Future<void> _refreshData() async {
     if (!mounted) return;
-    return _doRefreshDataForRef(ref);
+    return await _doRefreshDataForRef(ref);
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body(this.orientation);
-
-  final Orientation orientation;
-
+class const _Body(final Orientation orientation) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   ImageColorWorker? _worker;
 
   @override
@@ -180,6 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     final content = [
       if (_worker != null) _BroadcastWidget(broadcastList, _worker!),
+      const _BroadcastCalendarCard(),
       if (isTablet)
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,16 +219,14 @@ Future<void> _doRefreshDataForRef(WidgetRef ref) async {
   }
 }
 
-class _BroadcastWidget extends ConsumerWidget {
-  const _BroadcastWidget(this.broadcastList, this.worker);
-
-  final AsyncValue<BroadcastList> broadcastList;
-  final ImageColorWorker worker;
-
+class const _BroadcastWidget(
+  final AsyncValue<BroadcastList> broadcastList,
+  final ImageColorWorker worker,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: Styles.verticalBodyPadding,
+      padding: const EdgeInsets.only(top: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -253,11 +258,28 @@ class _BroadcastWidget extends ConsumerWidget {
   }
 }
 
-class _WatchTvWidget extends ConsumerWidget {
-  final AsyncValue<IList<TvGameSnapshot>> featuredChannels;
+class const _BroadcastCalendarCard() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.calendar_month),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastBroadcastCalendar),
+          onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
+        ),
+      ],
+    );
+  }
+}
 
-  const _WatchTvWidget(this.featuredChannels);
-
+class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChannels)
+    extends ConsumerWidget {
   static const _handsetFeaturedChannelsSet = ISetConst({
     TvChannel.best,
     TvChannel.bullet,
@@ -277,12 +299,7 @@ class _WatchTvWidget extends ConsumerWidget {
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
-          onHeaderTap: () =>
-              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()).then((_) {
-                if (context.mounted) {
-                  _doRefreshDataForRef(ref);
-                }
-              }),
+          onHeaderTap: () => Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()),
           children: data
               .where((snapshot) {
                 if (isTablet) return true;
@@ -300,19 +317,13 @@ class _WatchTvWidget extends ConsumerWidget {
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap: () => Navigator.of(context, rootNavigator: true)
-                      .push(
-                        TvScreen.buildRoute(
-                          channel: snapshot.channel,
-                          gameId: snapshot.id,
-                          orientation: snapshot.player.side,
-                        ),
-                      )
-                      .then((_) {
-                        if (context.mounted) {
-                          _doRefreshDataForRef(ref);
-                        }
-                      }),
+                  onTap: () => Navigator.of(context).pushHidingTabBar(
+                    TvScreen.buildRoute(
+                      channel: snapshot.channel,
+                      gameId: snapshot.id,
+                      orientation: snapshot.player.side,
+                    ),
+                  ),
                 );
               })
               .toList(growable: false),
@@ -335,11 +346,7 @@ class _WatchTvWidget extends ConsumerWidget {
   }
 }
 
-class _StreamerWidget extends ConsumerWidget {
-  final AsyncValue<IList<Streamer>> streamers;
-
-  const _StreamerWidget(this.streamers);
-
+class const _StreamerWidget(final AsyncValue<IList<Streamer>> streamers) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final numberOfItems = isTabletOrLarger(context) ? 10 : 5;

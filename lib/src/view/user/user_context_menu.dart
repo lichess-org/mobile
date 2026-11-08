@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -17,12 +18,9 @@ import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class UserContextMenu extends ConsumerWidget {
-  const UserContextMenu({this.user, this.userId, super.key})
-    : assert(user != null || userId != null, 'user or userId must be provided');
-
-  final User? user;
-  final UserId? userId;
+class const UserContextMenu({final User? user, final UserId? userId, super.key})
+    extends ConsumerWidget {
+  this : assert(user != null || userId != null, 'user or userId must be provided');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,10 +69,8 @@ class UserContextMenu extends ConsumerWidget {
                 BottomSheetContextMenuAction(
                   icon: Icons.live_tv_outlined,
                   onPressed: () {
-                    Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(TvScreen.buildRoute(user: value.lightUser));
+                    Navigator.of(context)
+                        .pushHidingTabBar(TvScreen.buildRoute(user: value.lightUser));
                   },
                   child: Text(context.l10n.watchGames),
                 ),

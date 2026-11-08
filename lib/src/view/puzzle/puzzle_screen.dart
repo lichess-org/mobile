@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -17,16 +16,15 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_queue_filler.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_solve_limit.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -34,6 +32,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_board.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_feedback_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_session_widget.dart';
@@ -41,38 +40,33 @@ import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-class PuzzleScreen extends ConsumerStatefulWidget {
+class const PuzzleScreen({
+  required final PuzzleAngle angle,
+  final Puzzle? puzzle,
+  final PuzzleId? puzzleId,
+
+  /// If true, the result won't be recorded on the server for the provider [puzzleId].
+  final bool openCasual = false,
+
+  /// If set, load puzzles to replay from the given number of days.
+  final int? replayDays,
+  super.key,
+}) extends ConsumerStatefulWidget {
   /// Creates a new puzzle screen.
   ///
   /// If [puzzle] or [puzzleId] are provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
-  const PuzzleScreen({
-    required this.angle,
-    this.puzzle,
-    this.puzzleId,
-    this.openCasual = false,
-    this.replayDays,
-    super.key,
-  });
-
-  final PuzzleAngle angle;
-  final Puzzle? puzzle;
-  final PuzzleId? puzzleId;
-
-  /// If true, the result won't be recorded on the server for the provider [puzzleId].
-  final bool openCasual;
-
-  /// If set, load puzzles to replay from the given number of days.
-  final int? replayDays;
+  this;
 
   static Route<dynamic> buildRoute({
     required PuzzleAngle angle,
@@ -96,7 +90,9 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
 }
 
-class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
+class _PuzzleScreenState() extends ConsumerState<PuzzleScreen> with RouteAware {
+  RouteObserver<PageRoute<void>>? _pageRouteObserver;
+
   final _boardKey = GlobalKey(debugLabel: 'boardOnPuzzleScreen');
 
   @override
@@ -104,13 +100,13 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
     super.didChangeDependencies();
     final route = ModalRoute.of(context);
     if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
+      _pageRouteObserver = pageRouteObserverOf(context)..subscribe(this, route);
     }
   }
 
   @override
   void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
+    _pageRouteObserver?.unsubscribe(this);
     super.dispose();
   }
 
@@ -140,12 +136,8 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   }
 }
 
-class _Title extends ConsumerWidget {
-  const _Title({required this.angle, this.initialPuzzleContext});
-
-  final PuzzleAngle angle;
-  final PuzzleContext? initialPuzzleContext;
-
+class const _Title({required final PuzzleAngle angle, final PuzzleContext? initialPuzzleContext})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool isDailyPuzzle = false;
@@ -175,12 +167,8 @@ class _Title extends ConsumerWidget {
   }
 }
 
-class _LoadNextPuzzle extends ConsumerWidget {
-  const _LoadNextPuzzle({required this.boardKey, required this.angle});
-
-  final PuzzleAngle angle;
-  final GlobalKey boardKey;
-
+class const _LoadNextPuzzle({required final GlobalKey boardKey, required final PuzzleAngle angle})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
@@ -219,12 +207,8 @@ class _LoadNextPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadReplayPuzzle extends ConsumerWidget {
-  const _LoadReplayPuzzle({required this.boardKey, required this.days});
-
-  final GlobalKey boardKey;
-  final int days;
-
+class const _LoadReplayPuzzle({required final GlobalKey boardKey, required final int days})
+    extends ConsumerWidget {
   static const _angle = PuzzleTheme(PuzzleThemeKey.mix);
 
   @override
@@ -266,13 +250,11 @@ class _LoadReplayPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadPuzzleFromPuzzle extends ConsumerWidget {
-  const _LoadPuzzleFromPuzzle({required this.boardKey, required this.angle, required this.puzzle});
-
-  final PuzzleAngle angle;
-  final Puzzle puzzle;
-  final GlobalKey boardKey;
-
+class const _LoadPuzzleFromPuzzle({
+  required final GlobalKey boardKey,
+  required final PuzzleAngle angle,
+  required final Puzzle puzzle,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -289,19 +271,12 @@ class _LoadPuzzleFromPuzzle extends ConsumerWidget {
   }
 }
 
-class _LoadPuzzleFromId extends ConsumerWidget {
-  const _LoadPuzzleFromId({
-    required this.boardKey,
-    required this.angle,
-    required this.id,
-    this.openCasual = false,
-  });
-
-  final PuzzleAngle angle;
-  final PuzzleId id;
-  final GlobalKey boardKey;
-  final bool openCasual;
-
+class const _LoadPuzzleFromId({
+  required final GlobalKey boardKey,
+  required final PuzzleAngle angle,
+  required final PuzzleId id,
+  final bool openCasual = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(puzzleProvider(id));
@@ -336,28 +311,28 @@ class _LoadPuzzleFromId extends ConsumerWidget {
   }
 }
 
-class _PuzzleScaffold extends StatelessWidget {
-  const _PuzzleScaffold({
-    required this.angle,
-    required this.initialPuzzleContext,
-    required this.body,
-  });
-
-  final PuzzleAngle angle;
-  final PuzzleContext? initialPuzzleContext;
-  final Widget body;
-
+class const _PuzzleScaffold({
+  required final PuzzleAngle angle,
+  required final PuzzleContext? initialPuzzleContext,
+  required final Widget body,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          actions: [if (initialPuzzleContext != null) _PuzzleSettingsButton(initialPuzzleContext!)],
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
+          actions: [
+            if (initialPuzzleContext case final initialPuzzleContext?)
+              SemanticIconButton(
+                onPressed: () => showAdaptiveNavigationSheet<void>(
+                  context: context,
+                  builder: (_) => _PuzzleSettingsScreen(initialPuzzleContext),
+                ),
+                semanticsLabel: context.l10n.settingsSettings,
+                icon: const Icon(Icons.settings),
+              ),
+          ],
           title: _Title(angle: angle, initialPuzzleContext: initialPuzzleContext),
         ),
         body: body,
@@ -366,72 +341,16 @@ class _PuzzleScaffold extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.boardKey, required this.initialPuzzleContext});
-
-  final GlobalKey boardKey;
-  final PuzzleContext initialPuzzleContext;
-
+class const _Body({
+  required final GlobalKey boardKey,
+  required final PuzzleContext initialPuzzleContext,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
-  late final ChessboardController _controller;
+class _BodyState() extends ConsumerState<_Body> {
   bool _isBoardTurned = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = ChessboardController(game: _buildGameData());
-  }
-
-  @override
-  void didUpdateWidget(_Body oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // The streak feeds new puzzles by swapping the puzzle context (and thus the
-    // controller provider), so push the new puzzle onto the board.
-    if (oldWidget.initialPuzzleContext != widget.initialPuzzleContext) {
-      _applyBoardUpdate();
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  PlayerSide _playerSide(PuzzleState state) {
-    return state.mode == PuzzleMode.load ||
-            state.currentPosition.isGameOver ||
-            (state.mode == PuzzleMode.play && state.canGoNext)
-        ? PlayerSide.none
-        : state.mode == PuzzleMode.view
-        ? PlayerSide.both
-        : state.pov == Side.white
-        ? PlayerSide.white
-        : PlayerSide.black;
-  }
-
-  GameData _buildGameData() {
-    final state = ref.read(puzzleControllerProvider(widget.initialPuzzleContext));
-    final boardPreferences = ref.read(boardPreferencesProvider);
-    return buildGameData(
-      fen: state.currentPosition.fen,
-      variant: Variant.standard,
-      position: state.currentPosition,
-      playerSide: _playerSide(state),
-      lastMove: state.lastMove,
-      castlingMethod: boardPreferences.castlingMethod,
-      boardHighlights: boardPreferences.boardHighlights,
-    );
-  }
-
-  /// Pushes the latest puzzle position to the board controller without rebuilding it.
-  void _applyBoardUpdate() {
-    _controller.updatePosition(_buildGameData());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -451,214 +370,178 @@ class _BodyState extends ConsumerState<_Body> {
       }
     });
 
-    // Drive the board on position/interactivity changes without rebuilding it.
-    ref.listen(
-      ctrlProvider.select(
-        (s) => (fen: s.currentPosition.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
-      ),
-      (_, _) => _applyBoardUpdate(),
-    );
-    ref.listen(
-      boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
-      (_, _) => _applyBoardUpdate(),
-    );
-
-    // Clear drawn shapes when puzzle or position changes.
-    ref.listen(ctrlProvider.select((state) => state.puzzle.puzzle.id), (previous, next) {
-      if (previous != null && previous != next) {
-        _controller.clearDrawnShapes();
-      }
-    });
-    ref.listen(ctrlProvider.select((state) => state.currentPath), (previous, next) {
-      if (previous != null && previous != next) {
-        _controller.clearDrawnShapes();
-      }
-    });
-
     final shapes = puzzleState.hintSquare != null
         ? <Shape>{Circle(color: ShapeColor.green.color, orig: puzzleState.hintSquare!)}
         : const <Shape>{};
 
-    final content = PopScope(
-      canPop:
-          Theme.of(context).platform != TargetPlatform.iOS || puzzleState.mode == PuzzleMode.view,
-      child: SafeArea(
-        // view padding can change on Android when immersive mode is enabled, so to prevent any
-        // board vertical shift, we set `maintainBottomViewPadding` to true.
-        maintainBottomViewPadding: true,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final orientation = constraints.maxWidth > constraints.maxHeight
-                ? Orientation.landscape
-                : Orientation.portrait;
-            final isTablet = isTabletOrLarger(context);
+    final content = SafeArea(
+      // view padding can change on Android when immersive mode is enabled, so to prevent any
+      // board vertical shift, we set `maintainBottomViewPadding` to true.
+      maintainBottomViewPadding: true,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final orientation = constraints.maxWidth > constraints.maxHeight
+              ? Orientation.landscape
+              : Orientation.portrait;
+          final isTablet = isTabletOrLarger(context);
 
-            final defaultSettings = boardPreferences
-                .toBoardSettings(Variant.standard)
-                .copyWith(
-                  borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
-                  boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-                  drawShape: DrawShapeOptions(
-                    enable: boardPreferences.enableShapeDrawings,
-                    newShapeColor: boardPreferences.shapeColor.color,
+          final defaultSettings = boardPreferences
+              .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
+              .copyWith(
+                borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
+                boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                enablePremoves: boardPreferences.premoves,
+                drawShape: DrawShapeOptions(
+                  enable: boardPreferences.enableShapeDrawings,
+                  newShapeColor: boardPreferences.shapeColor.color,
+                ),
+              );
+
+          if (orientation == Orientation.landscape) {
+            final defaultBoardSize =
+                constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+            final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+            final boardSize = sideWidth >= 250
+                ? defaultBoardSize
+                : constraints.biggest.longestSide / kGoldenRatio -
+                      (kTabletBoardTableSidePadding * 2);
+            return Padding(
+              padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  PuzzleBoard(
+                    key: widget.boardKey,
+                    initialPuzzleContext: widget.initialPuzzleContext,
+                    size: boardSize,
+                    orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
+                    shapes: shapes,
+                    settings: defaultSettings,
                   ),
-                );
-
-            if (orientation == Orientation.landscape) {
-              final defaultBoardSize =
-                  constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-              final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-              final boardSize = sideWidth >= 250
-                  ? defaultBoardSize
-                  : constraints.biggest.longestSide / kGoldenRatio -
-                        (kTabletBoardTableSidePadding * 2);
-              return Padding(
-                padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    BoardWidget(
-                      boardKey: widget.boardKey,
-                      size: boardSize,
-                      controller: _controller,
-                      onMove: (move, {viaDragAndDrop}) {
-                        ref.read(ctrlProvider.notifier).onUserMove(move);
-                      },
-                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
-                      shapes: shapes,
-                      settings: defaultSettings,
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Center(
-                            child: PuzzleFeedbackWidget(
-                              puzzle: puzzleState.puzzle,
-                              state: puzzleState,
-                              onStreak: false,
-                            ),
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Center(
+                          child: PuzzleFeedbackWidget(
+                            puzzle: puzzleState.puzzle,
+                            state: puzzleState,
+                            onStreak: false,
                           ),
-                          _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
-                              child: Card(
-                                clipBehavior: Clip.hardEdge,
-                                margin: EdgeInsets.zero,
-                                child: SingleChildScrollView(
-                                  padding: EdgeInsets.zero,
-                                  child: Column(
-                                    children: [
-                                      DebouncedPgnTreeView(
-                                        root: puzzleState.root,
-                                        currentPath: puzzleState.currentPath,
-                                        pgnRootComments: null,
-                                        shouldShowComputerAnalysis: false,
-                                        shouldShowComments: false,
-                                        shouldShowAnnotations: false,
-                                        displayMode: PgnTreeDisplayMode.twoColumn,
-                                      ),
-                                    ],
-                                  ),
+                        ),
+                        _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Card(
+                              clipBehavior: Clip.hardEdge,
+                              margin: EdgeInsets.zero,
+                              child: SingleChildScrollView(
+                                padding: EdgeInsets.zero,
+                                child: Column(
+                                  children: [
+                                    DebouncedPgnTreeView(
+                                      root: puzzleState.root,
+                                      currentPath: puzzleState.currentPath,
+                                      pgnRootComments: null,
+                                      shouldShowComputerAnalysis: false,
+                                      shouldShowComments: false,
+                                      shouldShowAnnotations: false,
+                                      displayMode: PgnTreeDisplayMode.twoColumn,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: _BottomBar(
-                              initialPuzzleContext: widget.initialPuzzleContext,
-                              puzzleId: puzzleState.puzzle.puzzle.id,
-                              onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              final defaultBoardSize = constraints.biggest.shortestSide;
-              final double boardSize = isTablet
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
-
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                      ),
-                      child: Center(
-                        child: PuzzleFeedbackWidget(
-                          puzzle: puzzleState.puzzle,
-                          state: puzzleState,
-                          onStreak: false,
                         ),
-                      ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: _BottomBar(
+                            initialPuzzleContext: widget.initialPuzzleContext,
+                            puzzleId: puzzleState.puzzle.puzzle.id,
+                            onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Padding(
-                    padding: isTablet
-                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                        : EdgeInsets.zero,
-                    child: BoardWidget(
-                      boardKey: widget.boardKey,
-                      size: boardSize,
-                      controller: _controller,
-                      onMove: (move, {viaDragAndDrop}) {
-                        ref.read(ctrlProvider.notifier).onUserMove(move);
-                      },
-                      orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
-                      shapes: shapes,
-                      settings: defaultSettings,
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                      ),
-                      child: _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
-                    ),
-                  ),
-                  _BottomBar(
-                    initialPuzzleContext: widget.initialPuzzleContext,
-                    puzzleId: puzzleState.puzzle.puzzle.id,
-                    onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
                   ),
                 ],
-              );
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            final defaultBoardSize = constraints.biggest.shortestSide;
+            final double boardSize = isTablet
+                ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                : defaultBoardSize;
+
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                    ),
+                    child: Center(
+                      child: PuzzleFeedbackWidget(
+                        puzzle: puzzleState.puzzle,
+                        state: puzzleState,
+                        onStreak: false,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: isTablet
+                      ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                      : EdgeInsets.zero,
+                  child: PuzzleBoard(
+                    key: widget.boardKey,
+                    initialPuzzleContext: widget.initialPuzzleContext,
+                    size: boardSize,
+                    orientation: _isBoardTurned ? puzzleState.pov.opposite : puzzleState.pov,
+                    shapes: shapes,
+                    settings: defaultSettings,
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                    ),
+                    child: _PuzzleStatus(initialPuzzleContext: widget.initialPuzzleContext),
+                  ),
+                ),
+                _BottomBar(
+                  initialPuzzleContext: widget.initialPuzzleContext,
+                  puzzleId: puzzleState.puzzle.puzzle.id,
+                  onFlipBoard: () => setState(() => _isBoardTurned = !_isBoardTurned),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
 
     return Theme.of(context).platform == TargetPlatform.android
-        ? AndroidGesturesExclusionWidget(
-            boardKey: widget.boardKey,
-            shouldExcludeGesturesOnFocusGained: puzzleState.mode != PuzzleMode.view,
-            shouldSetImmersiveMode: boardPreferences.immersiveModeWhilePlaying ?? false,
+        ? AndroidImmersiveModeWidget(
+            enabled:
+                puzzleState.mode != PuzzleMode.view &&
+                (boardPreferences.immersiveModeWhilePlaying ?? false),
             child: content,
           )
         : content;
   }
 }
 
-class _PuzzleStatus extends ConsumerWidget {
-  const _PuzzleStatus({required this.initialPuzzleContext});
-
-  final PuzzleContext initialPuzzleContext;
-
+class const _PuzzleStatus({required final PuzzleContext initialPuzzleContext})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
@@ -698,17 +581,11 @@ class _PuzzleStatus extends ConsumerWidget {
   }
 }
 
-class _BottomBar extends ConsumerStatefulWidget {
-  const _BottomBar({
-    required this.initialPuzzleContext,
-    required this.puzzleId,
-    required this.onFlipBoard,
-  });
-
-  final PuzzleContext initialPuzzleContext;
-  final PuzzleId puzzleId;
-  final VoidCallback onFlipBoard;
-
+class const _BottomBar({
+  required final PuzzleContext initialPuzzleContext,
+  required final PuzzleId puzzleId,
+  required final VoidCallback onFlipBoard,
+}) extends ConsumerStatefulWidget {
   static const _repeatTriggerDelays = [
     Duration(milliseconds: 500),
     Duration(milliseconds: 250),
@@ -719,7 +596,7 @@ class _BottomBar extends ConsumerStatefulWidget {
   ConsumerState<_BottomBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends ConsumerState<_BottomBar> {
+class _BottomBarState() extends ConsumerState<_BottomBar> {
   static const viewSolutionDelay = Duration(seconds: 4);
 
   Timer? _viewSolutionTimer;
@@ -760,9 +637,10 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
     final puzzleState = ref.watch(ctrlProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        if (puzzleState.mode != PuzzleMode.view)
+        if (puzzleState.mode != PuzzleMode.view) ...[
           FutureBuilder(
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
@@ -776,7 +654,6 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               );
             },
           ),
-        if (puzzleState.mode != PuzzleMode.view)
           FutureBuilder(
             future: _viewSolutionCompleter.future,
             builder: (context, snapshot) {
@@ -789,6 +666,7 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
               );
             },
           ),
+        ],
         if (puzzleState.mode == PuzzleMode.view)
           BottomBarButton(
             label: context.l10n.menu,
@@ -798,54 +676,59 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
             icon: Icons.menu,
           ),
         if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
-            onTap: () {
-              Navigator.of(context).push(
-                AnalysisScreen.buildRoute(
-                  puzzleState.makeAnalysisOptions(
-                    ref
-                        .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
-                        .makePgn,
-                  ),
-                ),
-              );
-            },
+          BottomBarGroup(
+            children: [
+              BottomBarButton(
+                onTap: () {
+                  Navigator.of(context).push(
+                    AnalysisScreen.buildRoute(
+                      puzzleState.makeAnalysisOptions(
+                        ref
+                            .read(puzzleControllerProvider(widget.initialPuzzleContext).notifier)
+                            .makePgn,
+                      ),
+                    ),
+                  );
+                },
 
-            label: context.l10n.analysis,
-            icon: Icons.biotech,
+                label: context.l10n.analysis,
+                icon: Icons.biotech,
+              ),
+              BottomBarButton(
+                onTap: puzzleState.nextContext != null
+                    ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
+                    : null,
+                highlighted: true,
+                label: context.l10n.puzzleContinueTraining,
+                icon: CupertinoIcons.play_arrow_solid,
+              ),
+            ],
           ),
-
-        RepeatButton(
-          triggerDelays: _BottomBar._repeatTriggerDelays,
-          onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-          child: BottomBarButton(
-            onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-            label: 'Previous',
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              triggerDelays: _BottomBar._repeatTriggerDelays,
+              onLongPress: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+              child: BottomBarButton(
+                onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              triggerDelays: _BottomBar._repeatTriggerDelays,
+              onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+              child: BottomBarButton(
+                onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+                label: context.l10n.next,
+                icon: CupertinoIcons.chevron_forward,
+                showTooltip: false,
+                blink: puzzleState.shouldBlinkNextArrow,
+              ),
+            ),
+          ],
         ),
-
-        RepeatButton(
-          triggerDelays: _BottomBar._repeatTriggerDelays,
-          onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-          child: BottomBarButton(
-            onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
-            label: context.l10n.next,
-            icon: CupertinoIcons.chevron_forward,
-            showTooltip: false,
-            blink: puzzleState.shouldBlinkNextArrow,
-          ),
-        ),
-        if (puzzleState.mode == PuzzleMode.view)
-          BottomBarButton(
-            onTap: puzzleState.mode == PuzzleMode.view && puzzleState.nextContext != null
-                ? () => ref.read(ctrlProvider.notifier).onLoadPuzzle(puzzleState.nextContext!)
-                : null,
-            highlighted: true,
-            label: context.l10n.puzzleContinueTraining,
-            icon: CupertinoIcons.play_arrow_solid,
-          ),
       ],
     );
   }
@@ -906,32 +789,8 @@ class _BottomBarState extends ConsumerState<_BottomBar> {
   }
 }
 
-class _PuzzleSettingsButton extends StatelessWidget {
-  const _PuzzleSettingsButton(this.initialPuzzleContext);
-
-  final PuzzleContext initialPuzzleContext;
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticIconButton(
-      onPressed: () => showModalBottomSheet<void>(
-        context: context,
-        isDismissible: true,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
-        builder: (_) => _PuzzleSettingsBottomSheet(initialPuzzleContext),
-      ),
-      semanticsLabel: context.l10n.settingsSettings,
-      icon: const Icon(Icons.settings),
-    );
-  }
-}
-
-class _PuzzleSettingsBottomSheet extends ConsumerWidget {
-  const _PuzzleSettingsBottomSheet(this.initialPuzzleContext);
-
-  final PuzzleContext initialPuzzleContext;
-
+/// The first page of the puzzle settings sheet.
+class const _PuzzleSettingsScreen(final PuzzleContext initialPuzzleContext) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -947,141 +806,142 @@ class _PuzzleSettingsBottomSheet extends ConsumerWidget {
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final isFillingQueue = ref.watch(puzzleQueueFillerProvider);
 
-    return BottomSheetScrollableContainer(
-      padding: const EdgeInsets.only(bottom: 16),
-      children: [
-        ListSection(
-          header: Text(context.l10n.settingsSettings),
-          materialFilledCard: true,
-          children: [
-            SwitchSettingTile(
-              title: Text(context.l10n.sound),
-              value: isSoundEnabled,
-              onChanged: (value) {
-                ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-              },
-            ),
-            if (initialPuzzleContext.userId != null &&
-                initialPuzzleContext.replayRemaining == null &&
-                puzzleState.mode != PuzzleMode.view &&
-                isOnline)
-              StatefulBuilder(
-                builder: (context, setState) {
-                  PuzzleDifficulty selectedDifficulty = difficulty;
-                  return SettingsListTile(
-                    settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
-                    settingsValue: puzzleDifficultyL10n(context, difficulty),
-                    onTap: puzzleState.isChangingDifficulty
-                        ? null
-                        : () {
-                            showChoicePicker(
-                              context,
-                              choices: PuzzleDifficulty.values,
-                              selectedItem: difficulty,
-                              labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
-                              onSelectedItemChanged: (PuzzleDifficulty? d) {
-                                if (d != null) {
-                                  setState(() {
-                                    selectedDifficulty = d;
-                                  });
-                                }
-                              },
-                            ).then((_) async {
-                              if (selectedDifficulty == difficulty) {
-                                return;
-                              }
-                              final nextContext = await ref
-                                  .read(ctrlProvider.notifier)
-                                  .changeDifficulty(selectedDifficulty);
-                              if (context.mounted && nextContext != null) {
-                                ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
-                              }
-                            });
-                          },
-                  );
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
+      body: ListView(
+        children: [
+          ListSection(
+            materialFilledCard: true,
+            children: [
+              SwitchSettingTile(
+                title: Text(context.l10n.sound),
+                value: isSoundEnabled,
+                onChanged: (value) {
+                  ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
                 },
               ),
-            SwitchSettingTile(
-              title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
-              value: autoNext,
-              onChanged: (value) {
-                ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
-              },
-            ),
-            // Offline queue length is a logged-in-only feature: anonymous
-            // players face a much higher server rate limit for fetching
-            // puzzles, so the setting is hidden for them. It is also limited to
-            // the mix angle (see [isConfigurableOfflineQueueAngle]).
-            if (initialPuzzleContext.userId != null &&
-                isConfigurableOfflineQueueAngle(initialPuzzleContext.angle))
-              SettingsListTile(
-                trailing: isFillingQueue
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                      )
-                    : null,
-                settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
-                settingsValue: nbOfflinePuzzles.toString(),
-                enabled: !isFillingQueue,
-                onTap: isFillingQueue
-                    ? null
-                    : () {
-                        int selectedNb = nbOfflinePuzzles;
-                        showChoicePicker(
-                          context,
-                          choices: kOfflinePuzzlesChoices,
-                          selectedItem: nbOfflinePuzzles,
-                          labelBuilder: (t) => Text(t.toString()),
-                          onSelectedItemChanged: (int? nb) {
-                            if (nb != null) {
-                              selectedNb = nb;
-                            }
-                          },
-                        ).then((_) async {
-                          if (selectedNb == nbOfflinePuzzles) {
-                            return;
-                          }
-                          // Await the save: the fill reads the count from the
-                          // preferences state, so it must be up to date before
-                          // the fill starts, or it would be a silent no-op.
-                          await ref
-                              .read(puzzlePreferencesProvider.notifier)
-                              .setNbOfflinePuzzles(selectedNb);
-                          if (!context.mounted) return;
-                          unawaited(
-                            ref
-                                .read(puzzleQueueFillerProvider.notifier)
-                                .fill(
-                                  userId: initialPuzzleContext.userId,
-                                  angle: initialPuzzleContext.angle,
-                                ),
-                          );
-                        });
-                      },
-              ),
-            if (authUser != null && initialPuzzleContext.replayRemaining == null)
+              if (initialPuzzleContext.userId != null &&
+                  initialPuzzleContext.replayRemaining == null &&
+                  puzzleState.mode != PuzzleMode.view &&
+                  isOnline)
+                StatefulBuilder(
+                  builder: (context, setState) {
+                    PuzzleDifficulty selectedDifficulty = difficulty;
+                    return SettingsListTile(
+                      settingsLabel: Text(context.l10n.puzzleDifficultyLevel),
+                      settingsValue: puzzleDifficultyL10n(context, difficulty),
+                      onTap: puzzleState.isChangingDifficulty
+                          ? null
+                          : () {
+                              showChoicePicker(
+                                context,
+                                choices: PuzzleDifficulty.values,
+                                selectedItem: difficulty,
+                                labelBuilder: (t) => Text(puzzleDifficultyL10n(context, t)),
+                                onSelectedItemChanged: (PuzzleDifficulty? d) {
+                                  if (d != null) {
+                                    setState(() {
+                                      selectedDifficulty = d;
+                                    });
+                                  }
+                                },
+                              ).then((_) async {
+                                if (selectedDifficulty == difficulty) {
+                                  return;
+                                }
+                                final nextContext = await ref
+                                    .read(ctrlProvider.notifier)
+                                    .changeDifficulty(selectedDifficulty);
+                                if (context.mounted && nextContext != null) {
+                                  ref.read(ctrlProvider.notifier).onLoadPuzzle(nextContext);
+                                }
+                              });
+                            },
+                    );
+                  },
+                ),
               SwitchSettingTile(
-                title: Text(context.l10n.rated),
-                // ignore: avoid_bool_literals_in_conditional_expressions
-                value: initialPuzzleContext.casual == true ? false : rated,
-                onChanged: initialPuzzleContext.casual == true
-                    ? null
-                    : (value) {
-                        ref.read(puzzlePreferencesProvider.notifier).setRated(value);
-                      },
+                title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
+                value: autoNext,
+                onChanged: (value) {
+                  ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
+                },
               ),
-            ListTile(
-              title: Text(context.l10n.mobileBoardSettings),
-              trailing: const CupertinoListTileChevron(),
-              onTap: () {
-                Navigator.of(context).push(BoardSettingsScreen.buildRoute(fullscreenDialog: true));
-              },
-            ),
-          ],
-        ),
-      ],
+              // Offline queue length is a logged-in-only feature: anonymous
+              // players face a much higher server rate limit for fetching
+              // puzzles, so the setting is hidden for them. It is also limited to
+              // the mix angle (see [isConfigurableOfflineQueueAngle]).
+              if (initialPuzzleContext.userId != null &&
+                  isConfigurableOfflineQueueAngle(initialPuzzleContext.angle))
+                SettingsListTile(
+                  trailing: isFillingQueue
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                        )
+                      : null,
+                  settingsLabel: Text(context.l10n.mobileNbOfflinePuzzles),
+                  settingsValue: nbOfflinePuzzles.toString(),
+                  enabled: !isFillingQueue,
+                  onTap: isFillingQueue
+                      ? null
+                      : () {
+                          int selectedNb = nbOfflinePuzzles;
+                          showChoicePicker(
+                            context,
+                            choices: kOfflinePuzzlesChoices,
+                            selectedItem: nbOfflinePuzzles,
+                            labelBuilder: (t) => Text(t.toString()),
+                            onSelectedItemChanged: (int? nb) {
+                              if (nb != null) {
+                                selectedNb = nb;
+                              }
+                            },
+                          ).then((_) async {
+                            if (selectedNb == nbOfflinePuzzles) {
+                              return;
+                            }
+                            // Await the save: the fill reads the count from the
+                            // preferences state, so it must be up to date before
+                            // the fill starts, or it would be a silent no-op.
+                            await ref
+                                .read(puzzlePreferencesProvider.notifier)
+                                .setNbOfflinePuzzles(selectedNb);
+                            if (!context.mounted) return;
+                            unawaited(
+                              ref
+                                  .read(puzzleQueueFillerProvider.notifier)
+                                  .fill(
+                                    userId: initialPuzzleContext.userId,
+                                    angle: initialPuzzleContext.angle,
+                                  ),
+                            );
+                          });
+                        },
+                ),
+              if (authUser != null && initialPuzzleContext.replayRemaining == null)
+                SwitchSettingTile(
+                  title: Text(context.l10n.rated),
+                  // ignore: avoid_bool_literals_in_conditional_expressions
+                  value: initialPuzzleContext.casual == true ? false : rated,
+                  onChanged: initialPuzzleContext.casual == true
+                      ? null
+                      : (value) {
+                          ref.read(puzzlePreferencesProvider.notifier).setRated(value);
+                        },
+                ),
+              ListTile(
+                title: Text(context.l10n.mobileBoardSettings),
+                trailing: const CupertinoListTileChevron(),
+                onTap: () {
+                  Navigator.of(context).push(BoardSettingsScreen.buildRoute());
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

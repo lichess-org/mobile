@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/gestures.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays an interactive chessboard driven by a [ChessboardController].
@@ -11,43 +13,29 @@ import 'package:material_ui/material_ui.dart';
 /// For a non-interactive board, use [StaticChessboard] instead. To disable user
 /// interaction on this board (e.g. at the end of a game), drive the [controller]
 /// with game data whose `playerSide` is [PlayerSide.none].
-class BoardWidget extends StatelessWidget {
-  const BoardWidget({
-    required this.size,
-    required this.orientation,
-    required this.settings,
-    required this.controller,
-    this.onMove,
-    this.shapes = const {},
-    this.annotations = const {},
-    this.boardOverlay,
-    this.error,
-    this.boardKey,
-  });
-
-  final double size;
-  final Side orientation;
-  final ChessboardSettings settings;
+class const BoardWidget({
+  required final double size,
+  required final Side orientation,
+  required final ChessboardSettings settings,
 
   /// Controller that drives the board position and game state.
-  final ChessboardController controller;
+  required final ChessboardController controller,
 
   /// Called when the user completes a move on the board.
-  final void Function(Move, {bool? viaDragAndDrop})? onMove;
+  final void Function(Move, {bool? viaDragAndDrop})? onMove,
 
   /// External shapes to draw on the board (engine arrows, analysis annotations, etc.).
-  final Set<Shape> shapes;
+  final Set<Shape> shapes = const {},
 
   /// Move annotations to display on the board.
-  final Map<Square, Annotation> annotations;
-
-  final String? error;
-  final Widget? boardOverlay;
-  final GlobalKey? boardKey;
-
+  final Map<Square, Annotation> annotations = const {},
+  final Widget? boardOverlay,
+  final String? error,
+  final GlobalKey? boardKey,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final board = Chessboard(
+    final chessboard = Chessboard(
       key: boardKey,
       controller: controller,
       size: size,
@@ -56,6 +44,27 @@ class BoardWidget extends StatelessWidget {
       shapes: shapes,
       annotations: annotations,
       settings: settings,
+    );
+
+    // Chessground handles raw pointer events and doesn't enter the gesture arena.
+    // We use a RawGestureDetector to claim the pointer events for the board, so that they don't
+    // trigger a swipe gesture to pop the screen on iOS.
+    final board = RawGestureDetector(
+      gestures: {
+        _BoardPointerClaimRecognizer:
+            GestureRecognizerFactoryWithHandlers<_BoardPointerClaimRecognizer>(
+              _BoardPointerClaimRecognizer.new,
+              (recognizer) => recognizer.controller = controller,
+            ),
+      },
+      child: Theme.of(context).platform == TargetPlatform.android
+          ? AndroidBoardGesturesExclusion(
+              controller: controller,
+              orientation: orientation,
+              size: size,
+              child: chessboard,
+            )
+          : chessboard,
     );
 
     final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
@@ -82,10 +91,22 @@ class BoardWidget extends StatelessWidget {
   }
 }
 
-class _ErrorWidget extends StatelessWidget {
-  const _ErrorWidget({required this.errorMessage});
-  final String errorMessage;
+/// Claims the pointers that touch an interactive board down, unless the promotion selector is
+/// shown: it is drawn inside the board and handles taps with gesture detectors, which must win.
+///
+/// A board that can't be played on doesn't claim its pointers, so that an edge swipe on it pops
+/// the screen.
+class _BoardPointerClaimRecognizer() extends EagerGestureRecognizer {
+  ChessboardController? controller;
 
+  @override
+  bool isPointerAllowed(PointerDownEvent event) =>
+      controller?.interactive == true &&
+      controller?.pendingPromotion == null &&
+      super.isPointerAllowed(event);
+}
+
+class const _ErrorWidget({required final String errorMessage}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

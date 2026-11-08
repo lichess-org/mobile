@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -12,31 +10,24 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_seek.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ChallengeListItem extends ConsumerWidget {
-  const ChallengeListItem({
-    super.key,
-    required this.challenge,
-    required this.challengerUser,
-    this.onPressed,
-    this.onAccept,
-    this.onDecline,
-    this.onCancel,
-  });
-
-  final Challenge challenge;
-  final LightUser challengerUser;
-  final VoidCallback? onPressed;
-  final VoidCallback? onAccept;
-  final VoidCallback? onCancel;
-  final void Function(ChallengeDeclineReason? reason)? onDecline;
-
+class const ChallengeListItem({
+  super.key,
+  required final Challenge challenge,
+  required final LightUser challengerUser,
+  final VoidCallback? onPressed,
+  final VoidCallback? onAccept,
+  final void Function(ChallengeDeclineReason? reason)? onDecline,
+  final VoidCallback? onCancel,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final me = ref.watch(authControllerProvider)?.user;
@@ -62,37 +53,35 @@ class ChallengeListItem extends ConsumerWidget {
 
     final screenWidth = MediaQuery.widthOf(context);
 
-    return Slidable(
-      enabled: onAccept != null || onDecline != null || (isMyChallenge && onCancel != null),
-      dragStartBehavior: DragStartBehavior.start,
-      endActionPane: ActionPane(
-        motion: const StretchMotion(),
-        extentRatio: 0.6,
-        children: [
-          if (onAccept != null)
-            SlidableAction(
-              icon: Icons.check,
-              onPressed: (_) => onAccept!(),
-              spacing: 8.0,
-              backgroundColor: context.lichessColors.good,
-              foregroundColor: Colors.white,
-              label: context.l10n.accept,
-            ),
-          if (onDecline != null || (isMyChallenge && onCancel != null))
-            SlidableAction(
-              icon: Icons.close,
-              onPressed: isMyChallenge
-                  ? (_) => onCancel!()
-                  : onDecline != null
-                  ? (_) => onDecline!(null)
-                  : null,
-              spacing: 8.0,
-              backgroundColor: context.lichessColors.error,
-              foregroundColor: Colors.white,
-              label: isMyChallenge ? context.l10n.cancel : context.l10n.decline,
-            ),
-        ],
-      ),
+    return SwipeActions(
+      extentRatio: 0.6,
+      allowsFullSwipe: false,
+      endActions: [
+        if (isMyChallenge && onCancel != null)
+          SwipeAction(
+            icon: Icons.close,
+            onPressed: onCancel!,
+            backgroundColor: context.lichessColors.error,
+            foregroundColor: Colors.white,
+            label: context.l10n.cancel,
+          )
+        else if (!isMyChallenge && onDecline != null)
+          SwipeAction(
+            icon: Icons.close,
+            onPressed: () => onDecline!(null),
+            backgroundColor: context.lichessColors.error,
+            foregroundColor: Colors.white,
+            label: context.l10n.decline,
+          ),
+        if (onAccept != null)
+          SwipeAction(
+            icon: Icons.check,
+            onPressed: onAccept!,
+            backgroundColor: context.lichessColors.good,
+            foregroundColor: Colors.white,
+            label: context.l10n.accept,
+          ),
+      ],
       child: isFromPosition
           ? ExpansionTile(
               backgroundColor: color,
@@ -123,20 +112,13 @@ class ChallengeListItem extends ConsumerWidget {
   }
 }
 
-class CorrespondenceChallengeListItem extends StatelessWidget {
-  const CorrespondenceChallengeListItem({
-    super.key,
-    required this.seek,
-    required this.challengerUser,
-    this.onPressed,
-    this.onCancel,
-  });
-
-  final CorrespondenceSeek seek;
-  final LightUser challengerUser;
-  final VoidCallback? onPressed;
-  final VoidCallback? onCancel;
-
+class const CorrespondenceChallengeListItem({
+  super.key,
+  required final CorrespondenceSeek seek,
+  required final LightUser challengerUser,
+  final VoidCallback? onPressed,
+  final VoidCallback? onCancel,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChallengeListItem(

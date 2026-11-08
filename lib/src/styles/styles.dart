@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:dynamic_system_colors/dynamic_system_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_ui/material_ui.dart';
 
 // ignore: avoid_classes_with_only_static_members
-abstract class Styles {
+abstract class Styles() {
   // text
   static const bold = TextStyle(fontWeight: FontWeight.bold);
   static const title = TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold);
@@ -42,6 +45,23 @@ abstract class Styles {
   static Color chartColor(BuildContext context) {
     return ColorScheme.of(context).tertiary;
   }
+
+  /// Minimum chroma of [chartColors], so that colors of a muted scheme stay apart.
+  static const _minChartColorsChroma = 40.0;
+
+  /// [count] distinct colors for the series of a chart, which fit in the color scheme.
+  ///
+  /// The hue of [chartColor] is rotated in equal steps in the HCT color space, the way Material
+  /// derives the scheme's own accent colors. Its tone is kept, so the colors have the same contrast
+  /// with the surface.
+  static List<Color> chartColors(BuildContext context, int count) {
+    final base = Hct.fromInt(chartColor(context).toARGB32());
+    final chroma = max(base.chroma, _minChartColorsChroma);
+    return [
+      for (var i = 0; i < count; i++)
+        Color(Hct.from((base.hue + i * 360 / count) % 360, chroma, base.tone).toInt()),
+    ];
+  }
 }
 
 /// Retrieve the default text color and apply an opacity to it.
@@ -59,25 +79,15 @@ Color lighten(Color c, [double amount = .1]) {
 }
 
 @immutable
-class LichessCustomColors extends ThemeExtension<LichessCustomColors> {
-  const LichessCustomColors({
-    required this.cyan,
-    required this.brag,
-    required this.good,
-    required this.error,
-    required this.fancy,
-    required this.purple,
-    required this.primary,
-  });
-
-  final Color cyan;
-  final Color brag;
-  final Color good;
-  final Color error;
-  final Color fancy;
-  final Color purple;
-  final Color primary;
-
+class const LichessCustomColors({
+  required final Color cyan,
+  required final Color brag,
+  required final Color good,
+  required final Color error,
+  required final Color fancy,
+  required final Color purple,
+  required final Color primary,
+}) extends ThemeExtension<LichessCustomColors> {
   @override
   LichessCustomColors copyWith({
     Color? cyan,

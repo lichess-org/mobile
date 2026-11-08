@@ -20,7 +20,7 @@ final gameBookmarksPaginatorProvider =
       name: 'GameBookmarksPaginatorProvider',
     );
 
-class GameBookmarksPaginator extends AsyncNotifier<GameBookmarksPaginatorState> {
+class GameBookmarksPaginator() extends AsyncNotifier<GameBookmarksPaginatorState> {
   final _list = <LightExportedGameWithPov>[];
 
   GameRepository get _gameRepository => ref.read(gameRepositoryProvider);
@@ -104,7 +104,7 @@ class GameBookmarksPaginator extends AsyncNotifier<GameBookmarksPaginatorState> 
 
 @freezed
 sealed class GameBookmarksPaginatorState with _$GameBookmarksPaginatorState {
-  const factory GameBookmarksPaginatorState({
+  const factory({
     required IList<LightExportedGameWithPov> gameList,
     required bool isLoading,
     required bool hasMore,

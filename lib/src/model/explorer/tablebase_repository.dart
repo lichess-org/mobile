@@ -24,11 +24,7 @@ final tablebaseRepositoryProvider = Provider<TablebaseRepository>((ref) {
   return TablebaseRepository(client);
 }, name: 'TablebaseRepositoryProvider');
 
-class TablebaseRepository {
-  const TablebaseRepository(this.client);
-
-  final Client client;
-
+class const TablebaseRepository(final Client client) {
   Future<TablebaseEntry> getTablebaseEntry(String fen, Variant variant) {
     return client.readJson(
       Uri.https(kLichessTablebaseHost, _tablebasePath(variant), {'source': 'mobile', 'fen': fen}),

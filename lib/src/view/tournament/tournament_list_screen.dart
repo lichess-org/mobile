@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -15,12 +17,11 @@ import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-class TournamentListScreen extends ConsumerStatefulWidget {
-  const TournamentListScreen({super.key});
-
+class const TournamentListScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<void> buildRoute() {
     return buildScreenRoute(screen: const TournamentListScreen());
   }
@@ -29,7 +30,7 @@ class TournamentListScreen extends ConsumerStatefulWidget {
   ConsumerState<TournamentListScreen> createState() => _TournamentListScreenState();
 }
 
-enum _ViewMode {
+enum _ViewMode() {
   completed,
   ongoing,
   upcoming;
@@ -46,7 +47,8 @@ enum _ViewMode {
   }
 }
 
-class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
+class _TournamentListScreenState()
+    extends ConsumerState<TournamentListScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
@@ -79,22 +81,19 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         ref.invalidate(tournamentsProvider);
       },
       child: PlatformScaffold(
+        plainList: true,
         appBar: PlatformAppBar(
           title: Text(context.l10n.arenaArenaTournaments),
           actions: [
             IconButton(
               icon: const Icon(Icons.help_outline),
               tooltip: context.l10n.tournamentFAQ,
-              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
+              onPressed: () => showTournamentFaqSheet(context),
             ),
           ],
-          bottom: TabBar(
+          bottom: PlatformTabBar(
             controller: _tabController,
-            tabs: <Widget>[
-              Tab(text: _ViewMode.completed.l10n(context)),
-              Tab(text: _ViewMode.ongoing.l10n(context)),
-              Tab(text: _ViewMode.upcoming.l10n(context)),
-            ],
+            tabs: [for (final mode in _ViewMode.values) mode.l10n(context)],
           ),
         ),
         body: switch (tournamentAsync) {
@@ -114,11 +113,10 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
   }
 }
 
-class FeaturedTournamentsWidget extends ConsumerWidget {
-  const FeaturedTournamentsWidget({required this.featured, super.key});
-
-  final AsyncValue<IList<LightTournament>> featured;
-
+class const FeaturedTournamentsWidget({
+  required final AsyncValue<IList<LightTournament>> featured,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (featured) {
@@ -155,18 +153,15 @@ class FeaturedTournamentsWidget extends ConsumerWidget {
   }
 }
 
-class _TournamentListBody extends ConsumerStatefulWidget {
-  const _TournamentListBody({required this.tournaments, required this.viewMode});
-
-  final IList<LightTournament> tournaments;
-
-  final _ViewMode viewMode;
-
+class const _TournamentListBody({
+  required final IList<LightTournament> tournaments,
+  required final _ViewMode viewMode,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_TournamentListBody> createState() => _TournamentListBodyState();
 }
 
-class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
+class _TournamentListBodyState() extends ConsumerState<_TournamentListBody> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
@@ -224,11 +219,8 @@ class _TournamentListBodyState extends ConsumerState<_TournamentListBody> {
     ];
 
     return HapticRefreshIndicator(
-      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-          ? MediaQuery.paddingOf(context).top + kToolbarHeight
-          : 0.0,
       key: _refreshIndicatorKey,
-      onRefresh: () async => ref.refresh(tournamentsProvider),
+      onRefresh: () async => await ref.refresh(tournamentsProvider),
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: tournamentListItems.length,
@@ -252,12 +244,9 @@ Color? _iconColor(LightTournament tournament) {
         };
 }
 
-class _TournamentListItem extends StatelessWidget {
-  const _TournamentListItem({required this.tournament});
-
-  final LightTournament tournament;
-
-  static final _hourMinuteFormat = DateFormat.Hm();
+class const _TournamentListItem({required final LightTournament tournament})
+    extends StatelessWidget {
+  static DateFormat get _hourMinuteFormat => DateFormat.Hm();
 
   @override
   Widget build(BuildContext context) {
@@ -289,10 +278,8 @@ class _TournamentListItem extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () => Navigator.of(
-        context,
-        rootNavigator: true,
-      ).push(TournamentScreen.buildRoute(tournament.id)),
+      onTap: () =>
+          Navigator.of(context).pushHidingTabBar(TournamentScreen.buildRoute(tournament.id)),
     );
   }
 }

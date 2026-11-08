@@ -8,28 +8,33 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
 import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
 import 'package:lichess_mobile/src/view/study/study_bottom_bar.dart';
+import 'package:lichess_mobile/src/view/study/study_chapters_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_gamebook.dart';
 import 'package:lichess_mobile/src/view/study/study_tree_view.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:logging/logging.dart';
@@ -38,119 +43,244 @@ import 'package:share_plus/share_plus.dart';
 
 final _logger = Logger('StudyScreen');
 
-class StudyScreen extends StatelessWidget {
-  const StudyScreen({required this.options, super.key});
-
-  final StudyOptions options;
-
+/// The scaffold is the same while the study is loading and once it is loaded: the iOS 26 pinned bar
+/// buttons of the route are lost if its scaffold is replaced.
+class const StudyScreen({required final StudyOptions options, super.key})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudyScreen(options: options));
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _StudyScreenLoader(options: options);
-  }
+  ConsumerState<StudyScreen> createState() => _StudyScreenState();
 }
 
-class _StudyScreenLoader extends ConsumerWidget {
-  const _StudyScreenLoader({required this.options});
-
-  final StudyOptions options;
-
+class _StudyScreenState() extends ConsumerState<StudyScreen> {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final studyPrefs = ref.watch(studyPreferencesProvider);
-    switch (ref.watch(studyControllerProvider(options))) {
-      case AsyncData(:final value):
-        return _StudyScreen(options: options, studyState: value);
-      case AsyncError(:final error, :final stackTrace):
-        _logger.severe('Cannot load study:', error, stackTrace);
-        return Scaffold(
-          appBar: AppBar(title: const Text('')),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
-                ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: Text('Failed to load study.'))],
-            ),
+  Widget build(BuildContext context) {
+    final asyncState = ref.watch(studyControllerProvider(widget.options));
+    final studyState = switch (asyncState) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+    if (asyncState case AsyncError(:final error, :final stackTrace)) {
+      _logger.severe('Cannot load study:', error, stackTrace);
+    }
+    final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
+
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
+        centerTitle: false,
+        compactButtons: true,
+        title: switch (asyncState) {
+          AsyncData(value: final studyState) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (studyState.variant != Variant.standard &&
+                  studyState.variant != Variant.fromPosition) ...[
+                Icon(studyState.variant.icon),
+                const SizedBox(width: 5.0),
+              ],
+              Flexible(child: AppBarTitleText(studyState.currentChapterTitle, maxLines: 2)),
+            ],
           ),
-        );
-      case _:
-        return Scaffold(
-          appBar: AppBar(
-            title: Shimmer(
-              child: ShimmerLoading(
-                isLoading: true,
-                child: SizedBox(
-                  height: 24.0,
-                  width: 200.0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+          AsyncError() => null,
+          _ => Shimmer(
+            child: ShimmerLoading(
+              isLoading: true,
+              child: SizedBox(
+                height: 24.0,
+                width: 200.0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
             ),
           ),
-          body: DefaultTabController(
-            length: 1,
-            child: AnalysisLayout(
-              pov: Side.white,
-              sideToMove: null,
-              boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
-                size: boardSize,
-                settings: StaticChessboardSettings.fromBoardSettings(
-                  boardPrefs
-                      .toBoardSettings(Variant.standard)
-                      .copyWith(
-                        borderRadius: borderRadius,
-                        boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
-                      ),
-                ),
-                orientation: Side.white,
-                fen: kEmptyFEN,
-              ),
-              smallBoard: studyPrefs.smallBoard,
-              children: const [Center(child: CircularProgressIndicator.adaptive())],
+        },
+        actions: [
+          if (studyState != null) ...[
+            SemanticIconButton(
+              semanticsLabel: context.l10n.studyNbChapters(studyState.study.chapters.length),
+              icon: const Icon(Icons.menu_book),
+              onPressed: () => showStudyChaptersSheet(context, widget.options),
             ),
+            ContextMenuIconButton(
+              semanticsLabel: 'Study menu',
+              icon: const Icon(Icons.more_horiz),
+              actions: [
+                if (isLoggedIn)
+                  ContextMenuAction(
+                    icon: studyState.study.liked ? Icons.favorite : Icons.favorite_border,
+                    label: studyState.study.liked ? 'Stop liking' : context.l10n.studyLike,
+                    onPressed: () {
+                      ref.read(studyControllerProvider(widget.options).notifier).toggleLike();
+                    },
+                  ),
+                ContextMenuAction(
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? Icons.ios_share
+                      : Icons.share,
+                  label: context.l10n.mobileShare,
+                  onPressed: null,
+                  submenu: _shareMenuActions(studyState),
+                ),
+              ],
+            ),
+          ],
+        ],
+      ),
+      body: switch (asyncState) {
+        AsyncData(value: final studyState) => _TabbedBody(
+          options: widget.options,
+          studyState: studyState,
+        ),
+        AsyncError() => const _PlaceholderBody(child: Text('Failed to load study.')),
+        _ => const _PlaceholderBody(child: CircularProgressIndicator.adaptive()),
+      },
+    );
+  }
+
+  List<ContextMenuAction> _shareMenuActions(StudyState state) {
+    return [
+      ContextMenuAction(
+        label: context.l10n.studyStudyUrl,
+        onPressed: () {
+          launchShareDialog(context, ShareParams(uri: lichessUri('/study/${state.study.id}')));
+        },
+      ),
+      ContextMenuAction(
+        label: context.l10n.studyCurrentChapterUrl,
+        onPressed: () {
+          launchShareDialog(
+            context,
+            ShareParams(uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}')),
+          );
+        },
+      ),
+      if (!state.gamebookActive) ...[
+        ContextMenuAction(
+          label: context.l10n.studyStudyPgn,
+          onPressed: () async {
+            try {
+              final pgn = await ref.read(studyRepositoryProvider).getStudyPgn(state.study.id);
+              if (mounted) {
+                launchShareDialog(context, ShareParams(text: pgn));
+              }
+            } catch (e) {
+              if (mounted) {
+                showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
+              }
+            }
+          },
+        ),
+        ContextMenuAction(
+          label: context.l10n.studyChapterPgn,
+          onPressed: () {
+            launchShareDialog(context, ShareParams(text: state.pgn));
+          },
+        ),
+        if (state.currentPosition != null)
+          ContextMenuAction(
+            label: context.l10n.positionAsImage,
+            onPressed: () async {
+              try {
+                final image = await ref
+                    .read(gameShareServiceProvider)
+                    .screenshotPosition(state.pov, state.currentPosition!.fen, state.lastMove);
+                if (mounted) {
+                  launchShareDialog(
+                    context,
+                    ShareParams(
+                      files: [image],
+                      subject: context.l10n.puzzleFromGameLink(
+                        lichessUri('/study/${state.study.id}').toString(),
+                      ),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+                }
+              }
+            },
           ),
-        );
-    }
+        ContextMenuAction(
+          label: 'GIF',
+          onPressed: () async {
+            try {
+              final gif = await ref
+                  .read(gameShareServiceProvider)
+                  .chapterGif(state.study.id, state.study.chapter.id);
+              if (mounted) {
+                launchShareDialog(
+                  context,
+                  ShareParams(
+                    files: [gif],
+                    subject: context.l10n.studyChapterX(state.study.currentChapterMeta.name),
+                  ),
+                );
+              }
+            } catch (e) {
+              debugPrint(e.toString());
+              if (mounted) {
+                showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
+              }
+            }
+          },
+        ),
+      ],
+    ];
   }
 }
 
-class _StudyScreen extends ConsumerStatefulWidget {
-  const _StudyScreen({required this.options, required this.studyState});
-
-  final StudyOptions options;
-  final StudyState studyState;
-
+/// An empty board, while the study is loading or when it could not be loaded.
+class const _PlaceholderBody({required final Widget child}) extends ConsumerWidget {
   @override
-  ConsumerState<_StudyScreen> createState() => _StudyScreenState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    return DefaultTabController(
+      length: 1,
+      child: AnalysisLayout(
+        pov: Side.white,
+        sideToMove: null,
+        boardBuilder: (context, boardSize, borderRadius) => StaticChessboard(
+          size: boardSize,
+          settings: StaticChessboardSettings.fromBoardSettings(
+            boardPrefs
+                .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
+                .copyWith(
+                  borderRadius: borderRadius,
+                  boxShadow: borderRadius != null ? boardShadows : const <BoxShadow>[],
+                ),
+          ),
+          orientation: Side.white,
+          fen: kEmptyFEN,
+        ),
+        smallBoard: isSmallBoardByDefault(context),
+        children: [Center(child: child)],
+      ),
+    );
+  }
 }
 
-class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderStateMixin {
+class const _TabbedBody({required final StudyOptions options, required final StudyState studyState})
+    extends StatefulWidget {
+  @override
+  State<_TabbedBody> createState() => _TabbedBodyState();
+}
+
+class _TabbedBodyState() extends State<_TabbedBody> with TickerProviderStateMixin {
   late List<AnalysisTab> tabs;
   late TabController _tabController;
+
+  /// Whether the board is small, once switched with the bottom bar button; not persisted.
+  bool? _smallBoard;
 
   void _initTabs() {
     tabs = [
@@ -174,7 +304,7 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
   }
 
   @override
-  void didUpdateWidget(covariant _StudyScreen oldWidget) {
+  void didUpdateWidget(covariant _TabbedBody oldWidget) {
     if (oldWidget.studyState.currentChapter.id != widget.studyState.currentChapter.id) {
       _tabController.dispose();
       _initTabs();
@@ -191,170 +321,19 @@ class _StudyScreenState extends ConsumerState<_StudyScreen> with TickerProviderS
 
   @override
   Widget build(BuildContext context) {
-    final variant = widget.studyState.variant;
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (variant != Variant.standard && variant != Variant.fromPosition) ...[
-              Icon(variant.icon),
-              const SizedBox(width: 5.0),
-            ],
-            Flexible(child: AppBarTitleText(widget.studyState.currentChapterTitle)),
-          ],
-        ),
-        actions: [_StudyMenu(options: widget.options)],
-      ),
-      body: _Body(options: widget.options, tabController: _tabController, tabs: tabs),
+    final smallBoard = _smallBoard ?? isSmallBoardByDefault(context);
+    return _Body(
+      options: widget.options,
+      tabController: _tabController,
+      tabs: tabs,
+      smallBoard: smallBoard,
+      onToggleSmallBoard: () => setState(() => _smallBoard = !smallBoard),
     );
   }
 }
 
-class _StudyMenu extends ConsumerWidget {
-  const _StudyMenu({required this.options});
-
-  final StudyOptions options;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
-    final state = ref.watch(studyControllerProvider(options)).requireValue;
-
-    return ContextMenuIconButton(
-      semanticsLabel: 'Study menu',
-      icon: const Icon(Icons.more_horiz),
-      actions: [
-        if (authUser != null)
-          ContextMenuAction(
-            icon: state.study.liked ? Icons.favorite : Icons.favorite_border,
-            label: state.study.liked ? 'Stop liking' : context.l10n.studyLike,
-            onPressed: () {
-              ref.read(studyControllerProvider(options).notifier).toggleLike();
-            },
-          ),
-        ContextMenuAction(
-          icon: Theme.of(context).platform == TargetPlatform.iOS ? Icons.ios_share : Icons.share,
-          label: context.l10n.studyShareAndExport,
-          onPressed: () {
-            showAdaptiveActionSheet<void>(
-              context: context,
-              actions: [
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyStudyUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      context,
-                      ShareParams(uri: lichessUri('/study/${state.study.id}')),
-                    );
-                  },
-                ),
-                BottomSheetAction(
-                  makeLabel: (context) => Text(context.l10n.studyCurrentChapterUrl),
-                  onPressed: () {
-                    launchShareDialog(
-                      context,
-                      ShareParams(
-                        uri: lichessUri('/study/${state.study.id}/${state.study.chapter.id}'),
-                      ),
-                    );
-                  },
-                ),
-                if (!state.gamebookActive) ...[
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyStudyPgn),
-                    onPressed: () async {
-                      try {
-                        final pgn = await ref
-                            .read(studyRepositoryProvider)
-                            .getStudyPgn(state.study.id);
-                        if (context.mounted) {
-                          launchShareDialog(context, ShareParams(text: pgn));
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get PGN', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                  BottomSheetAction(
-                    makeLabel: (context) => Text(context.l10n.studyChapterPgn),
-                    onPressed: () {
-                      launchShareDialog(context, ShareParams(text: state.pgn));
-                    },
-                  ),
-                  if (state.currentPosition != null)
-                    BottomSheetAction(
-                      makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
-                      onPressed: () async {
-                        try {
-                          final image = await ref
-                              .read(gameShareServiceProvider)
-                              .screenshotPosition(
-                                state.pov,
-                                state.currentPosition!.fen,
-                                state.lastMove,
-                              );
-                          if (context.mounted) {
-                            launchShareDialog(
-                              context,
-                              ShareParams(
-                                files: [image],
-                                subject: context.l10n.puzzleFromGameLink(
-                                  lichessUri('/study/${state.study.id}').toString(),
-                                ),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                          }
-                        }
-                      },
-                    ),
-                  BottomSheetAction(
-                    makeLabel: (context) => const Text('GIF'),
-                    onPressed: () async {
-                      try {
-                        final gif = await ref
-                            .read(gameShareServiceProvider)
-                            .chapterGif(state.study.id, state.study.chapter.id);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            ShareParams(
-                              files: [gif],
-                              subject: context.l10n.studyChapterX(
-                                state.study.currentChapterMeta.name,
-                              ),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        if (context.mounted) {
-                          showSnackBar(context, 'Failed to get GIF', type: SnackBarType.error);
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ],
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class _CannotRequestServerAnalysisReason extends StatelessWidget {
-  const _CannotRequestServerAnalysisReason({required this.reason});
-
-  final String reason;
-
+class const _CannotRequestServerAnalysisReason({required final String reason})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -363,13 +342,13 @@ class _CannotRequestServerAnalysisReason extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.options, required this.tabController, required this.tabs});
-
-  final StudyOptions options;
-  final TabController tabController;
-  final List<AnalysisTab> tabs;
-
+class const _Body({
+  required final StudyOptions options,
+  required final TabController tabController,
+  required final List<AnalysisTab> tabs,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;
@@ -388,7 +367,7 @@ class _Body extends ConsumerWidget {
               child: Text(context.l10n.mobileUnsupportedVariant(variant.label(context.l10n))),
             ),
           ),
-          smallBoard: studyPrefs.smallBoard,
+          smallBoard: smallBoard,
           children: const [SizedBox.shrink()],
         ),
       );
@@ -407,13 +386,26 @@ class _Body extends ConsumerWidget {
         ? StudyGamebook(options)
         : StudyTreeView(options, showTopDivider: tabs.length == 1);
 
+    final playerWidgets = playerWidgetsFromPgnHeaders(
+      pgnHeaders: studyState.pgnHeaders,
+      sideToMove: studyState.currentPosition?.turn ?? Side.white,
+      whiteClock: studyState.currentPosition?.turn == Side.white
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+      blackClock: studyState.currentPosition?.turn == Side.black
+          ? studyState.clocks?.parentClock
+          : studyState.clocks?.clock,
+    );
+
     return AnalysisLayout(
       tabController: tabController,
       pov: pov,
       sideToMove: studyState.currentPosition?.turn,
       boardBuilder: (context, boardSize, borderRadius) =>
           StudyAnalysisBoard(options: options, boardSize: boardSize, boardRadius: borderRadius),
-      smallBoard: studyPrefs.smallBoard,
+      smallBoard: smallBoard,
+      boardHeader: pov == Side.white ? playerWidgets.black : playerWidgets.white,
+      boardFooter: pov == Side.white ? playerWidgets.white : playerWidgets.black,
       engineGaugeBuilder:
           isComputerAnalysisAllowed && showEvaluationGauge && engineGaugeParams != null
           ? (context) {
@@ -426,12 +418,17 @@ class _Body extends ConsumerWidget {
               isLocalEvaluationEnabled &&
               numEvalLines > 0
           ? EngineLines(
-              filters: (id: studyState.evaluationContext.id, path: studyState.currentPath),
+              filters: (context: studyState.evaluationContext, path: studyState.currentPath),
               analysisState: studyState,
               onTapMove: ref.read(studyControllerProvider(options).notifier).onUserMove,
             )
           : null,
-      bottomBar: StudyBottomBar(options: options),
+      bottomBar: StudyBottomBar(
+        options: options,
+        smallBoard: smallBoard,
+        onToggleSmallBoard: onToggleSmallBoard,
+      ),
+      bottomBarOverContent: true,
       pockets: studyState.currentPosition?.pockets,
       tabs: tabs,
       children: tabs.map((tab) {
@@ -510,16 +507,16 @@ extension on PgnCommentShape {
   }
 }
 
-class StudyAnalysisBoard extends AnalysisBoard {
-  const StudyAnalysisBoard({required this.options, required super.boardSize, super.boardRadius});
-
-  final StudyOptions options;
-
+class const StudyAnalysisBoard({
+  required final StudyOptions options,
+  required super.boardSize,
+  super.boardRadius,
+}) extends AnalysisBoard {
   @override
   ConsumerState<StudyAnalysisBoard> createState() => _StudyAnalysisBoardState();
 }
 
-class _StudyAnalysisBoardState
+class _StudyAnalysisBoardState()
     extends AnalysisBoardState<StudyAnalysisBoard, StudyState, StudyPrefs> {
   @override
   StudyState? readCurrentState() => ref.read(studyControllerProvider(widget.options)).value;
@@ -551,7 +548,7 @@ class _StudyAnalysisBoardState
 
   @override
   EngineEvaluationFilters get engineEvaluationFilters =>
-      (id: analysisState.evaluationContext.id, path: analysisState.currentPath);
+      (context: analysisState.evaluationContext, path: analysisState.currentPath);
 
   @override
   String computeFen(StudyState state) =>

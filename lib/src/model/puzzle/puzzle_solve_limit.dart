@@ -19,7 +19,7 @@ typedef PuzzleSolveLimit = ({DateTime since, int solvedCount});
 ///
 /// Global, not per-angle: the solve rate limit is account-wide, so hitting it on
 /// one angle means every angle is limited.
-class PuzzleSolveLimiter extends Notifier<PuzzleSolveLimit?> {
+class PuzzleSolveLimiter() extends Notifier<PuzzleSolveLimit?> {
   @override
   PuzzleSolveLimit? build() => null;
 

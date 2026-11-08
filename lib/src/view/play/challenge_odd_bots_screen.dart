@@ -9,47 +9,36 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ChallengeOddBotsScreen extends StatelessWidget {
-  const ChallengeOddBotsScreen(this.bot);
-
-  final LightUser bot;
-
+class const ChallengeOddBotsScreen(final LightUser bot) extends StatelessWidget {
   static Route<dynamic> buildRoute(LightUser bot) {
     return buildScreenRoute(screen: ChallengeOddBotsScreen(bot));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.challengeChallengesX(bot.name))),
       body: _ChallengeBody(bot),
     );
   }
 }
 
-class _ChallengeBody extends ConsumerStatefulWidget {
-  const _ChallengeBody(this.bot);
-
-  final LightUser bot;
-
+class const _ChallengeBody(final LightUser bot) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_ChallengeBody> createState() => _ChallengeBodyState();
 }
 
-class _BotFen {
-  final String fen;
-  final Side side;
-
-  _BotFen({required this.fen, required this.side});
-}
+class _BotFen({required final String fen, required final Side side});
 
 final Map<String, List<_BotFen>> _botFens = {
   'leelaknightodds': [
@@ -103,7 +92,7 @@ final Map<String, List<_BotFen>> _botFens = {
 };
 final oddBots = _botFens.keys;
 
-class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
+class _ChallengeBodyState() extends ConsumerState<_ChallengeBody> {
   String? fen;
   SideChoice sideChoice = SideChoice.white;
   late int seconds;
@@ -269,7 +258,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             child: FilledButton(
               onPressed: fen != null
                   ? () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         GameScreen.buildRoute(
                           source: UserChallengeSource(
                             ChallengeRequest(

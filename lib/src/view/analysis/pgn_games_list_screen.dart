@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -21,11 +22,8 @@ typedef _GameData = ({
 });
 
 /// A screen that lists multiple games parsed from one PGN file, allowing the user to select one for analysis.
-class PgnGamesListScreen extends StatefulWidget {
-  const PgnGamesListScreen({required this.games, super.key});
-
-  final IList<PgnLazyGame> games;
-
+class const PgnGamesListScreen({required final IList<PgnLazyGame> games, super.key})
+    extends StatefulWidget {
   static Route<dynamic> buildRoute(IList<PgnLazyGame> games) {
     return buildScreenRoute(screen: PgnGamesListScreen(games: games));
   }
@@ -34,7 +32,7 @@ class PgnGamesListScreen extends StatefulWidget {
   State<PgnGamesListScreen> createState() => _PgnGamesListScreenState();
 }
 
-class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
+class _PgnGamesListScreenState() extends State<PgnGamesListScreen> {
   late final IList<_GameData> _gameData;
   String _searchQuery = '';
   late final TextEditingController _searchController;
@@ -90,6 +88,7 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
                   padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8)),
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     onChanged: (value) {
                       setState(() {
                         _searchQuery = value;
@@ -119,7 +118,7 @@ class _PgnGamesListScreenState extends State<PgnGamesListScreen> {
             subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
             onTap: () {
               final game = widget.games[filteredIndices[index]];
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pushHidingTabBar(
                 AnalysisScreen.buildRoute(
                   AnalysisOptions.pgn(
                     // TODO generate unique id for each game, maybe based on the PGN headers?

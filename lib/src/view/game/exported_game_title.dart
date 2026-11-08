@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -15,29 +17,26 @@ import 'package:material_ui/material_ui.dart';
 /// Shows the game's speed/variant icon, the time control and rated/casual mode,
 /// and optionally the date of the last move. Used both by the game screen and
 /// the analysis screen so their app bar titles stay consistent.
-class ExportedGameTitle extends StatelessWidget {
-  const ExportedGameTitle({
-    required this.meta,
-    this.lastMoveAt,
-    this.isImport = false,
-    this.importDate,
-    super.key,
-  });
-
-  final GameMeta meta;
+class const ExportedGameTitle({
+  required final GameMeta meta,
 
   /// The date of the last move played in the game. When set, the title shows the
   /// relative date and a tooltip with the full date.
-  final DateTime? lastMoveAt;
+  final DateTime? lastMoveAt,
 
   /// Whether the game was imported on lichess, and thus not played on the site.
-  final bool isImport;
+  final bool isImport = false,
 
   /// The raw PGN date of an imported game, shown in place of [lastMoveAt], which is the date of
   /// the import itself.
-  final String? importDate;
+  final String? importDate,
 
-  static final _tooltipFormatter = DateFormat.yMMMMd().add_jm();
+  /// Whether the game was played in a tournament, for a game whose [meta] has no
+  /// [GameMeta.tournament] (an archived game).
+  final bool isTournament = false,
+  super.key,
+}) extends StatelessWidget {
+  static DateFormat get _tooltipFormatter => DateFormat.yMMMMd().add_jm();
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,11 @@ class ExportedGameTitle extends StatelessWidget {
       mainAxisSize: .min,
       children: [
         Icon(
-          isImport ? Icons.cloud_upload_outlined : meta.perf.icon,
+          isImport
+              ? Icons.cloud_upload_outlined
+              : isTournament || meta.tournament != null
+              ? LichessIcons.tournament_cup
+              : meta.perf.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 8.0),
@@ -105,9 +108,7 @@ class ExportedGameTitle extends StatelessWidget {
 
 /// Shimmer placeholder shown in the app bar while the game data backing a
 /// [ExportedGameTitle] is still loading.
-class ExportedGameTitleLoading extends StatelessWidget {
-  const ExportedGameTitleLoading({super.key});
-
+class const ExportedGameTitleLoading({super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer(
@@ -128,11 +129,7 @@ class ExportedGameTitleLoading extends StatelessWidget {
   }
 }
 
-class _TournamentGameTitle extends StatelessWidget {
-  const _TournamentGameTitle(this.tournament);
-
-  final TournamentMeta tournament;
-
+class const _TournamentGameTitle(final TournamentMeta tournament) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

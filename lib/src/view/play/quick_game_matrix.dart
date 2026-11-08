@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -10,18 +9,19 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/playban.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _kMatrixSpacing = 8.0;
 
-class QuickGameMatrix extends ConsumerWidget {
-  const QuickGameMatrix({super.key});
-
+class const QuickGameMatrix({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playban = ref.watch(accountProvider).value?.playban;
@@ -85,12 +85,10 @@ class QuickGameMatrix extends ConsumerWidget {
   }
 }
 
-class _SectionChoices extends ConsumerWidget {
-  const _SectionChoices({required this.choices, this.showCustom = false});
-
-  final List<TimeIncrement> choices;
-  final bool showCustom;
-
+class const _SectionChoices({
+  required final List<TimeIncrement> choices,
+  final bool showCustom = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -112,7 +110,7 @@ class _SectionChoices extends ConsumerWidget {
                 speed: choice.speed,
                 onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
-                        Navigator.of(context, rootNavigator: true).push(
+                        Navigator.of(context).pushHidingTabBar(
                           GameScreen.buildRoute(
                             source: LobbySource(GameSeek.fastPairing(choice, authUser)),
                           ),
@@ -139,13 +137,11 @@ class _SectionChoices extends ConsumerWidget {
                 title: Text(context.l10n.custom, textAlign: TextAlign.center),
                 onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
-                        showModalBottomSheet<void>(
+                        showAdaptiveBottomSheet<void>(
                           context: context,
                           useRootNavigator: true,
                           isScrollControlled: true,
-                          builder: (context) {
-                            return const PlayBottomSheet();
-                          },
+                          builder: (_) => PlayBottomSheet(navigator: Navigator.of(context)),
                         );
                       }
                     : null,
@@ -158,20 +154,13 @@ class _SectionChoices extends ConsumerWidget {
   }
 }
 
-class _ChoiceChip extends StatelessWidget {
-  const _ChoiceChip({
-    required this.title,
-    this.subtitle,
-    this.speed,
-    required this.onTap,
-    super.key,
-  });
-
-  final Widget title;
-  final Widget? subtitle;
-  final Speed? speed;
-  final void Function()? onTap;
-
+class const _ChoiceChip({
+  required final Widget title,
+  final Widget? subtitle,
+  final Speed? speed,
+  required final void Function()? onTap,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _kBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
@@ -181,7 +170,9 @@ class _ChoiceChip extends StatelessWidget {
         ? scaffoldOpacity > 0
               ? Colors.white10
               : ColorScheme.of(context).surfaceContainerLow
-        : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
+        // Translucent, so that the logo behind the tiles shows through.
+        : Theme.of(context).cardTheme.color?.withValues(alpha: 0.65) ??
+              ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.65);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,
@@ -200,7 +191,7 @@ class _ChoiceChip extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [title, if (subtitle != null) subtitle!],
+                children: [title, ?subtitle],
               ),
             ),
           ),
@@ -227,7 +218,7 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
               disabledControls.length +
               (customEnabled ? 1 : 0);
 
-          return AlertDialog.adaptive(
+          return PlatformAlertDialog(
             title: Text(context.l10n.quickPairing),
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
@@ -279,44 +270,25 @@ Future<void> showTimeControlPicker(BuildContext context, WidgetRef ref) {
                 ],
               ),
             ),
-            actions: Theme.of(context).platform == TargetPlatform.iOS
-                ? [
-                    CupertinoDialogAction(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(context.l10n.cancel),
-                    ),
-                    CupertinoDialogAction(
-                      isDefaultAction: true,
-                      onPressed: () {
-                        ref
-                            .read(homePreferencesProvider.notifier)
-                            .setTimeControlConfig(
-                              disabledTimeControls: IList(disabledControls),
-                              customButtonEnabled: customEnabled,
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(context.l10n.mobileOkButton),
-                    ),
-                  ]
-                : [
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(context.l10n.cancel),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref
-                            .read(homePreferencesProvider.notifier)
-                            .setTimeControlConfig(
-                              disabledTimeControls: IList(disabledControls),
-                              customButtonEnabled: customEnabled,
-                            );
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(context.l10n.mobileOkButton),
-                    ),
-                  ],
+            actions: [
+              PlatformDialogAction(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(context.l10n.cancel),
+              ),
+              PlatformDialogAction(
+                cupertinoIsDefaultAction: true,
+                onPressed: () {
+                  ref
+                      .read(homePreferencesProvider.notifier)
+                      .setTimeControlConfig(
+                        disabledTimeControls: IList(disabledControls),
+                        customButtonEnabled: customEnabled,
+                      );
+                  Navigator.of(context).pop();
+                },
+                child: Text(context.l10n.mobileOkButton),
+              ),
+            ],
           );
         },
       );

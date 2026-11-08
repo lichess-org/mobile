@@ -9,17 +9,13 @@ part 'tv_game.freezed.dart';
 
 @freezed
 sealed class TvGame with _$TvGame {
-  const factory TvGame({
-    required GameId id,
-    required LightUser user,
-    required int? rating,
-    Side? side,
-  }) = _TvGame;
+  const factory({required GameId id, required LightUser user, required int? rating, Side? side}) =
+      _TvGame;
 }
 
 @freezed
 sealed class TvGameSnapshot with _$TvGameSnapshot {
-  const factory TvGameSnapshot({
+  const factory({
     required TvChannel channel,
     required GameId id,
     required Side orientation,

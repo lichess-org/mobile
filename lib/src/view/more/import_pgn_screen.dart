@@ -9,11 +9,13 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
@@ -21,9 +23,7 @@ final pickPgnFileProvider = Provider<Future<PlatformFile?> Function()>((ref) {
   return () => FilePicker.pickFile(type: .custom, allowedExtensions: ['pgn']);
 });
 
-class ImportPgnScreen extends StatelessWidget {
-  const ImportPgnScreen({super.key});
-
+class const ImportPgnScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const ImportPgnScreen());
   }
@@ -41,7 +41,7 @@ class ImportPgnScreen extends StatelessWidget {
         final game = games.first;
         final rule = Rule.fromPgn(game.headers['Variant']);
 
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context).pushHidingTabBar(
           AnalysisScreen.buildRoute(
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
@@ -54,7 +54,7 @@ class ImportPgnScreen extends StatelessWidget {
           ),
         );
       } else {
-        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
+        Navigator.of(context).pushHidingTabBar(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -63,21 +63,19 @@ class ImportPgnScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.importPgn)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.importPgn)),
       body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
-  const _Body();
-
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -131,9 +129,9 @@ class _BodyState extends ConsumerState<_Body> {
       final file = await ref.read(pickPgnFileProvider)();
 
       if (file != null) {
-        final content = await const Utf8Decoder(
-          allowMalformed: true,
-        ).bind(file.readAsByteStream()).join();
+        final content = await const Utf8Decoder(allowMalformed: true)
+            .bind(file.readAsByteStream())
+            .join();
         if (mounted) {
           ImportPgnScreen.handlePgnText(context, content);
         }

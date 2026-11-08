@@ -2,19 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// A wrapper widget over RefreshIndicator to provide haptic feedback on iOS
-class HapticRefreshIndicator extends StatelessWidget {
-  final Widget child;
-  final double edgeOffset;
-  final RefreshCallback onRefresh;
-
-  const HapticRefreshIndicator({
-    super.key,
-    required this.child,
-    this.edgeOffset = 0.0,
-    required this.onRefresh,
-  });
-
+/// A wrapper widget over RefreshIndicator to provide haptic feedback on iOS.
+///
+/// On iOS the indicator appears below the glass app bar: the body extends behind it, and its top
+/// padding, which the scroll view below applies too, includes the bar height.
+class const HapticRefreshIndicator({
+  super.key,
+  required final Widget child,
+  required final RefreshCallback onRefresh,
+}) extends StatelessWidget {
   Future<void> _onRefreshWithHaptics() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       HapticFeedback.lightImpact();
@@ -26,7 +22,9 @@ class HapticRefreshIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
-      edgeOffset: edgeOffset,
+      edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
+          ? MediaQuery.paddingOf(context).top
+          : 0.0,
       onRefresh: _onRefreshWithHaptics,
       child: child,
     );

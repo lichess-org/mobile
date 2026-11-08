@@ -16,7 +16,7 @@ part 'correspondence_seek.freezed.dart';
 /// This is what the server returns from `/lobby/seeks`.
 @freezed
 sealed class CorrespondenceSeek with _$CorrespondenceSeek {
-  const factory CorrespondenceSeek({
+  const factory({
     required GameId id,
     required String username,
     String? title,
@@ -29,7 +29,7 @@ sealed class CorrespondenceSeek with _$CorrespondenceSeek {
     bool? provisional,
   }) = _CorrespondenceSeek;
 
-  factory CorrespondenceSeek.fromServerJson(Map<String, dynamic> json) =>
+  factory fromServerJson(Map<String, dynamic> json) =>
       _correspondenceSeekFromPick(pick(json).required());
 }
 

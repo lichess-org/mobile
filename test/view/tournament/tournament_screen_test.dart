@@ -4,7 +4,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
@@ -12,13 +14,17 @@ import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../model/game/game_socket_example_data.dart';
+import '../../network/fake_http_client_factory.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -87,6 +93,7 @@ String makeTournamentJson({
   required int nbPlayers,
   String? verdictsJson,
   TournamentMe? me,
+  bool isStarted = true,
   bool isPrivate = false,
   String featuredGameJson = '',
 }) {
@@ -113,8 +120,8 @@ String makeTournamentJson({
   "nbPlayers": $nbPlayers,
   ${meToJson(me)}
   "duels": [ ],
-  "secondsToFinish": 2744,
-  "isStarted": true,
+  "${isStarted ? 'secondsToFinish' : 'secondsToStart'}": 2744,
+  "isStarted": $isStarted,
   $featuredGameJson
   "standing": {
     "page": 1,
@@ -547,6 +554,50 @@ void main() {
       expect(find.text('11-12 / 12'), findsOneWidget);
     });
 
+    for (final isStarted in [false, true]) {
+      testWidgets('${isStarted ? 'Shows' : 'Hides'} pairing status for a joined '
+          '${isStarted ? 'started' : 'scheduled'} tournament', (WidgetTester tester) async {
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(
+                standings: makeTestPlayers(10),
+                nbPlayers: 11,
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                isStarted: isStarted,
+              ),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        const name = 'tom-anders';
+        final authUser = AuthUser(
+          user: LightUser(id: UserId.fromUserName(name), name: name),
+          token: 'test-token',
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+          authUser: authUser,
+          overrides: {
+            lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+              return LichessClient(mockClient, ref);
+            }),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pump();
+
+        expect(
+          find.text('Stand by $name, pairing players, get ready!'),
+          isStarted ? findsOneWidget : findsNothing,
+        );
+      });
+    }
+
     testWidgets('Cannot join tournament if not logged in', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
         if (request.url.path == '/api/tournament/82QbxlJb') {
@@ -734,9 +785,8 @@ void main() {
         // Wait for tournament data to load and the socket to open.
         await tester.pump();
 
-        final socketPool = ProviderScope.containerOf(
-          tester.element(find.byType(TournamentScreen)),
-        ).read(socketPoolProvider);
+        final socketPool = ProviderScope.containerOf(tester.element(find.byType(TournamentScreen)))
+            .read(socketPoolProvider);
 
         // The tournament socket is the active one.
         expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
@@ -759,18 +809,118 @@ void main() {
         // Push the SAME tournament again on top of the game. The provider is kept
         // alive by the first screen, so `build` doesn't re-run: the socket must be
         // reopened by the newly focused screen.
-        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        final tournamentRoute = TournamentScreen.buildRoute(tournamentId);
+        navigator.push(tournamentRoute);
         await tester.pump(); // start the route transition
-        // Complete the push transition so the new screen becomes fully visible
-        // and its `FocusDetector` reports a focus gain -> onFocusGained.
-        await tester.pump(const Duration(milliseconds: 400));
-        await tester.pump(); // onFocusGained -> invalidateSelf
+        await tester.pump((tournamentRoute as PageRoute).transitionDuration);
+        // The new screen's `didPush` asks the controller to reopen the socket after the first frame
+        // -> onFocusGained -> invalidateSelf.
+        await tester.pump(const Duration(milliseconds: 1));
         await tester.pump(); // rebuild: getTournament resolves -> socket reopens
         await tester.pump(kFakeWebSocketConnectionLag);
 
         expect(find.byType(TournamentScreen), findsWidgets);
         // The tournament socket must be reconnected.
         expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+      },
+    );
+
+    testWidgets(
+      'Keeps the game socket when a pairing arrives while the chat is open',
+      variant: kPlatformVariant,
+      (WidgetTester tester) async {
+        const tournamentId = TournamentId('82QbxlJb');
+        const gameId = GameFullId('1234567890ab');
+
+        final mockClient = MockClient((request) {
+          if (request.url.path == '/api/tournament/82QbxlJb') {
+            return mockResponse(
+              makeTournamentJson(
+                me: (gameId: null, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(10),
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          }
+          if (request.url.path == '/https%253A//http.lichess.org/tournament/82QbxlJb' &&
+              request.url.queryParameters['partial'] == 'true') {
+            return mockResponse(
+              makeReloadedTournamentJson(
+                me: (gameId: gameId, pauseDelay: null, rank: 11, withdraw: null),
+                standings: makeTestPlayers(10),
+                page: 1,
+                nbPlayers: 12,
+              ),
+              200,
+            );
+          }
+          return mockResponse('', 404);
+        });
+
+        final app = await makeTestProviderScope(
+          tester,
+          child: const Application(),
+          authUser: fakeAuthUser,
+          overrides: {
+            httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+              (ref) => FakeHttpClientFactory(() => mockClient),
+            ),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        // In the app, visibility changes are delivered by one 500ms timer shared by all the
+        // detectors, so they can land at any moment of a transition: each `notifyNow` below stands
+        // for that timer firing.
+        VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 500);
+
+        // The root navigator, where services open a tournament.
+        final navigator = tester.state<NavigatorState>(find.byType(Navigator).first);
+        navigator.push(TournamentScreen.buildRoute(tournamentId));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+
+        final socketPool = ProviderScope.containerOf(tester.element(find.byType(TournamentScreen)))
+            .read(socketPoolProvider);
+
+        navigator.push(
+          ChatScreen.buildRoute(
+            options: const TournamentChatOptions(id: tournamentId, writeable: true),
+          ),
+        );
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+        expect(find.byType(ChatScreen), findsOneWidget);
+
+        // The pairing pops the chat and pushes the game screen.
+        sendServerSocketMessages(TournamentController.socketUri(tournamentId), ['{"t": "reload"}']);
+        for (var i = 0; i < 12; i++) {
+          await tester.pump(const Duration(milliseconds: 8));
+        }
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Visibility is delivered ~100ms into the game screen transition.
+        VisibilityDetectorController.instance.notifyNow();
+        await tester.pump(const Duration(seconds: 1));
+        expect(socketPool.currentClient.route, GameController.socketUri(gameId));
+
+        // Back from the game, the tournament socket is needed for the next pairing.
+        VisibilityDetectorController.instance.notifyNow();
+        navigator.pop();
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        VisibilityDetectorController.instance.notifyNow();
+        await tester.pump();
+        await tester.pump(kFakeWebSocketConnectionLag);
+        expect(socketPool.currentClient.route, TournamentController.socketUri(tournamentId));
+
+        // No visibility timer can be left pending at the end of the test.
+        VisibilityDetectorController.instance.notifyNow();
+        VisibilityDetectorController.instance.updateInterval = Duration.zero;
       },
     );
   });
@@ -1160,6 +1310,9 @@ void main() {
             }
             ''', 200);
         }
+        if (request.url.path == '/tournament/testTeamBattle/player/player1') {
+          return mockResponse(testTournamentPlayerResponse, 200);
+        }
         return mockResponse('', 404);
       });
 
@@ -1177,10 +1330,10 @@ void main() {
 
       // Tap on a team in the standings
       await tester.tap(find.text('Team one'));
-      // wait for the modal bottom sheet to appear
+      // Wait for the network request to complete, and the sheet to open: its content is shown
+      // once it is open.
       await tester.pump();
-      // wait for the network request to complete
-      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
 
       // Verify team details are shown
       expect(find.text('Average rating'), findsOneWidget);
@@ -1189,6 +1342,20 @@ void main() {
       expect(find.text('1921'), findsOneWidget);
       expect(find.text('Average score'), findsOneWidget);
       expect(find.text('23'), findsOneWidget);
+
+      // A player of the team opens in the same sheet.
+      await tester.tap(
+        find.descendant(of: find.byType(BottomSheet), matching: find.text('Player1')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsOneWidget);
+      expect(find.text('Average rating'), findsNothing);
+
+      // And goes back to the team, in the same sheet.
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      expect(find.text('Win rate'), findsNothing);
+      expect(find.text('Average rating'), findsOneWidget);
     });
 
     testWidgets('shows "View all teams" button and opens all teams screen', (

@@ -19,13 +19,11 @@ final gameRepositoryProvider = Provider<GameRepository>((ref) {
   return GameRepository(client, aggregator, gameStorage);
 }, name: 'GameRepositoryProvider');
 
-class GameRepository {
-  const GameRepository(this.client, this.aggregator, this.storage);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-  final Future<GameStorage> storage;
-
+class const GameRepository(
+  final LichessClient client,
+  final Aggregator aggregator,
+  final Future<GameStorage> storage,
+) {
   /// Fetches a game from lichess API, or from local storage if there is no connectivity.
   Future<ExportedGame> getGame(GameId id, {bool withBookmarked = false}) async {
     try {
@@ -54,7 +52,7 @@ class GameRepository {
   }
 
   Future<void> requestServerAnalysis(GameId id) async {
-    await client.postRead(Uri(path: '/$id/request-analysis'));
+    await client.postRead(Uri(path: '/game/$id/request-analysis'));
   }
 
   Future<IList<LightExportedGameWithPov>> getUserGames(
@@ -163,14 +161,16 @@ class GameRepository {
     Move? moveToPlay,
   }) async {
     final uri = Uri(
-      path: moveToPlay != null ? '$gameId/forecasts/${moveToPlay.uci}' : '$gameId/forecasts',
+      path: moveToPlay != null
+          ? '/game/$gameId/forecasts/${moveToPlay.uci}'
+          : '/game/$gameId/forecasts',
     );
     await client.postRead(uri, body: forecast, headers: {'Content-type': 'application/json'});
   }
 
   Future<PlayableGame> getActiveCorrespondenceGame(GameFullId id) {
     return client.readJson(
-      Uri(path: '/$id/forecasts'),
+      Uri(path: '/game/$id/forecasts'),
       headers: {'Accept': 'application/json'},
       mapper: PlayableGame.fromServerJson,
     );

@@ -11,7 +11,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// A board preview with a description.
 class SmallBoardPreview extends ConsumerWidget {
-  const SmallBoardPreview({
+  const new({
     required this.orientation,
     required this.fen,
     required this.description,
@@ -20,7 +20,7 @@ class SmallBoardPreview extends ConsumerWidget {
     this.onTap,
   }) : _showLoadingPlaceholder = false;
 
-  const SmallBoardPreview.loading({this.padding})
+  const new loading({this.padding})
     : orientation = Side.white,
       fen = kEmptyFEN,
       lastMove = null,
@@ -80,7 +80,8 @@ class SmallBoardPreview extends ConsumerWidget {
                       pieceAssets: boardPrefs.pieceSet.assets,
                       enable3dAssets: boardPrefs.enable3dAssets,
                       colorScheme: boardPrefs.boardTheme.colors,
-                      brightness: boardPrefs.brightness,
+                      brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
+                      contrast: boardPrefs.contrast,
                       hue: boardPrefs.hue,
                       enableCoordinates: false,
                       borderRadius: Styles.boardBorderRadius,

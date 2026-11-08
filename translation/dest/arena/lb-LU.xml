@@ -25,7 +25,6 @@ Den zousätzleche Punkt fir \"Berserk\" kriss du just wann du an der Partie op m
   <string name="howIsTheWinnerDecided">Wéi gëtt den Gewënner bestëmmt?</string>
   <string name="howIsTheWinnerDecidedAnswer">Den Spiller oder d\'Spiller mat den meeschten Punkten zum Schluss vum Turnéier ginn zum Gewënner ernannt.
 Wann zwee oder méi Spiller déi selwecht Punktzuel hunn ass d\'Turnéierperformance den Tiebreaker.</string>
-  <string name="howDoesPairingWork">Wéi funktionéieren d\'Puerungen?</string>
   <string name="howDoesPairingWorkAnswer">Um Ufank vum Turnéier ginn Spiller op Grondlag vun hiren Wäertungen zougedeelt.
 Soubaal deng Partie fäerdeg ass, kanns du zeréck an d\'Turnéieriwwersicht: du wäers dann engem Spiller ob engem ähnlechen Rang zougedeelt ginn. Doduerch gëtt eng minimal Waardezäit erreecht, mee et kann sinn dass du net géint jiddereen am Turnéier spills.
 Spill schnell an géih zeréck an d\'Turnéieriwwersicht fir méi Partien ze spillen an méi Punkten ze kréien.</string>
@@ -56,14 +55,14 @@ Spill schnell an géih zeréck an d\'Turnéieriwwersicht fir méi Partien ze spi
   <string name="allowChatHelp">Spiller am Chatraum diskutéieren loossen</string>
   <string name="arenaStreaks">Arena Serien</string>
   <string name="arenaStreaksHelp">No 2 Victoirë hannerteneen kriss du 4 Punkten statt 2.</string>
-  <string name="noBerserkAllowed">Keen Berserken erlaabt</string>
+  <string name="noBerserkAllowed">Kee Berserken erlaabt</string>
   <string name="noArenaStreaks">Keng Arena Serien</string>
   <string name="averagePerformance">Duerchschnëttlech Performance</string>
   <string name="averageScore">Duerchschnëttlech Punktzuel</string>
   <string name="myTournaments">Meng Turnéieren</string>
   <string name="editTournament">Turnéier änneren</string>
   <string name="editTeamBattle">Ekippekampf änneren</string>
-  <string name="defender">Verdeedeger</string>
+  <string name="defenderLabel" comment="In this context, this is the current holder of a shield trophy, who is defending their trophy in the next shield tournament of that variant. https://lichess.org/tournament/shields">Verdeedeger:</string>
   <string name="pickYourTeam">Wiel deng Ekipp</string>
   <string name="recentlyPlayed">Viru Kuerzem gespillt</string>
   <string name="bestResults">Bescht Resultater</string>

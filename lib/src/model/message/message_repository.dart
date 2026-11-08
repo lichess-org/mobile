@@ -30,12 +30,7 @@ final unreadMessagesProvider = FutureProvider.autoDispose<UnreadMessages>((ref) 
   );
 }, name: 'UnreadMessagesProvider');
 
-class MessageRepository {
-  const MessageRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class const MessageRepository(final LichessClient client, final Aggregator aggregator) {
   Future<UnreadMessages> unreadMessages() {
     return aggregator.readJson(
       Uri(path: '/inbox/unread-count'),

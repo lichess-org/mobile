@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('PreferencesStorage');
 
-abstract class Serializable {
+abstract class Serializable() {
   Map<String, dynamic> toJson();
 }
 
 /// A preference category with its storage key
-enum PrefCategory {
+enum PrefCategory(final String storageKey) {
   general('preferences.general'),
   home('preferences.home'),
   board('preferences.board'),
@@ -33,11 +33,8 @@ enum PrefCategory {
   offlineComputerGame('preferences.offlineComputerGame'),
   account('preferences.account'),
   log('preferences.log'),
-  clockTool('preferences.clockTool');
-
-  const PrefCategory(this.storageKey);
-
-  final String storageKey;
+  clockTool('preferences.clockTool'),
+  relation('preferences.relation'),
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.

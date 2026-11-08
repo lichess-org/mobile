@@ -85,17 +85,9 @@
   <string name="removesTheDepthLimit">ଗଭୀରତା ସୀମା ଅପସାରଣ କରେ, ଏବଂ ଆପଣଙ୍କ କମ୍ପ୍ୟୁଟରକୁ ଗରମ ରଖେ</string>
   <string name="blunder">ଗମ୍ଭୀର ଭୁଲ</string>
   <string name="mistake">ଭୁଲ</string>
-  <plurals name="nbBlunders">
-    <item quantity="one">%s ଗମ୍ଭୀର ତ୍ରୁଟି</item>
-    <item quantity="other">%s ଗମ୍ଭୀର ତ୍ରୁଟିଗୁଡିକ</item>
-  </plurals>
   <plurals name="numberBlunders">
     <item quantity="one">%s ଗମ୍ଭୀର ତ୍ରୁଟି</item>
     <item quantity="other">%s ଗମ୍ଭୀର ତ୍ରୁଟିଗୁଡିକ</item>
-  </plurals>
-  <plurals name="nbMistakes">
-    <item quantity="one">%s ଭୁଲ</item>
-    <item quantity="other">%s ଭୁଲଗୁଡିକ</item>
   </plurals>
   <plurals name="numberMistakes">
     <item quantity="one">%s ଭୁଲ</item>
@@ -219,7 +211,6 @@
   <string name="createTheTopic">ବିଷୟ ସୃଷ୍ଟି କରନ୍ତୁ</string>
   <string name="user">ଉପଭୋକ୍ତା</string>
   <string name="reason">କାରଣ</string>
-  <string name="whatIsIheMatter">ମାମଲା କ\'ଣ?</string>
   <string name="importedByX">%sଙ୍କ ଦ୍ୱାରା ଆମଦାନୀ ହୋଇଛି</string>
   <string name="thisTopicIsNowClosed">ଏଇ ପ୍ରକରଣଟି ଏବେ ବନ୍ଦ ହୋଇଯାଇଛି।</string>
   <string name="typePrivateNotesHere">ଘରୋଇ ନୋଟ୍ ଏଠାରେ ଟାଇପ୍ କରନ୍ତୁ</string>

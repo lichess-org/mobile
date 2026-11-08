@@ -1,19 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_list_tile.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_search_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-enum _BroadcastFilter {
+enum _BroadcastFilter() {
   all,
   live;
 
@@ -28,9 +29,7 @@ enum _BroadcastFilter {
 }
 
 /// A screen that displays a paginated list of broadcasts.
-class BroadcastListScreen extends StatefulWidget {
-  const BroadcastListScreen({super.key});
-
+class const BroadcastListScreen({super.key}) extends StatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BroadcastListScreen());
   }
@@ -39,50 +38,44 @@ class BroadcastListScreen extends StatefulWidget {
   State<BroadcastListScreen> createState() => _BroadcastListScreenState();
 }
 
-class _BroadcastListScreenState extends State<BroadcastListScreen> {
+class _BroadcastListScreenState() extends State<BroadcastListScreen> {
   _BroadcastFilter filter = _BroadcastFilter.all;
 
   @override
   Widget build(BuildContext context) {
     final title = AppBarTitleText(context.l10n.broadcastBroadcasts);
-    final searchButton = SemanticIconButton(
-      icon: const Icon(Icons.search),
+    final searchButton = SearchHeroButton(
+      heroTag: BroadcastSearchScreen.heroTag,
       onPressed: () {
         Navigator.of(context).push(BroadcastSearchScreen.buildRoute());
       },
-      semanticsLabel: context.l10n.searchSearch,
     );
-    final filterButton = SemanticIconButton(
+    final filterButton = ContextMenuIconButton(
       icon: const Icon(Icons.filter_list),
       // TODO: translate
       semanticsLabel: 'Filter broadcasts',
-      onPressed: () => showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
-        builder: (_) => StatefulBuilder(
-          builder: (context, setLocalState) {
-            return BottomSheetScrollableContainer(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                const SizedBox(height: 16.0),
-                Filter<_BroadcastFilter>(
-                  filterType: FilterType.singleChoice,
-                  choices: _BroadcastFilter.values,
-                  choiceSelected: (choice) => filter == choice,
-                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                  onSelected: (value, selected) {
-                    setLocalState(() => filter = value);
-                    setState(() => filter = value);
-                  },
-                ),
-                const SizedBox(height: 16.0),
-              ],
-            );
-          },
-        ),
-      ),
+      actions: [
+        for (final choice in _BroadcastFilter.values)
+          ContextMenuAction(
+            label: choice.l10n(context.l10n),
+            selected: choice == filter,
+            onPressed: () => setState(() => filter = choice),
+          ),
+      ],
     );
+
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return PlatformScaffold(
+        // The pinned section headers stick right below the glass app bar, so the list starts below
+        // it: a pinned sliver always sticks to the top of its scroll view. No content would scroll
+        // under the bar anyway, since a pinned header always covers that edge, so the bar is never
+        // tinted.
+        extendBodyBehindAppBar: false,
+        plainList: true,
+        appBar: PlatformAppBar(title: title, actions: [searchButton, filterButton]),
+        body: _Body(filter),
+      );
+    }
 
     final appBarBackground = ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
 
@@ -99,36 +92,40 @@ class _BroadcastListScreenState extends State<BroadcastListScreen> {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.filter);
-
-  final _BroadcastFilter filter;
-
+class const _Body(final _BroadcastFilter filter) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final padding = MediaQuery.paddingOf(context);
+    // On iOS the headers have the color of the background behind the glass app bar.
+    final scaffoldBackground = Theme.of(context).scaffoldBackgroundColor;
+    final sectionHeaderBackground = isIOS
+        ? (scaffoldBackground.a == 0 ? cupertinoBarTint(context) : scaffoldBackground)
+        : ColorScheme.of(context).surfaceContainerHigh.withValues(alpha: 1);
 
-    return HapticRefreshIndicator(
-      onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
-      child: broadcastList.when(
-        data: (value) {
-          final sections = [
-            (
-              'ongoing',
-              context.l10n.broadcastOngoing,
-              switch (filter) {
-                _BroadcastFilter.all => value.active,
-                _BroadcastFilter.live => value.active.where((b) => b.isLive),
-              }.toList(growable: false),
-            ),
-            if (filter == _BroadcastFilter.all)
-              ('past', context.l10n.broadcastPastBroadcasts, value.past.toList(growable: false)),
-          ];
-          final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
-          final notifier = ref.read(broadcastsPaginatorProvider.notifier);
+    return FocusDetector(
+      onFocusRegained: () => ref.invalidate(broadcastsPaginatorProvider),
+      child: HapticRefreshIndicator(
+        onRefresh: () => ref.refresh(broadcastsPaginatorProvider.future),
+        child: broadcastList.when(
+          data: (value) {
+            final sections = [
+              (
+                'ongoing',
+                context.l10n.broadcastOngoing,
+                switch (filter) {
+                  _BroadcastFilter.all => value.active,
+                  _BroadcastFilter.live => value.active.where((b) => b.isLive),
+                }.toList(growable: false),
+              ),
+              if (filter == _BroadcastFilter.all)
+                ('past', context.l10n.broadcastPastBroadcasts, value.past.toList(growable: false)),
+            ];
+            final hasMorePages = value.nextPage != null && value.nextPage! <= 20;
+            final notifier = ref.read(broadcastsPaginatorProvider.notifier);
 
-          return SafeArea(
-            child: CustomScrollView(
+            final scrollView = CustomScrollView(
               slivers: [
                 for (final section in sections)
                   SliverMainAxisGroup(
@@ -137,9 +134,7 @@ class _Body extends ConsumerWidget {
                       if (section.$3.isNotEmpty)
                         SliverAppBar(
                           centerTitle: false,
-                          backgroundColor: ColorScheme.of(
-                            context,
-                          ).surfaceContainerHigh.withValues(alpha: 1),
+                          backgroundColor: sectionHeaderBackground,
                           scrolledUnderElevation: 0,
                           automaticallyImplyLeading: false,
                           primary: false,
@@ -160,12 +155,16 @@ class _Body extends ConsumerWidget {
                       ),
                     ],
                   ),
+                // Scrolls above the glass tab bar.
+                if (isIOS) SliverPadding(padding: EdgeInsets.only(bottom: padding.bottom)),
               ],
-            ),
-          );
-        },
-        error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
-        loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+            );
+
+            return isIOS ? scrollView : SafeArea(child: scrollView);
+          },
+          error: (_, _) => const Center(child: Text('Cannot load broadcasts')),
+          loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+        ),
       ),
     );
   }

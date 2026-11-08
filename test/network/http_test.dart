@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -57,6 +58,40 @@ void main() {
         shouldRetryOn429(response(429, method: 'GET', path: '/api/puzzle/batch/advancedPawn')),
         isFalse,
       );
+    });
+  });
+
+  group('isCachedResponse', () {
+    final now = DateTime.utc(2026, 10, 23, 12);
+
+    http.Response response(int status, {DateTime? date}) =>
+        http.Response('', status, headers: {if (date != null) 'date': HttpDate.format(date)});
+
+    test('a response dated now comes from the network', () {
+      expect(isCachedResponse(response(200, date: now), now: now), isFalse);
+    });
+
+    test('a response with an old date comes from the cache', () {
+      final date = now.subtract(const Duration(days: 3));
+      expect(isCachedResponse(response(200, date: date), now: now), isTrue);
+    });
+
+    test('a few seconds of clock skew is not taken for a cached response', () {
+      final date = now.subtract(const Duration(seconds: 30));
+      expect(isCachedResponse(response(200, date: date), now: now), isFalse);
+    });
+
+    test('a response without a valid date comes from the network', () {
+      expect(isCachedResponse(response(200), now: now), isFalse);
+      expect(
+        isCachedResponse(http.Response('', 200, headers: {'date': 'garbage'}), now: now),
+        isFalse,
+      );
+    });
+
+    test('only 200 responses can come from the cache', () {
+      final date = now.subtract(const Duration(days: 3));
+      expect(isCachedResponse(response(404, date: date), now: now), isFalse);
     });
   });
 
@@ -424,9 +459,98 @@ void main() {
       });
     });
   });
+
+  group('kQuietRequestHeader', () {
+    test('is stripped before the request is sent', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        },
+      );
+      final client = container.read(defaultClientProvider);
+      await client.head(
+        Uri.https('www.gstatic.com', '/generate_204'),
+        headers: const {kQuietRequestHeader: '1'},
+      );
+      final requests = FakeClient.verifyRequests();
+      expect(requests.first.headers.containsKey(kQuietRequestHeader), isFalse);
+    });
+  });
+
+  group('downloadFile', () {
+    Future<File> targetFile() async {
+      final tempDir = await Directory.systemTemp.createTemp('download_test_');
+      addTearDown(() => tempDir.delete(recursive: true));
+      return File('${tempDir.path}/file.bin');
+    }
+
+    test('saves the file when the whole body arrives', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('hello', 200));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isTrue);
+      expect(await file.readAsString(), 'hello');
+    });
+
+    test('deletes the partial file when the body is truncated', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        return http.StreamedResponse(
+          Stream<List<int>>.fromIterable([utf8.encode('hel')]),
+          200,
+          contentLength: 5,
+        );
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('deletes the partial file when the stream fails', () async {
+      final file = await targetFile();
+      final client = MockClient.streaming((request, bodyStream) async {
+        final controller = StreamController<List<int>>();
+        controller.add(utf8.encode('hel'));
+        controller.addError(const SocketException('connection reset'));
+        unawaited(controller.close());
+        return http.StreamedResponse(controller.stream, 200);
+      });
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('writes nothing when the server answers with an error', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => http.Response('nope', 404));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+
+    test('returns false when the request throws', () async {
+      final file = await targetFile();
+      final client = MockClient((request) async => throw const SocketException('no route'));
+
+      final result = await downloadFile(client, Uri.parse('https://example.org/file'), file);
+
+      expect(result, isFalse);
+      expect(await file.exists(), isFalse);
+    });
+  });
 }
 
-class FakeClient extends http.BaseClient {
+class FakeClient() extends http.BaseClient {
   static List<http.BaseRequest> _requests = [];
 
   static List<http.BaseRequest> verifyRequests() {

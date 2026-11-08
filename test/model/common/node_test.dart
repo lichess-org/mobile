@@ -257,6 +257,49 @@ void main() {
       expect(testNode.children[0], isNot(branch));
     });
 
+    test('addNodeAt, prepend duplicate move', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final newBranch = Branch(
+        sanMove: SanMove('e5', Move.parse('e7e5')!),
+        position: Chess.initial,
+      );
+      final e4Path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
+      final (newPath, isNewNode) = root.addNodeAt(e4Path, newBranch, prepend: true);
+
+      expect(isNewNode, isTrue);
+      expect(newPath, equals(e4Path + newBranch.id));
+
+      final e4Node = root.nodeAt(e4Path);
+      expect(e4Node.children.length, equals(2));
+      expect(e4Node.children[0], equals(newBranch));
+      expect(e4Node.children[0].id, equals(UciCharPair.fromUci('e7e5')));
+      expect(
+        e4Node.children[1].id,
+        equals(UciCharPair.disambiguated(UciCharPair.fromUci('e7e5'), 1)),
+      );
+    });
+
+    test('addNodeAt, navigates to existing sibling even if only disambiguated id exists', () {
+      const pgn = '1. e4 (1. e4 e5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      // Delete the mainline (1. e4 c6)
+      root.deleteAt(UciPath.fromId(root.children[0].id));
+      expect(root.children.length, 1);
+      final remainingDisambiguatedId = root.children[0].id;
+      expect(
+        remainingDisambiguatedId,
+        equals(UciCharPair.disambiguated(UciCharPair.fromUci('e2e4'), 1)),
+      );
+
+      // User plays 'e4' (which has base ID)
+      final branch = Branch(sanMove: SanMove('e4', Move.parse('e2e4')!), position: Chess.initial);
+      final (newPath, isNewNode) = root.addNodeAt(UciPath.empty, branch);
+
+      expect(isNewNode, isFalse);
+      expect(newPath, equals(UciPath.fromId(remainingDisambiguatedId)));
+      expect(root.children.length, 1);
+    });
+
     test('addNodesAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(sanMove: SanMove('Nc6', Move.parse('b8c6')!), position: Chess.initial);
@@ -335,6 +378,43 @@ void main() {
       expect(root.mainline.length, equals(0));
     });
 
+    test('deleteAt, duplicate sideline only deletes that specific variation', () {
+      const pgn = '1. e4 (1. e4 e5) (1. e4 c5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 3); // mainline (c6), sideline 1 (e5), sideline 2 (c5)
+
+      final sideline1Id = root.children[1].id;
+      final sideline2Id = root.children[2].id;
+
+      // Delete sideline 1 (1. e4 e5)
+      root.deleteAt(UciPath.fromId(sideline1Id));
+
+      // Mainline and sideline 2 remain
+      expect(root.children.length, 2);
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'c6']));
+      expect(root.children[1].id, equals(sideline2Id));
+      expect(root.children[1].children.first.sanMove.san, equals('c5'));
+    });
+
+    test('deleteAt, mainline with duplicate sidelines leaves sidelines intact', () {
+      const pgn = '1. e4 (1. e4 e5) (1. e4 c5) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 3);
+
+      final mainlineId = root.children[0].id;
+      final sideline1Id = root.children[1].id;
+      final sideline2Id = root.children[2].id;
+
+      // Delete the mainline (1. e4 c6)
+      root.deleteAt(UciPath.fromId(mainlineId));
+
+      // The two sidelines remain, and the first sideline becomes the new mainline
+      expect(root.children.length, 2);
+      expect(root.children[0].id, equals(sideline1Id));
+      expect(root.children[1].id, equals(sideline2Id));
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'e5']));
+    });
+
     test('promoteAt', () {
       const pgn = '1. e4 d5 2. exd5 Qxd5 (2... Nf6 3. c4 (3. Nc3)) 3. Nc3';
       final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
@@ -375,6 +455,30 @@ void main() {
       root.promoteAt(path, toMainline: false);
       expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['d4']));
       expect(root.makePgn(), equals('1. d4 ( 1. e4 ) *\n'));
+    });
+
+    test('promoteAt, duplicate variation to mainline', () {
+      const pgn = '1. e4 (1. e4 e5 2. Nf3) 1... c6 *';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      expect(root.children.length, 2);
+
+      final duplicateE4Id = root.children[1].id;
+      final e5Id = root.children[1].children.first.id;
+      final duplicatePath = UciPath.fromIds([duplicateE4Id, e5Id]);
+
+      expect(root.isOnMainline(duplicatePath), isFalse);
+
+      // Promote the duplicate variation (1. e4 e5 2. Nf3) to mainline
+      root.promoteAt(duplicatePath, toMainline: true);
+
+      // The promoted line is now the mainline
+      expect(root.mainline.map((n) => n.sanMove.san).toList(), equals(['e4', 'e5', 'Nf3']));
+
+      // isOnMainline now reports true for the promoted line
+      expect(root.isOnMainline(duplicatePath), isTrue);
+
+      // PGN export produces the promoted line as mainline and old mainline in parens
+      expect(root.makePgn(), equals('1. e4 ( 1. e4 c6 ) 1... e5 2. Nf3 *\n'));
     });
 
     group('merge', () {
@@ -534,6 +638,119 @@ void main() {
         root.addMoveAt(previousUciPath, move!);
         expect(root.makePgn(), isNot(initialPng));
         expect(root.mainline.last.sanMove.move, move);
+      });
+    });
+
+    group('makeLinePgn', () {
+      const pgn = '1. e4 e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3 Nc6 (2... d6) 3. Bb5';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+
+      test('main line, without the sidelines branching off it', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'e7e5']),
+            variant: Variant.standard,
+            includeVariations: false,
+          ),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *\n',
+        );
+      });
+
+      test('variation, with the sidelines after the end of the path', () {
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'c7c5']),
+            variant: Variant.standard,
+            includeVariations: true,
+          ),
+          '1. e4 c5 2. Nf3 ( 2. c3 ) *\n',
+        );
+      });
+
+      test('nested variation drops earlier siblings and annotations', () {
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn(
+            r'{root} 1. e4 $1 {comment} e5 (1... c5 2. Nf3 (2. c3 d5 (2... Nf6) 3. exd5)) 2. Nf3',
+          ),
+        );
+        expect(
+          root.makeLinePgn(
+            UciPath.fromUciMoves(['e2e4', 'c7c5', 'c2c3']),
+            variant: .standard,
+            includeVariations: true,
+          ),
+          '1. e4 c5 2. c3 d5 ( 2... Nf6 ) 3. exd5 *\n',
+        );
+      });
+
+      test('from the root', () {
+        expect(
+          root.makeLinePgn(UciPath.empty, variant: Variant.standard, includeVariations: false),
+          '1. e4 e5 2. Nf3 Nc6 3. Bb5 *\n',
+        );
+      });
+
+      test('adds the tags needed to replay a non standard game', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n3. Bb5 a6'));
+        expect(
+          root.makeLinePgn(
+            root.mainlinePath,
+            variant: Variant.fromPosition,
+            includeVariations: false,
+          ),
+          '[Variant "From Position"]\n[FEN "$fen"]\n\n3. Bb5 a6 *\n',
+        );
+      });
+
+      test('preserves move numbering and position when black moves first', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n3... a6 4. Bc4'));
+        final pgn = root.makeLinePgn(
+          root.mainlinePath,
+          variant: .standard,
+          includeVariations: false,
+        );
+        expect(pgn, '[FEN "$fen"]\n\n3... a6 4. Bc4 *\n');
+        final replay = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        expect(replay.mainline.last.position.fen, root.mainline.last.position.fen);
+      });
+
+      test('preserves the starting position and variant for Chess960', () {
+        const fen = 'rkrbbnnq/pppppppp/8/8/8/8/PPPPPPPP/RKRBBNNQ w CAca - 0 1';
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn('[Variant "Chess960"]\n[FEN "$fen"]\n\n1. d4 d5 2. c4'),
+        );
+        final pgn = root.makeLinePgn(
+          root.mainlinePath,
+          variant: .chess960,
+          includeVariations: false,
+        );
+        final game = PgnGame.parsePgn(pgn);
+        expect(game.headers['Variant'], 'Chess960');
+        expect(game.headers['FEN'], root.position.fen);
+        final replay = Root.fromPgnGame(game);
+        expect(replay.mainline.length, 3);
+        expect(replay.mainline.last.position.fen, root.mainline.last.position.fen);
+      });
+
+      test('adds no FEN tag for a variant starting from its own initial position', () {
+        final root = Root.fromPgnGame(
+          PgnGame.parsePgn('[Variant "Crazyhouse"]\n\n1. e4 e5 2. Nf3 Nc6'),
+        );
+        expect(
+          root.makeLinePgn(root.mainlinePath, variant: .crazyhouse, includeVariations: false),
+          '[Variant "Crazyhouse"]\n\n1. e4 e5 2. Nf3 Nc6 *\n',
+        );
+      });
+
+      test('is empty when there is no move to copy', () {
+        const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+        final root = Root.fromPgnGame(PgnGame.parsePgn('[FEN "$fen"]\n\n*'));
+        expect(
+          root.makeLinePgn(UciPath.empty, variant: .fromPosition, includeVariations: false),
+          '',
+        );
       });
     });
   });

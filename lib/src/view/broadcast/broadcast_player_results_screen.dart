@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
@@ -44,17 +45,11 @@ int tournamentReferenceYear(BroadcastTournament tournament) {
   return (dates.endsAt ?? dates.startsAt).year;
 }
 
-class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
-  final BroadcastRoundId roundId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreenLoading({
-    required this.roundId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreenLoading({
+  required final BroadcastRoundId roundId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastRoundId roundId,
     String playerId, {
@@ -79,29 +74,23 @@ class BroadcastPlayerResultsScreenLoading extends ConsumerWidget {
         player: player,
         playerId: playerId,
       ),
-      AsyncError(:final error) => Scaffold(
-        appBar: AppBar(title: const Text('')),
+      AsyncError(:final error) => PlatformScaffold(
+        appBar: const PlatformAppBar(title: Text('')),
         body: Center(child: Text('Cannot load round data: $error')),
       ),
-      _ => Scaffold(
-        appBar: AppBar(title: const Text('')),
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+      _ => const PlatformScaffold(
+        appBar: PlatformAppBar(title: Text('')),
+        body: Center(child: CircularProgressIndicator.adaptive()),
       ),
     };
   }
 }
 
-class BroadcastPlayerResultsScreen extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final BroadcastPlayer? player;
-  final String playerId;
-
-  const BroadcastPlayerResultsScreen({
-    required this.tournamentId,
-    this.player,
-    required this.playerId,
-  });
-
+class const BroadcastPlayerResultsScreen({
+  required final BroadcastTournamentId tournamentId,
+  final BroadcastPlayer? player,
+  required final String playerId,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(
     BroadcastTournamentId tournamentId,
     BroadcastPlayer player,
@@ -129,20 +118,43 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
 
     final playerResults = asyncData.value?.$1;
     final fideId = playerResults?.playerWithOverallResult.player.fideId;
-    final isFollowing = playerResults?.isFollowing;
+    final isFollowing = fideId != null
+        ? ref.watch(_followingOverrideProvider(fideId)) ?? playerResults?.isFollowing
+        : null;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        // A long title, next to the actions.
+        centerTitle: false,
         title: displayPlayer != null
             ? BroadcastPlayerWidget(player: displayPlayer, showFederation: false, showRating: false)
             : const SizedBox.shrink(),
         actions: [
           if (fideId != null && isFollowing != null)
-            _FollowPlayerButton(fideId: fideId, isFollowing: isFollowing),
+            SemanticIconButton(
+              icon: Icon(isFollowing ? Icons.star : Icons.star_border),
+              semanticsLabel: isFollowing ? context.l10n.unfollow : context.l10n.follow,
+              onPressed: () async {
+                final newValue = !isFollowing;
+                final override = ref.read(_followingOverrideProvider(fideId).notifier);
+                override.state = newValue;
+                try {
+                  await ref.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
+                } catch (_) {
+                  if (!context.mounted) return;
+                  override.state = !newValue;
+                  showSnackBar(
+                    context,
+                    'Could not update the follow status',
+                    type: SnackBarType.error,
+                  );
+                }
+              },
+            ),
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
+              semanticsLabel: context.l10n.mobileShare,
               onPressed: () {
                 final (playerData, tournament) = data;
                 final playerId = playerData.playerWithOverallResult.player.id;
@@ -165,51 +177,13 @@ class BroadcastPlayerResultsScreen extends ConsumerWidget {
   }
 }
 
-/// App bar button to follow or unfollow a FIDE player.
+/// The follow status of a player set from the app bar, until the screen is closed.
 ///
-/// The toggled value is kept locally so the button reacts immediately, without refetching the
-/// player. It is reverted if the request fails.
-class _FollowPlayerButton extends ConsumerStatefulWidget {
-  const _FollowPlayerButton({required this.fideId, required this.isFollowing});
-
-  final FideId fideId;
-  final bool isFollowing;
-
-  @override
-  ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
-}
-
-class _FollowPlayerButtonState extends ConsumerState<_FollowPlayerButton> {
-  bool? _isFollowing;
-
-  bool get _value => _isFollowing ?? widget.isFollowing;
-
-  Future<void> _toggle() async {
-    final newValue = !_value;
-    setState(() {
-      _isFollowing = newValue;
-    });
-
-    try {
-      await ref.read(broadcastRepositoryProvider).setFollowingPlayer(widget.fideId, newValue);
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _isFollowing = !newValue;
-      });
-      showSnackBar(context, 'Could not update the follow status', type: SnackBarType.error);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticIconButton(
-      icon: Icon(_value ? Icons.star : Icons.star_border),
-      semanticsLabel: _value ? context.l10n.unfollow : context.l10n.follow,
-      onPressed: _toggle,
-    );
-  }
-}
+/// The button reacts immediately, without refetching the player. The status is reverted if the
+/// request fails.
+final _followingOverrideProvider = StateProvider.autoDispose.family<bool?, FideId>(
+  (ref, _) => null,
+);
 
 final _playerAndTournamentProvider = FutureProvider.autoDispose
     .family<
@@ -223,12 +197,8 @@ final _playerAndTournamentProvider = FutureProvider.autoDispose
       return (player, tournament);
     });
 
-class _Body extends ConsumerWidget {
-  final BroadcastTournamentId tournamentId;
-  final String playerId;
-
-  const _Body(this.tournamentId, this.playerId);
-
+class const _Body(final BroadcastTournamentId tournamentId, final String playerId)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (ref.watch(_playerAndTournamentProvider((tournamentId, playerId)))) {
@@ -301,12 +271,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OverallStatPlayer extends StatelessWidget {
-  const _OverallStatPlayer({required this.playerWithGameResults, required this.tournament});
-
-  final BroadcastPlayerWithGameResults playerWithGameResults;
-  final BroadcastTournament tournament;
-
+class const _OverallStatPlayer({
+  required final BroadcastPlayerWithGameResults playerWithGameResults,
+  required final BroadcastTournament tournament,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerWithGameResults(:playerWithOverallResult, :fideData, :games) =
@@ -355,14 +323,13 @@ class _OverallStatPlayer extends StatelessWidget {
                           Expanded(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                                Image.asset(federation.flagAsset, height: 12),
                                 const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
-                                    federationIdToName[federation]!,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge?.copyWith(height: 1.2),
+                                    federation.name,
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(height: 1.2),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -377,9 +344,8 @@ class _OverallStatPlayer extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           if (tournament.data.showTeamScores == true) {
-                            Navigator.of(
-                              context,
-                            ).push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
+                            Navigator.of(context)
+                                .push(BroadcastTeamScreen.buildRoute(tournament.data.id, team));
                           }
                         },
                         child: Row(
@@ -499,12 +465,10 @@ class _OverallStatPlayer extends StatelessWidget {
   }
 }
 
-class _TieBreaksSection extends StatelessWidget {
-  const _TieBreaksSection(this.tieBreaks, this.player);
-
-  final BroadcastPlayerWithOverallResult player;
-  final IList<BroadcastTieBreakDetail> tieBreaks;
-
+class const _TieBreaksSection(
+  final IList<BroadcastTieBreakDetail> tieBreaks,
+  final BroadcastPlayerWithOverallResult player,
+) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -539,23 +503,14 @@ class _TieBreaksSection extends StatelessWidget {
   }
 }
 
-class _GameResultListTile extends StatelessWidget {
-  const _GameResultListTile({
-    required this.playerGameResult,
-    required this.tournament,
-    required this.index,
-    required this.indexWidth,
-    required this.showRatingDiff,
-    required this.showTCIcon,
-  });
-
-  final BroadcastPlayerGameResult playerGameResult;
-  final BroadcastTournament tournament;
-  final int index;
-  final double indexWidth;
-  final bool showRatingDiff;
-  final bool showTCIcon;
-
+class const _GameResultListTile({
+  required final BroadcastPlayerGameResult playerGameResult,
+  required final BroadcastTournament tournament,
+  required final int index,
+  required final double indexWidth,
+  required final bool showRatingDiff,
+  required final bool showTCIcon,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final BroadcastPlayerGameResult(
@@ -596,7 +551,7 @@ class _GameResultListTile extends StatelessWidget {
           ? Row(
               mainAxisSize: .min,
               children: [
-                Image.asset('assets/images/fide-fed/$federation.webp', height: 12),
+                Image.asset(federation.flagAsset, height: 12),
                 const SizedBox(width: 5),
                 if (rating != null) Text(rating.toString()),
               ],
@@ -648,13 +603,8 @@ class _GameResultListTile extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard(this.stat, {this.value, this.child});
-
-  final String stat;
-  final String? value;
-  final Widget? child;
-
+class const _StatCard(final String stat, {final String? value, final Widget? child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StatCard(

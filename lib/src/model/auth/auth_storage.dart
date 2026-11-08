@@ -12,9 +12,7 @@ final authStorageProvider = Provider<AuthStorage>((Ref ref) {
   return const AuthStorage();
 }, name: 'AuthStorageProvider');
 
-class AuthStorage {
-  const AuthStorage();
-
+class const AuthStorage() {
   Future<AuthUser?> read() async {
     final string = await SecureStorage.instance.read(key: kAuthStorageKey);
     if (string != null) {

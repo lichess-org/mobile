@@ -11,25 +11,18 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ClockToolSettingsModal extends StatefulWidget {
-  const ClockToolSettingsModal({
-    required this.clockType,
-    required this.timeIncrement,
-    required this.onClockTypeSelected,
-    required this.onTimeSelected,
-    super.key,
-  });
-
-  final ClockTimeControlType clockType;
-  final TimeIncrement timeIncrement;
-  final ValueSetter<ClockTimeControlType> onClockTypeSelected;
-  final ValueSetter<TimeIncrement> onTimeSelected;
-
+class const ClockToolSettingsModal({
+  required final ClockTimeControlType clockType,
+  required final TimeIncrement timeIncrement,
+  required final ValueSetter<ClockTimeControlType> onClockTypeSelected,
+  required final ValueSetter<TimeIncrement> onTimeSelected,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<ClockToolSettingsModal> createState() => _ClockToolSettingsModalState();
 }
 
-class _ClockToolSettingsModalState extends State<ClockToolSettingsModal> {
+class _ClockToolSettingsModalState() extends State<ClockToolSettingsModal> {
   late ClockTimeControlType _clockType;
   late TimeIncrement _timeIncrement;
 

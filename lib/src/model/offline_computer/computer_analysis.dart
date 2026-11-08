@@ -2,7 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/offline_computer/practice_comment.dart';
+import 'package:lichess_mobile/src/model/engine/practice_comment.dart';
 
 part 'computer_analysis.freezed.dart';
 
@@ -12,10 +12,8 @@ part 'computer_analysis.freezed.dart';
 /// hints, best moves, winning chances, and eval string are derived).
 /// For player-move steps, contains the practice comment for the move.
 @freezed
-sealed class ComputerAnalysis with _$ComputerAnalysis {
-  const ComputerAnalysis._();
-
-  const factory ComputerAnalysis({
+sealed class const ComputerAnalysis._() with _$ComputerAnalysis {
+  const factory({
     /// The engine evaluation for this position (pre-move, for player-turn steps).
     ClientEval? eval,
 

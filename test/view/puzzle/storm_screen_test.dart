@@ -1,7 +1,7 @@
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -23,6 +23,9 @@ final client = MockClient((request) {
 
 void main() {
   group('StormScreen', () {
+    // iOS skipped: the liquid glass app bar wraps each `GlassBarItem.custom` in an unlabelled
+    // button (https://github.com/sdegenaar/liquid_glass_widgets/issues/432). Run it on iOS again
+    // once that is fixed.
     testWidgets('meets accessibility guidelines', (tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
 
@@ -41,7 +44,7 @@ void main() {
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
-    }, variant: kPlatformVariant);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
     testWidgets('Load puzzle and play white pieces', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -79,7 +82,7 @@ void main() {
       expect(boardHasPiece(tester, Square.h5, Piece.whiteRook), isTrue);
       await tester.tapAt(squareOffset(Square.h5, tester.getRect(find.byType(Chessboard))));
       await tester.pump();
-      expect(find.byKey(const Key('h5-selected')), findsNothing);
+      expect(getBoardSelectedSquare(tester), isNull);
 
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));
@@ -98,6 +101,37 @@ void main() {
       await tester.pump(const Duration(milliseconds: 500));
 
       // should have loaded next puzzle
+      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
+    }, variant: kPlatformVariant);
+
+    testWidgets('plays a premove once the opponent has replied', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for first move to be played
+      await tester.pump(const Duration(seconds: 1));
+
+      await playMove(tester, 'h5', 'h7', orientation: Side.white);
+
+      // premove the last solution move while waiting for the opponent's reply
+      await playMove(tester, 'e3', 'g1', orientation: Side.white);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.e3, to: Square.g1)), isTrue);
+
+      // the opponent replies Qd1+, the premove Bg1 is played and solves the puzzle, so the next
+      // one is loaded
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pumpAndSettle();
+
       expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
     }, variant: kPlatformVariant);
 

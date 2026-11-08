@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -22,11 +22,7 @@ final puzzleSessionProvider =
 
 typedef PuzzleSessionParams = ({UserId? userId, PuzzleAngle angle});
 
-class PuzzleSession extends Notifier<PuzzleSessionData> {
-  PuzzleSession(this.params);
-
-  final PuzzleSessionParams params;
-
+class PuzzleSession(final PuzzleSessionParams params) extends Notifier<PuzzleSessionData> {
   static const maxAge = Duration(hours: 1);
   static const maxSize = 150;
 
@@ -45,7 +41,7 @@ class PuzzleSession extends Notifier<PuzzleSessionData> {
     await _update((d) {
       final newAttempts = d.attempts.replaceFirstWhere(
         (p) => p.id == id,
-        (p) => p?.copyWith(win: win) ?? PuzzleAttempt(id: id, win: win),
+        (_) => PuzzleAttempt(id: id, win: win),
         addIfNotFound: true,
       );
       final newState = d.copyWith(
@@ -89,13 +85,13 @@ class PuzzleSession extends Notifier<PuzzleSessionData> {
 
 @Freezed(fromJson: true, toJson: true)
 sealed class PuzzleSessionData with _$PuzzleSessionData {
-  const factory PuzzleSessionData({
+  const factory({
     required PuzzleAngle angle,
     required IList<PuzzleAttempt> attempts,
     required DateTime lastUpdatedAt,
   }) = _PuzzleSession;
 
-  factory PuzzleSessionData.initial({required PuzzleAngle angle}) {
+  factory initial({required PuzzleAngle angle}) {
     return PuzzleSessionData(
       angle: angle,
       attempts: IList(const []),
@@ -103,7 +99,7 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
     );
   }
 
-  factory PuzzleSessionData.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     try {
       return _$PuzzleSessionDataFromJson(json);
     } catch (e) {
@@ -113,13 +109,10 @@ sealed class PuzzleSessionData with _$PuzzleSessionData {
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzleAttempt with _$PuzzleAttempt {
-  const PuzzleAttempt._();
+sealed class const PuzzleAttempt._() with _$PuzzleAttempt {
+  const factory({required PuzzleId id, required bool win, int? ratingDiff}) = _PuzzleAttempt;
 
-  const factory PuzzleAttempt({required PuzzleId id, required bool win, int? ratingDiff}) =
-      _PuzzleAttempt;
-
-  factory PuzzleAttempt.fromJson(Map<String, dynamic> json) => _$PuzzleAttemptFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleAttemptFromJson(json);
 
   String? get ratingDiffString {
     if (ratingDiff == null) return null;

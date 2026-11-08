@@ -25,7 +25,7 @@
   <string name="cantChangeMore">Nie możemy zmienić więcej niż wielkość liter. Ze względów technicznych jest to absolutnie niemożliwe.</string>
   <string name="orCloseAccount">Możesz jednak zamknąć swoje bieżące konto i utworzyć nowe.</string>
   <string name="wantClearHistory">Chcę wyczyścić swoją historię lub swój ranking</string>
-  <string name="cantClearHistory">Nie jest możliwe wyczyszczenie Twojej historii i rankingu.</string>
+  <string name="cantClearHistoryOrResetRatings">Nie można wyczyścić historii Twoich partii, historii rozwiązywanych zadań ani zresetować rankingu.</string>
   <string name="wantReport">Chcę zgłosić gracza</string>
   <string name="toReportAPlayerUseForm">Aby zgłosić gracza, użyj formularza</string>
   <string name="youCanAlsoReachReportPage">Możesz również dotrzeć do tej strony klikając przycisk raportu %s na stronie profilowej.</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">Upewnij się, że grałeś partię rankingową. Zwykłe gry nie mają wpływu na ranking graczy.</string>
   <string name="botRatingAbuse">W pewnych okolicznościach, grając przeciwko botowi, partia rankingowa może nie przynieść punktów, jeśli zostanie rozpoznane, że gracz nadużywa bota do nabijania ich sobie.</string>
   <string name="errorPage">Strona błędu</string>
-  <string name="reportErrorPage">Jeśli znalazłeś się na stronie błędu, możesz to zgłosić:</string>
+  <string name="reportTheBug">Możesz to zgłosić:</string>
+  <string name="securityVulnerability">Zagrożenie bezpieczeństwa</string>
+  <string name="otherBug">Inny błąd</string>
   <string name="learnHowToMakeBroadcasts">Dowiedz się, jak tworzyć własne transmisje na Lichess</string>
   <string name="banAppeal">Odwołanie od zablokowania konta lub ograniczenia IP</string>
   <string name="engineAppeal">Silnik szachowy lub inne oszustwo</string>

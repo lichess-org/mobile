@@ -12,27 +12,33 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_controller.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:material_ui/material_ui.dart';
 
-class GameResultDialog extends ConsumerStatefulWidget {
-  const GameResultDialog({required this.id, required this.onNewOpponentCallback, super.key});
-
-  final GameFullId id;
+class const GameResultDialog({
+  required final GameFullId id,
 
   /// Callback to load a new opponent.
-  final void Function(PlayableGame game) onNewOpponentCallback;
+  required final void Function(PlayableGame game) onNewOpponentCallback,
 
+  /// Callback to navigate back to the tournament of the game, once the dialog is closed.
+  required final void Function(TournamentId tournamentId) onBackToTournamentCallback,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysisCallback,
+  super.key,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<GameResultDialog> createState() => _GameResultDialogState();
 }
 
-class _GameResultDialogState extends ConsumerState<GameResultDialog> {
+class _GameResultDialogState() extends ConsumerState<GameResultDialog> {
   late Timer _buttonActivationTimer;
   bool _activateButtons = false;
 
@@ -82,29 +88,9 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
     return null;
   }
 
-  /// Navigates back to the tournament this game belongs to.
-  ///
-  /// If we came from the tournament screen (the usual case: we were on the
-  /// tournament, the game was pushed on top and we played it), it is still in
-  /// the navigation stack, so we close the dialog and pop back to it. Otherwise
-  /// (e.g. the game was opened from the home recent games list) there is no
-  /// tournament screen to go back to, so we push a fresh one.
   void _backToTournament(TournamentId tournamentId) {
-    final navigator = Navigator.of(context);
-    if (rootNavRouteStackObserver.containsRoute(
-      TournamentScreen.routeName,
-      arguments: tournamentId.value,
-    )) {
-      navigator.popUntil(
-        (route) =>
-            route.settings.name == TournamentScreen.routeName &&
-            route.settings.arguments == tournamentId.value,
-      );
-    } else {
-      // Close the dialog first, then push the tournament screen.
-      navigator.popUntil((route) => route is! PopupRoute);
-      navigator.push(TournamentScreen.buildRoute(tournamentId));
-    }
+    Navigator.of(context).popUntil((route) => route is! PopupRoute);
+    widget.onBackToTournamentCallback(tournamentId);
   }
 
   @override
@@ -249,7 +235,8 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
             if (value.game.userAnalysable)
               FilledButton.tonal(
                 onPressed: () {
-                  Navigator.of(context).push(AnalysisScreen.buildRoute(value.analysisOptions));
+                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
+                  widget.onAnalysisCallback(value.analysisOptions);
                 },
                 child: Text(context.l10n.analysis, textAlign: TextAlign.center),
               ),
@@ -261,13 +248,17 @@ class _GameResultDialogState extends ConsumerState<GameResultDialog> {
   }
 }
 
-class OverTheBoardGameResultDialog extends StatelessWidget {
-  const OverTheBoardGameResultDialog({super.key, required this.game, required this.onRematch});
+class const OverTheBoardGameResultDialog({
+  super.key,
+  required final OverTheBoardGame game,
+  required final void Function() onRematch,
 
-  final OverTheBoardGame game;
-
-  final void Function() onRematch;
-
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysis,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = Column(
@@ -281,15 +272,14 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
         ),
         FilledButton.tonal(
           onPressed: () {
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: const StringId('otb_finished_game_analysis'),
-                  orientation: Side.white,
-                  pgn: game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: game.meta.variant,
-                ),
+            Navigator.pop(context);
+            onAnalysis(
+              AnalysisOptions.pgn(
+                id: const StringId('otb_finished_game_analysis'),
+                orientation: Side.white,
+                pgn: game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: game.meta.variant,
               ),
             );
           },
@@ -302,11 +292,7 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
   }
 }
 
-class GameResult extends StatelessWidget {
-  const GameResult({required this.game, super.key});
-
-  final BaseGame game;
-
+class const GameResult({required final BaseGame game, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final showWinner = game.winner != null
@@ -337,13 +323,12 @@ class GameResult extends StatelessWidget {
   }
 }
 
-class _ResultDialog extends StatelessWidget {
-  const _ResultDialog({required this.child});
-
-  final Widget child;
-
+class const _ResultDialog({required final Widget child}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return GlassDialogFrame(child: child);
+    }
     final screenWidth = MediaQuery.widthOf(context);
     final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);
     final sizedContent = SizedBox(

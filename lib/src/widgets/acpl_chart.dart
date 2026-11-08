@@ -31,11 +31,7 @@ typedef AcplChartParams = ({
 ///
 /// This widget shows the evaluation curve for the chess game, with lines indicating
 /// for game phases (opening, middlegame, endgame) and the current position.
-class AcplChart extends StatelessWidget {
-  const AcplChart({required this.params, super.key});
-
-  final AcplChartParams params;
-
+class const AcplChart({required final AcplChartParams params, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainLineColor = Theme.of(context).colorScheme.secondary;
@@ -54,7 +50,7 @@ class AcplChart extends StatelessWidget {
 
     return Center(
       child: AspectRatio(
-        aspectRatio: 2.5,
+        aspectRatio: 3.9,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LayoutBuilder(

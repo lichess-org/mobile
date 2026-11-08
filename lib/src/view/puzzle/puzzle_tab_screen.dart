@@ -1,17 +1,15 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/streak_storage.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -31,14 +29,13 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
 
-class PuzzleTabScreen extends ConsumerWidget {
-  const PuzzleTabScreen({super.key});
-
+class const PuzzleTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // The saved batches are only used to show the extra angle previews at the bottom of the list,
@@ -63,11 +60,7 @@ class PuzzleTabScreen extends ConsumerWidget {
 }
 
 /// Scaffold of the puzzle tab, shared by all states of the [savedBatchesProvider].
-class _PuzzleTabScaffold extends ConsumerWidget {
-  const _PuzzleTabScaffold({required this.body});
-
-  final Widget body;
-
+class const _PuzzleTabScaffold({required final Widget body}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -81,9 +74,6 @@ class _PuzzleTabScaffold extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Text(context.l10n.puzzles),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: body,
@@ -92,16 +82,12 @@ class _PuzzleTabScaffold extends ConsumerWidget {
   }
 }
 
-class _MaterialTabBody extends ConsumerStatefulWidget {
-  const _MaterialTabBody(this.savedAngles);
-
-  final IList<PuzzleAngle> savedAngles;
-
+class const _MaterialTabBody(final IList<PuzzleAngle> savedAngles) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
 }
 
-class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
+class _MaterialTabBodyState() extends ConsumerState<_MaterialTabBody> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late AnimatedListModel<PuzzleAngle> _angles;
 
@@ -150,27 +136,29 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
         _buildMainListItem(context, index, animation, (index) => _angles[index]);
 
     return _PuzzleTabScaffold(
-      body: isTablet
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: AnimatedList(
-                    key: _listKey,
-                    initialItemCount: _angles.length,
-                    controller: puzzlesScrollController,
-                    itemBuilder: buildItem,
+      body: SwipeActionsScope(
+        child: isTablet
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AnimatedList(
+                      key: _listKey,
+                      initialItemCount: _angles.length,
+                      controller: puzzlesScrollController,
+                      itemBuilder: buildItem,
+                    ),
                   ),
-                ),
-                Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
-              ],
-            )
-          : AnimatedList(
-              key: _listKey,
-              controller: puzzlesScrollController,
-              initialItemCount: _angles.length,
-              itemBuilder: buildItem,
-            ),
+                  Expanded(child: ListView(children: const [PuzzleHistoryWidget()])),
+                ],
+              )
+            : AnimatedList(
+                key: _listKey,
+                controller: puzzlesScrollController,
+                initialItemCount: _angles.length,
+                itemBuilder: buildItem,
+              ),
+      ),
     );
   }
 }
@@ -197,8 +185,7 @@ Widget _buildMainListItem(
         onTap: () {
           Navigator.of(
             context,
-            rootNavigator: true,
-          ).push(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
+          ).pushHidingTabBar(PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix)));
         },
       );
     default:
@@ -206,7 +193,7 @@ Widget _buildMainListItem(
       return PuzzleAnglePreview(
         angle: angle,
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(PuzzleScreen.buildRoute(angle: angle));
+          Navigator.of(context).pushHidingTabBar(PuzzleScreen.buildRoute(angle: angle));
         },
       );
   }
@@ -223,23 +210,14 @@ Widget _buildMainListRemovedItem(
   );
 }
 
-class _PuzzleMenuListTile extends StatelessWidget {
-  const _PuzzleMenuListTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    this.badgeLabel,
-    this.onTap,
-    this.enabled = true,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final String? badgeLabel;
-  final VoidCallback? onTap;
-  final bool enabled;
-
+class const _PuzzleMenuListTile({
+  required final IconData icon,
+  required final String title,
+  required final String subtitle,
+  final String? badgeLabel,
+  final VoidCallback? onTap,
+  final bool enabled = true,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -265,9 +243,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
   }
 }
 
-class _PuzzleMenu extends ConsumerWidget {
-  const _PuzzleMenu();
-
+class const _PuzzleMenu() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -299,7 +275,7 @@ class _PuzzleMenu extends ConsumerWidget {
               (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StreakScreen.buildRoute());
+                  Navigator.of(context).pushHidingTabBar(StreakScreen.buildRoute());
                 }
               : null,
         ),
@@ -310,7 +286,7 @@ class _PuzzleMenu extends ConsumerWidget {
           subtitle: context.l10n.mobilePuzzleStormSubtitle,
           onTap: isOnline
               ? () {
-                  Navigator.of(context, rootNavigator: true).push(StormScreen.buildRoute());
+                  Navigator.of(context).pushHidingTabBar(StormScreen.buildRoute());
                 }
               : null,
         ),
@@ -327,13 +303,10 @@ class _PuzzleMenu extends ConsumerWidget {
           _PuzzleMenuListTile(
             icon: Icons.history_outlined,
             title: context.l10n.puzzleHistory,
-            subtitle: 'Review your past puzzle attempts.',
+            subtitle: context.l10n.mobilePuzzleHistoryDescription,
             enabled: isOnline,
             onTap: isOnline
-                ? () => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(PuzzleHistoryScreen.buildRoute())
+                ? () => Navigator.of(context).pushHidingTabBar(PuzzleHistoryScreen.buildRoute())
                 : null,
           ),
         ],
@@ -342,11 +315,7 @@ class _PuzzleMenu extends ConsumerWidget {
   }
 }
 
-class PuzzleHistoryWidget extends ConsumerWidget {
-  const PuzzleHistoryWidget({this.showHeader = true});
-
-  final bool showHeader;
-
+class const PuzzleHistoryWidget({final bool showHeader = true}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncData = ref.watch(puzzleRecentActivityProvider);
@@ -409,9 +378,7 @@ TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
 }
 
 /// A widget that displays the daily puzzle.
-class DailyPuzzle extends ConsumerWidget {
-  const DailyPuzzle({super.key});
-
+class const DailyPuzzle({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
@@ -461,7 +428,7 @@ class DailyPuzzle extends ConsumerWidget {
           ),
           onTap: () {
             if (!context.mounted) return;
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               PuzzleScreen.buildRoute(angle: const PuzzleTheme(PuzzleThemeKey.mix), puzzle: data),
             );
           },
@@ -485,12 +452,11 @@ class DailyPuzzle extends ConsumerWidget {
 }
 
 /// A widget that displays a preview of a puzzle angle batch.
-class PuzzleAnglePreview extends ConsumerWidget {
-  const PuzzleAnglePreview({required this.angle, this.onTap, super.key});
-
-  final PuzzleAngle angle;
-  final VoidCallback? onTap;
-
+class const PuzzleAnglePreview({
+  required final PuzzleAngle angle,
+  final VoidCallback? onTap,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzlePreviewProvider(angle));
@@ -507,15 +473,13 @@ class PuzzleAnglePreview extends ConsumerWidget {
           ? const Shimmer(
               child: ShimmerLoading(isLoading: true, child: SmallBoardPreview.loading()),
             )
-          : Slidable(
-              dragStartBehavior: DragStartBehavior.start,
-              enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
-              endActionPane: ActionPane(
-                motion: const StretchMotion(),
-                children: [
-                  SlidableAction(
+          : SwipeActions(
+              allowsFullSwipe: false,
+              endActions: [
+                if (angle != const PuzzleTheme(PuzzleThemeKey.mix))
+                  SwipeAction(
                     icon: Icons.delete,
-                    onPressed: (context) async {
+                    onPressed: () async {
                       final service = await ref.read(puzzleServiceProvider.future);
                       if (context.mounted) {
                         await service.deleteBatch(
@@ -525,13 +489,11 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         ref.invalidate(savedBatchesProvider);
                       }
                     },
-                    spacing: 8.0,
                     backgroundColor: context.lichessColors.error,
                     foregroundColor: Colors.white,
                     label: context.l10n.delete,
                   ),
-                ],
-              ),
+              ],
               child: SmallBoardPreview(
                 orientation: preview?.orientation ?? Side.white,
                 fen: preview?.initialFen ?? kEmptyFEN,
@@ -558,9 +520,8 @@ class PuzzleAnglePreview extends ConsumerWidget {
                             style: TextStyle(
                               height: 1.2,
                               fontSize: 12.0,
-                              color: DefaultTextStyle.of(
-                                context,
-                              ).style.color?.withValues(alpha: 0.6),
+                              color: DefaultTextStyle.of(context).style.color
+                                  ?.withValues(alpha: 0.6),
                             ),
                           ),
                         ],

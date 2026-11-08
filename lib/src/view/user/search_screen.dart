@@ -9,27 +9,24 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
 
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
-class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen({this.onUserTap, this.title, this.autoFocus = true, super.key});
+class const SearchScreen({
+  final void Function(LightUser)? onUserTap,
+  final bool autoFocus = true,
+  super.key,
+}) extends ConsumerStatefulWidget {
+  /// Hero tag of the search field, for a [SearchHeroButton] opening this screen.
+  static const heroTag = 'user-search-field';
 
-  final void Function(LightUser)? onUserTap;
-  final Widget? title;
-  final bool autoFocus;
-
-  static Route<dynamic> buildRoute({
-    void Function(LightUser)? onUserTap,
-    Widget? title,
-    bool autoFocus = true,
-  }) {
+  static Route<dynamic> buildRoute({void Function(LightUser)? onUserTap, bool autoFocus = true}) {
     return buildScreenRoute(
-      screen: SearchScreen(onUserTap: onUserTap, title: title, autoFocus: autoFocus),
-      fullscreenDialog: true,
+      screen: SearchScreen(onUserTap: onUserTap, autoFocus: autoFocus),
     );
   }
 
@@ -37,7 +34,7 @@ class SearchScreen extends ConsumerStatefulWidget {
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends ConsumerState<SearchScreen> {
+class _SearchScreenState() extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
   final saveHistoryDebouncer = Debouncer(_kSaveHistoryDebouncTimer);
   String? _term;
@@ -81,80 +78,69 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final searchBar = PlatformSearchBar(
-      hintText: context.l10n.searchSearch,
-      controller: _searchController,
-      autoFocus: widget.autoFocus,
+    final searchBar = SearchFieldHero(
+      tag: SearchScreen.heroTag,
+      child: PlatformSearchBar(
+        hintText: context.l10n.searchSearch,
+        controller: _searchController,
+        autoFocus: widget.autoFocus,
+        inAppBar: true,
+      ),
     );
 
     final body = _Body(_term, setSearchText, widget.onUserTap);
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: widget.title == null
-            ? kToolbarHeight
-            : null, // Custom height to fit the search bar
-        title: widget.title ?? searchBar,
-        bottom: widget.title != null
-            ? PreferredSize(
-                preferredSize: const Size.fromHeight(kToolbarHeight),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: searchBar,
-                ),
-              )
-            : null,
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: searchBar,
+        // The search field fills the bar.
+        centerTitle: false,
       ),
       body: body,
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body(this.term, this.onRecentSearchTap, this.onUserTap);
-
-  final String? term;
-  final void Function(String) onRecentSearchTap;
-  final void Function(LightUser)? onUserTap;
+class const _Body(
+  final String? term,
+  final void Function(String) onRecentSearchTap,
+  final void Function(LightUser)? onUserTap,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (term != null) {
-      return SafeArea(child: _UserList(term!, onUserTap));
+      return _UserList(term!, onUserTap);
     } else {
       final searchHistory = ref.watch(searchHistoryProvider).history;
-      return SafeArea(
-        child: SingleChildScrollView(
-          child: searchHistory.isEmpty
-              ? kEmptyWidget
-              : ListSection(
-                  header: Text(context.l10n.mobileRecentSearches),
-                  headerTrailing: TextButton(
-                    child: Text(context.l10n.mobileClearButton),
-                    onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
-                  ),
-                  hasLeading: true,
-                  children: searchHistory
-                      .map(
-                        (term) => ListTile(
-                          leading: const Icon(Icons.history),
-                          title: Text(term),
-                          onTap: () => onRecentSearchTap(term),
-                        ),
-                      )
-                      .toList(),
+      return SingleChildScrollView(
+        // Not in a SafeArea, so that the content scrolls under the app bar.
+        padding: MediaQuery.paddingOf(context),
+        child: searchHistory.isEmpty
+            ? kEmptyWidget
+            : ListSection(
+                header: Text(context.l10n.mobileRecentSearches),
+                headerTrailing: TextButton(
+                  child: Text(context.l10n.mobileClearButton),
+                  onPressed: () => ref.read(searchHistoryProvider.notifier).clear(),
                 ),
-        ),
+                hasLeading: true,
+                children: searchHistory
+                    .map(
+                      (term) => ListTile(
+                        leading: const Icon(Icons.history),
+                        title: Text(term),
+                        onTap: () => onRecentSearchTap(term),
+                      ),
+                    )
+                    .toList(),
+              ),
       );
     }
   }
 }
 
-class _UserList extends ConsumerWidget {
-  const _UserList(this.term, this.onUserTap);
-
-  final String term;
-  final void Function(LightUser)? onUserTap;
-
+class const _UserList(final String term, final void Function(LightUser)? onUserTap)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final autoComplete = ref.watch(autoCompleteUserProvider(term));
@@ -162,6 +148,8 @@ class _UserList extends ConsumerWidget {
     return autoComplete.when(
       data: (userList) => userList.isNotEmpty
           ? SingleChildScrollView(
+              // Not in a SafeArea, so that the content scrolls under the app bar.
+              padding: MediaQuery.paddingOf(context),
               child: ListSection(
                 header: Row(
                   children: [

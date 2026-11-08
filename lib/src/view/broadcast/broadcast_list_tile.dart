@@ -3,6 +3,7 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -16,10 +17,9 @@ const _kHandsetThumbnailSize = 80.0;
 const _kTabletThumbnailSize = 250.0;
 
 class BroadcastListTile extends StatelessWidget {
-  const BroadcastListTile({required this.broadcast, this.maxSubtitleLines = 4})
-    : _isLoading = false;
+  const new({required this.broadcast, this.maxSubtitleLines = 4}) : _isLoading = false;
 
-  const BroadcastListTile.loading({this.maxSubtitleLines = 4})
+  const new loading({this.maxSubtitleLines = 4})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -160,7 +160,7 @@ class BroadcastListTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(BroadcastRoundScreen.buildRoute(broadcast));
+        Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(broadcast));
       },
       child: Padding(
         padding: _kPadding,
@@ -212,16 +212,13 @@ class BroadcastListTile extends StatelessWidget {
   }
 }
 
-class BroadcastNextPageTile extends StatefulWidget {
-  const BroadcastNextPageTile(this.nextPageFunction);
-
-  final Future<void> Function() nextPageFunction;
-
+class const BroadcastNextPageTile(final Future<void> Function() nextPageFunction)
+    extends StatefulWidget {
   @override
   State<BroadcastNextPageTile> createState() => _BroadcastNextPageTileState();
 }
 
-class _BroadcastNextPageTileState extends State<BroadcastNextPageTile> {
+class _BroadcastNextPageTileState() extends State<BroadcastNextPageTile> {
   late Future<void> nextPageFuture;
 
   @override

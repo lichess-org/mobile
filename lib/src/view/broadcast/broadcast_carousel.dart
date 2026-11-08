@@ -13,7 +13,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show TabBarHidingNavigator, watchTabInteraction;
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -41,12 +42,9 @@ const BroadcastList _emptyBroadcasts = (
 );
 
 class BroadcastCarousel extends StatefulWidget {
-  const BroadcastCarousel({required this.broadcasts, required this.worker, super.key})
-    : _isLoading = false;
+  const new({required this.broadcasts, required this.worker, super.key}) : _isLoading = false;
 
-  const BroadcastCarousel.loading({required this.worker})
-    : _isLoading = true,
-      broadcasts = _emptyBroadcasts;
+  const new loading({required this.worker}) : _isLoading = true, broadcasts = _emptyBroadcasts;
 
   final BroadcastList broadcasts;
   final ImageColorWorker worker;
@@ -67,7 +65,7 @@ class BroadcastCarousel extends StatefulWidget {
   State<BroadcastCarousel> createState() => _BroadcastCarouselState();
 }
 
-class _BroadcastCarouselState extends State<BroadcastCarousel> {
+class _BroadcastCarouselState() extends State<BroadcastCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -137,18 +135,13 @@ class _BroadcastCarouselState extends State<BroadcastCarousel> {
 }
 
 class BroadcastCarouselItem extends ConsumerStatefulWidget {
-  const BroadcastCarouselItem({
-    required this.broadcast,
-    required this.flexWeights,
-    required this.worker,
-    super.key,
-  });
+  const new({required this.broadcast, required this.flexWeights, required this.worker, super.key});
 
   final Broadcast broadcast;
   final ImageColorWorker worker;
   final List<int> flexWeights;
 
-  const BroadcastCarouselItem.loading({required this.worker, required this.flexWeights})
+  const new loading({required this.worker, required this.flexWeights})
     : broadcast = const Broadcast(
         tour: BroadcastTournamentData(
           id: BroadcastTournamentId(''),
@@ -184,14 +177,14 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BroadcastCarouselItem> createState() => _BroadcastCarouselItemState();
 }
 
-class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
+class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBroadcastImage;
 
   @override
@@ -200,7 +193,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -248,10 +241,7 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(widget.broadcast));
+        Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
@@ -301,14 +291,12 @@ class _BroadcastCarouselItemState extends ConsumerState<BroadcastCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd().add_jm();
+DateFormat get _dateFormat => DateFormat.MMMd().add_jm();
 
-class _BroadcastCardContent extends StatelessWidget {
-  const _BroadcastCardContent({required this.broadcast, required this._cardColors});
-
-  final Broadcast broadcast;
-  final _CardColors? _cardColors;
-
+class const _BroadcastCardContent({
+  required final Broadcast broadcast,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String? eventDate;
@@ -421,22 +409,10 @@ class _BroadcastCardContent extends StatelessWidget {
                 icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                 actions: [
                   ContextMenuAction(
-                    icon: Icons.info,
-                    label: context.l10n.broadcastOverview,
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        BroadcastRoundScreen.buildRoute(
-                          broadcast,
-                          initialTab: BroadcastRoundTab.overview,
-                        ),
-                      );
-                    },
-                  ),
-                  ContextMenuAction(
                     icon: LichessIcons.chess_board,
                     label: context.l10n.broadcastBoards,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.boards,
@@ -448,7 +424,7 @@ class _BroadcastCardContent extends StatelessWidget {
                     icon: Icons.people,
                     label: context.l10n.players,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.players,
@@ -460,10 +436,13 @@ class _BroadcastCardContent extends StatelessWidget {
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
-                    label: context.l10n.studyShareAndExport,
-                    onPressed: () {
-                      showBroadcastShareMenu(context, broadcast.tour, broadcast.round);
-                    },
+                    label: context.l10n.mobileShare,
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      broadcast.tour,
+                      broadcast.round,
+                    ),
                   ),
                 ],
               ),

@@ -19,11 +19,7 @@ final appLogPaginatorProvider = AsyncNotifierProvider.autoDispose
     );
 
 /// A Riverpod controller for managing paginated app log entries.
-class AppLogPaginator extends AsyncNotifier<AppLogState> {
-  AppLogPaginator(this._searchQuery);
-
-  final String? _searchQuery;
-
+class AppLogPaginator(final String? _searchQuery) extends AsyncNotifier<AppLogState> {
   @override
   Future<AppLogState> build() async {
     final storage = await ref.read(appLogStorageProvider.future);
@@ -74,10 +70,8 @@ class AppLogPaginator extends AsyncNotifier<AppLogState> {
 }
 
 @freezed
-sealed class AppLogState with _$AppLogState {
-  const AppLogState._();
-
-  const factory AppLogState({required IList<AsyncValue<AppLogPage>> data}) = _AppLogState;
+sealed class const AppLogState._() with _$AppLogState {
+  const factory({required IList<AsyncValue<AppLogPage>> data}) = _AppLogState;
 
   bool get initialized => data.isNotEmpty;
   List<AppLogEntry> get logs =>

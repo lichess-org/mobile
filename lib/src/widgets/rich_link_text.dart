@@ -5,37 +5,28 @@ typedef LinkCallback = void Function(LinkableElement link);
 
 /// A widget that renders [text] with URLs, email addresses and user tags
 /// turned into tappable links.
-class RichLinkText extends StatefulWidget {
-  final String text;
-  final List<Linkifier> linkifiers;
-  final LinkCallback? onOpen;
-  final TextStyle? style;
-  final TextStyle? linkStyle;
-  final TextAlign textAlign;
-  final TextDirection? textDirection;
-  final int? maxLines;
-  final TextOverflow overflow;
-  final TextScaler? textScaler;
+class const RichLinkText({
+  super.key,
+  required final String text,
+  final List<Linkifier> linkifiers = defaultLinkifiers,
+  final LinkCallback? onOpen,
+  final TextStyle? style,
+  final TextStyle? linkStyle,
+  final TextAlign textAlign = TextAlign.start,
+  final TextDirection? textDirection,
+  final int? maxLines,
+  final TextOverflow overflow = TextOverflow.clip,
+  final TextScaler? textScaler,
 
-  const RichLinkText({
-    super.key,
-    required this.text,
-    this.linkifiers = defaultLinkifiers,
-    this.onOpen,
-    this.style,
-    this.linkStyle,
-    this.textAlign = TextAlign.start,
-    this.textDirection,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
-    this.textScaler,
-  });
-
+  /// Appended after the text, inside the same paragraph. For a caller that overlays something on
+  /// the last line, such as a timestamp, and needs to reserve room for it.
+  final InlineSpan? trailing,
+}) extends StatefulWidget {
   @override
   State<RichLinkText> createState() => _RichLinkTextState();
 }
 
-class _RichLinkTextState extends State<RichLinkText> {
+class _RichLinkTextState() extends State<RichLinkText> {
   late List<LinkifyElement> _elements;
   final List<TapGestureRecognizer> _recognizers = [];
 
@@ -49,9 +40,12 @@ class _RichLinkTextState extends State<RichLinkText> {
   @override
   void didUpdateWidget(RichLinkText oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // Not on onOpen: a recognizer's onTap reads widget.onOpen when tapped, so a new callback does
+    // not need a new recognizer. Every caller passes an inline closure, so including it here would
+    // relink the text on every parent rebuild.
     if (oldWidget.text != widget.text ||
         oldWidget.linkifiers != widget.linkifiers ||
-        oldWidget.onOpen != widget.onOpen) {
+        (oldWidget.onOpen == null) != (widget.onOpen == null)) {
       _disposeRecognizers();
       _elements = linkify(widget.text, linkifiers: widget.linkifiers);
       _createRecognizers();
@@ -93,10 +87,7 @@ class _RichLinkTextState extends State<RichLinkText> {
             text: element.text,
             style:
                 widget.linkStyle ??
-                defaultStyle.copyWith(
-                  color: Colors.blueAccent,
-                  decoration: TextDecoration.underline,
-                ),
+                defaultStyle.copyWith(color: Colors.blueAccent, decoration: TextDecoration.none),
             recognizer: widget.onOpen != null ? _recognizers[recognizerIndex++] : null,
           ),
         );
@@ -105,8 +96,9 @@ class _RichLinkTextState extends State<RichLinkText> {
       }
     }
 
+    final trailing = widget.trailing;
     return Text.rich(
-      TextSpan(children: children),
+      TextSpan(children: trailing == null ? children : [...children, trailing]),
       textAlign: widget.textAlign,
       textDirection: widget.textDirection,
       maxLines: widget.maxLines,
@@ -116,11 +108,8 @@ class _RichLinkTextState extends State<RichLinkText> {
   }
 }
 
-abstract class LinkifyElement {
-  final String text;
-  final String originText;
-
-  LinkifyElement(this.text, [String? originText]) : originText = originText ?? text;
+abstract class LinkifyElement(final String text, [String? originText]) {
+  final String originText = originText ?? text;
 
   @override
   String toString() {
@@ -128,35 +117,25 @@ abstract class LinkifyElement {
   }
 }
 
-class TextElement extends LinkifyElement {
-  TextElement(super.text);
+class TextElement(super.text) extends LinkifyElement;
+
+class LinkableElement(String? text, final String url, [String? originText]) extends LinkifyElement {
+  this : super(text ?? url, originText);
 }
 
-class LinkableElement extends LinkifyElement {
-  final String url;
-
-  LinkableElement(String? text, this.url, [String? originText]) : super(text ?? url, originText);
+class UrlElement(String url, [String? text, String? originText]) extends LinkableElement {
+  this : super(text, url, originText);
 }
 
-class UrlElement extends LinkableElement {
-  UrlElement(String url, [String? text, String? originText]) : super(text, url, originText);
+class EmailElement(final String emailAddress) extends LinkableElement {
+  this : super(emailAddress, 'mailto:$emailAddress');
 }
 
-class EmailElement extends LinkableElement {
-  final String emailAddress;
-
-  EmailElement(this.emailAddress) : super(emailAddress, 'mailto:$emailAddress');
+class UserTagElement(final String userTag) extends LinkableElement {
+  this : super(userTag, userTag);
 }
 
-class UserTagElement extends LinkableElement {
-  final String userTag;
-
-  UserTagElement(this.userTag) : super(userTag, userTag);
-}
-
-abstract class Linkifier {
-  const Linkifier();
-
+abstract class const Linkifier() {
   List<LinkifyElement> parse(List<LinkifyElement> elements);
 }
 
@@ -170,9 +149,7 @@ final _mailtoRegex = RegExp('^mailto:', caseSensitive: false);
 
 final _wordBoundaryRegex = RegExp(r'[\w@]$');
 
-class UrlLinkifier extends Linkifier {
-  const UrlLinkifier();
-
+class const UrlLinkifier() extends Linkifier {
   @override
   List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
@@ -245,9 +222,7 @@ final _emailRegex = RegExp(
   dotAll: true,
 );
 
-class EmailLinkifier extends Linkifier {
-  const EmailLinkifier();
-
+class const EmailLinkifier() extends Linkifier {
   @override
   List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
@@ -284,11 +259,14 @@ class EmailLinkifier extends Linkifier {
   }
 }
 
-final _userTagRegex = RegExp(r'^(.*?)(@[\w@]+(?:[.!][\w@]+)*)', caseSensitive: false, dotAll: true);
+// Same rule as lila's UserName.atRegex.
+final _userTagRegex = RegExp(
+  r'^(.*?)(@[\w-]{2,30}(?![@\w-]|\.\w))',
+  caseSensitive: false,
+  dotAll: true,
+);
 
-class UserTagLinkifier extends Linkifier {
-  const UserTagLinkifier();
-
+class const UserTagLinkifier() extends Linkifier {
   @override
   List<LinkifyElement> parse(List<LinkifyElement> elements) {
     final result = <LinkifyElement>[];
@@ -350,31 +328,4 @@ List<LinkifyElement> linkify(String text, {List<Linkifier> linkifiers = defaultL
   }
 
   return elements;
-}
-
-TextSpan buildTextSpan(
-  List<LinkifyElement> elements, {
-  TextStyle? style,
-  TextStyle? linkStyle,
-  LinkCallback? onOpen,
-}) {
-  final children = <InlineSpan>[];
-
-  for (final element in elements) {
-    if (element is LinkableElement) {
-      children.add(
-        TextSpan(
-          text: element.text,
-          style: linkStyle,
-          recognizer: onOpen != null
-              ? (TapGestureRecognizer()..onTap = () => onOpen(element))
-              : null,
-        ),
-      );
-    } else {
-      children.add(TextSpan(text: element.text, style: style));
-    }
-  }
-
-  return TextSpan(children: children);
 }

@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
@@ -17,8 +17,6 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/nnue_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -31,7 +29,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -51,7 +48,6 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
-import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -69,24 +65,22 @@ import 'package:url_launcher/url_launcher.dart';
 /// Number of cold app starts before hiding the home customization tip.
 const kColdAppStartsHideCustomizationTipThreshold = 5;
 
-class HomeTabScreen extends ConsumerStatefulWidget {
-  const HomeTabScreen({super.key, this.editModeEnabled = false});
-
-  final bool editModeEnabled;
-
+class const HomeTabScreen({super.key, final bool editModeEnabled = false})
+    extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({bool editModeEnabled = false}) {
-    return buildScreenRoute(screen: HomeTabScreen(editModeEnabled: editModeEnabled));
+    return buildScreenRoute(
+      screen: HomeTabScreen(editModeEnabled: editModeEnabled),
+      // Editing the home widgets is a full screen task, closed with its OK button.
+      fullscreenDialog: editModeEnabled,
+    );
   }
 
   @override
   ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
 }
 
-class _IsEditingHome extends InheritedWidget {
-  const _IsEditingHome({required super.child, required this.isEditingWidgets});
-
-  final bool isEditingWidgets;
-
+class const _IsEditingHome({required super.child, required final bool isEditingWidgets})
+    extends InheritedWidget {
   @override
   bool updateShouldNotify(_IsEditingHome oldWidget) {
     return isEditingWidgets != oldWidget.isEditingWidgets;
@@ -103,10 +97,9 @@ class _IsEditingHome extends InheritedWidget {
   }
 }
 
-const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
 const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
 
-class _HomeScreenState extends ConsumerState<HomeTabScreen> {
+class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
   ImageColorWorker? _worker;
   final _refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -183,6 +176,17 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ? ref.watch(followingCarouselProvider)
                 : const AsyncValue.data(IListConst<FollowingUser>([]));
 
+            // Widgets whose content can be empty should not show a checkbox in
+            // edit mode when there is nothing to display next to it.
+            final hasFeaturedTournaments = featuredTournaments.maybeWhen(
+              data: (tournaments) => tournaments.any((t) => t.isSupportedInApp),
+              orElse: () => true,
+            );
+            final hasFollowing = followingAsync.maybeWhen(
+              data: (following) => following.isNotEmpty,
+              orElse: () => true,
+            );
+
             final isKidMode = ref.watch(kidModeProvider).value ?? false;
 
             // Show the welcome screen if not logged in and there are no recent games and no stored games
@@ -195,11 +199,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
             if (shouldShowWelcomeScreen) {
               final welcomeWidgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
                 if (showOutage) const ServerOutageDisplay(),
                 if (!widget.editModeEnabled) ...[
                   Padding(
@@ -231,7 +230,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                       child: Text(context.l10n.aboutX('Lichess...')),
                     ),
                   ),
-                  const _WelcomeMessageCard(),
                   const _HomeCustomizationTip(),
                 ],
               ];
@@ -264,7 +262,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     ),
                   _EditableWidget(
                     widget: HomeEditableWidget.featuredTournaments,
-                    shouldShow: hasServerContent,
+                    shouldShow: hasServerContent && hasFeaturedTournaments,
                     child: FeaturedTournamentsWidget(featured: featuredTournaments),
                   ),
                   if (_worker != null && !isKidMode)
@@ -277,15 +275,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               ];
             } else if (isTablet) {
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 if (hasServerContent)
                   _EditableWidget(
@@ -295,7 +285,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 Row(
@@ -350,26 +340,16 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                         orElse: () => false,
                       ));
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 _EditableWidget(
                   widget: HomeEditableWidget.perfCards,
                   shouldShow: authUser != null && hasServerContent,
-                  child: AccountPerfCards(
-                    padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-                  ),
+                  child: const AccountPerfCards(padding: Styles.bodySectionPadding),
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
-                  shouldShow: authUser != null && hasServerContent,
+                  shouldShow: authUser != null && hasServerContent && hasFollowing,
                   child: FollowingCarousel(followingAsync),
                 ),
                 _EditableWidget(
@@ -389,7 +369,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.featuredTournaments,
-                  shouldShow: hasServerContent,
+                  shouldShow: hasServerContent && hasFeaturedTournaments,
                   child: FeaturedTournamentsWidget(featured: featuredTournaments),
                 ),
                 if (_worker != null && !isKidMode)
@@ -434,51 +414,32 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   appBar: widget.editModeEnabled
                       ? PlatformAppBar(
                           title: Text(context.l10n.mobileSettingsHomeWidgets),
-                          leading: const BackButton(),
+                          leading: TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text(context.l10n.ok),
+                          ),
+                          leadingWidth: 80.0,
                           automaticallyImplyLeading: false,
                         )
                       : PlatformAppBar(
-                          title: Theme.of(context).platform == TargetPlatform.iOS
-                              ? AppBarLichessTitle(
-                                  iconSize:
-                                      Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
-                                )
-                              : const AppBarLichessTitle(),
+                          // A greeting without a name when logged out.
+                          title: _GreetingWidget(authUser?.user, isOnline: isOnline),
                           centerTitle: false,
-                          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                              ? Theme.of(context).textTheme.headlineSmall
-                              : null,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
                   body: widget.editModeEnabled
                       ? content
                       : HapticRefreshIndicator(
-                          edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
                           key: _refreshKey,
-                          onRefresh: () => _refreshData(isOnline: isOnline),
+                          // Not gated on the connectivity status: the device may be marked
+                          // offline while its network is back, and the responses to these
+                          // requests are what tell the connectivity check to run again.
+                          onRefresh: () => _refreshData(isOnline: true),
                           child: content,
                         ),
-                  bottomNavigationBar: widget.editModeEnabled
-                      ? BottomAppBar(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(context.l10n.ok),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
                   floatingActionButton: widget.editModeEnabled || isTablet
                       ? null
                       : const FloatingPlayButton(),
-                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
                 ),
               ),
             );
@@ -507,9 +468,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 }
 
-class _LichessMessageBanner extends ConsumerWidget {
-  const _LichessMessageBanner();
-
+class const _LichessMessageBanner() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -517,8 +476,8 @@ class _LichessMessageBanner extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true)
-              .push(
+          Navigator.of(context)
+              .pushHidingTabBar(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
                 ),
@@ -538,7 +497,7 @@ class _LichessMessageBanner extends ConsumerWidget {
               ),
               const SizedBox(height: 4.0),
               Text(
-                context.l10n.clickHereToReadIt,
+                context.l10n.readTheMessage,
                 style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
               ),
             ],
@@ -549,9 +508,7 @@ class _LichessMessageBanner extends ConsumerWidget {
   }
 }
 
-class _SignInWidget extends ConsumerWidget {
-  const _SignInWidget();
-
+class const _SignInWidget() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signInState = ref.watch(signInMutation);
@@ -581,13 +538,11 @@ class _SignInWidget extends ConsumerWidget {
 ///   pairing matrix when the user is online.
 ///   This parameter is only active when the user is not in edit mode, as we
 ///   always want to display the widget in edit mode.
-class _EditableWidget extends ConsumerWidget {
-  const _EditableWidget({required this.child, required this.widget, required this.shouldShow});
-
-  final Widget child;
-  final HomeEditableWidget widget;
-  final bool shouldShow;
-
+class const _EditableWidget({
+  required final Widget child,
+  required final HomeEditableWidget widget,
+  required final bool shouldShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final disabledWidgets = ref.watch(homePreferencesProvider).disabledWidgets;
@@ -634,7 +589,7 @@ class _EditableWidget extends ConsumerWidget {
   }
 }
 
-class _IsDayTimeNotifier extends Notifier<bool> {
+class _IsDayTimeNotifier() extends Notifier<bool> {
   Timer? _timer;
 
   @override
@@ -658,64 +613,59 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   name: '_isDayTimeProvider',
 );
 
-class _GreetingWidget extends ConsumerWidget {
-  const _GreetingWidget();
-
+/// The greeting of the user, as the app bar title, which opens the profile when logged in.
+/// The greeting of the home app bar, with an "Offline" subtitle while the device is offline.
+class const _GreetingWidget(
+  /// Null when logged out: the greeting has no name.
+  final LightUser? user, {
+  required final bool isOnline,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
     final isDayTime = ref.watch(_isDayTimeProvider);
-    final style = TextTheme.of(context).bodyLarge;
+    final user = this.user;
+    final text = user != null
+        ? (isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening)(user.name)
+        : isDayTime
+        ? context.l10n.mobileGoodDayWithoutName
+        : context.l10n.mobileGoodEveningWithoutName;
+    final greeting = '${isDayTime ? '☀️' : '🌙'} $text';
 
-    const iconSize = 24.0;
+    void openProfile() {
+      Navigator.of(context).push(ProfileScreen.buildRoute());
+    }
 
-    final user = authUser?.user;
-
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.3,
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: GestureDetector(
-          onTap: () {
-            ref.invalidate(accountProvider);
-            Navigator.of(context).push(ProfileScreen.buildRoute());
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isDayTime ? '☀️' : '🌙',
-                style: const TextStyle(fontSize: iconSize, height: 1.0),
-              ),
-              const SizedBox(width: 5.0),
-              if (user != null)
-                Flexible(
-                  child: l10nWithWidget(
-                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
-                    Text(user.name, style: style),
-                    textStyle: style,
-                  ),
-                )
-              else
-                Flexible(
-                  child: Text(
-                    isDayTime
-                        ? context.l10n.mobileGoodDayWithoutName
-                        : context.l10n.mobileGoodEveningWithoutName,
-                    style: style,
-                  ),
-                ),
-            ],
+    return InkWell(
+      onTap: user != null ? openProfile : null,
+      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            greeting,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
+            style: Theme.of(context).platform == TargetPlatform.iOS
+                ? TextTheme.of(context).titleLarge
+                : null,
           ),
-        ),
+          if (!isOnline)
+            Text(
+              context.l10n.noNetwork,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextTheme.of(context).bodySmall
+                  ?.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
       ),
     );
   }
 }
 
-class _TabletCreateAGameSection extends StatelessWidget {
-  const _TabletCreateAGameSection();
-
+class const _TabletCreateAGameSection() extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Column(
@@ -732,12 +682,10 @@ class _TabletCreateAGameSection extends StatelessWidget {
   }
 }
 
-class _BlogCarouselWidget extends ConsumerWidget {
-  const _BlogCarouselWidget(this.posts, this.worker);
-
-  final AsyncValue<IList<BlogPost>> posts;
-  final ImageColorWorker worker;
-
+class const _BlogCarouselWidget(
+  final AsyncValue<IList<BlogPost>> posts,
+  final ImageColorWorker worker,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
@@ -765,13 +713,10 @@ class _BlogCarouselWidget extends ConsumerWidget {
   }
 }
 
-class _OngoingGamesCarousel extends ConsumerWidget {
-  const _OngoingGamesCarousel(this.games, {required this.maxGamesToShow});
-
-  final AsyncValue<IList<OngoingGame>> games;
-
-  final int maxGamesToShow;
-
+class const _OngoingGamesCarousel(
+  final AsyncValue<IList<OngoingGame>> games, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (games) {
@@ -786,7 +731,7 @@ class _OngoingGamesCarousel extends ConsumerWidget {
           list: list,
           onTap: (index) {
             final game = list[index];
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
@@ -808,13 +753,10 @@ class _OngoingGamesCarousel extends ConsumerWidget {
   }
 }
 
-class _OfflineCorrespondenceCarousel extends ConsumerWidget {
-  const _OfflineCorrespondenceCarousel(this.offlineCorresGames, {required this.maxGamesToShow});
-
-  final int maxGamesToShow;
-
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
-
+class const _OfflineCorrespondenceCarousel(
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return offlineCorresGames.maybeWhen(
@@ -826,10 +768,9 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
           list: data,
           onTap: (index) {
             final el = data[index];
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)));
+            Navigator.of(context).pushHidingTabBar(
+              OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)),
+            );
           },
           builder: (el) => OngoingGameCarouselItem(
             game: OngoingGame(
@@ -857,12 +798,10 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
   }
 }
 
-class _OngoingGamesPreview extends ConsumerWidget {
-  const _OngoingGamesPreview(this.games, {required this.maxGamesToShow});
-
-  final AsyncValue<IList<OngoingGame>> games;
-  final int maxGamesToShow;
-
+class const _OngoingGamesPreview(
+  final AsyncValue<IList<OngoingGame>> games, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (games) {
@@ -887,13 +826,10 @@ class _OngoingGamesPreview extends ConsumerWidget {
   }
 }
 
-class _OfflineCorrespondencePreview extends ConsumerWidget {
-  const _OfflineCorrespondencePreview(this.offlineCorresGames, {required this.maxGamesToShow});
-
-  final int maxGamesToShow;
-
-  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames;
-
+class const _OfflineCorrespondencePreview(
+  final AsyncValue<IList<(DateTime, OfflineCorrespondenceGame)>> offlineCorresGames, {
+  required final int maxGamesToShow,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return offlineCorresGames.maybeWhen(
@@ -910,18 +846,12 @@ class _OfflineCorrespondencePreview extends ConsumerWidget {
   }
 }
 
-class PreviewGameList<T> extends StatelessWidget {
-  const PreviewGameList({
-    required this.list,
-    required this.builder,
-    required this.moreScreenRouteBuilder,
-    required this.maxGamesToShow,
-  });
-  final IList<T> list;
-  final Widget Function(T data) builder;
-  final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder;
-  final int maxGamesToShow;
-
+class const PreviewGameList<T>({
+  required final IList<T> list,
+  required final Widget Function(T data) builder,
+  required final Route<dynamic> Function(BuildContext) moreScreenRouteBuilder,
+  required final int maxGamesToShow,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (list.isEmpty) {
@@ -948,9 +878,7 @@ class PreviewGameList<T> extends StatelessWidget {
   }
 }
 
-class _ChallengeScreenButton extends ConsumerWidget {
-  const _ChallengeScreenButton();
-
+class const _ChallengeScreenButton() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -986,13 +914,8 @@ class _ChallengeScreenButton extends ConsumerWidget {
   }
 }
 
-class _TipCard extends StatelessWidget {
-  const _TipCard({required this.content, required this.actions});
-
-  final Widget content;
-
-  final List<Widget> actions;
-
+class const _TipCard({required final Widget content, required final List<Widget> actions})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -1016,136 +939,12 @@ class _TipCard extends StatelessWidget {
   }
 }
 
-class _WelcomeMessageCard extends StatefulWidget {
-  const _WelcomeMessageCard();
-
-  @override
-  State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
-}
-
-class _WelcomeMessageCardState extends State<_WelcomeMessageCard> {
-  bool _shouldDisplay() {
-    return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
-  }
-
-  void _dismiss() {
-    LichessBinding.instance.sharedPreferences.setBool(kWelcomeMessageShownKey, true);
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_shouldDisplay()) {
-      return const SizedBox.shrink();
-    }
-
-    return _TipCard(
-      content: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            TextSpan(text: context.l10n.mobileNotAllFeaturesAreAvailable),
-          ],
-        ),
-      ),
-      actions: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
-    );
-  }
-}
-
-class _NNUEFilesOutdatedTip extends ConsumerStatefulWidget {
-  const _NNUEFilesOutdatedTip();
-
-  @override
-  ConsumerState<_NNUEFilesOutdatedTip> createState() => _NNUEFilesOutdatedTipState();
-}
-
-class _NNUEFilesOutdatedTipState extends ConsumerState<_NNUEFilesOutdatedTip> {
-  bool _openedSettings = false;
-  late Future<bool> _checkNNUEFilesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkNNUEFilesFuture = ref.read(nnueServiceProvider).hasOutdatedNNUEFiles();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final chessEnginePref = ref.watch(engineEvaluationPreferencesProvider).enginePref;
-    if (chessEnginePref != ChessEnginePref.sfLatest) {
-      return const SizedBox.shrink();
-    }
-
-    final nnueService = ref.watch(nnueServiceProvider);
-    if (nnueService.isDownloadingNNUEFiles) {
-      return const SizedBox.shrink();
-    }
-
-    return FocusDetector(
-      // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
-      onFocusRegained: () {
-        if (_openedSettings) {
-          setState(() {
-            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
-            _openedSettings = false;
-          });
-        }
-      },
-      child: FutureBuilder(
-        future: _checkNNUEFilesFuture,
-        builder: (context, snapshot) {
-          final hasOutdatedNNUEFiles = snapshot.data ?? false;
-          if (!hasOutdatedNNUEFiles) {
-            return const SizedBox.shrink();
-          }
-
-          return _TipCard(
-            content: Row(
-              children: [
-                Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8.0),
-                const Flexible(
-                  child: Text(
-                    // TODO l10n
-                    'New Stockfish version available! Go to the settings to download the updated NNUE files.',
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _openedSettings = true;
-                  });
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(EngineSettingsScreen.buildRoute());
-                },
-                // TODO l10n
-                child: const Text('Open settings'),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _HomeCustomizationTip extends StatefulWidget {
-  const _HomeCustomizationTip();
-
+class const _HomeCustomizationTip() extends StatefulWidget {
   @override
   State<_HomeCustomizationTip> createState() => _HomeCustomizationTipState();
 }
 
-class _HomeCustomizationTipState extends State<_HomeCustomizationTip> {
+class _HomeCustomizationTipState() extends State<_HomeCustomizationTip> {
   bool _shouldDisplayHomeWidgetCustomizationTip() {
     final prefs = LichessBinding.instance.sharedPreferences;
 

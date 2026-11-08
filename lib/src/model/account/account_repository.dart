@@ -29,12 +29,7 @@ final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
 
-class AccountRepository {
-  AccountRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class AccountRepository(final LichessClient client, final Aggregator aggregator) {
   Future<User> getProfile() {
     return aggregator.readJson(
       Uri(path: '/api/account', queryParameters: {'playban': '1'}),
@@ -103,5 +98,6 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     follow: BooleanPref(pick('follow').asBoolOrThrow()),
     challenge: Challenge.fromInt(pick('challenge').asIntOrThrow()),
     message: Message.fromInt(pick('message').asIntOrThrow()),
+    favoriteFederation: pick('favFed').letOrNull((p) => FederationId.fromCode(p.asStringOrThrow())),
   );
 }

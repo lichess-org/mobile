@@ -12,11 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
-class ConditionalPremoves extends ConsumerWidget {
-  const ConditionalPremoves(this.options);
-
-  final AnalysisOptions options;
-
+class const ConditionalPremoves(final AnalysisOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(options);
@@ -25,7 +21,8 @@ class ConditionalPremoves extends ConsumerWidget {
     final lines = analysisState.forecast!.lines;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      // Above a bar floating over the view.
+      padding: EdgeInsets.only(left: 4.0, right: 4.0, bottom: MediaQuery.paddingOf(context).bottom),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -58,11 +55,7 @@ class ConditionalPremoves extends ConsumerWidget {
   }
 }
 
-class _AddVariationButton extends ConsumerWidget {
-  const _AddVariationButton(this.options);
-
-  final AnalysisOptions options;
-
+class const _AddVariationButton(final AnalysisOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(analysisControllerProvider(options)).requireValue;
@@ -111,11 +104,7 @@ class _AddVariationButton extends ConsumerWidget {
   }
 }
 
-class _PlayAndSaveButton extends ConsumerWidget {
-  const _PlayAndSaveButton(this.options);
-
-  final AnalysisOptions options;
-
+class const _PlayAndSaveButton(final AnalysisOptions options) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(analysisControllerProvider(options)).requireValue;
@@ -151,17 +140,12 @@ class _PlayAndSaveButton extends ConsumerWidget {
   }
 }
 
-class _SavedVariation extends ConsumerWidget {
-  const _SavedVariation(this.options, {required this.startingNode, required this.path, this.onTap});
-
-  final AnalysisOptions options;
-
-  final ViewNode startingNode;
-
-  final UciPath path;
-
-  final VoidCallback? onTap;
-
+class const _SavedVariation(
+  final AnalysisOptions options, {
+  required final ViewNode startingNode,
+  required final UciPath path,
+  final VoidCallback? onTap,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
@@ -188,15 +172,11 @@ class _SavedVariation extends ConsumerWidget {
   }
 }
 
-class _Variation extends ConsumerWidget {
-  const _Variation({required this.startingNode, required this.path, required this.maxLines});
-
-  final ViewNode startingNode;
-
-  final UciPath path;
-
-  final int maxLines;
-
+class const _Variation({
+  required final ViewNode startingNode,
+  required final UciPath path,
+  required final int maxLines,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceNotation = ref

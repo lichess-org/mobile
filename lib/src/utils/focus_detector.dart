@@ -5,54 +5,42 @@ import 'package:visibility_detector/visibility_detector.dart';
 // https://github.com/EdsonBueno/focus_detector
 
 /// Fires callbacks every time the widget appears or disappears from the screen.
-class FocusDetector extends StatefulWidget {
-  const FocusDetector({
-    required this.child,
-    this.onFocusGained,
-    this.onFocusRegained,
-    this.onFocusLost,
-    this.onVisibilityGained,
-    this.onVisibilityRegained,
-    this.onVisibilityLost,
-    this.onForegroundGained,
-    this.onForegroundLost,
-    super.key,
-  });
+class const FocusDetector({
+  /// The widget below this widget in the tree.
+  required final Widget child,
 
   /// Called when the widget becomes visible or enters foreground while visible.
-  final VoidCallback? onFocusGained;
+  final VoidCallback? onFocusGained,
 
   /// Called when the widget gains focus again (same as onFocusGained but does
   /// not fires the first time).
-  final VoidCallback? onFocusRegained;
+  final VoidCallback? onFocusRegained,
 
   /// Called when the widget becomes invisible or enters background while visible.
-  final VoidCallback? onFocusLost;
+  final VoidCallback? onFocusLost,
 
   /// Called when the widget becomes visible.
-  final VoidCallback? onVisibilityGained;
+  final VoidCallback? onVisibilityGained,
 
   /// Called when the widget become visible again (same as onVisibilityGained but
   /// does not fires the first time).
-  final VoidCallback? onVisibilityRegained;
+  final VoidCallback? onVisibilityRegained,
 
   /// Called when the widget becomes invisible.
-  final VoidCallback? onVisibilityLost;
+  final VoidCallback? onVisibilityLost,
 
   /// Called when the app entered the foreground while the widget is visible.
-  final VoidCallback? onForegroundGained;
+  final VoidCallback? onForegroundGained,
 
   /// Called when the app is sent to background while the widget was visible.
-  final VoidCallback? onForegroundLost;
-
-  /// The widget below this widget in the tree.
-  final Widget child;
-
+  final VoidCallback? onForegroundLost,
+  super.key,
+}) extends StatefulWidget {
   @override
   _FocusDetectorState createState() => _FocusDetectorState();
 }
 
-class _FocusDetectorState extends State<FocusDetector> with WidgetsBindingObserver {
+class _FocusDetectorState() extends State<FocusDetector> with WidgetsBindingObserver {
   final _visibilityDetectorKey = UniqueKey();
 
   /// Counter to keep track of the visibility changes.

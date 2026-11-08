@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -23,9 +24,7 @@ import 'package:material_color_utilities/score/score.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:path/path.dart';
 
-class BackgroundChoiceScreen extends StatelessWidget {
-  const BackgroundChoiceScreen({super.key});
-
+class const BackgroundChoiceScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const BackgroundChoiceScreen());
   }
@@ -34,7 +33,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.background)),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
@@ -42,7 +41,7 @@ class BackgroundChoiceScreen extends StatelessWidget {
 const colorChoices = BackgroundColor.values;
 const itemsByRow = 3;
 
-class _Body extends ConsumerWidget {
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appDocumentsDirectory = ref
@@ -191,21 +190,16 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class ConfirmColorBackgroundScreen extends StatefulWidget {
-  const ConfirmColorBackgroundScreen({
-    required this.initialIndex,
-    required this.boardPrefs,
-    super.key,
-  });
-
-  final int initialIndex;
-  final BoardPrefs boardPrefs;
-
+class const ConfirmColorBackgroundScreen({
+  required final int initialIndex,
+  required final BoardPrefs boardPrefs,
+  super.key,
+}) extends StatefulWidget {
   @override
   State<ConfirmColorBackgroundScreen> createState() => _ConfirmColorBackgroundScreenState();
 }
 
-class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScreen> {
+class _ConfirmColorBackgroundScreenState() extends State<ConfirmColorBackgroundScreen> {
   late PageController _controller;
 
   @override
@@ -230,9 +224,26 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                 ? _controller.page ?? widget.initialIndex
                 : widget.initialIndex)
             .toInt()];
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    final cancelLabel = Text(context.l10n.cancel);
+    void onCancel() => Navigator.pop(context, null);
+    final acceptLabel = Text(context.l10n.accept);
+    void onAccept() =>
+        Navigator.pop(context, _controller.hasClients ? (_controller.page!.toInt(), true) : null);
     return _BackgroundTheme(
       baseTheme: BackgroundImage.getTheme(color.color),
       child: Scaffold(
+        // On iOS the glass buttons float over the color.
+        extendBody: isIOS,
+        bottomNavigationBar: isIOS
+            ? BottomBar(
+                cupertinoGlass: true,
+                children: [
+                  BottomBarTextButton(onPressed: onCancel, child: cancelLabel),
+                  BottomBarTextButton(onPressed: onAccept, child: acceptLabel),
+                ],
+              )
+            : null,
         body: LayoutBuilder(
           builder: (context, constraints) {
             final orientation = constraints.maxWidth > constraints.maxHeight
@@ -269,7 +280,10 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
                           fen: kInitialFEN,
                           orientation: Side.white,
                           settings: StaticChessboardSettings.fromBoardSettings(
-                            widget.boardPrefs.toBoardSettings(Variant.standard),
+                            widget.boardPrefs.toBoardSettings(
+                              Variant.standard,
+                              appBrightness: Theme.of(context).brightness,
+                            ),
                           ),
                         ),
                       ),
@@ -292,44 +306,27 @@ class _ConfirmColorBackgroundScreenState extends State<ConfirmColorBackgroundScr
             );
           },
         ),
-        persistentFooterButtons: [
-          TextButton(
-            child: Text(context.l10n.cancel),
-            onPressed: () => Navigator.pop(context, null),
-          ),
-          TextButton(
-            child: Text(context.l10n.accept),
-            onPressed: () => Navigator.pop(
-              context,
-              _controller.hasClients ? (_controller.page!.toInt(), true) : null,
-            ),
-          ),
-        ],
+        persistentFooterButtons: isIOS
+            ? null
+            : [
+                TextButton(onPressed: onCancel, child: cancelLabel),
+                TextButton(onPressed: onAccept, child: acceptLabel),
+              ],
       ),
     );
   }
 }
 
-class ConfirmImageBackgroundScreen extends StatefulWidget {
-  const ConfirmImageBackgroundScreen({
-    required this.image,
-    required this.boardPrefs,
-    required this.meanLuminance,
-    required this.baseColor,
-    required this.imageSize,
-    required this.viewport,
-    required this.appDocumentsDirectory,
-    super.key,
-  });
-
-  final XFile image;
-  final BoardPrefs boardPrefs;
-  final Color baseColor;
-  final double meanLuminance;
-  final Size imageSize;
-  final Size viewport;
-  final Directory appDocumentsDirectory;
-
+class const ConfirmImageBackgroundScreen({
+  required final XFile image,
+  required final BoardPrefs boardPrefs,
+  required final double meanLuminance,
+  required final Color baseColor,
+  required final Size imageSize,
+  required final Size viewport,
+  required final Directory appDocumentsDirectory,
+  super.key,
+}) extends StatefulWidget {
   Orientation get viewportOrientation =>
       viewport.width > viewport.height ? Orientation.landscape : Orientation.portrait;
 
@@ -354,7 +351,7 @@ class ConfirmImageBackgroundScreen extends StatefulWidget {
   State<ConfirmImageBackgroundScreen> createState() => _ConfirmImageBackgroundScreenState();
 }
 
-class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScreen> {
+class _ConfirmImageBackgroundScreenState() extends State<ConfirmImageBackgroundScreen> {
   bool blur = false;
   bool showBoard = true;
 
@@ -390,6 +387,41 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
     );
 
     final landscapeBoardPadding = MediaQuery.paddingOf(context).top + 60.0;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    void toggleBoard() => setState(() => showBoard = !showBoard);
+    final toggleBoardLabel = Text(
+      showBoard
+          ? context.l10n.mobileSettingsPickAnImageHideBoard
+          : context.l10n.mobileSettingsPickAnImageShowBoard,
+    );
+    void onCancel() => Navigator.pop(context, null);
+    final cancelLabel = Text(context.l10n.cancel);
+    Future<void> onAccept() async {
+      final ext = extension(widget.image.path);
+      final relativePath = 'custom-board-background$ext';
+      final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
+      await FileImage(File(targetPath)).evict();
+      await File(widget.image.path).copy(targetPath);
+      if (context.mounted) {
+        return Navigator.pop<BackgroundImage>(
+          context,
+          BackgroundImage(
+            path: relativePath,
+            transform: _transformationMatrix,
+            isBlurred: blur,
+            seedColor: widget.baseColor,
+            meanLuminance: widget.meanLuminance,
+            width: widget.imageSize.width,
+            height: widget.imageSize.height,
+            viewportWidth: widget.viewport.width,
+            viewportHeight: widget.viewport.height,
+          ),
+        );
+      }
+    }
+
+    final acceptLabel = Text(context.l10n.accept);
 
     return _BackgroundTheme(
       baseTheme: baseTheme,
@@ -446,7 +478,10 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
                         fen: kInitialFEN,
                         orientation: Side.white,
                         settings: StaticChessboardSettings.fromBoardSettings(
-                          widget.boardPrefs.toBoardSettings(Variant.standard),
+                          widget.boardPrefs.toBoardSettings(
+                            Variant.standard,
+                            appBrightness: Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                     ),
@@ -459,92 +494,113 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
               left: widget.viewportOrientation == Orientation.portrait ? 0 : null,
               right: 0,
               child: Center(
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                  ),
-                  margin: const EdgeInsets.all(16.0),
-                  child: InkWell(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                    onTap: () {
-                      setState(() {
-                        blur = !blur;
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(blur ? Icons.check_circle : Icons.circle_outlined, size: 16),
-                          const SizedBox(width: 6.0),
-                          Text(
-                            context.l10n.mobileSettingsPickAnImageBlur,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                child: isIOS
+                    // Glass buttons floating over the image, like the bottom ones.
+                    ? Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8.0,
+                          children: [
+                            BottomBarTextButton(
+                              onPressed: () => setState(() => blur = !blur),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: 6.0,
+                                children: [
+                                  Icon(blur ? Icons.check_circle : Icons.circle_outlined),
+                                  Text(context.l10n.mobileSettingsPickAnImageBlur),
+                                ],
+                              ),
+                            ),
+                            BottomBarTextButton(onPressed: toggleBoard, child: toggleBoardLabel),
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8.0,
+                          children: [
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              margin: EdgeInsets.zero,
+                              child: InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                onTap: () {
+                                  setState(() {
+                                    blur = !blur;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        blur ? Icons.check_circle : Icons.circle_outlined,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 6.0),
+                                      Text(
+                                        context.l10n.mobileSettingsPickAnImageBlur,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Card(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                              ),
+                              margin: EdgeInsets.zero,
+                              child: InkWell(
+                                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                                onTap: toggleBoard,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16.0,
+                                  ),
+                                  child: toggleBoardLabel,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
             ),
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom,
+              // The bottom bar has its own safe area.
+              bottom: isIOS ? 0 : MediaQuery.paddingOf(context).bottom,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    child: Text(
-                      showBoard
-                          ? context.l10n.mobileSettingsPickAnImageHideBoard
-                          : context.l10n.mobileSettingsPickAnImageShowBoard,
+              child: isIOS
+                  // Glass buttons floating over the image.
+                  ? BottomBar(
+                      cupertinoGlass: true,
+                      children: [
+                        BottomBarTextButton(onPressed: onCancel, child: cancelLabel),
+                        BottomBarTextButton(onPressed: onAccept, child: acceptLabel),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(onPressed: onCancel, child: cancelLabel),
+                        const SizedBox(width: 10.0),
+                        TextButton(onPressed: onAccept, child: acceptLabel),
+                      ],
                     ),
-                    onPressed: () => setState(() {
-                      showBoard = !showBoard;
-                    }),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        child: Text(context.l10n.cancel),
-                        onPressed: () => Navigator.pop(context, null),
-                      ),
-                      const SizedBox(width: 10.0),
-                      TextButton(
-                        child: Text(context.l10n.accept),
-                        onPressed: () async {
-                          final ext = extension(widget.image.path);
-                          final relativePath = 'custom-board-background$ext';
-                          final targetPath = '${widget.appDocumentsDirectory.path}/$relativePath';
-                          await FileImage(File(targetPath)).evict();
-                          await File(widget.image.path).copy(targetPath);
-                          if (context.mounted) {
-                            return Navigator.pop<BackgroundImage>(
-                              context,
-                              BackgroundImage(
-                                path: relativePath,
-                                transform: _transformationMatrix,
-                                isBlurred: blur,
-                                seedColor: widget.baseColor,
-                                meanLuminance: widget.meanLuminance,
-                                width: widget.imageSize.width,
-                                height: widget.imageSize.height,
-                                viewportWidth: widget.viewport.width,
-                                viewportHeight: widget.viewport.height,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
             ),
           ],
         ),
@@ -556,12 +612,8 @@ class _ConfirmImageBackgroundScreenState extends State<ConfirmImageBackgroundScr
 /// Applies the background theme, based on [baseTheme], to the child widget.
 ///
 /// This is used to try new background themes without changing the whole app theme.
-class _BackgroundTheme extends StatelessWidget {
-  const _BackgroundTheme({required this.baseTheme, required this.child});
-
-  final ThemeData baseTheme;
-  final Widget child;
-
+class const _BackgroundTheme({required final ThemeData baseTheme, required final Widget child})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme(

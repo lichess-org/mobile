@@ -21,11 +21,7 @@ final httpLogPaginatorProvider = AsyncNotifierProvider.autoDispose
 /// The `HttpLogController` class is responsible for fetching and managing
 /// paginated HTTP log entries from the storage. It uses a throttler to limit
 /// the rate of fetching new pages.
-class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
-  HttpLogPaginator(this._searchQuery);
-
-  final String? _searchQuery;
-
+class HttpLogPaginator(final String? _searchQuery) extends AsyncNotifier<HttpLogState> {
   @override
   Future<HttpLogState> build() async {
     final storage = await ref.read(httpLogStorageProvider.future);
@@ -78,10 +74,8 @@ class HttpLogPaginator extends AsyncNotifier<HttpLogState> {
 }
 
 @freezed
-sealed class HttpLogState with _$HttpLogState {
-  const HttpLogState._();
-
-  const factory HttpLogState({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;
+sealed class const HttpLogState._() with _$HttpLogState {
+  const factory({required IList<AsyncValue<HttpLog>> data}) = _HttpLogState;
 
   bool get initialized => data.isNotEmpty;
   List<HttpLogEntry> get logs => data.expand((e) => e.value?.items ?? <HttpLogEntry>[]).toList();

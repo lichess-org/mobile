@@ -25,7 +25,7 @@
   <string name="cantChangeMore">それ以外は変えられません。技術的に不可能なのです。</string>
   <string name="orCloseAccount">ただし今のアカウントを削除して別の名前のアカウントを作ることはできます。</string>
   <string name="wantClearHistory">対局履歴やレーティングをリセットしたい</string>
-  <string name="cantClearHistory">対局や問題の履歴、レーティングはリセットできません。</string>
+  <string name="cantClearHistoryOrResetRatings">対局や問題の履歴、レーティングはリセットできません。</string>
   <string name="wantReport">誰かを通報したい</string>
   <string name="toReportAPlayerUseForm">プレイヤーの通報には通報用フォームを使ってください</string>
   <string name="youCanAlsoReachReportPage">その人のプロフィールページの通報ボタン（右上 %s）からもできます。</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">レート戦だったかどうか確かめてください。非レート戦ではレーティングは動きません。</string>
   <string name="botRatingAbuse">ボットアカウントとの対戦で、ボットを利用してレーティングを操作していると判断された場合は、レーティングの点が与えられません。</string>
   <string name="errorPage">エラーページ</string>
-  <string name="reportErrorPage">エラーページに出会ったら、以下で報告できます。</string>
+  <string name="reportTheBug">通報できます:</string>
+  <string name="securityVulnerability">セキュリティ脆弱性</string>
+  <string name="otherBug">他のバグ</string>
   <string name="learnHowToMakeBroadcasts">Lichess で独自の配信を行なう方法について</string>
   <string name="banAppeal">アクセス禁止や IP 制限への異議申し立て</string>
   <string name="engineAppeal">不正行為の赤マーク</string>

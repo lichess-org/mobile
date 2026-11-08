@@ -5,15 +5,13 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
 import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StudySettingsScreen extends ConsumerWidget {
-  const StudySettingsScreen(this.options);
-
-  final StudyOptions options;
-
+class const StudySettingsScreen(final StudyOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute(StudyOptions options) {
     return buildScreenRoute(screen: StudySettingsScreen(options));
   }
@@ -28,8 +26,8 @@ class StudySettingsScreen extends ConsumerWidget {
 
     final studyPrefs = ref.watch(studyPreferencesProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           ListSection(
@@ -41,25 +39,17 @@ class StudySettingsScreen extends ConsumerWidget {
                     ref.read(studyPreferencesProvider.notifier).toggleInlineNotation(),
               ),
               SwitchSettingTile(
-                // TODO: l10n
-                title: const Text('Show engine lines'),
+                title: Text(context.l10n.mobileShowEngineLines),
                 value: studyPrefs.showEngineLines,
                 onChanged: (value) =>
                     ref.read(studyPreferencesProvider.notifier).toggleShowEngineLines(),
               ),
-              SwitchSettingTile(
-                title: const Text('Small board'), // TODO l10n
-                value: studyPrefs.smallBoard,
-                onChanged: (value) =>
-                    ref.read(studyPreferencesProvider.notifier).toggleSmallBoard(),
-              ),
               ListTile(
                 title: Text(context.l10n.openingExplorer),
-                onTap: () => showModalBottomSheet<void>(
+                onTap: () => showAdaptiveBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
                   showDragHandle: true,
-                  isDismissible: true,
                   builder: (_) => const OpeningExplorerSettings(),
                 ),
               ),

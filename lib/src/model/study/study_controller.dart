@@ -11,27 +11,26 @@ import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_mixin.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/server_analysis_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 part 'study_controller.freezed.dart';
 
@@ -43,19 +42,21 @@ final studyControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'StudyControllerProvider',
     );
 
-enum ChapterServerAnalysisStatus { canRequest, notEnoughMoves, notWriteable, available }
+enum ChapterServerAnalysisStatus() {
+  canRequest,
+  notEnoughMoves,
+  notWriteable,
+  available,
+}
 
-class StudyController extends AsyncNotifier<StudyState>
+class StudyController(final StudyOptions options)
+    extends AsyncNotifier<StudyState>
     with
         EngineEvaluationMixin,
         ServerAnalysisMixin,
         ChatMixin<StudyState>,
         OpeningExplorerMixin<StudyState>
     implements PgnTreeNotifier {
-  StudyController(this.options);
-
-  final StudyOptions options;
-
   late Root _root;
 
   Timer? _opponentFirstMoveTimer;
@@ -191,6 +192,7 @@ class StudyController extends AsyncNotifier<StudyState>
         variant: variant,
         study: study,
         currentPath: UciPath.empty,
+        clocks: null,
         isOnMainline: true,
         root: null,
         currentNode: StudyCurrentNode.illegalPosition(),
@@ -233,6 +235,7 @@ class StudyController extends AsyncNotifier<StudyState>
       variant: variant,
       study: study,
       currentPath: currentPath,
+      clocks: _getClocks(currentPath),
       isOnMainline: true,
       root: _root.view,
       currentNode: StudyCurrentNode.fromNode(_root),
@@ -468,6 +471,13 @@ class StudyController extends AsyncNotifier<StudyState>
     _setPath(path.penultimate, shouldRecomputeRootView: true);
   }
 
+  @override
+  String makeLinePgn(UciPath path, {required bool includeVariations}) => _root.makeLinePgn(
+    path,
+    variant: state.requireValue.variant,
+    includeVariations: includeVariations,
+  );
+
   void _sendMoveToSocket(Move move) {
     if (state.requireValue.isWriteable == false) return;
 
@@ -559,6 +569,7 @@ class StudyController extends AsyncNotifier<StudyState>
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           currentBranchOpening: branchOpening,
@@ -570,6 +581,7 @@ class StudyController extends AsyncNotifier<StudyState>
       this.state = AsyncValue.data(
         state.copyWith(
           currentPath: path,
+          clocks: _getClocks(path),
           isOnMainline: _root.isOnMainline(path),
           currentNode: StudyCurrentNode.fromNode(currentNode),
           currentBranchOpening: branchOpening,
@@ -603,12 +615,28 @@ class StudyController extends AsyncNotifier<StudyState>
       ),
     );
   }
+
+  ({Duration? parentClock, Duration? clock}) _getClocks(UciPath path) {
+    final node = _root.nodeAt(path);
+    final parent = _root.parentAt(path);
+
+    return (
+      parentClock: (parent is Branch) ? parent.clock : null,
+      clock: (node is Branch) ? node.clock : null,
+    );
+  }
 }
 
-enum GamebookState { startLesson, findTheMove, correctMove, incorrectMove, lessonComplete }
+enum GamebookState() {
+  startLesson,
+  findTheMove,
+  correctMove,
+  incorrectMove,
+  lessonComplete,
+}
 
 @freezed
-sealed class StudyState
+sealed class const StudyState._()
     with
         _$StudyState,
         AnalysisExplosionMixin,
@@ -617,8 +645,6 @@ sealed class StudyState
         ServerAnalysisMixinState,
         OpeningExplorerMixinState
     implements CommonAnalysisState {
-  const StudyState._();
-
   @override
   ViewRoot? get analysisRoot => root;
 
@@ -626,7 +652,7 @@ sealed class StudyState
   StudyState withThreatMode(bool engineInThreatMode) =>
       copyWith(engineInThreatMode: engineInThreatMode);
 
-  const factory StudyState({
+  const factory({
     UserId? myId,
     bool? isAdmin,
     required Study study,
@@ -659,6 +685,9 @@ sealed class StudyState
 
     /// Whether local evaluation is allowed for this study.
     required bool isComputerAnalysisAllowed,
+
+    /// Clocks if available.
+    required ({Duration? parentClock, Duration? clock})? clocks,
 
     /// Whether we're currently in gamebook mode, where the user has to find the right moves.
     required bool gamebookActive,
@@ -735,7 +764,7 @@ sealed class StudyState
           position: currentPosition!,
           savedEval: currentNode.eval,
           serverEval: null,
-          filters: (id: evaluationContext.id, path: currentPath),
+          filters: (context: evaluationContext, path: currentPath),
         )
       : null;
 
@@ -806,10 +835,10 @@ sealed class StudyState
 }
 
 @freezed
-sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrentNodeInterface {
-  const StudyCurrentNode._();
-
-  const factory StudyCurrentNode({
+sealed class const StudyCurrentNode._()
+    with _$StudyCurrentNode
+    implements AnalysisCurrentNodeInterface {
+  const factory({
     // Null if the chapter's starting position is illegal.
     required Position? position,
     required List<Move> children,
@@ -822,11 +851,11 @@ sealed class StudyCurrentNode with _$StudyCurrentNode implements AnalysisCurrent
     ClientEval? eval,
   }) = _StudyCurrentNode;
 
-  factory StudyCurrentNode.illegalPosition() {
+  factory illegalPosition() {
     return const StudyCurrentNode(position: null, children: [], isRoot: true);
   }
 
-  factory StudyCurrentNode.fromNode(Node node) {
+  factory fromNode(Node node) {
     final children = node.children.map((n) => n.sanMove.move).toList();
     if (node is Branch) {
       return StudyCurrentNode(
