@@ -299,7 +299,8 @@ enum BoardTheme {
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
   horsey('Horsey', 'horsey'),
-  /// 3D boards
+  
+/// 3D boards
   blackwhitealuminium('Black White Aluminium','blackwhitealuminium'),
   chinablue('China Blue','chinablue'),
   chinagreen('China Green','chinagreen'),
@@ -310,6 +311,10 @@ enum BoardTheme {
   powercoated('Power Coated','powercoated'),
   rosewood('Rosewood','rosewood'),
   wax('Wax','wax');
+
+  static List<BoardTheme> get3dBoards() => [BoardTheme.chinablue,BoardTheme.chinagreen, BoardTheme.chinascarlet, BoardTheme.jade, BoardTheme.lightwood, BoardTheme.powercoated, BoardTheme.rosewood,BoardTheme.wax];
+
+  static List<BoardTheme> get2dBoards() => [BoardTheme.system, BoardTheme.blue,BoardTheme.blue2,BoardTheme.blue3,BoardTheme.blueMarble,BoardTheme.canvas,BoardTheme.wood,BoardTheme.wood2,BoardTheme.wood3,BoardTheme.wood4,BoardTheme.maple,BoardTheme.maple2,BoardTheme.brown,BoardTheme.leather,BoardTheme.ic,BoardTheme.green,BoardTheme.marble,BoardTheme.greenPlastic,BoardTheme.grey,BoardTheme.metal,BoardTheme.olive,BoardTheme.newspaper,BoardTheme.purple,BoardTheme.purpleDiag, BoardTheme.pinkPyramid, BoardTheme.horsey];
 
   final String label;
   final String gifApiName;
@@ -393,7 +398,8 @@ enum BoardTheme {
       case BoardTheme.wax:
 	return ChessboardColorScheme.wax;   
     }
-  }
+      
+}
 
   Widget get thumbnail => switch (this) {
     BoardTheme.system => SizedBox(
