@@ -342,7 +342,7 @@ class const BriefGameResultBox({
           children: [
             if (win != 0) _ResultBox(number: win, color: context.lichessColors.good),
             if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
-            if (draw != 0) _ResultBox(number: draw, color: Colors.grey),
+            if (draw != 0) _ResultBox(number: draw, color: context.lichessColors.brag),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
             if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
