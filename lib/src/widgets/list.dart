@@ -121,6 +121,7 @@ class ListSection extends StatelessWidget {
               padding: margin ?? Styles.bodySectionPadding,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (header != null)
                     ListSectionHeader(title: header!, onTap: onHeaderTap, trailing: headerTrailing),
