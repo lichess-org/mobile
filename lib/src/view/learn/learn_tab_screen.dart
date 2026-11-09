@@ -162,6 +162,7 @@ class const _Body() extends ConsumerWidget {
                 onHeaderTap: () =>
                     Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
                 hasLeading: true,
+                margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                 children: [
                   ...(switch (ref.watch(_hotStudiesProvider)) {
                     AsyncData(:final value) =>
@@ -185,7 +186,7 @@ class const _Body() extends ConsumerWidget {
               if (haveIStudies || haveIFavoriteStudies)
                 ListSection(
                   hasLeading: true,
-                  margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                  margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
                   children: [
                     if (haveIStudies)
                       ListTile(
@@ -216,6 +217,7 @@ class const _Body() extends ConsumerWidget {
                   ],
                 ),
               ListSection(
+                margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
                 hasLeading: true,
                 children: [
                   ListTile(
