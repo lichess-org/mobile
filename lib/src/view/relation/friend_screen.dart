@@ -92,6 +92,11 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
       ),
       body: TabBarView(
         controller: _tabController,
+        // On iOS, a horizontal swipe on a friend reveals its swipe actions, so the tabs only
+        // change with the segmented control.
+        physics: Theme.of(context).platform == TargetPlatform.iOS
+            ? const NeverScrollableScrollPhysics()
+            : null,
         children: [
           _Online(searchTerm, _searchController, _onSearchChanged),
           _Following(searchTerm, _searchController, _onSearchChanged),
