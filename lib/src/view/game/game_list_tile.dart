@@ -87,7 +87,7 @@ class const GameListTile({
     final resultColor = isAborted
         ? LichessColors.grey
         : game.winner == null
-        ? context.lichessColors.brag
+        ? textShade(context, Styles.subtitleOpacity)
         : game.winner == youAre
         ? context.lichessColors.good
         : context.lichessColors.error;
@@ -265,7 +265,7 @@ class const GameContextMenu({
                                 ),
                                 style: TextStyle(
                                   color: game.winner == null
-                                      ? context.lichessColors.brag
+                                      ? textShade(context, Styles.subtitleOpacity)
                                       : game.winner == mySide
                                       ? context.lichessColors.good
                                       : context.lichessColors.error,

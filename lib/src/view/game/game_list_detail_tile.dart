@@ -209,7 +209,7 @@ class const GameListDetailTile({
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
                                       color: game.winner == null
-                                          ? context.lichessColors.brag
+                                          ? textShade(context, Styles.subtitleOpacity)
                                           : game.winner == mySide
                                           ? context.lichessColors.good
                                           : context.lichessColors.error,
