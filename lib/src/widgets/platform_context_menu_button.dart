@@ -267,38 +267,43 @@ class const ContextMenuTitleButton({
   Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
       final foregroundColor = ColorScheme.of(context).onSurface;
-      return GlassMenu(
-        menuWidth: kGlassMenuWidth,
-        settings: menuGlassSettings(context),
-        triggerBuilder: (context, toggleMenu) => Semantics(
-          button: true,
-          label: semanticsLabel,
-          child: GlassButton.custom(
-            onTap: toggleMenu,
+      // The menu items take the text alignment of the app bar title, which is centered: a title
+      // that wraps on two lines must stay aligned to the start, like the others.
+      return DefaultTextStyle.merge(
+        textAlign: .start,
+        child: GlassMenu(
+          menuWidth: kGlassMenuWidth,
+          settings: menuGlassSettings(context),
+          triggerBuilder: (context, toggleMenu) => Semantics(
+            button: true,
             label: semanticsLabel,
-            // The glass of the app bar buttons next to it.
-            settings: ios27GlassSettings(context),
-            height: _kGlassTitleButtonHeight,
-            shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
-            // The app bar is isolated, there is no parent glass layer to share.
-            useOwnLayer: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: IconTheme.merge(
-                data: IconThemeData(color: foregroundColor),
-                child: Row(
-                  mainAxisSize: .min,
-                  spacing: 6.0,
-                  children: [
-                    Flexible(child: title),
-                    const Icon(CupertinoIcons.chevron_down, size: 14.0),
-                  ],
+            child: GlassButton.custom(
+              onTap: toggleMenu,
+              label: semanticsLabel,
+              // The glass of the app bar buttons next to it.
+              settings: ios27GlassSettings(context),
+              height: _kGlassTitleButtonHeight,
+              shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
+              // The app bar is isolated, there is no parent glass layer to share.
+              useOwnLayer: true,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: foregroundColor),
+                  child: Row(
+                    mainAxisSize: .min,
+                    spacing: 6.0,
+                    children: [
+                      Flexible(child: title),
+                      const Icon(CupertinoIcons.chevron_down, size: 14.0),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+          items: glassMenuItems(context, actions),
         ),
-        items: glassMenuItems(context, actions),
       );
     }
 
