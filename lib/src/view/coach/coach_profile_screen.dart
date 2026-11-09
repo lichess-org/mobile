@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -63,23 +62,11 @@ class const _Body({required final CoachProfile profile}) extends StatelessWidget
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    UserFullNameWidget(
-                      user: profile.user,
-                      rating: profile.rating,
-                      showFlair: false,
-                      style: Styles.callout,
-                    ),
-                    if (profile.headline case final headline?) ...[
-                      const SizedBox(height: 4.0),
+                    if (profile.headline case final headline?)
                       Text(
                         headline,
                         style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                       ),
-                    ],
-                    if (profile.hourlyRate case final rate?) ...[
-                      const SizedBox(height: 4.0),
-                      Text(rate),
-                    ],
                   ],
                 ),
               ),
