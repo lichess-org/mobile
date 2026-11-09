@@ -90,6 +90,20 @@ const _profileResponse = '''
 }
 ''';
 
+const _userResponse = '''
+{
+  "id": "toniaa",
+  "username": "toniaa",
+  "seenAt": 1760000000000,
+  "perfs": {
+    "bullet": {"games": 100, "rating": 2014, "rd": 58, "prog": 0},
+    "blitz": {"games": 200, "rating": 2288, "rd": 86, "prog": 85},
+    "rapid": {"games": 56, "rating": 2615, "rd": 233, "prog": 223, "prov": true}
+  },
+  "profile": {"fideRating": 2281, "location": "Bruxelles", "flag": "GR"}
+}
+''';
+
 void main() {
   group('CoachListScreen', () {
     testWidgets('shows coaches with a 1:1 picture on the left side', (tester) async {
@@ -158,6 +172,49 @@ void main() {
       expect(find.text('About me'), findsOneWidget);
       expect(find.text('I teach chess for a living'), findsOneWidget);
       expect(find.text('Learn chess the fun way'), findsOneWidget);
+    });
+
+    testWidgets('profile shows user API data in the overview card', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          case '/api/user/toniaa':
+            return http.Response(_userResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Location'), findsOneWidget);
+      expect(find.text('Bruxelles'), findsOneWidget);
+      expect(find.text('Greece'), findsOneWidget);
+      expect(find.text('FIDE: 2281'), findsOneWidget);
+      expect(find.text('Bullet 2014'), findsOneWidget);
+      expect(find.text('Blitz 2288'), findsOneWidget);
+      expect(find.text('Rapid 2615'), findsNothing);
+      expect(find.text('Hourly rate'), findsOneWidget);
+      expect(find.text('25 EUR'), findsOneWidget);
+      expect(find.text('Accepting students'), findsOneWidget);
+      expect(find.textContaining('Active'), findsOneWidget);
     });
 
     testWidgets('changing the sort filter refetches with the new order', (tester) async {

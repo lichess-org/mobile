@@ -2,12 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -46,9 +50,17 @@ class const CoachProfileScreen({required final String username, super.key}) exte
   }
 }
 
-class const _Body({required final CoachProfile profile}) extends StatelessWidget {
+class const _Body({required final CoachProfile profile}) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userProvider(profile.user.id));
+    final userInfo = user.value?.profile;
+    final perfRatings = <String>[
+      for (final perf in const [Perf.bullet, Perf.blitz, Perf.rapid, Perf.classical])
+        if (user.value?.perfs[perf] case final perfRating?)
+          if (perfRating.provisional != true) '${perf.label(context.l10n)} ${perfRating.rating}',
+    ];
+
     return ListView(
       children: [
         Padding(
@@ -76,16 +88,46 @@ class const _Body({required final CoachProfile profile}) extends StatelessWidget
         ListSection(
           hasLeading: true,
           children: [
+            if (userInfo case final info? when info.location != null || info.country != null)
+              _InfoRow(
+                label: context.l10n.coachLocation,
+                value: Location(profile: info),
+              ),
             if (profile.languages.isNotEmpty)
-              _InfoRow(label: context.l10n.coachLanguages, value: profile.languages.join(', ')),
+              _InfoRow(
+                label: context.l10n.coachLanguages,
+                value: Text(profile.languages.join(', ')),
+              ),
+            if (userInfo?.fideRating != null || perfRatings.isNotEmpty)
+              _InfoRow(
+                label: context.l10n.coachRating,
+                value: Wrap(
+                  spacing: 12.0,
+                  runSpacing: 4.0,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    if (userInfo?.fideRating case final fideRating?) Text('FIDE: $fideRating'),
+                    for (final perfRating in perfRatings) Text(perfRating),
+                  ],
+                ),
+              ),
             if (profile.rating != null)
-              _InfoRow(label: context.l10n.coachLichessRating, value: profile.rating.toString()),
+              _InfoRow(
+                label: context.l10n.coachLichessRating,
+                value: Text(profile.rating.toString()),
+              ),
+            if (profile.hourlyRate case final rate?)
+              _InfoRow(label: context.l10n.coachHourlyRate, value: Text(rate)),
             _InfoRow(
               label: context.l10n.coachAvailability,
-              value: profile.available
-                  ? context.l10n.coachAccepting
-                  : context.l10n.coachNotAccepting,
+              value: Text(
+                profile.available ? context.l10n.coachAccepting : context.l10n.coachNotAccepting,
+              ),
             ),
+            if (user.value?.seenAt case final seenAt?)
+              _InfoRow(
+                value: Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt))),
+              ),
           ],
         ),
         if (profile.description case final description?)
@@ -140,11 +182,11 @@ class const _Body({required final CoachProfile profile}) extends StatelessWidget
   }
 }
 
-class const _InfoRow({required final String label, required final String value})
-    extends StatelessWidget {
+class const _InfoRow({required final Widget value, final String? label}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListTile(title: Text(value), subtitle: Text(label));
+    final subtitle = label;
+    return ListTile(title: value, subtitle: subtitle != null ? Text(subtitle) : null);
   }
 }
 
