@@ -211,6 +211,8 @@ void main() {
       expect(find.text('Bullet 2014'), findsOneWidget);
       expect(find.text('Blitz 2288'), findsOneWidget);
       expect(find.text('Rapid 2615'), findsNothing);
+      expect(find.textContaining('Lichess rating'), findsNothing);
+      expect(find.text('2434'), findsNothing);
       expect(find.text('Hourly rate'), findsOneWidget);
       expect(find.text('25 EUR'), findsOneWidget);
       expect(find.text('Accepting students'), findsOneWidget);

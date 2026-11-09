@@ -111,11 +111,6 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                   ],
                 ),
               ),
-            if (profile.rating != null)
-              _InfoRow(
-                label: context.l10n.coachLichessRating,
-                value: Text(profile.rating.toString()),
-              ),
             if (profile.hourlyRate case final rate?)
               _InfoRow(label: context.l10n.coachHourlyRate, value: Text(rate)),
             _InfoRow(
