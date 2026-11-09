@@ -69,7 +69,7 @@ const _profileResponse = '''
     "profile": {
       "headline": "Learn chess the fun way",
       "hourlyRate": "25 EUR",
-      "description": "I teach chess for a living",
+      "description": "I teach chess for a living\\r\\n\\r\\n",
       "playingExperience": null,
       "teachingExperience": null,
       "otherExperience": null,

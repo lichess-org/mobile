@@ -196,7 +196,7 @@ class const _TextSection({required final String title, required final String bod
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(body),
+          child: Text(body.trim()),
         ),
       ],
     );
