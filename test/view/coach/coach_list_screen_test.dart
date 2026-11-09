@@ -289,6 +289,39 @@ void main() {
       expect(requestCount, greaterThanOrEqualTo(2));
     });
 
+    testWidgets('filter sheet can be closed', (tester) async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/coach/all/all/login') {
+          return http.Response(_listResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byIcon(Icons.filter_list));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BottomSheet), findsOneWidget);
+      await tester.ensureVisible(find.text('Done'));
+      await tester.tap(find.text('Done'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(BottomSheet), findsNothing);
+      expect(find.byType(CoachListTile), findsNWidgets(2));
+    });
+
     testWidgets('learn tab shows a Coaches entry', (tester) async {
       final client = MockClient((request) async {
         return http.Response('', 404);

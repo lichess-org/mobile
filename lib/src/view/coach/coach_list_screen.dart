@@ -76,6 +76,9 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
+      useSafeArea: true,
+      showDragHandle: true,
+      constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
       builder: (context) => StatefulBuilder(
         builder: (context, setSheetState) => BottomSheetScrollableContainer(
           padding: const EdgeInsets.all(16.0),
