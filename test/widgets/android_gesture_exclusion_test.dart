@@ -75,6 +75,7 @@ void main() {
     WidgetTester tester, {
     required GameBoardParams boardParams,
     bool isImmersiveMode = false,
+    double sideMargin = 0,
   }) async {
     final app = await makeTestProviderScope(
       tester,
@@ -82,7 +83,10 @@ void main() {
         home: Scaffold(
           body: AndroidImmersiveModeWidget(
             enabled: isImmersiveMode,
-            child: boardLayout(boardParams),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: sideMargin),
+              child: boardLayout(boardParams),
+            ),
           ),
         ),
       ),
@@ -126,6 +130,22 @@ void main() {
       expectRects(lastSentRects(tester), [
         for (final square in [Square.a1, Square.a2, Square.h1, Square.h2])
           squareRect(tester, square),
+      ]);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
+    testWidgets('extends the excluded edge squares to the screen edges', (tester) async {
+      await pumpBoard(tester, boardParams: _interactiveParams, sideMargin: 12);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, greaterThanOrEqualTo(12));
+      final screenWidth = tester.view.physicalSize.width / tester.view.devicePixelRatio;
+      expectRects(lastSentRects(tester), [
+        for (final square in [Square.a1, Square.a2])
+          if (squareRect(tester, square) case final rect)
+            Rect.fromLTRB(0, rect.top, rect.right, rect.bottom),
+        for (final square in [Square.h1, Square.h2])
+          if (squareRect(tester, square) case final rect)
+            Rect.fromLTRB(rect.left, rect.top, screenWidth, rect.bottom),
       ]);
     }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
