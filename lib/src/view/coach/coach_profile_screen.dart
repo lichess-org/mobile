@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
@@ -96,7 +97,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             if (profile.languages.isNotEmpty)
               _InfoRow(
                 label: context.l10n.coachLanguages,
-                value: Text(profile.languages.join(', ')),
+                value: Text(profile.languages.map(languageName).join(', ')),
               ),
             if (userInfo?.fideRating != null || perfRatings.isNotEmpty)
               _InfoRow(

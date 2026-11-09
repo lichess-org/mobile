@@ -224,4 +224,8 @@ Locale _localeFromLanguageCode(String code) {
   return parts.length > 1 ? Locale(parts.first, parts[1]) : Locale(parts.first);
 }
 
-String languageName(String code) => localeToLocalizedName(_localeFromLanguageCode(code));
+String languageName(String code) {
+  final locale = _localeFromLanguageCode(code);
+  final name = localeToLocalizedName(locale);
+  return name == locale.toString() ? localeToLocalizedName(Locale(locale.languageCode)) : name;
+}

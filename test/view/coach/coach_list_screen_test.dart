@@ -207,6 +207,8 @@ void main() {
       expect(find.text('Location'), findsOneWidget);
       expect(find.text('Bruxelles'), findsOneWidget);
       expect(find.text('Greece'), findsOneWidget);
+      expect(find.text('Ελληνικά, English (US)'), findsOneWidget);
+      expect(find.textContaining('el-GR'), findsNothing);
       expect(find.text('FIDE: 2281'), findsOneWidget);
       expect(find.text('Bullet 2014'), findsOneWidget);
       expect(find.text('Blitz 2288'), findsOneWidget);
