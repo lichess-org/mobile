@@ -29,6 +29,36 @@ String formatPgnDate(String date, {bool shortDate = true}) {
   return dateFormatter.format(parsed);
 }
 
+/// Formats the time of day of [date] in the locale's format (e.g. '3:05 PM' or '15:05'), or always
+/// in 24-hour format if the user set their device to it.
+String formatTimeOfDay(BuildContext context, DateTime date) => MaterialLocalizations.of(context)
+    .formatTimeOfDay(
+      TimeOfDay.fromDateTime(date),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+
+/// Formats the calendar day of [date] as the header of a list grouped by day: 'Today', 'Yesterday',
+/// 'N days ago' within a week, then the date, with its year only if it's not the current one.
+///
+/// Unlike [relativeDate], each day gets its own label.
+String formatDayHeader(AppLocalizations l10n, DateTime date) {
+  final now = DateTime.now();
+  final local = date.toLocal();
+  // Count calendar days in UTC so that a daylight saving time change between the two dates
+  // doesn't shorten a day to 23 hours.
+  final days = DateTime.utc(
+    now.year,
+    now.month,
+    now.day,
+  ).difference(DateTime.utc(local.year, local.month, local.day)).inDays;
+  return switch (days) {
+    0 => l10n.today,
+    1 => l10n.yesterday,
+    <= 7 => l10n.timeagoNbDaysAgo(days),
+    _ => (local.year == now.year ? DateFormat.MMMMd() : DateFormat.yMMMMd()).format(local),
+  };
+}
+
 /// Formats a date as a relative date string from now.
 String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true}) {
   final now = DateTime.now();

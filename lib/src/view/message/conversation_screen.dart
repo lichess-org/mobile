@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
@@ -321,7 +322,7 @@ class const _MessageBubble({
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = DateFormat.Hm().format(message.date);
+    final time = formatTimeOfDay(context, message.date);
 
     return ChatBubbleContextMenu(
       message: message.text,

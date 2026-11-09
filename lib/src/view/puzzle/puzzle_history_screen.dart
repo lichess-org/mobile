@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -18,8 +17,6 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
-
-DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 /// Shows a short preview of the puzzle history.
 class const PuzzleHistoryPreview(
@@ -160,16 +157,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 ),
               );
             } else if (element is DateTime) {
-              final now = DateTime.now();
-              final today = DateTime(now.year, now.month, now.day);
-              final difference = today.difference(element).inDays;
-              final title = difference == 0
-                  ? context.l10n.today
-                  : difference == 1
-                  ? context.l10n.yesterday
-                  : difference < 15
-                  ? relativeDate(context.l10n, element)
-                  : _dateFormatter.format(element);
+              final title = formatDayHeader(context.l10n, element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(
