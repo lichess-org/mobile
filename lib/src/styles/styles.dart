@@ -5,6 +5,13 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// The opacity of the image cards of the blog and broadcast carousels.
+const kDefaultCardOpacity = 0.9;
+
+/// The opacity of the background of the blog and broadcast carousel cards on a dark background,
+/// where the light image colors would otherwise stand out too much.
+const kDarkCardBackgroundOpacity = 0.75;
+
 // ignore: avoid_classes_with_only_static_members
 abstract class Styles() {
   // text

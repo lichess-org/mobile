@@ -28,7 +28,6 @@ import 'package:material_ui/material_ui.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
-const kDefaultCardOpacity = 0.9;
 
 const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 const kHandsetCarouselFlexWeights = [6, 2];
@@ -256,7 +255,13 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
+          color: backgroundColor.withValues(
+            alpha: _tapDown
+                ? 1.0
+                : Theme.of(context).brightness == .dark
+                ? kDarkCardBackgroundOpacity
+                : kDefaultCardOpacity,
+          ),
         ),
         child: OverflowBox(
           maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
