@@ -158,6 +158,7 @@ class const GameListDetailTile({
                                   name: opponent.name,
                                   aiLevel: opponent.aiLevel,
                                   rating: opponent.rating,
+                                  provisional: opponent.provisional,
                                   style: TextStyle(
                                     fontSize: titleFontSize,
                                     fontWeight: FontWeight.w600,
