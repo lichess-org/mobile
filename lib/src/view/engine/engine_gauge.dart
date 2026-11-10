@@ -23,9 +23,12 @@ double getEvalGaugeFontSize(BuildContext context) {
 class const EngineGauge({required final EngineGaugeParams params, super.key})
     extends ConsumerWidget {
   /// The color of black's share of the gauge: a dark tone of the color scheme, in both light and
-  /// dark themes.
-  static Color backgroundColor(BuildContext context) =>
-      context.boardColorScheme.onSecondaryFixedVariant;
+  /// dark themes, between the tones of [ColorScheme.onSecondaryFixedVariant] and
+  /// [ColorScheme.onSecondaryFixed].
+  static Color backgroundColor(BuildContext context) {
+    final colorScheme = context.boardColorScheme;
+    return Color.lerp(colorScheme.onSecondaryFixedVariant, colorScheme.onSecondaryFixed, 0.2)!;
+  }
 
   /// The color of white's share of the gauge: a light tone of the color scheme, in both light and
   /// dark themes.
