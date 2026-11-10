@@ -19,11 +19,8 @@ import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const BoardSettingsScreen({super.key}) extends ConsumerStatefulWidget {
-  static Route<dynamic> buildRoute({bool fullscreenDialog = false}) {
-    return buildScreenRoute(
-      fullscreenDialog: fullscreenDialog,
-      screen: const BoardSettingsScreen(),
-    );
+  static Route<dynamic> buildRoute() {
+    return buildScreenRoute(screen: const BoardSettingsScreen());
   }
 
   @override
