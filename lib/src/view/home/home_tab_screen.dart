@@ -4,7 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/home_preferences.dart';
 import 'package:lichess_mobile/src/model/account/home_widgets.dart';
@@ -17,8 +17,6 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
 import 'package:lichess_mobile/src/model/relation/following_user.dart';
@@ -31,7 +29,6 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -51,7 +48,6 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_bottom_sheet.dart';
 import 'package:lichess_mobile/src/view/play/play_menu.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
-import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -72,7 +68,11 @@ const kColdAppStartsHideCustomizationTipThreshold = 5;
 class const HomeTabScreen({super.key, final bool editModeEnabled = false})
     extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute({bool editModeEnabled = false}) {
-    return buildScreenRoute(screen: HomeTabScreen(editModeEnabled: editModeEnabled));
+    return buildScreenRoute(
+      screen: HomeTabScreen(editModeEnabled: editModeEnabled),
+      // Editing the home widgets is a full screen task, closed with its OK button.
+      fullscreenDialog: editModeEnabled,
+    );
   }
 
   @override
@@ -97,7 +97,6 @@ class const _IsEditingHome({required super.child, required final bool isEditingW
   }
 }
 
-const String kWelcomeMessageShownKey = 'app_welcome_message_shown';
 const String kHideHomeWidgetCustomizationTip = 'app_hide_home_widget_customization_tip';
 
 class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
@@ -200,11 +199,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
 
             if (shouldShowWelcomeScreen) {
               final welcomeWidgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
                 if (showOutage) const ServerOutageDisplay(),
                 if (!widget.editModeEnabled) ...[
                   Padding(
@@ -236,7 +230,6 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                       child: Text(context.l10n.aboutX('Lichess...')),
                     ),
                   ),
-                  const _WelcomeMessageCard(),
                   const _HomeCustomizationTip(),
                 ],
               ];
@@ -282,15 +275,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
               ];
             } else if (isTablet) {
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 if (hasServerContent)
                   _EditableWidget(
@@ -355,22 +340,12 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                         orElse: () => false,
                       ));
               widgets = [
-                const _EditableWidget(
-                  widget: HomeEditableWidget.hello,
-                  shouldShow: true,
-                  child: _GreetingWidget(),
-                ),
-                if (!widget.editModeEnabled) ...[
-                  const _HomeCustomizationTip(),
-                  const _NNUEFilesOutdatedTip(),
-                ],
+                if (!widget.editModeEnabled) ...[const _HomeCustomizationTip()],
                 if (showOutage) const ServerOutageDisplay(),
                 _EditableWidget(
                   widget: HomeEditableWidget.perfCards,
                   shouldShow: authUser != null && hasServerContent,
-                  child: AccountPerfCards(
-                    padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-                  ),
+                  child: const AccountPerfCards(padding: Styles.bodySectionPadding),
                 ),
                 _EditableWidget(
                   widget: HomeEditableWidget.friends,
@@ -439,51 +414,32 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
                   appBar: widget.editModeEnabled
                       ? PlatformAppBar(
                           title: Text(context.l10n.mobileSettingsHomeWidgets),
-                          leading: const BackButton(),
+                          leading: TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: Text(context.l10n.ok),
+                          ),
+                          leadingWidth: 80.0,
                           automaticallyImplyLeading: false,
                         )
                       : PlatformAppBar(
-                          title: Theme.of(context).platform == TargetPlatform.iOS
-                              ? AppBarLichessTitle(
-                                  iconSize:
-                                      Theme.of(context).textTheme.headlineSmall?.fontSize ?? 24,
-                                )
-                              : const AppBarLichessTitle(),
+                          // A greeting without a name when logged out.
+                          title: _GreetingWidget(authUser?.user, isOnline: isOnline),
                           centerTitle: false,
-                          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-                              ? Theme.of(context).textTheme.headlineSmall
-                              : null,
                           actions: const [_ChallengeScreenButton(), AccountMenuButton()],
                         ),
                   body: widget.editModeEnabled
                       ? content
                       : HapticRefreshIndicator(
-                          edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-                              ? MediaQuery.paddingOf(context).top + kToolbarHeight
-                              : 0.0,
                           key: _refreshKey,
-                          onRefresh: () => _refreshData(isOnline: isOnline),
+                          // Not gated on the connectivity status: the device may be marked
+                          // offline while its network is back, and the responses to these
+                          // requests are what tell the connectivity check to run again.
+                          onRefresh: () => _refreshData(isOnline: true),
                           child: content,
                         ),
-                  bottomNavigationBar: widget.editModeEnabled
-                      ? BottomAppBar(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(context.l10n.ok),
-                              ),
-                            ],
-                          ),
-                        )
-                      : null,
                   floatingActionButton: widget.editModeEnabled || isTablet
                       ? null
                       : const FloatingPlayButton(),
-                  bottomSheet: widget.editModeEnabled ? null : const OfflineBanner(),
                 ),
               ),
             );
@@ -520,8 +476,8 @@ class const _LichessMessageBanner() extends ConsumerWidget {
       color: theme.colorScheme.tertiaryContainer,
       child: InkWell(
         onTap: () {
-          Navigator.of(context, rootNavigator: true)
-              .push(
+          Navigator.of(context)
+              .pushHidingTabBar(
                 ConversationScreen.buildRoute(
                   user: const LightUser(id: UserId('lichess'), name: 'lichess'),
                 ),
@@ -657,54 +613,53 @@ final _isDayTimeProvider = NotifierProvider.autoDispose<_IsDayTimeNotifier, bool
   name: '_isDayTimeProvider',
 );
 
-class const _GreetingWidget() extends ConsumerWidget {
+/// The greeting of the user, as the app bar title, which opens the profile when logged in.
+/// The greeting of the home app bar, with an "Offline" subtitle while the device is offline.
+class const _GreetingWidget(
+  /// Null when logged out: the greeting has no name.
+  final LightUser? user, {
+  required final bool isOnline,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authUser = ref.watch(authControllerProvider);
     final isDayTime = ref.watch(_isDayTimeProvider);
-    final style = TextTheme.of(context).bodyLarge;
+    final user = this.user;
+    final text = user != null
+        ? (isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening)(user.name)
+        : isDayTime
+        ? context.l10n.mobileGoodDayWithoutName
+        : context.l10n.mobileGoodEveningWithoutName;
+    final greeting = '${isDayTime ? '☀️' : '🌙'} $text';
 
-    const iconSize = 24.0;
+    void openProfile() {
+      Navigator.of(context).push(ProfileScreen.buildRoute());
+    }
 
-    final user = authUser?.user;
-
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.3,
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: GestureDetector(
-          onTap: () {
-            ref.invalidate(accountProvider);
-            Navigator.of(context).push(ProfileScreen.buildRoute());
-          },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isDayTime ? '☀️' : '🌙',
-                style: const TextStyle(fontSize: iconSize, height: 1.0),
-              ),
-              const SizedBox(width: 5.0),
-              if (user != null)
-                Flexible(
-                  child: l10nWithWidget(
-                    isDayTime ? context.l10n.mobileGoodDay : context.l10n.mobileGoodEvening,
-                    Text(user.name, style: style),
-                    textStyle: style,
-                  ),
-                )
-              else
-                Flexible(
-                  child: Text(
-                    isDayTime
-                        ? context.l10n.mobileGoodDayWithoutName
-                        : context.l10n.mobileGoodEveningWithoutName,
-                    style: style,
-                  ),
-                ),
-            ],
+    return InkWell(
+      onTap: user != null ? openProfile : null,
+      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      child: Column(
+        mainAxisSize: .min,
+        crossAxisAlignment: .start,
+        children: [
+          Text(
+            greeting,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            // On iOS, smaller than the large title of the other tabs, so that the greeting fits.
+            style: Theme.of(context).platform == TargetPlatform.iOS
+                ? TextTheme.of(context).titleLarge
+                : null,
           ),
-        ),
+          if (!isOnline)
+            Text(
+              context.l10n.noNetwork,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextTheme.of(context).bodySmall
+                  ?.copyWith(color: textShade(context, Styles.subtitleOpacity)),
+            ),
+        ],
       ),
     );
   }
@@ -776,7 +731,7 @@ class const _OngoingGamesCarousel(
           list: list,
           onTap: (index) {
             final game = list[index];
-            Navigator.of(context, rootNavigator: true).push(
+            Navigator.of(context).pushHidingTabBar(
               GameScreen.buildRoute(
                 source: ExistingGameSource(game.fullId),
                 loadingPosition: (
@@ -813,10 +768,9 @@ class const _OfflineCorrespondenceCarousel(
           list: data,
           onTap: (index) {
             final el = data[index];
-            Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)));
+            Navigator.of(context).pushHidingTabBar(
+              OfflineCorrespondenceGameScreen.buildRoute(initialGame: (el.$1, el.$2)),
+            );
           },
           builder: (el) => OngoingGameCarouselItem(
             game: OngoingGame(
@@ -980,124 +934,6 @@ class const _TipCard({required final Widget content, required final List<Widget>
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class const _WelcomeMessageCard() extends StatefulWidget {
-  @override
-  State<_WelcomeMessageCard> createState() => _WelcomeMessageCardState();
-}
-
-class _WelcomeMessageCardState() extends State<_WelcomeMessageCard> {
-  bool _shouldDisplay() {
-    return LichessBinding.instance.sharedPreferences.getBool(kWelcomeMessageShownKey) != true;
-  }
-
-  void _dismiss() {
-    LichessBinding.instance.sharedPreferences.setBool(kWelcomeMessageShownKey, true);
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_shouldDisplay()) {
-      return const SizedBox.shrink();
-    }
-
-    return _TipCard(
-      content: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: '${context.l10n.mobileWelcomeToLichessApp}\n\n',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            TextSpan(text: context.l10n.mobileNotAllFeaturesAreAvailable),
-          ],
-        ),
-      ),
-      actions: [TextButton(onPressed: _dismiss, child: Text(context.l10n.ok))],
-    );
-  }
-}
-
-class const _NNUEFilesOutdatedTip() extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_NNUEFilesOutdatedTip> createState() => _NNUEFilesOutdatedTipState();
-}
-
-class _NNUEFilesOutdatedTipState() extends ConsumerState<_NNUEFilesOutdatedTip> {
-  bool _openedSettings = false;
-  late Future<bool> _checkNNUEFilesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkNNUEFilesFuture = ref.read(stockfishNnueServiceProvider).hasOutdatedNNUEFiles();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final chessEnginePref = ref.watch(engineEvaluationPreferencesProvider).enginePref;
-    if (chessEnginePref != ChessEnginePref.sfLatest) {
-      return const SizedBox.shrink();
-    }
-
-    final nnueService = ref.watch(stockfishNnueServiceProvider);
-    if (nnueService.isDownloadingNNUEFile) {
-      return const SizedBox.shrink();
-    }
-
-    return FocusDetector(
-      // If we come back from the settings, trigger rebuild to hide the widget if the user has updated the NNUE files
-      onFocusRegained: () {
-        if (_openedSettings) {
-          setState(() {
-            _checkNNUEFilesFuture = nnueService.hasOutdatedNNUEFiles();
-            _openedSettings = false;
-          });
-        }
-      },
-      child: FutureBuilder(
-        future: _checkNNUEFilesFuture,
-        builder: (context, snapshot) {
-          final hasOutdatedNNUEFiles = snapshot.data ?? false;
-          if (!hasOutdatedNNUEFiles) {
-            return const SizedBox.shrink();
-          }
-
-          return _TipCard(
-            content: Row(
-              children: [
-                Icon(Icons.warning, size: 25.0, color: Theme.of(context).colorScheme.primary),
-                const SizedBox(width: 8.0),
-                const Flexible(
-                  child: Text(
-                    // TODO l10n
-                    'New Stockfish version available! Go to the settings to download the updated NNUE file.',
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _openedSettings = true;
-                  });
-                  Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(EngineSettingsScreen.buildRoute());
-                },
-                // TODO l10n
-                child: const Text('Open settings'),
-              ),
-            ],
-          );
-        },
       ),
     );
   }

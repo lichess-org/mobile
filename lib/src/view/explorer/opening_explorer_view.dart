@@ -66,7 +66,6 @@ class _OpeningExplorerState() extends ConsumerState<OpeningExplorerView> {
     final variant = Variant.fromRule(widget.position.rule);
 
     if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
-      // TODO: l10n
       return _buildListView(
         children: [const ExplorerMessage('Select a Lichess player in the settings.')],
       );
@@ -196,7 +195,11 @@ class const _ExplorerListView({
     return Stack(
       children: [
         if (scrollable)
-          ListView(padding: EdgeInsets.zero, children: children)
+          ListView(
+            // Scrolls under a bar floating over it.
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            children: children,
+          )
         else
           ListBody(children: children),
         loadingOverlay,

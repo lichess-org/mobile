@@ -18,14 +18,14 @@ class const Clock({
   /// The time left to be displayed on the clock.
   required final Duration timeLeft,
 
-  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  /// If `true`, the active colors are used unless the clock is in emergency.
   final bool active = false,
 
   /// Clock style to use.
   final ClockStyle? clockStyle,
 
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
-  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  /// If [timeLeft] is at or below [emergencyThreshold], the emergency background is used, dimmed
+  /// when the clock is inactive and still has time remaining.
   final Duration? emergencyThreshold,
   final ClockTenths? clockTenths,
 
@@ -46,7 +46,7 @@ class const Clock({
     final showTenths = switch (clockTenths) {
       ClockTenths.never => false,
       ClockTenths.lessThan10s || null => timeLeft < const Duration(seconds: 10),
-      ClockTenths.always => true,
+      ClockTenths.always => timeLeft < const Duration(hours: 1),
     };
 
     final hoursDisplay = padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
@@ -56,62 +56,66 @@ class const Clock({
     final colorScheme = ColorScheme.of(context);
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
+    final emergencyBackgroundColor = effectiveClockStyle.emergencyBackgroundColor.withValues(
+      alpha: effectiveClockStyle.emergencyBackgroundColor.a * (active ? 1.0 : 0.5),
+    );
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        // TODO improve this
-        final fontScaleFactor = maxWidth < 90 ? 0.8 : 1.0;
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            color: timeLeft > Duration.zero
-                ? active
-                      ? isEmergency
-                            ? effectiveClockStyle.emergencyBackgroundColor
-                            : effectiveClockStyle.activeBackgroundColor
-                      : effectiveClockStyle.backgroundColor
-                : effectiveClockStyle.emergencyBackgroundColor,
-          ),
-          child: Padding(
-            padding: padding,
-            child: MediaQuery.withClampedTextScaling(
-              maxScaleFactor: kMaxClockTextScaleFactor,
-              child: Text.rich(
-                TextSpan(
-                  text: hours > 0
-                      ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                      : '$minsDisplay:$secs',
-                  style: TextStyle(
-                    color: timeLeft > Duration.zero
-                        ? active
-                              ? isEmergency
-                                    ? effectiveClockStyle.emergencyTextColor
-                                    : effectiveClockStyle.activeTextColor
-                              : effectiveClockStyle.textColor
-                        : effectiveClockStyle.emergencyTextColor,
-                    fontSize: _kClockFontSize * fontScaleFactor,
-                    height: isShortVerticalScreen(context) ? 1.0 : null,
-                    fontFeatures: const [FontFeature.tabularFigures()],
-                  ),
-                  children: [
-                    if (showTenths)
-                      TextSpan(
-                        text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                        style: TextStyle(fontSize: _kClockTenthFontSize * fontScaleFactor),
-                      ),
-                    if (!active && timeLeft < const Duration(seconds: 1))
-                      TextSpan(
-                        text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                        style: TextStyle(fontSize: _kClockHundredsFontSize * fontScaleFactor),
-                      ),
-                  ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: timeLeft > Duration.zero
+            ? active || isEmergency
+                  ? isEmergency
+                        ? emergencyBackgroundColor
+                        : effectiveClockStyle.activeBackgroundColor
+                  : effectiveClockStyle.backgroundColor
+            : effectiveClockStyle.emergencyBackgroundColor,
+      ),
+      child: Padding(
+        padding: padding,
+        // The clock must stay on one line: wrapping (e.g. when tenths show up below 10 seconds
+        // with a large text size) makes it taller and pushes away the widgets below it, such as
+        // the crazyhouse pockets. Shrink it to fit the available width instead.
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: MediaQuery.withClampedTextScaling(
+            maxScaleFactor: kMaxClockTextScaleFactor,
+            child: Text.rich(
+              TextSpan(
+                text: hours > 0
+                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                    : '$minsDisplay:$secs',
+                style: TextStyle(
+                  color: timeLeft > Duration.zero
+                      ? active
+                            ? isEmergency
+                                  ? effectiveClockStyle.emergencyTextColor
+                                  : effectiveClockStyle.activeTextColor
+                            : effectiveClockStyle.textColor
+                      : effectiveClockStyle.emergencyTextColor,
+                  fontSize: _kClockFontSize,
+                  height: isShortVerticalScreen(context) ? 1.0 : null,
+                  fontFeatures: const [FontFeature.tabularFigures()],
                 ),
+                children: [
+                  if (showTenths)
+                    TextSpan(
+                      text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                      style: const TextStyle(fontSize: _kClockTenthFontSize),
+                    ),
+                  if (!active && timeLeft < const Duration(seconds: 1))
+                    TextSpan(
+                      text: '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                      style: const TextStyle(fontSize: _kClockHundredsFontSize),
+                    ),
+                ],
               ),
+              maxLines: 1,
+              softWrap: false,
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

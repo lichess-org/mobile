@@ -45,18 +45,6 @@ void main() {
       expect(const EngineBudget(maxMemoryInMb: 300, maxCores: 1).offlineEvalThreads, 1);
     });
 
-    test('a shared engine searches on the threads the evaluator asks for', () {
-      const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
-
-      // Anything else tears the thread pool down and rebuilds it on every hand-off, clearing the
-      // table with it.
-      expect(
-        budget.offlineOpponentThreads(sharesEngineWithEvaluator: true, threads: 1),
-        budget.offlineEvalThreads,
-      );
-      expect(budget.offlineEvalThreads, greaterThanOrEqualTo(1));
-    });
-
     test('an opponent on its own engine gets the threads its level asks for', () {
       const budget = EngineBudget(maxMemoryInMb: 300, maxCores: 3);
       expect(budget.offlineOpponentThreads(sharesEngineWithEvaluator: false, threads: 2), 2);

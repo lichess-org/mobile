@@ -9,7 +9,7 @@ Contributions to this project are welcome!
 If you want to contribute, please read the [contributing guide](./CONTRIBUTING.md).
 
 If you are new to this project, you can [read the documentation](./docs) to get
-started. The [CLAUDE.md](./CLAUDE.md) is also a good resource to understand the
+started. The [AGENTS.md](./AGENTS.md) is also a good resource to understand the
 codebase.
 
 ## Setup
@@ -34,6 +34,17 @@ dart run build_runner build
 # run the app on all available devices
 flutter run -d all
 ```
+
+### Previewing the platform designs
+
+To check the iOS and Android designs on any device, run the app in device preview:
+
+```bash
+flutter run -t lib/device_preview_main.dart
+```
+
+See [Device preview](./docs/setting_dev_env.md#device-preview) for how to use it and its
+limitations.
 
 ## Running tests
 

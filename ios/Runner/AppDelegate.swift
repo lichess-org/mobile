@@ -28,6 +28,10 @@ import flutter_local_notifications
       SharePlugin.register(with: shareRegistrar)
     }
 
+    if let liveActivityRegistrar = engineBridge.pluginRegistry.registrar(forPlugin: "LiveActivityPlugin") {
+      LiveActivityPlugin.register(with: liveActivityRegistrar)
+    }
+
     let BADGE_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/badge",
                                                     binaryMessenger: engineBridge.applicationRegistrar.messenger())
 

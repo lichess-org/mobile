@@ -13,12 +13,15 @@ import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -31,17 +34,21 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stageNumber = learnStages.indexOf(stage) + 1;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
-        actions: const [ToggleSoundButton()],
+    return WakelockWidget(
+      child: PlatformScaffold(
+        extendBodyBehindAppBar: false,
+        appBar: PlatformAppBar(
+          compactButtons: true,
+          title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
+        ),
+        // The controller reads the saved progress to pick the level to start with.
+        body: switch (ref.watch(learnProgressProvider)) {
+          AsyncData() => _Body(stage: stage),
+          AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
+          _ => const Center(child: CircularProgressIndicator.adaptive()),
+        },
       ),
-      // The controller reads the saved progress to pick the level to start with.
-      body: switch (ref.watch(learnProgressProvider)) {
-        AsyncData() => _Body(stage: stage),
-        AsyncError(:final error) => Center(child: Text('Could not load progress: $error')),
-        _ => const Center(child: CircularProgressIndicator.adaptive()),
-      },
     );
   }
 }
@@ -97,21 +104,21 @@ class _BodyState() extends ConsumerState<_Body> {
             builder: (context, constraints) {
               final isTablet = isTabletOrLarger(context);
               final isLandscape = constraints.biggest.aspectRatio > 1;
-              final defaultBoardSize = constraints.biggest.shortestSide;
-              final remainingHeight = constraints.maxHeight - defaultBoardSize;
-              final boardSize = isTablet || isLandscape || remainingHeight < kSmallHeightMinusBoard
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
+              // Like the analysis board, the board never spans the whole screen width.
+              final boardPadding = isTablet || isLandscape
+                  ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                  : isShortVerticalScreen(context)
+                  ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                  : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+              final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
               final settings = boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     autoQueenPromotion: false,
-                    borderRadius: isTablet || isLandscape
-                        ? Styles.boardBorderRadius
-                        : BorderRadius.zero,
-                    boxShadow: isTablet || isLandscape ? boardShadows : const <BoxShadow>[],
+                    borderRadius: Styles.boardBorderRadius,
+                    boxShadow: boardShadows,
                   );
 
               final board = _LearnBoard(
@@ -129,21 +136,13 @@ class _BodyState() extends ConsumerState<_Body> {
               return isLandscape
                   ? Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     )
                   : Column(
                       children: [
-                        Padding(
-                          padding: boardSize < defaultBoardSize
-                              ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                              : EdgeInsets.zero,
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     );
@@ -443,12 +442,26 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                   padding: Styles.bodyPadding,
                   child: GestureDetector(
                     onTap: () {},
-                    child: Card(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(24.0),
-                        child: child,
-                      ),
-                    ),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        // Shown over the board, which the glass would let show through too much.
+                        ? GlassModalCard(
+                            tinted: true,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(24.0),
+                                child: child,
+                              ),
+                            ),
+                          )
+                        : Card(
+                            // The dialog color, opaque enough with a background theme.
+                            color: DialogTheme.of(context).backgroundColor,
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(24.0),
+                              child: child,
+                            ),
+                          ),
                   ),
                 ),
               ),

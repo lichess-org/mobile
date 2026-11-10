@@ -38,7 +38,8 @@ class OpeningExplorer(final String fen, final Variant variant)
       case OpeningDatabase.master:
         final openingExplorer = await repository.getMasterDatabase(
           fen,
-          since: prefs.masterDb.sinceYear,
+          since: prefs.masterDb.since,
+          until: prefs.masterDb.until,
         );
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.lichess:
@@ -48,6 +49,7 @@ class OpeningExplorer(final String fen, final Variant variant)
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
+          until: prefs.lichessDb.until,
         );
         return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.player:
@@ -60,6 +62,7 @@ class OpeningExplorer(final String fen, final Variant variant)
           speeds: prefs.playerDb.speeds,
           gameModes: prefs.playerDb.gameModes,
           since: prefs.playerDb.since,
+          until: prefs.playerDb.until,
         );
 
         _openingExplorerSubscription = openingExplorerStream.listen(
@@ -89,12 +92,13 @@ Uri _explorerUri(String path, [Map<String, dynamic>? queryParameters]) =>
     : Uri.https(kLichessOpeningExplorerHost, path, queryParameters);
 
 class const OpeningExplorerRepository(final Client client) {
-  Future<OpeningExplorerEntry> getMasterDatabase(String fen, {int? since}) {
+  Future<OpeningExplorerEntry> getMasterDatabase(String fen, {DateTime? since, DateTime? until}) {
     return client.readJson(
       _explorerUri('/masters', {
         'source': 'mobile',
         'fen': fen,
-        if (since != null) 'since': since.toString(),
+        if (since != null) 'since': since.year.toString(),
+        if (until != null) 'until': until.year.toString(),
       }),
       mapper: OpeningExplorerEntry.fromJson,
     );
@@ -106,6 +110,7 @@ class const OpeningExplorerRepository(final Client client) {
     required ISet<Speed> speeds,
     required ISet<int> ratings,
     DateTime? since,
+    DateTime? until,
   }) {
     return client.readJson(
       _explorerUri('/lichess', {
@@ -114,7 +119,8 @@ class const OpeningExplorerRepository(final Client client) {
         'fen': fen,
         if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
         if (ratings.isNotEmpty) 'ratings': ratings.join(','),
-        if (since != null) 'since': '${since.year}-${since.month}',
+        if (since != null) 'since': _explorerMonth(since),
+        if (until != null) 'until': _explorerMonth(until),
       }),
       mapper: OpeningExplorerEntry.fromJson,
     );
@@ -128,6 +134,7 @@ class const OpeningExplorerRepository(final Client client) {
     required ISet<Speed> speeds,
     required ISet<GameMode> gameModes,
     DateTime? since,
+    DateTime? until,
   }) {
     return client.readNdJsonStream(
       _explorerUri('/player', {
@@ -138,12 +145,16 @@ class const OpeningExplorerRepository(final Client client) {
         'color': color.name,
         if (speeds.isNotEmpty) 'speeds': speeds.map((speed) => speed.name).join(','),
         if (gameModes.isNotEmpty) 'modes': gameModes.map((gameMode) => gameMode.name).join(','),
-        if (since != null) 'since': '${since.year}-${since.month}',
+        if (since != null) 'since': _explorerMonth(since),
+        if (until != null) 'until': _explorerMonth(until),
       }),
       mapper: OpeningExplorerEntry.fromJson,
     );
   }
 }
+
+/// Formats a month in the `YYYY-MM` format expected by the explorer API.
+String _explorerMonth(DateTime month) => '${month.year}-${month.month.toString().padLeft(2, '0')}';
 
 // Opening explorer treats imported/custom positions as standard chess.
 // Other variants must be explicit or the API falls back to standard data.

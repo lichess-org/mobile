@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 
 /// A fake implementation of [StockfishNnueService] for testing.
 ///
@@ -15,9 +15,6 @@ class FakeStockfishNnueService() implements StockfishNnueService {
 
   @override
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
-
-  @override
-  bool get isDownloadingNNUEFile => false;
 
   @override
   File get nnueFile {
@@ -61,9 +58,6 @@ class FakeStockfishNnueServiceUnavailable() implements StockfishNnueService {
 
   @override
   ValueListenable<double> get nnueDownloadProgress => _nnueDownloadProgress;
-
-  @override
-  bool get isDownloadingNNUEFile => false;
 
   @override
   File get nnueFile {

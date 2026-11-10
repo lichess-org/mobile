@@ -1,13 +1,16 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
 import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/learn/learn_stage_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -23,9 +26,10 @@ class const LearnScreen({super.key}) extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(learnProgressProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.learnLearnChess),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.chessBasics),
+        largeTitle: true,
         actions: [
           if ((progress.value?.percent ?? 0) > 0)
             ContextMenuIconButton(
@@ -85,6 +89,22 @@ class const _Body({required final LearnProgress progress}) extends StatelessWidg
             ],
           ),
         ),
+        if (progress.resumeStage case final stage?)
+          ListSection(
+            hasLeading: true,
+            children: [
+              ListTile(
+                leading: LearnStageIcon(stage: stage),
+                title: Text(context.l10n.resumeLearning),
+                subtitle: Text(stage.title(context.l10n)),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () =>
+                    Navigator.of(context).pushHidingTabBar(LearnStageScreen.buildRoute(stage)),
+              ),
+            ],
+          ),
         for (final category in learnCategories)
           ListSection(
             header: Text(category.name(context.l10n)),
@@ -113,8 +133,7 @@ class const _StageTile({required final LearnStage stage, required final LearnPro
           : completed > 0
           ? Text('$completed / ${stage.levels.length}')
           : null,
-      onTap: () =>
-          Navigator.of(context, rootNavigator: true).push(LearnStageScreen.buildRoute(stage)),
+      onTap: () => Navigator.of(context).pushHidingTabBar(LearnStageScreen.buildRoute(stage)),
     );
   }
 }

@@ -19,7 +19,6 @@ const modules = [
   // mobile is the only module managed by this project (of which we can edit the source)
   'mobile',
   // below are modules from lichess/lila
-  'variant',
   'activity',
   'arena',
   'broadcast',
@@ -29,6 +28,7 @@ const modules = [
   'learn',
   'patron',
   'perfStat',
+  'practice',
   'preferences',
   'puzzle',
   'puzzleTheme',
@@ -40,9 +40,10 @@ const modules = [
   'streamer',
   'study',
   'team',
-  'timeago',
   'tfa',
+  'timeago',
   'ublog',
+  'variant',
 ]
 
 // list of keys (per module) to include in the ARB file

@@ -3,6 +3,9 @@
 -keep class java.util.concurrent.Executors { *; }
 -keep class org.chromium.net.** { *; }
 
+# ONNX Runtime (from flutter_onnxruntime)
+-keep class ai.onnxruntime.** { *; }
+
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.

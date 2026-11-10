@@ -136,15 +136,15 @@ class _ShimmerLoadingState() extends State<ShimmerLoading> {
     final scaffoldOpacity = Theme.of(context).scaffoldBackgroundColor.a;
 
     final shimmer = Shimmer.of(context)!;
-    if (!shimmer.isSized) {
-      return const SizedBox();
+    final renderObject = context.findRenderObject() as RenderBox?;
+    // The gradient is positioned from the previous frame's layout, which the first frame does not
+    // have. The child is still laid out then, only hidden, so that the skeleton has its full size
+    // from the start instead of expanding from nothing a frame later.
+    if (!shimmer.isSized || renderObject == null) {
+      return Opacity(opacity: 0.0, child: widget.child);
     }
     final shimmerSize = shimmer.size;
     final gradient = shimmer.gradient;
-    final renderObject = context.findRenderObject() as RenderBox?;
-    if (renderObject == null) {
-      return const SizedBox();
-    }
     final offsetWithinShimmer = shimmer.getDescendantOffset(descendant: renderObject);
 
     return ShaderMask(

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
@@ -34,6 +34,7 @@ enum PrefCategory(final String storageKey) {
   account('preferences.account'),
   log('preferences.log'),
   clockTool('preferences.clockTool'),
+  relation('preferences.relation'),
 }
 
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.

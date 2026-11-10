@@ -140,7 +140,7 @@ enum BackgroundThemeMode() {
       case BackgroundThemeMode.light:
         return l10n.light;
       case BackgroundThemeMode.amoled:
-        return 'Amoled black';
+        return l10n.mobileAmoledBlack;
     }
   }
 }

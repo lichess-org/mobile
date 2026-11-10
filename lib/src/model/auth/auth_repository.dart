@@ -93,10 +93,12 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
   ///
   /// Throws an [EmailLoginRateLimitException] if the request is rate-limited.
   Future<void> requestEmailLoginCode({required String username, required String email}) async {
-    final url = lichessUri('/auth/mobile-code/email', {'email': email, 'username': username});
+    final url = lichessUri('/auth/mobile-code/email');
     // The default client is used on purpose: this endpoint is unauthenticated, and its 429 responses
     // are deliberate rate limiting that must not be retried like [lichessClientProvider] does.
-    final response = await _ref.read(defaultClientProvider).post(url);
+    final response = await _ref
+        .read(defaultClientProvider)
+        .post(url, body: {'email': email, 'username': username});
 
     if (response.statusCode == 429) {
       throw const EmailLoginRateLimitException();
@@ -121,12 +123,10 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
     required String email,
     required String code,
   }) async {
-    final url = lichessUri('/auth/mobile-code/bearer', {
-      'email': email,
-      'username': username,
-      'code': code,
-    });
-    final response = await _ref.read(defaultClientProvider).post(url);
+    final url = lichessUri('/auth/mobile-code/bearer');
+    final response = await _ref
+        .read(defaultClientProvider)
+        .post(url, body: {'email': email, 'username': username, 'code': code});
 
     switch (response.statusCode) {
       case 429:

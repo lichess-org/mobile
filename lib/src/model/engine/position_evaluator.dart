@@ -17,10 +17,9 @@ import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/weights_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
+import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:logging/logging.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -54,13 +53,17 @@ final positionEvaluatorProvider = NotifierProvider.autoDispose
 
 /// The flavor the evaluator will use for [variant], played from [position].
 ///
-/// The user's preference, except where only Fairy-Stockfish will do: the variants Stockfish does
-/// not know how to play, and the positions it refuses to accept the material of (see
-/// [hasNonStandardMaterial]). Read when the work starts rather than carried on it, so that
-/// changing the preference is picked up by the next evaluation wherever it comes from.
-StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant, Position position) =>
-    officialStockfishVariants.contains(variant) && !hasNonStandardMaterial(position)
-    ? ref.read(engineEvaluationPreferencesProvider).enginePref.flavor
+/// [enginePref] if given, else the user's preference, except where only Fairy-Stockfish will do:
+/// the variants Stockfish does not know how to play, and the positions it refuses to accept the
+/// material of (see [hasNonStandardMaterial]). Read when the work starts rather than carried on it,
+/// so that changing the preference is picked up by the next evaluation wherever it comes from.
+StockfishFlavor evaluatorFlavorFor(
+  Ref ref,
+  Variant variant,
+  Position position, {
+  ChessEnginePref? enginePref,
+}) => officialStockfishVariants.contains(variant) && !hasNonStandardMaterial(position)
+    ? (enginePref ?? ref.read(engineEvaluationPreferencesProvider).enginePref).flavor
     : StockfishFlavor.variant;
 
 /// The engine the evaluator will run [variant] on, played from [position].
@@ -70,12 +73,16 @@ StockfishFlavor evaluatorFlavorFor(Ref ref, Variant variant, Position position) 
 /// search request. What it is asked is whether some other role shares the evaluator's engine, and
 /// the slot settles that: the `latestNoNNUE` → `light` fallback can make this name the wrong
 /// Stockfish, but only a variant or an unplayable material ever resolves to Fairy.
-EngineSlot evaluatorEngineSlotFor(Ref ref, Variant variant, Position position) =>
-    switch (evaluatorFlavorFor(ref, variant, position)) {
-      StockfishFlavor.variant => EngineSlot.fairy,
-      StockfishFlavor.light => EngineSlot.sfLight,
-      StockfishFlavor.latestNoNNUE => EngineSlot.sfLatest,
-    };
+EngineSlot evaluatorEngineSlotFor(
+  Ref ref,
+  Variant variant,
+  Position position, {
+  ChessEnginePref? enginePref,
+}) => switch (evaluatorFlavorFor(ref, variant, position, enginePref: enginePref)) {
+  StockfishFlavor.variant => EngineSlot.fairy,
+  StockfishFlavor.light => EngineSlot.sfLight,
+  StockfishFlavor.latestNoNNUE => EngineSlot.sfLatest,
+};
 
 /// Evaluates positions for analysis.
 ///
@@ -189,27 +196,11 @@ class PositionEvaluator(
   ///
   /// This will stop any current evaluation and start a new one. Last caller wins.
   ///
-  /// Returns a [Stream] of [EvalResult]s for this work only. The stream completes
-  /// when the evaluation finishes or is replaced by another request.
-  ///
-  /// If [goDeeper] is true, the engine will use the maximum search time.
-  ///
-  /// Returns `null` if a cached eval is sufficient.
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
+  /// Returns a [Stream] of [EvalResult]s for this work only. The stream completes when the
+  /// evaluation finishes or is replaced by another request.
+  Stream<EvalResult> evaluate(EvalWork work) {
     // reset eval is needed to avoid showing a stale eval from a previous work in a different position
     _setEval(null);
-
-    if (!work.threatMode) {
-      // If we have an already good enough eval in cache, skip the evaluation
-      switch (work.evalCache) {
-        case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-        case CloudEval _ when goDeeper == false:
-          stop();
-          return null;
-        case _:
-          break;
-      }
-    }
 
     _logger.info(
       'Starting evaluation at ply ${work.position.ply} with options: '
@@ -437,7 +428,7 @@ class PositionEvaluator(
   /// The material is read from the root of the tree rather than from the position being evaluated,
   /// so that the engine cannot change under the user as pieces come off the board.
   StockfishFlavor _flavorFor(EvalWork work) =>
-      evaluatorFlavorFor(ref, work.variant, work.initialPosition);
+      evaluatorFlavorFor(ref, work.variant, work.initialPosition, enginePref: context.enginePref);
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {
@@ -613,7 +604,7 @@ class PositionEvaluator(
     _notifyUser(failure);
   }
 
-  /// Shows the user a snackbar for a failure they cannot work around.
+  /// Reports an engine failure the user cannot work around.
   ///
   /// Recoverable failures are left to the engine button, which already shows an error state; only
   /// an engine that will not come back until the app is restarted is worth interrupting for.
@@ -626,17 +617,8 @@ class PositionEvaluator(
       return;
     }
 
-    try {
-      final navigatorContext = ref.read(currentNavigatorKeyProvider).currentContext;
-      if (navigatorContext == null || !navigatorContext.mounted) return;
-
-      showSnackBar(navigatorContext, _kUnrecoverableEngineMessage, type: SnackBarType.error);
-      _lastUserNotification = now;
-    } catch (e) {
-      // There may be no widget tree to show anything in. Telling the user is best effort and must
-      // never take the failure handling around it down.
-      _logger.fine('Could not show the engine failure message: $e');
-    }
+    ref.read(uiEventBusProvider).emit(const ShowErrorEvent(_kUnrecoverableEngineMessage));
+    _lastUserNotification = now;
   }
 
   // ---------------------------------------------------------------------------

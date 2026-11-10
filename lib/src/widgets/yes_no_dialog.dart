@@ -11,7 +11,7 @@ class const YesNoDialog({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
       title: title,
       content: content,
       actions: [

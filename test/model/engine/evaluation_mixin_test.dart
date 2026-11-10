@@ -32,7 +32,7 @@ class _FakePositionEvaluator(super.context) extends PositionEvaluator {
   EngineEvaluationState build() => PositionEvaluator.defaultState;
 
   @override
-  Stream<EvalResult>? evaluate(EvalWork work, {bool goDeeper = false}) {
+  Stream<EvalResult> evaluate(EvalWork work) {
     final controller = StreamController<EvalResult>.broadcast();
     streams.add(controller);
     return controller.stream.where((result) => result.$1 == work);

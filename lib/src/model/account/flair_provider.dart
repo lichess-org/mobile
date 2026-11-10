@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/emoji_picker_models.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
-import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker_models.dart';
 
 /// A provider that fetches the list of available flairs.
 final flairListProvider = FutureProvider<EmojiData>((Ref ref) async {

@@ -27,21 +27,27 @@ enum PuzzleThemeKey(final IconData icon) {
   attackingF2F7(PuzzleIcons.attackingF2F7),
   attraction(PuzzleIcons.attraction),
   backRankMate(PuzzleIcons.backRankMate),
+  balestraMate(PuzzleIcons.balestraMate),
   bishopEndgame(PuzzleIcons.bishopEndgame),
+  blindSwineMate(PuzzleIcons.blindSwineMate),
   bodenMate(PuzzleIcons.bodenMate),
   capturingDefender(PuzzleIcons.capturingDefender),
   castling(PuzzleIcons.castling),
   clearance(PuzzleIcons.clearance),
+  collinearMove(PuzzleIcons.collinearMove),
+  cornerMate(PuzzleIcons.cornerMate),
   crushing(PuzzleIcons.crushing),
   defensiveMove(PuzzleIcons.defensiveMove),
   deflection(PuzzleIcons.deflection),
   discoveredAttack(PuzzleIcons.discoveredAttack),
+  discoveredCheck(PuzzleIcons.discoveredCheck),
   doubleBishopMate(PuzzleIcons.doubleBishopMate),
   doubleCheck(PuzzleIcons.doubleCheck),
   dovetailMate(PuzzleIcons.dovetailMate),
   equality(PuzzleIcons.equality),
   endgame(PuzzleIcons.endgame),
   enPassant(PuzzleIcons.enPassant),
+  epauletteMate(PuzzleIcons.epauletteMate),
   exposedKing(PuzzleIcons.exposedKing),
   fork(PuzzleIcons.fork),
   hangingPiece(PuzzleIcons.hangingPiece),
@@ -62,9 +68,12 @@ enum PuzzleThemeKey(final IconData icon) {
   mateIn5(PuzzleIcons.mate),
   smotheredMate(PuzzleIcons.smotheredMate),
   middlegame(PuzzleIcons.middlegame),
+  morphysMate(PuzzleIcons.morphysMate),
   oneMove(PuzzleIcons.oneMove),
   opening(PuzzleIcons.opening),
+  operaMate(PuzzleIcons.operaMate),
   pawnEndgame(PuzzleIcons.pawnEndgame),
+  pillsburysMate(PuzzleIcons.pillsburysMate),
   pin(PuzzleIcons.pin),
   promotion(PuzzleIcons.promotion),
   queenEndgame(PuzzleIcons.queenEndgame),
@@ -76,9 +85,12 @@ enum PuzzleThemeKey(final IconData icon) {
   short(PuzzleIcons.short),
   skewer(PuzzleIcons.skewer),
   superGM(PuzzleIcons.superGM),
+  swallowstailMate(PuzzleIcons.swallowstailMate),
   trappedPiece(PuzzleIcons.trappedPiece),
+  triangleMate(PuzzleIcons.triangleMate),
   underPromotion(PuzzleIcons.underPromotion),
   veryLong(PuzzleIcons.veryLong),
+  vukovicMate(PuzzleIcons.vukovicMate),
   xRayAttack(PuzzleIcons.xRayAttack),
   zugzwang(PuzzleIcons.zugzwang),
 
@@ -128,10 +140,20 @@ enum PuzzleThemeKey(final IconData icon) {
           name: l10n.puzzleThemeBackRankMate,
           description: l10n.puzzleThemeBackRankMateDescription,
         );
+      case PuzzleThemeKey.balestraMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeBalestraMate,
+          description: l10n.puzzleThemeBalestraMateDescription,
+        );
       case PuzzleThemeKey.bishopEndgame:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeBishopEndgame,
           description: l10n.puzzleThemeBishopEndgameDescription,
+        );
+      case PuzzleThemeKey.blindSwineMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeBlindSwineMate,
+          description: l10n.puzzleThemeBlindSwineMateDescription,
         );
       case PuzzleThemeKey.bodenMate:
         return PuzzleThemeL10n(
@@ -153,6 +175,16 @@ enum PuzzleThemeKey(final IconData icon) {
           name: l10n.puzzleThemeClearance,
           description: l10n.puzzleThemeClearanceDescription,
         );
+      case PuzzleThemeKey.collinearMove:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeCollinearMove,
+          description: l10n.puzzleThemeCollinearMoveDescription,
+        );
+      case PuzzleThemeKey.cornerMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeCornerMate,
+          description: l10n.puzzleThemeCornerMateKnightDeliversDescription,
+        );
       case PuzzleThemeKey.crushing:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeCrushing,
@@ -172,6 +204,11 @@ enum PuzzleThemeKey(final IconData icon) {
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeDiscoveredAttack,
           description: l10n.puzzleThemeDiscoveredAttackDescription,
+        );
+      case PuzzleThemeKey.discoveredCheck:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeDiscoveredCheck,
+          description: l10n.puzzleThemeDiscoveredCheckDescription,
         );
       case PuzzleThemeKey.doubleBishopMate:
         return PuzzleThemeL10n(
@@ -202,6 +239,11 @@ enum PuzzleThemeKey(final IconData icon) {
         return PuzzleThemeL10n(
           name: l10n.enPassant,
           description: l10n.puzzleThemeEnPassantAdjacentCaptureDescription,
+        );
+      case PuzzleThemeKey.epauletteMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeEpauletteMate,
+          description: l10n.puzzleThemeEpauletteMateDescription,
         );
       case PuzzleThemeKey.exposedKing:
         return PuzzleThemeL10n(
@@ -303,6 +345,11 @@ enum PuzzleThemeKey(final IconData icon) {
           name: l10n.puzzleThemeMiddlegame,
           description: l10n.puzzleThemeMiddlegameDescription,
         );
+      case PuzzleThemeKey.morphysMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeMorphysMate,
+          description: l10n.puzzleThemeMorphyMateBishopAndRookDescription,
+        );
       case PuzzleThemeKey.oneMove:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeOneMove,
@@ -313,10 +360,20 @@ enum PuzzleThemeKey(final IconData icon) {
           name: l10n.puzzleThemeOpening,
           description: l10n.puzzleThemeOpeningDescription,
         );
+      case PuzzleThemeKey.operaMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeOperaMate,
+          description: l10n.puzzleThemeOperaMateDescription,
+        );
       case PuzzleThemeKey.pawnEndgame:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemePawnEndgame,
           description: l10n.puzzleThemePawnEndgameDescription,
+        );
+      case PuzzleThemeKey.pillsburysMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemePillsburysMate,
+          description: l10n.puzzleThemePillsburyMateRookAndBishopDescription,
         );
       case PuzzleThemeKey.pin:
         return PuzzleThemeL10n(
@@ -373,10 +430,20 @@ enum PuzzleThemeKey(final IconData icon) {
           name: l10n.puzzleThemeSuperGM,
           description: l10n.puzzleThemeSuperGMDescription,
         );
+      case PuzzleThemeKey.swallowstailMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeSwallowstailMate,
+          description: l10n.puzzleThemeSwallowstailMateDescription,
+        );
       case PuzzleThemeKey.trappedPiece:
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeTrappedPiece,
           description: l10n.puzzleThemeTrappedPieceDescription,
+        );
+      case PuzzleThemeKey.triangleMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeTriangleMate,
+          description: l10n.puzzleThemeTriangleMateDescription,
         );
       case PuzzleThemeKey.underPromotion:
         return PuzzleThemeL10n(
@@ -387,6 +454,11 @@ enum PuzzleThemeKey(final IconData icon) {
         return PuzzleThemeL10n(
           name: l10n.puzzleThemeVeryLong,
           description: l10n.puzzleThemeVeryLongDescription,
+        );
+      case PuzzleThemeKey.vukovicMate:
+        return PuzzleThemeL10n(
+          name: l10n.puzzleThemeVukovicMate,
+          description: l10n.puzzleThemeVukovicMateDescription,
         );
       case PuzzleThemeKey.xRayAttack:
         return PuzzleThemeL10n(
@@ -449,6 +521,8 @@ final puzzleThemeCategoriesProvider = Provider<IList<PuzzleThemeCategory>>((Ref 
       [
         PuzzleThemeKey.attraction,
         PuzzleThemeKey.clearance,
+        PuzzleThemeKey.collinearMove,
+        PuzzleThemeKey.discoveredCheck,
         PuzzleThemeKey.defensiveMove,
         PuzzleThemeKey.deflection,
         PuzzleThemeKey.interference,
@@ -467,14 +541,29 @@ final puzzleThemeCategoriesProvider = Provider<IList<PuzzleThemeCategory>>((Ref 
         PuzzleThemeKey.mateIn3,
         PuzzleThemeKey.mateIn4,
         PuzzleThemeKey.mateIn5,
+      ],
+    ),
+    (
+      l10n.strings.puzzleMateThemes,
+      [
         PuzzleThemeKey.anastasiaMate,
         PuzzleThemeKey.arabianMate,
         PuzzleThemeKey.backRankMate,
+        PuzzleThemeKey.balestraMate,
+        PuzzleThemeKey.blindSwineMate,
         PuzzleThemeKey.bodenMate,
+        PuzzleThemeKey.cornerMate,
         PuzzleThemeKey.doubleBishopMate,
         PuzzleThemeKey.dovetailMate,
+        PuzzleThemeKey.epauletteMate,
         PuzzleThemeKey.hookMate,
         PuzzleThemeKey.killBoxMate,
+        PuzzleThemeKey.pillsburysMate,
+        PuzzleThemeKey.morphysMate,
+        PuzzleThemeKey.operaMate,
+        PuzzleThemeKey.swallowstailMate,
+        PuzzleThemeKey.triangleMate,
+        PuzzleThemeKey.vukovicMate,
         PuzzleThemeKey.smotheredMate,
       ],
     ),

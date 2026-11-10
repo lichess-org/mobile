@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/relation/following_user.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -26,6 +27,8 @@ final followingCarouselProvider = FutureProvider.autoDispose<IList<FollowingUser
   }
   return ref.watch(relationRepositoryProvider).getRecentFollowing();
 }, name: 'FollowingCarouselProvider');
+
+const _kFollowingCarouselHeight = 110.0;
 
 /// A carousel widget that displays a list of users that the current user is following.
 class const FollowingCarousel(final AsyncValue<IList<FollowingUser>> followingAsync, {super.key})
@@ -60,7 +63,7 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
                 ),
               ),
               SizedBox(
-                height: 110,
+                height: _kFollowingCarouselHeight,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 3.0),
@@ -92,21 +95,29 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
                                 ),
                                 FittedBox(
                                   fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    friend.playing == true
-                                        ? context.l10n.playingRightNow
-                                        : friend.user.isOnline == true
-                                        ? context.l10n.online.capitalize()
-                                        : friend.seenAt != null
-                                        ? context.l10n.lastSeenActive(
-                                            relativeDate(context.l10n, friend.seenAt!),
-                                          )
-                                        : context.l10n.offline.capitalize(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: textShade(context, Styles.subtitleOpacity),
-                                    ),
+                                  child: Row(
+                                    mainAxisSize: .min,
+                                    spacing: 4,
+                                    children: [
+                                      if (friend.user.isOnline == true)
+                                        const ConnectedIcon(isConnected: true, size: 10),
+                                      Text(
+                                        friend.playing == true
+                                            ? context.l10n.playingRightNow
+                                            : friend.user.isOnline == true
+                                            ? context.l10n.online.capitalize()
+                                            : friend.seenAt != null
+                                            ? context.l10n.lastSeenActive(
+                                                relativeDate(context.l10n, friend.seenAt!),
+                                              )
+                                            : context.l10n.offline.capitalize(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: textShade(context, Styles.subtitleOpacity),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const Spacer(),
@@ -142,7 +153,7 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
       if (friend.playing == true)
         IconButton.filledTonal(
           onPressed: () {
-            Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: friend.user));
+            Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: friend.user));
           },
           icon: const Icon(Icons.live_tv_outlined),
           iconSize: iconSize,
@@ -161,10 +172,8 @@ Widget _buildActionButtons(BuildContext context, WidgetRef ref, FollowingUser fr
             icon: Icons.chat_bubble_outline,
             label: context.l10n.message,
             onPressed: () {
-              Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(ConversationScreen.buildRoute(user: friend.user));
+              Navigator.of(context)
+                  .pushHidingTabBar(ConversationScreen.buildRoute(user: friend.user));
             },
           ),
           ContextMenuAction(
@@ -199,7 +208,7 @@ Widget _buildLoadingSkeleton(BuildContext context) {
           child: ShimmerLoading(
             isLoading: true,
             child: SizedBox(
-              height: 120,
+              height: _kFollowingCarouselHeight,
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,

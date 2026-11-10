@@ -216,7 +216,7 @@ sealed class const BroadcastPlayer._() with _$BroadcastPlayer {
     required String? name,
     required String? title,
     required int? rating,
-    required String? federation,
+    required FederationId? federation,
     required FideId? fideId,
     required String? team,
   }) = _BroadcastPlayer;

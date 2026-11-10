@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' show Locale;
 
 import 'package:deep_pick/deep_pick.dart';
@@ -7,6 +8,12 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('JsonUtils');
+
+/// A JSON decoder that decodes UTF-8 bytes.
+///
+/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
+/// than decoding the bytes to a string and then parsing the JSON.
+final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
 
 /// Reads a JSON list of objects and maps it using the provided mapper function.
 IList<T> decodeObjectList<T>(Object? json, {required T? Function(Map<String, dynamic>) mapper}) {
@@ -101,7 +108,7 @@ extension TimeExtension on Pick {
     if (value is int) {
       return DateTime.fromMillisecondsSinceEpoch(value);
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to DateTime");
+    throw PickException.fromPick(this, "can't be casted to DateTime");
   }
 
   /// Matches a DateTime from milliseconds since unix epoch.
@@ -123,7 +130,7 @@ extension TimeExtension on Pick {
     if (value is int) {
       return Duration(minutes: value);
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to Duration");
+    throw PickException.fromPick(this, "can't be casted to Duration");
   }
 
   Duration? asDurationFromMinutesOrNull() {
@@ -146,7 +153,7 @@ extension TimeExtension on Pick {
     } else if (value is double) {
       return Duration(milliseconds: (value * 1000).toInt());
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to Duration");
+    throw PickException.fromPick(this, "can't be casted to Duration");
   }
 
   /// Matches a Duration from seconds
@@ -168,7 +175,7 @@ extension TimeExtension on Pick {
     if (value is int) {
       return Duration(milliseconds: value * 10);
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to Duration");
+    throw PickException.fromPick(this, "can't be casted to Duration");
   }
 
   Duration? asDurationFromCentiSecondsOrNull() {
@@ -189,7 +196,7 @@ extension TimeExtension on Pick {
     if (value is int) {
       return Duration(milliseconds: value);
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to Duration");
+    throw PickException.fromPick(this, "can't be casted to Duration");
   }
 
   Duration? asDurationFromMilliSecondsOrNull() {

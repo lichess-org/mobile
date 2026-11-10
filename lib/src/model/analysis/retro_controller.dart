@@ -9,13 +9,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_mixin.dart';
-import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
@@ -26,6 +23,9 @@ import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/server_analysis_service.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:logging/logging.dart';
 
 part 'retro_controller.freezed.dart';
@@ -88,6 +88,8 @@ class RetroController(final RetroOptions options)
 
   final Completer<void> _serverAnalysisCompleter = Completer<void>();
 
+  Timer? _serverAnalysisTimeout;
+
   Timer? _incorrectMoveTimer;
 
   @override
@@ -102,6 +104,7 @@ class RetroController(final RetroOptions options)
   Future<RetroState> build() async {
     ref.onDispose(() {
       _incorrectMoveTimer?.cancel();
+      _serverAnalysisTimeout?.cancel();
     });
 
     socketClient = ref.watch(socketPoolProvider).open(AnalysisController.socketUri);
@@ -138,24 +141,20 @@ class RetroController(final RetroOptions options)
       if (currentServerAnalysis.value != ServerAnalysisSource.game(gameId: options.id)) {
         requestServerAnalysis().catchError((Object e, StackTrace st) {
           _logger.warning('Failed to request server analysis', e, st);
+          _serverAnalysisTimeout?.cancel();
           state = AsyncError(e, st);
         });
       }
 
-      unawaited(
-        _serverAnalysisCompleter.future.timeout(
-          kMaxWaitForServerAnalysis,
-          onTimeout: () {
-            _logger.warning(
-              'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
-            );
-            state = AsyncError(
-              Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
-              StackTrace.current,
-            );
-          },
-        ),
-      );
+      _serverAnalysisTimeout = Timer(kMaxWaitForServerAnalysis, () {
+        _logger.warning(
+          'Server analysis did not finish within $kMaxWaitForServerAnalysis for game ${options.id}',
+        );
+        state = AsyncError(
+          Exception('Server analysis did not finish within $kMaxWaitForServerAnalysis'),
+          StackTrace.current,
+        );
+      });
 
       return state.requireValue;
     }
@@ -200,7 +199,7 @@ class RetroController(final RetroOptions options)
           try {
             final entry = await ref
                 .read(openingExplorerRepositoryProvider)
-                .getMasterDatabase(branch.position.fen, since: MasterDb.kEarliestYear);
+                .getMasterDatabase(branch.position.fen, since: MasterDb.earliestDate);
 
             final masterMovesPlayedMoreThanOnce = entry.moves.where(
               (move) => move.white + move.draws + move.black > 1,
@@ -472,6 +471,7 @@ class RetroController(final RetroOptions options)
     state = AsyncValue.data(state.requireValue.copyWith(serverAnalysisProgress: progress));
 
     if (event.isAnalysisComplete) {
+      _serverAnalysisTimeout?.cancel();
       if (_serverAnalysisCompleter.isCompleted == false) {
         _serverAnalysisCompleter.complete();
       }

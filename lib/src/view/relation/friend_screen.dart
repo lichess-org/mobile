@@ -1,48 +1,29 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/relation/friend_list_sort.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
+import 'package:lichess_mobile/src/model/relation/relation_preferences.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_context_menu.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
+import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
-
-enum _FriendSortType() {
-  alphabetical,
-  ratingDesc,
-  ratingAsc,
-  lastOnline;
-
-  String l10n(AppLocalizations l10n) {
-    switch (this) {
-      case _FriendSortType.alphabetical:
-        return l10n.studyAlphabetical;
-      case ratingDesc:
-        return 'Rating Descending';
-      case _FriendSortType.ratingAsc:
-        return 'Rating Ascending';
-      case _FriendSortType.lastOnline:
-        return 'Last Seen';
-    }
-  }
-}
 
 class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
@@ -56,7 +37,6 @@ class const FriendScreen({super.key}) extends ConsumerStatefulWidget {
 class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProviderStateMixin {
   late final TabController _tabController;
   final _searchController = TextEditingController();
-  _FriendSortType sortType = _FriendSortType.lastOnline;
   String searchTerm = '';
 
   @override
@@ -76,61 +56,50 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
   Widget build(BuildContext context) {
     final onlineFriendsCount = ref.watch(onlineFriendsProvider.select((v) => v.value?.length ?? 0));
     final followingCount = ref.watch(followingProvider.select((v) => v.value?.length ?? 0));
-
-    final sortButton = SemanticIconButton(
+    final sort = ref.watch(
+      relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
+    );
+    final sortButton = ContextMenuIconButton(
       icon: const Icon(Icons.sort),
-      // TODO: translate
-      semanticsLabel: 'Sort friends',
-      onPressed: () => showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.4),
-        builder: (_) => StatefulBuilder(
-          builder: (context, setLocalState) {
-            return BottomSheetScrollableContainer(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                const SizedBox(height: 16.0),
-                Text('Sort by', style: Theme.of(context).textTheme.bodyLarge),
-                const SizedBox(height: 16.0),
-                Filter<_FriendSortType>(
-                  filterType: FilterType.singleChoice,
-                  choices: _FriendSortType.values,
-                  choiceSelected: (choice) => sortType == choice,
-                  choiceLabel: (category) => Text(category.l10n(context.l10n)),
-                  onSelected: (value, selected) {
-                    if (_tabController.index == 0) {
-                      _tabController.animateTo(1, duration: kTabScrollDuration);
-                    }
-                    setLocalState(() => sortType = value);
-                    setState(() => sortType = value);
-                  },
-                ),
-                const SizedBox(height: 16.0),
-              ],
-            );
-          },
-        ),
-      ),
+      semanticsLabel: context.l10n.mobileSortFriends,
+      actions: [
+        for (final choice in FriendListSort.values)
+          ContextMenuAction(
+            label: choice.l10n(context.l10n),
+            selected: choice == sort,
+            onPressed: () {
+              if (_tabController.index == 0) {
+                _tabController.animateTo(1, duration: kTabScrollDuration);
+              }
+              ref.read(relationPreferencesProvider.notifier).setFriendSort(choice);
+            },
+          ),
+      ],
     );
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
-        bottom: TabBar(
+        bottom: PlatformTabBar(
           controller: _tabController,
-          tabs: <Widget>[
-            Tab(text: context.l10n.nbFriendsOnline(onlineFriendsCount)),
-            Tab(text: context.l10n.nbFollowing(followingCount)),
+          tabs: [
+            context.l10n.nbFriendsOnline(onlineFriendsCount),
+            context.l10n.nbFollowing(followingCount),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
+        // On iOS, a horizontal swipe on a friend reveals its swipe actions, so the tabs only
+        // change with the segmented control.
+        physics: Theme.of(context).platform == TargetPlatform.iOS
+            ? const NeverScrollableScrollPhysics()
+            : null,
         children: [
           _Online(searchTerm, _searchController, _onSearchChanged),
-          _Following(sortType, searchTerm, _searchController, _onSearchChanged),
+          _Following(searchTerm, _searchController, _onSearchChanged),
         ],
       ),
     );
@@ -209,16 +178,15 @@ class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
           ? IconButton(
               tooltip: context.l10n.watchGames,
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(TvScreen.buildRoute(user: user));
+                Navigator.of(context).pushHidingTabBar(TvScreen.buildRoute(user: user));
               },
               icon: const Icon(Icons.live_tv),
             )
           : null,
       onTap: () => Navigator.of(context).push(UserOrProfileScreen.buildRoute(user)),
-      onLongPress: () => showModalBottomSheet<void>(
+      onLongPress: () => showAdaptiveBottomSheet<void>(
         context: context,
         useRootNavigator: true,
-        isDismissible: true,
         isScrollControlled: true,
         showDragHandle: true,
         constraints: BoxConstraints(minHeight: MediaQuery.heightOf(context) * 0.5),
@@ -287,7 +255,6 @@ bool _matchesSearch(String username, String searchTerm) =>
     searchTerm.isEmpty || username.toLowerCase().contains(searchTerm.toLowerCase().trim());
 
 class const _Following(
-  final _FriendSortType sortType,
   final String searchTerm,
   final TextEditingController searchController,
   final ValueChanged<String> onSearchChanged,
@@ -295,6 +262,9 @@ class const _Following(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final following = ref.watch(followingProvider);
+    final sort = ref.watch(
+      relationPreferencesProvider.select((v) => v.friendSort ?? FriendListSort.lastSeen),
+    );
 
     switch (following) {
       case AsyncData(value: final users):
@@ -302,57 +272,57 @@ class const _Following(
         final showSearchBar = users.length >= _kMinItemsForSearchBar;
         final offset = showSearchBar ? 1 : 0;
         final value = users.where((u) => _matchesSearch(u.username, searchTerm)).toIList();
-        IList<User> following = switch (sortType) {
-          _FriendSortType.alphabetical => value.sort(
+        IList<User> following = switch (sort) {
+          FriendListSort.alphabetical => value.sort(
             (a, b) => a.username.toLowerCase().compareTo(b.username.toLowerCase()),
           ),
-          _FriendSortType.ratingDesc =>
+          FriendListSort.ratingDesc =>
             value
                 .sort((a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0))
                 .reversed,
-          _FriendSortType.ratingAsc => value.sort(
+          FriendListSort.ratingAsc => value.sort(
             (a, b) => (a.perfs.displayRating ?? 0).compareTo(b.perfs.displayRating ?? 0),
           ),
-          _FriendSortType.lastOnline =>
+          FriendListSort.lastSeen =>
             value
                 .sort((a, b) => (a.seenAt ?? DateTime(1970)).compareTo(b.seenAt ?? DateTime(1970)))
                 .reversed,
         };
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return ListView.separated(
-              // an empty list shows a message instead of tiles
-              itemCount: (following.isEmpty ? 1 : following.length) + offset,
-              separatorBuilder: (context, index) =>
-                  index >= offset && Theme.of(context).platform == TargetPlatform.iOS
-                  ? const PlatformDivider(height: 1)
-                  : const SizedBox.shrink(),
-              itemBuilder: (context, index) {
-                if (showSearchBar && index == 0) {
-                  return _SearchBarItem(controller: searchController, onChanged: onSearchChanged);
-                }
-                if (following.isEmpty) {
-                  return _EmptyListMessage(
-                    searchTerm.isEmpty
-                        ? context.l10n.mobileNotFollowingAnyUser
-                        : context.l10n.mobileNoSearchResults,
-                  );
-                }
-                final user = following[index - offset];
-                return Slidable(
-                  dragStartBehavior: DragStartBehavior.start,
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
+            return SwipeActionsScope(
+              child: ListView.separated(
+                // an empty list shows a message instead of tiles
+                itemCount: (following.isEmpty ? 1 : following.length) + offset,
+                separatorBuilder: (context, index) =>
+                    index >= offset && Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1)
+                    : const SizedBox.shrink(),
+                itemBuilder: (context, index) {
+                  if (showSearchBar && index == 0) {
+                    return _SearchBarItem(controller: searchController, onChanged: onSearchChanged);
+                  }
+                  if (following.isEmpty) {
+                    return _EmptyListMessage(
+                      searchTerm.isEmpty
+                          ? context.l10n.mobileNotFollowingAnyUser
+                          : context.l10n.mobileNoSearchResults,
+                    );
+                  }
+                  final user = following[index - offset];
+                  return SwipeActions(
                     extentRatio: 0.3,
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) async {
+                    allowsFullSwipe: false,
+                    endActions: [
+                      SwipeAction(
+                        onPressed: () async {
                           final oldState = following;
                           setState(() {
                             following = following.removeWhere((v) => v.id == user.id);
                           });
                           try {
                             await ref.read(relationRepositoryProvider).unfollow(user.id);
+                            ref.invalidate(followingProvider);
                           } catch (_) {
                             setState(() {
                               following = oldState;
@@ -365,14 +335,15 @@ class const _Following(
                         label: context.l10n.unfollow,
                       ),
                     ],
-                  ),
-                  child: UserListTile.fromUser(
-                    user,
-                    onTap: () =>
-                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(user.lightUser)),
-                  ),
-                );
-              },
+                    child: UserListTile.fromUser(
+                      user,
+                      onTap: () =>
+                          Navigator.of(context)
+                              .push(UserOrProfileScreen.buildRoute(user.lightUser)),
+                    ),
+                  );
+                },
+              ),
             );
           },
         );

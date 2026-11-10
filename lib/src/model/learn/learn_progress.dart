@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -35,6 +36,19 @@ class const LearnProgress(final IMap<String, IMap<int, int>> _scores) {
   int nextLevelIndex(LearnStage stage) {
     final index = stageScores(stage).indexWhere((s) => s == 0);
     return index == -1 ? 0 : index;
+  }
+
+  /// The stage to resume: the first one started but not completed, or, if none is in progress,
+  /// the first one not completed.
+  ///
+  /// Null while nothing is started and once everything is done, so that resuming is only offered
+  /// to a user in the middle of the stages.
+  LearnStage? get resumeStage {
+    if (percent <= 0 || percent >= 100) return null;
+    return learnStages.firstWhereOrNull(
+          (stage) => isStageStarted(stage) && !isStageComplete(stage),
+        ) ??
+        learnStages.firstWhereOrNull((stage) => !isStageComplete(stage));
   }
 
   /// The overall progress, from 0 to 100, computed as on lichess.org.

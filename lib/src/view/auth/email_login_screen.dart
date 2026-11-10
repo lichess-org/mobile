@@ -4,12 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Number of characters of a login code.
 const _kLoginCodeLength = 6;
@@ -64,7 +66,7 @@ class _EmailLoginScreenState() extends State<EmailLoginScreen> {
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: const Text('Sign in with an email'),
+        title: Text(context.l10n.mobileSignInWithEmail),
         leading: step == _EmailLoginStep.code
             ? IconButton(
                 icon: const Icon(Icons.arrow_back),
@@ -167,7 +169,7 @@ class _EmailFormState() extends ConsumerState<_EmailForm> {
       child: ListView(
         padding: Styles.bodySectionPadding,
         children: [
-          const Text('We will email you a code to sign in with.'),
+          Text(context.l10n.mobileWeWillEmailYouCode),
           const SizedBox(height: 24.0),
           TextFormField(
             controller: usernameController,
@@ -208,7 +210,7 @@ class _EmailFormState() extends ConsumerState<_EmailForm> {
             validator: (value) {
               final email = value?.trim() ?? '';
               if (!_emailRegExp.hasMatch(email)) {
-                return 'Please enter a valid email address.';
+                return context.l10n.error_email;
               }
               return null;
             },
@@ -220,7 +222,13 @@ class _EmailFormState() extends ConsumerState<_EmailForm> {
               MutationPending() => null,
               _ => submit,
             },
-            child: const Text('Send me a code'),
+            child: Text(context.l10n.mobileSendMeACode),
+          ),
+          const SizedBox(height: 8.0),
+          // Signing up needs the website's captcha and email confirmation, so open its page.
+          TextButton(
+            onPressed: () => launchUrl(lichessUri('/signup')),
+            child: Text(context.l10n.signUp),
           ),
         ],
       ),
@@ -284,10 +292,7 @@ class _CodeFormState() extends ConsumerState<_CodeForm> {
       child: ListView(
         padding: Styles.bodySectionPadding,
         children: [
-          Text(
-            'If an account matches ${widget.email}, a $_kLoginCodeLength character code was sent '
-            'to it. Check your inbox and enter the code below.',
-          ),
+          Text(context.l10n.mobileIfAccountMatchesCodeSent(widget.email, '$_kLoginCodeLength')),
           const SizedBox(height: 24.0),
           TextFormField(
             controller: controller,
@@ -301,10 +306,13 @@ class _CodeFormState() extends ConsumerState<_CodeForm> {
               FilteringTextInputFormatter.deny(RegExp(r'\s')),
               LengthLimitingTextInputFormatter(_kLoginCodeLength),
             ],
-            decoration: const InputDecoration(labelText: 'Code', border: OutlineInputBorder()),
+            decoration: InputDecoration(
+              labelText: context.l10n.mobileCodeFieldLabel,
+              border: const OutlineInputBorder(),
+            ),
             validator: (value) {
               if ((value?.trim() ?? '').length != _kLoginCodeLength) {
-                return 'The code is $_kLoginCodeLength characters long.';
+                return context.l10n.mobileCodeLengthMessage('$_kLoginCodeLength');
               }
               return null;
             },
@@ -319,10 +327,7 @@ class _CodeFormState() extends ConsumerState<_CodeForm> {
             child: Text(context.l10n.signIn),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            'The code expires after 5 minutes and can only be used once.',
-            style: TextTheme.of(context).bodySmall,
-          ),
+          Text(context.l10n.mobileCodeExpiresMessage, style: TextTheme.of(context).bodySmall),
         ],
       ),
     );
@@ -333,8 +338,8 @@ class _CodeFormState() extends ConsumerState<_CodeForm> {
 void showEmailLoginError(BuildContext context, MutationState<void> state) {
   if (state case MutationError(:final error)) {
     showSnackBar(context, switch (error) {
-      EmailLoginRateLimitException() => 'Too many attempts. Please try again later.',
-      InvalidEmailLoginCodeException() => 'This code is invalid or has expired.',
+      EmailLoginRateLimitException() => context.l10n.mobileTooManyLoginAttempts,
+      InvalidEmailLoginCodeException() => context.l10n.mobileInvalidOrExpiredLoginCode,
       _ => context.l10n.mobileSomethingWentWrong,
     }, type: SnackBarType.error);
   }

@@ -9,6 +9,9 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
+  String get mobileAcceptDraw => 'ドローに応じますか？';
+
+  @override
   String get mobileAccount => 'アカウント';
 
   @override
@@ -18,39 +21,119 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileAccountPreferencesHelp => 'これらの設定は、あなたの Lichess アカウントを使用しているすべての端末で有効になります。';
 
   @override
+  String get mobileAddToStudy => '研究に追加';
+
+  @override
   String get mobileAllGames => 'すべて';
+
+  @override
+  String get mobileAllowTakebacksAndHints => '待ったとヒントを許可する';
+
+  @override
+  String get mobileAppLogs => 'アプリログ';
+
+  @override
+  String get mobileAmoledBlack => 'AMOLED用ブラック';
 
   @override
   String get mobileAreYouSure => '本当にいいですか？';
 
   @override
+  String mobileAreYouSureDownloadNnue(String param) {
+    return 'ほんとうにNNUEファイル($param)をダウンロードしますか？';
+  }
+
+  @override
+  String get mobileBoardPositionLandscape => '横置きモードでのボードの位置';
+
+  @override
   String get mobileBoardSettings => '盤面の設定';
+
+  @override
+  String get mobileBronsteinDelay => 'ブロンシュテイン・ディレイ';
 
   @override
   String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
+  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
+
+  @override
+  String get mobileChallengeFromPosition => 'この局面でチャレンジ';
+
+  @override
+  String get mobileChapterName => '章名';
+
+  @override
   String get mobileChessEngine => 'チェスエンジン';
+
+  @override
+  String get mobileChooseCustomBackground => 'カスタム背景を選択';
 
   @override
   String get mobileClearButton => 'クリア';
 
   @override
+  String get mobileCodeExpiresMessage => 'コードは 5 分後に期限切れになり、使えるのは一度だけです。';
+
+  @override
+  String get mobileCodeFieldLabel => 'コード';
+
+  @override
+  String mobileCodeLengthMessage(String param) {
+    return 'コードは $param 文字です。';
+  }
+
+  @override
+  String get mobileCopied => 'コピーしました。';
+
+  @override
   String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
 
   @override
-  String get mobileCustomGameJoinAGame => 'ゲームに参加';
+  String get mobileCustomizeButton => 'カスタマイズ';
+
+  @override
+  String get mobileCustomizeHomeTip => 'ヒント：ホーム画面でウィジェットの追加、不要なウィジェットの削除ができます！';
+
+  @override
+  String get mobileCustomizeHomeTipDismiss => '使わない';
+
+  @override
+  String get mobileDeleteAllLogsConfirmation => 'すべてのログを削除しますか？';
+
+  @override
+  String get mobileDangerZone => '要注意の操作';
+
+  @override
+  String get mobileDeleteYourAccount => 'アカウントを削除';
+
+  @override
+  String get mobileDisplayModeCompact => 'コンパクト';
+
+  @override
+  String get mobileDisplayModeDetailed => '詳細';
+
+  @override
+  String get mobileDoYouAcceptChallenge => 'チャレンジを承認しますか？';
+
+  @override
+  String get mobileDownloadMyGames => '自分のゲームをダウンロード';
 
   @override
   String get mobileFeedbackButton => 'フィードバック';
 
   @override
-  String mobileGoodEvening(String param) {
-    return 'こんばんは、$param さん';
-  }
+  String get mobileFilters => 'フィルター';
 
   @override
-  String get mobileGoodEveningWithoutName => 'こんばんは';
+  String get mobileFlipClock => '時計の上下反転';
+
+  @override
+  String get mobileFlipPiecesAfterMove => '1 手ごとに駒と情報を上下反転';
+
+  @override
+  String get mobileGetFeedbackOnMoves => '指し手についてフィードバックをもらう';
 
   @override
   String mobileGoodDay(String param) {
@@ -61,13 +144,41 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileGoodDayWithoutName => 'こんにちは';
 
   @override
-  String get mobileHideVariation => '変化手順を隠す';
+  String mobileGoodEvening(String param) {
+    return 'こんばんは、$param さん';
+  }
+
+  @override
+  String get mobileGoodEveningWithoutName => 'こんばんは';
+
+  @override
+  String get mobileGoodMoveButThereIsBetter => 'いい手ですがもっといい手があります';
+
+  @override
+  String get mobileHello => 'ハロー';
 
   @override
   String get mobileHomeTab => 'ホーム';
 
   @override
-  String get mobileLiveStreamers => 'ライブ配信者';
+  String get mobileHttpLogs => 'ネットワークログ';
+
+  @override
+  String mobileIfAccountMatchesCodeSent(String param1, String param2) {
+    return 'アカウントが $param1 と一致していれば $param2 文字のコードが送られています。受信箱を確認し、以下にコードを入力してください。';
+  }
+
+  @override
+  String get mobileInvalidOrExpiredLoginCode => 'コードが無効か期限切れです。';
+
+  @override
+  String get mobileLocalDatabaseSize => 'ローカルデータベース容量';
+
+  @override
+  String get mobileMoveOnRelease => '指を離すと手が確定';
+
+  @override
+  String get mobileMoveOnReleaseSubtitle => 'タップしてピースを動かすときは、指を離したときに移動先が決まります。指を滑らせて移動先のマスを変更できます。';
 
   @override
   String get mobileMustBeLoggedIn => 'このページを見るにはログインが必要です。';
@@ -79,10 +190,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileNewGame => '新しい対局';
 
   @override
-  String get mobileNoSearchResults => '検索結果なし';
+  String get mobileNextMistake => '次の悪手';
 
   @override
-  String get mobileNotAllFeaturesAreAvailable => 'まだ旧版のアプリやウェブサイトの機能がすべて使えるわけではありませんが、今後も機能を追加していく予定です。';
+  String get mobileNoSearchResults => '検索結果なし';
 
   @override
   String get mobileNotFollowingAnyUser => '誰もフォローしていません。';
@@ -91,7 +202,67 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
+  String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
+
+  @override
+  String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
+
+  @override
   String get mobileOverTheBoard => 'オフライン（2人対戦）';
+
+  @override
+  String get mobilePasteFromClipboard => 'クリップボードからペースト';
+
+  @override
+  String get mobilePerfShortAntichess => 'アンチ';
+
+  @override
+  String get mobilePerfShortAtomic => 'アトミック';
+
+  @override
+  String get mobilePerfShortBlitz => 'ブリッツ';
+
+  @override
+  String get mobilePerfShortBullet => 'ブレット';
+
+  @override
+  String get mobilePerfShortChess960 => '960';
+
+  @override
+  String get mobilePerfShortClassical => '長時間';
+
+  @override
+  String get mobilePerfShortCorrespondence => '通信戦';
+
+  @override
+  String get mobilePerfShortCrazyhouse => 'クレージ';
+
+  @override
+  String get mobilePerfShortFromPosition => '指定局面';
+
+  @override
+  String get mobilePerfShortHorde => 'ホード';
+
+  @override
+  String get mobilePerfShortKingOfTheHill => 'KOTH';
+
+  @override
+  String get mobilePerfShortPuzzle => '問題';
+
+  @override
+  String get mobilePerfShortRacingKings => 'レース';
+
+  @override
+  String get mobilePerfShortRapid => 'ラピッド';
+
+  @override
+  String get mobilePerfShortThreeCheck => '3チェ';
+
+  @override
+  String get mobilePerfShortUltraBullet => 'ウルトラ';
+
+  @override
+  String get mobilePgnCopied => 'PGNをコピーしました。';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -105,7 +276,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePositionRight => '右';
 
   @override
+  String get mobilePracticeMode => '練習モード';
+
+  @override
   String get mobilePrefMagnifyDraggedPiece => 'ドラッグ中の駒を拡大';
+
+  @override
+  String get mobilePreviousPage => '前';
+
+  @override
+  String get mobilePuzzleHistoryDescription => '過去のタクティクス問題の試行を再表示します。';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';
@@ -120,19 +300,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobilePuzzleStormSubtitle => '3 分間でできるだけ多くの問題を解いてください。';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => '現在の連続正解が終わり、スコアが保存されます。';
-
-  @override
   String get mobilePuzzleThemesSubtitle => 'お気に入りのオープニングやテーマの問題が選べます。';
 
   @override
   String get mobilePuzzlesTab => '問題';
 
   @override
+  String get mobileRateThisApp => 'このアプリを評価';
+
+  @override
   String get mobileRecentSearches => '最近の検索';
 
   @override
   String get mobileRemoveBookmark => 'ブックマークから削除';
+
+  @override
+  String get mobileSelectAStudy => '研究を選択';
+
+  @override
+  String get mobileSendMeACode => 'コードを送ってもらう';
 
   @override
   String get mobileServerAnalysis => 'サーバ解析';
@@ -174,10 +360,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsPickAnImage => '画像を選択';
 
   @override
-  String get mobileSettingsPickAnImageHelp => '選んだ背景はダークモードでのみ有効になります。暗い画像を選ぶことをおすすめします。';
+  String get mobileSettingsPickAnImageBlur => '画像をぼかす';
 
   @override
-  String get mobileSettingsPickAnImageBlur => '画像をぼかす';
+  String get mobileSettingsPickAnImageHelp => '選んだ背景はダークモードでのみ有効になります。暗い画像を選ぶことをおすすめします。';
 
   @override
   String get mobileSettingsPickAnImageHideBoard => '盤面を隠す';
@@ -195,6 +381,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsPieceShiftMethodTapTwoSquares => '2つのマスをタップ';
 
   @override
+  String get mobileSettingsPreferencesSaved => '設定はあなたの Lichess アカウントに保存されました。すべてのデバイスで有効になります。';
+
+  @override
   String get mobileSettingsShapeDrawing => '図形の描画';
 
   @override
@@ -210,13 +399,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => '有効にすると、着手・捕獲したときに端末が少し震えます。';
 
   @override
-  String get mobileSettingsTab => '設定';
+  String get mobileShare => 'シェアする';
+
+  @override
+  String get mobileShareChallengeUrl => 'チャレンジ URL をシェア';
 
   @override
   String get mobileShareGamePGN => 'PGN を共有';
 
   @override
   String get mobileShareGameURL => 'ゲーム URLを共有';
+
+  @override
+  String get mobileShareLocalAnalysisPgn => 'ローカル解析 PGN をシェア';
 
   @override
   String get mobileSharePositionAsFEN => '局面を FEN で共有';
@@ -228,51 +423,49 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileShowComments => 'コメントを表示';
 
   @override
+  String get mobileShowEngineLines => 'エンジンの手順を表示';
+
+  @override
+  String get mobileShowEvaluationGauge => '評価値ゲージを表示';
+
+  @override
   String get mobileShowResult => '結果を表示';
 
   @override
-  String get mobileShowVariations => '変化手順を表示';
+  String get mobileSignInWithBrowser => 'ブラウザでサインイン';
+
+  @override
+  String get mobileSignInWithEmail => 'メールアドレスでサインイン';
+
+  @override
+  String get mobileSimpleDelay => '単純なディレイ';
+
+  @override
+  String get mobileSmallBoard => '小さなボード';
 
   @override
   String get mobileSomethingWentWrong => '問題が発生しました。';
 
   @override
+  String get mobileSortFriends => '友達をソート';
+
+  @override
+  String get mobileStopShowingThreat => '狙いの表示をやめる';
+
+  @override
   String get mobileSystemColors => 'OS と同じ色設定';
+
+  @override
+  String get mobileTablebaseOffline => 'テーブルベースはオフラインでは利用できません。';
 
   @override
   String get mobileTheme => 'テーマ';
 
   @override
-  String get mobileToolsTab => 'ツール';
+  String get mobileToBeAnnounced => '発表待ち';
 
   @override
-  String mobileUnsupportedVariant(String param) {
-    return '$param はこのバージョンでは対応していません.';
-  }
-
-  @override
-  String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
-
-  @override
-  String get mobileWatchTab => '見る';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Lichess アプリにようこそ！';
-
-  @override
-  String get mobileViewGame => '元のゲームを見る';
-
-  @override
-  String get mobileCustomizeHomeTip => 'ヒント：ホーム画面でウィジェットの追加、不要なウィジェットの削除ができます！';
-
-  @override
-  String get mobileCustomizeHomeTipDismiss => '使わない';
-
-  @override
-  String get mobileCustomizeButton => 'カスタマイズ';
-
-  @override
-  String get mobileStopShowingThreat => '狙いの表示をやめる';
+  String get mobileTooManyLoginAttempts => '試行回数が多すぎます。また後でどうぞ。';
 
   @override
   String get mobileTournamentCompleted => '終了';
@@ -281,133 +474,30 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileTournamentJumpToMyPage => '自分のページに飛ぶ';
 
   @override
-  String get mobileDisplayModeCompact => 'コンパクト';
+  String mobileUnsupportedVariant(String param) {
+    return '$param はこのバージョンでは対応していません.';
+  }
 
   @override
-  String get mobileDisplayModeDetailed => '詳細';
+  String get mobileUseSymmetricPieces => '上下対称デザインの駒';
 
   @override
-  String get mobileOpeningExplorerNotAvailableOffline => 'エクスプローラーはオフラインでは利用できません。';
+  String get mobileViewGame => '元のゲームを見る';
 
   @override
-  String get mobileChallengeCreated => 'チャレンジを作成しました：ゲームが始まると通知されます。\nホームタブからアクセスできます。';
+  String get mobileViewLicenses => 'ライセンスを表示';
 
   @override
-  String get mobilePreviousPage => '前';
+  String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
 
   @override
-  String get mobileOrImportPgnFile => 'または PGN ファイルをインポート';
+  String get mobileWatchTab => '見る';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'いい手ですがもっといい手があります';
+  String get mobileWeWillEmailYouCode => 'サインインのためのコードをメールで送ります。';
 
   @override
-  String get mobilePerfShortUltraBullet => 'ウルトラ';
-
-  @override
-  String get mobilePerfShortBullet => 'ブレット';
-
-  @override
-  String get mobilePerfShortBlitz => 'ブリッツ';
-
-  @override
-  String get mobilePerfShortRapid => 'ラピッド';
-
-  @override
-  String get mobilePerfShortClassical => '長時間';
-
-  @override
-  String get mobilePerfShortCorrespondence => '通信戦';
-
-  @override
-  String get mobilePerfShortFromPosition => '指定局面';
-
-  @override
-  String get mobilePerfShortChess960 => '960';
-
-  @override
-  String get mobilePerfShortAntichess => 'アンチ';
-
-  @override
-  String get mobilePerfShortKingOfTheHill => 'KOTH';
-
-  @override
-  String get mobilePerfShortThreeCheck => '3チェ';
-
-  @override
-  String get mobilePerfShortAtomic => 'アトミック';
-
-  @override
-  String get mobilePerfShortHorde => 'ホード';
-
-  @override
-  String get mobilePerfShortRacingKings => 'レース';
-
-  @override
-  String get mobilePerfShortCrazyhouse => 'クレージ';
-
-  @override
-  String get mobilePerfShortPuzzle => '問題';
-
-  @override
-  String get variantStandard => 'スタンダード';
-
-  @override
-  String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
-
-  @override
-  String get variantChess960 => 'チェス960';
-
-  @override
-  String get variantChess960Title => '1 段目の駒の配置がランダムになります。';
-
-  @override
-  String get variantKingOfTheHill => 'キング・オブ・ザ・ヒル';
-
-  @override
-  String get variantKingOfTheHillTitle => 'キングを中央のマスに進めると勝ち。';
-
-  @override
-  String get variantThreeCheck => 'スリーチェック';
-
-  @override
-  String get variantThreeCheckTitle => '先に 3 回チェックした方が勝ち。';
-
-  @override
-  String get variantAntichess => 'アンチチェス';
-
-  @override
-  String get variantAntichessTitle => 'すべての駒を取られる（またはステイルメイトされる）と勝ち。';
-
-  @override
-  String get variantAtomic => 'アトミック';
-
-  @override
-  String get variantAtomicTitle => '相手のキングを「吹き飛ばす」と勝ち。';
-
-  @override
-  String get variantHorde => 'ホード';
-
-  @override
-  String get variantHordeTitle => '一方はポーンだけ、他方はふつうの駒で戦う。';
-
-  @override
-  String get variantRacingKings => 'キング・レース';
-
-  @override
-  String get variantRacingKingsTitle => 'キングをボードの向こうの端まで進めると勝ち。';
-
-  @override
-  String get variantCrazyhouse => 'クレージーハウス';
-
-  @override
-  String get variantCrazyhouseTitle => '取った駒を自分の手番に盤上に打つことができる。';
-
-  @override
-  String get variantFromPosition => '特定の局面から';
-
-  @override
-  String get variantFromPositionTitle => '指定した局面からのふつうのチェス';
+  String get mobileYouCannotChallengeYourself => '自分にはチャレンジできません';
 
   @override
   String get activityActivity => '活動';
@@ -643,9 +733,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'トーナメントの予定終了時刻の時点でもっともポイント数の多いプレイヤーが優勝です。';
 
   @override
-  String get arenaHowDoesPairingWork => 'How does the pairing work?';
-
-  @override
   String get arenaHowArePlayersPaired => '対戦組み合わせはどう決まりますか？';
 
   @override
@@ -734,9 +821,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaEditTeamBattle => 'チームバトルを編集';
 
   @override
-  String get arenaDefender => 'Defender';
-
-  @override
   String get arenaDefenderLabel => 'シールド保持者：';
 
   @override
@@ -759,9 +843,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get arenaTournamentStats => 'トーナメントの統計';
-
-  @override
-  String get arenaRankAvgHelp => 'The rank average is a percentage of your ranking. Lower is better.\n\nFor instance, being ranked 3 in a tournament of 100 players = 3%. Being ranked 10 in a tournament of 1000 players = 1%.';
 
   @override
   String get arenaRankAverageHelp => '平均順位は各トーナメントで参加者全体の上位何％に入ったかの平均を示します。\nこれはトーナメントでの順位の指標で、レーティングとは無関係です。\n\nたとえば平均順位が 3 ％であれば、平均して上位 3 ％以内（たとえば 1000 人中 30 位以内）に入っているということです。';
@@ -910,9 +991,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastDeleteRound => 'このラウンドを削除';
 
   @override
-  String get broadcastDefinitivelyDeleteRound => 'Definitively delete the round and all its games.';
-
-  @override
   String get broadcastPermanentlyDeleteRound => 'このラウンドのゲームをすべて永久に削除しますか？';
 
   @override
@@ -923,9 +1001,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get broadcastDeleteTournament => 'このトーナメントを削除';
-
-  @override
-  String get broadcastDefinitivelyDeleteTournament => 'Definitively delete the entire tournament, all its rounds and all its games.';
 
   @override
   String get broadcastPermanentlyDeleteTournament => 'このトーナメント（全ラウンド、全対局を含む）を完全に削除しますか？';
@@ -1158,6 +1233,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastKnockouts => 'ノックアウト';
 
   @override
+  String get broadcastPinPlayer => 'プレイヤーをピン留め';
+
+  @override
   String broadcastUnderXAgeTournament(String param) {
     return 'U$param';
   }
@@ -1334,6 +1412,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => '一部のファイルとランクだけ練習';
+
+  @override
+  String get coordinatesEnterTheCoordinate => '座標を入力してください';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return '$param を押してスタート';
+  }
 
   @override
   String get learnLearnChess => 'チェスを学ぶ';
@@ -1639,6 +1725,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get learnCastling => 'キャスリング';
+
+  @override
+  String get learnEnPassant => 'アンパッサン';
 
   @override
   String get learnTheSpecialKingMove => 'キングの特殊な動き';
@@ -1971,6 +2060,207 @@ class AppLocalizationsJa extends AppLocalizations {
   String get perfStatNow => '現在';
 
   @override
+  String get practiceMakesPerfect => 'あなたのチェスを完璧に';
+
+  @override
+  String get practiceSignUpToSaveYourProgress => 'サインアップして進捗を記録';
+
+  @override
+  String get practiceSecHeadCheckmates => 'チェックメイト';
+
+  @override
+  String get practiceSecHeadFundamentalTactics => '基本のタクティクス';
+
+  @override
+  String get practiceSecHeadAdvancedTactics => '高度なタクティクス';
+
+  @override
+  String get practiceSecHeadPawnEndgames => 'ポーンの終盤';
+
+  @override
+  String get practiceSecHeadRookEndgames => 'ルークの終盤';
+
+  @override
+  String get practiceStNamPieceCheckmatesI => 'ピースでのメイト I';
+
+  @override
+  String get practiceStNamCheckmatePatternsI => 'メイトのパターン I';
+
+  @override
+  String get practiceStNamCheckmatePatternsII => 'メイトのパターン II';
+
+  @override
+  String get practiceStNamCheckmatePatternsIII => 'メイトのパターン III';
+
+  @override
+  String get practiceStNamCheckmatePatternsIV => 'メイトのパターン IV';
+
+  @override
+  String get practiceStNamPieceCheckmatesII => 'ピースでのメイト II';
+
+  @override
+  String get practiceStNamKnightAndBishopMate => 'ナイトとビショップでのメイト';
+
+  @override
+  String get practiceStNamThePin => 'ピン';
+
+  @override
+  String get practiceStNamTheSkewer => 'スキュアー';
+
+  @override
+  String get practiceStNamTheFork => 'フォーク';
+
+  @override
+  String get practiceStNamDiscoveredAttacks => 'ディスカバード アタック';
+
+  @override
+  String get practiceStNamDoubleCheck => 'ダブルチェック';
+
+  @override
+  String get practiceStNamOverloadedPieces => 'オーバーロード';
+
+  @override
+  String get practiceStNamZwischenzug => 'ツヴィッシェンツーク';
+
+  @override
+  String get practiceStNamXRay => 'X 線';
+
+  @override
+  String get practiceStNamZugzwang => 'ツークツヴァンク';
+
+  @override
+  String get practiceStNamInterference => 'インターフェア（干渉）';
+
+  @override
+  String get practiceStNamGreekGift => 'グリークギフト';
+
+  @override
+  String get practiceStNamDeflection => 'ディフレクション（そらし）';
+
+  @override
+  String get practiceStNamAttraction => 'アトラクション（引き寄せ）';
+
+  @override
+  String get practiceStNamUnderpromotion => 'アンダープロモーション';
+
+  @override
+  String get practiceStNamDesperado => 'デスペラード';
+
+  @override
+  String get practiceStNamCounterCheck => '逆チェック';
+
+  @override
+  String get practiceStNamUndermining => '守り駒の除去';
+
+  @override
+  String get practiceStNamClearance => 'クリアランス（解放）';
+
+  @override
+  String get practiceStNamKeySquares => '必争のマス';
+
+  @override
+  String get practiceStNamOpposition => 'オポジション';
+
+  @override
+  String get practiceStNam7thRankRookPawn => '7 段目のルークポーン';
+
+  @override
+  String get practiceStNamBasicRookEndgames => '基本的なルークの終盤';
+
+  @override
+  String get practiceStNamIntermediateRookEndings => '中級レベルのルークの終盤';
+
+  @override
+  String get practiceStNamPracticalRookEndings => '実戦的なルークの終盤';
+
+  @override
+  String get practiceStDesBasicCheckmates => '基本のメイト';
+
+  @override
+  String get practiceStDesRecognizeThePatterns => 'パターンを認識する';
+
+  @override
+  String get practiceStDesChallengingCheckmates => '高度なチェックメイト';
+
+  @override
+  String get practiceStDesInteractiveLesson => '対話形式のレッスン';
+
+  @override
+  String get practiceStDesPinItToWinIt => 'ピンは勝利への道';
+
+  @override
+  String get practiceStDesYumSkewers => 'ぐさっと串刺し！';
+
+  @override
+  String get practiceStDesUseTheForkLuke => 'フォークを器用に';
+
+  @override
+  String get practiceStDesIncludingDiscoveredChecks => 'ディスカバードチェックも含む';
+
+  @override
+  String get practiceStDesAVeryPowerfulTactic => '強烈なタクティクス';
+
+  @override
+  String get practiceStDesTheyHaveTooMuchWork => '守るべきマスが多すぎる';
+
+  @override
+  String get practiceStDesInBetweenMoves => 'きわどい効かし';
+
+  @override
+  String get practiceStDesAttackingThroughAnEnemyPiece => '相手の駒の向こうに利かす';
+
+  @override
+  String get practiceStDesBeingForcedToMove => '動かざるを得ない状況';
+
+  @override
+  String get practiceStDesInterposeAPieceToGreatEffect => '守り駒のラインを閉じる';
+
+  @override
+  String get practiceStDesStudyTheGreekGiftSacrifice => '「ギリシャの贈り物」なる捨駒';
+
+  @override
+  String get practiceStDesDistractingADefender => '守り駒の利きをそらす';
+
+  @override
+  String get practiceStDesLureAPieceToABadSquare => '相手の駒を悪いマスに誘う';
+
+  @override
+  String get practiceStDesPromoteButNotToAQueen => 'クイーン以外の駒に昇格！';
+
+  @override
+  String get practiceStDesAPieceIsLostButItCanStillHelp => '取られそうな駒もまだ役に立つ';
+
+  @override
+  String get practiceStDesRespondToACheckWithACheck => '相手のチェックにチェックで返す';
+
+  @override
+  String get practiceStDesRemoveTheDefendingPiece => '相手の守り駒を取ってしまう';
+
+  @override
+  String get practiceStDesGetOutOfTheWay => '道をあけて！';
+
+  @override
+  String get practiceStDesReachAKeySquare => '重要なマスを先に占領';
+
+  @override
+  String get practiceStDesTakeTheOpposition => 'オポジション（見合い）を取る';
+
+  @override
+  String get practiceStDesVersusAQueen => '対クイーン';
+
+  @override
+  String get practiceStDesAndPassiveRookVsRook => 'とルーク対ルーク';
+
+  @override
+  String get practiceStDesLucenaAndPhilidor => 'ルセナとフィリドール';
+
+  @override
+  String get practiceStDesBroadenYourKnowledge => 'さらに知識を広げよう';
+
+  @override
+  String get practiceStDesRookEndingsWithSeveralPawns => '多数のポーンが残ったルークの終盤';
+
+  @override
   String get preferencesPreferences => '設定';
 
   @override
@@ -2094,6 +2384,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesMoveConfirmation => '着手をそのつど確認する';
 
   @override
+  String get preferencesMultipleChoices => '複数選択可。 ';
+
+  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ボードのメニューからゲーム中に無効にできます';
 
   @override
@@ -2139,19 +2432,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesNotifyStreamStart => '配信を始めた時';
 
   @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
   String get preferencesNotifyDirectMessage => '新しいダイレクト メッセージ';
 
   @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
   String get preferencesNotifyForumMentions => 'フォーラムでのメンション';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
 
   @override
   String get preferencesNotifyStudyInvites => '研究への招待';
@@ -2161,9 +2445,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesNotifyChallenge => '挑戦が来た時';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
 
   @override
   String get preferencesNotifyTournamentStartReminders => 'トーナメント開始の通知';
@@ -2199,7 +2480,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesInlineNotation => '棋譜を行書き';
 
   @override
-  String get preferencesShowServerAnalysis => 'サーバ解析を表示';
+  String get preferencesShowMainlineAnalysis => '主手順の解析を表示';
 
   @override
   String get preferencesShowBestMoveArrows => '最善手の矢印を表示';
@@ -2229,6 +2510,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesShowCheckableKing => 'チェックできるキングを表示';
 
   @override
+  String get preferencesShowTrappedPieces => '逃げ場のない駒を表示';
+
+  @override
   String get preferencesDisclosureMode => 'バリエーションの非表示を有効にする';
 
   @override
@@ -2244,10 +2528,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesAnalysisSettings => '解析に関する設定';
 
   @override
-  String get preferencesManeuverArrowsHelp => 'Sequence of engine moves for one piece';
+  String get preferencesManeuverArrowsHelp => '1つのピースのエンジン移動のシーケンス';
 
   @override
   String get preferencesHoverOverSettingLabelsForHelp => '設定メニューにカーソルを合わせるとヘルプを表示';
+
+  @override
+  String get preferencesNetwork => 'ネットワーク';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingDirectRouting => '現在ダイレクトルーティングを使用中です。';
+
+  @override
+  String get preferencesYouAreCurrentlyUsingCdnRouting => '現在、コンテンツ配信ネットワーク (CDN) ルーティングを使用中。';
+
+  @override
+  String get preferencesFrequentDisconnectsAdvice => '接続切れが多い場合はルーティングを変更してみてください。';
+
+  @override
+  String get preferencesUseDirectRouting => 'ダイレクトルーティングを使用';
+
+  @override
+  String get preferencesUseCdnRouting => 'CDN ルーティングを使用';
 
   @override
   String get puzzlePuzzles => 'タクティクス問題';
@@ -2614,9 +2916,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeCornerMate => 'コーナー・メイト';
 
   @override
-  String get puzzleThemeCornerMateDescription => 'Confine the king to the corner using a rook or queen and a knight to engage the checkmate.';
-
-  @override
   String get puzzleThemeCornerMateKnightDeliversDescription => 'ルークかクイーンでキングを隅に追い詰め、ナイトでメイトする形。';
 
   @override
@@ -2692,7 +2991,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'ゲームの終盤でのタクティクス。';
 
   @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
+  String get puzzleThemeEnPassant => 'アンパッサン';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
@@ -2713,9 +3012,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemeFork => 'フォーク（両取り）';
 
   @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
   String get puzzleThemeForkOpposingPiecesDescription => 'ひとつの駒が相手の複数の駒を同時に攻撃する手。';
 
   @override
@@ -2726,9 +3022,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemeHookMate => '釣り針のメイト';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
 
   @override
   String get puzzleThemeHookMateOpposingPawnDescription => 'ポーンの隣にいるキングを、ルーク、ナイト、ポーンでメイトする形。';
@@ -2755,16 +3048,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'ピルズベリーのメイト';
 
   @override
-  String get puzzleThemePillsburysMateDescription => 'The rook delivers checkmate, while the bishop helps to confine it.';
-
-  @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'ルークがチェックし、ビショップが逃げ道を防ぐ形のメイト。';
 
   @override
   String get puzzleThemeMorphysMate => 'モーフィのメイト';
-
-  @override
-  String get puzzleThemeMorphysMateDescription => 'Use the bishop to check the king, while your rook helps to confine it.';
 
   @override
   String get puzzleThemeMorphyMateBishopAndRookDescription => 'ビショップがチェックし、ルークが逃げ道を防ぐ形のメイト。';
@@ -2885,9 +3172,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get puzzleThemePromotion => 'プロモーション';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
 
   @override
   String get puzzleThemePromotePawnToQueenRookOrMinor => 'ポーンをクイーンかルーク、マイナーピースに昇格させます。';
@@ -3032,7 +3316,33 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
 
   @override
-  String get gameSetup => 'ゲームの設定';
+  String get settingsWereSorryToSeeYouGo => 'とても残念です。';
+
+  @override
+  String get settingsCloseAccountForeverLabel => '永久に閉鎖、つまり再開できなくする';
+
+  @override
+  String get settingsCloseAccountForeverWarning => '後でアカウントを再開できないようにします。このボックスにチェックを入れると、要請を受けた管理者でもアカウントを再開できません。';
+
+  @override
+  String get settingsDeleteYourAccount => 'アカウントを削除';
+
+  @override
+  String get settingsDeleteAccountWarning => '「アカウントを削除」すると Lichess からアカウントが消え、管理者もアカウントを回復できなくなります。';
+
+  @override
+  String settingsWouldYouLikeToXInstead(String param) {
+    return '代わりに $param しますか？';
+  }
+
+  @override
+  String get settingsCloseYourAccount => 'アカウントを閉鎖';
+
+  @override
+  String get settingsDeleteAccountConfirmText => '私は削除されたアカウントが回復できないことを理解しています';
+
+  @override
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '友達に挑戦';
@@ -3062,7 +3372,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reusableChallengeUrl => '再利用可能なチャレンジ URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'これと同じ設定で対局をするための固定URL';
+  String get permanentLinkForAnyoneToChallengeYou => 'これと同じ設定で対局をするための固定URL。';
 
   @override
   String get waiting => '待機中';
@@ -3481,6 +3791,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get engineSettings => 'エンジンの設定';
 
   @override
+  String get engine => 'エンジン';
+
+  @override
   String get enginesFromStrongestToWeakest => '最強から最弱まで多彩なエンジン';
 
   @override
@@ -3701,9 +4014,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get refreshInboxAfterFiveMinutes => '5 分待ってからメール受信箱を更新してください。';
 
   @override
-  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
-
-  @override
   String get checkSpamOrJunkFolder => '確認メールが届かない場合は迷惑メールフォルダを確認してください。重要な連絡を見逃さないように、Lichess からのメッセージを必ず「安全」「非スパム」などと指定しておいてください。';
 
   @override
@@ -3752,13 +4062,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cancel => 'キャンセル';
 
   @override
-  String get whiteTimeOut => 'White time out';
-
-  @override
   String get whiteRanOutOfTime => '白が時間切れになりました';
-
-  @override
-  String get blackTimeOut => 'Black time out';
 
   @override
   String get blackRanOutOfTime => '黒が時間切れになりました';
@@ -3970,9 +4274,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get ratingRangeIsDisabledBecauseYourRatingIsProvisional => 'Rating filters are locked because your rating is not stable. Playing rated games will increase stability.';
-
-  @override
   String get cannotFilterByUnstableRating => 'あなたのレーティングが不安定なため、レーティングフィルタは使えません。レート戦をプレイすると安定度が上がります。';
 
   @override
@@ -4117,6 +4418,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noNetwork => 'オフライン';
+
+  @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return '接続中の友達： $param1\nプレイ中の友達： $param2';
+  }
 
   @override
   String get favoriteOpponents => '対戦の多かった相手';
@@ -4395,6 +4701,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onlineBots => 'オンラインのボット';
 
   @override
+  String get aboutBotsOnLichess => 'Lichess のボットについて';
+
+  @override
+  String get featuredBots => '注目のボット';
+
+  @override
+  String get tryPlayingTheseInnovativeChessEngines => '革新的なチェスエンジンと対戦してみよう！　私たちのお気に入りです。';
+
+  @override
+  String get communityBots => 'コミュニティボット';
+
+  @override
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Lichess のコミュニティが作成したチェスエンジンです。作成者がホストしているもので、常に接続中とは限りません。';
+
+  @override
   String get name => '名称';
 
   @override
@@ -4470,9 +4791,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reason => '理由';
 
   @override
-  String get whatIsIheMatter => 'どうされましたか？';
-
-  @override
   String get cheat => 'ソフト使用';
 
   @override
@@ -4488,13 +4806,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reportUsernameHelp => 'このユーザー名のどこが攻撃的かを説明してください。ただ「攻撃的」「不適切」と言うのではなく、あなたがなぜそう思ったのか教えてください。中でも綴りの変更、英語以外の言語、俗語、歴史・文化的要因に関係した場合は特に説明が必要です。';
 
   @override
-  String get reportProcessedFasterInEnglish => 'Your report will be processed faster if written in English.';
-
-  @override
   String get processReportFasterInEnglish => '英語で書くと通報への対応が速くなります。';
-
-  @override
-  String get error_provideOneCheatedGameLink => '不正のあった対局 1 局以上へのリンクを添えてください。';
 
   @override
   String by(String param) {
@@ -4541,6 +4853,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get logInByEmail => 'メールアドレスでログイン';
+
+  @override
+  String get emailLoginInstructions => 'ログインリンクが記載されたメールをお送りします。';
 
   @override
   String get emailMeALink => 'リンクをメールで送る';
@@ -4613,6 +4928,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get never => '無効';
+
+  @override
+  String get defeatOnly => '負けた時だけ';
+
+  @override
+  String get drawAndDefeat => 'ドローか負けの時に';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -4797,7 +5118,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get really => '本当に';
 
   @override
+  String get lichessUpdates => 'Lichess 更新情報';
+
+  @override
   String get contribute => '力を貸す';
+
+  @override
+  String get changelog => '変更ログ';
 
   @override
   String get termsOfService => '利用規約（英文）';
@@ -4807,6 +5134,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get sourceCode => 'ソースコード';
+
+  @override
+  String get blockAds => '広告をブロック';
 
   @override
   String get simultaneousExhibitions => '同時対局';
@@ -4859,9 +5189,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get create => '作成する';
 
   @override
-  String get whenCreateSimul => 'When you create a simul, you get to play several players at once.';
-
-  @override
   String get creatingASimul => '同時対局では同時に複数の相手と対戦することができます。';
 
   @override
@@ -4872,9 +5199,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get simulAddExtraTime => '同時対局の手間を考え、自分に持時間をさらに追加できます。';
-
-  @override
-  String get simulHostExtraTime => 'Host extra initial clock time';
 
   @override
   String get extraClockTimeForHost => 'ホストのための追加時間：';
@@ -5062,7 +5386,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get downloadImported => 'インポート分のダウンロード';
 
   @override
+  String get downloadMyGames => '自分のゲームをダウンロード';
+
+  @override
   String get downloadAllGames => '全局をダウンロード';
+
+  @override
+  String get downloadResults => '結果をダウンロード';
 
   @override
   String get crosstable => '成績表';
@@ -5124,6 +5454,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get security => 'セキュリティ';
 
   @override
+  String activeSessionsDescription(String param1, String param2) {
+    return 'これはあなたのアカウントにログインしているデバイスとアプリの一覧です。 不審な活動に気づいた場合 <a href=\'$param1\'>リカバリ用のメールアドレス</a> を確認し、 <a href=\'$param2\'>パスワード</a>を変更してください。';
+  }
+
+  @override
   String get sessions => 'セッション';
 
   @override
@@ -5140,6 +5475,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noChallenges => 'チャレンジはありません。';
+
+  @override
+  String get browserNotificationsDenied => 'ブラウザの設定で通知ポップアップが無効になります';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -5186,7 +5524,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get background => '背景';
 
   @override
-  String get theme => 'Theme';
+  String get theme => 'テーマ';
 
   @override
   String get light => '明るい';
@@ -5195,13 +5533,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dark => '暗い';
 
   @override
-  String get picture => 'Picture';
+  String get picture => '画像';
 
   @override
   String get deviceTheme => 'デバイスの設定に従う';
 
   @override
-  String get roundness => 'Roundness';
+  String get roundness => '丸み';
 
   @override
   String get backgroundImage => '背景画像';
@@ -5278,11 +5616,6 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String notificationsX(String param1) {
     return '通知：$param1';
-  }
-
-  @override
-  String perfRatingX(String param) {
-    return 'Rating: $param';
   }
 
   @override
@@ -5441,9 +5774,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showUnreadLichessMessage => 'Lichess からプライベートメッセージが来ました。';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
-
-  @override
   String get readTheMessage => 'メッセージを読む';
 
   @override
@@ -5468,16 +5798,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get howToAvoidThis => 'どうすればいいの？';
 
   @override
-  String get playEveryGame => '始めたゲームを中断しない';
+  String get playEveryGame => '始めたゲームを中断しない。';
 
   @override
-  String get tryToWin => 'すべてのゲームで勝ち（またはドロー）を目指す';
+  String get tryToWin => 'すべてのゲームで勝ち（またはドロー）を目指す。';
 
   @override
-  String get resignLostGames => '敗勢なら投了する（時間切れまで放置しない）';
+  String get resignLostGames => '敗勢なら投了する（時間切れまで放置しない）。';
 
   @override
-  String get temporaryInconvenience => 'しばらくご不便をおかけしますが';
+  String get temporaryInconvenience => 'しばらくご不便をおかけしますが、';
 
   @override
   String get wishYouGreatGames => '今後も Lichess ですばらしいゲームを楽しまれるよう願っています。';
@@ -5657,7 +5987,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get timeAlmostUp => '残り時間わずか！';
 
   @override
-  String get clickToRevealEmailAddress => '[ クリックでメールアドレスを表示 ]';
+  String get clickToRevealEmailAddress => '[クリックでメールアドレスを表示]';
 
   @override
   String get download => 'ダウンロード';
@@ -5726,11 +6056,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get simulDescriptionHelp => '参加者に伝えたいことがあればどうぞ';
 
   @override
-  String markdownIsAvailable(String param) {
-    return '$param is available for formatting.';
-  }
-
-  @override
   String youCanFormatTextUsing(String param) {
     return 'テキストのフォーマット用に $param が使えます。';
   }
@@ -5752,9 +6077,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get onlyTeamMembers => 'チームメンバー限定';
-
-  @override
-  String get navigateMoveTree => 'Navigate the move tree';
 
   @override
   String get moveListNavigation => '指し手リストのナビゲーション';
@@ -5837,7 +6159,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showMeEverything => 'すべてを表示';
 
   @override
-  String get lichessPatronInfo => 'Lichess は非営利組織であり、完全に無料/自由なオープンソースソフトウェアです。\n運営費、開発、コンテンツを支えているのはすべてユーザーの寄付です。';
+  String get lichessPatronInfo => 'Lichessは慈善団体であり、完全に無料のオープンソース/リブレソフトウェアです。私たちは、運営コスト、開発、コンテンツをサポートするために、ユーザーからの寄付に頼っています。寛大なコミュニティの皆さまなしでは、サイトを運営し続けることができません。Lichessに参加していただき、ありがとうございます！';
 
   @override
   String get nothingToSeeHere => '今は何もありません。';
@@ -5884,7 +6206,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settings => '設定';
 
   @override
-  String get verifyingYourDevice => 'デバイスを確認しています...';
+  String get verifyingYourDevice => 'デバイスを確認しています…';
 
   @override
   String get chessOpenings => 'チェスのオープニング';
@@ -5893,11 +6215,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get boards => 'ボード';
 
   @override
+  String get write => '書く';
+
+  @override
+  String get preview => 'プレビュー';
+
+  @override
+  String get done => '完了';
+
+  @override
   String opponentLeftCounter(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '相手がいなくなりました。あと $count 秒で勝ちにできます。',
+      other: '相手がいなくなりました。あと$count秒で勝ちにできます。',
     );
     return '$_temp0';
   }
@@ -5913,17 +6244,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count blunders',
-      one: '$count blunder',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberBlunders(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -5934,33 +6254,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mistakes',
-      one: '$count mistake',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String numberMistakes(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
       other: '$count 悪手',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count inaccuracies',
-      one: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -6306,17 +6604,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String nbAnonymous(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Anonymous ($count)',
-      one: 'Anonymous',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String nbSecondsToPlayTheFirstMove(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -6639,9 +6926,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'コンピュータ解析を要請できるのは投稿参加者だけです。';
 
   @override
-  String get studyGetAFullComputerAnalysis => '主手順についてサーバ上でのコンピュータ解析を行なう。';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => '章が完成したか確認してください。解析の要請は 1 回だけです。';
 
   @override
@@ -6688,9 +6972,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyCurrentChapterUrl => '現在の章の URL';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'You can paste this in the forum or your Lichess blog to embed';
 
   @override
   String get studyPasteToEmbedChapterInForumOrBlog => 'これをフォーラムやLichessブログにペーストすると研究の章を埋め込みできます。';
@@ -6861,9 +7142,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyStart => '開始';
-
-  @override
-  String get studySave => '保存';
 
   @override
   String get studyClearChat => 'チャットを消去';
@@ -7065,16 +7343,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyCustomPositionText => '駒を好きなように配置します。<br>終盤の研究に最適です。';
 
   @override
-  String get studyLoadExistingLichessGameTitle => 'Load an existing lichess game';
-
-  @override
   String get studyLoadGameFromTheWebTitle => 'ウェブから棋譜を読み込み';
 
   @override
-  String get studyLoadExistingLichessGameText => 'Paste a lichess game URL<br>(like lichess.org/7fHIU0XI)<br>to load the game moves in the chapter.';
-
-  @override
-  String get studyLoadGameFromTheWebText => 'Lichess の対局の URL<br>（例：lichess.org/7fHIU0XI）<br>をペーストすると章内にその手順が読み込めます。';
+  String get studyLoadGameFromTheWebText => 'Lichess の対局の URL<br>（例：lichess.org/game/7fHIU0XI）<br>をペーストすると章内にその手順が読み込めます。';
 
   @override
   String get studyFromFenStringTitle => 'FEN の局面から';
@@ -7105,6 +7377,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => '白負け黒1/2ポイント';
+
+  @override
+  String get studyAnalysisEditor => '解析エディタ';
+
+  @override
+  String get studyClearLocal => 'ローカル解析をクリアしますか？';
+
+  @override
+  String get studyClearPublished => '公開した解析をクリアしますか？';
+
+  @override
+  String get studyRequestAServerAnalysis => 'サーバ解析をリクエスト';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'デバイス内で解析';
 
   @override
   String studyNbChapters(int count) {
@@ -7174,6 +7461,9 @@ class AppLocalizationsJa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get tfaTwoFactorAuth => '2 要素認証';
 
   @override
   String get timeagoJustNow => 'たった今';
@@ -7335,13 +7625,70 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get tfaTwoFactorAuth => '2 要素認証';
-
-  @override
   String get ublogCommunity => 'コミュニティ';
 
   @override
   String ublogXBlog(String param) {
     return '$param のブログ';
   }
+
+  @override
+  String get variantStandard => 'スタンダード';
+
+  @override
+  String get variantStandardTitle => 'チェスの標準ルール (FIDE)';
+
+  @override
+  String get variantChess960 => 'チェス960';
+
+  @override
+  String get variantChess960Title => '1 段目の駒の配置がランダムになります。';
+
+  @override
+  String get variantKingOfTheHill => 'キング・オブ・ザ・ヒル';
+
+  @override
+  String get variantKingOfTheHillTitle => 'キングを中央のマスに進めると勝ち。';
+
+  @override
+  String get variantThreeCheck => 'スリーチェック';
+
+  @override
+  String get variantThreeCheckTitle => '先に 3 回チェックした方が勝ち。';
+
+  @override
+  String get variantAntichess => 'アンチチェス';
+
+  @override
+  String get variantAntichessTitle => 'すべての駒を取られる（またはステイルメイトされる）と勝ち。';
+
+  @override
+  String get variantAtomic => 'アトミック';
+
+  @override
+  String get variantAtomicTitle => '相手のキングを「吹き飛ばす」と勝ち。';
+
+  @override
+  String get variantHorde => 'ホード';
+
+  @override
+  String get variantHordeTitle => '一方はポーンだけ、他方はふつうの駒で戦う。';
+
+  @override
+  String get variantRacingKings => 'キング・レース';
+
+  @override
+  String get variantRacingKingsTitle => 'キングをボードの向こうの端まで進めると勝ち。';
+
+  @override
+  String get variantCrazyhouse => 'クレージーハウス';
+
+  @override
+  String get variantCrazyhouseTitle => '取った駒を自分の手番に盤上に打つことができる。';
+
+  @override
+  String get variantFromPosition => '特定の局面から';
+
+  @override
+  String get variantFromPositionTitle => '指定した局面からのふつうのチェス';
 }

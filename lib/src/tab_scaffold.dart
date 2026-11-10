@@ -1,9 +1,5 @@
-import 'dart:ui' show ImageFilter;
-
-import 'package:cupertino_ui/cupertino_ui.dart';
-import 'package:flutter/foundation.dart';
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
@@ -12,6 +8,10 @@ import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/background.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart'
+    show BlurredBarBackground, ios27GlassSettings, useLiquidGlass, usePinnedNavBar;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
+    show GlassNavigationShell, GlassScaffold, GlassTab, GlassTabBar;
 import 'package:material_ui/material_ui.dart';
 
 /// Main scaffold that provides the bottom navigation bar and tab switching view.
@@ -20,41 +20,131 @@ class const MainTabScaffold({super.key}) extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
 
-    final extendBody = Theme.of(context).platform == TargetPlatform.iOS;
+    final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+
+    final body = _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder);
+
+    final tabBarVisibility = tabNavigatorObservers[currentTab]!.tabBarVisibility;
+
+    if (!isIOS) {
+      final tabBarHeight =
+          (NavigationBarTheme.of(context).height ?? _kNavigationBarDefaultHeight) +
+          MediaQuery.paddingOf(context).bottom;
+      final navigationBar = NavigationBar(
+        selectedIndex: currentTab.index,
+        destinations: [
+          for (final tab in BottomTab.values)
+            NavigationDestination(
+              icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
+              label: tab.label(context.l10n),
+            ),
+        ],
+        onDestinationSelected: (i) => _onItemTapped(ref, i),
+      );
+      // The tab navigators cover the whole screen, below the navigation bar: the routes shown with
+      // it are laid out above it ([TabRoutePage]), the routes hiding it cover the whole screen.
+      return FullScreenBackground(
+        child: Builder(
+          builder: (context) => ColoredBox(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: _TabBarLayout(
+              height: tabBarHeight,
+              extendBody: false,
+              child: Stack(
+                children: [
+                  Positioned.fill(child: body),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    // Rebuilt with the media query (on every frame of a keyboard animation), but
+                    // the navigation bar is the same widget.
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: _TabBarTransition(visibility: tabBarVisibility, child: navigationBar),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // On iOS the tabs content extends below a floating liquid glass tab bar, or before iOS 26 a
+    // docked translucent one.
+    // The package default label color: the app Cupertino theme text color (onSurface) has less
+    // contrast over the content seen through the glass.
+    final tabColor = CupertinoColors.label.resolveFrom(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final glass = useLiquidGlass(context);
+    // The package default indicator color in light mode.
+    final indicatorColor = isDark ? const Color(0x80000000) : const Color(0x1A000000);
+    final glassSettings = ios27GlassSettings(context);
+    // The glass, icons, labels and selection indicator of the glass tab bar are faded through its
+    // own parameters with the same [visibility], since glass cannot be faded by an ancestor
+    // [Opacity] and its content is not a child of its glass.
+    GlassTabBar buildGlassTabBar(double visibility) {
+      Color fade(Color color) => color.withValues(alpha: color.a * visibility);
+      return GlassTabBar.bottom(
+        settings: visibility == 1.0
+            ? glassSettings
+            : glassSettings.copyWith(visibility: visibility),
+        indicatorColor: fade(indicatorColor),
+        selectedIconColor: fade(tabColor),
+        unselectedIconColor: fade(tabColor),
+        selectedIndex: currentTab.index,
+        tabs: [
+          for (final tab in BottomTab.values)
+            GlassTab(
+              icon: Icon(tab.icon),
+              activeIcon: Icon(tab.icon, fill: 1),
+              label: tab.label(context.l10n),
+            ),
+        ],
+        onTabSelected: (i) => _onItemTapped(ref, i),
+      );
+    }
+
+    final PreferredSizeWidget tabBar = !glass
+        ? _BlurredTabBar(
+            currentTab: currentTab,
+            onTap: (i) => _onItemTapped(ref, i),
+            bottomPadding: MediaQuery.paddingOf(context).bottom,
+          )
+        : buildGlassTabBar(1.0);
 
     return FullScreenBackground(
-      child: MainTabScaffoldProperties(
-        extendBody: extendBody,
-        child: Scaffold(
-          body: _TabSwitchingView(currentTab: currentTab, tabBuilder: _tabBuilder),
-          extendBody: extendBody,
-          bottomNavigationBar: Theme.of(context).platform == TargetPlatform.iOS
-              ? _CupertinoTabBar(
-                  height: 50,
-                  backgroundColor: NavigationBarTheme.of(context).backgroundColor,
-                  border: const Border(top: BorderSide(color: Colors.transparent)),
-                  activeColor: ColorScheme.of(context).onSurface,
-                  currentIndex: currentTab.index,
-                  items: [
-                    for (final tab in BottomTab.values)
-                      BottomNavigationBarItem(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                        label: tab.label(context.l10n),
-                      ),
-                  ],
-                  onTap: (i) => _onItemTapped(ref, i),
-                )
-              : NavigationBar(
-                  selectedIndex: currentTab.index,
-                  destinations: [
-                    for (final tab in BottomTab.values)
-                      NavigationDestination(
-                        icon: Icon(tab.icon, fill: tab == currentTab ? 1 : 0),
-                        label: tab.label(context.l10n),
-                      ),
-                  ],
-                  onDestinationSelected: (i) => _onItemTapped(ref, i),
-                ),
+      // The bars are outside of any Scaffold: provide a Material for their text and icons.
+      child: Material(
+        type: MaterialType.transparency,
+        child: GlassScaffold(
+          // Transparent with a background image or color, so that [FullScreenBackground] shows
+          // through.
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          // The background is a plain color, there is nothing worth sampling.
+          enableBackgroundSampling: false,
+          // Each tab screen resizes for the keyboard in its own Scaffold.
+          resizeToAvoidBottomInset: false,
+          bottomBar: _PreferredTabBarTransition(
+            visibility: tabBarVisibility,
+            tabBar: tabBar,
+            builder: glass ? buildGlassTabBar : null,
+          ),
+          // The floating tab bar has no edge effect around it, like in iOS apps.
+          bottomEdgeFade: false,
+          // GlassScaffold does not inset the body: the routes shown with the tab bar get its height
+          // as their bottom padding ([TabRoutePage]), and the tab screens' [PlatformScaffold]
+          // extend their body into it.
+          body: _TabBarLayout(
+            height: tabBar.preferredSize.height,
+            extendBody: true,
+            // GlassScaffold installs a CupertinoTheme that sets the icon color to its primary
+            // color: restore the app icon theme.
+            child: IconTheme(data: IconTheme.of(context), child: body),
+          ),
         ),
       ),
     );
@@ -266,10 +356,7 @@ class const _MaterialTabView({
 }
 
 class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
-  // ignore: avoid-late-keyword
   late HeroController _heroController;
-
-  // ignore: avoid-late-keyword
   late List<NavigatorObserver> _navigatorObservers;
 
   @override
@@ -290,13 +377,63 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
 
   void _updateObservers() {
     _navigatorObservers = List<NavigatorObserver>.of(widget.navigatorObservers)
-      ..add(_heroController);
+      ..add(_heroController)
+      ..add(tabNavigatorObservers[widget.tab]!);
   }
 
   @override
   Widget build(BuildContext context) {
     final currentTab = ref.watch(currentBottomTabProvider);
     final enablePopHandler = currentTab == widget.tab;
+    final observer = tabNavigatorObservers[widget.tab]!;
+    final tabBarLayout = _TabBarLayout.of(context);
+    // One shell per navigator: it ranks the routes of a single navigator.
+    final shell = GlassNavigationShell(
+      enabled: usePinnedNavBar(context),
+      // The routes that are not pages (sheets, dialogs, menus) are laid out for the tab bar while
+      // it is shown, and over the whole screen while a route hides it.
+      //
+      // The shape of the tree is the same either way: a change of shape would move the navigator
+      // (it has a global key), deactivating and activating every element of the tab, which is
+      // costly and trips an overlay portal whose controller is attached elsewhere meanwhile.
+      child: ListenableBuilder(
+        listenable: observer,
+        builder: (context, child) {
+          final mediaQuery = MediaQuery.of(context);
+          final tabBarShown = !observer.hasTabBarHidingRoute;
+          return MediaQuery(
+            data: tabBarShown
+                ? mediaQuery.copyWith(
+                    padding: mediaQuery.padding.copyWith(bottom: tabBarLayout.height),
+                  )
+                : mediaQuery,
+            child: MainTabScaffoldProperties(
+              // Like no properties at all, while the tab bar is hidden.
+              extendBody: tabBarShown && tabBarLayout.extendBody,
+              child: child!,
+            ),
+          );
+        },
+        child: Navigator(
+          key: widget.navigatorKey,
+          onGenerateRoute: _onGenerateRoute,
+          onUnknownRoute: _onUnknownRoute,
+          observers: _navigatorObservers,
+          restorationScopeId: widget.restorationScopeId,
+        ),
+      ),
+    );
+    // The media query changes on every frame of a keyboard animation: only this builder rebuilds
+    // then, the shell and the navigator under it are the same widgets.
+    final scope = Builder(
+      builder: (context) => TabNavigatorScope(
+        observer: observer,
+        mediaQuery: MediaQuery.of(context),
+        tabBarHeight: tabBarLayout.height,
+        extendBody: tabBarLayout.extendBody,
+        child: shell,
+      ),
+    );
     return NavigatorPopHandler(
       onPopWithResult: enablePopHandler
           ? (_) {
@@ -304,13 +441,7 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
             }
           : null,
       enabled: enablePopHandler,
-      child: Navigator(
-        key: widget.navigatorKey,
-        onGenerateRoute: _onGenerateRoute,
-        onUnknownRoute: _onUnknownRoute,
-        observers: _navigatorObservers,
-        restorationScopeId: widget.restorationScopeId,
-      ),
+      child: scope,
     );
   }
 
@@ -323,7 +454,11 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
       routeBuilder = widget.routes![name];
     }
     if (routeBuilder != null) {
-      return MaterialPageRoute<dynamic>(builder: routeBuilder, settings: settings);
+      final builder = routeBuilder;
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => TabRoutePage(child: builder(context)),
+        settings: settings,
+      );
     }
     if (widget.onGenerateRoute != null) {
       return widget.onGenerateRoute!(settings);
@@ -364,293 +499,142 @@ class _MaterialTabViewState() extends ConsumerState<_MaterialTabView> {
   }
 }
 
-// Code taken and adapted from
-// https://github.com/flutter/flutter/blob/main/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L60
+/// The default height of the Material 3 [NavigationBar], above the bottom safe area.
+const double _kNavigationBarDefaultHeight = 80.0;
 
-// Standard iOS 10 tab bar height.
-const double _kTabBarHeight = 50.0;
+/// The tab bar layout, for the tab navigators (see [TabNavigatorScope]).
+class const _TabBarLayout({
+  /// The height of the tab bar, including the bottom safe area.
+  required final double height,
 
-const Color _kDefaultTabBarBorderColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0x4D000000),
-  darkColor: Color(0x29000000),
-);
-const Color _kDefaultTabBarInactiveColor = CupertinoColors.inactiveGray;
-
-/// An iOS-styled bottom navigation tab bar.
-///
-/// Displays multiple tabs using [BottomNavigationBarItem] with one tab being
-/// active, the first tab by default.
-///
-/// This [StatelessWidget] doesn't store the active tab itself. You must
-/// listen to the [onTap] callbacks and call `setState` with a new [currentIndex]
-/// for the new selection to reflect. This can also be done automatically
-/// by wrapping this with a [CupertinoTabScaffold].
-///
-/// Tab changes typically trigger a switch between [Navigator]s, each with its
-/// own navigation stack, per standard iOS design. This can be done by using
-/// [CupertinoTabView]s inside each tab builder in [CupertinoTabScaffold].
-///
-/// If the given [backgroundColor]'s opacity is not 1.0 (which is the case by
-/// default), it will produce a blurring effect to the content behind it.
-///
-/// When used as [CupertinoTabScaffold.tabBar], by default [CupertinoTabBar]
-/// disables text scaling to match the native iOS behavior. To override
-/// this behavior, wrap each of the `navigationBar`'s components inside a
-/// [MediaQuery] with the desired [TextScaler].
-///
-/// {@tool dartpad}
-/// This example shows a [CupertinoTabBar] placed in a [CupertinoTabScaffold].
-///
-/// ** See code in examples/api/lib/cupertino/bottom_tab_bar/cupertino_tab_bar.0.dart **
-/// {@end-tool}
-///
-/// See also:
-///
-///  * [CupertinoTabScaffold], which hosts the [CupertinoTabBar] at the bottom.
-///  * [BottomNavigationBarItem], an item in a [CupertinoTabBar].
-///  * <https://developer.apple.com/design/human-interface-guidelines/ios/bars/tab-bars/>
-class const _CupertinoTabBar({
-  // ignore: unused_element_parameter
-  super.key,
-
-  /// The interactive items laid out within the bottom navigation bar.
-  required final List<BottomNavigationBarItem> items,
-
-  /// The callback that is called when a item is tapped.
-  ///
-  /// The widget creating the bottom navigation bar needs to keep track of the
-  /// current index and call `setState` to rebuild it with the newly provided
-  /// index.
-  final ValueChanged<int>? onTap,
-
-  /// The index into [items] of the current active item.
-  ///
-  /// Must be between 0 and the number of tabs minus 1, inclusive.
-  final int currentIndex = 0,
-
-  /// The background color of the tab bar. If it contains transparency, the
-  /// tab bar will automatically produce a blurring effect to the content
-  /// behind it.
-  ///
-  /// Defaults to [CupertinoTheme]'s `barBackgroundColor` when null.
-  final Color? backgroundColor,
-
-  /// The foreground color of the icon and title for the [BottomNavigationBarItem]
-  /// of the selected tab.
-  ///
-  /// Defaults to [CupertinoTheme]'s `primaryColor` if null.
-  final Color? activeColor,
-
-  /// The foreground color of the icon and title for the [BottomNavigationBarItem]s
-  /// in the unselected state.
-  ///
-  /// Defaults to a [CupertinoDynamicColor] that matches the disabled foreground
-  /// color of the native `UITabBar` component.
-  // ignore: unused_element_parameter
-  final Color inactiveColor = _kDefaultTabBarInactiveColor,
-
-  /// The size of all of the [BottomNavigationBarItem] icons.
-  ///
-  /// This value is used to configure the [IconTheme] for the navigation bar.
-  /// When a [BottomNavigationBarItem.icon] widget is not an [Icon] the widget
-  /// should configure itself to match the icon theme's size and color.
-  // ignore: unused_element_parameter
-  final double iconSize = 30.0,
-
-  /// The height of the [CupertinoTabBar].
-  ///
-  /// Defaults to 50.
-  final double height = _kTabBarHeight,
-
-  /// The border of the [CupertinoTabBar].
-  ///
-  /// The default value is a one physical pixel top border with grey color.
-  final Border? border = const Border(
-    top: BorderSide(
-      color: _kDefaultTabBarBorderColor,
-      width: 0.0, // 0.0 means one physical pixel
-    ),
-  ),
-}) extends StatelessWidget implements PreferredSizeWidget {
-  /// Creates a tab bar in the iOS style.
-  this
-    : assert(items.length >= 2, "Tabs need at least 2 items to conform to Apple's HIG"),
-      assert(0 <= currentIndex && currentIndex < items.length),
-      assert(height >= 0.0);
+  /// Whether the routes extend their body behind the tab bar.
+  required final bool extendBody,
+  required super.child,
+}) extends InheritedWidget {
+  static _TabBarLayout of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_TabBarLayout>()!;
+  }
 
   @override
-  Size get preferredSize => Size.fromHeight(height);
-
-  /// Indicates whether the tab bar is fully opaque or can have contents behind
-  /// it show through it.
-  bool opaque(BuildContext context) {
-    final Color backgroundColor =
-        this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor;
-    return CupertinoDynamicColor.resolve(backgroundColor, context).a == 1.0;
+  bool updateShouldNotify(_TabBarLayout oldWidget) {
+    return height != oldWidget.height || extendBody != oldWidget.extendBody;
   }
+}
+
+/// Fades the tab bar in and out with [visibility] (see [TabNavigatorObserver.tabBarVisibility]).
+///
+/// The tab bar is the [child], faded by a [FadeTransition], or is built by [builder] with the
+/// visibility, to fade itself (glass cannot be faded by an ancestor [Opacity]). It can only be used
+/// once fully visible.
+class const _TabBarTransition({
+  required final Animation<double> visibility,
+  final Widget? child,
+  final Widget Function(double visibility)? builder,
+}) extends StatelessWidget {
+  this : assert((child == null) != (builder == null));
 
   @override
   Widget build(BuildContext context) {
-    assert(debugCheckHasMediaQuery(context));
-    final double bottomPadding = MediaQuery.viewPaddingOf(context).bottom;
-
-    final Color backgroundColor = CupertinoDynamicColor.resolve(
-      this.backgroundColor ?? CupertinoTheme.of(context).barBackgroundColor,
-      context,
+    return AnimatedBuilder(
+      animation: visibility,
+      builder: (context, child) {
+        final visible = visibility.value == 1.0;
+        return IgnorePointer(
+          ignoring: !visible,
+          child: ExcludeSemantics(excluding: !visible, child: child ?? builder!(visibility.value)),
+        );
+      },
+      child: child != null ? FadeTransition(opacity: visibility, child: child) : null,
     );
-
-    BorderSide resolveBorderSide(BorderSide side) {
-      return side == BorderSide.none
-          ? side
-          : side.copyWith(color: CupertinoDynamicColor.resolve(side.color, context));
-    }
-
-    // Return the border as is when it's a subclass.
-    final Border? resolvedBorder = border == null || border.runtimeType != Border
-        ? border
-        : Border(
-            top: resolveBorderSide(border!.top),
-            left: resolveBorderSide(border!.left),
-            bottom: resolveBorderSide(border!.bottom),
-            right: resolveBorderSide(border!.right),
-          );
-
-    final Color inactive = CupertinoDynamicColor.resolve(inactiveColor, context);
-    Widget result = DecoratedBox(
-      decoration: BoxDecoration(border: resolvedBorder, color: backgroundColor),
-      child: SizedBox(
-        height: height + bottomPadding,
-        child: IconTheme.merge(
-          // Default with the inactive state.
-          data: IconThemeData(color: inactive, size: iconSize),
-          child: DefaultTextStyle(
-            // Default with the inactive state.
-            style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle.copyWith(color: inactive),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: bottomPadding),
-              child: Semantics(
-                explicitChildNodes: true,
-                child: Row(
-                  // Align bottom since we want the labels to be aligned.
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: _buildTabItems(context),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    if (!opaque(context)) {
-      // For non-opaque backgrounds, apply a blur effect.
-      result = ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: kCupertinoBarBlurSigma, sigmaY: kCupertinoBarBlurSigma),
-          child: result,
-        ),
-      );
-    }
-
-    return result;
   }
+}
 
-  List<Widget> _buildTabItems(BuildContext context) {
-    final List<Widget> result = <Widget>[];
-    final CupertinoLocalizations localizations = CupertinoLocalizations.of(context);
+/// A [_TabBarTransition] for the bottom bar of a [GlassScaffold], which reads the height of the
+/// [tabBar].
+class const _PreferredTabBarTransition({
+  required final Animation<double> visibility,
+  required final PreferredSizeWidget tabBar,
 
-    for (int index = 0; index < items.length; index += 1) {
-      final bool active = index == currentIndex;
-      result.add(
-        _wrapActiveItem(
-          context,
-          Expanded(
-            // Make tab items part of the EditableText tap region so that
-            // switching tabs doesn't unfocus text fields.
-            child: TextFieldTapRegion(
-              child: Semantics(
-                selected: active,
-                hint: localizations.tabSemanticsLabel(tabIndex: index + 1, tabCount: items.length),
-                child: MouseRegion(
-                  cursor: kIsWeb ? SystemMouseCursors.click : MouseCursor.defer,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: onTap == null
-                        ? null
-                        : () {
-                            onTap!(index);
-                          },
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 4.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: _buildSingleTabItem(items[index], active),
+  /// Builds the [tabBar] with the visibility, for a tab bar that fades itself.
+  final Widget Function(double visibility)? builder,
+}) extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => tabBar.preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return builder != null
+        ? _TabBarTransition(visibility: visibility, builder: builder)
+        : _TabBarTransition(visibility: visibility, child: tabBar);
+  }
+}
+
+/// Height of the [_BlurredTabBar], above the bottom safe area, like the iOS 18 tab bar.
+const double _kBlurredTabBarHeight = 50.0;
+
+/// The tab bar before iOS 26 ([useLiquidGlass]), in place of the glass one: docked at the bottom of
+/// the screen on a [BlurredBarBackground], like the iOS 18 tab bar.
+class const _BlurredTabBar({
+  required final BottomTab currentTab,
+  required final ValueChanged<int> onTap,
+
+  /// The bottom safe area, which the bar extends into.
+  required final double bottomPadding,
+}) extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => Size.fromHeight(_kBlurredTabBarHeight + bottomPadding);
+
+  @override
+  Widget build(BuildContext context) {
+    final activeColor = ColorScheme.of(context).onSurface;
+    final inactiveColor = CupertinoColors.inactiveGray.resolveFrom(context);
+    // Like the iOS tab bar, the labels are not scaled.
+    return MediaQuery.withNoTextScaling(
+      child: BlurredBarBackground(
+        atBottom: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: SizedBox(
+            height: _kBlurredTabBarHeight,
+            child: Row(
+              children: [
+                for (final tab in BottomTab.values)
+                  Expanded(
+                    child: Semantics(
+                      button: true,
+                      selected: tab == currentTab,
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => onTap(tab.index),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 2.0,
+                          children: [
+                            Icon(
+                              tab.icon,
+                              fill: tab == currentTab ? 1 : 0,
+                              color: tab == currentTab ? activeColor : inactiveColor,
+                            ),
+                            Text(
+                              tab.label(context.l10n),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 10.0,
+                                fontWeight: FontWeight.w500,
+                                color: tab == currentTab ? activeColor : inactiveColor,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
+              ],
             ),
           ),
-          active: active,
         ),
-      );
-    }
-
-    return result;
-  }
-
-  List<Widget> _buildSingleTabItem(BottomNavigationBarItem item, bool active) {
-    return <Widget>[
-      Expanded(child: Center(child: active ? item.activeIcon : item.icon)),
-      if (item.label != null) Text(item.label!),
-    ];
-  }
-
-  /// Change the active tab item's icon and title colors to active.
-  Widget _wrapActiveItem(BuildContext context, Widget item, {required bool active}) {
-    if (!active) {
-      return item;
-    }
-
-    final Color activeColor = CupertinoDynamicColor.resolve(
-      this.activeColor ?? CupertinoTheme.of(context).primaryColor,
-      context,
-    );
-    return IconTheme.merge(
-      data: IconThemeData(color: activeColor),
-      child: DefaultTextStyle.merge(
-        style: TextStyle(color: activeColor),
-        child: item,
       ),
-    );
-  }
-
-  /// Create a clone of the current [CupertinoTabBar] but with provided
-  /// parameters overridden.
-  CupertinoTabBar copyWith({
-    Key? key,
-    List<BottomNavigationBarItem>? items,
-    Color? backgroundColor,
-    Color? activeColor,
-    Color? inactiveColor,
-    double? iconSize,
-    double? height,
-    Border? border,
-    int? currentIndex,
-    ValueChanged<int>? onTap,
-  }) {
-    return CupertinoTabBar(
-      key: key ?? this.key,
-      items: items ?? this.items,
-      backgroundColor: backgroundColor ?? this.backgroundColor,
-      activeColor: activeColor ?? this.activeColor,
-      inactiveColor: inactiveColor ?? this.inactiveColor,
-      iconSize: iconSize ?? this.iconSize,
-      height: height ?? this.height,
-      border: border ?? this.border,
-      currentIndex: currentIndex ?? this.currentIndex,
-      onTap: onTap ?? this.onTap,
     );
   }
 }

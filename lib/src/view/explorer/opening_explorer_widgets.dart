@@ -7,41 +7,68 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/explorer/explorer_view.dart';
+import 'package:lichess_mobile/src/view/explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// The bar showing the name of the opening, with a link to its lichess.org page and a button to
+/// open the explorer settings.
 class const OpeningNameHeader({required final Opening opening, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final isStartPosition = opening.name == context.l10n.startPosition;
+    final color = ColorScheme.of(context).onSurface;
     return Container(
       padding: kExplorerTableRowPadding,
       decoration: BoxDecoration(color: ColorScheme.of(context).surfaceDim),
-      child: GestureDetector(
-        onTap: opening.name == context.l10n.startPosition
-            ? null
-            : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
-        child: Row(
-          children: [
-            if (opening.name != context.l10n.startPosition) ...[
-              Icon(Icons.open_in_browser_outlined, color: ColorScheme.of(context).onSurface),
-              const SizedBox(width: 6.0),
-            ],
-            Expanded(
-              child: Text(
-                opening.eco.isNotEmpty ? '${opening.eco} ${opening.name}' : opening.name,
-                style: TextStyle(
-                  color: ColorScheme.of(context).onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
-                maxLines: 1,
+      child: Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: isStartPosition
+                  ? null
+                  : () => launchUrl(Uri.parse('https://lichess.org/opening/${opening.name}')),
+              child: Row(
+                children: [
+                  if (!isStartPosition) ...[
+                    Icon(Icons.open_in_browser_outlined, color: color),
+                    const SizedBox(width: 6.0),
+                  ],
+                  Expanded(
+                    child: Text(
+                      opening.eco.isNotEmpty ? '${opening.eco} ${opening.name}' : opening.name,
+                      style: TextStyle(color: color, fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 6.0),
+          Semantics(
+            button: true,
+            label: context.l10n.settingsSettings,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                showDragHandle: true,
+                builder: (_) => const OpeningExplorerSettings(),
+              ),
+              child: Icon(Icons.settings, color: color),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -301,7 +328,6 @@ class _IndexingIndicatorState() extends State<IndexingIndicator> with TickerProv
       child: CircularProgressIndicator(
         strokeWidth: 1.5,
         value: controller.value,
-        // TODO: l10n
         semanticsLabel: 'Indexing',
       ),
     );

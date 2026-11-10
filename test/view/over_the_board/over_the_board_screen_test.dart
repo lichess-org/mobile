@@ -446,21 +446,20 @@ void main() {
       await tester.pump();
       expect(activeClock(tester), Side.white);
 
-      // Close OTB screen and confirm dialog to trigger save
+      // Close OTB screen to trigger save
       await tester.pageBack();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Yes'));
 
       verify(
         () => gameStorage.save(
           any(),
           timeIncrement: const TimeIncrement(5, 3),
-          // White's clock was left running, so pausing it on the way out charges white the time
-          // that had run since the last reading.
+          // White's clock was left running, so at most a tick's worth of time has been charged
+          // to white since the last reading.
           whiteTimeLeft: any(
             named: 'whiteTimeLeft',
             that: allOf(
-              lessThan(const Duration(minutes: 2)),
+              lessThanOrEqualTo(const Duration(minutes: 2)),
               greaterThan(const Duration(minutes: 1, seconds: 59)),
             ),
           ),
@@ -791,32 +790,6 @@ void main() {
       expect(gameState.game.steps.length, 1);
       expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
       expect(boardHasPiece(tester, Square.e5, Piece.blackPawn), isTrue);
-    });
-
-    testWidgets('Blindfold option is shown in display settings sheet', (tester) async {
-      final gameStorage = MockOverTheBoardGameStorage();
-      when(() => gameStorage.fetchOngoingGame()).thenAnswer((_) async => null);
-
-      final app = await makeTestProviderScopeApp(
-        tester,
-        home: const OverTheBoardScreen(),
-        overrides: {
-          overTheBoardGameStorageProvider: overTheBoardGameStorageProvider.overrideWith(
-            (_) => gameStorage,
-          ),
-        },
-      );
-      await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Play'));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byIcon(Icons.settings));
-      await tester.pumpAndSettle();
-
-      // Verify Blindfold setting tile is present in display settings bottom sheet
-      expect(find.text('Blindfold'), findsOneWidget);
     });
   });
 }

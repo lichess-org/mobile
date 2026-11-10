@@ -252,14 +252,19 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
     speed: pick('game', 'speed').asSpeedOrThrow(),
     perf: pick('game', 'perf').asPerfOrThrow(),
     variant: pick('game', 'variant').asVariantOrThrow(),
-    clock: pick('clock').letOrNull(
-      (cPick) => (
-        initial: cPick('initial').asDurationFromSecondsOrThrow(),
+    clock: pick('clock').letOrNull((cPick) {
+      final initial = cPick('initial').asDurationFromSecondsOrThrow();
+      return (
+        initial: initial,
         increment: cPick('increment').asDurationFromSecondsOrThrow(),
-        emergency: cPick('emerg').asDurationFromSecondsOrNull(),
+        emergency:
+            const Duration(seconds: 1) *
+            (initial < const Duration(minutes: 1)
+                ? (initial.inSeconds * 0.2).clamp(2, 60)
+                : (initial.inSeconds * 0.125).clamp(10, 60)),
         moreTime: cPick('moretime').asDurationFromSecondsOrNull(),
-      ),
-    ),
+      );
+    }),
     daysPerTurn: pick('correspondence').letOrNull((ccPick) => ccPick('daysPerTurn').asIntOrThrow()),
     startedAtTurn: pick('game', 'startedAtTurn').asIntOrNull(),
     rules: pick('game', 'rules').letOrNull(

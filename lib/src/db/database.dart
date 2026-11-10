@@ -63,7 +63,7 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 7,
+      version: 9,
       onConfigure: (db) async {
         final version = await _getDatabaseVersion(db);
         _logger.info('SQLite version: $version');
@@ -92,9 +92,10 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         _createChatReadMessagesTableV1(batch);
         _createGameTableV2(batch);
         _createGameTableIndexesV6(batch);
-        _createHttpLogTableV4(batch);
+        _createHttpLogTableV9(batch);
         _createAppLogTableV5(batch);
         _createLearnProgressTableV7(batch);
+        _createPracticeProgressTableV8(batch);
         await batch.commit();
       },
       onUpgrade: (db, oldVersion, newVersion) async {
@@ -106,7 +107,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
           _updatePuzzleBatchTableToV3(batch);
         }
         if (oldVersion < 4) {
-          _createHttpLogTableV4(batch);
+          _createHttpLogTableV9(batch);
+        } else if (oldVersion < 9) {
+          _updateHttpLogTableToV9(batch);
         }
         if (oldVersion < 5) {
           _createAppLogTableV5(batch);
@@ -116,6 +119,9 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) {
         }
         if (oldVersion < 7) {
           _createLearnProgressTableV7(batch);
+        }
+        if (oldVersion < 8) {
+          _createPracticeProgressTableV8(batch);
         }
         await batch.commit();
       },
@@ -212,7 +218,7 @@ void _createChatReadMessagesTableV1(Batch batch) {
     ''');
 }
 
-void _createHttpLogTableV4(Batch batch) {
+void _createHttpLogTableV9(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS http_log');
   batch.execute('''
     CREATE TABLE http_log(
@@ -224,9 +230,16 @@ void _createHttpLogTableV4(Batch batch) {
     responseCode INTEGER,
     responseDateTime TEXT,
     lastModified TEXT NOT NULL,
-    errorMessage TEXT
+    errorMessage TEXT,
+    cache TEXT,
+    responseSize INTEGER
   )
     ''');
+}
+
+void _updateHttpLogTableToV9(Batch batch) {
+  batch.execute('ALTER TABLE http_log ADD COLUMN cache TEXT');
+  batch.execute('ALTER TABLE http_log ADD COLUMN responseSize INTEGER');
 }
 
 void _createAppLogTableV5(Batch batch) {
@@ -256,6 +269,18 @@ void _createLearnProgressTableV7(Batch batch) {
     lastModified TEXT NOT NULL,
     syncedAt TEXT,
     PRIMARY KEY (stageKey, levelId)
+  )
+    ''');
+}
+
+void _createPracticeProgressTableV8(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS practice_progress');
+  batch.execute('''
+    CREATE TABLE practice_progress(
+    chapterId TEXT NOT NULL PRIMARY KEY,
+    nbMoves INTEGER NOT NULL,
+    lastModified TEXT NOT NULL,
+    syncedAt TEXT
   )
     ''');
 }

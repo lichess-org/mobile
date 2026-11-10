@@ -210,7 +210,8 @@ class const _BoardCarouselItem({
                 lastMove: lastMove,
                 settings: StaticChessboardSettings(
                   hue: boardPrefs.hue,
-                  brightness: boardPrefs.brightness,
+                  contrast: boardPrefs.contrast,
+                  brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
                   enableCoordinates: false,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10.0),
