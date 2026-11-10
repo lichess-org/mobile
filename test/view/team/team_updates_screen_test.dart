@@ -389,8 +389,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      expect(find.text('Updates from teams you join will appear here.'), findsOneWidget);
-      expect(find.text('Join teams'), findsOneWidget);
+      expect(find.text('Updates from your teams will appear here.'), findsOneWidget);
+      expect(find.text('Browse teams'), findsOneWidget);
     });
   });
 }

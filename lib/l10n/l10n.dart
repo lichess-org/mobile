@@ -1123,14 +1123,14 @@ abstract class AppLocalizations {
   /// No description provided for @mobileTeamUpdatesEmptyDescription.
   ///
   /// In en, this message translates to:
-  /// **'Updates from teams you join will appear here.'**
+  /// **'Updates from your teams will appear here.'**
   String get mobileTeamUpdatesEmptyDescription;
 
-  /// No description provided for @mobileJoinTeams.
+  /// No description provided for @mobileBrowseTeams.
   ///
   /// In en, this message translates to:
-  /// **'Join teams'**
-  String get mobileJoinTeams;
+  /// **'Browse teams'**
+  String get mobileBrowseTeams;
 
   /// No description provided for @activityActivity.
   ///

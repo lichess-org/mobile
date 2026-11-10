@@ -485,10 +485,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Du kannst dich nicht selbst herausfordern';
 
   @override
-  String get mobileTeamUpdatesEmptyDescription => 'Updates from teams you join will appear here.';
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
 
   @override
-  String get mobileJoinTeams => 'Join teams';
+  String get mobileBrowseTeams => 'Browse teams';
 
   @override
   String get activityActivity => 'Verlauf';

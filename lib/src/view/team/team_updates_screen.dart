@@ -73,7 +73,7 @@ class const _ChannelsList({required final IList<TeamUpdatesByTeam> teams}) exten
                       TextButton.icon(
                         onPressed: () => launchUrl(lichessUri('/team/all')),
                         icon: const OpenInNewIcon(),
-                        label: Text(context.l10n.mobileJoinTeams),
+                        label: Text(context.l10n.mobileBrowseTeams),
                       ),
                     ],
                   ),
