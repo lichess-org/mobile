@@ -65,6 +65,7 @@ class const GameListTile({
             name: opponent.name,
             aiLevel: opponent.aiLevel,
             rating: opponent.rating,
+            provisional: opponent.provisional,
           );
 
     // Like the website, show when the game started. For an imported game that's the import date, so
