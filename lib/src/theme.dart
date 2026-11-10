@@ -168,7 +168,7 @@ ThemeData _makeDefaultTheme(
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
-    dynamicSchemeVariant: .neutral,
+    dynamicSchemeVariant: isIOS ? .monochrome : .neutral,
   );
   final defaultScheme = isIOS
       ? makeIOSAccentColorScheme(seedColor: boardTheme.colors.darkSquare, brightness: brightness)
