@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:material_ui/material_ui.dart';
@@ -24,11 +25,11 @@ class const EngineGauge({required final EngineGaugeParams params, super.key})
   /// The color of black's share of the gauge: a dark tone of the color scheme, in both light and
   /// dark themes.
   static Color backgroundColor(BuildContext context) =>
-      ColorScheme.of(context).onSecondaryFixedVariant;
+      context.boardColorScheme.onSecondaryFixedVariant;
 
   /// The color of white's share of the gauge: a light tone of the color scheme, in both light and
   /// dark themes.
-  static Color valueColor(BuildContext context) => ColorScheme.of(context).secondaryFixedDim;
+  static Color valueColor(BuildContext context) => context.boardColorScheme.secondaryFixedDim;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -105,8 +106,8 @@ class _EvalGaugeState() extends State<_EvalGauge> {
 
     final evalStyle = TextStyle(
       color: toValue >= 0.5
-          ? ColorScheme.of(context).onSecondaryFixed.withValues(alpha: 0.7)
-          : ColorScheme.of(context).secondaryFixed,
+          ? context.boardColorScheme.onSecondaryFixed.withValues(alpha: 0.7)
+          : context.boardColorScheme.secondaryFixed,
       fontSize: getEvalGaugeFontSize(context),
       letterSpacing: -0.8,
       fontWeight: FontWeight.bold,

@@ -75,24 +75,33 @@ ThemeData makeAppTheme(
           BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
         };
 
-  if (backgroundColor == null && backgroundImage == null) {
-    return _makeDefaultTheme(
-      brightness,
-      themeMode: themeMode,
-      systemColors: systemColors,
-      boardTheme: boardTheme,
-      isIOS: isIOS,
-    );
-  } else {
-    return _makeBackgroundImageTheme(
-      baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
-      seedColor:
-          backgroundImage?.seedColor ??
-          (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
-      isIOS: isIOS,
-      isBackgroundImage: backgroundImage != null,
-    );
-  }
+  final theme = backgroundColor == null && backgroundImage == null
+      ? _makeDefaultTheme(
+          brightness,
+          themeMode: themeMode,
+          systemColors: systemColors,
+          boardTheme: boardTheme,
+          isIOS: isIOS,
+        )
+      : _makeBackgroundImageTheme(
+          baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
+          seedColor:
+              backgroundImage?.seedColor ??
+              (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
+          isIOS: isIOS,
+          isBackgroundImage: backgroundImage != null,
+        );
+
+  // The elements next to the board don't follow the app color scheme (system colors, background,
+  // vibrant variant on iOS): the fidelity variant keeps their colors close to the board ones.
+  final boardColorScheme = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    brightness: brightness,
+    dynamicSchemeVariant: .fidelity,
+  );
+  return theme.copyWith(
+    extensions: [...theme.extensions.values, BoardColorScheme(boardColorScheme)],
+  );
 }
 
 /// A custom theme extension that adds lichess custom properties to the theme.

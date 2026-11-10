@@ -148,7 +148,31 @@ const lichessCustomColors = LichessCustomColors(
   primary: LichessColors.primary,
 );
 
+/// The color scheme of the elements that sit next to the board, such as the eval gauge, so that
+/// they match the board colors whatever the app color scheme.
+@immutable
+class const BoardColorScheme(final ColorScheme colorScheme)
+    extends ThemeExtension<BoardColorScheme> {
+  @override
+  BoardColorScheme copyWith({ColorScheme? colorScheme}) =>
+      BoardColorScheme(colorScheme ?? this.colorScheme);
+
+  @override
+  BoardColorScheme lerp(ThemeExtension<BoardColorScheme>? other, double t) {
+    if (other is! BoardColorScheme) {
+      return this;
+    }
+    return BoardColorScheme(ColorScheme.lerp(colorScheme, other.colorScheme, t));
+  }
+}
+
 extension CustomColorsBuildContext on BuildContext {
   LichessCustomColors get lichessColors =>
       Theme.of(this).extension<LichessCustomColors>() ?? lichessCustomColors;
+
+  /// The color scheme of the elements that sit next to the board, see [BoardColorScheme].
+  ///
+  /// Defaults to the app color scheme.
+  ColorScheme get boardColorScheme =>
+      Theme.of(this).extension<BoardColorScheme>()?.colorScheme ?? ColorScheme.of(this);
 }
