@@ -199,10 +199,17 @@ sealed class const BackgroundImage._() with _$BackgroundImage {
   );
 
   /// Generate a base [ThemeData] from the seed color.
-  static ThemeData getTheme(Color seedColor) => ThemeData.from(
-    colorScheme: ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
-    textTheme: defaultTargetPlatform == TargetPlatform.iOS ? kCupertinoDefaultTextTheme : null,
-  );
+  ///
+  /// On iOS, the primary color is the iOS accent one, see [makeIOSAccentColorScheme].
+  static ThemeData getTheme(Color seedColor) {
+    final isIOS = defaultTargetPlatform == TargetPlatform.iOS;
+    return ThemeData.from(
+      colorScheme: isIOS
+          ? makeIOSAccentColorScheme(seedColor: seedColor, brightness: .dark)
+          : ColorScheme.fromSeed(seedColor: seedColor, brightness: Brightness.dark),
+      textTheme: isIOS ? kCupertinoDefaultTextTheme : null,
+    );
+  }
 
   /// The base theme for the background image.
   ThemeData get baseTheme => getTheme(seedColor);

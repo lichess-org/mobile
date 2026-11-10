@@ -4,12 +4,58 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_ui/material_ui.dart';
 
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
 );
+
+/// Generates a [ColorScheme] from [seedColor] whose primary color looks like an iOS accent color.
+///
+/// The primary color is more saturated than the Material tonal spot one, like an iOS tint color, but
+/// less than the vibrant variant, which can be glaring with some seeds (e.g. neon green). Its tone
+/// does not follow the seed, so that it stands out from the background.
+ColorScheme makeIOSAccentColorScheme({required Color seedColor, required Brightness brightness}) {
+  final scheme = ColorScheme.fromSeed(
+    seedColor: seedColor,
+    brightness: brightness,
+    dynamicSchemeVariant: .vibrant,
+  );
+  final palette = TonalPalette.of(Hct.fromInt(seedColor.toARGB32()).hue, _kIOSPrimaryChroma);
+  Color tone(int t) => Color(palette.get(t));
+  // Material 3 primary tones of the light and dark schemes.
+  return switch (brightness) {
+    .dark => scheme.copyWith(
+      primary: tone(80),
+      onPrimary: tone(20),
+      primaryContainer: tone(30),
+      onPrimaryContainer: tone(90),
+      primaryFixed: tone(90),
+      primaryFixedDim: tone(80),
+      onPrimaryFixed: tone(10),
+      onPrimaryFixedVariant: tone(30),
+      inversePrimary: tone(40),
+      surfaceTint: tone(80),
+    ),
+    .light => scheme.copyWith(
+      primary: tone(40),
+      onPrimary: tone(100),
+      primaryContainer: tone(90),
+      onPrimaryContainer: tone(10),
+      primaryFixed: tone(90),
+      primaryFixedDim: tone(80),
+      onPrimaryFixed: tone(10),
+      onPrimaryFixedVariant: tone(30),
+      inversePrimary: tone(80),
+      surfaceTint: tone(40),
+    ),
+  };
+}
+
+/// Chroma of the iOS accent primary palette: tonal spot uses 36, vibrant goes up to the gamut limit.
+const _kIOSPrimaryChroma = 60.0;
 
 ThemeData makeAppTheme(
   BuildContext context, {
@@ -105,20 +151,19 @@ ThemeData _makeDefaultTheme(
 }) {
   final dynamicColorSchemes = getDynamicColorSchemes();
   final systemScheme = switch (brightness) {
-    Brightness.light => dynamicColorSchemes?.light,
-    Brightness.dark => dynamicColorSchemes?.dark,
+    .light => dynamicColorSchemes?.light,
+    .dark => dynamicColorSchemes?.dark,
   };
   final hasSystemColors = systemScheme != null && systemColors;
 
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
-    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+    dynamicSchemeVariant: .neutral,
   );
-  final defaultScheme = ColorScheme.fromSeed(
-    seedColor: boardTheme.colors.darkSquare,
-    brightness: brightness,
-  );
+  final defaultScheme = isIOS
+      ? makeIOSAccentColorScheme(seedColor: boardTheme.colors.darkSquare, brightness: brightness)
+      : ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare, brightness: brightness);
   // makes a theme with neutral surfaces and default colors
   final boardScheme = defaultScheme.copyWith(
     surface: neutralScheme.surface,
@@ -143,7 +188,7 @@ ThemeData _makeDefaultTheme(
   final baseScheme = hasSystemColors ? systemScheme : boardScheme;
 
   // On iOS light mode, like the iOS grouped lists, cards stand out brighter on a darker background.
-  final isIOSLight = isIOS && brightness == Brightness.light;
+  final isIOSLight = isIOS && brightness == .light;
   final theme = ThemeData.from(
     colorScheme: isIOSLight
         ? baseScheme.copyWith(surface: baseScheme.surfaceContainer)
@@ -154,7 +199,7 @@ ThemeData _makeDefaultTheme(
       ? Color.lerp(baseScheme.surface, baseScheme.surfaceContainerLowest, 0.75)
       : theme.colorScheme.surfaceContainerHigh;
 
-  final isAmoled = themeMode == BackgroundThemeMode.amoled;
+  final isAmoled = themeMode == .amoled;
 
   final finalTheme = theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
