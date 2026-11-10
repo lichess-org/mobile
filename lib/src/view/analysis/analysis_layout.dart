@@ -16,8 +16,12 @@ import 'package:material_ui/material_ui.dart';
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 
+/// The margin around a clock in the board header or footer, and between the board and the eval gauge
+/// in portrait orientation.
+const kAnalysisBoardInnerMargin = 3.0;
+
 /// Scale factor for the small board in portrait orientation.
-const kSmallBoardScale = 0.8;
+const kSmallBoardScale = 0.7;
 
 typedef BoardBuilder = Widget Function(
   BuildContext context,
@@ -129,11 +133,13 @@ class const AnalysisLayout({
         Theme.of(context).platform == TargetPlatform.iOS &&
         MediaQuery.orientationOf(context) == Orientation.portrait;
     // The bar below the content takes care of the bottom inset itself.
-    final tabViewBottomInset = floatingBar
-        ? kBottomBarHeight + MediaQuery.paddingOf(context).bottom
-        : 0.0;
+    final tabViewBottomInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
-    final tabViewColor = ColorScheme.of(context).surfaceContainerLowest;
+    final colorScheme = ColorScheme.of(context);
+    // In light mode, a pure white tab view stands out too much from the background.
+    final tabViewColor = Theme.of(context).brightness == Brightness.light
+        ? Color.lerp(colorScheme.surface, colorScheme.surfaceContainerLowest, 0.5)!
+        : colorScheme.surfaceContainerLowest;
 
     final content = SafeArea(
       bottom: false,
@@ -285,11 +291,22 @@ class const AnalysisLayout({
               ),
             );
           } else {
-            final evalGaugeSize = engineGaugeBuilder != null ? getEvalGaugeWidth(context) : 0.0;
+            final boardPadding = isTablet
+                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                : isShortVerticalScreen(context)
+                ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+
+            // The board, its eval gauge, header and footer are one centered column, as wide as the
+            // board and the gauge, whatever the board size. The board does not span the whole
+            // screen width, so it and the gauge have rounded corners, with a gap between them.
+            final evalGaugeSize = engineGaugeBuilder != null
+                ? getEvalGaugeWidth(context) + kAnalysisBoardInnerMargin
+                : 0.0;
 
             final defaultBoardSize =
                 (smallBoard ? kSmallBoardScale : 1.0) *
-                (constraints.biggest.shortestSide - evalGaugeSize);
+                (constraints.biggest.shortestSide - boardPadding.horizontal - evalGaugeSize);
 
             // The height left above a bar floating over the content.
             final remainingHeight = constraints.maxHeight - tabViewBottomInset - defaultBoardSize;
@@ -297,9 +314,7 @@ class const AnalysisLayout({
             final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
 
             final boardSize =
-                defaultBoardSize -
-                (isTablet ? kTabletBoardTableSidePadding * 2 : 0) -
-                (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
+                defaultBoardSize - (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
 
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -308,74 +323,59 @@ class const AnalysisLayout({
               children: [
                 ?engineLines,
                 Padding(
-                  padding: isTablet
-                      ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                      : EdgeInsets.zero,
-                  child: Column(
-                    children: [
-                      if (pockets != null)
-                        PocketsMenu(
-                          side: pov.opposite,
-                          sideToMove: sideToMove,
-                          playerSide: playerSide,
-                          pockets: pockets!,
-                          squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
-                        ),
-                      if (boardHeader != null)
-                        // This key is used to preserve the state of the board header when the pov changes
-                        Container(
-                          key: ValueKey(pov.opposite),
-                          decoration: BoxDecoration(
-                            borderRadius: isTablet
-                                ? tabletBoardRadius.copyWith(
-                                    bottomLeft: Radius.zero,
-                                    bottomRight: Radius.zero,
-                                  )
-                                : null,
+                  padding: EdgeInsets.symmetric(vertical: boardPadding.vertical / 2),
+                  child: SizedBox(
+                    width: boardSize + evalGaugeSize,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov.opposite,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
                           ),
-                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                          height: kAnalysisBoardHeaderOrFooterHeight,
-                          child: boardHeader,
-                        ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          boardBuilder(
-                            context,
-                            boardSize,
-                            isTablet && boardHeader == null && boardFooter != null
-                                ? tabletBoardRadius
-                                : null,
+                        if (boardHeader != null)
+                          // This key is used to preserve the state of the board header when the pov changes
+                          SizedBox(
+                            key: ValueKey(pov.opposite),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardHeader,
                           ),
-                          if (engineGaugeBuilder != null)
-                            SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
-                        ],
-                      ),
-                      if (boardFooter != null)
-                        Container(
-                          // This key is used to preserve the state of the board footer when the pov changes
-                          key: ValueKey(pov),
-                          decoration: BoxDecoration(
-                            borderRadius: isTablet
-                                ? tabletBoardRadius.copyWith(
-                                    topLeft: Radius.zero,
-                                    topRight: Radius.zero,
-                                  )
-                                : null,
+                        Row(
+                          children: [
+                            boardBuilder(context, boardSize, tabletBoardRadius),
+                            if (engineGaugeBuilder != null) ...[
+                              const SizedBox(width: kAnalysisBoardInnerMargin),
+                              ClipRRect(
+                                borderRadius: tabletBoardRadius,
+                                child: SizedBox(
+                                  height: boardSize,
+                                  child: engineGaugeBuilder!(context),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (boardFooter != null)
+                          SizedBox(
+                            // This key is used to preserve the state of the board footer when the pov changes
+                            key: ValueKey(pov),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardFooter,
                           ),
-                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                          height: kAnalysisBoardHeaderOrFooterHeight,
-                          child: boardFooter,
-                        ),
-                      if (pockets != null)
-                        PocketsMenu(
-                          side: pov,
-                          sideToMove: sideToMove,
-                          playerSide: playerSide,
-                          pockets: pockets!,
-                          squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
-                        ),
-                    ],
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -406,12 +406,13 @@ class const AnalysisLayout({
         children: [
           Positioned.fill(
             child: BottomBarScrollEdgeEffect(
+              enabled: true,
               barHeight: tabViewBottomInset,
               color: tabViewColor,
               child: content,
             ),
           ),
-          Positioned(left: 0, right: 0, bottom: 0, child: bottomBar!),
+          Positioned(left: 0, right: 0, bottom: 0, child: ThickBottomBarGlass(child: bottomBar!)),
         ],
       );
     }

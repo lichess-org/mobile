@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart' show LichessBinding;
+import 'package:lichess_mobile/src/binding/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -116,6 +116,7 @@ class AccountService(final Ref _ref) {
 
     await _ref.read(accountRepositoryProvider).bookmark(id, bookmark: bookmark);
 
+    _ref.invalidate(accountProvider);
     _bookmarkChangesController.add((id, bookmark));
   }
 }

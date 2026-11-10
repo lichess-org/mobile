@@ -9,8 +9,8 @@ import 'package:material_ui/material_ui.dart';
 
 /// A bottom bar that can be used in a [Scaffold.bottomNavigationBar].
 ///
-/// The height of the bar is always [kBottomBarHeight] and the font size scale factor is
-/// clamped to 1.4.
+/// The height of the bar is [kBottomBarHeight] above the bottom safe area, except for the liquid
+/// glass bar ([heightOf]), and the font size scale factor is clamped to 1.4.
 class BottomBar extends StatelessWidget {
   const new({
     required this.children,
@@ -44,6 +44,11 @@ class BottomBar extends StatelessWidget {
   /// draws itself as a [BottomBarGlassButton] there.
   static bool isGlass(BuildContext context) => _GlassBottomBarScope.isIn(context);
 
+  /// The height a bar with [cupertinoGlass] covers at the bottom of the screen, safe area included.
+  static double heightOf(BuildContext context) => useLiquidGlass(context)
+      ? _kGlassBarTopPadding + _kGlassCapsuleHeight + _glassBarBottomPadding(context)
+      : kBottomBarHeight + MediaQuery.paddingOf(context).bottom;
+
   @override
   Widget build(BuildContext context) {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
@@ -52,20 +57,37 @@ class BottomBar extends StatelessWidget {
     final ungrouped = glass
         ? children
         : children.expand((child) => child is BottomBarGroup ? child.children : [child]).toList();
-    final bar = BottomAppBar(
-      color: isIOS && cupertinoGlass ? Colors.transparent : null,
-      elevation: isIOS && cupertinoGlass ? 0.0 : null,
-      height: kBottomBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-      child: glass
-          ? _GlassBottomBarScope(child: _GlassBarRow(children: children))
-          : Row(
+    final bar = glass
+        ? Material(
+            type: MaterialType.transparency,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  8.0,
+                  _kGlassBarTopPadding,
+                  8.0,
+                  _glassBarBottomPadding(context),
+                ),
+                child: SizedBox(
+                  height: _kGlassCapsuleHeight,
+                  child: _GlassBottomBarScope(child: _GlassBarRow(children: children)),
+                ),
+              ),
+            ),
+          )
+        : BottomAppBar(
+            color: isIOS && cupertinoGlass ? Colors.transparent : null,
+            elevation: isIOS && cupertinoGlass ? 0.0 : null,
+            height: kBottomBarHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Row(
               mainAxisAlignment: mainAxisAlignment,
               children: expandChildren
                   ? ungrouped.map((child) => Expanded(child: child)).toList()
                   : ungrouped,
             ),
-    );
+          );
 
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: 1.4,
@@ -75,9 +97,6 @@ class BottomBar extends StatelessWidget {
     );
   }
 }
-
-/// Strongest blur of the content under a [BottomBar] floating over it, at the bottom of the screen.
-const double _kBottomEdgeBlurMaxSigma = 8.0;
 
 /// Opacity of the tint over the bottom edge blur, below the top of the bar buttons, in light and
 /// dark mode. The glass buttons stand out less over light content.
@@ -89,14 +108,14 @@ const double _kBottomEdgeFadeAboveBar = 4.0;
 
 /// Distance from the top of a [BottomBar] to the vertical middle of its glass buttons, where the
 /// tint over the bottom edge blur reaches its full opacity.
-const double _kBottomBarButtonsMiddle = 8.0 + _kGlassCapsuleHeight / 2;
+const double _kBottomBarButtonsMiddle = _kGlassBarTopPadding + _kGlassCapsuleHeight / 2;
 
 /// Number of stops of the eased tint gradient over the bottom edge blur.
 const int _kBottomEdgeTintSteps = 8;
 
 /// The bottom edge of content scrolling under a [BottomBar] with [BottomBar.cupertinoGlass] that
-/// floats over it, on iOS 26 and later: the content under the bar is blurred, under a gradient of
-/// [color], so that its glass buttons stay readable, like an iOS scroll edge effect.
+/// floats over it, on iOS 26 and later: when [enabled], the content under the bar is blurred, under
+/// a gradient of [color], so that its glass buttons stay readable, like an iOS scroll edge effect.
 ///
 /// Before iOS 26, the bar has its own blur ([BlurredBarBackground]): [child] is shown as is.
 class const BottomBarScrollEdgeEffect({
@@ -106,11 +125,15 @@ class const BottomBarScrollEdgeEffect({
   /// The background color of the content, which tints the edge under the bar buttons.
   required final Color color,
   required final Widget child,
+
+  /// Whether the content under the bar is blurred and tinted. Defaults to false: the glass buttons
+  /// stand out enough from the content on their own.
+  final bool enabled = false,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!useLiquidGlass(context)) return child;
+    if (!enabled || !useLiquidGlass(context)) return child;
 
     final edgeHeight = barHeight + _kBottomEdgeFadeAboveBar;
     final tintOpacity = Theme.of(context).brightness == Brightness.light
@@ -125,8 +148,7 @@ class const BottomBarScrollEdgeEffect({
       children: [
         Positioned.fill(
           child: GlassScrollEdgeEffect(
-            style: .blur,
-            maxSigma: _kBottomEdgeBlurMaxSigma,
+            style: .soft,
             fadeTop: false,
             bottomFadeHeight: edgeHeight,
             child: child,
@@ -275,11 +297,14 @@ class const BottomBarTextButton({
 ///
 /// In a bar with [BottomBar.cupertinoGlass] on iOS, the group is one liquid glass capsule, like a
 /// group of iOS toolbar items, and its [BottomBarButton]s are icons in it, without a capsule or a
-/// label. Elsewhere, its [children] are laid out like the other buttons of the bar.
+/// label. A single button is shown as if it were not in a group. Elsewhere, its [children] are laid
+/// out like the other buttons of the bar.
 class const BottomBarGroup({required final List<Widget> children, super.key})
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (children.length == 1) return children.single;
+
     if (!_GlassBottomBarScope.isIn(context)) {
       return Row(mainAxisSize: MainAxisSize.min, children: children);
     }
@@ -329,6 +354,17 @@ class const BottomBarGlassButton({
   }
 }
 
+/// Gives the liquid glass buttons of a [BottomBar] with [BottomBar.cupertinoGlass] below it a
+/// thicker glass, more frosted, so that they stand out over busy content (e.g. the moves of an
+/// analysis), with [thickGlassSettings]. Prominent buttons keep their tinted glass.
+class const ThickBottomBarGlass({required super.child, super.key}) extends InheritedWidget {
+  static bool isIn(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<ThickBottomBarGlass>() != null;
+
+  @override
+  bool updateShouldNotify(ThickBottomBarGlass oldWidget) => false;
+}
+
 /// Marks the buttons of a [BottomBar] with [BottomBar.cupertinoGlass] on iOS.
 class const _GlassBottomBarScope({required super.child}) extends InheritedWidget {
   static bool isIn(BuildContext context) =>
@@ -347,7 +383,24 @@ class const _GlassBottomBarGroupScope({required super.child}) extends InheritedW
   bool updateShouldNotify(_GlassBottomBarGroupScope oldWidget) => false;
 }
 
-const double _kGlassCapsuleHeight = 40.0;
+const double _kGlassCapsuleHeight = 48.0;
+
+/// Size of the icons of the liquid glass buttons of a [BottomBar].
+const double _kGlassIconSize = 24.0;
+
+/// Space above the buttons of a [BottomBar] with liquid glass buttons.
+const double _kGlassBarTopPadding = 8.0;
+
+/// How far the buttons of a [BottomBar] with liquid glass buttons reach into the bottom safe area,
+/// above the home indicator, like an iOS 26 toolbar.
+const double _kGlassBarSafeAreaOverlap = 8.0;
+
+/// Space below the buttons of a [BottomBar] with liquid glass buttons: the bottom safe area, minus
+/// [_kGlassBarSafeAreaOverlap], and at least [_kGlassBarTopPadding] (e.g. without a home indicator).
+double _glassBarBottomPadding(BuildContext context) => math.max(
+  MediaQuery.paddingOf(context).bottom - _kGlassBarSafeAreaOverlap,
+  _kGlassBarTopPadding,
+);
 
 /// Width of an icon button in a liquid glass [BottomBar]: a circle on its own, and a slot of the
 /// same width in a [BottomBarGroup].
@@ -360,9 +413,6 @@ class const _GlassBottomBarCapsule({
   required final Widget child,
   final bool prominent = false,
 
-  /// Whether the capsule pulses with a wash of the theme color, to draw attention to it.
-  final bool blink = false,
-
   /// Whether the capsule holds the buttons of a [BottomBarGroup], which handle the taps.
   final bool group = false,
   final EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16.0),
@@ -370,80 +420,44 @@ class const _GlassBottomBarCapsule({
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final colorScheme = ColorScheme.of(context);
-    final foregroundColor = prominent ? colorScheme.primary : colorScheme.onSurface;
-    final glassSettings = tintedGlassSettings(context);
-    // A wash that shows on the light glass as well as on the dark one.
-    final washAlpha = Theme.of(context).brightness == Brightness.light ? 0.3 : 0.15;
-
-    Widget buildButton(double wash) => GlassButton.custom(
-      onTap: onTap ?? () {},
-      enabled: enabled,
-      // Tinted for busy content, like boards. A prominent button gets a light wash of the theme
-      // color, with a label in that color, like an iOS tinted button.
-      settings: wash > 0
-          ? glassSettings.copyWith(
-              glassColor: Color.alphaBlend(
-                colorScheme.primary.withValues(alpha: washAlpha * wash),
-                glassSettings.glassColor,
-              ),
-            )
-          : glassSettings,
-      shape: const LiquidRoundedRectangle(borderRadius: 100),
-      // The bar has no glass layer to share.
-      useOwnLayer: true,
-      width: double.infinity,
-      height: _kGlassCapsuleHeight,
-      // The buttons of a group have their own semantics and focus.
-      excludeFromSemantics: group,
-      canRequestFocus: !group,
-      // A wide group stretches less, like an iOS toolbar group.
-      stretch: group ? 0.15 : 0.5,
-      child: Padding(
-        padding: padding,
-        child: IconTheme.merge(
-          data: IconThemeData(color: foregroundColor, size: 20.0),
-          child: DefaultTextStyle.merge(
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: foregroundColor),
-            child: child,
-          ),
-        ),
-      ),
-    );
+    final foregroundColor = prominent
+        ? onProminentGlassColor(context)
+        : ColorScheme.of(context).onSurface;
 
     // As wide as its content, within the width the bar gives it.
     return IntrinsicWidth(
       child: Opacity(
         opacity: enabled ? 1.0 : 0.4,
-        child: blink ? _Blink(builder: buildButton) : buildButton(prominent ? 1.0 : 0.0),
+        child: GlassButton.custom(
+          onTap: onTap ?? () {},
+          enabled: enabled,
+          settings: prominent
+              ? prominentGlassSettings(context)
+              : ThickBottomBarGlass.isIn(context)
+              ? thickGlassSettings(context)
+              : ios27GlassSettings(context),
+          shape: const LiquidRoundedRectangle(borderRadius: 100),
+          // The bar has no glass layer to share.
+          useOwnLayer: true,
+          width: double.infinity,
+          height: _kGlassCapsuleHeight,
+          // The buttons of a group have their own semantics and focus.
+          excludeFromSemantics: group,
+          canRequestFocus: !group,
+          // A wide group stretches less, like an iOS toolbar group.
+          stretch: group ? 0.15 : 0.5,
+          child: Padding(
+            padding: padding,
+            child: IconTheme.merge(
+              data: IconThemeData(color: foregroundColor, size: _kGlassIconSize),
+              child: DefaultTextStyle.merge(
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: foregroundColor),
+                child: child,
+              ),
+            ),
+          ),
+        ),
       ),
-    );
-  }
-}
-
-/// Builds a liquid glass button with a wash of the theme color that comes and goes, from 0 to 1.
-class const _Blink({required final Widget Function(double wash) builder}) extends StatefulWidget {
-  @override
-  State<_Blink> createState() => _BlinkState();
-}
-
-class _BlinkState() extends State<_Blink> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 2000),
-    vsync: this,
-  )..repeat(reverse: true);
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (_, _) => widget.builder(_controller.value),
     );
   }
 }
@@ -462,7 +476,7 @@ class const BottomBarButton({
   final bool blink = false,
 
   /// Whether the button is the main action of the bar: on iOS, in a [BottomBar] with
-  /// [BottomBar.cupertinoGlass], its glass capsule is tinted with the theme color.
+  /// [BottomBar.cupertinoGlass], its glass capsule is tinted like a [PlatformFloatingActionButton].
   final bool prominent = false,
 
   /// In case we want to override the tooltip message. If null, the [label] will
@@ -508,7 +522,7 @@ class const BottomBarButton({
       // slot as wide as the icon alone.
       final groupSlot = Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: badgeLabel == null ? (_kGlassIconButtonWidth - 20.0) / 2 : 12.0,
+          horizontal: badgeLabel == null ? (_kGlassIconButtonWidth - _kGlassIconSize) / 2 : 12.0,
         ),
         child: Center(widthFactor: 1.0, child: badge),
       );
@@ -526,23 +540,30 @@ class const BottomBarButton({
                 onTap: onTap,
                 child: Opacity(
                   opacity: enabled ? 1.0 : 0.4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: blink
-                        ? _AnimatedInvertBackground(
-                            color: primary.withValues(alpha: 0.2),
+                  // A prominent slot has the color and the icon color of a prominent capsule. A
+                  // blinking slot is prominent: glass buttons don't blink.
+                  child: prominent || blink
+                      ? DecoratedBox(
+                          decoration: ShapeDecoration(
+                            shape: const StadiumBorder(),
+                            color: prominentGlassSettings(context).glassColor,
+                          ),
+                          child: IconTheme.merge(
+                            data: IconThemeData(color: onProminentGlassColor(context)),
                             child: groupSlot,
-                          )
-                        : groupSlot,
-                  ),
+                          ),
+                        )
+                      : groupSlot,
                 ),
               )
             : _GlassBottomBarCapsule(
                 onTap: onTap,
-                prominent: prominent,
-                blink: blink,
+                // A blinking button is prominent: glass buttons don't blink.
+                prominent: prominent || blink,
                 padding: iconOnly
-                    ? const EdgeInsets.symmetric(horizontal: (_kGlassIconButtonWidth - 20.0) / 2)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: (_kGlassIconButtonWidth - _kGlassIconSize) / 2,
+                      )
                     : const EdgeInsets.symmetric(horizontal: 16.0),
                 child: content,
               ),

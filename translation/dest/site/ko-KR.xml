@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="gameSetup">게임 설정</string>
   <string name="challengeAFriend" comment="be mindful how 'friend' translates in gendered languages. look for a more neutral term if there's an issue, or base your translation on a different phrase like 'invite to a game'. keep it short and convey the button's meaning without offense.">친구에게 도전</string>
   <string name="playAgainstComputer">컴퓨터와 대국하기</string>
   <string name="gameMode">게임 모드</string>
@@ -478,6 +477,7 @@
   <string name="standByX">%s 님, 현재 매칭중입니다. 준비하세요!</string>
   <string name="pause">일시 중지</string>
   <string name="resume">재개</string>
+  <string name="stop">중지</string>
   <string name="youArePlaying">참가중!</string>
   <string name="winRate">승률</string>
   <string name="performance">퍼포먼스 레이팅</string>
@@ -1001,7 +1001,7 @@ FEN 포지션을 생성하기 위해 %s를 사용할 수 있습니다.
   <string name="ourEventTips">이벤트 준비를 위한 팁</string>
   <string name="instructions">설명</string>
   <string name="showMeEverything">모두 보기</string>
-  <string name="lichessPatronInfo">Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다. 모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다. 마음씨 좋은 사용자 분들이 없었더라면, 이 사이트는 유지될 수 없을 겁니다. 함께해 주셔서 감사합니다!  </string>
+  <string name="lichessPatronInfo">Lichess는 비영리 기구이며 완전한 무료/자유 오픈소스 소프트웨어입니다. 모든 운영 비용, 개발, 컨텐츠 조달은 전적으로 사용자들의 기부로 이루어집니다. 마음씨 좋은 사용자 분들이 없었더라면, 이 사이트는 유지될 수 없을 겁니다. 함께해 주셔서 감사합니다!</string>
   <string name="nothingToSeeHere">지금은 여기에 볼 것이 없습니다.</string>
   <string name="stats">통계</string>
   <string name="accessibility">접근성</string>

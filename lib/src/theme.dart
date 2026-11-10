@@ -51,11 +51,24 @@ ThemeData makeAppTheme(
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class const CustomTheme({required final Color rowEven, required final Color rowOdd})
-    extends ThemeExtension<CustomTheme> {
+class const CustomTheme({
+  required final Color rowEven,
+  required final Color rowOdd,
+
+  /// Background of the screens made of a plain list, whose rows are directly on the background
+  /// rather than in cards, when it differs from the scaffold background.
+  ///
+  /// On iOS light mode, the scaffold background is darker so that cards stand out, like the iOS
+  /// grouped lists, while plain lists have a lighter background, like the iOS plain lists.
+  final Color? plainListBackground,
+}) extends ThemeExtension<CustomTheme> {
   @override
-  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
-    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd, Color? plainListBackground}) {
+    return CustomTheme(
+      rowEven: rowEven ?? this.rowEven,
+      rowOdd: rowOdd ?? this.rowOdd,
+      plainListBackground: plainListBackground ?? this.plainListBackground,
+    );
   }
 
   @override
@@ -66,6 +79,7 @@ class const CustomTheme({required final Color rowEven, required final Color rowO
     return CustomTheme(
       rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
       rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+      plainListBackground: Color.lerp(plainListBackground, other.plainListBackground, t),
     );
   }
 }
@@ -167,7 +181,7 @@ ThemeData _makeDefaultTheme(
     ),
     searchBarTheme: isIOS ? _kCupertinoSearchBarTheme : null,
     iconTheme: IconThemeData(color: theme.colorScheme.onSurface.withValues(alpha: 0.7)),
-    listTileTheme: _makeListTileTheme(theme.colorScheme, isIOS),
+    listTileTheme: _makeListTileTheme(theme.colorScheme, theme.textTheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme.copyWith(color: cupertinoCardColor) : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(theme.colorScheme) : null,
     floatingActionButtonTheme: isIOS
@@ -187,7 +201,11 @@ ThemeData _makeDefaultTheme(
       // The rows are brighter than the background, like the cards, so that a card of rows still
       // stands out from it.
       if (isIOSLight)
-        CustomTheme(rowEven: cupertinoCardColor!, rowOdd: baseScheme.surfaceContainerLow),
+        CustomTheme(
+          rowEven: cupertinoCardColor!,
+          rowOdd: baseScheme.surfaceContainerLow,
+          plainListBackground: baseScheme.surfaceContainerLowest,
+        ),
     ],
   );
 
@@ -238,7 +256,7 @@ ThemeData _makeBackgroundImageTheme({
       surfaceBright: baseTheme.colorScheme.surfaceBright.withValues(alpha: baseSurfaceAlpha - 2),
     ),
     cupertinoOverrideTheme: _makeCupertinoThemeData(baseTheme.colorScheme, baseTheme.brightness),
-    listTileTheme: _makeListTileTheme(baseTheme.colorScheme, isIOS),
+    listTileTheme: _makeListTileTheme(baseTheme.colorScheme, baseTheme.textTheme, isIOS),
     cardTheme: isIOS ? _kCupertinoCardTheme : null,
     inputDecorationTheme: isIOS ? _makeCupertinoInputDecorationTheme(baseTheme.colorScheme) : null,
     bottomSheetTheme: (isIOS ? _kCupertinoBottomSheetTheme : const BottomSheetThemeData()).copyWith(
@@ -317,11 +335,18 @@ const MenuThemeData _kCupertinoMenuThemeData = MenuThemeData(
   style: MenuStyle(elevation: WidgetStatePropertyAll(0)),
 );
 
-ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, bool isIOS) {
+ListTileThemeData _makeListTileTheme(ColorScheme colorScheme, TextTheme textTheme, bool isIOS) {
   return ListTileThemeData(
     iconColor: colorScheme.onSurface.withValues(alpha: 0.7),
+    // A complete style (`inherit: false`), like the Material default it replaces: [ListTile]
+    // animates its title style, and text styles with different `inherit` values cannot be
+    // interpolated when the platform changes at runtime (in the device preview).
     titleTextStyle: isIOS
-        ? TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16)
+        ? textTheme.bodyMedium!
+              .merge(
+                TextStyle(color: colorScheme.onSurface, fontWeight: FontWeight.w500, fontSize: 16),
+              )
+              .copyWith(inherit: false)
         : null,
     subtitleTextStyle: TextStyle(
       color: colorScheme.onSurface.withValues(alpha: Styles.subtitleOpacity),

@@ -184,7 +184,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBroadcastImage;
 
   @override
@@ -193,7 +193,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -291,7 +291,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd().add_jm();
+DateFormat get _dateFormat => DateFormat.MMMd().add_jm();
 
 class const _BroadcastCardContent({
   required final Broadcast broadcast,

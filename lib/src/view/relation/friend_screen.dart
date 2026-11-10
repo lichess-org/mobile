@@ -1,7 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/relation/friend_list_sort.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_preferences.dart';
@@ -22,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform_tab_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:material_ui/material_ui.dart';
@@ -79,6 +78,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     );
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
@@ -92,6 +92,11 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
       ),
       body: TabBarView(
         controller: _tabController,
+        // On iOS, a horizontal swipe on a friend reveals its swipe actions, so the tabs only
+        // change with the segmented control.
+        physics: Theme.of(context).platform == TargetPlatform.iOS
+            ? const NeverScrollableScrollPhysics()
+            : null,
         children: [
           _Online(searchTerm, _searchController, _onSearchChanged),
           _Following(searchTerm, _searchController, _onSearchChanged),
@@ -285,33 +290,32 @@ class const _Following(
         };
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return ListView.separated(
-              // an empty list shows a message instead of tiles
-              itemCount: (following.isEmpty ? 1 : following.length) + offset,
-              separatorBuilder: (context, index) =>
-                  index >= offset && Theme.of(context).platform == TargetPlatform.iOS
-                  ? const PlatformDivider(height: 1)
-                  : const SizedBox.shrink(),
-              itemBuilder: (context, index) {
-                if (showSearchBar && index == 0) {
-                  return _SearchBarItem(controller: searchController, onChanged: onSearchChanged);
-                }
-                if (following.isEmpty) {
-                  return _EmptyListMessage(
-                    searchTerm.isEmpty
-                        ? context.l10n.mobileNotFollowingAnyUser
-                        : context.l10n.mobileNoSearchResults,
-                  );
-                }
-                final user = following[index - offset];
-                return Slidable(
-                  dragStartBehavior: DragStartBehavior.start,
-                  endActionPane: ActionPane(
-                    motion: const StretchMotion(),
+            return SwipeActionsScope(
+              child: ListView.separated(
+                // an empty list shows a message instead of tiles
+                itemCount: (following.isEmpty ? 1 : following.length) + offset,
+                separatorBuilder: (context, index) =>
+                    index >= offset && Theme.of(context).platform == TargetPlatform.iOS
+                    ? const PlatformDivider(height: 1)
+                    : const SizedBox.shrink(),
+                itemBuilder: (context, index) {
+                  if (showSearchBar && index == 0) {
+                    return _SearchBarItem(controller: searchController, onChanged: onSearchChanged);
+                  }
+                  if (following.isEmpty) {
+                    return _EmptyListMessage(
+                      searchTerm.isEmpty
+                          ? context.l10n.mobileNotFollowingAnyUser
+                          : context.l10n.mobileNoSearchResults,
+                    );
+                  }
+                  final user = following[index - offset];
+                  return SwipeActions(
                     extentRatio: 0.3,
-                    children: [
-                      SlidableAction(
-                        onPressed: (BuildContext context) async {
+                    allowsFullSwipe: false,
+                    endActions: [
+                      SwipeAction(
+                        onPressed: () async {
                           final oldState = following;
                           setState(() {
                             following = following.removeWhere((v) => v.id == user.id);
@@ -331,14 +335,15 @@ class const _Following(
                         label: context.l10n.unfollow,
                       ),
                     ],
-                  ),
-                  child: UserListTile.fromUser(
-                    user,
-                    onTap: () =>
-                        Navigator.of(context).push(UserOrProfileScreen.buildRoute(user.lightUser)),
-                  ),
-                );
-              },
+                    child: UserListTile.fromUser(
+                      user,
+                      onTap: () =>
+                          Navigator.of(context)
+                              .push(UserOrProfileScreen.buildRoute(user.lightUser)),
+                    ),
+                  );
+                },
+              ),
             );
           },
         );

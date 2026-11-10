@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 
 import '../../test_helpers.dart';
@@ -104,7 +108,7 @@ void main() {
       expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
     }, variant: kPlatformVariant);
 
-    testWidgets('shows end run result', (tester) async {
+    testWidgets('plays a premove once the opponent has replied', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
@@ -123,18 +127,69 @@ void main() {
 
       await playMove(tester, 'h5', 'h7', orientation: Side.white);
 
-      await tester.pump(const Duration(milliseconds: 500));
+      // premove the last solution move while waiting for the opponent's reply
       await playMove(tester, 'e3', 'g1', orientation: Side.white);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.e3, to: Square.g1)), isTrue);
 
+      // the opponent replies Qd1+, the premove Bg1 is played and solves the puzzle, so the next
+      // one is loaded
       await tester.pump(const Duration(milliseconds: 500));
-      // should have loaded next puzzle
-      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
-
-      await tester.tap(find.text('End run'));
       await tester.pumpAndSettle();
 
-      expect(find.text('1 puzzles solved'), findsOneWidget);
-    });
+      expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
+    }, variant: kPlatformVariant);
+
+    for (final showRatings in [...ShowRatings.values, null]) {
+      testWidgets('shows end run result (${showRatings ?? 'loading/error'})', (tester) async {
+        final preference = Completer<ShowRatings>();
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const StormScreen(),
+          overrides: {
+            stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+            lichessClientProvider: lichessClientProvider.overrideWith(
+              (ref) => LichessClient(client, ref),
+            ),
+            showRatingsPrefProvider: showRatingsPrefProvider.overrideWith((ref) {
+              if (showRatings != null) return showRatings;
+              return preference.future;
+            }),
+          },
+        );
+
+        await tester.pumpWidget(app);
+
+        // wait for first move to be played
+        await tester.pump(const Duration(seconds: 1));
+
+        await playMove(tester, 'h5', 'h7', orientation: Side.white);
+
+        await tester.pump(const Duration(milliseconds: 500));
+        await playMove(tester, 'e3', 'g1', orientation: Side.white);
+
+        await tester.pump(const Duration(milliseconds: 500));
+        // should have loaded next puzzle
+        expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
+
+        await tester.tap(find.text('End run'));
+        await tester.pumpAndSettle();
+
+        expect(find.text('1 puzzles solved'), findsOneWidget);
+        expect(find.byType(PuzzleHistoryPreview), findsOneWidget);
+        final rating = find.descendant(
+          of: find.byType(PuzzleHistoryPreview),
+          matching: find.text('900'),
+        );
+        if (showRatings == null) {
+          expect(rating, findsNothing);
+          preference.completeError(StateError('Could not load rating preference'));
+          await tester.pumpAndSettle();
+          expect(rating, findsNothing);
+        } else {
+          expect(rating, showRatings == .no ? findsNothing : findsOneWidget);
+        }
+      }, variant: kPlatformVariant);
+    }
 
     testWidgets('play wrong move', (tester) async {
       final app = await makeTestProviderScopeApp(

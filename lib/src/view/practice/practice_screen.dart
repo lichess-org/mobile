@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/practice/practice_repository.dart';
 import 'package:lichess_mobile/src/model/practice/practice_structure.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/practice/practice_chapter_screen.dart';
@@ -108,9 +109,9 @@ class const _Body({
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                onTap: () =>
-                    Navigator.of(context)
-                        .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
+                onTap: () => Navigator.of(context).pushHidingTabBar(
+                  PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study)),
+                ),
               ),
             ],
           ),
@@ -147,7 +148,7 @@ class const _StudyTile({
       // Straight to the chapter to play: the others are a tap away in the chapter screen.
       onTap: () =>
           Navigator.of(context)
-              .push(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
+              .pushHidingTabBar(PracticeChapterScreen.buildRoute(progress.firstOngoingIn(study))),
     );
   }
 }

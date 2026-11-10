@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Thêm vào nghiên cứu</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Tất cả ván đấu</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Cho phép đi lại và xem gợi ý</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Nhật ký ứng dụng</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bạn chắc chứ?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Bạn có chắc chắn muốn tải xuống tệp NNUE (%s) không?</string>
   <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Vị trí bàn cờ ở chế độ ngang</string>
@@ -26,6 +27,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Tùy chỉnh</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Mẹo: Bạn có thể tuỳ chỉnh Trang chính của bạn!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Bỏ qua</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Bạn có muốn xóa tất cả nhật ký không?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Khu vực nguy hiểm</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Xoá tài khoản của bạn</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Thu gọn</string>
@@ -43,9 +45,9 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Nước đi tốt, nhưng có nước đi tốt hơn nữa</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Xin chào</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Trang chủ</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Nhật ký mạng</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Nếu tài khoản liên kết với %1$s, một mã %2$s kí tự sẽ được gửi đến tài khoản đó. Kiểm tra hộp thư đến của bạn và nhập mã bên dưới.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Mã này không hợp lệ hoặc đã hết hạn.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Các Streamer phát trực tiếp</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Kích thước CSDL cục bộ</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Khi di chuyển một quân cờ bằng cách chạm, thao tác di chuyển được thực hiện khi bạn nhấc ngón tay lên, cho phép bạn trượt ngón tay để thay đổi ô đích.</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Bạn phải đăng nhập để xem trang này.</string>
@@ -57,7 +59,7 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Khám phá Khai cuộc không khả dụng khi ngoại tuyến.</string>
   <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">Hoặc nhập một tệp PGN</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Trên bàn cờ</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Chơi ngoại tuyến trên bàn cờ</string>
   <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">Dán từ bảng nhớ tạm</string>
   <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Phản cờ</string>
   <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Nguyên tử</string>
@@ -119,9 +121,11 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Hiển thị đường viền</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Phản hồi khi chạm</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Khi được bật, thiết bị sẽ rung trong thời gian ngắn khi bạn di chuyển hoặc ăn một quân cờ.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Chia sẻ</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Chia sẻ URL thách đấu</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Chia sẻ tập tin PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Chia sẻ URL ván cờ</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Chia sẻ phân tích cục bộ PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Chia sẻ thế cờ dạng FEN</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Chia sẻ câu đố này</string>
   <string name="showComments" comment="Shown in the analysis screen.">Hiển thị bình luận</string>
@@ -135,6 +139,7 @@
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sắp xếp bạn bè</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Dừng hiện mối nguy</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Màu hệ thống</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Bảng dữ liệu không khả dụng khi ngoại tuyến.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Giao diện</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Quá nhiều lần thử. Vui lòng thử lại sau.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Đã hoàn thành</string>

@@ -148,7 +148,7 @@ class const _BoardEditor(
       pieces: pieces,
       orientation: orientation,
       settings: boardPrefs
-          .toBoardSettings(editorState.variant)
+          .toBoardSettings(editorState.variant, appBrightness: Theme.of(context).brightness)
           .copyWith(
             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
@@ -229,6 +229,7 @@ class _PieceMenuState() extends ConsumerState<_PieceMenu> {
                     : Colors.transparent,
                 child: GestureDetector(
                   child: Draggable(
+                    dragAnchorStrategy: pointerDragAnchorStrategy,
                     data: Piece(role: role, color: widget.side),
                     feedback: PieceDragFeedback(
                       piece: piece,

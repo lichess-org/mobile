@@ -156,7 +156,7 @@ class Aggregator(
       return mapper(result);
     }
 
-    _logger.warning('No aggregation found for URI: $uri');
+    _logger.fine('No aggregation found for URI: $uri');
 
     return await atomicClientCall();
   }

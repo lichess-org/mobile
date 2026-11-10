@@ -1,35 +1,108 @@
 name: Builds
-on: workflow_dispatch
+
+# Manual runs build everything. Automated runs only build the platforms whose native code changed;
+# a pubspec change can bump a plugin's native code, so it builds both.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'android/**'
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - '.github/workflows/build.yml'
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'android/**'
+      - 'ios/**'
+      - 'pubspec.yaml'
+      - '.github/workflows/build.yml'
+    branches:
+      - main
+
+# Cancel superseded PR runs so only the latest pushed commit is actually built.
+# Pushes to main are never cancelled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Declare default permissions as read only.
 permissions: read-all
 
 jobs:
+  changes:
+    name: Select builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      # paths-filter diffs with git on push events, so it needs the repository.
+      - name: Checkout mobile code
+        if: github.event_name == 'push'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Detect native changes
+        id: filter
+        if: github.event_name != 'workflow_dispatch'
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          filters: |
+            android:
+              - 'android/**'
+              - 'pubspec.yaml'
+              - 'pubspec.lock'
+              - '.github/workflows/build.yml'
+            ios:
+              - 'ios/**'
+              - 'pubspec.yaml'
+              - 'pubspec.lock'
+              - '.github/workflows/build.yml'
+
+      # The debug APK is only built on manual runs, to be uploaded: the app bundle already checks
+      # that the Android build compiles.
+      - name: Build matrix
+        id: matrix
+        env:
+          MANUAL: ${{ github.event_name == 'workflow_dispatch' }}
+          ANDROID: ${{ steps.filter.outputs.android == 'true' }}
+          IOS: ${{ steps.filter.outputs.ios == 'true' }}
+        run: |
+          include='[]'
+          if [ "$MANUAL" = true ] || [ "$ANDROID" = true ]; then
+            include=$(jq -c '. + [{"target": "appbundle --debug", "os": "ubuntu-latest"}]' <<< "$include")
+          fi
+          if [ "$MANUAL" = true ] || [ "$IOS" = true ]; then
+            include=$(jq -c '. + [{"target": "ios --no-codesign", "os": "macos-26"}]' <<< "$include")
+          fi
+          if [ "$MANUAL" = true ]; then
+            include=$(jq -c '. + [{"target": "apk --debug", "os": "ubuntu-latest"}]' <<< "$include")
+          fi
+          echo "matrix={\"include\":$include}" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build ${{ matrix.target }}
+    needs: changes
+    if: needs.changes.outputs.matrix != '{"include":[]}'
     runs-on: ${{ matrix.os }}
     # A native build that hangs should fail fast rather than hold a runner.
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - target: "appbundle --debug"
-            os: ubuntu-latest
-          - target: "ios --no-codesign"
-            os: macos-26
-          - target: "apk --debug"
-            os: ubuntu-latest
+      matrix: ${{ fromJSON(needs.changes.outputs.matrix) }}
     steps:
+      # The Gradle cache is keyed on the Gradle files, so the code must be checked out first.
+      - name: Checkout mobile code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
       - name: Set up JDK 17
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           java-version: 17
           distribution: temurin
           cache: gradle
-
-      - name: Checkout mobile code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Flutter
         uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
@@ -47,7 +120,7 @@ jobs:
       - run: flutter build ${{ matrix.target }}
 
       - name: Upload debug APK
-        if: matrix.target == 'apk --debug'
+        if: github.event_name == 'workflow_dispatch' && matrix.target == 'apk --debug'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: lichess-mobile-debug-apk

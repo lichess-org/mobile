@@ -81,8 +81,6 @@ class _PlatformSearchBarState() extends State<PlatformSearchBar> {
       return GlassControlBackground(
         glass: widget.inAppBar && (AppBarBottomGlassScope.maybeOf(context) ?? true),
         height: height,
-        // Like the app bar buttons.
-        settings: appBarButtonGlassSettings(context),
         child: SearchBar(
           backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
           overlayColor: const WidgetStatePropertyAll(Colors.transparent),

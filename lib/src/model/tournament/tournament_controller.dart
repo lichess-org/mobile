@@ -86,17 +86,16 @@ class TournamentController(final TournamentId id)
     return TournamentState(tournament: tournament, chatState: await initChat(tournament.chat));
   }
 
-  void onFocusGained() {
-    // Don't interfere with the initial [build] which opens the socket itself.
-    if (!state.hasValue) {
+  void reopenSocketIfNeeded() {
+    // Don't interfere with a running [build] (the initial one, or one after an invalidation): it
+    // opens the socket itself once the tournament is loaded.
+    if (!state.hasValue || state.isLoading) {
       return;
     }
-    // When another [TournamentScreen] for the same tournament is already in the
-    // route stack, this provider is kept alive and [build] won't re-run, so the
-    // socket (closed by the game we navigated through) isn't reopened by it.
-    // We use `onFocusGained` (not `onFocusRegained`) because a freshly pushed
-    // screen gains focus for the *first* time, which never triggers
-    // `onFocusRegained`.
+    // When another [TournamentScreen] for the same tournament is already in the route stack, this
+    // provider is kept alive and [build] won't re-run, so the socket (closed by the game we
+    // navigated through) isn't reopened by it. The screen must only call this while it is the top
+    // route: it would otherwise take the socket from the screen on top of it.
     final currentClient = ref.read(socketPoolProvider).currentClient;
     if (currentClient.route != _socketClient?.route) {
       ref.invalidateSelf();

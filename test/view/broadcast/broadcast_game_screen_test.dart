@@ -375,8 +375,12 @@ void main() {
 
   group('Engine evaluation:', () {
     group('Engine lines', () {
-      testWidgets('are displayed', (tester) async {
-        await makeEngineTestApp(tester, broadcastGame: (_tournamentId, _roundId, _gameId));
+      testWidgets('are displayed if enabled', (tester) async {
+        await makeEngineTestApp(
+          tester,
+          broadcastGame: (_tournamentId, _roundId, _gameId),
+          showEngineLines: true,
+        );
         await tester.pump(kRequestEvalDebounceDelay + kFakeWebSocketConnectionLag);
         expect(find.byType(Engineline), findsOne);
       });

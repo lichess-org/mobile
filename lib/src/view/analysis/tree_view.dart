@@ -17,53 +17,37 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
     final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
     final currentNode =
         analysisState.root.branchesOn(analysisState.currentPath).lastOrNull ?? analysisState.root;
-    // The height of a bar floating over the view: the moves scroll under it, unless the variations
-    // bar is shown, which is kept above it.
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
-    final hasVariations = currentNode.children.length > 1;
-
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: hasVariations ? 0.0 : bottomInset),
-            child: Column(
-              children: [
-                DebouncedPgnTreeView(
-                  root: analysisState.root,
-                  currentPath: analysisState.currentPath,
-                  livePath: analysisState.pathToLiveMove,
-                  pgnRootComments: analysisState.pgnRootComments,
-                  notifier: ref.read(ctrlProvider.notifier),
-                  // Avoid overlap with the divider of the analysis tab bar
-                  showTopDivider: false,
-                  shouldShowComputerAnalysis: enableServerAnalysis,
-                  shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
-                  shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
-                  premovePaths: analysisState.forecast?.lines,
-                  displayMode: prefs.inlineNotation ? .inlineNotation : .twoColumn,
-                ),
-                if (analysisState.archivedGame != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: GameResult(game: analysisState.archivedGame!),
-                  ),
-              ],
-            ),
-          ),
-        ),
-        if (hasVariations)
-          Padding(
-            padding: EdgeInsets.only(bottom: bottomInset),
-            child: VariationsBar(
-              currentNode: currentNode,
+    return MovesWithVariationsBar(
+      currentNode: currentNode,
+      currentPath: analysisState.currentPath,
+      showAnnotations: enableServerAnalysis && prefs.showAnnotations,
+      onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+      movesBuilder: (context, bottomPadding) => SingleChildScrollView(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: Column(
+          children: [
+            DebouncedPgnTreeView(
+              root: analysisState.root,
               currentPath: analysisState.currentPath,
-              showAnnotations: enableServerAnalysis && prefs.showAnnotations,
-              onJump: (path) => ref.read(ctrlProvider.notifier).userJump(path),
+              livePath: analysisState.pathToLiveMove,
+              pgnRootComments: analysisState.pgnRootComments,
+              notifier: ref.read(ctrlProvider.notifier),
+              // Avoid overlap with the divider of the analysis tab bar
+              showTopDivider: false,
+              shouldShowComputerAnalysis: enableServerAnalysis,
+              shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
+              shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
+              premovePaths: analysisState.forecast?.lines,
+              displayMode: prefs.inlineNotation ? .inlineNotation : .twoColumn,
             ),
-          ),
-      ],
+            if (analysisState.archivedGame != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GameResult(game: analysisState.archivedGame!),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

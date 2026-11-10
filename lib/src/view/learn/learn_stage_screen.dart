@@ -104,21 +104,21 @@ class _BodyState() extends ConsumerState<_Body> {
             builder: (context, constraints) {
               final isTablet = isTabletOrLarger(context);
               final isLandscape = constraints.biggest.aspectRatio > 1;
-              final defaultBoardSize = constraints.biggest.shortestSide;
-              final remainingHeight = constraints.maxHeight - defaultBoardSize;
-              final boardSize = isTablet || isLandscape || remainingHeight < kSmallHeightMinusBoard
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
+              // Like the analysis board, the board never spans the whole screen width.
+              final boardPadding = isTablet || isLandscape
+                  ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                  : isShortVerticalScreen(context)
+                  ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                  : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+              final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
               final settings = boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     autoQueenPromotion: false,
-                    borderRadius: isTablet || isLandscape
-                        ? Styles.boardBorderRadius
-                        : BorderRadius.zero,
-                    boxShadow: isTablet || isLandscape ? boardShadows : const <BoxShadow>[],
+                    borderRadius: Styles.boardBorderRadius,
+                    boxShadow: boardShadows,
                   );
 
               final board = _LearnBoard(
@@ -136,21 +136,13 @@ class _BodyState() extends ConsumerState<_Body> {
               return isLandscape
                   ? Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     )
                   : Column(
                       children: [
-                        Padding(
-                          padding: boardSize < defaultBoardSize
-                              ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                              : EdgeInsets.zero,
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     );
@@ -453,7 +445,7 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                     child: Theme.of(context).platform == TargetPlatform.iOS
                         // Shown over the board, which the glass would let show through too much.
                         ? GlassModalCard(
-                            tintOpacity: 0.85,
+                            tinted: true,
                             child: Material(
                               type: MaterialType.transparency,
                               child: SingleChildScrollView(

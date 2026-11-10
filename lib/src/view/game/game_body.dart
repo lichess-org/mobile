@@ -607,7 +607,7 @@ class const _GamePlayerTable({
                     key: ValueKey('${side.name}-clock'),
                     timeLeft: value,
                     active: data.activeClockSide == side,
-                    emergencyThreshold: youAre == side ? game.meta.clock?.emergency : null,
+                    emergencyThreshold: game.meta.clock?.emergency,
                     clockTenths: clockTenths,
                   );
                 },
@@ -703,6 +703,12 @@ class const _GameBottomBar({
         data.chatAvailable &&
         kidModeAsync.value == false;
     final numPremoveLines = data.numPremoveLines;
+    final showNextGame =
+        data.playable &&
+        data.isCorrespondence &&
+        !data.offeringDraw &&
+        !data.isThreefoldRepetition &&
+        !data.proposingTakeback;
 
     return BottomBar(
       cupertinoGlass: true,
@@ -714,136 +720,141 @@ class const _GameBottomBar({
           },
           icon: Icons.menu,
         ),
-        if (data.canBerserk)
-          BottomBarButton(
-            label: context.l10n.arenaBerserk,
-            onTap: data.canBerserk && !data.hasBerserked
-                ? ref.read(gameControllerProvider(id).notifier).berserk
-                : null,
-            icon: LichessIcons.body_cut,
-          ),
-        if (data.playable && data.offeringDraw)
-          BottomBarButton(
-            label: context.l10n.yourOpponentOffersADraw,
-            highlighted: true,
-            onTap: () {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => _GameNegotiationDialog(
-                  title: Text(context.l10n.yourOpponentOffersADraw),
-                  onAccept: () {
-                    ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
+        BottomBarGroup(
+          children: [
+            if (data.canBerserk)
+              BottomBarButton(
+                label: context.l10n.arenaBerserk,
+                onTap: data.canBerserk && !data.hasBerserked
+                    ? ref.read(gameControllerProvider(id).notifier).berserk
+                    : null,
+                icon: LichessIcons.body_cut,
+              ),
+            if (data.playable && data.offeringDraw)
+              BottomBarButton(
+                label: context.l10n.yourOpponentOffersADraw,
+                highlighted: true,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentOffersADraw),
+                      onAccept: () {
+                        ref.read(gameControllerProvider(id).notifier).offerOrAcceptDraw();
+                      },
+                      onDecline: () {
+                        ref.read(gameControllerProvider(id).notifier).cancelOrDeclineDraw();
+                      },
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: Icons.handshake_outlined,
+              )
+            else if (data.playable && data.isThreefoldRepetition)
+              BottomBarButton(
+                label: context.l10n.threefoldRepetition,
+                highlighted: true,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => _ThreefoldDialog(id: id),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: Icons.handshake_outlined,
+              )
+            else if (data.playable && data.proposingTakeback)
+              BottomBarButton(
+                label: context.l10n.yourOpponentProposesATakeback,
+                highlighted: true,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => _GameNegotiationDialog(
+                      title: Text(context.l10n.yourOpponentProposesATakeback),
+                      onAccept: () {
+                        ref.read(gameControllerProvider(id).notifier).acceptTakeback();
+                      },
+                      onDecline: () {
+                        ref.read(gameControllerProvider(id).notifier).cancelOrDeclineTakeback();
+                      },
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: CupertinoIcons.arrowshape_turn_up_left,
+              )
+            else if (showNextGame)
+              BottomBarButton(
+                label: context.l10n.analysis,
+                icon: Icons.biotech,
+                badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
+                onTap: () {
+                  final analysisOptions = ref
+                      .read(gameControllerProvider(id))
+                      .requireValue
+                      .analysisOptions;
+                  Navigator.of(context).push(AnalysisScreen.buildRoute(analysisOptions));
+                },
+              )
+            else if (data.finished)
+              BottomBarButton(
+                label: context.l10n.mobileShowResult,
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (_) => GameResultDialog(
+                      id: id,
+                      onNewOpponentCallback: onNewOpponentCallback,
+                      onBackToTournamentCallback: (tournamentId) =>
+                          _backToTournament(context, tournamentId),
+                      onAnalysisCallback: (options) =>
+                          Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: Icons.info_outline,
+              )
+            else
+              BottomBarButton(
+                label: context.l10n.resign,
+                onTap: data.resignable
+                    ? boardPreferences.confirmResignAndDraw
+                          ? () => _showConfirmDialog(
+                              context,
+                              description: Text(context.l10n.resignTheGame),
+                              onConfirm: () {
+                                ref.read(gameControllerProvider(id).notifier).resignGame();
+                              },
+                            )
+                          : () {
+                              ref.read(gameControllerProvider(id).notifier).resignGame();
+                            }
+                    : null,
+                icon: Icons.flag_outlined,
+              ),
+            if (canShowChat) ChatBottomBarButton(options: data.chatOptions!),
+            if (showNextGame)
+              BottomBarButton(
+                label: 'Go to the next game',
+                icon: Icons.skip_next,
+                onTap: ongoingGames.maybeWhen(
+                  data: (games) {
+                    final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
+                    if (gamesWithMyTurn.isEmpty) return null;
+                    final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
+                    // If the current game is the only one where it's my turn, disable.
+                    if (currentIndex != -1 && gamesWithMyTurn.length == 1) return null;
+                    final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
+                    return () => onLoadGameCallback(gamesWithMyTurn[nextIndex].fullId);
                   },
-                  onDecline: () {
-                    ref.read(gameControllerProvider(id).notifier).cancelOrDeclineDraw();
-                  },
+                  orElse: () => null,
                 ),
-                barrierDismissible: true,
-              );
-            },
-            icon: Icons.handshake_outlined,
-          )
-        else if (data.playable && data.isThreefoldRepetition)
-          BottomBarButton(
-            label: context.l10n.threefoldRepetition,
-            highlighted: true,
-            onTap: () {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => _ThreefoldDialog(id: id),
-                barrierDismissible: true,
-              );
-            },
-            icon: Icons.handshake_outlined,
-          )
-        else if (data.playable && data.proposingTakeback)
-          BottomBarButton(
-            label: context.l10n.yourOpponentProposesATakeback,
-            highlighted: true,
-            onTap: () {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => _GameNegotiationDialog(
-                  title: Text(context.l10n.yourOpponentProposesATakeback),
-                  onAccept: () {
-                    ref.read(gameControllerProvider(id).notifier).acceptTakeback();
-                  },
-                  onDecline: () {
-                    ref.read(gameControllerProvider(id).notifier).cancelOrDeclineTakeback();
-                  },
-                ),
-                barrierDismissible: true,
-              );
-            },
-            icon: CupertinoIcons.arrowshape_turn_up_left,
-          )
-        else if (data.playable && data.isCorrespondence) ...[
-          BottomBarButton(
-            label: 'Go to the next game',
-            icon: Icons.skip_next,
-            onTap: ongoingGames.maybeWhen(
-              data: (games) {
-                final gamesWithMyTurn = games.where((g) => g.isMyTurn).toList();
-                if (gamesWithMyTurn.isEmpty) return null;
-                final currentIndex = gamesWithMyTurn.indexWhere((g) => g.fullId == id);
-                // If the current game is the only one where it's my turn, disable.
-                if (currentIndex != -1 && gamesWithMyTurn.length == 1) return null;
-                final nextIndex = (currentIndex + 1) % gamesWithMyTurn.length;
-                return () => onLoadGameCallback(gamesWithMyTurn[nextIndex].fullId);
-              },
-              orElse: () => null,
-            ),
-          ),
-          BottomBarButton(
-            label: context.l10n.analysis,
-            icon: Icons.biotech,
-            badgeLabel: (numPremoveLines ?? 0) > 0 ? numPremoveLines.toString() : null,
-            onTap: () {
-              final analysisOptions = ref
-                  .read(gameControllerProvider(id))
-                  .requireValue
-                  .analysisOptions;
-              Navigator.of(context).push(AnalysisScreen.buildRoute(analysisOptions));
-            },
-          ),
-        ] else if (data.finished)
-          BottomBarButton(
-            label: context.l10n.mobileShowResult,
-            onTap: () {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (_) => GameResultDialog(
-                  id: id,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                  onBackToTournamentCallback: (tournamentId) =>
-                      _backToTournament(context, tournamentId),
-                  onAnalysisCallback: (options) =>
-                      Navigator.of(context).push(AnalysisScreen.buildRoute(options)),
-                ),
-                barrierDismissible: true,
-              );
-            },
-            icon: Icons.info_outline,
-          )
-        else
-          BottomBarButton(
-            label: context.l10n.resign,
-            onTap: data.resignable
-                ? boardPreferences.confirmResignAndDraw
-                      ? () => _showConfirmDialog(
-                          context,
-                          description: Text(context.l10n.resignTheGame),
-                          onConfirm: () {
-                            ref.read(gameControllerProvider(id).notifier).resignGame();
-                          },
-                        )
-                      : () {
-                          ref.read(gameControllerProvider(id).notifier).resignGame();
-                        }
-                : null,
-            icon: Icons.flag_outlined,
-          ),
-        if (canShowChat) ChatBottomBarButton(options: data.chatOptions!),
+              ),
+          ],
+        ),
         BottomBarGroup(
           children: [
             _MoveNavButton(id: id, forward: false),

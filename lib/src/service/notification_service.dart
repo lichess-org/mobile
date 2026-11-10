@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
+import 'package:lichess_mobile/src/binding/binding_play.dart';
 import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
@@ -148,6 +149,7 @@ class NotificationService(final Ref _ref) {
     //
     // The server sends notifications to FCM registration tokens, not to the Firebase installation
     // IDs that `register()` and `onRegistered` replace them with.
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     _fcmTokenRefreshSubscription = LichessBinding.instance.firebaseMessaging.onTokenRefresh.listen((
       String token,
@@ -268,8 +270,8 @@ class NotificationService(final Ref _ref) {
       // Types with a local notification representation are never logged here.
       case NewMessageFcmMessage():
       case CorresGameUpdateFcmMessage():
-      case ChallengeCreateFcmMessage():
-      case ChallengeAcceptFcmMessage():
+      case CorresChallengeCreateFcmMessage():
+      case CorresChallengeAcceptFcmMessage():
       case BroadcastRoundFcmMessage():
       case BroadcastPlayerFollowFcmMessage():
       case RecapFcmMessage():
@@ -280,15 +282,15 @@ class NotificationService(final Ref _ref) {
   /// Whether a received message must be displayed as a local notification by the app.
   ///
   /// Messages received in background are displayed by the system, messages without a
-  /// platform notification have nothing to display, and a challenge creation received in
-  /// foreground is handled by the socket, which shows a [ChallengeNotification] with
+  /// platform notification have nothing to display, and a correspondence challenge creation
+  /// received in foreground is handled by the socket, which shows a [ChallengeNotification] with
   /// accept/decline actions instead.
   ///
   /// A platform notification with no title or body is malformed and is flagged with a
   /// severe log instead of being displayed as a blank notification.
   static bool _shouldShow(FcmMessage message, {required bool fromBackground}) {
     if (fromBackground) return false;
-    if (message is ChallengeCreateFcmMessage) return false;
+    if (message is CorresChallengeCreateFcmMessage) return false;
     final notification = message.notification;
     if (notification == null) return false;
     if (notification.title == null || notification.body == null) {
@@ -351,7 +353,7 @@ class NotificationService(final Ref _ref) {
   /// Returns true if the device was successfully registered, false otherwise.
   Future<bool> registerDevice() async {
     // For apple platforms, make sure the APNS token is available before making any FCM plugin API calls
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Platform.isIOS) {
       final apnsToken = await LichessBinding.instance.firebaseMessaging.getAPNSToken();
       if (apnsToken == null) {
         _logger.warning('APNS token is null');
@@ -359,6 +361,7 @@ class NotificationService(final Ref _ref) {
       }
     }
     // The server sends notifications to FCM registration tokens (see `onTokenRefresh` above).
+    // TODO: remove this when server-side support for Firebase installation IDs is added
     // ignore: deprecated_member_use
     final token = await LichessBinding.instance.firebaseMessaging.getToken();
     if (token == null) {
@@ -406,7 +409,7 @@ class NotificationService(final Ref _ref) {
     // create a new provider scope for the background isolate
     final ref = ProviderContainer();
 
-    final lichessBinding = AppLichessBinding.ensureInitialized();
+    final lichessBinding = PlayLichessBinding.ensureInitialized();
     await lichessBinding.preloadSharedPreferences();
     await ref.read(preloadedDataProvider.future);
 

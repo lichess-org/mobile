@@ -98,7 +98,8 @@ private struct GameBoard: View {
             fen: context.state.fen,
             lastMove: context.state.lastMove,
             flipped: context.attributes.myColor == .black,
-            boardStyle: .fromAppGroup()
+            boardStyle: .fromAppGroup(),
+            usesBoardImage: false
         )
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: GameActivityLayout.boardCornerRadius))

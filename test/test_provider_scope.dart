@@ -296,6 +296,7 @@ Future<Widget> makeTestProviderScope(
         engineMaxMemoryInMb: 256,
         appDocumentsDirectory: null,
         appSupportDirectory: null,
+        imageCacheDirectory: null,
       );
     }),
     ...?overrides,

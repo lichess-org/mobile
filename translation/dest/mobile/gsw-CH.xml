@@ -23,7 +23,6 @@
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Guete Abig</string>
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Gueter Zueg, abr es git en bessere</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Startsite</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live Streamer</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du muesch igloggt si, um die Site z\'gseh.</string>
   <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Offline Ufgabe</string>
   <string name="newGame" comment="New game button in OTB and play against offline computer features">Neus Schpiel</string>
@@ -54,6 +53,7 @@
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Rächts</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Vegrösserig vu de zogene Figur</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Vorher</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Bisherigi Lösigsversüech nomal aluege.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wottsch de Lauf beände?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nüt zum Zeige, bitte d\'Filter ändere</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.</string>
@@ -96,6 +96,7 @@
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Drohige nümme zeige</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Syschtem-Farbe</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Farbschema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Wird no bekannt g\'macht</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Komplett</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Gang uf mini Site</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variante %s wird in dere Version nöd underschtützt.</string>

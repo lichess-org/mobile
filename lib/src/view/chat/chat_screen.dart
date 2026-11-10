@@ -333,29 +333,17 @@ class _ChatBottomBarState() extends ConsumerState<_ChatBottomBar> {
       ),
     );
     final placeholder = authUser != null ? context.l10n.talkInChat : context.l10n.loginToChat;
-    return SafeArea(
-      top: false,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: messageInputVerticalPadding(context, fallback: 8.0),
-        ),
-        child: MessageInputField(
-          field: TextField(
-            decoration: messageInputDecoration(
-              context,
-              suffixIcon: sendButton,
-              hintText: placeholder,
-            ),
-            controller: _textController,
-            keyboardType: TextInputType.text,
-            textCapitalization: TextCapitalization.sentences,
-            minLines: 1,
-            maxLines: 4,
-            enableSuggestions: true,
-            readOnly: authUser == null,
-          ),
-        ),
+    return MessageInputBar(
+      fallbackVerticalPadding: 8.0,
+      field: TextField(
+        decoration: messageInputDecoration(context, suffixIcon: sendButton, hintText: placeholder),
+        controller: _textController,
+        keyboardType: TextInputType.text,
+        textCapitalization: TextCapitalization.sentences,
+        minLines: 1,
+        maxLines: 4,
+        enableSuggestions: true,
+        readOnly: authUser == null,
       ),
     );
   }

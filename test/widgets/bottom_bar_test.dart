@@ -69,6 +69,36 @@ void main() {
     expect(next, 2);
   }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
+  testWidgets('iOS: a group of one button is a circle of its own', (tester) async {
+    await tester.pumpWidget(
+      await makeTestProviderScopeApp(
+        tester,
+        home: PlatformScaffold(
+          body: const SizedBox.expand(),
+          bottomNavigationBar: BottomBar(
+            cupertinoGlass: true,
+            children: [
+              BottomBarGroup(
+                children: [
+                  BottomBarButton(
+                    key: const ValueKey('single'),
+                    label: 'Single',
+                    icon: Icons.flag_outlined,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final size = tester.getSize(find.byType(GlassButton));
+    expect(size.width, size.height);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
   testWidgets('iOS: when the buttons do not fit, only the widest ones shrink', (tester) async {
     final longLabel = List.filled(20, 'label').join(' ');
     await tester.pumpWidget(
@@ -102,7 +132,7 @@ void main() {
 
     expect(tester.takeException(), isNull);
     // The icon button keeps its width, the long labels share the rest.
-    expect(tester.getSize(find.byKey(const ValueKey('icon'))).width, 40.0);
+    expect(tester.getSize(find.byKey(const ValueKey('icon'))).width, 48.0);
     final long1 = tester.getRect(find.byKey(const ValueKey('long1')));
     final long2 = tester.getRect(find.byKey(const ValueKey('long2')));
     expect(long1.width, long2.width);
