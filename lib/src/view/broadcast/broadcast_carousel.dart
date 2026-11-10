@@ -238,6 +238,17 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
+    final isDark = Theme.of(context).brightness == .dark;
+    final imageOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardImageOpacity
+        : kDefaultCardOpacity;
+    final backgroundOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardBackgroundOpacity
+        : kDefaultCardOpacity;
     final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
@@ -254,15 +265,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: backgroundColor.withValues(
-            alpha: _tapDown
-                ? 1.0
-                : Theme.of(context).brightness == .dark
-                ? kDarkCardBackgroundOpacity
-                : kDefaultCardOpacity,
-          ),
-        ),
+        decoration: BoxDecoration(color: backgroundColor.withValues(alpha: backgroundOpacity)),
         child: OverflowBox(
           maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
           minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
@@ -275,13 +278,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
-                    opacity: wasSynchronouslyLoaded
-                        ? _tapDown
-                              ? 1.0
-                              : kDefaultCardOpacity
-                        : frame == null
-                        ? 0
-                        : 1,
+                    opacity: wasSynchronouslyLoaded || frame != null ? imageOpacity : 0,
                     child: child,
                   );
                 },
@@ -322,7 +319,7 @@ class const _BroadcastCardContent({
 
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.9) ?? textShade(context, 0.8);
 
     return Stack(
       children: [
