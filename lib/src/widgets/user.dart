@@ -312,7 +312,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
     return CircleAvatar(
       radius: widget.radius,
       foregroundImage: showFlair ? HttpNetworkImage(lichessFlairSrc(user.flair!), client) : null,
-      onForegroundImageError: user.flair != null
+      onForegroundImageError: showFlair
           ? (_, _) => setState(() => _errorLoadingFlair = true)
           : null,
       backgroundColor: showFlair

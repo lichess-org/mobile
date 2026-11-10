@@ -205,16 +205,22 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
-      if (response != null) {
-        if (mounted) {
-          setState(() {
-            _cardColors = response;
-          });
-        }
+      var failed = false;
+      await precacheImage(provider, context, onError: (_, _) => failed = true);
+      // The card image failed to load (e.g. network timeout): keep the default card colors.
+      if (failed || !mounted) return;
+      final _CardColors? response;
+      try {
+        final ui.Image scaledImage = await imageProviderToScaled(provider);
+        final imageBytes = await scaledImage.toByteData();
+        response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      } catch (_) {
+        return;
+      }
+      if (response != null && mounted) {
+        setState(() {
+          _cardColors = response;
+        });
       }
     }
   }

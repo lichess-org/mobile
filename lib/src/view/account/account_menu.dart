@@ -132,7 +132,7 @@ class _AccountMenuScreenState()
                               foregroundImage: value.flair != null && !_errorLoadingFlair
                                   ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                                   : null,
-                              onForegroundImageError: value.flair != null
+                              onForegroundImageError: value.flair != null && !_errorLoadingFlair
                                   ? (error, _) => setState(() => _errorLoadingFlair = true)
                                   : null,
                               backgroundColor: value.flair == null || _errorLoadingFlair
@@ -377,7 +377,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
                   foregroundImage: value.flair != null && !_errorLoadingFlair
                       ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
                       : null,
-                  onForegroundImageError: value.flair != null
+                  onForegroundImageError: value.flair != null && !_errorLoadingFlair
                       ? (error, _) => setState(() => _errorLoadingFlair = true)
                       : null,
                   backgroundColor: value.flair == null || _errorLoadingFlair
