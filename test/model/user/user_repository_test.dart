@@ -518,6 +518,36 @@ void main() {
     });
   });
 
+  test('UserRepository.getTop1 reads online status', () async {
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/player/top/1/standard') {
+        return mockResponse('''
+{
+  "bullet": {
+    "id": "online", "username": "Online", "online": true,
+    "perfs": {"bullet": {"rating": 2500, "progress": 10}}
+  },
+  "blitz": {
+    "id": "offline", "username": "Offline", "online": false,
+    "perfs": {"blitz": {"rating": 2400, "progress": 0}}
+  },
+  "rapid": {
+    "id": "unknown", "username": "Unknown",
+    "perfs": {"rapid": {"rating": 2300, "progress": 0}}
+  }
+}
+''', 200);
+      }
+      return mockResponse('', 404);
+    });
+    final container = await lichessClientContainer(mockClient);
+    final result = await container.read(userRepositoryProvider).getTop1();
+
+    expect(result[Perf.bullet]?.online, isTrue);
+    expect(result[Perf.blitz]?.online, isFalse);
+    expect(result[Perf.rapid]?.online, isNull);
+  });
+
   test('UserRepository.getUserActivity minimal example', () async {
     final mockClient = MockClient((request) {
       if (request.url.path == '/api/user/testUser/activity') {

@@ -87,7 +87,14 @@ class const LeaderboardListTile({required final LeaderboardUser user, final Icon
       leading: perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
-        child: UserFullNameWidget(user: user.lightUser),
+        child: Row(
+          mainAxisSize: .min,
+          spacing: 5,
+          children: [
+            UserStatusIcon(isOnline: user.online == true, size: 12),
+            Flexible(child: UserFullNameWidget(user: user.lightUser)),
+          ],
+        ),
       ),
       trailing: perfIcon != null
           ? _Progress(user.rating, user.progress)

@@ -39,6 +39,23 @@ class const ConnectedIcon({
   }
 }
 
+/// A filled green circle for online users, or an outlined circle for offline users.
+class const UserStatusIcon({required final bool isOnline, final double size = 10, super.key})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: isOnline ? context.l10n.online : context.l10n.offline,
+      child: Icon(
+        Symbols.circle,
+        size: size,
+        fill: isOnline ? 1 : 0,
+        color: isOnline ? context.lichessColors.good : textShade(context, Styles.subtitleOpacity),
+      ),
+    );
+  }
+}
+
 /// App bar title for the user and profile screens.
 ///
 /// Shows the user's avatar and name, with a subtitle displaying the online status, or the time they
@@ -67,27 +84,29 @@ class const UserAppBarTitleWidget({
             crossAxisAlignment: .start,
             children: [
               UserFullNameWidget(user: user, showFlair: false),
-              if (isOnline)
-                Text(
-                  context.l10n.online,
-                  style: subtitleTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )
-              else if (seenAt != null)
-                Text(
-                  context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!)),
-                  style: subtitleTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )
-              else
-                Text(
-                  context.l10n.offline,
-                  style: subtitleTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      alignment: .middle,
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(top: 3, end: 4),
+                        child: UserStatusIcon(isOnline: isOnline),
+                      ),
+                    ),
+                    TextSpan(
+                      text: isOnline
+                          ? context.l10n.online
+                          : seenAt != null
+                          ? context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt!))
+                          : context.l10n.offline,
+                    ),
+                  ],
                 ),
+                style: subtitleTextStyle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),

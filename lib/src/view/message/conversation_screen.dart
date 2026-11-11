@@ -77,7 +77,20 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
           contentPadding: EdgeInsets.zero,
           leading: UserAvatar(widget.user, radius: 20),
           title: UserFullNameWidget(user: widget.user, showFlair: false),
-          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
+          subtitle: Row(
+            mainAxisSize: .min,
+            spacing: 4,
+            children: [
+              UserStatusIcon(isOnline: widget.user.isOnline == true),
+              Flexible(
+                child: Text(
+                  widget.user.isOnline == true ? context.l10n.online : context.l10n.offline,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
           onTap: () {
             Navigator.push(context, UserOrProfileScreen.buildRoute(widget.user))
             // invalidate to refresh potential blocking status change

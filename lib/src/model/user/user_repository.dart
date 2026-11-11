@@ -390,6 +390,7 @@ LeaderboardUser _top1userFromPick(RequiredPick pick, Perf perf) {
     title: pick('title').asStringOrNull(),
     flair: pick('flair').asStringOrNull(),
     patronColor: pick('patronColor').asIntOrNull(),
+    online: pick('online').asBoolOrNull(),
     rating: pick('perfs', perf.name, 'rating').asIntOrThrow(),
     progress: pick('perfs', perf.name, 'progress').asIntOrThrow(),
   );
