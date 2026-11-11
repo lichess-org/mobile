@@ -34,10 +34,9 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      await tester.enterText(find.byType(SearchBar), 'john');
       await tester.enterText(
         find.descendant(of: find.byType(PlatformSearchBar), matching: find.byType(EditableText)),
-        'joh',
+        'john',
       );
 
       // await debouce call
