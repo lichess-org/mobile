@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:material_ui/material_ui.dart';
 
-const _shadeOpacity = 0.6;
+const _shadeOpacity = 0.7;
 const _valueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 22);
 
 String _formatPercentage(int value, int total) =>
@@ -215,7 +215,13 @@ class const IconStatRow({
         children: [
           Icon(icon, color: textShade(context, _shadeOpacity)),
           Expanded(
-            child: Column(crossAxisAlignment: .start, children: [Text(label), ?subtitle]),
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text(label, style: TextStyle(color: textShade(context, _shadeOpacity))),
+                ?subtitle,
+              ],
+            ),
           ),
           Column(
             crossAxisAlignment: .end,

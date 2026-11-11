@@ -79,6 +79,10 @@ abstract class Styles() {
 Color? textShade(BuildContext context, double opacity) =>
     DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);
 
+/// The color of the perf icons (perf cards, game list tiles, activity).
+Color perfIconColor(BuildContext context) =>
+    ColorScheme.of(context).onSurface.withValues(alpha: 0.6);
+
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
   return Color.lerp(c, Colors.black, amount) ?? c;
