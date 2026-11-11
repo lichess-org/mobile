@@ -2,7 +2,7 @@ name: lichess_mobile
 description: Lichess mobile app V2
 publish_to: "none"
 
-version: 0.31.3+003103 # See README.md for details about versioning
+version: 0.31.6+003106 # See README.md for details about versioning
 
 environment:
   sdk: ^3.13.0
@@ -98,6 +98,11 @@ dev_dependencies:
   mocktail: ^1.0.5
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.7.0
+
+# objective_c 9.6.3 native isValidObject debug assert fails on the iOS 26 simulator, which breaks
+# every cupertino_http request in debug builds.
+dependency_overrides:
+  objective_c: 9.6.2
 
 flutter:
   # The following line ensures that the Material Icons font is

@@ -16,7 +16,7 @@ const kBoardDefaultContrastFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
 
 /// The brightness filter of the boards when they are dimmed in dark mode.
-const kBoardDimmedBrightnessFilter = 0.8;
+const kBoardDimmedBrightnessFilter = 0.85;
 
 final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   BoardPreferences.new,

@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -277,7 +276,7 @@ class _BodyState() extends ConsumerState<_Body> {
                   padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
                   child: ListSectionHeader(
                     title: Text(
-                      _dayLabel(context, day),
+                      formatDayHeader(context.l10n, day),
                       style: TextStyle(fontSize: 15, color: textShade(context, 0.6)),
                     ),
                   ),
@@ -401,19 +400,6 @@ class _BodyState() extends ConsumerState<_Body> {
       loading: () => const CenterLoadingIndicator(),
     );
   }
-}
-
-String _dayLabel(BuildContext context, DateTime day) {
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final difference = today.difference(day).inDays;
-  return difference == 0
-      ? context.l10n.today
-      : difference == 1
-      ? context.l10n.yesterday
-      : difference < 15
-      ? relativeDate(context.l10n, day)
-      : DateFormat.yMMMd().format(day);
 }
 
 /// A row of the game history list: either the header of a day, or a game played that day.

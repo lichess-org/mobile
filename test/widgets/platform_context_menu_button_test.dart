@@ -98,6 +98,63 @@ void main() {
     expect(tester.getTopLeft(find.text('One day')).dx, tester.getTopLeft(find.text('One week')).dx);
   });
 
+  testWidgets('reports the choices and the toggles to assistive technologies', (tester) async {
+    final semantics = tester.ensureSemantics();
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: const Text('Title'),
+          actions: [
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: 'Menu',
+              actions: [
+                ContextMenuAction(label: 'One day', onPressed: () {}),
+                ContextMenuAction(label: 'One week', selected: true, onPressed: () {}),
+                ContextMenuSection(
+                  actions: [
+                    ContextMenuAction(label: 'Eval bar', toggled: true, onPressed: () {}),
+                    ContextMenuAction(label: 'Arrows', toggled: false, onPressed: () {}),
+                    ContextMenuAction(label: 'Share', onPressed: () {}),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        body: const SizedBox.shrink(),
+      ),
+    );
+
+    await tester.pumpWidget(app);
+    await tester.tap(find.byIcon(Icons.more_horiz).hitTestable());
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSemantics(find.text('One week')),
+      isSemantics(label: 'One week', hasSelectedState: true, isSelected: true),
+    );
+    expect(
+      tester.getSemantics(find.text('One day')),
+      isSemantics(label: 'One day', hasSelectedState: true, isSelected: false),
+    );
+    expect(
+      tester.getSemantics(find.text('Eval bar')),
+      isSemantics(label: 'Eval bar', hasCheckedState: true, isChecked: true),
+    );
+    expect(
+      tester.getSemantics(find.text('Arrows')),
+      isSemantics(label: 'Arrows', hasCheckedState: true, isChecked: false),
+    );
+    // Outside of a group of choices, an action is not a choice.
+    expect(
+      tester.getSemantics(find.text('Share')),
+      isSemantics(label: 'Share', hasSelectedState: false, hasCheckedState: false),
+    );
+    semantics.dispose();
+  }, variant: TargetPlatformVariant.only(.iOS));
+
   testWidgets('shows a toggle, a titled section and a submenu', variant: kPlatformVariant, (
     tester,
   ) async {

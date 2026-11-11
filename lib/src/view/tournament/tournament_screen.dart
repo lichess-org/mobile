@@ -627,7 +627,7 @@ class const _ExpandableDescription({
                 link: true,
                 child: GestureDetector(
                   onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
-                  child: const Text('Prizes', style: Styles.linkStyle),
+                  child: Text('Prizes', style: Styles.linkStyle(context)),
                 ),
               ),
               const Text(': '),
@@ -639,7 +639,7 @@ class const _ExpandableDescription({
           MarkdownBody(
             data: description!,
             styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                .copyWith(a: Styles.linkStyle),
+                .copyWith(a: Styles.linkStyle(context)),
             softLineBreak: true,
             onTapLink: (text, url, title) {
               if (url != null) {

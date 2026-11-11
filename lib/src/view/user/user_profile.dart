@@ -59,7 +59,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
                 overflow: TextOverflow.ellipsis,
-                linkStyle: Styles.linkStyle,
+                linkStyle: Styles.linkStyle(context),
               ),
             if (userFullName != null || user.profile?.bio != null) const SizedBox(height: 10),
             if (user.profile?.fideRating != null)
@@ -115,7 +115,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                         onTap: () => launchUrl(link.url),
                         child: Text(
                           link.site?.title ?? link.url.toString(),
-                          style: Styles.linkStyle,
+                          style: Styles.linkStyle(context),
                         ),
                       ),
                     ),

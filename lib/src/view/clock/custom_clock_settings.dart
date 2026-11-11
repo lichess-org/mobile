@@ -99,14 +99,14 @@ class _CustomClockSettingsState() extends State<CustomClockSettings> {
               Expanded(
                 child: FilledButton(
                   onPressed: () => _submit(context),
-                  child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+                  child: Text(context.l10n.mobileOkButton),
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: FilledButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel, style: Styles.bold),
+                  child: Text(context.l10n.cancel),
                 ),
               ),
             ],
