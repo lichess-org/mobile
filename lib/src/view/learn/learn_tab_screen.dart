@@ -225,7 +225,7 @@ class const _Body() extends ConsumerWidget {
                     trailing: Theme.of(context).platform == TargetPlatform.iOS
                         ? const CupertinoListTileChevron()
                         : null,
-                    title: Text(context.l10n.coaches),
+                    title: Text(context.l10n.coaches, style: Styles.callout),
                     onTap: () => Navigator.of(
                       context,
                       rootNavigator: true,
