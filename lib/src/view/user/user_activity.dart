@@ -64,7 +64,6 @@ class const UserActivityEntry({
 
     final redColor = context.lichessColors.error;
     final greenColor = context.lichessColors.good;
-    final bragColor = context.lichessColors.brag.withValues(alpha: 0.85);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,7 +72,7 @@ class const UserActivityEntry({
           padding: const EdgeInsets.only(left: 14.0, top: 16.0, right: 14.0, bottom: 4.0),
           child: Text(
             _dateFormatter.format(entry.startTime),
-            style: TextStyle(color: bragColor, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         if (entry.games != null)
@@ -245,7 +244,8 @@ class const _UserActivityListTile({
   @override
   Widget build(BuildContext context) {
     final textDirection = Directionality.of(context);
-    final color = context.lichessColors.brag.withValues(alpha: 0.85);
+    // The color of the ListTile leading icons, like the perf icons of the game list.
+    final color = ListTileTheme.of(context).iconColor ?? ColorScheme.of(context).onSurfaceVariant;
     final contentPadding =
         ListTileTheme.of(context).contentPadding?.resolve(textDirection) ??
         const EdgeInsets.symmetric(horizontal: 16.0);
