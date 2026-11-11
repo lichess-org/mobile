@@ -465,7 +465,7 @@ class BroadcastAnalysisController(final BroadcastAnalysisControllerParams params
         }
       }
       // if navigating and an actually movement occurred, only sound feedback
-      else if (pathChange){
+      else if (pathChange) {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
           soundService.playCaptureSound(state.requireValue.variant);
