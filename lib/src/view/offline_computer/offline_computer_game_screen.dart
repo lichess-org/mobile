@@ -1215,6 +1215,7 @@ class const OfflineComputerGameResultDialog({
     );
 
     return PlatformAlertDialog(
+      opaque: true,
       title: Text(title),
       content: Text(subtitle),
       actions: [
