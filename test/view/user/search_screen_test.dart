@@ -10,8 +10,8 @@ import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/player/autocomplete') {
-    if (request.url.queryParameters['term'] == 'joh') {
-      return mockResponse(johResponse, 200);
+    if (request.url.queryParameters['term'] == 'john') {
+      return mockResponse(johnResponse, 200);
     }
     return mockResponse(emptyResponse, 200);
   }
@@ -33,7 +33,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      await tester.enterText(find.byType(SearchBar), 'joh');
+      await tester.enterText(find.byType(SearchBar), 'john');
 
       // await debouce call
       await tester.pump(const Duration(milliseconds: 300));
@@ -44,7 +44,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
       expect(find.byType(CircularProgressIndicator), findsNothing);
-      expect(find.text('Players with "joh"'), findsOneWidget);
+      expect(find.text('Players with "john"'), findsOneWidget);
       expect(find.byType(UserListTile), findsNWidgets(2));
       expect(find.text('John Doe'), findsOneWidget);
       expect(find.text('John Doe 2'), findsOneWidget);
@@ -86,7 +86,7 @@ void main() {
   });
 }
 
-const johResponse = '''
+const johnResponse = '''
 {
     "result": [
         {

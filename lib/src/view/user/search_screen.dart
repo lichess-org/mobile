@@ -36,6 +36,17 @@ class const SearchScreen({
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
+// Mirrors the server-side autocomplete term validation (UserSearch.read in lila):
+// trim, cut at the first space, then require the username pattern.
+final _kSearchTermRegex = RegExp(r'^[a-zA-Z0-9][a-zA-Z0-9_-]{3,28}$');
+
+String? _cleanSearchTerm(String term) {
+  final trimmed = term.trim();
+  final spaceIndex = trimmed.indexOf(' ');
+  final clean = spaceIndex == -1 ? trimmed : trimmed.substring(0, spaceIndex);
+  return _kSearchTermRegex.hasMatch(clean) ? clean : null;
+}
+
 class _SearchScreenState() extends ConsumerState<SearchScreen> {
   final _searchController = TextEditingController();
   final saveHistoryDebouncer = Debouncer(_kSaveHistoryDebouncTimer);
@@ -56,8 +67,8 @@ class _SearchScreenState() extends ConsumerState<SearchScreen> {
   void _onSearchChanged() {
     if (!mounted) return;
 
-    final term = _searchController.text;
-    if (term.length >= 3) {
+    final term = _cleanSearchTerm(_searchController.text);
+    if (term != null) {
       ref.read(autoCompleteUserProvider(term));
       setState(() {
         _term = term;
