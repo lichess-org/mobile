@@ -31,7 +31,6 @@ abstract class Styles() {
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
-  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
   static const noResultTextStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
 
   // padding
@@ -52,6 +51,11 @@ abstract class Styles() {
   static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
 
   static const thumbnailBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
+  static TextStyle linkStyle(BuildContext context) {
+    final primary = ColorScheme.of(context).primary;
+    return TextStyle(color: primary, decoration: TextDecoration.none, decorationColor: primary);
+  }
 
   static Color chartColor(BuildContext context) {
     return ColorScheme.of(context).tertiary;
@@ -78,6 +82,10 @@ abstract class Styles() {
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>
     DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);
+
+/// The color of the perf icons (perf cards, game list tiles, activity).
+Color perfIconColor(BuildContext context) =>
+    ColorScheme.of(context).onSurface.withValues(alpha: 0.6);
 
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);

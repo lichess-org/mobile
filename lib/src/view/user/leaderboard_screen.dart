@@ -91,7 +91,7 @@ class const LeaderboardListTile({required final LeaderboardUser user, final Icon
           mainAxisSize: .min,
           spacing: 5,
           children: [
-            UserStatusIcon(isOnline: user.online == true, size: 12),
+            if (user.online == true) const ConnectedIcon(isConnected: true, size: 12),
             Flexible(child: UserFullNameWidget(user: user.lightUser)),
           ],
         ),

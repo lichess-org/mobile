@@ -72,7 +72,7 @@ class const UserActivityEntry({
           padding: const EdgeInsets.only(left: 14.0, top: 16.0, right: 14.0, bottom: 4.0),
           child: Text(
             _dateFormatter.format(entry.startTime),
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(color: textShade(context, 0.7)),
           ),
         ),
         if (entry.games != null)
@@ -232,6 +232,9 @@ class const UserActivityEntry({
 
 const _leadingIconSize = 26.0;
 
+/// The opacity of the timeline lines, lower than the perf icons so they stand out less.
+const _timelineOpacity = 0.5;
+
 /// An activity list tile, with a timeline line drawn above and below its leading icon, which joins
 /// the lines of the tiles above and below.
 class const _UserActivityListTile({
@@ -244,14 +247,14 @@ class const _UserActivityListTile({
   @override
   Widget build(BuildContext context) {
     final textDirection = Directionality.of(context);
-    // The color of the ListTile leading icons, like the perf icons of the game list.
-    final color = ListTileTheme.of(context).iconColor ?? ColorScheme.of(context).onSurfaceVariant;
+    // The color of the perf icons, as in the perf cards and the game list.
+    final color = perfIconColor(context);
     final contentPadding =
         ListTileTheme.of(context).contentPadding?.resolve(textDirection) ??
         const EdgeInsets.symmetric(horizontal: 16.0);
     return CustomPaint(
       painter: _TimelinePainter(
-        color: color,
+        color: textShade(context, _timelineOpacity) ?? color,
         lineStart: textDirection == .ltr ? contentPadding.left + _leadingIconSize / 2 : null,
         lineEnd: textDirection == .rtl ? contentPadding.right + _leadingIconSize / 2 : null,
       ),
