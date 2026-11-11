@@ -422,7 +422,7 @@ class const _PgnTagsView(final BroadcastRoundId roundId, final BroadcastGameId g
                           return Text.rich(
                             TextSpan(
                               text: value,
-                              style: Styles.linkStyle,
+                              style: Styles.linkStyle(context),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => launchUrlString(url),
                             ),

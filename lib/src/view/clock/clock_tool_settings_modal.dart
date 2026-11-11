@@ -121,7 +121,7 @@ class _ClockToolSettingsModalState() extends State<ClockToolSettingsModal> {
           padding: Styles.horizontalBodyPadding,
           child: FilledButton(
             onPressed: () => _submit(context),
-            child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+            child: Text(context.l10n.mobileOkButton),
           ),
         ),
       ],

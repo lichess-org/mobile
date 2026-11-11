@@ -28,6 +28,10 @@ const kGlassMenuWidth = 250.0;
 /// selected choice.
 ///
 /// A title too long for one line wraps to two, like in an iOS menu.
+///
+/// Assistive technologies read a toggle as a switch that is on or off, and every action of a group
+/// of choices as selected or not. A group is a [ContextMenuSection], or the actions outside of the
+/// sections.
 List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries) {
   final isCheckMenu = _actionsOf(entries).any((action) => action._hasCheckMark);
   // The package's title style (the theme text color at 90%), with the line height the menu sizes
@@ -67,10 +71,15 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
     return exceeds ? 2 : 1;
   }
 
-  GlassMenuItem item(ContextMenuAction action) {
+  bool isChoiceGroup(Iterable<ContextMenuAction> actions) => actions.any((a) => a.selected);
+  final isTopLevelChoiceGroup = isChoiceGroup(entries.whereType<ContextMenuAction>());
+
+  GlassMenuItem item(ContextMenuAction action, {required bool inChoiceGroup}) {
     final icon = action.icon;
     return GlassMenuItem(
       title: action.label,
+      semanticsChecked: action.toggled,
+      semanticsSelected: action.toggled == null && inChoiceGroup ? action.selected : null,
       titleStyle: titleStyle,
       subtitle: action.subtitle,
       maxLines: maxLines(
@@ -100,7 +109,7 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
       ...switch (entry) {
         final ContextMenuAction action => [
           if (index > 0 && entries[index - 1] is ContextMenuSection) const GlassMenuDivider(),
-          item(action),
+          item(action, inChoiceGroup: isTopLevelChoiceGroup),
         ],
         ContextMenuSection(:final title, :final actions) => [
           if (index > 0) const GlassMenuDivider(),
@@ -109,7 +118,7 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
               alignment: AlignmentDirectional.centerStart,
               child: Text(title, style: sectionTitleStyle, maxLines: 1, overflow: .ellipsis),
             ),
-          for (final action in actions) item(action),
+          for (final action in actions) item(action, inChoiceGroup: isChoiceGroup(actions)),
         ],
       },
   ];

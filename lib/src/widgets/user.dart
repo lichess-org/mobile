@@ -68,11 +68,20 @@ class const UserAppBarTitleWidget({
             children: [
               UserFullNameWidget(user: user, showFlair: false),
               if (isOnline)
-                Text(
-                  context.l10n.online,
-                  style: subtitleTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  mainAxisSize: .min,
+                  spacing: 4,
+                  children: [
+                    const ConnectedIcon(isConnected: true, size: 10),
+                    Flexible(
+                      child: Text(
+                        context.l10n.online,
+                        style: subtitleTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 )
               else if (seenAt != null)
                 Text(
@@ -312,7 +321,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
     return CircleAvatar(
       radius: widget.radius,
       foregroundImage: showFlair ? HttpNetworkImage(lichessFlairSrc(user.flair!), client) : null,
-      onForegroundImageError: user.flair != null
+      onForegroundImageError: showFlair
           ? (_, _) => setState(() => _errorLoadingFlair = true)
           : null,
       backgroundColor: showFlair

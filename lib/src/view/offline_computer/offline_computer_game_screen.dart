@@ -1111,7 +1111,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
                     Navigator.pop(context);
                   }
                 : null,
-            child: Text(context.l10n.play, style: Styles.bold),
+            child: Text(context.l10n.play),
           ),
         ),
       ],
@@ -1215,6 +1215,7 @@ class const OfflineComputerGameResultDialog({
     );
 
     return PlatformAlertDialog(
+      opaque: true,
       title: Text(title),
       content: Text(subtitle),
       actions: [

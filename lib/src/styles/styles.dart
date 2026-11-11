@@ -5,6 +5,17 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// The opacity of the blog and broadcast carousel cards.
+const kDefaultCardOpacity = 0.9;
+
+/// The opacity of the blog and broadcast carousel card images on a dark background, where their
+/// light colors would otherwise stand out too much.
+const kDarkCardImageOpacity = 0.80;
+
+/// The opacity of the blog and broadcast carousel card backgrounds on a dark background: higher
+/// than [kDarkCardImageOpacity] so that the text on it keeps enough contrast.
+const kDarkCardBackgroundOpacity = 0.9;
+
 // ignore: avoid_classes_with_only_static_members
 abstract class Styles() {
   // text
@@ -20,7 +31,6 @@ abstract class Styles() {
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
   static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
-  static const linkStyle = TextStyle(color: Colors.blueAccent, decoration: TextDecoration.none);
   static const noResultTextStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
 
   // padding
@@ -41,6 +51,11 @@ abstract class Styles() {
   static const boardBorderRadius = BorderRadius.all(Radius.circular(5.0));
 
   static const thumbnailBorderRadius = BorderRadius.all(Radius.circular(5.0));
+
+  static TextStyle linkStyle(BuildContext context) {
+    final primary = ColorScheme.of(context).primary;
+    return TextStyle(color: primary, decoration: TextDecoration.none, decorationColor: primary);
+  }
 
   static Color chartColor(BuildContext context) {
     return ColorScheme.of(context).tertiary;
@@ -67,6 +82,10 @@ abstract class Styles() {
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>
     DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);
+
+/// The color of the perf icons (perf cards, game list tiles, activity).
+Color perfIconColor(BuildContext context) =>
+    ColorScheme.of(context).onSurface.withValues(alpha: 0.6);
 
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
@@ -148,7 +167,31 @@ const lichessCustomColors = LichessCustomColors(
   primary: LichessColors.primary,
 );
 
+/// The color scheme of the elements that sit next to the board, such as the eval gauge, so that
+/// they match the board colors whatever the app color scheme.
+@immutable
+class const BoardColorScheme(final ColorScheme colorScheme)
+    extends ThemeExtension<BoardColorScheme> {
+  @override
+  BoardColorScheme copyWith({ColorScheme? colorScheme}) =>
+      BoardColorScheme(colorScheme ?? this.colorScheme);
+
+  @override
+  BoardColorScheme lerp(ThemeExtension<BoardColorScheme>? other, double t) {
+    if (other is! BoardColorScheme) {
+      return this;
+    }
+    return BoardColorScheme(ColorScheme.lerp(colorScheme, other.colorScheme, t));
+  }
+}
+
 extension CustomColorsBuildContext on BuildContext {
   LichessCustomColors get lichessColors =>
       Theme.of(this).extension<LichessCustomColors>() ?? lichessCustomColors;
+
+  /// The color scheme of the elements that sit next to the board, see [BoardColorScheme].
+  ///
+  /// Defaults to the app color scheme.
+  ColorScheme get boardColorScheme =>
+      Theme.of(this).extension<BoardColorScheme>()?.colorScheme ?? ColorScheme.of(this);
 }

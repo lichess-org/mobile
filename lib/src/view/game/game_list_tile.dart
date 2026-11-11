@@ -132,6 +132,7 @@ class const GameListTile({
             : isTournament
             ? LichessIcons.tournament_cup
             : game.perf.icon,
+        color: perfIconColor(context),
       ),
       title: title,
       subtitle: Text.rich(

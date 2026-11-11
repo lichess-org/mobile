@@ -231,7 +231,9 @@ class const _UserProfileListView(
                               label: context.l10n.composeMessage,
                               onPressed: () {
                                 Navigator.of(context).pushHidingTabBar(
-                                  ConversationScreen.buildRoute(user: user.lightUser),
+                                  ConversationScreen.buildRoute(
+                                    user: user.lightUser.copyWith(isOnline: data.isOnline),
+                                  ),
                                 );
                               },
                             ),

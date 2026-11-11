@@ -72,12 +72,11 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        centerTitle: false, // user name can be long
         titleSpacing: 0,
-        title: ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(widget.user, radius: 20),
-          title: UserFullNameWidget(user: widget.user, showFlair: false),
-          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
+        title: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: UserAppBarTitleWidget(user: widget.user, isOnline: widget.user.isOnline == true),
           onTap: () {
             Navigator.push(context, UserOrProfileScreen.buildRoute(widget.user))
             // invalidate to refresh potential blocking status change
@@ -405,7 +404,7 @@ class const _MessageContent({
           text: text,
           linkifiers: AppLinksService.kLichessLinkifiers,
           style: TextStyle(color: textColor),
-          linkStyle: Styles.linkStyle,
+          linkStyle: Styles.linkStyle(context).copyWith(decoration: TextDecoration.underline),
           onOpen: onLinkOpen,
           trailing: spacer,
         ),

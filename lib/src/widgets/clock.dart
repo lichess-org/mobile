@@ -138,10 +138,10 @@ class const ClockStyle({
     textColor: colorScheme.outline,
     activeBackgroundColor: brightness == Brightness.dark
         ? colorScheme.inverseSurface
-        : colorScheme.tertiaryContainer,
+        : colorScheme.secondary.withValues(alpha: 0.85),
     activeTextColor: brightness == Brightness.dark
         ? colorScheme.onInverseSurface
-        : colorScheme.onTertiaryContainer,
+        : colorScheme.onSecondary,
     emergencyBackgroundColor: lichessColors.error.withValues(
       alpha: brightness == Brightness.dark ? 0.6 : 0.4,
     ),
