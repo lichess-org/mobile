@@ -256,6 +256,44 @@ void main() {
       expect(requestedOrders, ['login', 'rating']);
     });
 
+    testWidgets('country filter asks to sign in when logged out', (tester) async {
+      final requestedPaths = <String>[];
+      final client = MockClient((request) async {
+        if (request.url.path.startsWith('/coach/')) {
+          requestedPaths.add(request.url.path);
+        }
+        if (request.url.path == '/coach/all/all/login') {
+          return http.Response(_listResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(findByTooltip('Filters'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Greece'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Done'));
+      await tester.pumpAndSettle();
+
+      expect(requestedPaths, ['/coach/all/all/login']);
+      expect(find.text('Sign in with the browser'), findsOneWidget);
+    });
+
     testWidgets('failed load shows a blue refresh icon next to retry', (tester) async {
       var requestCount = 0;
       final client = MockClient((request) async {

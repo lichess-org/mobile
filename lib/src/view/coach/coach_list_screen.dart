@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
 import 'package:lichess_mobile/src/model/coach/coach_list_controller.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
@@ -6,6 +7,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -135,6 +138,11 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
             const SizedBox(height: 16.0),
             FilledButton(
               onPressed: () {
+                if (newCountry != kAllCoachesFilter && !ref.read(isLoggedInProvider)) {
+                  Navigator.of(context).pop();
+                  showSignInOptions(this.context, ref);
+                  return;
+                }
                 setState(() {
                   language = newLanguage;
                   country = newCountry;
@@ -153,6 +161,8 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+
     ref.listen(coachListControllerProvider(_filters), (prev, next) {
       if (prev?.value?.nextPage != next.value?.nextPage) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
