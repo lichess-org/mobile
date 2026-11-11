@@ -262,7 +262,8 @@ class const _MessageBubble({
                   linkifiers: AppLinksService.kLichessLinkifiers,
                   text: message.message,
                   style: TextStyle(color: _textColor(context)),
-                  linkStyle: Styles.linkStyle,
+                  linkStyle: Styles.linkStyle(context)
+                      .copyWith(decoration: TextDecoration.underline),
                 ),
               ],
             ),

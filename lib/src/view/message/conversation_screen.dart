@@ -404,7 +404,7 @@ class const _MessageContent({
           text: text,
           linkifiers: AppLinksService.kLichessLinkifiers,
           style: TextStyle(color: textColor),
-          linkStyle: Styles.linkStyle,
+          linkStyle: Styles.linkStyle(context).copyWith(decoration: TextDecoration.underline),
           onOpen: onLinkOpen,
           trailing: spacer,
         ),
