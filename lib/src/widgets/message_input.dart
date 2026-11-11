@@ -16,6 +16,10 @@ const double _kIOSMessageInputVerticalPadding = 8.0;
 /// a single line field, and rounded corners around several lines, like the Messages input.
 const double _kGlassMessageInputRadius = 18.0;
 
+/// The tint of the liquid glass background of a [MessageInputBar] in light mode: whiter than the
+/// default light glass, so that the field stands out over the background of the messages.
+const Color _kLightGlassColor = Color(0xBFFFFFFF);
+
 /// The decoration of a message input field, at the bottom of a chat or conversation screen.
 ///
 /// On iOS it is a slim capsule, like the Messages input. On iOS 26 and later ([useLiquidGlass]),
@@ -92,8 +96,11 @@ class const MessageInputBar({
                       shape: const LiquidRoundedSuperellipse(
                         borderRadius: _kGlassMessageInputRadius,
                       ),
-                      // Like the bottom search fields.
-                      settings: ios27GlassSettings(context),
+                      // Frosted, and whiter in light mode, to stand out over the plain
+                      // background of the messages.
+                      settings: Theme.of(context).brightness == Brightness.light
+                          ? thickGlassSettings(context).copyWith(glassColor: _kLightGlassColor)
+                          : thickGlassSettings(context),
                       // Floats over the content, there is no parent glass layer to share.
                       useOwnLayer: true,
                       child: const SizedBox.expand(),
