@@ -314,7 +314,7 @@ class _CreateStudyChapterBottomSheetState() extends ConsumerState<CreateStudyCha
                 : null,
             child: _isSubmitting
                 ? const ButtonLoadingIndicator()
-                : Text(context.l10n.studyCreateChapter, style: Styles.bold),
+                : Text(context.l10n.studyCreateChapter),
           ),
         ),
       ],

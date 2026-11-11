@@ -14,48 +14,37 @@ const kSliderTheme = SliderThemeData(
 
 /// Generates a [ColorScheme] from [seedColor] whose primary color looks like an iOS accent color.
 ///
-/// The primary color is more saturated than the Material tonal spot one, like an iOS tint color, but
-/// less than the vibrant variant, which can be glaring with some seeds (e.g. neon green). Its tone
-/// does not follow the seed, so that it stands out from the background.
+/// The scheme is the Material tonal spot one, as on Android, except for the primary color, which is
+/// more saturated, like an iOS accent color.
 ColorScheme makeIOSAccentColorScheme({required Color seedColor, required Brightness brightness}) {
-  final scheme = ColorScheme.fromSeed(
-    seedColor: seedColor,
-    brightness: brightness,
-    dynamicSchemeVariant: .vibrant,
-  );
-  final palette = TonalPalette.of(Hct.fromInt(seedColor.toARGB32()).hue, _kIOSPrimaryChroma);
+  final isDark = brightness == .dark;
+  final sourceHct = Hct.fromInt(seedColor.toARGB32());
+  final scheme = ColorScheme.fromSeed(seedColor: seedColor, brightness: brightness);
+  final palette = TonalPalette.of(sourceHct.hue, _kIOSPrimaryChroma);
+  final accentTone = isDark ? _kIOSAccentDarkTone : _kIOSAccentLightTone;
+  // On the inverse surface, which has the opposite brightness.
+  final inverseAccentTone = isDark ? _kIOSAccentLightTone : _kIOSAccentDarkTone;
   Color tone(int t) => Color(palette.get(t));
-  // Material 3 primary tones of the light and dark schemes.
-  return switch (brightness) {
-    .dark => scheme.copyWith(
-      primary: tone(80),
-      onPrimary: tone(20),
-      primaryContainer: tone(30),
-      onPrimaryContainer: tone(90),
-      primaryFixed: tone(90),
-      primaryFixedDim: tone(80),
-      onPrimaryFixed: tone(10),
-      onPrimaryFixedVariant: tone(30),
-      inversePrimary: tone(40),
-      surfaceTint: tone(80),
-    ),
-    .light => scheme.copyWith(
-      primary: tone(40),
-      onPrimary: tone(100),
-      primaryContainer: tone(90),
-      onPrimaryContainer: tone(10),
-      primaryFixed: tone(90),
-      primaryFixedDim: tone(80),
-      onPrimaryFixed: tone(10),
-      onPrimaryFixedVariant: tone(30),
-      inversePrimary: tone(80),
-      surfaceTint: tone(40),
-    ),
-  };
+  return scheme.copyWith(
+    primary: tone(accentTone),
+    onPrimary: tone(100),
+    inversePrimary: tone(inverseAccentTone),
+    surfaceTint: tone(accentTone),
+  );
 }
 
 /// Chroma of the iOS accent primary palette: tonal spot uses 36, vibrant goes up to the gamut limit.
-const _kIOSPrimaryChroma = 60.0;
+const _kIOSPrimaryChroma = 48.0;
+
+/// Tone of the iOS accent primary color in light mode: the iOS system colors are around tone 50
+/// (e.g. systemBlue is 53), dark enough for white content on top.
+const _kIOSAccentLightTone = 50;
+
+/// Tone of the iOS accent primary color in dark mode: the iOS system colors are 3 to 5 tones
+/// brighter in dark mode (e.g. systemBlue is 56). A few tones more here, because the dark surfaces
+/// are lighter than the iOS ones and the primary color less saturated, which both lower its
+/// contrast.
+const _kIOSAccentDarkTone = 64;
 
 ThemeData makeAppTheme(
   BuildContext context, {
@@ -93,7 +82,7 @@ ThemeData makeAppTheme(
         );
 
   // The elements next to the board don't follow the app color scheme (system colors, background,
-  // vibrant variant on iOS): the fidelity variant keeps their colors close to the board ones.
+  // iOS accent colors): the fidelity variant keeps their colors close to the board ones.
   final boardColorScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
@@ -376,9 +365,16 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
-/// Capsule buttons, like the iOS 26 buttons.
+/// Capsule buttons with a semibold 15pt label, like the UIKit buttons of the default (medium) size.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
+  style: ButtonStyle(
+    shape: WidgetStatePropertyAll(StadiumBorder()),
+    textStyle: WidgetStatePropertyAll(
+      TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -0.23),
+    ),
+    minimumSize: WidgetStatePropertyAll(Size(64, 44)),
+    padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 20)),
+  ),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(

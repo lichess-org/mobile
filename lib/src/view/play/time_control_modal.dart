@@ -201,7 +201,7 @@ class const TimeControlModal({
                               ),
                               FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
-                                child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+                                child: Text(context.l10n.mobileOkButton),
                               ),
                             ],
                           );

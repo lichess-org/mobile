@@ -323,10 +323,7 @@ class const _Button({required final VoidCallback onPressed, required final Strin
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: onPressed,
-      child: Text(label, style: Styles.bold),
-    );
+    return FilledButton(onPressed: onPressed, child: Text(label));
   }
 }
 
