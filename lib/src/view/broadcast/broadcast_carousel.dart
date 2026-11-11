@@ -13,7 +13,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/tab_navigation.dart' show watchTabInteraction;
+import 'package:lichess_mobile/src/tab_navigation.dart'
+    show TabBarHidingNavigator, watchTabInteraction;
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -27,7 +28,6 @@ import 'package:material_ui/material_ui.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
-const kDefaultCardOpacity = 0.9;
 
 const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 const kHandsetCarouselFlexWeights = [6, 2];
@@ -183,7 +183,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
   String? get imageUrl => widget.broadcast.tour.imageUrl;
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBroadcastImage;
 
   @override
@@ -192,7 +192,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -204,16 +204,22 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
-      if (response != null) {
-        if (mounted) {
-          setState(() {
-            _cardColors = response;
-          });
-        }
+      var failed = false;
+      await precacheImage(provider, context, onError: (_, _) => failed = true);
+      // The card image failed to load (e.g. network timeout): keep the default card colors.
+      if (failed || !mounted) return;
+      final _CardColors? response;
+      try {
+        final ui.Image scaledImage = await imageProviderToScaled(provider);
+        final imageBytes = await scaledImage.toByteData();
+        response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      } catch (_) {
+        return;
+      }
+      if (response != null && mounted) {
+        setState(() {
+          _cardColors = response;
+        });
       }
     }
   }
@@ -232,6 +238,17 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
+    final isDark = Theme.of(context).brightness == .dark;
+    final imageOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardImageOpacity
+        : kDefaultCardOpacity;
+    final backgroundOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardBackgroundOpacity
+        : kDefaultCardOpacity;
     final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
@@ -240,10 +257,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(BroadcastRoundScreen.buildRoute(widget.broadcast));
+        Navigator.of(context).pushHidingTabBar(BroadcastRoundScreen.buildRoute(widget.broadcast));
       },
       onTapDown: (_) => _onTapDown(),
       onTapCancel: _onTapCancel,
@@ -251,9 +265,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
-        ),
+        decoration: BoxDecoration(color: backgroundColor.withValues(alpha: backgroundOpacity)),
         child: OverflowBox(
           maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
           minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
@@ -266,13 +278,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
-                    opacity: wasSynchronouslyLoaded
-                        ? _tapDown
-                              ? 1.0
-                              : kDefaultCardOpacity
-                        : frame == null
-                        ? 0
-                        : 1,
+                    opacity: wasSynchronouslyLoaded || frame != null ? imageOpacity : 0,
                     child: child,
                   );
                 },
@@ -293,7 +299,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd().add_jm();
+DateFormat get _dateFormat => DateFormat.MMMd().add_jm();
 
 class const _BroadcastCardContent({
   required final Broadcast broadcast,
@@ -313,7 +319,7 @@ class const _BroadcastCardContent({
 
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.9) ?? textShade(context, 0.8);
 
     return Stack(
       children: [
@@ -411,22 +417,10 @@ class const _BroadcastCardContent({
                 icon: Icon(Icons.more_horiz, color: titleColor?.withValues(alpha: 0.5)),
                 actions: [
                   ContextMenuAction(
-                    icon: Icons.info,
-                    label: context.l10n.broadcastOverview,
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
-                        BroadcastRoundScreen.buildRoute(
-                          broadcast,
-                          initialTab: BroadcastRoundTab.overview,
-                        ),
-                      );
-                    },
-                  ),
-                  ContextMenuAction(
                     icon: LichessIcons.chess_board,
                     label: context.l10n.broadcastBoards,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.boards,
@@ -438,7 +432,7 @@ class const _BroadcastCardContent({
                     icon: Icons.people,
                     label: context.l10n.players,
                     onPressed: () {
-                      Navigator.of(context, rootNavigator: true).push(
+                      Navigator.of(context).pushHidingTabBar(
                         BroadcastRoundScreen.buildRoute(
                           broadcast,
                           initialTab: BroadcastRoundTab.players,
@@ -450,10 +444,13 @@ class const _BroadcastCardContent({
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? Icons.ios_share_outlined
                         : Icons.share_outlined,
-                    label: context.l10n.studyShareAndExport,
-                    onPressed: () {
-                      showBroadcastShareMenu(context, broadcast.tour, broadcast.round);
-                    },
+                    label: context.l10n.mobileShare,
+                    onPressed: null,
+                    submenu: makeBroadcastShareMenuActions(
+                      context,
+                      broadcast.tour,
+                      broadcast.round,
+                    ),
                   ),
                 ],
               ),

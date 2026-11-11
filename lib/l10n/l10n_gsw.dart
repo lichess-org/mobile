@@ -30,6 +30,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Ablehne';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileHomeTab => 'Startsite';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'Live Streamer';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -279,6 +285,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobilePreviousPage => 'Vorher';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Bisherigi Lösigsversüech nomal aluege.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Wottsch de Lauf beände?';
 
   @override
@@ -390,6 +399,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Wänns aktiviert isch, vibriert s\'Grät churz, wänn du e Figur bewegsch oder schlasch.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -450,6 +462,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileTheme => 'Farbschema';
 
   @override
+  String get mobileToBeAnnounced => 'Wird no bekannt g\'macht';
+
+  @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
 
   @override
@@ -504,7 +519,7 @@ class AppLocalizationsGsw extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Underschtützt lichess.org sit $count Mönet als $param2',
-      one: 'Underschtüzt lichess.org sit $count Monet als $param2',
+      one: 'Underschtützt lichess.org sit $count Monet als $param2',
     );
     return '$_temp0';
   }
@@ -614,7 +629,7 @@ class AppLocalizationsGsw extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Hät $count neui Folgendi',
-      one: 'Hät $count neui Folgendi',
+      one: 'Hät $count neue Folgende',
     );
     return '$_temp0';
   }
@@ -736,7 +751,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiller wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \nWänn 2 oder meh Schpiller glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
 
   @override
-  String get arenaHowArePlayersPaired => 'How are players paired?';
+  String get arenaHowArePlayersPaired => 'Wie werded d\'Schpiller paaret?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpiel fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiller \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge all Schpiller. \nWänn me sofort z\'rugg id Übersicht gaht, chann me meh schpille und so meh Pünkt mache!';
@@ -791,7 +806,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaAllowBerserk => 'Berserk erlaube';
 
   @override
-  String get arenaAllowBerserkHelp => 'Erlaubt em Schpiller sini Bedänkziit z\'halbiere, um so en Zuesatzpunkt z\'günne';
+  String get arenaAllowBerserkHelp => 'Erlaubt de Schpiller d\'Bedänkzit z\'halbiere, zum so Zuesatzpünkt z\'gwünne';
 
   @override
   String get arenaAllowChatHelp => 'Lass d\'Schpiller ime Chatruum diskutiere';
@@ -824,7 +839,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaEditTeamBattle => 'Team - Schlacht bearbeite';
 
   @override
-  String get arenaDefenderLabel => 'Verteidigär:';
+  String get arenaDefenderLabel => 'Verteidiger:';
 
   @override
   String get arenaPickYourTeam => 'Wähl dis Team';
@@ -848,7 +863,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaTournamentStats => 'Turnier - Schtatistike';
 
   @override
-  String get arenaRankAverageHelp => 'Din Durschnittsrang repräsentiert din erwartete Endrang, abhängig vo dr totale Azahl a Schpiller.\nDa misst dini Turnierplatzierig, nid dis generelle Rating.\n\nZm Bispiel, en Durschnittsrang vo 3% wür heisse, das du es normal würsch id top 3% vom Turnier schaffe (Aso 30er vor 1’000 Schpiller).';
+  String get arenaRankAverageHelp => 'Din Durschnittsrang repräsentiert din erwartete Endrang, abhängig vu de Azahl Schpiller.\nDas isch es Mass vu dinere Turnierplatzierig, nöd vu dinere generelle Wertig.\n\nZ. B.: En Durschnittsrang vo 3% würd heisse, dass du\'s würsch id top 3% vum Turnier schaffe (also i die erschte 30 vu 1000 Schpiller).';
 
   @override
   String get arenaMedians => 'mittleri Wert';
@@ -889,7 +904,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaBerserkRate => 'Berserk-Wertig';
 
   @override
-  String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+  String get arenaLeaguesAndStreamerBattles => 'Ligas & Streamer Kämpf';
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -996,7 +1011,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastDeleteRound => 'Die Rundi lösche';
 
   @override
-  String get broadcastPermanentlyDeleteRound => 'Permanently delete this round and all its games?';
+  String get broadcastPermanentlyDeleteRound => 'Die Rundi und all Schpiel für immer lösche?';
 
   @override
   String get broadcastDeleteAllGamesOfThisRound => 'Lösch alli Schpiel vu dere Rundi. D\'Quälle muess aktiv si, dass sie neu erschtellt werde chönd.';
@@ -1008,7 +1023,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastDeleteTournament => 'Lösch das Turnier';
 
   @override
-  String get broadcastPermanentlyDeleteTournament => 'S\'Turnier permanent lösche, inklusivi allne Runde und Partie?';
+  String get broadcastPermanentlyDeleteTournament => 'Das Turnier, mit allne Runde und Schpiel, für immer lösche?';
 
   @override
   String get broadcastShowScores => 'Zeigt d\'Erfolg vu de Schpiller, anhand vu Schpiel-Ergäbnis';
@@ -1238,7 +1253,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastKnockouts => 'Usscheidigskämpf';
 
   @override
-  String get broadcastPinPlayer => 'Pin player';
+  String get broadcastPinPlayer => 'Pin Schpieler';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1421,6 +1436,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Üeb nur einigi Dateie und Räng';
 
   @override
+  String get coordinatesEnterTheCoordinate => 'Gib d\'Koordinate i';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Klick $param zum Afange';
+  }
+
+  @override
   String get learnLearnChess => 'Lern Schach';
 
   @override
@@ -1555,7 +1578,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get learnUseAllThePawns => 'Benutz all Pure! Mer muess nöd Umwandle.';
 
   @override
-  String get learnAPawnOnTheSecondRank => 'En Pur dörf - bim 1. Zug - grad 2 Fälder vorwärts!';
+  String get learnAPawnOnTheSecondRank => 'En Pur chann - bim erschte Zug - sogar grad 2 Fälder vorwärts!';
 
   @override
   String get learnGrabAllTheStarsNoNeedToPromote => 'Schnapp dir all die Stern! \nUmwandle muesch nöd.';
@@ -1738,7 +1761,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get learnCastleKingSide => 'Zieh de König - uf de Königssite - zwei Fälder. \nDas isch die churz Rochade \"0-0\"!';
 
   @override
-  String get learnCastleQueenSide => 'Zieh de König - uf de Damesiie - zwei Fälder.\nDas isch die lang Rochade \"0-0-0\"!';
+  String get learnCastleQueenSide => 'Zieh de König - uf de Damesite - zwei Fälder.\nDas isch die lang Rochade \"0-0-0\"!';
 
   @override
   String get learnTheKnightIsInTheWay => 'De Schpringer staht im Wäg, ziehn en weg und mach dänn die churz Rochade.';
@@ -2383,7 +2406,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Zugsbeschtätigung';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Mehrfach Uswahle. ';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Chann während eme Schpil im Brättmenü deaktiviert werde';
@@ -2479,7 +2502,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline-Notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Server-Analyse zeigä';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Pfiil für d\'beschti Züg zeige';
@@ -2507,6 +2530,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'En Schachbare König zeige';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Zeig g\'fessleti Figure';
 
   @override
   String get preferencesDisclosureMode => 'Ermögliche, d\'Variante z\'verstäcke';
@@ -2900,9 +2926,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCastling => 'Rochade';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Bring de König in Sicherheit und schick de Turm in Agriff.';
 
   @override
@@ -2921,7 +2944,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeCornerMate => 'Arabischs Matt (Eck-Matt)';
 
   @override
-  String get puzzleThemeCornerMateKnightDeliversDescription => 'Confine the king to the corner using a rook or queen, and use a knight to deliver the checkmate.';
+  String get puzzleThemeCornerMateKnightDeliversDescription => 'Dräng de König mit me Turm oder mit de Dame in Egge und mach mit em Schpringer es Schachmatt.';
 
   @override
   String get puzzleThemeCrushing => 'Vernichtend';
@@ -2996,6 +3019,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeEndgameDescription => 'E Taktik für die letscht Fase vum Schpiel.';
 
   @override
+  String get puzzleThemeEnPassant => 'En passant';
+
+  @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'E Taktik, wo d\'En Passant regle griift, bi dere en buur en gegnerische Buur cha schla, wenn dise vorher isch zwei Schritt glaufe.';
 
   @override
@@ -3050,13 +3076,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemePillsburysMate => 'Pillsbury Matt';
 
   @override
-  String get puzzleThemePillsburyMateRookAndBishopDescription => 'A rook delivers checkmate to the king, while a bishop helps confine it.';
+  String get puzzleThemePillsburyMateRookAndBishopDescription => 'En Turm setzt de König schachmatt, wobi en Läufer bim Ichessle hilft.';
 
   @override
   String get puzzleThemeMorphysMate => 'Morphy Matt';
 
   @override
-  String get puzzleThemeMorphyMateBishopAndRookDescription => 'A bishop delivers checkmate to the king, while a rook helps confine it.';
+  String get puzzleThemeMorphyMateBishopAndRookDescription => 'En Läufer setzt de König schachmatt, wobi en Turm bim Ichessle hilft.';
 
   @override
   String get puzzleThemeSwallowstailMate => 'Schwalbeschwanz Matt';
@@ -3176,7 +3202,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemePromotion => 'Umwandlig';
 
   @override
-  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Promote one of your pawns to a queen, rook or minor piece.';
+  String get puzzleThemePromotePawnToQueenRookOrMinor => 'Mach eine vu dine Pure zur Dame, zum Turm oder andere Figur.';
 
   @override
   String get puzzleThemeQueenEndgame => 'Dame Ändschpiel';
@@ -3300,7 +3326,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsSettings => 'Ischtellige';
 
   @override
-  String get settingsCloseAccount => 'Benutzerkonto schlüsse';
+  String get settingsCloseAccount => 'Konto schlüsse';
 
   @override
   String get settingsManagedAccountCannotBeClosed => 'Dis Konto wird verwaltet, es chann nöd geschlosse werde.';
@@ -3315,36 +3341,36 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsCloseAccountAreYouSure => 'Bisch sicher, dass du dis Konto schlüsse wottsch?';
 
   @override
-  String get settingsThisAccountIsClosed => 'Das Benutzerkonto isch g\'schlosse.';
+  String get settingsThisAccountIsClosed => 'Das Konto isch g\'schlosse.';
 
   @override
-  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+  String get settingsWereSorryToSeeYouGo => 'Es tuet eus leid, dass du eus verlahsch.';
 
   @override
-  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+  String get settingsCloseAccountForeverLabel => 'Für immer schlüsse: E Wiedereröffnig unmöglich mache';
 
   @override
-  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+  String get settingsCloseAccountForeverWarning => 'Mach, dass das Konto nümme frei-g\'schaltet werde chann: Wänn du das Chäschtli a-chrüzisch, chönnd - uf din Wunsch - nöd mal Admins dis Konto wieder frei schalte.';
 
   @override
-  String get settingsDeleteYourAccount => 'Delete your account';
+  String get settingsDeleteYourAccount => 'Lösch dis Konto';
 
   @override
-  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+  String get settingsDeleteAccountWarning => 'Sobald du dis Konto g\'löscht häsch, wirds bi Lichess entfernt und eusi Admins chönnds nümme für dich wieder herstelle.';
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
-    return 'Would you like to $param instead?';
+    return 'Würdsch stattdesse lieber $param?';
   }
 
   @override
-  String get settingsCloseYourAccount => 'close your account';
+  String get settingsCloseYourAccount => 'schlüss dis Konto';
 
   @override
-  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
+  String get settingsDeleteAccountConfirmText => 'Ich han verstande, dass g\'löschti Konti nümme reaktiviert werde chönnd';
 
   @override
-  String get gameSetup => 'Schpielischtellige';
+  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'En Fründ usefordere';
@@ -3374,7 +3400,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reusableChallengeUrl => 'Wieder verwändbari Useforderigs-URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'En permanänte Link, für jedermann - um di mit genau dene Istellige use z\'fordere.';
+  String get permanentLinkForAnyoneToChallengeYou => 'En permanänte Link, für jedermann - um di mit genau dene Ischtellige use z\'fordere.';
 
   @override
   String get waiting => 'Am Warte';
@@ -3793,13 +3819,16 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get engineSettings => 'Engine Ischtellige';
 
   @override
+  String get engine => 'Engine';
+
+  @override
   String get enginesFromStrongestToWeakest => 'Engines vo stärkste bis schwächste';
 
   @override
   String get illegalPosition => 'Illegali Schtellig';
 
   @override
-  String get threefoldRepetition => 'Drüüfachi Stelligswiederholig';
+  String get threefoldRepetition => 'Drüfachi Schtelligswiederholig';
 
   @override
   String get claimADraw => 'Es Remis beaschpruche';
@@ -4273,7 +4302,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get cannotFilterByUnstableRating => 'It is not possible to filter by rating because your rating is not stable.\nPlaying rated games will increase stability.';
+  String get cannotFilterByUnstableRating => 'Es isch nöd möglich nach Wertig z\'filtere, will dini Wertig nonig schtabil isch.\nDur Schpiele vu Wertigsschpiel erhöht sich d\'Schtabilität.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4417,6 +4446,11 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get noNetwork => 'Offline';
+
+  @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Fründe online: $param1\nFründe im Schpiel: $param2';
+  }
 
   @override
   String get favoriteOpponents => 'Hüfigschti Gägner';
@@ -4695,19 +4729,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get onlineBots => 'Online Roboter';
 
   @override
-  String get aboutBotsOnLichess => 'About bots on Lichess';
+  String get aboutBotsOnLichess => 'Über Bots uf Lichess';
 
   @override
-  String get featuredBots => 'Featured bots';
+  String get featuredBots => 'Empfohleni Bots';
 
   @override
-  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+  String get tryPlayingTheseInnovativeChessEngines => 'Probier die innovative Schach-Engines z\'schpille! Sie sind eusi Favorite.';
 
   @override
-  String get communityBots => 'Community bots';
+  String get communityBots => 'Gmeinschafts Bots';
 
   @override
-  String get moreChessEnginesCreatedByTheLichessCommunity => 'More chess engines created by the Lichess community. They are hosted by their creators, and might not always be online.';
+  String get moreChessEnginesCreatedByTheLichessCommunity => 'Meh Schach-Engines, kreiert vu de Lichess-G\'meinschaft. Sie werded vu ihrne \"Schöpfer\" g\'hostet und sind nöd immer online.';
 
   @override
   String get name => 'Name';
@@ -4785,9 +4819,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get reason => 'Grund';
 
   @override
-  String get whatIsIheMatter => 'Was isch s\'Problem?';
-
-  @override
   String get cheat => 'Bschiss';
 
   @override
@@ -4804,9 +4835,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Mir chönd dini Meldig schneller uf Änglisch bearbeite.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Bitte gib mindeschtens 1 Link zume Schpiel a, wo bschisse worde isch.';
 
   @override
   String by(String param) {
@@ -4855,7 +4883,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get logInByEmail => 'Mit E-Mail ilogge';
 
   @override
-  String get emailLoginInstructions => 'We will send you an email containing a link to log you in.';
+  String get emailLoginInstructions => 'Mir schicked dir e E-Mail, mit eme Link zum Ilogge.';
 
   @override
   String get emailMeALink => 'Schick mer per E-Mail en Link';
@@ -4930,10 +4958,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get never => 'Nie';
 
   @override
-  String get defeatOnly => 'Defeat only';
+  String get defeatOnly => 'Nur Niederlage';
 
   @override
-  String get drawAndDefeat => 'Draw and defeat';
+  String get drawAndDefeat => 'Remis und Niederlage';
 
   @override
   String xCompetesInY(String param1, String param2) {
@@ -5124,7 +5152,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get contribute => 'Mitmache';
 
   @override
-  String get changelog => 'Changelog';
+  String get changelog => 'Log wächsle';
 
   @override
   String get termsOfService => 'Nutzigs-Bedingige';
@@ -5136,7 +5164,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get sourceCode => 'Quällcode';
 
   @override
-  String get blockAds => 'Block ads';
+  String get blockAds => 'Ads blocke';
 
   @override
   String get simultaneousExhibitions => 'Simultanschach Veraschtaltige';
@@ -5189,7 +5217,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get create => 'Erschtelle';
 
   @override
-  String get creatingASimul => 'Es Simultan z\'veranstalte erlaubt dir, gäge mehreri Spiler ufs mal z\'spiele.';
+  String get creatingASimul => 'Wänn du es Simultan erschtellsch, chasch glichzitig gäge mehreri Gägner schpille.';
 
   @override
   String get simulVariantsHint => 'Wänn du mehreri Variante wählsch, chann jede Simultangägner ussueche, was er schpille will.';
@@ -5201,7 +5229,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get simulAddExtraTime => 'Du chasch dir Extrazit geh, dass du z\'rächt chunsch.';
 
   @override
-  String get extraClockTimeForHost => 'Extra clock time for the host:';
+  String get extraClockTimeForHost => 'Extra Schpielzit für de Host:';
 
   @override
   String get simulAddExtraTimePerPlayer => 'Gib für jede Schpiller, wo am Simultan teilnimmt, bi dinere Uhr Zit dezue';
@@ -5234,7 +5262,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get keyGoToStartOrEnd => 'gang zum Afang/Änd';
 
   @override
-  String get keyGoToPreviousOrNextLine => 'go to previous/next line';
+  String get keyGoToPreviousOrNextLine => 'uf die vorherig/nächscht Zile';
 
   @override
   String get keyCycleSelectedVariation => 'Usgwählti Zyklusvariante';
@@ -5386,7 +5414,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get downloadImported => 'Importierte Download';
 
   @override
+  String get downloadMyGames => 'Mini Schpiel abelade';
+
+  @override
   String get downloadAllGames => 'All Schpiel abelade';
+
+  @override
+  String get downloadResults => 'Resultat abelade';
 
   @override
   String get crosstable => 'Matchverlauf';
@@ -5449,7 +5483,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String activeSessionsDescription(String param1, String param2) {
-    return 'This is a list of devices and applications that are logged into your account. If you notice any suspicious activity, make sure to <a href=\'$param1\'>check your recovery email address</a> and <a href=\'$param2\'>change your password</a>.';
+    return 'Das isch e Lischte vu Grät und Awändige, wo i dim Konto agmäldet sind. Söttsch du verdächtigi Aktivitäte bemerke, dänn prüef bitte unbedingt <a href=\'$param1\'> dini E-Mail-Adrässe, für d\'Wiederherstellig</a> und <a href=\'$param2\'>mach es neus <a href=\'$param1\'>Passwort</a>.';
   }
 
   @override
@@ -5471,7 +5505,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get noChallenges => 'Kei Useforderige.';
 
   @override
-  String get browserNotificationsDenied => 'Notification popups disabled by browser setting';
+  String get browserNotificationsDenied => 'Benachrichtigungs-Popups werded vu Browserischtellige deaktiviert';
 
   @override
   String xHostsY(String param1, String param2) {
@@ -6153,7 +6187,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get showMeEverything => 'Zeig mer alles';
 
   @override
-  String get lichessPatronInfo => 'Lichess isch e Wohltätigkeitsorganisation und e völlig choschtelosi/freii Open-Source-Software.\nAlli Betriebs-Choschte, d\'Entwicklig und d\'Inhält werded usschliesslich dur Benutzerschpände finanziert.';
+  String get lichessPatronInfo => 'Lichess isch e g\'meinnützigi Organisation mit ere vollschtändig koschtelose Open-Source-Software. Mir sind uf Schpände vu euse Nutzer agwiese, zum d\'Betriebsköschte, d\'Entwicklig und d\'Inhalte z\'finanzieren. Ohni eusi grosszügig G\'meinschaft chönnted mir die Website nöd am Laufe b\'halte. Viele Dank, dass ihr debi sind!';
 
   @override
   String get nothingToSeeHere => 'Da gits im monumäntan nüt z\'gseh.';
@@ -6209,13 +6243,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get boards => 'Brätter';
 
   @override
-  String get write => 'Write';
+  String get write => 'Schribe';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Vorschau';
 
   @override
-  String get done => 'Done';
+  String get done => 'Erledigt';
 
   @override
   String opponentLeftCounter(int count) {
@@ -6277,8 +6311,8 @@ class AppLocalizationsGsw extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count Schpiller',
-      one: '$count Schpiller',
+      other: '$count Schpiler',
+      one: '$count Schpiler',
     );
     return '$_temp0';
   }
@@ -6963,9 +6997,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyOnlyContributorsCanRequestAnalysis => 'Nur wer a dere Schtudie mit macht, chann e Coputeranalyse afordere.';
 
   @override
-  String get studyGetAFullComputerAnalysis => 'Erhalt e vollschtändigi, serversitigi Computeranalyse vu de Hauptvariante.';
-
-  @override
   String get studyMakeSureTheChapterIsComplete => 'Schtell sicher, dass das Kapitel vollschtändig isch. Die Analyse chann nur eimal agforderet werde.';
 
   @override
@@ -7184,9 +7215,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyStart => 'Schtart';
 
   @override
-  String get studySave => 'Schpeichärä';
-
-  @override
   String get studyClearChat => 'Tschätt löschä';
 
   @override
@@ -7389,7 +7417,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Füeg e Lichess-Partie-URL i<br>(wie z.B. lichess.org/7fHIU0XI)<br>zum d\'Schpielzüg is Kapitel lade.';
 
   @override
   String get studyFromFenStringTitle => 'Vunere FEN-Partie';
@@ -7420,6 +7448,21 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Wiss besiegt, aber Schwarz chann nöd günne';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
   String studyNbChapters(int count) {

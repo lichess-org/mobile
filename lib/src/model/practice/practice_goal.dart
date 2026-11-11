@@ -62,7 +62,7 @@ sealed class const PracticeGoal._() with _$PracticeGoal {
       'equalIn' => PracticeGoal.equalIn(moves: moves()),
       'evalIn' => PracticeGoal.evalIn(cp: cp(), moves: moves()),
       'promotion' => PracticeGoal.promotion(cp: cp()),
-      _ => throw PickException('Unknown practice goal "$result" at ${pick.debugParsingExit}'),
+      _ => throw PickException.fromPick(pick('result'), 'unknown practice goal'),
     };
   }
 

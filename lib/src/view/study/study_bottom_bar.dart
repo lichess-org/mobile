@@ -6,12 +6,14 @@ import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/study/study_controller.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_actions.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
-import 'package:lichess_mobile/src/view/study/create_study_chapter_bottom_sheet.dart';
+import 'package:lichess_mobile/src/view/study/study_chapters_sheet.dart';
 import 'package:lichess_mobile/src/view/study/study_settings.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -21,23 +23,41 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const StudyBottomBar({required final StudyOptions options}) extends ConsumerWidget {
+class const StudyBottomBar({
+  required final StudyOptions options,
+  required final bool smallBoard,
+  required final VoidCallback onToggleSmallBoard,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gamebook = ref.watch(
       studyControllerProvider(options).select((s) => s.requireValue.gamebookActive),
     );
 
-    return gamebook ? _GamebookBottomBar(options: options) : _AnalysisBottomBar(options: options);
+    final menuGroup = BottomBarGroup(
+      children: [
+        _StudyMenuButton(options: options),
+        if (canToggleBoardSize(context))
+          BoardSizeToggleButton(smallBoard: smallBoard, onTap: onToggleSmallBoard),
+      ],
+    );
+    return gamebook
+        ? _GamebookBottomBar(options: options, menuGroup: menuGroup)
+        : _AnalysisBottomBar(options: options, menuGroup: menuGroup);
   }
 }
 
-class const _AnalysisBottomBar({required final StudyOptions options}) extends ConsumerWidget {
+class const _AnalysisBottomBar({
+  required final StudyOptions options,
+
+  /// The menu button, grouped with the board size button.
+  required final Widget menuGroup,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).value;
     if (state == null) {
-      return const BottomBar(children: []);
+      return const BottomBar.empty(cupertinoGlass: true);
     }
 
     final onGoForward = state.canGoNext
@@ -48,9 +68,9 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
         : null;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
-        _StudyMenuButton(options: options),
-        _ChapterButton(options: options),
+        menuGroup,
         if (state.isComputerAnalysisAllowed)
           EngineToggleButton(
             filters: (context: state.evaluationContext, path: state.currentPath),
@@ -65,45 +85,56 @@ class const _AnalysisBottomBar({required final StudyOptions options}) extends Co
           hasNextChapter: state.hasNextChapter,
           blink: state.isAtEndOfChapter && state.hasNextChapter,
         ),
-        RepeatButton(
-          onLongPress: state.canGoBack
-              ? () =>
-                    ref.read(studyControllerProvider(options).notifier).userPrevious(fastSeek: true)
-              : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-previous'),
-            onTap: onGoBack,
-            label: context.l10n.studyBack,
-            icon: CupertinoIcons.chevron_back,
-            showTooltip: false,
-          ),
-        ),
-        RepeatButton(
-          onLongPress: state.canGoNext
-              ? () => ref.read(studyControllerProvider(options).notifier).userNext(fastSeek: true)
-              : null,
-          child: BottomBarButton(
-            key: const ValueKey('goto-next'),
-            icon: CupertinoIcons.chevron_forward,
-            onTap: onGoForward,
-            label: context.l10n.studyNext,
-            showTooltip: false,
-          ),
+        BottomBarGroup(
+          children: [
+            RepeatButton(
+              onLongPress: state.canGoBack
+                  ? () => ref
+                        .read(studyControllerProvider(options).notifier)
+                        .userPrevious(fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-previous'),
+                onTap: onGoBack,
+                label: context.l10n.studyBack,
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            RepeatButton(
+              onLongPress: state.canGoNext
+                  ? () =>
+                        ref.read(studyControllerProvider(options).notifier).userNext(fastSeek: true)
+                  : null,
+              child: BottomBarButton(
+                key: const ValueKey('goto-next'),
+                icon: CupertinoIcons.chevron_forward,
+                onTap: onGoForward,
+                label: context.l10n.studyNext,
+                showTooltip: false,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-class const _GamebookBottomBar({required final StudyOptions options}) extends ConsumerWidget {
+class const _GamebookBottomBar({
+  required final StudyOptions options,
+
+  /// The menu button, grouped with the board size button.
+  required final Widget menuGroup,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(studyControllerProvider(options)).requireValue;
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
-        _StudyMenuButton(options: options),
-        _ChapterButton(options: options),
+        menuGroup,
         ...switch (state.gamebookState) {
           GamebookState.findTheMove => [
             BottomBarButton(
@@ -164,7 +195,7 @@ class const _GamebookBottomBar({required final StudyOptions options}) extends Co
             ),
             if (!state.isIntroductoryChapter)
               BottomBarButton(
-                onTap: () => Navigator.of(context, rootNavigator: true).push(
+                onTap: () => Navigator.of(context).pushHidingTabBar(
                   AnalysisScreen.buildRoute(
                     AnalysisOptions.pgn(
                       id: options.id,
@@ -224,26 +255,6 @@ class _NextChapterButtonState() extends ConsumerState<_NextChapterButton> {
   }
 }
 
-/// Opens a bottom sheet, filling most of the screen, to browse a study.
-Future<void> _showStudySheet(
-  BuildContext context, {
-  required Widget Function(BuildContext, ScrollController) builder,
-}) {
-  return showModalBottomSheet<void>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
-    isDismissible: true,
-    constraints: BoxConstraints(maxHeight: MediaQuery.heightOf(context) * 0.9),
-    builder: (_) => DraggableScrollableSheet(
-      initialChildSize: 0.6,
-      snap: true,
-      expand: false,
-      builder: builder,
-    ),
-  );
-}
-
 /// Menu holding the study actions that don't fit in the bottom bar.
 class const _StudyMenuButton({required final StudyOptions options}) extends ConsumerWidget {
   @override
@@ -273,7 +284,7 @@ class const _StudyMenuButton({required final StudyOptions options}) extends Cons
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.studyMembers),
-          onPressed: () => _showStudySheet(
+          onPressed: () => showStudySheet(
             context,
             builder: (context, scrollController) =>
                 _StudyMembersSheet(options: options, scrollController: scrollController),
@@ -316,24 +327,6 @@ class const _StudyMenuButton({required final StudyOptions options}) extends Cons
   }
 }
 
-class const _ChapterButton({required final StudyOptions options}) extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final nbChapters = ref.watch(
-      studyControllerProvider(options).select((s) => s.requireValue.study.chapters.length),
-    );
-    return BottomBarButton(
-      onTap: () => _showStudySheet(
-        context,
-        builder: (context, scrollController) =>
-            _StudyChaptersMenu(options: options, scrollController: scrollController),
-      ),
-      label: context.l10n.studyNbChapters(nbChapters),
-      icon: Icons.menu_book,
-    );
-  }
-}
-
 class const _StudyMembersSheet({
   required final StudyOptions options,
   required final ScrollController scrollController,
@@ -359,104 +352,6 @@ class const _StudyMembersSheet({
             onTap: () {
               Navigator.of(context).push(UserOrProfileScreen.buildRoute(member.user));
             },
-          ),
-      ],
-    );
-  }
-}
-
-class const _StudyChaptersMenu({
-  required final StudyOptions options,
-  required final ScrollController scrollController,
-}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_StudyChaptersMenu> createState() => _StudyChaptersMenuState();
-}
-
-class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
-  final currentChapterKey = GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    final state = ref.watch(studyControllerProvider(widget.options)).requireValue;
-
-    // Scroll to the current chapter
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentChapterKey.currentContext != null) {
-        Scrollable.ensureVisible(currentChapterKey.currentContext!, alignment: 0.5);
-      }
-    });
-
-    return BottomSheetScrollableContainer(
-      scrollController: widget.scrollController,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                context.l10n.studyNbChapters(state.study.chapters.length),
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        for (final chapter in state.study.chapters)
-          ListTile(
-            key: chapter.id == state.currentChapter.id ? currentChapterKey : null,
-            title: Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: '${state.study.getChapterIndex(chapter.id) + 1} ',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: chapter.name),
-                ],
-              ),
-              maxLines: 2,
-            ),
-            onTap: () {
-              ref.read(studyControllerProvider(widget.options).notifier).goToChapter(chapter.id);
-              Navigator.of(context).pop();
-            },
-            selected: chapter.id == state.currentChapter.id,
-          ),
-        if (state.canIContribute)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: FilledButton.tonalIcon(
-              onPressed: () {
-                final studyNotifier = ref.read(studyControllerProvider(widget.options).notifier);
-                Navigator.of(context).pop();
-                if (!context.mounted) return;
-
-                showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  useRootNavigator: true,
-                  builder: (context) => CreateStudyChapterBottomSheet(
-                    params: CreateChapterOfExistingStudy(state.study.id),
-                    initialChapterName: context.l10n.studyChapterX(
-                      (state.study.chapters.length + 1).toString(),
-                    ),
-                    onChaptersCreated: (_, chapters) {
-                      // The server always answers with the created chapters, but the response
-                      // mapper tolerates an empty list, and this runs after the sheet was popped:
-                      // an exception here would surface as an unhandled error.
-                      final chapterId = chapters.firstOrNull;
-                      if (chapterId != null) {
-                        studyNotifier.goToChapter(chapterId);
-                      }
-                    },
-                  ),
-                );
-              },
-              label: Text(context.l10n.studyNewChapter),
-              icon: const Icon(Icons.add),
-            ),
           ),
       ],
     );
