@@ -178,7 +178,7 @@ class _AccountMenuScreenState()
             )
           else ...[
             Center(
-              child: FilledButton(
+              child: FilledButton.tonal(
                 onPressed: isOnline
                     ? switch (signInState) {
                         MutationPending() => null,
