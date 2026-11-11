@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_screen.dart';
+import 'package:lichess_mobile/src/view/game/exported_game_title.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
@@ -169,7 +170,7 @@ class const _TvAppBarTitle({
           );
 
     return timeIncrement == null
-        ? const SizedBox.shrink()
+        ? const ExportedGameTitleLoading()
         : Column(
             spacing: 2.0,
             crossAxisAlignment: CrossAxisAlignment.start,
