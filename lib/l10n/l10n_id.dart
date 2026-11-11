@@ -435,9 +435,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Terjadi kesalahan.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3331,6 +3328,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get searchSearch => 'Cari';
+
+  @override
+  String get searchSortBy => 'Urut berdasarkan';
 
   @override
   String get settingsSettings => 'Pengaturan';

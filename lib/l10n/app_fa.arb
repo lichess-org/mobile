@@ -935,6 +935,7 @@
   "recapAwaitQuestion": "امسال چه کرده‌اید؟",
   "recapRecapReady": "سَرجمعِ سالِ {param} تان آماده است!",
   "searchSearch": "جستجو",
+  "searchSortBy": "مرتب‌سازی بر اساس",
   "settingsSettings": "تنظیمات",
   "settingsCloseAccount": "بستن حساب",
   "settingsManagedAccountCannotBeClosed": "حساب‌تان مدیریت می‌شود و نمی‌توان آن را بست.",

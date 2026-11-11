@@ -435,9 +435,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Ақау туындады.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get searchSearch => 'Іздеу';
+
+  @override
+  String get searchSortBy => 'Сұрыптау шарты';
 
   @override
   String get settingsSettings => 'Баптаулар';

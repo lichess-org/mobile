@@ -435,9 +435,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Zerbait gaizki joan da.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get searchSearch => 'Bilatu';
+
+  @override
+  String get searchSortBy => 'Honen arabera ordenatu';
 
   @override
   String get settingsSettings => 'Ezarpenak';

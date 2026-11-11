@@ -435,9 +435,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Diç shkoi ters.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get searchSearch => 'Kërko';
+
+  @override
+  String get searchSortBy => 'Renditi sipas';
 
   @override
   String get settingsSettings => 'Rregullime';

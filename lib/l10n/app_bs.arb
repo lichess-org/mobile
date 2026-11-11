@@ -805,6 +805,7 @@
   "recapAwaitQuestion": "Šta si radio/la ove godine?",
   "recapRecapReady": "Vaš sažetak za {param} je spreman!",
   "searchSearch": "Traži",
+  "searchSortBy": "Sortiraj po",
   "settingsSettings": "Postavke",
   "settingsCloseAccount": "Zatvorite račun",
   "settingsManagedAccountCannotBeClosed": "Vaš je račun pod administracijom i ne može biti zatvoren.",

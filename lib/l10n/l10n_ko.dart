@@ -435,9 +435,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSomethingWentWrong => '문제가 발생했습니다.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => '친구 정렬';
 
   @override
@@ -3327,6 +3324,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get searchSearch => '검색';
+
+  @override
+  String get searchSortBy => '다음으로 정렬:';
 
   @override
   String get settingsSettings => '설정';

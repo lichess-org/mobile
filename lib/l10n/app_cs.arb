@@ -863,6 +863,7 @@
   "recapAwaitQuestion": "Co jste dělali tento rok?",
   "recapRecapReady": "Váš recap {param} je připraven!",
   "searchSearch": "Hledat",
+  "searchSortBy": "Seřadit podle",
   "settingsSettings": "Nastavení",
   "settingsCloseAccount": "Zrušit účet",
   "settingsManagedAccountCannotBeClosed": "Váš účet je spravován a nemůže být zrušen.",

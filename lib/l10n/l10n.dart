@@ -1024,12 +1024,6 @@ abstract class AppLocalizations {
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
 
-  /// No description provided for @mobileSortBy.
-  ///
-  /// In en, this message translates to:
-  /// **'Sort by'**
-  String get mobileSortBy;
-
   /// No description provided for @mobileSortFriends.
   ///
   /// In en, this message translates to:
@@ -6231,6 +6225,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search'**
   String get searchSearch;
+
+  /// No description provided for @searchSortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get searchSortBy;
 
   /// No description provided for @settingsSettings.
   ///

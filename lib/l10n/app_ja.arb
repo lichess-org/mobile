@@ -1002,6 +1002,7 @@
   "recapAwaitQuestion": "今年はどんなだったでしょう。",
   "recapRecapReady": "{param} 年のまとめが用意できました！",
   "searchSearch": "検索",
+  "searchSortBy": "並べ替え基準",
   "settingsSettings": "設定",
   "settingsCloseAccount": "アカウント停止",
   "settingsManagedAccountCannotBeClosed": "あなたのアカウントは別の人が管理しており、自分では停止できません。",

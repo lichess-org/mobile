@@ -435,9 +435,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileSomethingWentWrong => 'কিছু সমস্যা হয়েছে।';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get searchSearch => 'অনুসন্ধান';
+
+  @override
+  String get searchSortBy => 'Sort by';
 
   @override
   String get settingsSettings => 'সেটিংস';

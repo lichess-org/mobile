@@ -435,9 +435,6 @@ class AppLocalizationsLt extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3409,6 +3406,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get searchSearch => 'Ieškoti';
+
+  @override
+  String get searchSortBy => 'Rūšiuoti pagal';
 
   @override
   String get settingsSettings => 'Nuostatos';

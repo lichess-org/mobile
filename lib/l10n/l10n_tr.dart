@@ -435,9 +435,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Birşeyler ters gitti.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Arkadaşları sıralayın';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get searchSearch => 'Ara';
+
+  @override
+  String get searchSortBy => 'Sıralama ölçütü';
 
   @override
   String get settingsSettings => 'Ayarlar';

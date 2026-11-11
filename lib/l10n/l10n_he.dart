@@ -435,9 +435,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSomethingWentWrong => 'משהו השתבש.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3381,6 +3378,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get searchSearch => 'חיפוש';
+
+  @override
+  String get searchSortBy => 'מיין לפי';
 
   @override
   String get settingsSettings => 'הגדרות';

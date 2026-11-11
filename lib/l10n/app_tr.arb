@@ -1004,6 +1004,7 @@
   "recapAwaitQuestion": "Bu yıl neler yaptın?",
   "recapRecapReady": "{param} özetiniz hazır!",
   "searchSearch": "Ara",
+  "searchSortBy": "Sıralama ölçütü",
   "settingsSettings": "Ayarlar",
   "settingsCloseAccount": "Hesabı kapat",
   "settingsManagedAccountCannotBeClosed": "Hesabınız başkası tarafından yönetiliyor, kapatılamaz.",

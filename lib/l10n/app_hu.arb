@@ -803,6 +803,7 @@
   "recapAwaitQuestion": "Mit csináltál idén?",
   "recapRecapReady": "Elkészült az éves összefoglalód: {param}!",
   "searchSearch": "Keresés",
+  "searchSortBy": "Rendezés",
   "settingsSettings": "Beállítások",
   "settingsCloseAccount": "Fiók zárolása",
   "settingsManagedAccountCannotBeClosed": "A felhasználói fiókod felügyelet alatt áll, ezért nem zárolható.",

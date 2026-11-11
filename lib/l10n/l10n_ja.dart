@@ -435,9 +435,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSomethingWentWrong => '問題が発生しました。';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => '友達をソート';
 
   @override
@@ -3327,6 +3324,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get searchSearch => '検索';
+
+  @override
+  String get searchSortBy => '並べ替え基準';
 
   @override
   String get settingsSettings => '設定';

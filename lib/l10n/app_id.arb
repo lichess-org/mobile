@@ -668,6 +668,7 @@
   "puzzleThemePlayerGamesDescription": "Mengambil taktik yang dihasilkan dari permainan anda, atau pemain lain.",
   "puzzleThemePuzzleDownloadInformation": "Taktik-taktik ini ada di domain publik, dan dapat di download dari {param}.",
   "searchSearch": "Cari",
+  "searchSortBy": "Urut berdasarkan",
   "settingsSettings": "Pengaturan",
   "settingsCloseAccount": "Tutup akun",
   "settingsManagedAccountCannotBeClosed": "Akun Anda dikelola, dan tidak dapat ditutup.",

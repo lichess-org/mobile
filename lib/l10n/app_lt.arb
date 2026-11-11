@@ -697,6 +697,7 @@
   "puzzleThemePlayerGamesDescription": "Galvosūkiai sugeneruoti iš jūsų partijų ar iš kitų žaidėjų partijų.",
   "puzzleThemePuzzleDownloadInformation": "Šie galvosūkiai yra laisvai prieinami ir gali būti parsisiųsti iš {param}.",
   "searchSearch": "Ieškoti",
+  "searchSortBy": "Rūšiuoti pagal",
   "settingsSettings": "Nuostatos",
   "settingsCloseAccount": "Uždaryti paskyrą",
   "settingsManagedAccountCannotBeClosed": "Jūsų paskyra yra valdoma ir negali būti uždaryta.",

@@ -715,6 +715,7 @@
   "puzzleThemePlayerGamesDescription": "Сіздің не басқаның ойындарынан құрылған жұмбақтарды табу.",
   "puzzleThemePuzzleDownloadInformation": "Осы жұмбақтар көпшілікке ашық доменде сақтаулы, оларды осы жерден жүктеп алуға болады: {param}",
   "searchSearch": "Іздеу",
+  "searchSortBy": "Сұрыптау шарты",
   "settingsSettings": "Баптаулар",
   "settingsCloseAccount": "Тіркелгіні жабу",
   "settingsManagedAccountCannotBeClosed": "Сіздің тіркелгіңіз біреудің басқаруында, сондықтан сіз оны жаба алмайсыз.",

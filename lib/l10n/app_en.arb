@@ -182,7 +182,6 @@
   "mobileSimpleDelay": "Simple delay",
   "mobileSmallBoard": "Small board",
   "mobileSomethingWentWrong": "Something went wrong.",
-  "mobileSortBy": "Sort by",
   "mobileSortFriends": "Sort friends",
   "mobileStopShowingThreat": "Stop showing threat",
   "mobileSystemColors": "System colors",
@@ -1620,6 +1619,7 @@
     }
   },
   "searchSearch": "Search",
+  "searchSortBy": "Sort by",
   "settingsSettings": "Settings",
   "settingsCloseAccount": "Close account",
   "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",

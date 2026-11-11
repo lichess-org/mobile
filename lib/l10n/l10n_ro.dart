@@ -435,9 +435,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Ceva nu a mers bine.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sortați prietenii';
 
   @override
@@ -3383,6 +3380,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get searchSearch => 'Căutare';
+
+  @override
+  String get searchSortBy => 'Sortare după';
 
   @override
   String get settingsSettings => 'Setări';

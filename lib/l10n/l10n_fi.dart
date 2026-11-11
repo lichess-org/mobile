@@ -435,9 +435,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Jokin meni vikaan.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get searchSearch => 'Etsi';
+
+  @override
+  String get searchSortBy => 'Lajittelutapa';
 
   @override
   String get settingsSettings => 'Asetukset';

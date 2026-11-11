@@ -435,9 +435,6 @@ class AppLocalizationsAz extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Xəta baş verdi.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3353,6 +3350,9 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get searchSearch => 'Axtar';
+
+  @override
+  String get searchSortBy => 'Sıralama şəkli';
 
   @override
   String get settingsSettings => 'Tənzimləmələr';

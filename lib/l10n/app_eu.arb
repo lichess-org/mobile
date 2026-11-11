@@ -878,6 +878,7 @@
   "recapAwaitQuestion": "Zertan aritu zara aurten?",
   "recapRecapReady": "Zure {param} urteko laburpena prest dago!",
   "searchSearch": "Bilatu",
+  "searchSortBy": "Honen arabera ordenatu",
   "settingsSettings": "Ezarpenak",
   "settingsCloseAccount": "Kontua itxi",
   "settingsManagedAccountCannotBeClosed": "Zure kontua beste norbaitek kudeatzen du eta ezin da itxi.",

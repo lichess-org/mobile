@@ -435,9 +435,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Hiba történt.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get searchSearch => 'Keresés';
+
+  @override
+  String get searchSortBy => 'Rendezés';
 
   @override
   String get settingsSettings => 'Beállítások';

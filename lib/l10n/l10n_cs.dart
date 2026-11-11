@@ -435,9 +435,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Něco se pokazilo.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3411,6 +3408,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get searchSearch => 'Hledat';
+
+  @override
+  String get searchSortBy => 'Seřadit podle';
 
   @override
   String get settingsSettings => 'Nastavení';

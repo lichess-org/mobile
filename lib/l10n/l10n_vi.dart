@@ -435,9 +435,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3327,6 +3324,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get searchSearch => 'Tìm kiếm';
+
+  @override
+  String get searchSortBy => 'Sắp xếp theo';
 
   @override
   String get settingsSettings => 'Cài đặt';

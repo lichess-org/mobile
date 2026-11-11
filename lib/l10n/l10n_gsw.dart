@@ -435,9 +435,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Es isch öppis schief gange.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get searchSearch => 'Suechi';
+
+  @override
+  String get searchSortBy => 'Sortier nach';
 
   @override
   String get settingsSettings => 'Ischtellige';

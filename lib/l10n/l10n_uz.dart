@@ -435,9 +435,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Nimadir xato ketdi.';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => 'Sort friends';
 
   @override
@@ -3355,6 +3352,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get searchSearch => 'Qidirish';
+
+  @override
+  String get searchSortBy => 'Saralash';
 
   @override
   String get settingsSettings => 'Sozlamalar';

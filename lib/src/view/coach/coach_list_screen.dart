@@ -84,7 +84,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
           padding: const EdgeInsets.all(16.0),
           children: [
             Filter<CoachOrder>(
-              filterName: context.l10n.mobileSortBy,
+              filterName: context.l10n.searchSortBy,
               filterType: FilterType.singleChoice,
               choices: CoachOrder.values,
               choiceSelected: (choice) => newOrder == choice,

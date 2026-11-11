@@ -435,9 +435,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSomethingWentWrong => '出现错误';
 
   @override
-  String get mobileSortBy => 'Sort by';
-
-  @override
   String get mobileSortFriends => '好友排序';
 
   @override
@@ -3327,6 +3324,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchSearch => '搜索';
+
+  @override
+  String get searchSortBy => '排序方式';
 
   @override
   String get settingsSettings => '设置';
@@ -10289,6 +10289,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchSearch => '搜尋';
+
+  @override
+  String get searchSortBy => '排序條件';
 
   @override
   String get settingsSettings => '設定';

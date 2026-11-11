@@ -598,6 +598,7 @@
   "puzzleThemePlayerGamesDescription": "Գտնել խնդիրներ, որոնք ստեղծվել են Ձեր պարտիաներից, կամ այլ խաղացողների պարտիաներից։",
   "puzzleThemePuzzleDownloadInformation": "Այս խնդիրները հանրության սեփականությունն են, և Դուք կարող եք ներբեռնել դրանք՝ {param}։",
   "searchSearch": "Փնտրել",
+  "searchSortBy": "Դասակարգել ըստ",
   "settingsSettings": "Կարգավորումներ",
   "settingsCloseAccount": "Փակել հաշիվը",
   "settingsManagedAccountCannotBeClosed": "Ձեր հաշիվը կառավարվում է և չի կարող փակվել։",

@@ -138,7 +138,6 @@
   <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Simple delay</string>
   <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Small board</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
-  <string name="sortBy" comment="Caption above the sort order choices in the coaches filter sheet.">Sort by</string>
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Sort friends</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Stop showing threat</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">System colors</string>
