@@ -7,18 +7,31 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:material_ui/material_ui.dart';
+
+/// The padding of each group of settings, also used by [_DateRangeInputs].
+const _kGroupPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
 
 class const OpeningExplorerSettings() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
+    final notifier = ref.read(openingExplorerPreferencesProvider.notifier);
+
+    Widget speedLabel(Speed speed) => Text(
+      String.fromCharCode(speed.icon.codePoint),
+      style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
+    );
+    String speedTooltip(Speed speed) =>
+        Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n);
 
     final List<Widget> masterDbSettings = [
       _DateRangeInputs(
@@ -27,54 +40,37 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
         earliest: MasterDb.earliestDate,
         since: prefs.masterDb.since,
         until: prefs.masterDb.until,
-        onChanged: (since, until) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setMasterDbDates(since: since, until: until),
+        onChanged: (since, until) => notifier.setMasterDbDates(since: since, until: until),
       ),
     ];
 
     final List<Widget> lichessDbSettings = [
-      ListTile(
-        title: Text(context.l10n.timeControl),
-        subtitle: Wrap(
-          spacing: 5,
-          children: LichessDb.kAvailableSpeeds
-              .map(
-                (speed) => FilterChip(
-                  label: Text(
-                    String.fromCharCode(speed.icon.codePoint),
-                    style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
-                  ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
-                  selected: prefs.lichessDb.speeds.contains(speed),
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .toggleLichessDbSpeed(speed),
-                ),
-              )
-              .toList(growable: false),
+      Padding(
+        padding: _kGroupPadding,
+        child: Filter<Speed>(
+          filterName: context.l10n.timeControl,
+          filterType: FilterType.multipleChoice,
+          choices: LichessDb.kAvailableSpeeds,
+          choiceLabel: speedLabel,
+          choiceTooltip: speedTooltip,
+          choiceSelected: (speed) => prefs.lichessDb.speeds.contains(speed),
+          onSelected: (speed, _) => notifier.toggleLichessDbSpeed(speed),
         ),
       ),
-      ListTile(
-        title: Text(context.l10n.rating),
-        subtitle: Wrap(
-          spacing: 5,
-          children: LichessDb.kAvailableRatings
-              .map(
-                (rating) => FilterChip(
-                  label: Text(rating.toString()),
-                  tooltip: rating == 400
-                      ? '400-1000'
-                      : rating == 2500
-                      ? '2500+'
-                      : '$rating-${rating + 200}',
-                  selected: prefs.lichessDb.ratings.contains(rating),
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .toggleLichessDbRating(rating),
-                ),
-              )
-              .toList(growable: false),
+      Padding(
+        padding: _kGroupPadding,
+        child: Filter<int>(
+          filterName: context.l10n.rating,
+          filterType: FilterType.multipleChoice,
+          choices: LichessDb.kAvailableRatings,
+          choiceLabel: (rating) => Text(rating.toString()),
+          choiceTooltip: (rating) => rating == 400
+              ? '400-1000'
+              : rating == 2500
+              ? '2500+'
+              : '$rating-${rating + 200}',
+          choiceSelected: (rating) => prefs.lichessDb.ratings.contains(rating),
+          onSelected: (rating, _) => notifier.toggleLichessDbRating(rating),
         ),
       ),
       _DateRangeInputs(
@@ -82,33 +78,29 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
         earliest: LichessDb.earliestDate,
         since: prefs.lichessDb.since,
         until: prefs.lichessDb.until,
-        onChanged: (since, until) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setLichessDbDates(since: since, until: until),
+        onChanged: (since, until) => notifier.setLichessDbDates(since: since, until: until),
       ),
     ];
     final List<Widget> playerDbSettings = [
-      ListTile(
-        title: Text.rich(
+      Padding(
+        padding: _kGroupPadding,
+        child: Text.rich(
           TextSpan(
             text: '${context.l10n.player}: ',
-            style: const TextStyle(fontWeight: FontWeight.normal),
+            style: const TextStyle(fontSize: 18),
             children: [
               TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () => Navigator.of(context).push(
                     SearchScreen.buildRoute(
                       onUserTap: (user) {
-                        ref
-                            .read(openingExplorerPreferencesProvider.notifier)
-                            .setPlayerDbUsernameOrId(user.name);
+                        notifier.setPlayerDbUsernameOrId(user.name);
                         Navigator.of(context).pop();
                       },
                     ),
                   ),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
                   decoration: TextDecoration.underline,
                 ),
                 text: prefs.playerDb.username ?? 'Select a Lichess player',
@@ -117,64 +109,44 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
           ),
         ),
       ),
-      ListTile(
-        title: Text(context.l10n.side),
-        subtitle: Wrap(
-          spacing: 5,
-          children: Side.values
-              .map(
-                (side) => ChoiceChip(
-                  label: switch (side) {
-                    Side.white => Text(context.l10n.white),
-                    Side.black => Text(context.l10n.black),
-                  },
-                  selected: prefs.playerDb.side == side,
-                  onSelected: (_) =>
-                      ref.read(openingExplorerPreferencesProvider.notifier).setPlayerDbSide(side),
-                ),
-              )
-              .toList(growable: false),
+      Padding(
+        padding: _kGroupPadding,
+        child: Filter<Side>(
+          filterName: context.l10n.side,
+          filterType: FilterType.singleChoice,
+          choices: Side.values,
+          choiceLabel: (side) => Text(switch (side) {
+            Side.white => context.l10n.white,
+            Side.black => context.l10n.black,
+          }),
+          choiceSelected: (side) => prefs.playerDb.side == side,
+          onSelected: (side, _) => notifier.setPlayerDbSide(side),
         ),
       ),
-      ListTile(
-        title: Text(context.l10n.timeControl),
-        subtitle: Wrap(
-          spacing: 5,
-          children: PlayerDb.kAvailableSpeeds
-              .map(
-                (speed) => FilterChip(
-                  label: Text(
-                    String.fromCharCode(speed.icon.codePoint),
-                    style: TextStyle(fontFamily: speed.icon.fontFamily, fontSize: 18.0),
-                  ),
-                  tooltip: Perf.fromVariantAndSpeed(Variant.standard, speed).label(context.l10n),
-                  selected: prefs.playerDb.speeds.contains(speed),
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .togglePlayerDbSpeed(speed),
-                ),
-              )
-              .toList(growable: false),
+      Padding(
+        padding: _kGroupPadding,
+        child: Filter<Speed>(
+          filterName: context.l10n.timeControl,
+          filterType: FilterType.multipleChoice,
+          choices: PlayerDb.kAvailableSpeeds,
+          choiceLabel: speedLabel,
+          choiceTooltip: speedTooltip,
+          choiceSelected: (speed) => prefs.playerDb.speeds.contains(speed),
+          onSelected: (speed, _) => notifier.togglePlayerDbSpeed(speed),
         ),
       ),
-      ListTile(
-        title: Text(context.l10n.mode),
-        subtitle: Wrap(
-          spacing: 5,
-          children: GameMode.values
-              .map(
-                (gameMode) => FilterChip(
-                  label: Text(switch (gameMode) {
-                    GameMode.casual => context.l10n.casual,
-                    GameMode.rated => context.l10n.rated,
-                  }),
-                  selected: prefs.playerDb.gameModes.contains(gameMode),
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .togglePlayerDbGameMode(gameMode),
-                ),
-              )
-              .toList(growable: false),
+      Padding(
+        padding: _kGroupPadding,
+        child: Filter<GameMode>(
+          filterName: context.l10n.mode,
+          filterType: FilterType.multipleChoice,
+          choices: GameMode.values,
+          choiceLabel: (gameMode) => Text(switch (gameMode) {
+            GameMode.casual => context.l10n.casual,
+            GameMode.rated => context.l10n.rated,
+          }),
+          choiceSelected: (gameMode) => prefs.playerDb.gameModes.contains(gameMode),
+          onSelected: (gameMode, _) => notifier.togglePlayerDbGameMode(gameMode),
         ),
       ),
       _DateRangeInputs(
@@ -182,41 +154,27 @@ class const OpeningExplorerSettings() extends ConsumerWidget {
         earliest: PlayerDb.earliestDate,
         since: prefs.playerDb.since,
         until: prefs.playerDb.until,
-        onChanged: (since, until) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setPlayerDbDates(since: since, until: until),
+        onChanged: (since, until) => notifier.setPlayerDbDates(since: since, until: until),
       ),
     ];
 
     return BottomSheetScrollableContainer(
+      // With the groups' own padding, 16 around the content and between the groups.
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       children: [
-        ListTile(
-          title: Text(context.l10n.database),
-          subtitle: Wrap(
-            spacing: 5,
-            children: [
-              ChoiceChip(
-                label: const Text('Masters'),
-                selected: prefs.db == OpeningDatabase.master,
-                onSelected: (_) => ref
-                    .read(openingExplorerPreferencesProvider.notifier)
-                    .setDatabase(OpeningDatabase.master),
-              ),
-              ChoiceChip(
-                label: const Text('Lichess'),
-                selected: prefs.db == OpeningDatabase.lichess,
-                onSelected: (_) => ref
-                    .read(openingExplorerPreferencesProvider.notifier)
-                    .setDatabase(OpeningDatabase.lichess),
-              ),
-              ChoiceChip(
-                label: Text(context.l10n.player),
-                selected: prefs.db == OpeningDatabase.player,
-                onSelected: (_) => ref
-                    .read(openingExplorerPreferencesProvider.notifier)
-                    .setDatabase(OpeningDatabase.player),
-              ),
-            ],
+        Padding(
+          padding: _kGroupPadding,
+          child: Filter<OpeningDatabase>(
+            filterName: context.l10n.database,
+            filterType: FilterType.singleChoice,
+            choices: OpeningDatabase.values,
+            choiceLabel: (db) => Text(switch (db) {
+              OpeningDatabase.master => 'Masters',
+              OpeningDatabase.lichess => 'Lichess',
+              OpeningDatabase.player => context.l10n.player,
+            }),
+            choiceSelected: (db) => prefs.db == db,
+            onSelected: (db, _) => notifier.setDatabase(db),
           ),
         ),
         ...switch (prefs.db) {
@@ -368,7 +326,7 @@ class const _DateRangeInputs({
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: _kGroupPadding,
       child: Row(
         children: [
           Expanded(

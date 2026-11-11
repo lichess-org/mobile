@@ -21,7 +21,8 @@ class const ConditionalPremoves(final AnalysisOptions options) extends ConsumerW
     final lines = analysisState.forecast!.lines;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      // Above a bar floating over the view.
+      padding: EdgeInsets.only(left: 4.0, right: 4.0, bottom: MediaQuery.paddingOf(context).bottom),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -60,9 +60,9 @@ class ChallengeService(final Ref ref) {
       switch (notification) {
         case ChallengeNotification(:final challenge):
           _onChallengeForegroundNotificationResponse(response.actionId, challenge);
-        case ChallengeCreatedNotification(:final challengeId):
+        case CorresChallengeCreatedNotification(:final challengeId):
           _onChallengeBackgroundNotificationResponse(challengeId);
-        case ChallengeAcceptedNotification(:final fullId):
+        case CorresChallengeAcceptedNotification(:final fullId):
           _onChallengeAccepted(fullId);
         case _:
           break;

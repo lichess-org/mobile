@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -6,6 +7,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -18,7 +20,12 @@ import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CreateGameWidget() extends ConsumerWidget {
+class const CreateGameWidget({
+  /// The navigator where the game is pushed, by default the navigator of the widget: in a sheet on
+  /// the root navigator, the navigator of the screen that presents it.
+  final NavigatorState? navigator,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
@@ -31,11 +38,11 @@ class const CreateGameWidget() extends ConsumerWidget {
         ?.copyWith(color: textShade(context, 0.5), height: 1.0);
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: .spaceBetween,
           children: [
             Expanded(
               child: Semantics(
@@ -44,22 +51,19 @@ class const CreateGameWidget() extends ConsumerWidget {
                 label: '${context.l10n.timeControl}: ${playPrefs.timeIncrement.display}',
                 excludeSemantics: true,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: .stretch,
+                  mainAxisSize: .min,
                   children: [
                     Text(context.l10n.timeControl, style: labelStyle),
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Theme.of(context).dividerColor),
-                      ),
-                      icon: Icon(playPrefs.timeIncrement.speed.icon),
+                    _PickerButton(
+                      icon: playPrefs.timeIncrement.speed.icon,
                       label: Text(
                         playPrefs.timeIncrement.display,
                         style: const TextStyle(letterSpacing: 2.0),
                       ),
                       onPressed: () {
                         final double screenHeight = MediaQuery.heightOf(context);
-                        showModalBottomSheet<void>(
+                        showAdaptiveBottomSheet<void>(
                           context: context,
                           isScrollControlled: true,
                           constraints: BoxConstraints(
@@ -94,12 +98,9 @@ class const CreateGameWidget() extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(context.l10n.variant, style: labelStyle),
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Theme.of(context).dividerColor),
-                      ),
+                    _PickerButton(
                       icon: playPrefs.customVariant != Variant.standard
-                          ? Icon(playPrefs.customVariant.icon)
+                          ? playPrefs.customVariant.icon
                           : null,
                       label: Text(playPrefs.customVariant.label(context.l10n)),
                       onPressed: () {
@@ -141,10 +142,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(context.l10n.gameMode, style: labelStyle),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Theme.of(context).dividerColor),
-                        ),
+                      _PickerButton(
                         onPressed: () {
                           showChoicePicker(
                             context,
@@ -161,7 +159,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                             },
                           );
                         },
-                        child: Text(
+                        label: Text(
                           playPrefs.customRated ? context.l10n.rated : context.l10n.casual,
                         ),
                       ),
@@ -201,16 +199,11 @@ class const CreateGameWidget() extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Theme.of(context).dividerColor),
-                          foregroundColor: canUseRatingRange
-                              ? null
-                              : Theme.of(context).disabledColor,
-                        ),
+                      _PickerButton(
+                        enabled: canUseRatingRange,
                         onPressed: canUseRatingRange
                             ? () {
-                                showModalBottomSheet<void>(
+                                showAdaptiveBottomSheet<void>(
                                   context: context,
                                   constraints: BoxConstraints(
                                     minHeight: MediaQuery.heightOf(context) * 0.4,
@@ -234,7 +227,7 @@ class const CreateGameWidget() extends ConsumerWidget {
                                 );
                               }
                             : () => _showDisabledRatingRangeExplanation(context),
-                        child: canUseRatingRange
+                        label: canUseRatingRange
                             ? Text(
                                 '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
                               )
@@ -247,12 +240,11 @@ class const CreateGameWidget() extends ConsumerWidget {
             ],
           ),
         ],
-        FilledButton.icon(
-          icon: const Icon(Icons.groups),
+        FilledButton(
           onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
                   // Pops the play bottom sheet
-                  Navigator.of(context).popUntil((route) => route is! ModalBottomSheetRoute);
+                  Navigator.of(context).popUntil((route) => route is! PopupRoute);
 
                   final playban = ref.read(accountProvider).value?.playban;
                   if (playban != null) {
@@ -260,12 +252,12 @@ class const CreateGameWidget() extends ConsumerWidget {
                     return;
                   }
 
-                  Navigator.of(context, rootNavigator: true).push(
+                  (navigator ?? Navigator.of(context)).pushHidingTabBar(
                     GameScreen.buildRoute(source: LobbySource(GameSeek.custom(playPrefs, account))),
                   );
                 }
               : null,
-          label: Text(context.l10n.createLobbyGame),
+          child: Text(context.l10n.createAGame),
         ),
       ],
     );
@@ -274,12 +266,52 @@ class const CreateGameWidget() extends ConsumerWidget {
   void _showDisabledRatingRangeExplanation(BuildContext context) {
     showAdaptiveDialog<void>(
       context: context,
-      builder: (context) => AlertDialog.adaptive(
+      builder: (context) => PlatformAlertDialog(
         content: Text(context.l10n.cannotFilterByUnstableRating),
         actions: [
           PlatformDialogAction(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A button that shows the value of a setting and opens a picker to change it.
+///
+/// Like the iOS pop-up buttons, the value is content rather than an action, so it is in the text
+/// color instead of the accent one, with a chevron telling that it opens a picker.
+class const _PickerButton({
+  required final Widget label,
+  required final VoidCallback onPressed,
+  final IconData? icon,
+
+  /// Whether the setting can be changed: when it cannot, the button is still tappable (e.g. to
+  /// explain why) but looks disabled.
+  final bool enabled = true,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final foregroundColor = enabled ? theme.colorScheme.onSurface : theme.disabledColor;
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: theme.dividerColor),
+        foregroundColor: foregroundColor,
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: .min,
+        spacing: 8.0,
+        children: [
+          if (icon != null) Icon(icon),
+          Flexible(child: label),
+          Icon(
+            theme.platform == .iOS ? CupertinoIcons.chevron_up_chevron_down : Icons.unfold_more,
+            size: 14.0,
+            color: foregroundColor.withValues(alpha: 0.5),
           ),
         ],
       ),

@@ -53,6 +53,7 @@ ProviderContainer makeWeightsContainer({
           engineMaxMemoryInMb: 256,
           appDocumentsDirectory: null,
           appSupportDirectory: appSupportDirectory,
+          imageCacheDirectory: null,
         );
       }),
       if (mockClient != null)

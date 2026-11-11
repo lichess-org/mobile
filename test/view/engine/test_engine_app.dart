@@ -37,6 +37,7 @@ Future<void> makeEngineTestApp(
   bool isEngineEnabled = true,
   bool isCloudEvalEnabled = true,
   bool showBestMoveArrow = true,
+  bool showEngineLines = false,
   Duration connectionLag = kFakeWebSocketConnectionLag,
 
   /// Custom engine for tests that need to control when evals are emitted.
@@ -67,6 +68,7 @@ Future<void> makeEngineTestApp(
             .copyWith(
               enableServerAnalysis: isServerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,
+              showEngineLines: showEngineLines,
             )
             .toJson(),
       ),
@@ -75,6 +77,7 @@ Future<void> makeEngineTestApp(
             .copyWith(
               enableServerAnalysis: isServerAnalysisEnabled,
               showBestMoveArrow: showBestMoveArrow,
+              showEngineLines: showEngineLines,
             )
             .toJson(),
       ),

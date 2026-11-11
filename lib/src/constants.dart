@@ -15,7 +15,7 @@ const kLichessWSSecret = String.fromEnvironment(
 
 const kLichessCDNHost = String.fromEnvironment(
   'LICHESS_CDN_HOST',
-  defaultValue: 'https://lichess1.org',
+  defaultValue: 'https://lichess.org',
 );
 
 const kLichessOpeningExplorerHost = String.fromEnvironment(
@@ -47,19 +47,28 @@ const kLichessBlueskyUrl = 'https://bsky.app/profile/lichess.org';
 const kLichessDiscordUrl = 'https://discord.gg/lichess';
 
 // UI
-const double kCupertinoBarBlurSigma = 30.0;
 const double kCupertinoBarOpacity = 0.8;
 
 const kGoldenRatio = 1.61803398875;
 
 /// Use same box shadows as material widgets with elevation 1.
-final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
-    ? <BoxShadow>[]
-    : kElevationToShadow[1]!;
+List<BoxShadow> get boardShadows =>
+    defaultTargetPlatform == .iOS ? const <BoxShadow>[] : kElevationToShadow[1]!;
 
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kTabletBoardTableSidePadding = 16.0;
+
+/// Horizontal margin around the board on phones in portrait orientation, on screens where the board
+/// does not span the whole screen width (analysis, learn, practice...).
+///
+/// It makes the board smaller, which leaves more vertical space below it.
+const kPhoneBoardSideMargin = 12.0;
+
+/// Horizontal margin around the board on phones with a short screen (`isShortVerticalScreen`) in
+/// portrait orientation, wider than [kPhoneBoardSideMargin] to leave enough vertical space below
+/// the board.
+const kShortScreenBoardSideMargin = 32.0;
 
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;

@@ -36,6 +36,7 @@ class const PracticeGamebookChapterBody({required final PracticeGamebookChapter 
       }.lock,
       table: _Table(state: state),
       bottomBar: BottomBar(
+        cupertinoGlass: true,
         children: [
           BottomBarButton(
             label: context.l10n.studyPlayAgain,

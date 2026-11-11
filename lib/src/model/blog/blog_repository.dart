@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
-import 'package:lichess_mobile/src/network/aggregator.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 
 final blogCarouselProvider = FutureProvider.autoDispose<IList<BlogPost>>((ref) {
@@ -10,11 +9,10 @@ final blogCarouselProvider = FutureProvider.autoDispose<IList<BlogPost>>((ref) {
 
 final blogRepositoryProvider = Provider<BlogRepository>((ref) {
   final client = ref.watch(lichessClientProvider);
-  final aggregator = ref.watch(aggregatorProvider);
-  return BlogRepository(client, aggregator);
+  return BlogRepository(client);
 }, name: 'BlogRepositoryProvider');
 
-class BlogRepository(final LichessClient client, final Aggregator aggregator) {
+class BlogRepository(final LichessClient client) {
   Future<IList<BlogPost>> getCarousel() {
     return client.readJsonList(Uri(path: '/api/blog/carousel'), mapper: BlogPost.fromServerJson);
   }

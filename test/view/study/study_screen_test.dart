@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
@@ -5,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -16,6 +18,8 @@ import 'package:lichess_mobile/src/model/study/study_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
+import 'package:material_ui/material_ui.dart' show TabBarView, TextButton;
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_helpers.dart';
@@ -112,6 +116,114 @@ void main() {
       expect(find.textContaining('e5'), findsOneWidget);
       expect(find.textContaining('such chess'), findsOneWidget);
     });
+
+    testWidgets(
+      'keeps the pinned app bar once loaded',
+      variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+      (WidgetTester tester) async {
+        final mockRepository = MockStudyRepository();
+        final study = Completer<(Study, AnalysisSummary?, String)>();
+        when(() => mockRepository.getStudy(id: testId)).thenAnswer((_) => study.future);
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Builder(
+            builder: (context) => Center(
+              child: TextButton(
+                onPressed: () =>
+                    Navigator.of(context)
+                        .push(StudyScreen.buildRoute((id: testId, initialChapter: null))),
+                child: const Text('Open study'),
+              ),
+            ),
+          ),
+          overrides: {
+            studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.tap(find.text('Open study'));
+        // The loading shimmer never settles: waits for the push transition.
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+
+        // The study is loaded after the route is shown.
+        study.complete((makeStudy(), null, '1. e4 e5'));
+        await tester.pumpAndSettle();
+
+        // The shell still draws the bar buttons of the route above the navigator.
+        final context = tester.element(find.byType(StudyScreen));
+        expect(GlassNavigationShell.maybeOf(context)!.isHoisting(ModalRoute.of(context)!), isTrue);
+      },
+    );
+
+    testWidgets('the bottom bar floats over the tab view on iOS only', variant: kPlatformVariant, (
+      WidgetTester tester,
+    ) async {
+      final mockRepository = MockStudyRepository();
+
+      when(() => mockRepository.getStudy(id: testId))
+          .thenAnswer((_) async => (makeStudy(), null, '1. e4 e5'));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StudyScreen(options: (id: testId, initialChapter: null)),
+        overrides: {
+          studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      expect(
+        tester
+            .widget<SliverPadding>(
+              find.descendant(of: find.byType(TabBarView), matching: find.byType(SliverPadding)),
+            )
+            .padding,
+        EdgeInsets.only(bottom: bottomInset),
+      );
+    });
+
+    testWidgets(
+      'the gamebook comment scrolls under the floating bottom bar on iOS',
+      variant: kPlatformVariant,
+      (WidgetTester tester) async {
+        final mockRepository = MockStudyRepository();
+        when(() => mockRepository.getStudy(id: testId)).thenAnswer(
+          (_) async => (
+            makeStudy(chapter: makeChapter(id: const StudyChapterId('1'), gamebook: true)),
+            null,
+            '{A long introduction} 1. e4 e5',
+          ),
+        );
+
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: const StudyScreen(options: (id: testId, initialChapter: null)),
+          overrides: {
+            studyRepositoryProvider: studyRepositoryProvider.overrideWith((ref) => mockRepository),
+          },
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        final bottomInset = expectBottomBarOverTabView(tester);
+        expect(
+          tester
+              .widget<SingleChildScrollView>(
+                find.ancestor(
+                  of: find.text('A long introduction', findRichText: true),
+                  matching: find.byType(SingleChildScrollView),
+                ),
+              )
+              .padding,
+          EdgeInsets.only(bottom: 16.0 + bottomInset),
+        );
+      },
+    );
 
     testWidgets('Switch between chapters', (WidgetTester tester) async {
       final mockRepository = MockStudyRepository();

@@ -209,7 +209,7 @@ abstract mixin class BaseGame() {
     final pgn = node.makePgn(
       IMap({
         'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
-        if (id is GameId) 'Site': lichessUri('/$id').toString(),
+        if (id case final GameId gameId) 'Site': lichessGameUri(gameId).toString(),
         'Date': _dateFormat.format(meta.createdAt),
         'White':
             white.user?.name ??
