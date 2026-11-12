@@ -100,7 +100,7 @@ class _FollowingWidgetState() extends ConsumerState<FollowingCarousel> {
                                     spacing: 4,
                                     children: [
                                       if (friend.user.isOnline == true)
-                                        const ConnectedIcon(isConnected: true, size: 10),
+                                        const UserStatusIcon(isOnline: true, size: 10),
                                       Text(
                                         friend.playing == true
                                             ? context.l10n.playingRightNow

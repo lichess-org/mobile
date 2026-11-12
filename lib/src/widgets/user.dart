@@ -40,14 +40,15 @@ class const ConnectedIcon({
 }
 
 /// A filled green circle for online users, or an outlined circle for offline users.
-class const UserStatusIcon({required final bool isOnline, super.key}) extends StatelessWidget {
+class const UserStatusIcon({required final bool isOnline, final double size = 16, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: isOnline ? context.l10n.online : context.l10n.offline,
       child: Icon(
         Symbols.circle,
-        size: 16,
+        size: size,
         fill: isOnline ? 1 : 0,
         color: isOnline
             ? context.lichessColors.good
