@@ -7,6 +7,5 @@
     <string name="live">LIVE</string>
     <string name="no_broadcasts">No active broadcasts</string>
     <string name="daily_puzzle_description">Shows daily puzzle</string>
-    <string name="no_dailyPuzzle">No New Puzzles</string>
     <string name="daily_puzzle_error">Couldn\'t load puzzle</string>
 </resources>

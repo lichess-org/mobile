@@ -120,7 +120,6 @@ const UNTRANSLATED_ANDROID_STRINGS = {
   live: 'LIVE',
   no_broadcasts: 'No active broadcasts',
   daily_puzzle_description: 'Shows daily puzzle',
-  no_dailyPuzzle: 'No New Puzzles',
   daily_puzzle_error: "Couldn't load puzzle",
 };
 

@@ -50,7 +50,8 @@
       android:id="@+id/puzzle_board_image"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      />
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="6dp" />
 
     <TextView
       android:id="@+id/no_puzzle"
@@ -58,7 +59,7 @@
       android:layout_height="wrap_content"
       android:paddingVertical="20dp"
       android:gravity="center"
-      android:text="@string/no_dailyPuzzle"
+      android:text="@string/daily_puzzle_error"
       android:textColor="@color/widget_text_secondary"
       android:textSize="14sp"
       android:visibility="gone" />

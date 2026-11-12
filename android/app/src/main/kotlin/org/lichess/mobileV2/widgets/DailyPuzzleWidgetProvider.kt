@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -15,8 +16,10 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.net.Uri
+import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import org.json.JSONObject
@@ -35,32 +38,28 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     val lastMove: String
   )
 
-  private fun fetchDailyPuzzle(lichessHost : String): DailyPuzzle? {
-    try{
-        val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
-        val url = URL("$scheme://$lichessHost/api/puzzle/daily")
+  // Throws on network, HTTP or JSON errors: there is always a daily puzzle, so a failure is an
+  // error to show, not an empty state.
+  private fun fetchDailyPuzzle(lichessHost : String): DailyPuzzle {
+    val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
+    val url = URL("$scheme://$lichessHost/api/puzzle/daily")
 
-        val connection = url.openConnection() as HttpURLConnection
-        connection.connectTimeout = 10000
-        connection.readTimeout = 10000
-        connection.setRequestProperty("Accept", "application/json")
-      try{
-        return connection.inputStream.use{ stream ->
-
-          val jsonString = stream.bufferedReader().use { it.readText() }
-          val puzzle = JSONObject(jsonString).getJSONObject("puzzle")
-          DailyPuzzle(
-            id = puzzle.getString("id"),
-            fen = puzzle.getString("fen"),
-            lastMove = puzzle.getString("lastMove")
-          )
-        }
-      } finally {
-        connection.disconnect()
+    val connection = url.openConnection() as HttpURLConnection
+    connection.connectTimeout = 10000
+    connection.readTimeout = 10000
+    connection.setRequestProperty("Accept", "application/json")
+    try {
+      return connection.inputStream.use { stream ->
+        val jsonString = stream.bufferedReader().use { it.readText() }
+        val puzzle = JSONObject(jsonString).getJSONObject("puzzle")
+        DailyPuzzle(
+          id = puzzle.getString("id"),
+          fen = puzzle.getString("fen"),
+          lastMove = puzzle.getString("lastMove")
+        )
       }
-    } catch (e: Exception){
-       Log.e("DailyPuzzleWidget", "Error fetching daily puzzle", e)
-       return null
+    } finally {
+      connection.disconnect()
     }
   }
 
@@ -121,27 +120,19 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
       val puzzle = fetchDailyPuzzle(lichessHost)
 
-      if(puzzle == null){
-        remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.puzzle_board_image,  View.GONE)
-      } else {
-        puzzleId = puzzle.id
-        remoteViews.setViewVisibility(R.id.no_puzzle, View.GONE)
-        remoteViews.setViewVisibility(R.id.puzzle_board_image, View.VISIBLE)
+      puzzleId = puzzle.id
+      remoteViews.setViewVisibility(R.id.no_puzzle, View.GONE)
+      remoteViews.setViewVisibility(R.id.puzzle_board_image, View.VISIBLE)
 
-        val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
-        val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-        val cornerRadiusPx = (12 * context.resources.displayMetrics.density).toInt()
+      val cornerRadiusPx = (12 * context.resources.displayMetrics.density).toInt()
+      val boardSizePx = boardSizePx(context, appWidgetManager.getAppWidgetOptions(appWidgetId))
 
-        val boardBitmap = getBoardBitmap(context, minWidth, puzzle.fen, puzzle.lastMove)
-        val roundBoard = getRoundedCornerBitmap(boardBitmap, cornerRadiusPx)
-        boardBitmap.recycle()
-        remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
-
-      }
+      val boardBitmap = getBoardBitmap(context, boardSizePx, puzzle.fen, puzzle.lastMove)
+      val roundBoard = getRoundedCornerBitmap(boardBitmap, cornerRadiusPx)
+      boardBitmap.recycle()
+      remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
     } catch (e: Exception) {
       Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
-      remoteViews.setTextViewText(R.id.no_puzzle, context.getString(R.string.daily_puzzle_error))
       remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
       remoteViews.setViewVisibility(R.id.puzzle_board_image, View.GONE)
     }
@@ -195,18 +186,46 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     return BitmapFactory.decodeResource(context.resources, resId)
   }
 
+  // Side of the board in pixels: the largest multiple of 8 that fits in the widget once the
+  // layout's padding, header and board margin are taken out.
+  private fun boardSizePx(context: Context, options: Bundle): Int {
+    val metrics = context.resources.displayMetrics
+    val isPortrait =
+      context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    // In portrait the widget is minWidth x maxHeight, in landscape maxWidth x minHeight. The
+    // options can be 0 before the launcher has filled them in: fall back to the provider's
+    // declared size (widget_daily_puzzle_info.xml).
+    val widthDp = options.getInt(
+      if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
+      else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+    ).takeIf { it > 0 } ?: 300
+    val heightDp = options.getInt(
+      if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
+      else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+    ).takeIf { it > 0 } ?: 330
+
+    // Keep in sync with widget_daily_puzzle.xml: 14dp horizontal and 10dp vertical padding,
+    // a header as tall as its 14sp title (16dp icon at least) and a 6dp margin above the board.
+    val titlePx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, metrics) * 1.3f
+    val headerPx = maxOf(16 * metrics.density, titlePx)
+    val availableWidthPx = (widthDp - 2 * 14) * metrics.density
+    val availableHeightPx = (heightDp - 2 * 10 - 6) * metrics.density - headerPx
+
+    val sizePx = minOf(availableWidthPx, availableHeightPx).toInt()
+    return maxOf(sizePx / 8, 1) * 8
+  }
+
   private fun getBoardBitmap(
     context : Context,
-    minWidth : Int,
+    boardSizePx : Int,
     fen : String,
     lastMove: String,
   ) : Bitmap
   {
-    val boardSizedPx = (minWidth * context.resources.displayMetrics.density).toInt()
-    val bitmap = Bitmap.createBitmap(boardSizedPx, boardSizedPx, Bitmap.Config.ARGB_8888)
+    val bitmap = Bitmap.createBitmap(boardSizePx, boardSizePx, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
 
-    val sqrSize = boardSizedPx / 8
+    val sqrSize = boardSizePx / 8
     val lightPaint = Paint().apply { color = Color.parseColor("#F0D9B6")}
     val darkPaint = Paint().apply { color = Color.parseColor("#B58863")}
     val highlightedPaint = Paint().apply { color = Color.parseColor("#809CC700")}
