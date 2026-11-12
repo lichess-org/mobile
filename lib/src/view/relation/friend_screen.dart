@@ -173,7 +173,10 @@ class const _OnlineFriendListTile({required final OnlineFriend onlineFriend})
     final (:user, :playing) = onlineFriend;
 
     return ListTile(
-      title: UserFullNameWidget(user: user),
+      title: UserFullNameWidget(
+        user: user,
+        statusIcon: UserStatusIconConfig(isOnline: true, show: !user.isPatron),
+      ),
       trailing: playing
           ? IconButton(
               tooltip: context.l10n.watchGames,
