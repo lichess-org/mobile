@@ -228,6 +228,8 @@ abstract mixin class BaseGame() {
             : '*',
         if (white.rating != null) 'WhiteElo': white.rating!.toString(),
         if (black.rating != null) 'BlackElo': black.rating!.toString(),
+        if (white.user?.title != null) 'WhiteTitle': white.user!.title!,
+        if (black.user?.title != null) 'BlackTitle': black.user!.title!,
         if (white.ratingDiff != null)
           'WhiteRatingDiff': '${white.ratingDiff! > 0 ? '+' : ''}${white.ratingDiff!}',
         if (black.ratingDiff != null)
@@ -235,6 +237,7 @@ abstract mixin class BaseGame() {
         'Variant': meta.variant.pgnName,
         if (meta.clock != null)
           'TimeControl': '${meta.clock!.initial.inSeconds}+${meta.clock!.increment.inSeconds}',
+        if (initialFen != null) 'SetUp': '1',
         'FEN': ?initialFen,
         if (meta.opening != null) 'ECO': meta.opening!.eco,
         if (meta.opening != null) 'Opening': meta.opening!.name,

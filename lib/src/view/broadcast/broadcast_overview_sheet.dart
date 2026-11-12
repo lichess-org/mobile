@@ -102,6 +102,12 @@ class const _BroadcastOverview({required final BroadcastTournamentId tournamentI
                         context.l10n.broadcastOfficialStandings,
                         information.standings,
                       ),
+                    if (information.regulations != null)
+                      _BroadcastOverviewCard(
+                        Icons.link,
+                        context.l10n.broadcastRegulations,
+                        information.regulations,
+                      ),
                   ],
                 ),
                 if (description != null) ...[

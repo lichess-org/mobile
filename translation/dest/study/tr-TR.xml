@@ -37,6 +37,7 @@
   <string name="spectator">İzleyici</string>
   <string name="contributor">Katılımcı</string>
   <string name="kick">Çıkar</string>
+  <string name="remove" comment="Used to remove a user from a study.&#10;&#10;Shown to the right of a user that has been added to the study e.g. as a contributor to that study.">Çıkar</string>
   <string name="leaveTheStudy">Çalışmadan ayrıl</string>
   <string name="youAreNowAContributor">Artık bir katılımcısınız</string>
   <string name="youAreNowASpectator">Artık bir izleyicisiniz</string>
@@ -100,8 +101,8 @@
   <string name="loadAGameFromPgn">PGN ile oyun yükle</string>
   <string name="automatic">Otomatik</string>
   <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">PGN metninizi buraya yapıştırın, en fazla %s oyuna kadar</item>
-    <item quantity="other">PGN metninizi buraya yapıştırın, en fazla %s oyuna kadar</item>
+    <item quantity="one">PGN metninizi buraya yapıştırın, en fazla %s oyuna kadar.</item>
+    <item quantity="other">Oyunları PGN metni olarak buraya yapıştırın. Her oyun için yeni bir bölüm oluşturulur. Çalışma, en fazla %s bölüm içerebilir.</item>
   </plurals>
   <string name="urlOfTheGame">Oyunun bağlantısı</string>
   <string name="createChapter">Bölüm oluştur</string>
@@ -128,9 +129,7 @@
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Tüm çalışma silinsin mi? Bunun geri dönüşü yok! İşlemi onaylamak için çalışmanın adını yazın: %s</string>
   <string name="whereDoYouWantToStudyThat">Bu çalışmayı nerede sürdürmek istersiniz?</string>
   <string name="goodMove">İyi hamle</string>
-  <string name="mistake">Hata</string>
   <string name="brilliantMove">Göz alıcı hamle</string>
-  <string name="blunder">Vahim hata</string>
   <string name="interestingMove">İlginç hamle</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Şüpheli hamle</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Tek hamle</string>
@@ -188,7 +187,7 @@
   <string name="loadGameFromTheWebTitle">Web\'den bir oyun yükle</string>
   <string name="loadGameFromTheWebText" comment="The special text tags must be retained in exact order, for example &amp;lt;br&amp;gt; must stay exactly as-is. You do not need to add spaces or new lines before or after them.&#10;&#10;Note that &quot;br&quot; in particular means &quot;line break&quot;. In other words, it will start a new line in the final text.">Bölüme oyun hamleleri yüklemek için bir oyun URL\'si&lt;br&gt;(örneğin lichess.org/game/7fHIU0XI)&lt;br&gt;yapıştırın.</string>
   <string name="fromFenStringTitle">Bir FEN dizisinden</string>
-  <string name="fromFenStringText">FEN formatında bir pozisyon &lt;br&gt;&lt;i&gt;4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w&lt;/i&gt;&lt;br&gt; yapıştırarak bölümü belirli bir yerden başlat.</string>
+  <string name="fromFenStringText">FEN biçiminde bir konum yapıştırarak&lt;br&gt;&lt;i&gt;4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w&lt;/i&gt;&lt;br&gt;bölümü bir konumdan başlatabilirsiniz.</string>
   <string name="fromPgnGameTitle">PGN oyunundan</string>
   <string name="fromPgnGameText">Bir oyunu PGN formatında&lt;br&gt;yapıştırarak hamleleri, yorumları ve varyasyonları bölüme yükle.</string>
   <string name="variantsAreSupportedTitle">Çalışmaların desteklediği oyun türleri</string>
