@@ -708,8 +708,8 @@ class AnalysisController(final AnalysisOptions options)
           ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
         }
       }
-      // if navigating, only sound feedback
-      else {
+      // if navigating and an actually movement occurred, only sound feedback
+      else if (pathChange) {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
           soundService.playCaptureSound(curState.variant);
