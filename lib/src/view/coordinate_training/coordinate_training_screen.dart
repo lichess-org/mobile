@@ -105,15 +105,15 @@ class _BodyState() extends ConsumerState<_Body> {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
                 final isTablet = isTabletOrLarger(context);
-                final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
-
                 final direction = aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
+                // Like the analysis board, the board never spans the whole screen width.
+                final boardPadding = isTablet || direction == Axis.horizontal
+                    ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                    : isShortVerticalScreen(context)
+                    ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                    : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+                final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
                 return Flex(
                   direction: direction,
@@ -121,54 +121,60 @@ class _BodyState() extends ConsumerState<_Body> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Column(
-                      children: [
-                        _TimeBar(
-                          maxWidth: boardSize,
-                          timeFractionElapsed: trainingState.timeFractionElapsed,
-                          color: trainingState.lastGuess == Guess.incorrect
-                              ? context.lichessColors.error
-                              : context.lichessColors.good,
-                        ),
-                        _TrainingBoard(
-                          boardSize: boardSize,
-                          isTablet: isTablet,
-                          orientation: trainingState.orientation,
-                          squareHighlights: squareHighlights,
-                          onGuess: _onGuess,
-                        ),
-                      ],
+                    Padding(
+                      padding: boardPadding,
+                      child: Column(
+                        children: [
+                          _TimeBar(
+                            maxWidth: boardSize,
+                            timeFractionElapsed: trainingState.timeFractionElapsed,
+                            color: trainingState.lastGuess == Guess.incorrect
+                                ? context.lichessColors.error
+                                : context.lichessColors.good,
+                          ),
+                          _TrainingBoard(
+                            boardSize: boardSize,
+                            orientation: trainingState.orientation,
+                            squareHighlights: squareHighlights,
+                            onGuess: _onGuess,
+                          ),
+                        ],
+                      ),
                     ),
                     if (trainingState.trainingActive)
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.score,
-                        onPressed: ref
-                            .read(coordinateTrainingControllerProvider.notifier)
-                            .abortTraining,
-                        label: 'Abort Training',
+                        button: FilledButton.tonal(
+                          onPressed: ref
+                              .read(coordinateTrainingControllerProvider.notifier)
+                              .abortTraining,
+                          child: const Text('Abort Training'),
+                        ),
                       )
                     else if (trainingState.lastScore != null)
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.lastScore!,
-                        onPressed: () {
-                          ref
-                              .read(coordinateTrainingControllerProvider.notifier)
-                              .startTraining(trainingPrefs.timeChoice.duration);
-                        },
-                        label: context.l10n.coordinatesStartTraining,
+                        button: FilledButton(
+                          onPressed: () {
+                            ref
+                                .read(coordinateTrainingControllerProvider.notifier)
+                                .startTraining(trainingPrefs.timeChoice.duration);
+                          },
+                          child: Text(context.l10n.coordinatesStartTraining),
+                        ),
                       )
                     else
                       Expanded(
                         child: Center(
-                          child: _Button(
+                          child: FilledButton(
                             onPressed: () {
                               ref
                                   .read(coordinateTrainingControllerProvider.notifier)
                                   .startTraining(trainingPrefs.timeChoice.duration);
                             },
-                            label: context.l10n.coordinatesStartTraining,
+                            child: Text(context.l10n.coordinatesStartTraining),
                           ),
                         ),
                       ),
@@ -265,8 +271,7 @@ class const _CoordinateTrainingMenu() extends ConsumerWidget {
 class const _ScoreAndTrainingButton({
   required final double scoreSize,
   required final int score,
-  required final VoidCallback onPressed,
-  required final String label,
+  required final Widget button,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -283,7 +288,7 @@ class const _ScoreAndTrainingButton({
                 ? context.lichessColors.error
                 : context.lichessColors.good,
           ),
-          _Button(label: label, onPressed: onPressed),
+          button,
         ],
       ),
     );
@@ -313,17 +318,6 @@ class const _Score({
           ),
         ),
       ),
-    );
-  }
-}
-
-class const _Button({required final VoidCallback onPressed, required final String label})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: onPressed,
-      child: Text(label, style: Styles.bold),
     );
   }
 }
@@ -372,7 +366,6 @@ class const SettingsBottomSheet() extends ConsumerWidget {
 
 class const _TrainingBoard({
   required final double boardSize,
-  required final bool isTablet,
   required final Side orientation,
   required final void Function(Square) onGuess,
   required final IMap<Square, SquareHighlight> squareHighlights,
@@ -403,10 +396,8 @@ class _TrainingBoardState() extends ConsumerState<_TrainingBoard> {
                     .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                     .copyWith(
                       enableCoordinates: trainingPrefs.showCoordinates,
-                      borderRadius: widget.isTablet
-                          ? const BorderRadius.all(Radius.circular(4.0))
-                          : BorderRadius.zero,
-                      boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+                      borderRadius: Styles.boardBorderRadius,
+                      boxShadow: boardShadows,
                     ),
               ),
               onTouchedSquare: (square) {

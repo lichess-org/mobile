@@ -6,6 +6,53 @@ import 'package:material_ui/material_ui.dart';
 
 void main() {
   group('Clock', () {
+    testWidgets('dims inactive emergency clocks while preserving normal and flagged colors', (
+      tester,
+    ) async {
+      const style = ClockStyle(
+        textColor: Colors.black,
+        activeTextColor: Colors.blue,
+        emergencyTextColor: Colors.white,
+        backgroundColor: Colors.grey,
+        activeBackgroundColor: Colors.green,
+        emergencyBackgroundColor: Color(0x80FF0000),
+      );
+
+      for (final (active, timeLeft, expectedBackground, expectedText) in const [
+        (true, Duration(seconds: 5), Color(0x80FF0000), Colors.white),
+        (false, Duration(seconds: 5), Color(0x40FF0000), Colors.black),
+        (true, Duration.zero, Color(0x80FF0000), Colors.white),
+        (false, Duration.zero, Color(0x80FF0000), Colors.white),
+        (true, Duration(seconds: 15), Colors.green, Colors.blue),
+        (false, Duration(seconds: 15), Colors.grey, Colors.black),
+      ]) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Clock(
+              timeLeft: timeLeft,
+              active: active,
+              emergencyThreshold: const Duration(seconds: 10),
+              clockStyle: style,
+            ),
+          ),
+        );
+
+        final clockFinder = find.byType(Clock);
+        final container = tester.widget<Container>(
+          find.descendant(of: clockFinder, matching: find.byType(Container)),
+        );
+        final timeText = tester.widget<Text>(
+          find.descendant(of: clockFinder, matching: find.byType(Text)),
+        );
+
+        expect(
+          (container.decoration! as BoxDecoration).color!.toARGB32(),
+          expectedBackground.toARGB32(),
+        );
+        expect(timeText.textSpan!.style?.color, expectedText);
+      }
+    });
+
     testWidgets('shows milliseconds when time < 1s and active is false', (
       WidgetTester tester,
     ) async {

@@ -144,7 +144,8 @@ class const _ImmersiveModeScope({required final bool isImmersiveMode, required s
 /// height per edge of the screen, honored from the bottom up, which is about half of a phone board.
 /// So this widget only excludes the edge squares that hold a piece the user can drag, since a
 /// navigation gesture only starts from a touch on the edge. In immersive mode
-/// ([AndroidImmersiveModeWidget]), which lifts the limit, it excludes the whole edge columns.
+/// ([AndroidImmersiveModeWidget]), which lifts the limit, it excludes the whole edge columns. The
+/// excluded rects extend from the edge columns to the edges of the screen, over the board margins.
 ///
 /// A board in a vertical scroll view doesn't exclude anything.
 ///
@@ -166,6 +167,7 @@ class _AndroidBoardGesturesExclusionState() extends State<AndroidBoardGesturesEx
   bool _isInScrollView = false;
   bool _isImmersiveMode = false;
   double _devicePixelRatio = 1.0;
+  double _screenWidth = 0.0;
   bool _isUpdateScheduled = false;
 
   bool get _isExcluding => _isSupported && _isFocused && !_isInScrollView;
@@ -189,6 +191,7 @@ class _AndroidBoardGesturesExclusionState() extends State<AndroidBoardGesturesEx
     _isImmersiveMode =
         context.dependOnInheritedWidgetOfExactType<_ImmersiveModeScope>()?.isImmersiveMode ?? false;
     _devicePixelRatio = MediaQuery.devicePixelRatioOf(context);
+    _screenWidth = MediaQuery.sizeOf(context).width;
     _scheduleUpdate();
   }
 
@@ -249,12 +252,15 @@ class _AndroidBoardGesturesExclusionState() extends State<AndroidBoardGesturesEx
         : _isImmersiveMode
         ? _edgeColumnRects(squareSize)
         : _draggableEdgeSquareRects(squareSize);
+    // The board is usually inset from the screen edges by a small margin, where a navigation
+    // gesture meant for the board would start: the rects of the edge columns extend to the edges.
     _boardsExcludedRects.set(this, [
       for (final rect in rects)
         Rect.fromLTRB(
-          (origin.dx + rect.left) * _devicePixelRatio,
+          (rect.left < squareSize / 2 ? 0.0 : origin.dx + rect.left) * _devicePixelRatio,
           (origin.dy + rect.top) * _devicePixelRatio,
-          (origin.dx + rect.right) * _devicePixelRatio,
+          (rect.right > widget.size - squareSize / 2 ? _screenWidth : origin.dx + rect.right) *
+              _devicePixelRatio,
           (origin.dy + rect.bottom) * _devicePixelRatio,
         ),
     ]);

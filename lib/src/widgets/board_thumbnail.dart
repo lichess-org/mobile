@@ -126,7 +126,7 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
                               topLeft: Radius.zero,
                               bottomLeft: Radius.zero,
                             ),
-                            color: Colors.grey.withValues(alpha: 0.6),
+                            color: ColorScheme.of(context).outlineVariant.withValues(alpha: 0.7),
                           ),
                         ),
                 ),

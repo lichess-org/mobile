@@ -39,21 +39,29 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
-/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS.
+/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS,
+/// with thick glass buttons over the blurred bottom edge of the tab view.
 ///
 /// Returns the bottom padding that the tab views must apply: the bar height on iOS, else 0.
 double expectBottomBarOverTabView(WidgetTester tester) {
   final barRect = tester.getRect(find.byType(BottomBar));
   final tabViewBottom = tester.getBottomLeft(find.byType(TabBarView)).dy;
-  expect(
-    find.byWidgetPredicate((widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom),
-    findsNothing,
+  final bottomEdgeEffect = find.byWidgetPredicate(
+    (widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom,
+  );
+  final thickGlassBar = find.ancestor(
+    of: find.byType(BottomBar),
+    matching: find.byType(ThickBottomBarGlass),
   );
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
     expect(tabViewBottom, greaterThan(barRect.top));
+    expect(bottomEdgeEffect, findsOneWidget);
+    expect(thickGlassBar, findsOneWidget);
     return barRect.height;
   } else {
     expect(tabViewBottom, barRect.top);
+    expect(bottomEdgeEffect, findsNothing);
+    expect(thickGlassBar, findsNothing);
     return 0.0;
   }
 }

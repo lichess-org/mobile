@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -23,7 +25,6 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_error_board_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
-import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
@@ -32,6 +33,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -52,7 +54,36 @@ class _StormScreenState() extends ConsumerState<StormScreen> {
         extendBodyBehindAppBar: false,
         appBar: PlatformAppBar(
           title: const Text('Puzzle Storm'),
-          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
+          actionsBuilder: (context, ref) => [
+            SemanticIconButton(
+              semanticsLabel: context.l10n.aboutX('Puzzle Storm'),
+              onPressed: () => _showStormInfo(context),
+              icon: const Icon(Icons.info_outline),
+            ),
+            ContextMenuIconButton(
+              icon: const Icon(Icons.more_horiz),
+              semanticsLabel: context.l10n.menu,
+              actions: [
+                if (ref.watch(authControllerProvider) case final authUser?)
+                  ContextMenuAction(
+                    icon: Icons.history,
+                    label: context.l10n.stormHighscores,
+                    onPressed: () =>
+                        Navigator.of(context)
+                            .pushHidingTabBar(StormDashboardModal.buildRoute(authUser.user)),
+                  ),
+                ContextMenuAction(
+                  icon: Icons.volume_up,
+                  label: context.l10n.sound,
+                  toggled: ref.watch(
+                    generalPreferencesProvider.select((prefs) => prefs.isSoundEnabled),
+                  ),
+                  onPressed: () =>
+                      ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+                ),
+              ],
+            ),
+          ],
         ),
         body: const _Load(),
       ),
@@ -98,7 +129,7 @@ class _BodyState() extends ConsumerState<_Body> {
     // A new run swaps the storm data (and thus the controller provider), so push
     // the new position onto the board.
     if (oldWidget.data != widget.data) {
-      _applyBoardUpdate();
+      _applyBoardUpdate(resetPremove: true);
     }
   }
 
@@ -131,8 +162,20 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 
   /// Pushes the latest storm position to the board controller without rebuilding it.
-  void _applyBoardUpdate() {
-    _controller.updatePosition(_buildGameData());
+  void _applyBoardUpdate({bool resetPremove = false}) {
+    _controller.updatePosition(_buildGameData(), resetPremove: resetPremove);
+  }
+
+  /// Plays the queued premove, if any, once the opponent has replied and it is the user's turn.
+  void _tryExecutePremove() {
+    final ctrlProvider = stormControllerProvider((widget.data.puzzles, widget.data.timestamp));
+    final state = ref.read(ctrlProvider);
+    if (_playerSide(state) == PlayerSide.none || state.position.turn != state.pov) return;
+    tryExecutePremove(
+      _controller,
+      state.position,
+      (move) => ref.read(ctrlProvider.notifier).onUserMove(move),
+    );
   }
 
   @override
@@ -154,9 +197,22 @@ class _BodyState() extends ConsumerState<_Body> {
     // Drive the board on position/interactivity changes without rebuilding it.
     ref.listen(
       ctrlProvider.select(
-        (s) => (fen: s.position.fen, lastMoveUci: s.lastMove?.uci, side: _playerSide(s)),
+        (s) => (
+          puzzleIndex: s.puzzleIndex,
+          fen: s.position.fen,
+          lastMoveUci: s.lastMove?.uci,
+          side: _playerSide(s),
+          ply: s.position.ply,
+        ),
       ),
-      (_, _) => _applyBoardUpdate(),
+      (previous, next) {
+        // A forward ply in the same puzzle is a new move (ours or the reply): keep the premove and
+        // try it. The next puzzle clears it.
+        final isForwardMove =
+            previous != null && previous.puzzleIndex == next.puzzleIndex && next.ply > previous.ply;
+        _applyBoardUpdate(resetPremove: !isForwardMove);
+        if (isForwardMove) _tryExecutePremove();
+      },
     );
     ref.listen(
       boardPreferencesProvider.select((p) => (p.castlingMethod, p.boardHighlights)),
@@ -209,6 +265,7 @@ class _BodyState() extends ConsumerState<_Body> {
                           .copyWith(
                             borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
                             boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+                            enablePremoves: boardPreferences.premoves,
                             drawShape: DrawShapeOptions(
                               enable: boardPreferences.enableShapeDrawings,
                               newShapeColor: boardPreferences.shapeColor.color,
@@ -675,17 +732,9 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrl = stormControllerProvider((data.puzzles, data.timestamp));
     final stormState = ref.watch(ctrl);
-    final authUser = ref.watch(authControllerProvider);
     return BottomBar(
       cupertinoGlass: true,
       children: [
-        if (stormState.mode == StormMode.initial)
-          BottomBarButton(
-            icon: Icons.info_outline,
-            label: context.l10n.aboutX('Storm'),
-            showLabel: true,
-            onTap: () => _showStormInfo(context),
-          ),
         BottomBarButton(
           icon: Icons.delete,
           label: context.l10n.stormNewRun.split('(').first.trimRight(),
@@ -712,15 +761,6 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
             showLabel: true,
             onTap: () => _showStats(context, stormState.stats!),
           ),
-        if (authUser != null)
-          BottomBarButton(
-            icon: Icons.history,
-            label: context.l10n.stormHighscores,
-            showLabel: true,
-            onTap: () =>
-                Navigator.of(context)
-                    .pushHidingTabBar(StormDashboardModal.buildRoute(authUser.user)),
-          ),
       ],
     );
   }
@@ -734,7 +774,6 @@ class const _RunStats(final StormRunStats stats) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -757,6 +796,7 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
   @override
   Widget build(BuildContext context) {
     final puzzleList = widget.stats.historyFilter(filter);
+    final showRatings = ref.watch(showRatingsPrefProvider).value;
     final highScoreWidgets = widget.stats.newHigh != null
         ? [
             const SizedBox(height: 16),
@@ -786,86 +826,85 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
     final percentFormat = NumberFormat.decimalPercentPattern(decimalDigits: 1);
     final numberFormat = NumberFormat.decimalPatternDigits(decimalDigits: 2);
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          ...?highScoreWidgets,
-          ListSection(
-            header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
+    return ListView(
+      children: [
+        ...?highScoreWidgets,
+        ListSection(
+          header: Text('${widget.stats.score} ${context.l10n.stormPuzzlesSolved}'),
+          children: [
+            _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
+            _StatsRow(
+              context.l10n.accuracy,
+              percentFormat.format((widget.stats.moves - widget.stats.errors) / widget.stats.moves),
+            ),
+            _StatsRow(context.l10n.stormCombo, widget.stats.comboBest.toString()),
+            _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds}s'),
+            _StatsRow(
+              context.l10n.stormTimePerMove,
+              '${numberFormat.format(widget.stats.timePerMove)}s',
+            ),
+            _StatsRow(context.l10n.stormHighestSolved, widget.stats.highest.toString()),
+          ],
+        ),
+        const SizedBox(height: 10.0),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.invalidate(stormProvider);
+              });
+            },
+            child: Text(context.l10n.stormPlayAgain),
+          ),
+        ),
+        const SizedBox(height: 10.0),
+        Padding(
+          padding: Styles.bodySectionPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _StatsRow(context.l10n.stormMoves, widget.stats.moves.toString()),
-              _StatsRow(
-                context.l10n.accuracy,
-                percentFormat.format(
-                  (widget.stats.moves - widget.stats.errors) / widget.stats.moves,
-                ),
+              Row(
+                children: [
+                  Text(context.l10n.stormPuzzlesPlayed, style: Styles.sectionTitle),
+                  const Spacer(),
+                  Tooltip(
+                    excludeFromSemantics: true,
+                    message: context.l10n.stormFailedPuzzles,
+                    child: SemanticIconButton(
+                      semanticsLabel: context.l10n.stormFailedPuzzles,
+                      icon: const Icon(Icons.close),
+                      onPressed: () =>
+                          setState(() => filter = filter.copyWith(failed: !filter.failed)),
+                      color: filter.failed ? ColorScheme.of(context).primary : null,
+                    ),
+                  ),
+                  Tooltip(
+                    message: context.l10n.stormSlowPuzzles,
+                    excludeFromSemantics: true,
+                    child: SemanticIconButton(
+                      semanticsLabel: context.l10n.stormSlowPuzzles,
+                      icon: const Icon(Icons.hourglass_bottom),
+                      onPressed: () => setState(() => filter = filter.copyWith(slow: !filter.slow)),
+                      color: filter.slow ? ColorScheme.of(context).primary : null,
+                    ),
+                  ),
+                ],
               ),
-              _StatsRow(context.l10n.stormCombo, widget.stats.comboBest.toString()),
-              _StatsRow(context.l10n.stormTime, '${widget.stats.time.inSeconds}s'),
-              _StatsRow(
-                context.l10n.stormTimePerMove,
-                '${numberFormat.format(widget.stats.timePerMove)}s',
-              ),
-              _StatsRow(context.l10n.stormHighestSolved, widget.stats.highest.toString()),
+              const SizedBox(height: 3.0),
+              if (puzzleList.isNotEmpty)
+                PuzzleHistoryPreview(
+                  puzzleList,
+                  shouldOpenCasualPuzzleRun: true,
+                  showRatings: showRatings != null && showRatings != .no,
+                )
+              else
+                Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
             ],
           ),
-          const SizedBox(height: 10.0),
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: FilledButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref.invalidate(stormProvider);
-                });
-              },
-              child: Text(context.l10n.stormPlayAgain),
-            ),
-          ),
-          const SizedBox(height: 10.0),
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(context.l10n.stormPuzzlesPlayed, style: Styles.sectionTitle),
-                    const Spacer(),
-                    Tooltip(
-                      excludeFromSemantics: true,
-                      message: context.l10n.stormFailedPuzzles,
-                      child: SemanticIconButton(
-                        semanticsLabel: context.l10n.stormFailedPuzzles,
-                        icon: const Icon(Icons.close),
-                        onPressed: () =>
-                            setState(() => filter = filter.copyWith(failed: !filter.failed)),
-                        color: filter.failed ? ColorScheme.of(context).primary : null,
-                      ),
-                    ),
-                    Tooltip(
-                      message: context.l10n.stormSlowPuzzles,
-                      excludeFromSemantics: true,
-                      child: SemanticIconButton(
-                        semanticsLabel: context.l10n.stormSlowPuzzles,
-                        icon: const Icon(Icons.hourglass_bottom),
-                        onPressed: () =>
-                            setState(() => filter = filter.copyWith(slow: !filter.slow)),
-                        color: filter.slow ? ColorScheme.of(context).primary : null,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 3.0),
-                if (puzzleList.isNotEmpty)
-                  PuzzleHistoryPreview(puzzleList, shouldOpenCasualPuzzleRun: true)
-                else
-                  Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

@@ -310,6 +310,7 @@ void main() {
             dates: startsAt == null ? null : (startsAt: startsAt, endsAt: endsAt),
             website: null,
             standings: null,
+            regulations: null,
           ),
         ),
         rounds: const IListConst([]),

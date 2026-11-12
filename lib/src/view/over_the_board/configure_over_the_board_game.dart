@@ -301,7 +301,7 @@ class _ConfigureOverTheBoardGameSheetState()
                     Navigator.pop(context);
                   }
                 : null,
-            child: Text(context.l10n.play, style: Styles.bold),
+            child: Text(context.l10n.play),
           ),
         ),
       ],

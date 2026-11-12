@@ -421,7 +421,6 @@ class _CreateChallengeBottomSheetState() extends ConsumerState<CreateChallengeBo
                       widget.user != null
                           ? context.l10n.challengeX(widget.user!.name)
                           : context.l10n.challengeAFriend,
-                      style: Styles.bold,
                     ),
                   ),
                 );

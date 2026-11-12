@@ -121,6 +121,39 @@ void main() {
       expect(find.textContaining(RegExp('0\$')), findsOneWidget);
     });
 
+    testWidgets('plays a premove once the opponent has replied', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      // wait for puzzle to load from api and opponent move to be played
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+
+      // premove the next solution move while waiting for the opponent's reply
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.f6, to: Square.f4)), isTrue);
+
+      // the opponent replies Kh2 and the premove is played right away
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      expect(boardHasPremove(tester, const NormalMove(from: Square.f6, to: Square.f4)), isFalse);
+      expect(boardHasPiece(tester, Square.h2, Piece.whiteKing), isTrue);
+      expect(boardHasPiece(tester, Square.f4, Piece.blackQueen), isTrue);
+
+      // the line goes on: the opponent replies g3 to the premoved check
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(boardHasPiece(tester, Square.g3, Piece.whitePawn), isTrue);
+    });
+
     testWidgets('hasSkipped is persisted when exiting after skip', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,

@@ -296,13 +296,18 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.heightOf(context);
-    showAdaptiveBottomSheet<void>(
+    // Draggable, so that it is dismissed by dragging it down: it is too tall to leave much room to
+    // tap outside of it.
+    showAdaptiveDraggableBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
-      builder: (context) =>
-          _NewGameSheet(initialVariant: initialVariant, initialFen: widget.initialFen),
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      snap: true,
+      builder: (context, scrollController) => _NewGameSheet(
+        initialVariant: initialVariant,
+        initialFen: widget.initialFen,
+        scrollController: scrollController,
+      ),
     );
   }
 
@@ -726,8 +731,11 @@ class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
   }
 }
 
-class const _NewGameSheet({required final Variant? initialVariant, final String? initialFen})
-    extends ConsumerStatefulWidget {
+class const _NewGameSheet({
+  required final Variant? initialVariant,
+  required final ScrollController scrollController,
+  final String? initialFen,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_NewGameSheet> createState() => _NewGameSheetState();
 }
@@ -847,6 +855,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     final hasClock = !_practiceMode && _timeControlType == TimeControlType.clock;
 
     return BottomSheetScrollableContainer(
+      scrollController: widget.scrollController,
       children: [
         if (widget.initialFen != null)
           Padding(
@@ -1111,7 +1120,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
                     Navigator.pop(context);
                   }
                 : null,
-            child: Text(context.l10n.play, style: Styles.bold),
+            child: Text(context.l10n.play),
           ),
         ),
       ],
@@ -1215,6 +1224,7 @@ class const OfflineComputerGameResultDialog({
     );
 
     return PlatformAlertDialog(
+      opaque: true,
       title: Text(title),
       content: Text(subtitle),
       actions: [

@@ -59,6 +59,7 @@ class _HttpLogScreenState() extends ConsumerState<HttpLogScreen> {
   Widget build(BuildContext context) {
     final asyncState = ref.watch(httpLogPaginatorProvider(_searchQuery));
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.mobileHttpLogs),
         actions: [

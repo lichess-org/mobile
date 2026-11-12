@@ -83,7 +83,7 @@ class const GameSettings({required final GameFullId id, super.key}) extends Cons
               title: Text(context.l10n.mobileBoardSettings),
               trailing: const CupertinoListTileChevron(),
               onTap: () {
-                Navigator.of(context).push(BoardSettingsScreen.buildRoute(fullscreenDialog: true));
+                Navigator.of(context).push(BoardSettingsScreen.buildRoute());
               },
             ),
           ],

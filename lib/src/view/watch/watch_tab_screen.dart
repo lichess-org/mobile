@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -63,72 +64,77 @@ class const WatchTabScreen({super.key}) extends ConsumerStatefulWidget {
 
 class _WatchScreenState() extends ConsumerState<WatchTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
+  DateTime? _focusLostAt;
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<BottomTab>(currentBottomTabProvider, (prev, current) {
-      if (prev != BottomTab.watch && current == BottomTab.watch) {
-        ref.invalidate(broadcastsPaginatorProvider);
-        ref.invalidate(featuredChannelsProvider);
-        if (!(ref.read(kidModeProvider).value ?? false)) {
-          ref.invalidate(liveStreamersProvider);
-        }
-      }
-    });
-
     final connectionStatus = ref.watch(lichessConnectionStatusProvider);
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+    return FocusDetector(
+      onFocusLost: () {
+        _focusLostAt = DateTime.now();
+      },
+      onFocusRegained: () {
+        if (context.mounted && _focusLostAt != null) {
+          final duration = DateTime.now().difference(_focusLostAt!);
+          if (duration.inSeconds < 10) {
+            return;
+          }
+          _refreshData();
         }
       },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.watch),
-          centerTitle: false,
-          actions: const [AccountMenuButton()],
-        ),
-        body: switch (connectionStatus) {
-          LichessConnectionStatus.online => OrientationBuilder(
-            builder: (context, orientation) {
-              return HapticRefreshIndicator(
-                key: _androidRefreshKey,
-                onRefresh: _refreshData,
-                child: _Body(orientation),
-              );
-            },
-          ),
-          // Pulling to refresh is not gated on the connectivity status: the device may be marked
-          // offline while its network is back, and the responses to these requests are what tell
-          // the connectivity check to run again.
-          LichessConnectionStatus.networkDown => HapticRefreshIndicator(
-            onRefresh: _refreshData,
-            child: const CustomScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(
-                    child: Text('No internet connection.', style: Styles.noResultTextStyle),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Nothing on this tab works without the server, so the outage message
-          // takes the whole screen. Pulling to refresh is the way out of it:
-          // the requests it makes update the server status on their own.
-          LichessConnectionStatus.serverMaintenance ||
-          LichessConnectionStatus.serverDown => HapticRefreshIndicator(
-            onRefresh: _refreshData,
-            child: const CustomScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
-            ),
-          ),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (bool didPop, _) {
+          if (!didPop) {
+            ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+          }
         },
+        child: PlatformScaffold(
+          appBar: PlatformAppBar(
+            title: Text(context.l10n.watch),
+            centerTitle: false,
+            actions: const [AccountMenuButton()],
+          ),
+          body: switch (connectionStatus) {
+            LichessConnectionStatus.online => OrientationBuilder(
+              builder: (context, orientation) {
+                return HapticRefreshIndicator(
+                  key: _androidRefreshKey,
+                  onRefresh: _refreshData,
+                  child: _Body(orientation),
+                );
+              },
+            ),
+            // Pulling to refresh is not gated on the connectivity status: the device may be marked
+            // offline while its network is back, and the responses to these requests are what tell
+            // the connectivity check to run again.
+            LichessConnectionStatus.networkDown => HapticRefreshIndicator(
+              onRefresh: _refreshData,
+              child: const CustomScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text('No internet connection.', style: Styles.noResultTextStyle),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Nothing on this tab works without the server, so the outage message
+            // takes the whole screen. Pulling to refresh is the way out of it:
+            // the requests it makes update the server status on their own.
+            LichessConnectionStatus.serverMaintenance ||
+            LichessConnectionStatus.serverDown => HapticRefreshIndicator(
+              onRefresh: _refreshData,
+              child: const CustomScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                slivers: [SliverFillRemaining(hasScrollBody: false, child: ServerOutageDisplay())],
+              ),
+            ),
+          },
+        ),
       ),
     );
   }
@@ -265,7 +271,6 @@ class const _BroadcastCalendarCard() extends StatelessWidget {
               ? const CupertinoListTileChevron()
               : null,
           title: Text(context.l10n.broadcastBroadcastCalendar),
-          subtitle: const Text('Upcoming and past tournaments'),
           onTap: () => Navigator.of(context).push(BroadcastCalendarScreen.buildRoute()),
         ),
       ],
@@ -294,12 +299,7 @@ class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChann
         return ListSection(
           header: const Text('Lichess TV'),
           hasLeading: true,
-          onHeaderTap: () =>
-              Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()).then((_) {
-                if (context.mounted) {
-                  _doRefreshDataForRef(ref);
-                }
-              }),
+          onHeaderTap: () => Navigator.of(context).push(LiveTvChannelsScreen.buildRoute()),
           children: data
               .where((snapshot) {
                 if (isTablet) return true;
@@ -317,19 +317,13 @@ class const _WatchTvWidget(final AsyncValue<IList<TvGameSnapshot>> featuredChann
                     aiLevel: snapshot.player.asPlayer.aiLevel,
                     rating: snapshot.player.rating,
                   ),
-                  onTap: () => Navigator.of(context)
-                      .pushHidingTabBar(
-                        TvScreen.buildRoute(
-                          channel: snapshot.channel,
-                          gameId: snapshot.id,
-                          orientation: snapshot.player.side,
-                        ),
-                      )
-                      .then((_) {
-                        if (context.mounted) {
-                          _doRefreshDataForRef(ref);
-                        }
-                      }),
+                  onTap: () => Navigator.of(context).pushHidingTabBar(
+                    TvScreen.buildRoute(
+                      channel: snapshot.channel,
+                      gameId: snapshot.id,
+                      orientation: snapshot.player.side,
+                    ),
+                  ),
                 );
               })
               .toList(growable: false),

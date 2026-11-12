@@ -178,12 +178,16 @@ class _DebouncedPgnTreeViewState() extends ConsumerState<DebouncedPgnTreeView> {
 
     // Scrollable.ensureVisible breaks animation when swiping between tabs (see https://github.com/lichess-org/mobile/issues/1232)
     // Explicitly use the Scrollable of our TreeView instead, so that it won't affect the TabController's state.
+    //
+    // The current move is centered, as when it changes (see [didUpdateWidget]): scrolling it only
+    // into view would leave it at the bottom edge of the viewport, under the bars floating over
+    // the moves.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentMoveKey.currentContext != null) {
         Scrollable.of(currentMoveKey.currentContext!).position.ensureVisible(
           currentMoveKey.currentContext!.findRenderObject()!,
           alignment: 0.5,
-          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
         );
       }
     });
@@ -675,7 +679,6 @@ class const _TwoColumnMainlinePart({
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final dividerColor = theme.dividerColor;
-    final brightness = theme.brightness;
     final textStyle = _baseTextStyle.copyWith(color: _textColor(context, 0.9));
 
     final threeDots = Container(padding: kInlineMovePadding, child: const Text('...'));
@@ -722,14 +725,10 @@ class const _TwoColumnMainlinePart({
         Container(
           padding: const EdgeInsets.only(top: 4, right: kViewHorizontalPadding, bottom: 4),
           decoration: BoxDecoration(
-            color: brightness == Brightness.dark
-                ? const Color(0x0BFFFFFF)
-                : const Color(0x05000000),
             border: Border(
               top: isFirstPart && !params.showTopDivider
                   ? BorderSide.none
                   : BorderSide(color: dividerColor),
-              bottom: BorderSide(color: dividerColor),
             ),
           ),
           child: Row(

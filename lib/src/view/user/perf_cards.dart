@@ -100,9 +100,8 @@ class const PerfCards({
                               perf.shortLabel(context.l10n),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: textShade(context, 0.7)),
                             ),
-                            Icon(perf.icon, color: textShade(context, 0.6)),
+                            Icon(perf.icon, color: perfIconColor(context)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.baseline,

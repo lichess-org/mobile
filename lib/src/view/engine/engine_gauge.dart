@@ -22,14 +22,17 @@ double getEvalGaugeFontSize(BuildContext context) {
 
 class const EngineGauge({required final EngineGaugeParams params, super.key})
     extends ConsumerWidget {
-  static Color backgroundColor(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark
-      ? lighten(ColorScheme.of(context).surface, .07)
-      : lighten(ColorScheme.of(context).onSurface, .17);
+  /// The color of black's share of the gauge: a dark tone of the color scheme, in both light and
+  /// dark themes, between the tones of [ColorScheme.onSecondaryFixedVariant] and
+  /// [ColorScheme.onSecondaryFixed].
+  static Color backgroundColor(BuildContext context) {
+    final colorScheme = context.boardColorScheme;
+    return Color.lerp(colorScheme.onSecondaryFixedVariant, colorScheme.onSecondaryFixed, 0.2)!;
+  }
 
-  static Color valueColor(BuildContext context) => Theme.of(context).brightness == Brightness.dark
-      ? darken(ColorScheme.of(context).onSurface, .1)
-      : darken(ColorScheme.of(context).surface, .01);
+  /// The color of white's share of the gauge: a light tone of the color scheme, in both light and
+  /// dark themes.
+  static Color valueColor(BuildContext context) => context.boardColorScheme.secondaryFixedDim;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -105,7 +108,9 @@ class _EvalGaugeState() extends State<_EvalGauge> {
         : evalDisplay;
 
     final evalStyle = TextStyle(
-      color: toValue >= 0.5 ? Colors.black54 : Colors.white70,
+      color: toValue >= 0.5
+          ? context.boardColorScheme.onSecondaryFixed.withValues(alpha: 0.7)
+          : context.boardColorScheme.secondaryFixed,
       fontSize: getEvalGaugeFontSize(context),
       letterSpacing: -0.8,
       fontWeight: FontWeight.bold,

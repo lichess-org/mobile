@@ -55,7 +55,8 @@ class _SearchScreenState() extends ConsumerState<SearchScreen> {
     if (!mounted) return;
 
     final term = _searchController.text;
-    if (term.length >= 3) {
+    // The lichess server rejects autocomplete terms shorter than 4 characters.
+    if (term.length >= 4) {
       ref.read(autoCompleteUserProvider(term));
       setState(() {
         _term = term;

@@ -167,7 +167,7 @@ class const GamePlayer({
                               color: player.ratingDiff! > 0
                                   ? context.lichessColors.good
                                   : player.ratingDiff! == 0
-                                  ? context.lichessColors.brag
+                                  ? textShade(context, Styles.subtitleOpacity)
                                   : context.lichessColors.error,
                             ),
                           ),
