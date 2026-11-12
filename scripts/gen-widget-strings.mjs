@@ -2,15 +2,16 @@
 /**
  * Generates widget UI strings for both platforms from the app's ARB translation files:
  *   - ios/LichessWidgets/Localizable.xcstrings (Xcode String Catalog)
- *   - android/app/src/main/res/values/strings.xml (default/English strings)
- *   - android/app/src/main/res/values-b+<locale>/strings.xml (per-locale translations)
+ *   - android/app/src/main/res/values/widget_strings.xml (default/English strings)
+ *   - android/app/src/main/res/values-b+<locale>/widget_strings.xml (per-locale translations)
  *
  * Run from the repo root:
  *   node scripts/gen-widget-strings.mjs
  *
  * Xcode picks up Localizable.xcstrings automatically via the fileSystemSynchronizedRootGroup.
- * values/strings.xml is generated too — never edit it by hand, any change will be
- * overwritten the next time this script runs.
+ * The Android widget_strings.xml files are generated: never edit them by hand. Each run deletes
+ * them all before writing the current ones, so a locale or string that goes away leaves no stale
+ * file behind. Other Android strings belong in the hand-written values/strings.xml.
  *
  * To add a new translatable string:
  *   1. Add the ARB key to WIDGET_KEYS below with its default English value.
@@ -134,6 +135,25 @@ function arbToAndroidValue(value, param) {
   return param ? value.replace(/\{param\}/g, '%1$s') : value;
 }
 
+const ANDROID_STRINGS_FILE_NAME = 'widget_strings.xml';
+
+function androidStringsXml(entries) {
+  const body = Object.entries(entries)
+    .map(([name, value]) => `    <string name="${name}">${xmlEscape(value)}</string>`)
+    .join('\n');
+  return '<?xml version="1.0" encoding="utf-8"?>\n' +
+    '<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->\n' +
+    `<resources>\n${body}\n</resources>\n`;
+}
+
+// Remove the files of the previous run, and the locale directories left empty.
+for (const dirName of fs.readdirSync(ANDROID_RES_DIR)) {
+  if (!dirName.startsWith('values')) continue;
+  const dir = path.join(ANDROID_RES_DIR, dirName);
+  fs.rmSync(path.join(dir, ANDROID_STRINGS_FILE_NAME), { force: true });
+  if (dirName.startsWith('values-b+') && fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
+}
+
 const androidLocaleGroups = new Map();
 
 for (const { file } of arbFiles) {
@@ -155,38 +175,22 @@ for (const { file } of arbFiles) {
 for (const [qualifier, entries] of androidLocaleGroups) {
   const dir = path.join(ANDROID_RES_DIR, `values-${qualifier}`);
   fs.mkdirSync(dir, { recursive: true });
-  const body = Object.entries(entries)
-    .map(([name, value]) => `    <string name="${name}">${xmlEscape(value)}</string>`)
-    .join('\n');
-  fs.writeFileSync(
-    path.join(dir, 'strings.xml'),
-    `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n${body}\n</resources>\n`
-  );
+  fs.writeFileSync(path.join(dir, ANDROID_STRINGS_FILE_NAME), androidStringsXml(entries));
 }
 console.log(`  Android locales: ${androidLocaleGroups.size}`);
 
 
-const DEFAULT_STRINGS_FILE = path.join(ANDROID_RES_DIR, 'values', 'strings.xml');
 const enArb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, 'app_en.arb'), 'utf8'));
-const defaultEntries = [];
+const defaultEntries = {};
 
 for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
   if (!androidName) continue;
-  let value = enArb[arbKey] ?? fallback;
-  if (param) value = value.replace(/\{param\}/g, '%1$s');
-  defaultEntries.push(`    <string name="${androidName}">${xmlEscape(value)}</string>`);
+  defaultEntries[androidName] = arbToAndroidValue(enArb[arbKey] ?? fallback, param);
 }
-
-for (const [name, value] of Object.entries(UNTRANSLATED_ANDROID_STRINGS)) {
-  defaultEntries.push(`    <string name="${name}">${xmlEscape(value)}</string>`);
-}
+Object.assign(defaultEntries, UNTRANSLATED_ANDROID_STRINGS);
 
 fs.writeFileSync(
-  DEFAULT_STRINGS_FILE,
-  '<?xml version="1.0" encoding="utf-8"?>\n' +
-  '<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->\n' +
-  '<resources>\n' +
-  defaultEntries.join('\n') + '\n' +
-  '</resources>\n'
+  path.join(ANDROID_RES_DIR, 'values', ANDROID_STRINGS_FILE_NAME),
+  androidStringsXml(defaultEntries),
 );
-console.log(`  Default strings: ${defaultEntries.length}`);
+console.log(`  Default strings: ${Object.keys(defaultEntries).length}`);
