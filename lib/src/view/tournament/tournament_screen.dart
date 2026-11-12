@@ -744,7 +744,7 @@ class const _TeamStandingTile({
                     child: UserFullNameWidget(
                       user: team.players.first.user,
                       style: TextStyle(fontSize: 14, color: textShade(context, 0.6)),
-                      showPatron: false,
+                      patronIcon: const PatronIconConfig(show: false),
                     ),
                   ),
                   TextSpan(
@@ -1069,7 +1069,7 @@ class const _FeaturedGamePlayer({required final FeaturedGame game, required fina
                 Flexible(
                   child: UserFullNameWidget(
                     user: player.user,
-                    showPatron: false,
+                    patronIcon: const PatronIconConfig(show: false),
                     rating: player.rating,
                     provisional: player.provisional,
                   ),

@@ -87,13 +87,10 @@ class const LeaderboardListTile({required final LeaderboardUser user, final Icon
       leading: perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
-        child: Row(
-          mainAxisSize: .min,
-          spacing: 5,
-          children: [
-            if (user.online == true) const ConnectedIcon(isConnected: true, size: 12),
-            Flexible(child: UserFullNameWidget(user: user.lightUser)),
-          ],
+        child: UserFullNameWidget(
+          user: user.lightUser,
+          statusIcon: UserStatusIconConfig(isOnline: user.online == true, show: !user.isPatron),
+          patronIcon: PatronIconConfig(color: user.online == true ? user.patronColor : null),
         ),
       ),
       trailing: perfIcon != null

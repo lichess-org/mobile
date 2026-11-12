@@ -307,7 +307,7 @@ class const _BlogCardContent({
               Expanded(
                 child: UserFullNameWidget(
                   user: post.author,
-                  showPatron: false,
+                  patronIcon: const PatronIconConfig(show: false),
                   showFlair: false,
                   style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
                 ),

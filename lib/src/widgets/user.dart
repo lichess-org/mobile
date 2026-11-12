@@ -39,6 +39,28 @@ class const ConnectedIcon({
   }
 }
 
+/// A filled green circle for online users, or an outlined circle for offline users.
+class const UserStatusIcon({required final bool isOnline, super.key}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: isOnline ? context.l10n.online : context.l10n.offline,
+      child: Icon(
+        Symbols.circle,
+        size: 16,
+        fill: isOnline ? 1 : 0,
+        color: isOnline
+            ? context.lichessColors.good
+            : ColorScheme.of(context).onSurface.withValues(alpha: 0.5),
+      ),
+    );
+  }
+}
+
+/// Controls the visibility and state of the online/offline circle.
+@immutable
+class const UserStatusIconConfig({required final bool isOnline, final bool show = true});
+
 /// App bar title for the user and profile screens.
 ///
 /// Shows the user's avatar and name, with a subtitle displaying the online status, or the time they
@@ -150,6 +172,16 @@ class const PatronIcon({final int? color, final double? size, super.key}) extend
   ];
 }
 
+/// Controls the patron icon independently of the user's online status indicator.
+@immutable
+class const PatronIconConfig({
+  /// Whether to show the icon for patrons.
+  final bool show = true,
+
+  /// A palette code from 1 to 10. When null, the surrounding icon color is inherited.
+  final int? color,
+});
+
 /// Displays a user name, title, flair (optional) with an optional rating.
 class UserFullNameWidget extends ConsumerWidget {
   const new({
@@ -160,8 +192,9 @@ class UserFullNameWidget extends ConsumerWidget {
     this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
+    this.statusIcon,
     this.showFlair = true,
-    this.showPatron = true,
+    this.patronIcon,
     this.style,
     this.onTap,
     super.key,
@@ -175,8 +208,9 @@ class UserFullNameWidget extends ConsumerWidget {
     this.ratingDiff,
     this.provisional,
     this.shouldShowOnline = false,
+    this.statusIcon,
     this.showFlair = true,
-    this.showPatron = true,
+    this.patronIcon,
     this.style,
     this.onTap,
     super.key,
@@ -198,11 +232,14 @@ class UserFullNameWidget extends ConsumerWidget {
   /// Whether to show the online status.
   final bool? shouldShowOnline;
 
+  /// An optional online/offline circle, configured independently of [shouldShowOnline].
+  final UserStatusIconConfig? statusIcon;
+
   /// Whether to show the user's flair. Defaults to `true`.
   final bool showFlair;
 
-  /// If the user is a patron, show the patron icon in front of their name. Defaults to `true`.
-  final bool showPatron;
+  /// Patron icon appearance. When omitted, patrons are shown with their chosen color.
+  final PatronIconConfig? patronIcon;
 
   /// Callback when the user taps on the name.
   final VoidCallback? onTap;
@@ -225,6 +262,7 @@ class UserFullNameWidget extends ConsumerWidget {
             : context.l10n.anonymous);
 
     final contextTextStyle = style ?? DefaultTextStyle.of(context).style;
+    final effectivePatronIcon = patronIcon ?? PatronIconConfig(color: user?.patronColor);
 
     final content = Row(
       mainAxisSize: MainAxisSize.min,
@@ -234,10 +272,15 @@ class UserFullNameWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 5),
             child: ConnectedIcon(isConnected: user?.isOnline == true),
           ),
-        if (showPatron && user?.isPatron == true)
+        if (statusIcon?.show == true)
           Padding(
             padding: const EdgeInsets.only(right: 5),
-            child: PatronIcon(size: contextTextStyle.fontSize, color: user?.patronColor),
+            child: UserStatusIcon(isOnline: statusIcon!.isOnline),
+          ),
+        if (effectivePatronIcon.show && user?.isPatron == true)
+          Padding(
+            padding: const EdgeInsets.only(right: 5),
+            child: PatronIcon(size: contextTextStyle.fontSize, color: effectivePatronIcon.color),
           ),
         if (user?.title != null) ...[
           Text(

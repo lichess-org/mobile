@@ -188,7 +188,7 @@ class const ContactTile(
       contentPadding: Theme.of(context).listTileTheme.contentPadding
           ?.add(const EdgeInsets.symmetric(vertical: 4.0)),
       leading: UserAvatar(contact.user),
-      title: UserFullNameWidget(user: contact.user, showFlair: false, showPatron: true),
+      title: UserFullNameWidget(user: contact.user, showFlair: false),
       subtitle: Text(contact.lastMessage.text),
       trailing: Column(
         mainAxisSize: .min,
@@ -224,7 +224,7 @@ class const UserTile(
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListTile(
-      title: UserFullNameWidget(user: user, showFlair: true, showPatron: true),
+      title: UserFullNameWidget(user: user, showFlair: true),
       onTap: () => openConvo(user),
     );
   }
