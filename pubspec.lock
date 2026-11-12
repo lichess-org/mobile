@@ -1167,7 +1167,7 @@ packages:
     source: hosted
     version: "0.6.0"
   objective_c:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: objective_c
       sha256: "5c80c2ad6e2c0397de5db38c6d653e69616a3397e13aa7633bf39eb668f2041b"

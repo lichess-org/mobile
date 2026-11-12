@@ -99,11 +99,6 @@ dev_dependencies:
   stream_channel: ^2.1.4
   wakelock_plus_platform_interface: ^1.7.0
 
-# objective_c 9.6.3 native isValidObject debug assert fails on the iOS 26 simulator, which breaks
-# every cupertino_http request in debug builds.
-dependency_overrides:
-  objective_c: 9.6.2
-
 flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
