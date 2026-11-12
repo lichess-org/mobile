@@ -28,6 +28,7 @@ import android.widget.RemoteViews
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.UnknownHostException
 import kotlin.concurrent.thread
 import org.lichess.mobileV2.R
 import org.lichess.mobileV2.MainActivity
@@ -38,6 +39,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
   companion object {
     private const val ACTION_RETRY = "org.lichess.mobileV2.widgets.DAILY_PUZZLE_RETRY"
     private const val RETRY_DELAY_MILLIS = 60 * 60 * 1000L
+    private const val FETCH_ATTEMPTS = 3
   }
 
   data class DailyPuzzle(
@@ -45,6 +47,23 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     val fen: String,
     val lastMove: String
   )
+
+  // Since Android 15 the system cuts the network of an app idling in the background, and gives it
+  // back only shortly after a broadcast wakes it up. An update that comes in before that fails
+  // right away with an UnknownHostException, so retry it a few times before giving up.
+  private fun fetchDailyPuzzleWithRetry(lichessHost: String): DailyPuzzle {
+    var attempt = 1
+    while (true) {
+      try {
+        return fetchDailyPuzzle(lichessHost)
+      } catch (e: UnknownHostException) {
+        if (attempt == FETCH_ATTEMPTS) throw e
+        Log.w("DailyPuzzleWidget", "Network not ready (attempt $attempt), retrying: $e")
+        Thread.sleep(attempt * 1000L)
+        attempt++
+      }
+    }
+  }
 
   // Throws on network, HTTP or JSON errors: there is always a daily puzzle, so a failure is an
   // error to show, not an empty state.
@@ -173,7 +192,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     try {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
-      val puzzle = fetchDailyPuzzle(lichessHost)
+      val puzzle = fetchDailyPuzzleWithRetry(lichessHost)
 
       puzzleId = puzzle.id
       remoteViews.setViewVisibility(R.id.no_puzzle, View.GONE)
@@ -188,7 +207,8 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
       succeeded = true
     } catch (e: Exception) {
-      Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
+      // Log the exception itself: Log drops the stack trace of an UnknownHostException.
+      Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId: $e", e)
       remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
       remoteViews.setViewVisibility(R.id.puzzle_board_image, View.GONE)
     }
