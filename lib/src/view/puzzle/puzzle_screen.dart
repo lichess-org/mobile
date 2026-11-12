@@ -155,7 +155,7 @@ class const _Title({required final PuzzleAngle angle, final PuzzleContext? initi
         key == PuzzleThemeKey.mix
             ? Text(context.l10n.puzzleDesc)
             : Text(key.l10n(context.l10n).name),
-      PuzzleOpening(key: final key) =>
+      PuzzleOpening(:final key) =>
         ref
             .watch(puzzleOpeningNameProvider(key))
             .when(
