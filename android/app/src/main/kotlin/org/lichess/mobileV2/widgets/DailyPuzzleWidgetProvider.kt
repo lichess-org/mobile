@@ -1,8 +1,10 @@
 package org.lichess.mobileV2.widgets
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -17,6 +19,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.text.format.DateUtils
 import android.util.Log
 import android.util.TypedValue
@@ -31,6 +34,11 @@ import org.lichess.mobileV2.MainActivity
 
 
 class DailyPuzzleWidgetProvider : AppWidgetProvider() {
+
+  companion object {
+    private const val ACTION_RETRY = "org.lichess.mobileV2.widgets.DAILY_PUZZLE_RETRY"
+    private const val RETRY_DELAY_MILLIS = 60 * 60 * 1000L
+  }
 
   data class DailyPuzzle(
     val id: String,
@@ -67,7 +75,15 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     val pendingResult = goAsync()
     thread {
       try {
-        super.onReceive(context, intent)
+        if (intent.action == ACTION_RETRY) {
+          val appWidgetManager = AppWidgetManager.getInstance(context)
+          val appWidgetIds = appWidgetManager.getAppWidgetIds(
+            ComponentName(context, DailyPuzzleWidgetProvider::class.java)
+          )
+          onUpdate(context, appWidgetManager, appWidgetIds)
+        } else {
+          super.onReceive(context, intent)
+        }
       } finally {
         pendingResult.finish()
       }
@@ -76,7 +92,40 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
 
   override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
     super.onUpdate(context, appWidgetManager, appWidgetIds)
-    appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
+    // `map` rather than `all`: every widget must be updated, even after a failure.
+    val succeeded = appWidgetIds.map { updateWidget(context, appWidgetManager, it) }.all { it }
+    if (succeeded) cancelRetry(context) else scheduleRetry(context)
+  }
+
+  override fun onDisabled(context: Context) {
+    super.onDisabled(context)
+    cancelRetry(context)
+  }
+
+  // The regular update comes every 6 hours (updatePeriodMillis), so a failed update is retried
+  // sooner, like the iOS widget. The alarm is inexact, so it needs no exact alarm permission and
+  // the system can batch it; scheduling again replaces the pending one.
+  private fun scheduleRetry(context: Context) {
+    val alarmManager = context.getSystemService(AlarmManager::class.java)
+    alarmManager.set(
+      AlarmManager.ELAPSED_REALTIME,
+      SystemClock.elapsedRealtime() + RETRY_DELAY_MILLIS,
+      retryPendingIntent(context)
+    )
+  }
+
+  private fun cancelRetry(context: Context) {
+    context.getSystemService(AlarmManager::class.java).cancel(retryPendingIntent(context))
+  }
+
+  private fun retryPendingIntent(context: Context): PendingIntent {
+    val intent = Intent(context, DailyPuzzleWidgetProvider::class.java).setAction(ACTION_RETRY)
+    return PendingIntent.getBroadcast(
+      context,
+      0,
+      intent,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
   }
 
   private fun buildClickPendingIntent(
@@ -104,7 +153,13 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     )
   }
 
-  private fun updateWidget(context : Context, appWidgetManager : AppWidgetManager, appWidgetId : Int){
+  // Returns whether the puzzle was loaded and drawn.
+  private fun updateWidget(
+    context : Context,
+    appWidgetManager : AppWidgetManager,
+    appWidgetId : Int
+  ): Boolean {
+    var succeeded = false
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_daily_puzzle)
 
     val dateStr = DateUtils.formatDateTime(
@@ -131,6 +186,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
       val roundBoard = getRoundedCornerBitmap(boardBitmap, cornerRadiusPx)
       boardBitmap.recycle()
       remoteViews.setImageViewBitmap(R.id.puzzle_board_image, roundBoard)
+      succeeded = true
     } catch (e: Exception) {
       Log.e("DailyPuzzleWidget", "Error updating widget $appWidgetId", e)
       remoteViews.setViewVisibility(R.id.no_puzzle, View.VISIBLE)
@@ -141,6 +197,7 @@ class DailyPuzzleWidgetProvider : AppWidgetProvider() {
     remoteViews.setOnClickPendingIntent(R.id.widget_container, clickPendingIntent)
 
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
+    return succeeded
   }
 
   private fun parseFen(fen : String): List<List<Char?>> {
