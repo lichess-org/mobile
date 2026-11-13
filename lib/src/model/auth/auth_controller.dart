@@ -92,9 +92,11 @@ class AuthController() extends Notifier<AuthUser?> {
   Future<void> switchAccount(AuthUser account) async {
     final isValid = await ref.read(authRepositoryProvider).checkToken(account);
     if (!isValid) {
-      final storage = ref.read(authStorageProvider);
-      final others = await storage.readOthers();
-      await storage.writeOthers(others.removeWhere((a) => a.user.id == account.user.id));
+      await _serialized(() async {
+        final storage = ref.read(authStorageProvider);
+        final others = await storage.readOthers();
+        await storage.writeOthers(others.removeWhere((a) => a.user.id == account.user.id));
+      });
       if (ref.mounted) ref.invalidate(otherAccountsProvider);
       throw const AccountSessionExpiredException();
     }
@@ -102,22 +104,44 @@ class AuthController() extends Notifier<AuthUser?> {
   }
 
   Future<void> _onSignedIn(AuthUser authUser) async {
-    final storage = ref.read(authStorageProvider);
-    final previous = state;
-    final others = (await storage.readOthers()).removeWhere(
-      (a) => a.user.id == authUser.user.id || a.user.id == previous?.user.id,
-    );
-    await storage.writeOthers(
-      previous != null && previous.user.id != authUser.user.id
-          ? others.insert(0, previous)
-          : others,
-    );
-    await storage.write(authUser);
+    final replaced = await _serialized(() async {
+      final storage = ref.read(authStorageProvider);
+      final previous = state;
+      final stored = await storage.readOthers();
+      final others = stored.removeWhere(
+        (a) => a.user.id == authUser.user.id || a.user.id == previous?.user.id,
+      );
+      await storage.writeOthers(
+        previous != null && previous.user.id != authUser.user.id
+            ? others.insert(0, previous)
+            : others,
+      );
+      await storage.write(authUser);
 
-    if (!ref.mounted) return;
-    state = authUser;
+      if (ref.mounted) {
+        state = authUser;
+        _authEventsController.add(AuthEvent.signIn);
+      }
 
-    _authEventsController.add(AuthEvent.signIn);
+      // The session this sign in replaces, when the user signed in again to an account they were
+      // already signed in to.
+      return [
+        ?previous,
+        ...stored,
+      ].where((a) => a.user.id == authUser.user.id && a.token != authUser.token).firstOrNull;
+    });
+
+    // The replaced token is not stored anymore, so it could never be revoked later.
+    if (replaced != null) {
+      unawaited(
+        ref.read(authRepositoryProvider).revokeToken(replaced).catchError((
+          Object e,
+          StackTrace st,
+        ) {
+          _logger.warning('Could not revoke the token of a replaced session:', e, st);
+        }),
+      );
+    }
   }
 
   /// Signs out the user from the active account.
@@ -125,9 +149,10 @@ class AuthController() extends Notifier<AuthUser?> {
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
+    final signedOut = state;
     _authEventsController.add(AuthEvent.signOut);
     await ref.read(authRepositoryProvider).signOut();
-    await _activateNextAccount();
+    if (signedOut != null) await _activateNextAccount(replacing: signedOut);
   }
 
   /// Closes the account of the signed in user, then signs them out of the app.
@@ -166,38 +191,79 @@ class AuthController() extends Notifier<AuthUser?> {
     _authEventsController.add(AuthEvent.signOut);
   }
 
-  /// Checks if the current authUser token is still valid.
+  /// Checks whether the token of [authUser], a session that got a 401 response, is still valid.
   ///
-  /// If the token is invalid, it deletes the authUser from storage.
-  Future<void> checkToken() async {
-    if (state == null) {
-      return;
-    }
+  /// If it is invalid and [authUser] is still the active session, the session is deleted and the
+  /// next account the user is signed in to becomes active, if any. The check is skipped if
+  /// [authUser] is not the active session anymore, e.g. when a request made before the user signed
+  /// out of it gets its 401 response after that.
+  Future<void> checkToken(AuthUser authUser) async {
+    if (state?.token != authUser.token) return;
 
-    final isValid = await ref.read(authRepositoryProvider).checkToken(state!);
+    final isValid = await ref.read(authRepositoryProvider).checkToken(authUser);
     if (!isValid) {
-      await ref.read(authStorageProvider).delete();
-      if (!ref.mounted) return;
-      state = null;
+      _logger.info('The token of the active session is invalid, signing out of it');
+      await _activateNextAccount(replacing: authUser);
     }
   }
 
-  Future<void> _activateNextAccount() async {
-    final storage = ref.read(authStorageProvider);
-    final others = await storage.readOthers();
-    if (others.isEmpty) {
-      await storage.delete();
+  /// Replaces the [replacing] session with the most recently used other account whose token is
+  /// valid, or signs the user out if there is none.
+  ///
+  /// Does nothing if [replacing] is not the active session anymore: another transition already
+  /// replaced it.
+  Future<void> _activateNextAccount({required AuthUser replacing}) {
+    return _serialized(() async {
+      if (!ref.mounted || state?.token != replacing.token) return;
+
+      final storage = ref.read(authStorageProvider);
+      var others = await storage.readOthers();
+      AuthUser? next;
+      while (next == null && others.isNotEmpty) {
+        final candidate = others.first;
+        others = others.removeAt(0);
+        if (await _isTokenValidOrUnknown(candidate)) next = candidate;
+      }
+      await storage.writeOthers(others);
+
+      if (next == null) {
+        await storage.delete();
+        if (!ref.mounted) return;
+        state = null;
+        return;
+      }
+
+      await storage.write(next);
       if (!ref.mounted) return;
-      state = null;
-      return;
+      state = next;
+      _authEventsController.add(AuthEvent.signIn);
+    });
+  }
+
+  /// Whether the token of [authUser] is valid, or `true` if it can't be checked, e.g. offline.
+  ///
+  /// An unknown token is kept: if it is invalid, the first request made with it gets a 401 response,
+  /// and [checkToken] then replaces it.
+  Future<bool> _isTokenValidOrUnknown(AuthUser authUser) async {
+    try {
+      return await ref.read(authRepositoryProvider).checkToken(authUser);
+    } catch (e, st) {
+      _logger.warning('Could not check the token of ${authUser.user.id}:', e, st);
+      return true;
     }
+  }
 
-    final next = others.first;
-    await storage.writeOthers(others.removeAt(0));
-    await storage.write(next);
-    if (!ref.mounted) return;
-    state = next;
+  /// The last session transition, which the next one waits for.
+  ///
+  /// Each transition reads the stored sessions, then writes them back across several awaits, so two
+  /// concurrent ones (e.g. a sign out and the token check of a 401 response) would otherwise lose
+  /// the writes of each other.
+  Future<void> _lastTransition = Future<void>.value();
 
-    _authEventsController.add(AuthEvent.signIn);
+  /// Runs [transition] once the previous session transitions have completed.
+  Future<T> _serialized<T>(Future<T> Function() transition) {
+    final result = _lastTransition.then((_) => transition());
+    _lastTransition = result.then<void>((_) {}, onError: (Object _) {});
+    return result;
   }
 }

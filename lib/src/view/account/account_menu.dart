@@ -100,15 +100,7 @@ class _AccountMenuScreenState()
 
     ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
     ref.listen(switchAccountMutation, (_, next) {
-      if (next case MutationError(:final error)) {
-        showSnackBar(
-          context,
-          error is AccountSessionExpiredException
-              ? 'Your session has expired, please sign in again.'
-              : context.l10n.mobileSomethingWentWrong,
-          type: SnackBarType.error,
-        );
-      }
+      if (next case MutationError(:final error)) _showSwitchAccountErrorSnackBar(context, error);
     });
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
@@ -397,13 +389,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
       showSnackBar(context, 'Switched to ${next.user.name}');
     } catch (e) {
       if (!mounted) return;
-      showSnackBar(
-        context,
-        e is AccountSessionExpiredException
-            ? 'Your session has expired, please sign in again.'
-            : context.l10n.mobileSomethingWentWrong,
-        type: SnackBarType.error,
-      );
+      _showSwitchAccountErrorSnackBar(context, e);
     }
   }
 
@@ -623,4 +609,15 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Tells the user that switching accounts failed with [error].
+void _showSwitchAccountErrorSnackBar(BuildContext context, Object error) {
+  showSnackBar(
+    context,
+    error is AccountSessionExpiredException
+        ? 'Your session has expired, please sign in again.'
+        : context.l10n.mobileSomethingWentWrong,
+    type: SnackBarType.error,
+  );
 }

@@ -549,7 +549,7 @@ class LichessClient(final Client _inner, final Ref _ref) implements Client {
       }
 
       if (response.statusCode == 401 && authUser != null) {
-        _ref.read(authControllerProvider.notifier).checkToken();
+        _ref.read(authControllerProvider.notifier).checkToken(authUser);
       }
 
       return response;
@@ -1040,7 +1040,11 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
+  ///
+  /// The response may be that of the signed in account, so the provider runs [fn] again when the
+  /// user signs in to, out of, or switches to another account.
   Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
+    _watchSignedInAccount();
     final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     try {
@@ -1059,10 +1063,13 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
+  ///
+  /// Like [withClientCacheFor], the provider runs [fn] again when the signed in account changes.
   Future<U> withAggregatorCacheFor<U>(
     Future<U> Function(LichessClient, Aggregator) fn,
     Duration duration,
   ) async {
+    _watchSignedInAccount();
     final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     final aggregator = read(aggregatorProvider);
@@ -1074,5 +1081,9 @@ extension ClientRefExtension on Ref {
       link.close();
       rethrow;
     }
+  }
+
+  void _watchSignedInAccount() {
+    watch(authControllerProvider.select((authUser) => authUser?.user.id));
   }
 }
