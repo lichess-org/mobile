@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
@@ -101,11 +102,7 @@ class const _Body({required final AnalysisOptions options, required final Analys
         final size = Size(constraints.maxWidth, constraints.maxHeight - topInset);
         final orientation = size.width > size.height ? Orientation.landscape : Orientation.portrait;
         if (orientation == Orientation.landscape) {
-          final sideWidth = size.longestSide - size.shortestSide;
-          final defaultBoardSize = size.shortestSide - (kTabletBoardTableSidePadding * 2);
-          final boardSize = sideWidth >= 250
-              ? defaultBoardSize
-              : size.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+          final boardSize = landscapeBoardSizeConstraints(BoxConstraints.tight(size));
           // Laid out below the app bar: nothing scrolls under it, the explorer list must not tint
           // it.
           final row = Row(

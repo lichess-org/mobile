@@ -17,6 +17,18 @@ import 'package:material_ui/material_ui.dart';
 /// In crazyhouse, when displaying pockets above/below the board, add this much additional side padding to make the board smaller and avoid overflows.
 const _kAdditionalBoardSidePaddingForPockets = 70.0;
 
+double landscapeBoardSizeConstraints(BoxConstraints constraints) {
+  final defaultBoardSize = constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+  final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
+  return sideWidth >= 250
+      ? defaultBoardSize
+      : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+}
+
+EdgeInsets boardSidePadding(bool isTablet) => isTablet
+    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+    : EdgeInsets.zero;
+
 Side variantBoardOrientation({
   required Variant variant,
   required Side youAre,
@@ -437,12 +449,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
         );
 
         if (orientation == Orientation.landscape) {
-          final defaultBoardSize =
-              constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-          final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-          final boardSize = sideWidth >= 250
-              ? defaultBoardSize
-              : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+          final boardSize = landscapeBoardSizeConstraints(constraints);
 
           return Padding(
             padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
@@ -541,9 +548,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                 ),
               ),
               Padding(
-                padding: isTablet
-                    ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                    : EdgeInsets.zero,
+                padding: boardSidePadding(isTablet),
                 child: BoardWidget(
                   size: effectiveBoardSize,
                   orientation: widget.orientation,

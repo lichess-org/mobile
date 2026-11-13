@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
@@ -165,13 +166,7 @@ class _BodyState() extends ConsumerState<_Body> {
                         );
 
                     if (orientation == Orientation.landscape) {
-                      final defaultBoardSize =
-                          constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                      final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-                      final boardSize = sideWidth >= 250
-                          ? defaultBoardSize
-                          : constraints.biggest.longestSide / kGoldenRatio -
-                                (kTabletBoardTableSidePadding * 2);
+                      final boardSize = landscapeBoardSizeConstraints(constraints);
                       return Padding(
                         padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
                         child: Row(
