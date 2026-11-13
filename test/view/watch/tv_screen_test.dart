@@ -4,11 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../example_data.dart';
@@ -34,6 +36,7 @@ void main() {
     ExportedGame? game,
     String whiteUserName = 'Peter',
     String blackUserName = 'Steven',
+    TournamentMeta? tournament,
   }) async {
     final uri = socketUri ?? tvSocketUri;
     final id = gameId ?? game?.id ?? const GameId('qVChCOTc');
@@ -44,6 +47,7 @@ void main() {
         pgn,
         whiteUserName: game?.white.user?.name ?? whiteUserName,
         blackUserName: game?.black.user?.name ?? blackUserName,
+        tournament: tournament,
       ),
     ]);
     await tester.pump();
@@ -169,6 +173,60 @@ void main() {
       // new game is loaded and opponent is called "White"
       expect(find.text('Black'), findsNothing);
       expect(find.text('White'), findsOneWidget);
+    });
+
+    testWidgets('app bar is not blank (Lichess TV)', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const TvScreen(channel: TvChannel.best, initialGame: (gameId, Side.white)),
+      );
+      await tester.pumpWidget(app);
+      await loadGame(tester);
+
+      expect(find.widgetWithText(PlatformAppBar, 'Top games TV'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, '3+2 • Casual'), findsOneWidget);
+    });
+
+    testWidgets('app bar is not blank (User TV)', (tester) async {
+      final user = LightUser(id: UserId.fromUserName('nfchess13'), name: 'NFChess13');
+      final games = generateExportedGames(count: 1, username: 'nfchess13');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TvScreen(user: user, initialGame: (games[0].id, Side.white)),
+      );
+
+      await tester.pumpWidget(app);
+      await loadGame(tester, socketUri: watchSocketUri(games[0].id, Side.white), game: games[0]);
+
+      expect(find.widgetWithText(PlatformAppBar, 'NFChess13'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, '3+2 • Casual'), findsOneWidget);
+    });
+
+    testWidgets('app bar is not blank (Tournament TV)', (tester) async {
+      final user = LightUser(id: UserId.fromUserName('nfchess13'), name: 'NFChess13');
+      final games = generateExportedGames(count: 1, username: 'nfchess13');
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: TvScreen(user: user, initialGame: (games[0].id, Side.white)),
+      );
+
+      await tester.pumpWidget(app);
+      await loadGame(
+        tester,
+        socketUri: watchSocketUri(games[0].id, Side.white),
+        game: games[0],
+        tournament: TournamentMeta(
+          id: const TournamentId('asdf'),
+          name: 'Awesome Tourney',
+          clock: (at: DateTime(2025), timeLeft: const Duration(seconds: 60)),
+          berserkable: true,
+          ranks: (black: 1, white: 2),
+        ),
+      );
+      expect(find.widgetWithText(PlatformAppBar, 'Awesome Tourney Arena'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, '3+2 • Casual'), findsOneWidget);
     });
   });
 }
