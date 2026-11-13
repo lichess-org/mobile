@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -143,18 +144,16 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             header: Text(context.l10n.coachYoutubeVideos),
             hasLeading: true,
             children: [
-              if (profile.youtubeChannel case final channel?)
-                ListTile(
-                  leading: const Icon(Icons.play_arrow),
-                  title: Text(channel, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  onTap: () => launchUrlString(channel),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Wrap(
+                  spacing: 8.0,
+                  runSpacing: 8.0,
+                  children: [
+                    for (final video in profile.youtubeVideos) _YoutubeVideoThumbnail(url: video),
+                  ],
                 ),
-              for (final video in profile.youtubeVideos)
-                ListTile(
-                  leading: const Icon(Icons.play_arrow),
-                  title: Text(video, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  onTap: () => launchUrlString(video),
-                ),
+              ),
             ],
           ),
         if (profile.studies.isNotEmpty)
@@ -183,6 +182,32 @@ class const _InfoRow({required final Widget value, final String? label}) extends
   Widget build(BuildContext context) {
     final subtitle = label;
     return ListTile(title: value, subtitle: subtitle != null ? Text(subtitle) : null);
+  }
+}
+
+class const _YoutubeVideoThumbnail({required final String url}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => launchUrlString(url),
+      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      child: SizedBox(
+        width: 160.0,
+        height: 120.0,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          child: ColoredBox(
+            color: ColorScheme.of(context).surfaceContainerHighest,
+            child: HttpNetworkImageWidget(
+              youtubeThumbnailUrl(url),
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) =>
+                  const Icon(Icons.play_circle_outline, size: 40.0, color: Colors.white70),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

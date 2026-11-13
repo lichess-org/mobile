@@ -21,6 +21,11 @@ IList<String> _parseYoutubeUrls(String text) {
       .toIList();
 }
 
+String youtubeThumbnailUrl(String videoUrl) {
+  final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
+  return id != null ? 'https://i.ytimg.com/vi/$id/hqdefault.jpg' : videoUrl;
+}
+
 IList<String> _parseStudyIds(String text) {
   return text
       .split('\n')

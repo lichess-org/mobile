@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -75,8 +76,8 @@ const _profileResponse = '''
       "otherExperience": null,
       "skills": null,
       "methodology": null,
-      "youtubeVideos": null,
-      "youtubeChannel": null,
+      "youtubeVideos": "https://www.youtube.com/watch?v=dQw4w9WgXcQ\\r\\nhttps://youtu.be/9bZkp7q19f0",
+      "youtubeChannel": "https://www.youtube.com/@cleverqueen",
       "publicStudies": null
     },
     "picture": "https://example.com/toniaa.webp",
@@ -172,6 +173,40 @@ void main() {
       expect(find.text('About me'), findsOneWidget);
       expect(find.text('I teach chess for a living'), findsOneWidget);
       expect(find.text('Learn chess the fun way'), findsOneWidget);
+    });
+
+    testWidgets('profile shows youtube thumbnails instead of video links', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('YouTube videos'), findsOneWidget);
+      expect(find.textContaining('youtube.com'), findsNothing);
+      expect(find.textContaining('youtu.be'), findsNothing);
+      expect(find.byType(HttpNetworkImageWidget), findsNWidgets(3));
     });
 
     testWidgets('profile shows user API data in the overview card', (tester) async {
