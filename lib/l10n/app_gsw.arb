@@ -2201,6 +2201,8 @@
   "teamBattleOfNbTeams": "{count, plural, =1{Schlacht vu {count} Team} other{Schlacht vu {count} Teams}}",
   "teamNbLeadersPerTeam": "{count, plural, =1{Ei/n Füerer*i pro Team} other{{count} Füerer*ine pro Team}}",
   "tfaTwoFactorAuth": "Zwei Faktor Autentifizierig",
+  "tfaAuthenticationCode": "Authentifizierigs Code",
+  "tfaOpenTwoFactorApp": "Gang uf dini App für Zwei Faktor Autentifizierig, det wird dir en Code, zur Beschtätigung vu dinere Identität, generiert.",
   "timeagoJustNow": "grad jetzt",
   "timeagoRightNow": "genau jetzt",
   "timeagoCompleted": "beändet",

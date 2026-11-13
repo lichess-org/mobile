@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:logging/logging.dart';
 
 export 'auth_user.dart';
 
@@ -13,6 +15,8 @@ enum AuthEvent() {
   signIn,
   signOut,
 }
+
+final _logger = Logger('AuthController');
 
 final _authEventsController = StreamController<AuthEvent>.broadcast();
 
@@ -31,6 +35,12 @@ final isLoggedInProvider = Provider.autoDispose<bool>((Ref ref) {
 
 final signInMutation = Mutation<void>();
 final signOutMutation = Mutation<void>();
+
+/// Mutation for closing the account of the signed in user.
+final closeAccountMutation = Mutation<void>();
+
+/// Mutation for deleting the account of the signed in user.
+final deleteAccountMutation = Mutation<void>();
 
 /// Mutation for requesting the login code email.
 final emailLoginCodeRequestMutation = Mutation<void>();
@@ -85,6 +95,42 @@ class AuthController() extends Notifier<AuthUser?> {
     await ref.read(authStorageProvider).delete();
     if (!ref.mounted) return;
     state = null;
+  }
+
+  /// Closes the account of the signed in user, then signs them out of the app.
+  Future<void> closeAccount({
+    required String username,
+    required String password,
+    required String token,
+    required bool forever,
+  }) async {
+    await ref
+        .read(accountRepositoryProvider)
+        .closeAccount(username: username, password: password, token: token, forever: forever);
+    await _signOutTerminatedAccount();
+  }
+
+  /// Schedules the deletion of the account of the signed in user, then signs them out of the app.
+  Future<void> deleteAccount({required String username, required String password}) async {
+    await ref.read(accountRepositoryProvider).deleteAccount(username: username, password: password);
+    await _signOutTerminatedAccount();
+  }
+
+  /// Signs out of a closed or deleted account.
+  ///
+  /// The server revokes the account tokens and unregisters its devices from push notifications
+  /// when it closes or deletes the account, so the sign out only clears the local session.
+  Future<void> _signOutTerminatedAccount() async {
+    try {
+      await ref.read(authStorageProvider).delete();
+    } catch (e, st) {
+      // The account is closed: a failure here must not be reported as a failure to close it. The
+      // stored session is dropped by the next token check, since its token is revoked.
+      _logger.severe('Could not delete the session of the closed account:', e, st);
+    }
+    if (!ref.mounted) return;
+    state = null;
+    _authEventsController.add(AuthEvent.signOut);
   }
 
   /// Checks if the current authUser token is still valid.

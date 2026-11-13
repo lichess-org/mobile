@@ -1447,6 +1447,8 @@
   "studyNbMembers": "{count, plural, =1{{count} Üzv} other{{count} Üzv}}",
   "teamTeam": "Komanda",
   "tfaTwoFactorAuth": "2 mərhələli təsdiqləmə",
+  "tfaAuthenticationCode": "Kimlik təsdiqləmə kodu",
+  "tfaOpenTwoFactorApp": "Kimlik təsdiqləmə koduna baxmaq və kimliyinizi təsdiqləmək üçün cihazınızdakı iki mərhələli kimlik təsdiqləmə tətbiqini açın.",
   "timeagoJustNow": "elə indi",
   "timeagoRightNow": "indicə",
   "timeagoCompleted": "tamamlanan"

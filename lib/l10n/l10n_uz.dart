@@ -7571,6 +7571,12 @@ class AppLocalizationsUz extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Ikki bosqişli autentifikatsiya';
 
   @override
+  String get tfaAuthenticationCode => 'Autentifikatsiya kodi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Autentifikatsiya kodini köriş va şaxsingizni tasdiqlaş uçun qurilmangizdagi ikki bosqiçli autentifikatsiya ilovasini oçing.';
+
+  @override
   String get timeagoJustNow => 'hozir';
 
   @override

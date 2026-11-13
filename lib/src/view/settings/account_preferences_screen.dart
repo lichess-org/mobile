@@ -2,15 +2,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/settings/account_termination_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -225,20 +228,26 @@ class _AccountPreferencesScreenState()
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
-                    leading: const Icon(Symbols.dangerous),
-                    title: Text(context.l10n.mobileDeleteYourAccount),
-                    trailing: const OpenInNewIcon(),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.mobileDeleteYourAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      launchUrl(lichessUri('/account/delete'));
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.delete));
                     },
                   )
                 else
                   ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
-                    title: Text(context.l10n.settingsCloseAccount),
-                    trailing: const OpenInNewIcon(),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.settingsCloseAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      launchUrl(lichessUri('/account/close'));
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.close));
                     },
                   ),
               ],
@@ -254,7 +263,16 @@ class _AccountPreferencesScreenState()
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.mobileAccountPreferences),
+        title: Row(
+          mainAxisSize: .min,
+          children: [
+            if (ref.watch(accountProvider) case AsyncData(value: final User account)) ...[
+              AccountAvatar(account, radius: 14.0),
+              const SizedBox(width: 8.0),
+            ],
+            Flexible(child: Text(context.l10n.mobileAccountPreferences, overflow: .ellipsis)),
+          ],
+        ),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,

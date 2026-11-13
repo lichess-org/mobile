@@ -1610,6 +1610,8 @@
   "studyNbMembers": "{count, plural, =1{{count} জন সদস্য} other{{count} জন সদস্য}}",
   "teamTeam": "দল",
   "tfaTwoFactorAuth": "টু-ফ্যাক্টর অথেন্টিকেশন",
+  "tfaAuthenticationCode": "অথেনটিকেশন কোড",
+  "tfaOpenTwoFactorApp": "অথেন্টিকেশন কোড দেখতে আপনার ডিভাইসে টু-ফ্যাক্টর অথেন্টিকেশন অ্যাপ চালু করুন এবং আপনার পরিচয় নিশ্চিত করুন।",
   "timeagoJustNow": "এখনই",
   "timeagoRightNow": "এই মুহূর্তে",
   "timeagoCompleted": "সম্পন্ন হয়েছে",

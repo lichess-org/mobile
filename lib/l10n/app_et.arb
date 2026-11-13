@@ -1827,6 +1827,8 @@
   "studyNbMembers": "{count, plural, =1{{count} liige} other{{count} liiget}}",
   "teamTeam": "Võistkond",
   "tfaTwoFactorAuth": "Kaheastmeline autentimine",
+  "tfaAuthenticationCode": "Autentimise kood",
+  "tfaOpenTwoFactorApp": "Ava kaheastmelise autentimise äpp oma seadmes, et näha autentimiskoodi ja kinnitada oma isikut.",
   "timeagoJustNow": "äsja",
   "timeagoRightNow": "praegu",
   "timeagoCompleted": "lõppenud",

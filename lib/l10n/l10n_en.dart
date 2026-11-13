@@ -7569,6 +7569,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tfaTwoFactorAuth => 'Two-factor authentication';
 
   @override
+  String get tfaAuthenticationCode => 'Authentication code';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.';
+
+  @override
   String get timeagoJustNow => 'just now';
 
   @override
@@ -15376,6 +15382,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get tfaAuthenticationCode => 'Authentication code';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.';
 
   @override
   String get timeagoJustNow => 'just now';
