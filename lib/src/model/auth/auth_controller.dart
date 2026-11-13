@@ -155,6 +155,43 @@ class AuthController() extends Notifier<AuthUser?> {
     if (signedOut != null) await _activateNextAccount(replacing: signedOut);
   }
 
+  /// Signs out of every account the user is signed in to.
+  ///
+  /// The tokens are revoked on a best effort basis: the sessions are forgotten even if it fails,
+  /// e.g. offline.
+  Future<void> signOutOfAllAccounts() async {
+    final storage = ref.read(authStorageProvider);
+    // Forgotten first, so that a token check of a 401 response meanwhile can't make one active.
+    final others = await _serialized(() async {
+      final others = await storage.readOthers();
+      await storage.writeOthers(const IListConst([]));
+      return others;
+    });
+
+    final repository = ref.read(authRepositoryProvider);
+    for (final other in others) {
+      unawaited(
+        repository.revokeToken(other).catchError((Object e, StackTrace st) {
+          _logger.warning('Could not revoke the token of ${other.user.id}:', e, st);
+        }),
+      );
+    }
+
+    if (state != null) {
+      _authEventsController.add(AuthEvent.signOut);
+      try {
+        await repository.signOut();
+      } catch (e, st) {
+        _logger.warning('Could not revoke the token of the active session:', e, st);
+      }
+    }
+
+    await _serialized(() async {
+      await storage.delete();
+      if (ref.mounted) state = null;
+    });
+  }
+
   /// Closes the account of the signed in user, then signs them out of the app.
   Future<void> closeAccount({
     required String username,

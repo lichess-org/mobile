@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
+import 'package:lichess_mobile/src/model/auth/parental_pin.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -31,9 +35,13 @@ final _accounts = {
 };
 
 /// Answers each request as the account owning the token it is signed with.
+///
+/// The accounts of the [kidTokens] are in kid mode. With a [parentalPin], it is set.
 Future<Widget> _makeApp(
   WidgetTester tester, {
   IList<AuthUser> others = const IListConst([]),
+  Set<String> kidTokens = const {},
+  String? parentalPin,
 }) async {
   final app = await makeTestProviderScopeApp(
     tester,
@@ -49,12 +57,11 @@ Future<Widget> _makeApp(
             switch (request.url.path) {
               case '/api/account':
                 final authorization = request.headers['Authorization'] ?? '';
-                final user = _accounts.entries
-                    .firstWhere((e) => authorization.contains(e.key))
-                    .value;
+                final account = _accounts.entries.firstWhere((e) => authorization.contains(e.key));
+                final user = account.value;
                 return mockResponse(
                   '{"id":"${user.id}","username":"${user.name}","createdAt":1290415680000,'
-                  '"seenAt":1290415680000,"perfs":{}}',
+                  '"seenAt":1290415680000,"perfs":{},"kid":${kidTokens.contains(account.key)}}',
                   200,
                 );
               case '/api/token/test':
@@ -69,6 +76,12 @@ Future<Widget> _makeApp(
     },
   );
   await const AuthStorage().writeOthers(others);
+  if (parentalPin != null) {
+    await SecureStorage.instance.write(
+      key: kParentalPinStorageKey,
+      value: jsonEncode(StoredParentalPin.create(parentalPin).toJson()),
+    );
+  }
   return app;
 }
 
@@ -180,5 +193,74 @@ void main() {
 
     expect(_activeUserId(tester), fakeAuthUser.user.id);
     expect(find.textContaining('Switched to'), findsNothing);
+  });
+
+  group('parental PIN', () {
+    testWidgets('is asked before swiping away from a kid account', (tester) async {
+      await tester.pumpWidget(
+        await _makeApp(
+          tester,
+          others: IList(const [_bobby]),
+          kidTokens: {fakeAuthUser.token},
+          parentalPin: '1234',
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _swipeDown(tester);
+      expect(find.text('Enter the parental PIN'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), '0000');
+      await tester.pumpAndSettle();
+      expect(find.text('Wrong PIN.'), findsOneWidget);
+      expect(_activeUserId(tester), fakeAuthUser.user.id);
+
+      await tester.enterText(find.byType(TextField), '1234');
+      await tester.pumpAndSettle();
+      expect(find.text('Enter the parental PIN'), findsNothing);
+      expect(_activeUserId(tester), const UserId('bobby'));
+    });
+
+    testWidgets('cancelling the PIN does not switch', (tester) async {
+      await tester.pumpWidget(
+        await _makeApp(
+          tester,
+          others: IList(const [_bobby]),
+          kidTokens: {fakeAuthUser.token},
+          parentalPin: '1234',
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await _swipeDown(tester);
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+
+      expect(_activeUserId(tester), fakeAuthUser.user.id);
+    });
+
+    testWidgets('is not asked when the active account is not in kid mode', (tester) async {
+      await tester.pumpWidget(
+        await _makeApp(tester, others: IList(const [_bobby]), parentalPin: '1234'),
+      );
+      await tester.pumpAndSettle();
+
+      await _swipeDown(tester);
+
+      expect(find.text('Enter the parental PIN'), findsNothing);
+      expect(_activeUserId(tester), const UserId('bobby'));
+    });
+
+    testWidgets('is not asked without a PIN, even in kid mode', (tester) async {
+      await tester.pumpWidget(
+        await _makeApp(tester, others: IList(const [_bobby]), kidTokens: {fakeAuthUser.token}),
+      );
+      await tester.pumpAndSettle();
+
+      await _swipeDown(tester);
+
+      expect(find.text('Enter the parental PIN'), findsNothing);
+      expect(_activeUserId(tester), const UserId('bobby'));
+    });
   });
 }

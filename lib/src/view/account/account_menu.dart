@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/parental_pin_dialog.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
@@ -189,7 +190,8 @@ class _AccountMenuScreenState()
                     leading: UserAvatar(other.user, radius: 12),
                     title: UserFullNameWidget(user: other.user, showFlair: false),
                     enabled: isOnline && switchAccountState is! MutationPending,
-                    onTap: () {
+                    onTap: () async {
+                      if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
                       // The error is surfaced by the [ref.listen] on [switchAccountMutation] above;
                       // ignore the rethrown future so it does not become an unhandled exception.
                       switchAccountMutation.run(ref, (tsx) async {
@@ -261,7 +263,10 @@ class _AccountMenuScreenState()
                     leading: const Icon(Icons.logout_outlined),
                     title: Text(context.l10n.logOut),
                     enabled: isOnline,
-                    onTap: () => _showSignOutConfirmDialog(context, ref),
+                    onTap: () async {
+                      if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
+                      _showSignOutConfirmDialog(context, ref);
+                    },
                   ),
                 },
             ],
@@ -380,6 +385,7 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
     final accounts = [active, ...others]
       ..sort((a, b) => a.user.name.toLowerCase().compareTo(b.user.name.toLowerCase()));
     final next = accounts[(accounts.indexOf(active) + step) % accounts.length];
+    if (!await confirmLeavingAccount(context, ref) || !mounted) return;
     HapticFeedback.selectionClick();
     try {
       await switchAccountMutation.run(ref, (tsx) async {
