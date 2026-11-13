@@ -869,6 +869,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arenaNewTeamBattle => 'معركة فريق جديدة';
 
   @override
+  String get arenaStartDate => 'تاريخ البدء';
+
+  @override
+  String get arenaEntryConditions => 'شروط المشاركة';
+
+  @override
   String get arenaCustomStartDate => 'تاريخ بدأ مخصص';
 
   @override
@@ -979,6 +985,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arenaLeaguesAndStreamerBattles => 'الدوريات & منافسات مشغّلي البث المباشر';
 
   @override
+  String get arenaAllowBotAccounts => 'السماح لحسابات الروبوتات';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'السماح لـ <a href=\'$param\' target=\'_blank\'>حسابات الروبوتات</a> بالمشاركة في البطولة واللعب باستخدام محركات الشطرنج الخاصة بها. غالبًا ما يؤدي ذلك إلى نفور اللاعبين البشريين.';
+  }
+
+  @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1018,7 +1032,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'بث البطولة المباشرة';
 
   @override
-  String get broadcastBroadcastCalendar => 'تقويم البث';
+  String get broadcastBroadcastCalendar => 'جدول البث المباشر';
 
   @override
   String get broadcastNewBroadcast => 'بث مباشر جديد';
@@ -1157,7 +1171,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastUploadImage => 'رفع صورة البطولة';
 
   @override
-  String get broadcastNoBoardsYet => 'لا توجد لوحات الآن. ستظهر بمجرد رفع المباريات.';
+  String get broadcastNoBoardsYet => 'لا توجد مباريات معروضة حتى الآن. ستظهر هنا بمجرد رفعها.';
 
   @override
   String get broadcastNoPlayersYet => 'لا يوجد أي لاعبين حتى الآن. سيظهرون فور تحميل المباريات.';
@@ -2182,7 +2196,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get practiceSecHeadFundamentalTactics => 'التكتيكات الأساسية';
 
   @override
-  String get practiceSecHeadAdvancedTactics => 'تكتيكات المتقدمة';
+  String get practiceSecHeadAdvancedTactics => 'تكتيكات متقدمة';
 
   @override
   String get practiceSecHeadPawnEndgames => 'نهايات البيادق';
@@ -2191,22 +2205,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get practiceSecHeadRookEndgames => 'نهايات الرخ';
 
   @override
-  String get practiceStNamPieceCheckmatesI => 'كش مات بالقطع I';
+  String get practiceStNamPieceCheckmatesI => 'I كش مات بالقطع';
 
   @override
-  String get practiceStNamCheckmatePatternsI => 'أنماط كشّ مات I';
+  String get practiceStNamCheckmatePatternsI => 'I أنماط كشّ مات';
 
   @override
-  String get practiceStNamCheckmatePatternsII => 'أنماط كشّ مات II';
+  String get practiceStNamCheckmatePatternsII => 'II أنماط كشّ مات';
 
   @override
-  String get practiceStNamCheckmatePatternsIII => 'أنماط كشّ مات III';
+  String get practiceStNamCheckmatePatternsIII => 'III أنماط كشّ مات';
 
   @override
-  String get practiceStNamCheckmatePatternsIV => 'أنماط كشّ مات IV';
+  String get practiceStNamCheckmatePatternsIV => 'IV أنماط كشّ مات';
 
   @override
-  String get practiceStNamPieceCheckmatesII => 'كش مات بالقطع II';
+  String get practiceStNamPieceCheckmatesII => 'II كش مات بالقطع';
 
   @override
   String get practiceStNamKnightAndBishopMate => 'كش مات بالفيل & الحصان';
@@ -2479,7 +2493,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'الترقية إلى وزير آلياً';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'اضغط مفتاح<ctrl> عند الترقية لتعطيل الترقية التلقائية مؤقتاً';
+  String get preferencesExplainPromoteToQueenAutomatically => 'اضغط باستمرار على مفتاح Ctrl أثناء ترقية البيدق لتعطيل الترقية التلقائية مؤقتًا';
 
   @override
   String get preferencesWhenPremoving => 'عند النقلة الاستباقية';
@@ -2494,7 +2508,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تأكيد النقلة';
 
   @override
-  String get preferencesMultipleChoices => 'خيارات متعددة. ';
+  String get preferencesMultipleChoices => 'خيارات متعددة.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة من قائمة اللوحة';
@@ -3480,9 +3494,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'أفهم أن الحسابات المحذوفة لا يمكن استعادتها';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'تحدَّ صديقًا';
@@ -4690,6 +4701,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get resume => 'استئناف';
+
+  @override
+  String get stop => 'توقّف';
 
   @override
   String get youArePlaying => 'أنت تلعب!';
@@ -6160,6 +6174,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get minimumRatedGames => 'الحد الأدنى لعدد المباريات المُصنَّفة';
 
   @override
+  String get minimumAccountAge => 'الحد الأدنى لعمر الحساب';
+
+  @override
+  String get titledPlayersBypassRestriction => 'يُستثنى اللاعبون الحاصلون على ألقاب من هذا القيد.';
+
+  @override
   String get minimumRating => 'الحد الأدنى للتصنيف';
 
   @override
@@ -6330,6 +6350,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clearSearch => 'مسح البحث';
+
+  @override
+  String searchInX(String param) {
+    return 'البحث في «$param»';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7168,7 +7193,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get streamerLichessStreamers => 'أصحاب بث على ليتشيس';
+  String get streamerLichessStreamers => 'Lichess مقدّمو البث المباشر على';
 
   @override
   String get studyPrivate => 'خاص';
@@ -7246,6 +7271,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyKick => 'طرد';
+
+  @override
+  String get studyRemove => 'إزالة';
 
   @override
   String get studyLeaveTheStudy => 'مغادرة الدراسة';
@@ -7519,13 +7547,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyGoodMove => 'نقلة جيدة';
 
   @override
-  String get studyMistake => 'خطأ';
-
-  @override
   String get studyBrilliantMove => 'نقلة رائعة';
-
-  @override
-  String get studyBlunder => 'غلطة';
 
   @override
   String get studyInterestingMove => 'نقلة مثيرة للاهتمام';
@@ -7749,6 +7771,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'حلّل على جهازك';
 
   @override
+  String get studySearchChapters => 'البحث في الفصول';
+
+  @override
+  String get studySearchGames => 'البحث في المباريات';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7798,12 +7826,12 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'الصق الPGN هنا، حتى $count العاب',
-      many: 'ألصق نص PGN هنا، حتى $count مباراة',
-      few: 'ألصق نص PGN هنا، حتى $count مباراة',
-      two: 'ألصق نص PGN هنا، حتى $count مباراة',
-      one: 'الصق نص الPGN هنا، حتى $count لعبة واحدة',
-      zero: 'ألصق نص PGN هنا، حتى $count مباراة',
+      other: 'ألصق المباريات هنا بصيغة PGN. سيُنشأ فصل جديد لكل مباراة، ويمكن أن تحتوي الدراسة على ما يصل إلى $count فصلًا.',
+      many: 'ألصق المباريات هنا بصيغة PGN. سيُنشأ فصل جديد لكل مباراة، ويمكن أن تحتوي الدراسة على ما يصل إلى $count فصلًا.',
+      few: 'ألصق المباريات هنا بصيغة PGN. سيُنشأ فصل جديد لكل مباراة، ويمكن أن تحتوي الدراسة على ما يصل إلى $count فصلًا.',
+      two: 'ألصق المباريات هنا بصيغة PGN. سيُنشأ فصل جديد لكل مباراة، ويمكن أن تحتوي الدراسة على ما يصل إلى $count فصلًا.',
+      one: 'ألصق نص PGN هنا، بحد أقصى $count مباراة.',
+      zero: 'ألصق المباريات هنا بصيغة PGN. سيُنشأ فصل جديد لكل مباراة، ويمكن أن تحتوي الدراسة على ما يصل إلى $count فصلًا.',
     );
     return '$_temp0';
   }
@@ -7849,6 +7877,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'التوثيق الثنائي';
+
+  @override
+  String get tfaAuthenticationCode => 'رمز التحقق';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'افتح تطبيق التوثيق ذو العاملين على جهازك لعرض رمز التوثيق الخاص بك والتحقق من هويتك.';
 
   @override
   String get timeagoJustNow => 'الآن';

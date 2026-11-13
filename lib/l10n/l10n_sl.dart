@@ -833,6 +833,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nova skupinska bitka';
 
   @override
+  String get arenaStartDate => 'Začetni datum';
+
+  @override
+  String get arenaEntryConditions => 'Pogoji za vstop';
+
+  @override
   String get arenaCustomStartDate => 'Začetni datum po meri';
 
   @override
@@ -941,6 +947,14 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Dovoli račune botov';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Dovolite <a href=\'$param\' target=\'_blank\'>botom</a>, da se pridružijo turnirju in igrajo s svojimi motorji. To pogosto odvrača človeške igralce.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2450,7 +2464,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potrditev poteze';
 
   @override
-  String get preferencesMultipleChoices => 'Več možnih odgovorov. ';
+  String get preferencesMultipleChoices => 'Več možnosti.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Lahko ga onemogočite med igro z menijem plošče';
@@ -3424,9 +3438,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Razumem, da izbrisanih računov ni mogoče obnoviti';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Izzovite prijatelja';
@@ -4634,6 +4645,9 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get resume => 'Nadaljuj';
+
+  @override
+  String get stop => 'Ustavi';
 
   @override
   String get youArePlaying => 'Igraš!';
@@ -6104,6 +6118,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get minimumRatedGames => 'Najmanjše število rangiranih iger';
 
   @override
+  String get minimumAccountAge => 'Najmanjša starost računa';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Igralci z nazivom so izvzeti iz te omejitve.';
+
+  @override
   String get minimumRating => 'Najmanjši rejting';
 
   @override
@@ -6274,6 +6294,11 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Počisti iskanje';
+
+  @override
+  String searchInX(String param) {
+    return 'Išči v »$param«';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7106,6 +7131,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyKick => 'Odstrani';
 
   @override
+  String get studyRemove => 'Odstrani';
+
+  @override
   String get studyLeaveTheStudy => 'Zapusti študijo';
 
   @override
@@ -7377,13 +7405,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyGoodMove => 'Dobra poteza';
 
   @override
-  String get studyMistake => 'Napakica';
-
-  @override
   String get studyBrilliantMove => 'Briljantna poteza';
-
-  @override
-  String get studyBlunder => 'Napaka';
 
   @override
   String get studyInterestingMove => 'Zanimiva poteza';
@@ -7607,6 +7629,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analizirajte v svoji napravi';
 
   @override
+  String get studySearchChapters => 'Iskanje poglavij';
+
+  @override
+  String get studySearchGames => 'Iskanje iger';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7650,10 +7678,10 @@ class AppLocalizationsSl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Prilepite PGN besedilo, z največ $count partijami',
-      few: 'Prilepite PGN besedilo, z največ $count partijami',
-      two: 'Prilepite PGN besedilo, z največ $count partijama',
-      one: 'Prilepite PGN besedilo, z največ $count partijo',
+      other: 'Prilepite PGN besedilo, z največ $count partijami.',
+      few: 'Prilepite PGN besedilo, z največ $count partijami.',
+      two: 'Prilepite PGN besedilo, z največ $count partijama.',
+      one: 'Prilepite PGN besedilo, z največ $count partijo.',
     );
     return '$_temp0';
   }
@@ -7695,6 +7723,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dvojna avtentikacija';
+
+  @override
+  String get tfaAuthenticationCode => 'Avtentikacijska koda';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'V napravi odprite aplikacijo za dvostopenjsko preverjanje pristnosti, da si ogledate kodo za preverjanje pristnosti in preverite svojo identiteto.';
 
   @override
   String get timeagoJustNow => 'pravkar';

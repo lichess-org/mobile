@@ -16,12 +16,12 @@ class const ProgressionWidget(final int progress, {final double fontSize = 20})
           Icon(
             progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
             size: fontSize,
-            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+            color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
           ),
           Text(
             progress.abs().toString(),
             style: TextStyle(
-              color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+              color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
               fontSize: fontSize,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),

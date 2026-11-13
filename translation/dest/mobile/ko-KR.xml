@@ -88,7 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">연습 모드</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">드래그 중 기물 확대</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">이전</string>
-  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">이전 퍼즐 시도를 리뷰하십시오.</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">이전 퍼즐 시도를 리뷰하세요.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.</string>

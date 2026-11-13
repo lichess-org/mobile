@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -14,6 +15,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/settings/background_theme_choice_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_choice_screen.dart';
+import 'package:lichess_mobile/src/view/settings/color_scheme_debug_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -325,12 +327,12 @@ class _BodyState() extends ConsumerState<_Body> {
                           enabled: hasAjustedColors,
                           leading: Icon(
                             Icons.clear,
-                            color: hasAjustedColors ? lichessCustomColors.error : null,
+                            color: hasAjustedColors ? lichessCustomColors.red : null,
                           ),
                           title: Text(
                             context.l10n.boardReset,
                             style: TextStyle(
-                              color: hasAjustedColors ? lichessCustomColors.error : null,
+                              color: hasAjustedColors ? lichessCustomColors.red : null,
                             ),
                           ),
                           onTap: hasAjustedColors
@@ -350,6 +352,13 @@ class _BodyState() extends ConsumerState<_Body> {
                                 }
                               : null,
                         ),
+                        if (kDebugMode)
+                          ListTile(
+                            leading: const Icon(Icons.palette_outlined),
+                            title: const Text('Color scheme (debug)'),
+                            onTap: () =>
+                                Navigator.of(context).push(ColorSchemeDebugScreen.buildRoute()),
+                          ),
                       ],
                     ),
                   ],

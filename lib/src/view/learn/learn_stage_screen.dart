@@ -200,7 +200,7 @@ class const _LearnBoard({
                 CustomShape(orig: apple, scale: 0.8, child: const _Apple()),
             },
             annotations: threat != null
-                ? {threat: const Annotation(symbol: '!', color: LichessColors.error)}
+                ? {threat: const Annotation(symbol: '!', color: LichessColors.red)}
                 : const {},
           ),
           if (highlightedRank != null)
@@ -212,8 +212,8 @@ class const _LearnBoard({
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: LichessColors.good, width: 3.0),
-                    color: LichessColors.good.withValues(alpha: 0.15),
+                    border: Border.all(color: LichessColors.green, width: 3.0),
+                    color: LichessColors.green.withValues(alpha: 0.15),
                   ),
                 ),
               ),
@@ -272,7 +272,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             l10n.learnPuzzleFailed,
-            style: Styles.title.copyWith(color: context.lichessColors.error),
+            style: Styles.title.copyWith(color: context.lichessColors.red),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),
@@ -288,7 +288,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             _congrats(l10n, state.levelIndex),
-            style: Styles.title.copyWith(color: context.lichessColors.good),
+            style: Styles.title.copyWith(color: context.lichessColors.green),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),

@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
@@ -104,13 +103,14 @@ class const GameListDetailTile({
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    // For an imported game, `lastMoveAt` is the import date, so
-                                    // prefer the PGN date if we have it.
+                                    // Like the website, show when the game started. For an imported
+                                    // game that's the import date, so prefer the PGN date if we
+                                    // have it.
                                     (game.importDate != null
                                             ? formatPgnDate(game.importDate!)
                                             : timeOnly
-                                            ? DateFormat.Hm().format(game.createdAt)
-                                            : relativeDate(context.l10n, game.lastMoveAt))
+                                            ? formatTimeOfDay(context, game.createdAt)
+                                            : relativeDate(context.l10n, game.createdAt))
                                         .toUpperCase(),
                                     style: dateStyle,
                                   ),
@@ -158,6 +158,7 @@ class const GameListDetailTile({
                                   name: opponent.name,
                                   aiLevel: opponent.aiLevel,
                                   rating: opponent.rating,
+                                  provisional: opponent.provisional,
                                   style: TextStyle(
                                     fontSize: titleFontSize,
                                     fontWeight: FontWeight.w600,
@@ -209,10 +210,10 @@ class const GameListDetailTile({
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
                                       color: game.winner == null
-                                          ? context.lichessColors.brag
+                                          ? textShade(context, Styles.subtitleOpacity)
                                           : game.winner == mySide
-                                          ? context.lichessColors.good
-                                          : context.lichessColors.error,
+                                          ? context.lichessColors.green
+                                          : context.lichessColors.red,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)

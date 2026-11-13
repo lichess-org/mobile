@@ -174,15 +174,19 @@ sealed class const OverTheBoardGameState._() with _$OverTheBoardGameState {
   factory fromVariant(Variant variant, TimeIncrement timeIncrement, {String? initialFen}) {
     final Position position;
     final Variant effectiveVariant;
+    final String? effectiveInitialFen;
     if (initialFen != null) {
       effectiveVariant = variant == Variant.standard ? Variant.fromPosition : variant;
       position = Position.setupPosition(effectiveVariant.rule, Setup.parseFen(initialFen));
+      effectiveInitialFen = initialFen;
     } else if (variant == Variant.chess960) {
       position = randomChess960Position();
       effectiveVariant = variant;
+      effectiveInitialFen = position.fen;
     } else {
       position = variant.initialPosition;
       effectiveVariant = variant;
+      effectiveInitialFen = null;
     }
     final sessionId = StringId('otb_${_random.nextInt(1 << 32).toRadixString(16).padLeft(8, '0')}');
     final speed = Speed.fromTimeIncrement(timeIncrement);
@@ -191,7 +195,7 @@ sealed class const OverTheBoardGameState._() with _$OverTheBoardGameState {
         id: sessionId,
         steps: [GameStep(position: position)].lock,
         status: GameStatus.started,
-        initialFen: initialFen,
+        initialFen: effectiveInitialFen,
         meta: GameMeta(
           createdAt: DateTime.now(),
           rated: false,

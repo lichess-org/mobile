@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/view/user/user_stat_cards.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Maximum number of perfs drawn in the rating history chart: one per line style, as they share
-/// the same color.
+/// Maximum number of perfs drawn in the rating history chart: one per line style, which tell the
+/// lines apart on top of their colors.
 final _kMaxChartPerfs = RatingHistoryLineStyle.values.length;
 
 /// The stats of a user over all perfs: the rating history of the most played perfs, the game
@@ -60,15 +60,30 @@ class const UserStatsSection({required final User user, required final bool isMe
               ),
             if (playTime != null) ...[
               const SizedBox(height: cardSpacing),
-              IconStatCard(
-                icon: Icons.schedule,
-                label: context.l10n.perfStatTimeSpentPlaying,
-                value: playTime.total.toDaysHoursMinutes(AppLocalizations.of(context)),
-                caption: playTime.tv > Duration.zero
-                    ? context.l10n.tpTimeSpentOnTV(
-                        playTime.tv.toDaysHoursMinutes(AppLocalizations.of(context)),
-                      )
-                    : null,
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  child: Column(
+                    children: [
+                      IconStatRow(
+                        icon: Icons.schedule,
+                        label: context.l10n.perfStatTimeSpentPlaying,
+                        value: playTime.total.toDaysHoursMinutes(AppLocalizations.of(context)),
+                      ),
+                      if (playTime.tv > Duration.zero) ...[
+                        const Divider(height: 1.0),
+                        IconStatRow(
+                          icon: Icons.live_tv_outlined,
+                          // The translation ends with the time: "Time featured on TV: {param}".
+                          label: context.l10n
+                              .tpTimeSpentOnTV('')
+                              .replaceFirst(RegExp(r'[\s:：]+$'), ''),
+                          value: playTime.tv.toDaysHoursMinutes(AppLocalizations.of(context)),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ],
           ],
@@ -150,6 +165,9 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
     ];
     if (chartPerfs.isEmpty) return const SizedBox.shrink();
 
+    final drawnPerfs = chartPerfs.take(_kMaxChartPerfs).toList();
+    final colors = Styles.chartColors(context, drawnPerfs.length);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Card(
@@ -157,11 +175,11 @@ class const _RatingHistoryCard({required final User user}) extends ConsumerWidge
           padding: const EdgeInsets.all(16.0),
           child: RatingHistoryChart(
             IList([
-              for (final (index, perf) in chartPerfs.take(_kMaxChartPerfs).indexed)
+              for (final (index, perf) in drawnPerfs.indexed)
                 RatingHistorySeries(
                   perf: perf,
                   points: historyByPerf[perf]!,
-                  color: Styles.chartColor(context),
+                  color: colors[index],
                   lineStyle: RatingHistoryLineStyle.values[index],
                 ),
             ]),

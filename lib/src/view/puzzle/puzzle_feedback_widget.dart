@@ -23,7 +23,7 @@ class const PuzzleFeedbackWidget({
         final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return FeedbackTile(
           leading: state.result == PuzzleResult.win
-              ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
+              ? Icon(Icons.check, size: 36, color: context.lichessColors.green)
               : null,
           title: onStreak && state.result == PuzzleResult.lose
               ? const Text(
@@ -53,7 +53,7 @@ class const PuzzleFeedbackWidget({
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return FeedbackTile(
-            leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
+            leading: Icon(Icons.close, size: 36, color: context.lichessColors.red),
             title: Text(context.l10n.puzzleNotTheMove, overflow: TextOverflow.ellipsis),
             subtitle: Text(
               context.l10n.puzzleTrySomethingElse,
@@ -63,7 +63,7 @@ class const PuzzleFeedbackWidget({
           );
         } else if (state.feedback == PuzzleFeedback.good) {
           return FeedbackTile(
-            leading: Icon(Icons.check, size: 36, color: context.lichessColors.good),
+            leading: Icon(Icons.check, size: 36, color: context.lichessColors.green),
             title: Text(context.l10n.puzzleBestMove),
             subtitle: Text(context.l10n.puzzleKeepGoing),
           );

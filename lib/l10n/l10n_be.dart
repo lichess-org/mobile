@@ -833,6 +833,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get arenaNewTeamBattle => 'Новая камандная бітва';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Уласная дата пачатку';
 
   @override
@@ -941,6 +947,14 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2431,7 +2445,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Аўтаматычна пераўтвараць пешку ў ферзя';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Зацісніце клавішу <ctrl> пад час пераўтварэння, каб часова адключыць аўта-пераўтварэнне';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Пры ходзе на апярэджанне';
@@ -2446,7 +2460,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Пацверджанне руху';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можа быць адключана падчас гульні з дапамогай меню дошкі';
@@ -3420,9 +3434,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Запрасіць сябра';
@@ -4630,6 +4641,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get resume => 'Працягнуць';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Вы ў гульні!';
@@ -6100,6 +6114,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get minimumRatedGames => 'Мінімальная колькасць рэйтынгавый партый';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Мінімальны рэйтынг';
 
   @override
@@ -6270,6 +6290,11 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ачысціць пошук';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7098,6 +7123,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyKick => 'Выдаліць';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Пакінуць навучанне';
 
   @override
@@ -7369,13 +7397,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyGoodMove => 'Добры ход';
 
   @override
-  String get studyMistake => 'Памылка';
-
-  @override
   String get studyBrilliantMove => 'Бліскучы ход';
-
-  @override
-  String get studyBlunder => 'Позех';
 
   @override
   String get studyInterestingMove => 'Цікавы ход';
@@ -7551,7 +7573,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7599,6 +7621,12 @@ class AppLocalizationsBe extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7642,10 +7670,8 @@ class AppLocalizationsBe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
-      many: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульняў',
-      few: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульні',
-      one: 'Устаўце сюды ваш PGN тэкст, не больш за $count гульню',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7683,6 +7709,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфактарная аўтэнтыфікацыя';
+
+  @override
+  String get tfaAuthenticationCode => 'Код аўтэнтыфікацыі';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Адкрыйце прыладу для двухфактарнай аўтэнтыфікацыі, каб паглядзець код аўтэнтыфікацыі та пацвердзіць сваю асобу.';
 
   @override
   String get timeagoJustNow => 'зараз';

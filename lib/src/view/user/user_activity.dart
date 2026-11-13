@@ -62,9 +62,8 @@ class const UserActivityEntry({
     final theme = Theme.of(context);
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
-    final redColor = context.lichessColors.error;
-    final greenColor = context.lichessColors.good;
-    final bragColor = context.lichessColors.brag.withValues(alpha: 0.85);
+    final redColor = context.lichessColors.red;
+    final greenColor = context.lichessColors.green;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,7 +72,7 @@ class const UserActivityEntry({
           padding: const EdgeInsets.only(left: 14.0, top: 16.0, right: 14.0, bottom: 4.0),
           child: Text(
             _dateFormatter.format(entry.startTime),
-            style: TextStyle(color: bragColor, fontWeight: FontWeight.bold),
+            style: TextStyle(color: textShade(context, 0.7)),
           ),
         ),
         if (entry.games != null)
@@ -233,6 +232,9 @@ class const UserActivityEntry({
 
 const _leadingIconSize = 26.0;
 
+/// The opacity of the timeline lines, lower than the perf icons so they stand out less.
+const _timelineOpacity = 0.5;
+
 /// An activity list tile, with a timeline line drawn above and below its leading icon, which joins
 /// the lines of the tiles above and below.
 class const _UserActivityListTile({
@@ -245,13 +247,14 @@ class const _UserActivityListTile({
   @override
   Widget build(BuildContext context) {
     final textDirection = Directionality.of(context);
-    final color = context.lichessColors.brag.withValues(alpha: 0.85);
+    // The color of the perf icons, as in the perf cards and the game list.
+    final color = perfIconColor(context);
     final contentPadding =
         ListTileTheme.of(context).contentPadding?.resolve(textDirection) ??
         const EdgeInsets.symmetric(horizontal: 16.0);
     return CustomPaint(
       painter: _TimelinePainter(
-        color: color,
+        color: textShade(context, _timelineOpacity) ?? color,
         lineStart: textDirection == .ltr ? contentPadding.left + _leadingIconSize / 2 : null,
         lineEnd: textDirection == .rtl ? contentPadding.right + _leadingIconSize / 2 : null,
       ),
@@ -340,12 +343,12 @@ class const BriefGameResultBox({
             ((win != 0 ? 1 : 0) + (draw != 0 ? 1 : 0) + (loss != 0 ? 1 : 0) - 1) * _spaceWidth,
         child: Row(
           children: [
-            if (win != 0) _ResultBox(number: win, color: context.lichessColors.good),
+            if (win != 0) _ResultBox(number: win, color: context.lichessColors.green),
             if (win != 0 && draw != 0) const SizedBox(width: _spaceWidth),
             if (draw != 0) _ResultBox(number: draw, color: Colors.grey),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
-            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
+            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.red),
           ],
         ),
       ),

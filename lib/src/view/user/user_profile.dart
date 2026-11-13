@@ -35,13 +35,13 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
                   children: [
-                    Icon(Icons.error, color: context.lichessColors.error),
+                    Icon(Icons.error, color: context.lichessColors.red),
                     const SizedBox(width: 5),
                     Flexible(
                       child: Text(
                         context.l10n.thisAccountViolatedTos,
                         style: TextStyle(
-                          color: context.lichessColors.error,
+                          color: context.lichessColors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -59,7 +59,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                 text: user.profile!.bio!,
                 maxLines: bioMaxLines,
                 overflow: TextOverflow.ellipsis,
-                linkStyle: Styles.linkStyle,
+                linkStyle: Styles.linkStyle(context),
               ),
             if (userFullName != null || user.profile?.bio != null) const SizedBox(height: 10),
             if (user.profile?.fideRating != null)
@@ -115,7 +115,7 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                         onTap: () => launchUrl(link.url),
                         child: Text(
                           link.site?.title ?? link.url.toString(),
-                          style: Styles.linkStyle,
+                          style: Styles.linkStyle(context),
                         ),
                       ),
                     ),

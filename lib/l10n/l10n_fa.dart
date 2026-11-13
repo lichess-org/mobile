@@ -797,6 +797,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaNewTeamBattle => 'مبارزه تیمی جدید';
 
   @override
+  String get arenaStartDate => 'تاریخ آغاز';
+
+  @override
+  String get arenaEntryConditions => 'شرایط ورود';
+
+  @override
   String get arenaCustomStartDate => 'تنظیم تاریخ شروع';
 
   @override
@@ -907,6 +913,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get arenaLeaguesAndStreamerBattles => 'جُرگ‌ها و نبردهای جَریانگران';
 
   @override
+  String get arenaAllowBotAccounts => 'اجازه به حساب‌های رَت';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'بگذارید <a href=\'$param\' target=\'_blank\'>رَت‌ها</a> به مسابقات بپیوندند و با موتورهایشان بازی کنند. این کار اغلب بازیکنان انسانی را فراری می‌دهد.';
+  }
+
+  @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -971,14 +985,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastTournamentName => 'نام مسابقات';
 
   @override
-  String get broadcastTournamentDescription => 'توضیحات کوتاه مسابقات';
+  String get broadcastTournamentDescription => 'شرحِ کوتاه مسابقات';
 
   @override
-  String get broadcastFullDescription => 'توضیحات کامل مسابقات';
+  String get broadcastFullDescription => 'شرحِ کامل مسابقات';
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'توضیحات بلند و اختیاری پخش همگانی. $param1 قابل‌استفاده است. طول متن باید کمتر از $param2 نویسه باشد.';
+    return 'شرحِ بلند و اختیاری رویداد. $param1 قابل‌استفاده است. طول متن باید کمتر از $param2 نویسه باشد.';
   }
 
   @override
@@ -2391,7 +2405,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'ارتقا خودکار به وزیر';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => '<ctrl> را در هنگام تبلیغ بزنید تا به طور موقت تبلیغات خودکار را غیرفعال کنید';
+  String get preferencesExplainPromoteToQueenAutomatically => 'غیرفعالیدنِ موقتِ خود-ارتقا، با نگهداشتنِ کلید مَهار/ctrl هنگام ارتقا';
 
   @override
   String get preferencesWhenPremoving => 'در زمان پیش حرکت';
@@ -2406,7 +2420,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تایید حرکت';
 
   @override
-  String get preferencesMultipleChoices => 'انتخاب‌های چندگانه. ';
+  String get preferencesMultipleChoices => 'چندانتخابه.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'می‌تواند هنگام بازی با «گزینگانِ تخته» خاموش شود';
@@ -3350,13 +3364,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get settingsCloseAccountForeverLabel => 'بستنِ تا اَبَد: بازگشایی آن را ناممکن کنید';
 
   @override
-  String get settingsCloseAccountForeverWarning => 'جلوی بازگشایی حساب در آینده را بگیرید. اگر این مربع را هَفتک زنید، حتی مدیران هم نمی‌توانند حساب‌تان را به درخواست‌تان بازگشایند.';
+  String get settingsCloseAccountForeverWarning => 'جلوی بازگشایی حساب در آینده را بگیرید. اگر این مربع را هَفتک زنید، حتی اداره‌گران هم نمی‌توانند حساب‌تان را به درخواست‌تان بازگشایند.';
 
   @override
   String get settingsDeleteYourAccount => 'حذفِ حساب‌تان';
 
   @override
-  String get settingsDeleteAccountWarning => 'به محض اینکه حساب‌تان را بحذفید، از Lichess برچیده می‌شود و مدیران ما دیگر نمی‌توانند آن را برای تان بازگردانند.';
+  String get settingsDeleteAccountWarning => 'به محض اینکه حساب‌تان را بحذفید، از Lichess برچیده می‌شود و اداره‌گرانِ ما دیگر نمی‌توانند آن را برای‌تان بازگردانند.';
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
@@ -3368,9 +3382,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'متوجهم که حساب‌های حذفیده بازیاب‌پذیر نیستند';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'دعوت به بازی';
@@ -4418,7 +4429,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get importGameExplanation => 'برای دریافت بازپخش مرورپذیر، واکاوی رایانه‌ای، گپ‌های بازی، و وب‌نشانی همگانی همرسانی‌پذیر، PGN یک بازی را جای‌گذاری کنید.';
 
   @override
-  String get importGameDataPrivacyWarning => 'این PGN برای عموم در دسترس است، برای وارد کردن یک بازی خصوصی، از *مطالعه* استفاده کنید.';
+  String get importGameDataPrivacyWarning => 'این PGN برای عموم دسترس است، برای درونبُردِ یک بازی خصوصی، از *مطالعه* استفاده کنید.';
 
   @override
   String get thisIsAChessCaptcha => 'این «آجرا»یِ شطرنج [آزمونِ امنیتی] است.';
@@ -4578,6 +4589,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get resume => 'ادامه دادن';
+
+  @override
+  String get stop => 'ایست';
 
   @override
   String get youArePlaying => 'شما بازی می‌کنید!';
@@ -4750,10 +4764,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get description => 'شرح';
 
   @override
-  String get descPrivate => 'توضیحات خصوصی';
+  String get descPrivate => 'شرحِ خصوصی';
 
   @override
-  String get descPrivateHelp => 'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین وصف عمومی برای هم‌تیمی‌ها می‌شود.';
+  String get descPrivateHelp => 'متنی که فقط هم‌تیمی‌ها خواهند دید. در صورت تعیین، جایگزین شرحِ همگانی برای هم‌تیمی‌ها می‌شود.';
 
   @override
   String get no => 'نه';
@@ -4996,7 +5010,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get starting => 'آغاز:';
 
   @override
-  String get allInformationIsPublicAndOptional => 'تمامی اطلاعات عمومی و اختیاری است.';
+  String get allInformationIsPublicAndOptional => 'همهٔ اطلاعات همگانی و اختیاری است.';
 
   @override
   String get biographyDescription => 'درباره ی خودتان بگویید - به چه چیزی در شطرنج علاقه داریدو گشایش ها - بازی ها و بازیکنان مورد علاقه تان…';
@@ -5435,7 +5449,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get analysisShapesHowTo => 'برای رسم دایره و پیکان روی تخته، shift+click یا راست-تِلیک را بفشارید.';
 
   @override
-  String get primaryColorArrowsHowTo => 'Ctrl یا shift = قرمز؛ command، alt یا meta = آبی؛ یک کلید از هر کدام = زرد.';
+  String get primaryColorArrowsHowTo => 'مهار/ctrl یا کیب/shift = قرمز؛ فرمان/command، دگرساز/alt یا مَتا/meta = آبی؛ یک کلید از هر کدام = زرد.';
 
   @override
   String get letOtherPlayersMessageYou => 'ارسال پیام توسط بقیه به شما';
@@ -6030,7 +6044,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get cancelTournament => 'لغو مسابقه';
 
   @override
-  String get tournDescription => 'توضیحات مسابقه';
+  String get tournDescription => 'شرحِ مسابقات';
 
   @override
   String get tournDescriptionHelp => 'نکته خاصی را می‌خواهید به شرکت‌گران گویید؟ بکوشید کوتاه باشد. پیوندهای فرونشان موجودند:\n[name](https://url)';
@@ -6046,6 +6060,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get minimumRatedGames => 'حداقل بازی های ریتد';
+
+  @override
+  String get minimumAccountAge => 'کمینهٔ عمرِ حساب';
+
+  @override
+  String get titledPlayersBypassRestriction => 'بازیکنان عنوان‌دار شامل این محدودیت نمی‌شوند.';
 
   @override
   String get minimumRating => 'حداقل درجه‌بندی';
@@ -6078,7 +6098,7 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
-  String get simulDescription => 'وصفِ هَمگاه';
+  String get simulDescription => 'شرحِ هَمگاه';
 
   @override
   String get simulDescriptionHelp => 'آیا می‌خواهید مطلبی را به شرکت‌کنندگان بگویید؟';
@@ -6218,6 +6238,11 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get clearSearch => 'پاکیدنِ جستجو';
+
+  @override
+  String searchInX(String param) {
+    return 'جستجو در «$param»';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyKick => 'اخراج';
 
   @override
+  String get studyRemove => 'برچیدن';
+
+  @override
   String get studyLeaveTheStudy => 'ترک مطالعه';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyGoodMove => 'حرکت خوب';
 
   @override
-  String get studyMistake => 'اشتباه';
-
-  @override
   String get studyBrilliantMove => 'حرکت درخشان';
-
-  @override
-  String get studyBlunder => 'اشتباه فاحش';
 
   @override
   String get studyInterestingMove => 'حرکت جالب';
@@ -7465,6 +7487,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'تحلیل در اَفزاره‌تان';
 
   @override
+  String get studySearchChapters => 'جستجوی بخش';
+
+  @override
+  String get studySearchGames => 'جستجوی بازی';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'متن PGN خود را در اینجا بچسبانید، تا $count بازی',
-      one: 'متن PGN خود را در اینجا بچسبانید، تا $count بازی',
+      other: 'متن بازی‌ها را در قالبِ PGN اینجا جایگذارید. برای هر بازی، بخش جدیدی ایجاد می‌شود. این مطالعه می‌تواند حداکثر $count بخش داشته باشد.',
+      one: 'متنِ PGN-تان را اینجا جایگذارید، حداکثر $count بازی.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'راستین‌آزمایی دوعاملی';
+
+  @override
+  String get tfaAuthenticationCode => 'کد هویت‌سنجی';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'بَرکِ راستین‌آزمایی دوعاملی را در اَفزاره‌تان باز کنید تا کد راستین‌آزمایی را ببینید و هویت‌تان را تایید کنید.';
 
   @override
   String get timeagoJustNow => 'چند لحظه پیش';

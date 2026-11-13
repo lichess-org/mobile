@@ -815,6 +815,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get arenaNewTeamBattle => 'Bătălie în echipă';
 
   @override
+  String get arenaStartDate => 'Dată de început';
+
+  @override
+  String get arenaEntryConditions => 'Condiții de intrare';
+
+  @override
   String get arenaCustomStartDate => 'Data de început personalizată';
 
   @override
@@ -923,6 +929,14 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Bătălii de ligi și streameri';
+
+  @override
+  String get arenaAllowBotAccounts => 'Permite conturile de bot';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Permiteți <a href=\'$param\' target=\'_blank\'>boților</a> să se alăture turneului și să joace cu motoarele lor. Acest lucru îi respinge adesea pe jucătorii umani.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2413,7 +2427,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promovează automat în damă';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Țineți apăsată tasta <ctrl> în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Țineți apăsată tasta ctrl în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
 
   @override
   String get preferencesWhenPremoving => 'În cazul mutărilor anticipate';
@@ -2428,7 +2442,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Confirmare mutare';
 
   @override
-  String get preferencesMultipleChoices => 'Alegere multiplă. ';
+  String get preferencesMultipleChoices => 'Alegere multiplă.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
@@ -3396,9 +3410,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Înțeleg că odată șterse conturile nu sunt recuperabile';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Provoacă un prieten';
@@ -4606,6 +4617,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get resume => 'Continuare';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Te joci!';
@@ -6076,6 +6090,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get minimumRatedGames => 'Numar minim de partide evaluate jucate';
 
   @override
+  String get minimumAccountAge => 'Vârsta minimă a contului';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Jucătorii cu titlu oficial nu sunt supuși acestei restricții.';
+
+  @override
   String get minimumRating => 'Rating minim';
 
   @override
@@ -6246,6 +6266,11 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get clearSearch => 'Șterge căutarea';
+
+  @override
+  String searchInX(String param) {
+    return 'Căută în \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7035,6 +7060,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyKick => 'Înlătură';
 
   @override
+  String get studyRemove => 'Șterge';
+
+  @override
   String get studyLeaveTheStudy => 'Părăsește studiul';
 
   @override
@@ -7306,13 +7334,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyGoodMove => 'Mutare bună';
 
   @override
-  String get studyMistake => 'Greșeală';
-
-  @override
   String get studyBrilliantMove => 'Mișcare genială';
-
-  @override
-  String get studyBlunder => 'Gafă';
 
   @override
   String get studyInterestingMove => 'Mișcare interesantă';
@@ -7536,6 +7558,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analizează pe dispozitivul tău';
 
   @override
+  String get studySearchChapters => 'Căutare capitole';
+
+  @override
+  String get studySearchGames => 'Caută jocuri';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7576,9 +7604,9 @@ class AppLocalizationsRo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
+      other: 'Lipiți textul PGN aici, până la $count de meciuri. Pentru fiecare joc se creează un nou capitol.',
       few: 'Lipiți textul PGN aici, până la $count meciuri. Pentru fiecare joc se creează un nou capitol.',
-      one: 'Lipiți textul PGN aici, până la $count meci',
+      one: 'Lipiți textul PGN aici, până la $count meci.',
     );
     return '$_temp0';
   }
@@ -7618,6 +7646,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentificare în doi pași';
+
+  @override
+  String get tfaAuthenticationCode => 'Cod de autentificare';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Deschideți aplicația de autentificare cu doi factori de pe dispozitivul dvs pentru a vedea codul de autentificare și a verifica identitatea dvs.';
 
   @override
   String get timeagoJustNow => 'chiar acum';

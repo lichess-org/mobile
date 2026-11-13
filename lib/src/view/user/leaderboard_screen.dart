@@ -113,7 +113,7 @@ class const _Progress(final int rating, final int progress) extends StatelessWid
         Icon(
           progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
           size: 16,
-          color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+          color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
         ),
         Text(
           progress.abs().toString().padRight(2),
@@ -121,7 +121,7 @@ class const _Progress(final int rating, final int progress) extends StatelessWid
           style: TextStyle(
             fontSize: 12,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+            color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
           ),
         ),
       ],

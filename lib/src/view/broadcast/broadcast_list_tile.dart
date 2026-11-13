@@ -35,6 +35,7 @@ class BroadcastListTile extends StatelessWidget {
             location: null,
             dates: null,
             standings: null,
+            regulations: null,
           ),
         ),
         round: BroadcastRound(
@@ -177,7 +178,7 @@ class BroadcastListTile extends StatelessWidget {
                     Text(
                       'LIVE',
                       style: TextStyle(
-                        color: context.lichessColors.error,
+                        color: context.lichessColors.red,
                         fontSize: 16,
                         height: 1,
                         fontWeight: FontWeight.bold,

@@ -126,7 +126,7 @@ class _GlassToastOverlayState()
             color: switch (widget.type) {
               .error => colorScheme.error,
               .info => context.lichessColors.cyan,
-              .success => context.lichessColors.good,
+              .success => context.lichessColors.green,
             },
             size: 20.0,
           ),

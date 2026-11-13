@@ -53,7 +53,7 @@ class LichessColors._() {
   // fancy: pink
   static const fancy = Color(0xFFB72FC6);
 
-  // error: red
+  // red
   static const MaterialColor red = MaterialColor(_redPrimaryValue, <int, Color>{
     50: Color(0xFFF9E7E7),
     100: Color(0xFFF0C2C2),
@@ -67,14 +67,12 @@ class LichessColors._() {
     900: Color(0xFFAD1414),
   });
   static const int _redPrimaryValue = 0xFFCC3333;
-  static const error = red;
 
   // offline: grey
   static const grey = Color(0xCCCCCCCC);
 
-  // good: green
+  // green
   static const green = secondary;
-  static const good = secondary;
 
   static const warn = brag;
 

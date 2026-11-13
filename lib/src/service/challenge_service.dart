@@ -204,7 +204,7 @@ class ChallengeService(final Ref ref) {
           .map(
             (reason) => BottomSheetAction(
               makeLabel: (context) => Text(reason.label(context.l10n)),
-              leading: Icon(Icons.close, color: context.lichessColors.error),
+              leading: Icon(Icons.close, color: context.lichessColors.red),
               isDestructiveAction: true,
               onPressed: () {
                 ref.read(challengeRepositoryProvider).decline(id, reason: reason);
@@ -233,7 +233,7 @@ class ChallengeService(final Ref ref) {
         if (challenge.variant.isPlaySupported)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.accept),
-            leading: Icon(Icons.check, color: context.lichessColors.good),
+            leading: Icon(Icons.check, color: context.lichessColors.green),
             isDefaultAction: true,
             onPressed: () async => await acceptChallenge(challenge.id),
           ),
@@ -246,7 +246,7 @@ class ChallengeService(final Ref ref) {
         else if (!fromLink)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.decline),
-            leading: Icon(Icons.clear, color: context.lichessColors.error),
+            leading: Icon(Icons.clear, color: context.lichessColors.red),
             isDestructiveAction: true,
             onPressed: () => showDeclineDialog(context, challenge.id),
           ),

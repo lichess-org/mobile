@@ -462,7 +462,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileTheme => 'Temë';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Për t’u njoftuar';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -797,6 +797,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get arenaNewTeamBattle => 'Ndeshje Ekipore e Re';
 
   @override
+  String get arenaStartDate => 'Datë fillimi';
+
+  @override
+  String get arenaEntryConditions => 'Kushte hyrjeje';
+
+  @override
   String get arenaCustomStartDate => 'Datë vetjake fillimi';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Lejo llogari robotësh';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Lejoni <a href=\'$param\' target=\'_blank\'>robotë</a> të marrin pjesë në turne dhe luani me motorët e tyre. Kjo shpesh largon lojtarët qenie njerëzore.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Dalja automatike në mbretëreshë';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Mbani të shtypur tastin <Ctrl> gjatë daljes, për të çaktivizuar përkohësisht daljet e automatizuara';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Kur bëhet lëvizje e paracaktuar';
@@ -2406,7 +2420,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Ripohim lëvizjesh';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Zgjedhje të shumta.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Mund të çaktivizohet gjatë një loje me menu tabele';
@@ -3368,9 +3382,6 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Sfidoni një shok';
@@ -4578,6 +4589,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get resume => 'Rifillo';
+
+  @override
+  String get stop => 'Ndal';
 
   @override
   String get youArePlaying => 'Po luani!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get minimumRatedGames => 'Lojëra të vlerësuara në minimum';
 
   @override
+  String get minimumAccountAge => 'Moshë minimum për llogari';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Vlerësim minimum';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get clearSearch => 'Spastro kërkimin';
+
+  @override
+  String searchInX(String param) {
+    return 'Kërkoni në “$param”';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyKick => 'Përjashtoje';
 
   @override
+  String get studyRemove => 'Hiqe';
+
+  @override
   String get studyLeaveTheStudy => 'Braktisni mësimin';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyGoodMove => 'Lëvizje e mirë';
 
   @override
-  String get studyMistake => 'Gabim';
-
-  @override
   String get studyBrilliantMove => 'Lëvizje e shkëlqyer';
-
-  @override
-  String get studyBlunder => 'Gafë';
 
   @override
   String get studyInterestingMove => 'Lëvizje me interes';
@@ -7417,7 +7439,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Nga një varg FEN';
@@ -7465,6 +7487,12 @@ class AppLocalizationsSq extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Kërko te kapitujt';
+
+  @override
+  String get studySearchGames => 'Kërko te lojëra';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsSq extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojëra',
-      one: 'Hidhni këtu tekstin e PGN-s tuaj, deri në $count lojë',
+      other: 'Ngjitini lojërat si tekst PGN këtu. Për çdo lojë, krijohet një kapitull i ri, Ushtrimi mund të ketë deri në $count kapituj.',
+      one: 'Ngjiteni tekstin tuaj PGN këtu, deri në $count lojë.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Mirëfilltësim dyfaktorësh';
+
+  @override
+  String get tfaAuthenticationCode => 'Kod mirëfilltësimi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Që të shihni kodin tuaj të mirëfilltësimit dhe të verifikoni identitetin tuaj, hapni aplikacionin për mirëfilltësim dyfaktorësh në pajisjen tuaj.';
 
   @override
   String get timeagoJustNow => 'tani';

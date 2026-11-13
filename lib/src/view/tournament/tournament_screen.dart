@@ -319,7 +319,7 @@ class const _Body({required final TournamentId id, required final TournamentStat
                   width: double.infinity,
                   color: state.tournament.pairingsClosed
                       ? context.lichessColors.primary
-                      : context.lichessColors.good,
+                      : context.lichessColors.green,
                   child: Padding(
                     padding: Styles.horizontalBodyPadding,
                     child: Center(
@@ -627,7 +627,7 @@ class const _ExpandableDescription({
                 link: true,
                 child: GestureDetector(
                   onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
-                  child: const Text('Prizes', style: Styles.linkStyle),
+                  child: Text('Prizes', style: Styles.linkStyle(context)),
                 ),
               ),
               const Text(': '),
@@ -639,7 +639,7 @@ class const _ExpandableDescription({
           MarkdownBody(
             data: description!,
             styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
-                .copyWith(a: Styles.linkStyle),
+                .copyWith(a: Styles.linkStyle(context)),
             softLineBreak: true,
             onTapLink: (text, url, title) {
               if (url != null) {
@@ -846,7 +846,7 @@ class const _Scores(final IList<int> scores) extends StatelessWidget {
                 color: score >= 4
                     ? context.lichessColors.brag
                     : score > 1
-                    ? context.lichessColors.good
+                    ? context.lichessColors.green
                     : textShade(context, 0.5),
                 letterSpacing: 0.5,
                 fontFeatures: const [FontFeature.tabularFigures()],
@@ -963,8 +963,8 @@ class const _Verdicts(final Verdicts verdicts) extends ConsumerWidget {
           isLoggedIn && verdicts.accepted ? Icons.check : Icons.lock,
           color: isLoggedIn
               ? verdicts.accepted
-                    ? context.lichessColors.good
-                    : context.lichessColors.error
+                    ? context.lichessColors.green
+                    : context.lichessColors.red
               : null,
           size: 30.0,
         ),
@@ -979,8 +979,8 @@ class const _Verdicts(final Verdicts verdicts) extends ConsumerWidget {
                   style: TextStyle(
                     color: isLoggedIn
                         ? verdict.ok
-                              ? context.lichessColors.good
-                              : context.lichessColors.error
+                              ? context.lichessColors.green
+                              : context.lichessColors.red
                         : null,
                   ),
                 ),
@@ -1609,11 +1609,11 @@ class const _PairingTile({
     final resultColor = pairing.score != null && pairing.score! >= 4
         ? context.lichessColors.brag
         : pairing.win == true
-        ? context.lichessColors.good
+        ? context.lichessColors.green
         : pairing.status == GameStatus.draw ||
               pairing.status == GameStatus.insufficientMaterialClaim
         ? null
-        : context.lichessColors.error;
+        : context.lichessColors.red;
 
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),

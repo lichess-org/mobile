@@ -797,6 +797,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get arenaNewTeamBattle => 'Yeni Takım Çarpışması';
 
   @override
+  String get arenaStartDate => 'Başlangıç tarihi';
+
+  @override
+  String get arenaEntryConditions => 'Giriş koşulları';
+
+  @override
   String get arenaCustomStartDate => 'Özel başlangıç tarihi';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ligler & Yayıncı Çarpışmaları';
+
+  @override
+  String get arenaAllowBotAccounts => 'Bot hesaplara izin ver';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return '<a href=\'$param\' target=\'_blank\'>Botların</a> turnuvaya katılmalarına ve kendi motorlarıyla oynamalarına izin verin. Bu durum genellikle insan oyuncuları uzaklaştırır.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Geçer piyonu otomatik olarak Vezir\'e terfi et';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Otomatik terfiyi geçici olarak devre dışı bırakmak için terfi sırasında <ctrl> tuşunu basılı tutun';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Otomatik terfiyi geçici olarak devre dışı bırakmak için terfi sırasında ctrl tuşunu basılı tutun';
 
   @override
   String get preferencesWhenPremoving => 'Ön hamlelerde';
@@ -2406,7 +2420,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Hamleyi onayla';
 
   @override
-  String get preferencesMultipleChoices => 'Çoklu seçenek. ';
+  String get preferencesMultipleChoices => 'Çoklu seçenek.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Oyun esnasında tahta menüsünden devre dışı bırakılabilir';
@@ -3370,9 +3384,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Silinen hesapların kurtarılamayacağını anlıyorum';
 
   @override
-  String get gameSetup => 'Game setup';
-
-  @override
   String get challengeAFriend => 'Bir arkadaşınıza meydan okuyun';
 
   @override
@@ -3717,7 +3728,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get lossOr50MovesByPriorMistake => 'Mağlubiyet veya geçmiş hata sebebiyle 50 hamle';
 
   @override
-  String get unknownDueToRounding => 'Kazanma/kaybetme, Syzygy tablo tabanlarında DTZ değerlerinin olası yuvarlanması nedeniyle, yalnızca son esir alma veya piyon hareketinden bu yana önerilen tablo tabanı çizgisi izlendiğinde garanti edilir.';
+  String get unknownDueToRounding => 'Syzygy tablo tabanlarındaki DTZ değerleri yuvarlama nedeniyle tam olmayabileceğinden, galibiyet veya mağlubiyet sonucu yalnızca son taş alışından ya da piyon hamlesinden itibaren önerilen tablo tabanı varyantı takip edilmişse garanti edilir.';
 
   @override
   String get allSet => 'Her şey tamam!';
@@ -3807,7 +3818,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get inaccuracy => 'Kusurlu hamle';
 
   @override
-  String get moveTimes => 'Hamle zamanları';
+  String get moveTimes => 'Hamle süreleri';
 
   @override
   String get flipBoard => 'Tahtayı döndür';
@@ -3875,7 +3886,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get signUp => 'Kayıt Ol';
 
   @override
-  String get computersAreNotAllowedToPlay => 'Bilgisayarlar ve bilgisayar destekli oyuncuların oynamasına izin yoktur. Lütfen maçlarda satranç motorlarından, veri tabanlarından ya da başka oyunculardan destek almayınız. Ayrıca, birden fazla hesap açmanız kesinlikle önerilmez. Çok fazla hesap açmak, hesapların kapatılmasına neden olacaktır.';
+  String get computersAreNotAllowedToPlay => 'Bilgisayarlar ve bilgisayar destekli oyuncuların oynamasına izin verilmez. Lütfen oynarken satranç motorlarından, veritabanlarından veya diğer oyunculardan yardım almayın. Ayrıca, birden fazla hesap açmanız kesinlikle önerilmez. Çok sayıda hesap kullanmanız, platformdan yasaklanmanıza neden olacaktır.';
 
   @override
   String get games => 'Oyunlar';
@@ -4011,7 +4022,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get passwordSuggestion => 'Başkaları tarafından önerilen bir parolayı kullanmayın. Bunu hesabınızı çalmak için kullanacaklardır.';
 
   @override
-  String get emailSuggestion => 'Başkaları tarafından önerilen bir e-posta adresi kullanmayın. Bunu hesabınızı çalmak için kullanacaklardır.';
+  String get emailSuggestion => 'Başkaları tarafından önerilen bir e-posta adresi kullanmayın. Bunu hesabınızı ele geçirmek için kullanacaklardır.';
 
   @override
   String get emailConfirmHelp => 'E-posta onayı için yardım';
@@ -4302,7 +4313,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get cannotFilterByUnstableRating => 'Puanınız istikrarlı olmadığı için puana göre filtreleme yapmak mümkün değil.\nPuanlı oyunlar oynamak istikrarınızı artıracaktır.';
+  String get cannotFilterByUnstableRating => 'Puanınız henüz yeterince istikrarlı olmadığı için puana göre filtreleme yapılamaz.\nDereceli oyunlar oynamak puanınızı daha istikrarlı hâle getirecektir.';
 
   @override
   String yourPerfRatingIsTooHigh(String param1, String param2) {
@@ -4343,7 +4354,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get backToGame => 'Oyuna dön';
 
   @override
-  String get siteDescription => 'Bedava çevrimiçi satranç sunucusu. Sade bir arayüzde satranç oynayın. Kayda gerek yok, reklam yok, eklenti yok. Bilgisayara karşı, arkadaşlarınızla veya rastgele bir rakiple satranç oynayın.';
+  String get siteDescription => 'Ücretsiz çevrimiçi satranç sunucusu. Sade ve bir arayüzle satranç oynayın. Kayıt olmanız ya da eklenti yüklemeniz gerekmez. Reklam yoktur. Bilgisayara karşı, arkadaşlarınızla veya rastgele rakiplere karşı satranç oynayın.';
 
   @override
   String xJoinedTeamY(String param1, String param2) {
@@ -4370,7 +4381,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get location => 'Yer';
 
   @override
-  String get filterGames => 'Oyunları kategorilendir';
+  String get filterGames => 'Oyunları filtrele';
 
   @override
   String get reset => 'Sıfırla';
@@ -4415,7 +4426,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get importGame => 'Oyun yükle';
 
   @override
-  String get importGameExplanation => 'Göz atılabilir bir oyun tekrarı, bilgisayar analizi, oyun sohbeti ve paylaşılabilir bir URL edinmek için bir oyun PGN\'si yapıştırın.';
+  String get importGameExplanation => 'Hamleler arasında gezinebileceğiniz bir tekrar, bilgisayar analizi, parti sohbeti ve paylaşılabilir bir bağlantı oluşturmak için bir satranç partisinin PGN kaydını yapıştırın.';
 
   @override
   String get importGameDataPrivacyWarning => 'Bu PGN herkes tarafından erişilebilir. Bir oyunu özel olarak yüklemek istiyorsanız bir çalışma kullanın.';
@@ -4578,6 +4589,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get resume => 'Devam et';
+
+  @override
+  String get stop => 'Durdur';
 
   @override
   String get youArePlaying => 'Şu an oyundasınız!';
@@ -4999,7 +5013,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get allInformationIsPublicAndOptional => 'Tüm bilgiler herkese açık ve seçime bağlıdır.';
 
   @override
-  String get biographyDescription => 'Kendinizden bahsedin, satrançta ne buluyorsunuz, favori açılışlarınız, oyunlarınız, hayranı olduğunuz satranç ustaları…';
+  String get biographyDescription => 'Kendinizden, ilgi alanlarınızdan, satrançta neleri sevdiğinizden, en sevdiğiniz açılışlardan ve satranç oyuncularından bahsedin...';
 
   @override
   String get listBlockedPlayers => 'Engellenen oyuncular';
@@ -5158,7 +5172,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get termsOfService => 'Hizmet Koşulları';
 
   @override
-  String get titleVerification => 'Ünvan doğrulaması';
+  String get titleVerification => 'Unvan doğrulaması';
 
   @override
   String get sourceCode => 'Kaynak Kodu';
@@ -5181,7 +5195,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get yourPendingSimuls => 'Bekleyen simultane oyunlarınız';
 
   @override
-  String get createdSimuls => 'Yeni oluşturulan eş zamanlı gösteriler';
+  String get createdSimuls => 'Yeni oluşturulan eş zamanlı partiler';
 
   @override
   String get hostANewSimul => 'Eş zamanlı gösteri düzenle';
@@ -5322,7 +5336,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tournamentMayHaveBeenCanceled => 'Eğer bütün oyuncular turnuva başlamadan ayrıldıysa, iptal edilmiş olabilir.';
 
   @override
-  String get returnToTournamentsHomepage => 'Turnuva sayfasına geri dön.';
+  String get returnToTournamentsHomepage => 'Turnuva anasayfasına geri dön';
 
   @override
   String weeklyPerfTypeRatingDistribution(String param) {
@@ -5466,7 +5480,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'Çocuk modunda, lichess.org logosu yerine $param belirir, bilin ki çocuğunuz güvendedir :)';
+    return 'Çocuk modunda Lichess logosunun yanında $param simgesi görünür. Böylece çocuklarınızın güvende olduğunu kolayca anlayabilirsiniz.';
   }
 
   @override
@@ -6048,6 +6062,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get minimumRatedGames => 'En düşük puanlı oyunlar';
 
   @override
+  String get minimumAccountAge => 'En düşük hesap yaşı';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Unvanlı oyuncular bu kısıtlamadan muaftır.';
+
+  @override
   String get minimumRating => 'En düşük puan';
 
   @override
@@ -6098,7 +6118,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tournChat => 'Turnuva sohbeti';
 
   @override
-  String get noChat => 'Sohbet yasak';
+  String get noChat => 'Sohbet yok';
 
   @override
   String get onlyTeamLeaders => 'Yalnızca takım liderleri';
@@ -6218,6 +6238,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearSearch => 'Aramayı temizle';
+
+  @override
+  String searchInX(String param) {
+    return '\"$param\" içinde ara';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyKick => 'Çıkar';
 
   @override
+  String get studyRemove => 'Çıkar';
+
+  @override
   String get studyLeaveTheStudy => 'Çalışmadan ayrıl';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyGoodMove => 'İyi hamle';
 
   @override
-  String get studyMistake => 'Hata';
-
-  @override
   String get studyBrilliantMove => 'Göz alıcı hamle';
-
-  @override
-  String get studyBlunder => 'Vahim hata';
 
   @override
   String get studyInterestingMove => 'İlginç hamle';
@@ -7423,7 +7445,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyFromFenStringTitle => 'Bir FEN dizisinden';
 
   @override
-  String get studyFromFenStringText => 'FEN formatında bir pozisyon <br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br> yapıştırarak bölümü belirli bir yerden başlat.';
+  String get studyFromFenStringText => 'FEN biçiminde bir konum yapıştırarak<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>bölümü bir konumdan başlatabilirsiniz.';
 
   @override
   String get studyFromPgnGameTitle => 'PGN oyunundan';
@@ -7465,6 +7487,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Kendi Cihazında Analiz Et';
 
   @override
+  String get studySearchChapters => 'Bölümleri ara';
+
+  @override
+  String get studySearchGames => 'Oyunları ara';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'PGN metninizi buraya yapıştırın, en fazla $count oyuna kadar',
-      one: 'PGN metninizi buraya yapıştırın, en fazla $count oyuna kadar',
+      other: 'Oyunları PGN metni olarak buraya yapıştırın. Her oyun için yeni bir bölüm oluşturulur. Çalışma, en fazla $count bölüm içerebilir.',
+      one: 'PGN metninizi buraya yapıştırın, en fazla $count oyuna kadar.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'İki faktörlü kimlik doğrulama';
+
+  @override
+  String get tfaAuthenticationCode => 'Kimlik doğrulama kodu';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Doğrulama kodunu görüntüleyerek kimliğinizi doğrulamak için cihazınızdan iki faktörlü kimlik doğrulama uygulamasını açın.';
 
   @override
   String get timeagoJustNow => 'şu anda';

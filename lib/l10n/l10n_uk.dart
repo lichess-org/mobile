@@ -833,6 +833,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get arenaNewTeamBattle => 'Нова Командна битва';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Власна дата початку';
 
   @override
@@ -941,6 +947,14 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ліги й битви стримерів';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2435,7 +2449,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Перетворення пішака завжди на ферзя';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Утримуйте клавішу <ctrl> під час перетворення, щоб тимчасово вимкнути автоматичне перетворення';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Для ходів на випередження';
@@ -2450,7 +2464,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Підтвердження ходу';
 
   @override
-  String get preferencesMultipleChoices => 'Множинний вибір. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можна вимкнути під час гри в меню дошки';
@@ -3424,9 +3438,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Я розумію, що видалені облікові записи неможливо відновити';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Кинути виклик другові';
@@ -4634,6 +4645,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get resume => 'Відновити';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Ви граєте!';
@@ -6104,6 +6118,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get minimumRatedGames => 'Мінімум рейтингових ігор';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Мінімальний рейтинг';
 
   @override
@@ -6274,6 +6294,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистити пошук';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7106,6 +7131,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyKick => 'Вигнати';
 
   @override
+  String get studyRemove => 'Видалити';
+
+  @override
   String get studyLeaveTheStudy => 'Покинути дослідження';
 
   @override
@@ -7377,13 +7405,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyGoodMove => 'Хороший хід';
 
   @override
-  String get studyMistake => 'Помилка';
-
-  @override
   String get studyBrilliantMove => 'Блискучий хід';
-
-  @override
-  String get studyBlunder => 'Груба помилка';
 
   @override
   String get studyInterestingMove => 'Цікавий хід';
@@ -7607,6 +7629,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7650,10 +7678,8 @@ class AppLocalizationsUk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Вставте ваш PGN текст тут, до $count ігор',
-      many: 'Вставте ваш PGN текст тут, до $count ігор',
-      few: 'Вставте ваш PGN текст тут, до $count ігор',
-      one: 'Вставте ваш PGN текст тут, до $count гри',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7695,6 +7721,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двофакторна автентифікація';
+
+  @override
+  String get tfaAuthenticationCode => 'Код автентифікації';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Відкрийте застосунок для двофакторної автентифікації на вашому пристрої, щоб переглянути ваш код автентифікації та підтвердити вашу особу.';
 
   @override
   String get timeagoJustNow => 'щойно';

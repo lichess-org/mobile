@@ -779,6 +779,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get arenaNewTeamBattle => 'Giải Đa Đội Mới';
 
   @override
+  String get arenaStartDate => 'Ngày bắt đầu';
+
+  @override
+  String get arenaEntryConditions => 'Điều kiện tham gia';
+
+  @override
   String get arenaCustomStartDate => 'Thời gian bắt đầu tùy chỉnh';
 
   @override
@@ -887,6 +893,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Các giải đấu tổng hợp & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Cho phép tài khoản bot';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Hãy cho phép <a href=\'$param\' target=\'_blank\'>các bot</a> tham gia giải đấu và chơi bằng phần mềm của chúng. Điều này thường khiến người chơi cảm thấy khó chịu.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2369,7 +2383,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Tự động phong cấp thành quân Hậu';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Giữ nút <ctrl> trong khi phong cấp để tạm thời hủy bỏ việc phong cấp tự động';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Khi đi trước';
@@ -2384,7 +2398,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Xác nhận nước đi';
 
   @override
-  String get preferencesMultipleChoices => 'Nhiều lựa chọn. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Có thể bị vô hiệu hóa trong ván cờ với mục lục bàn cờ';
@@ -3340,9 +3354,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Tôi hiểu rằng các tài khoản bị xóa sẽ không thể khôi phục được';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Thách đấu một người bạn';
@@ -4550,6 +4561,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get resume => 'Tiếp tục';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Bạn đã vào ván!';
@@ -6020,6 +6034,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get minimumRatedGames => 'Số ván đã xếp hạng tối thiểu';
 
   @override
+  String get minimumAccountAge => 'Tuổi tài khoản tối thiểu';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Những kỳ thủ có danh hiệu sẽ không bị ràng buộc bởi hạn chế này.';
+
+  @override
   String get minimumRating => 'Hệ số tối thiểu';
 
   @override
@@ -6190,6 +6210,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Xóa nội dung tìm kiếm';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6893,6 +6918,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyKick => 'Đuổi';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Rời khỏi nghiên cứu';
 
   @override
@@ -7164,13 +7192,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyGoodMove => 'Nước cờ tốt';
 
   @override
-  String get studyMistake => 'Sai lầm';
-
-  @override
   String get studyBrilliantMove => 'Nước đi thiên tài';
-
-  @override
-  String get studyBlunder => 'Sai lầm nghiêm trọng';
 
   @override
   String get studyInterestingMove => 'Nước đi hay';
@@ -7394,6 +7416,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Phân tích trên thiết bị của bạn';
 
   @override
+  String get studySearchChapters => 'Tìm chương';
+
+  @override
+  String get studySearchGames => 'Tìm ván cờ';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7428,7 +7456,8 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Dán PGN ở đây, tối đa $count ván',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7464,6 +7493,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Xác thực 2 bước';
+
+  @override
+  String get tfaAuthenticationCode => 'Mã xác thực';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Mở ứng dụng xác minh 2 bước trên thiết bị của bạn để xem mã xác minh của bạn và xác nhận danh tính.';
 
   @override
   String get timeagoJustNow => 'vừa mới đây';

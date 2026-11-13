@@ -45,6 +45,11 @@ class const GameSummaryTable({
       ),
     );
 
+    Color? errorCountColor(String text, Color color) {
+      if (text == '0') return textShade(context, Styles.subtitleOpacity);
+      return usingCustomBackground ? null : color;
+    }
+
     return Center(
       child: SizedBox(
         width: math.min(MediaQuery.widthOf(context), 500),
@@ -161,9 +166,9 @@ class const GameSummaryTable({
               ])
                 TableRow(
                   children: [
-                    _SummaryNumber(whiteText, color: usingCustomBackground ? null : color),
+                    _SummaryNumber(whiteText, color: errorCountColor(whiteText, color)),
                     Center(heightFactor: 1.2, child: Text(label, softWrap: true)),
-                    _SummaryNumber(blackText, color: usingCustomBackground ? null : color),
+                    _SummaryNumber(blackText, color: errorCountColor(blackText, color)),
                   ],
                 ),
               if (whiteAnalysis.acpl != null && blackAnalysis.acpl != null)
@@ -271,7 +276,7 @@ class const _SummaryPlayerName(
 
 Color _accuracyColor(int accuracy, BuildContext context) {
   if (accuracy >= 85) {
-    return LichessColors.good;
+    return LichessColors.green;
   }
   if (accuracy >= 70) {
     return LichessColors.inaccuracy;

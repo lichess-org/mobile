@@ -28,7 +28,6 @@ import 'package:material_ui/material_ui.dart';
 
 const kDefaultBroadcastImage = AssetImage('assets/images/broadcast_image.webp');
 const kBroadcastCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
-const kDefaultCardOpacity = 0.9;
 
 const kBroadcastCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 const kHandsetCarouselFlexWeights = [6, 2];
@@ -157,6 +156,7 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
             location: null,
             dates: null,
             standings: null,
+            regulations: null,
           ),
         ),
         round: BroadcastRound(
@@ -205,16 +205,22 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
-      if (response != null) {
-        if (mounted) {
-          setState(() {
-            _cardColors = response;
-          });
-        }
+      var failed = false;
+      await precacheImage(provider, context, onError: (_, _) => failed = true);
+      // The card image failed to load (e.g. network timeout): keep the default card colors.
+      if (failed || !mounted) return;
+      final _CardColors? response;
+      try {
+        final ui.Image scaledImage = await imageProviderToScaled(provider);
+        final imageBytes = await scaledImage.toByteData();
+        response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      } catch (_) {
+        return;
+      }
+      if (response != null && mounted) {
+        setState(() {
+          _cardColors = response;
+        });
       }
     }
   }
@@ -233,6 +239,17 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
+    final isDark = Theme.of(context).brightness == .dark;
+    final imageOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardImageOpacity
+        : kDefaultCardOpacity;
+    final backgroundOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardBackgroundOpacity
+        : kDefaultCardOpacity;
     final screenWidth = MediaQuery.widthOf(context);
     final double width = screenWidth - 16.0;
     final paddingWidth = kBroadcastCarouselItemPadding.horizontal;
@@ -249,9 +266,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
-        ),
+        decoration: BoxDecoration(color: backgroundColor.withValues(alpha: backgroundOpacity)),
         child: OverflowBox(
           maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
           minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
@@ -264,13 +279,7 @@ class _BroadcastCarouselItemState() extends ConsumerState<BroadcastCarouselItem>
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
-                    opacity: wasSynchronouslyLoaded
-                        ? _tapDown
-                              ? 1.0
-                              : kDefaultCardOpacity
-                        : frame == null
-                        ? 0
-                        : 1,
+                    opacity: wasSynchronouslyLoaded || frame != null ? imageOpacity : 0,
                     child: child,
                   );
                 },
@@ -311,7 +320,7 @@ class const _BroadcastCardContent({
 
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.9) ?? textShade(context, 0.8);
 
     return Stack(
       children: [

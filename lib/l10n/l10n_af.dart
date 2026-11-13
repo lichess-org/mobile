@@ -797,6 +797,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nuwe Span Geveg';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Aangepaste begin datum';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promoveer outomaties tot Dame';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Druk die <ctrl>-sleutel terwyl jy promoveer om outo-promovering tydelik te deaktiveer';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Tydens vooraf-skuiwe';
@@ -2406,7 +2420,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Skuif bevestiging';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3368,9 +3382,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Challenge a friend';
@@ -4578,6 +4589,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get resume => 'Hervat';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Jy speel nou!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get minimumRatedGames => 'Minimum gegradeerde spelle';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimum gradering';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyKick => 'Verwyder';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Verlaat die studie';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyGoodMove => 'Goeie skuif';
 
   @override
-  String get studyMistake => 'Fout';
-
-  @override
   String get studyBrilliantMove => 'Skitterende skuif';
-
-  @override
-  String get studyBlunder => 'Flater';
 
   @override
   String get studyInterestingMove => 'Interesante skuif';
@@ -7417,7 +7439,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Vanaf \'n FEN-string';
@@ -7465,6 +7487,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Plak jou PGN teks hier, tot by $count spelle',
-      one: 'Plak jou PGN teks hier, tot by $count spel',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tweeledige verifikasie';
+
+  @override
+  String get tfaAuthenticationCode => 'Verifikasie kode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Maak die twee-faktor verifikasie toep of jou toestel oop om die verifikasie kode te sien en jou identiteit te bevestig.';
 
   @override
   String get timeagoJustNow => 'sopas';

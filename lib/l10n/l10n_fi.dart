@@ -285,7 +285,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobilePreviousPage => 'Edellinen';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Tarkastele aiemmin yrittämiäsi tehtäviä.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
@@ -462,7 +462,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileTheme => 'Teema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Ilmoitetaan myöhemmin';
 
   @override
   String get mobileTooManyLoginAttempts => 'Liian monta yritystä. Yritä myöhemmin uudelleen.';
@@ -797,6 +797,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get arenaNewTeamBattle => 'Uusi joukkuetaisto';
 
   @override
+  String get arenaStartDate => 'Alkamispäivä';
+
+  @override
+  String get arenaEntryConditions => 'Osallistumisehdot';
+
+  @override
   String get arenaCustomStartDate => 'Mukautettu alkamisaika';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Liigat & Striimaajataistot';
+
+  @override
+  String get arenaAllowBotAccounts => 'Salli bottitunnukset';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Anna <a href=\'$param\' target=\'_blank\'>bottien</a> liittyä turnaukseen ja pelata täysillä laskentatehoillaan. Tämä usein karkottaa ihmispelaajat.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Korota automaattisesti kuningattareksi';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Pidä <ctrl>-näppäintä painettuna korottaessasi sotilaan, jos haluat ottaa automaattisen korotuksen väliaikaisesti pois käytöstä';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Pidä Ctrl-näppäintä painettuna korottaessasi sotilaan, jos haluat ottaa automaattisen korotuksen väliaikaisesti pois käytöstä';
 
   @override
   String get preferencesWhenPremoving => 'Esisiirtäessä';
@@ -2406,7 +2420,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Siirron vahvistus';
 
   @override
-  String get preferencesMultipleChoices => 'Monivalinta. ';
+  String get preferencesMultipleChoices => 'Monivalinta.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Voidaan poistaa käytöstä pelin aikana lautavalikon kautta';
@@ -3368,9 +3382,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Ymmärrän, ettei poistettua tiliä voi palauttaa';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Haasta kaveri';
@@ -4578,6 +4589,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get resume => 'Jatka';
+
+  @override
+  String get stop => 'Pysäytä';
 
   @override
   String get youArePlaying => 'Sinä pelaat!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get minimumRatedGames => 'Pisteytettyjä pelejä vähintään';
 
   @override
+  String get minimumAccountAge => 'Tunnuksen alaikäraja';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Tämä rajoitus ei koske pelaajia, joilla on arvonimi.';
+
+  @override
   String get minimumRating => 'Vahvuusluku vähintään';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tyhjennä haku';
+
+  @override
+  String searchInX(String param) {
+    return 'Hae kohteesta \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyKick => 'Poista';
 
   @override
+  String get studyRemove => 'Poista';
+
+  @override
   String get studyLeaveTheStudy => 'Jätä tutkielma';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyGoodMove => 'Hyvä siirto';
 
   @override
-  String get studyMistake => 'Virhe';
-
-  @override
   String get studyBrilliantMove => 'Loistava siirto';
-
-  @override
-  String get studyBlunder => 'Vakava virhe';
 
   @override
   String get studyInterestingMove => 'Mielenkiintoinen siirto';
@@ -7465,6 +7487,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analysoi omalla laitteellasi';
 
   @override
+  String get studySearchChapters => 'Hae lukuja';
+
+  @override
+  String get studySearchGames => 'Hae pelejä';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsFi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Liitä PGN tähän, enintään $count peliä',
-      one: 'Liitä PGN tähän, enintään $count peli',
+      other: 'Liitä pelit tähän PGN-muotoisena tekstinä. Jokaista peliä kohden luodaan uusi luku. Tutkielmassa voi olla maksimissaan $count lukua.',
+      one: 'Liitä PGN tähän, enintään $count peli.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaksivaiheinen tunnistautuminen';
+
+  @override
+  String get tfaAuthenticationCode => 'Tunnistautumiskoodi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Avaa laitteessasi sovellus kaksivaiheiseen tunnistautumiseen, katso siitä tunnistautumiskoodisi ja vahvista henkilöllisyytesi.';
 
   @override
   String get timeagoJustNow => 'juuri äsken';

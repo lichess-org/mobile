@@ -1444,6 +1444,18 @@ abstract class AppLocalizations {
   /// **'New Team Battle'**
   String get arenaNewTeamBattle;
 
+  /// No description provided for @arenaStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date'**
+  String get arenaStartDate;
+
+  /// No description provided for @arenaEntryConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry conditions'**
+  String get arenaEntryConditions;
+
   /// No description provided for @arenaCustomStartDate.
   ///
   /// In en, this message translates to:
@@ -1659,6 +1671,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Leagues & Streamer Battles'**
   String get arenaLeaguesAndStreamerBattles;
+
+  /// No description provided for @arenaAllowBotAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow bot accounts'**
+  String get arenaAllowBotAccounts;
+
+  /// No description provided for @arenaAllowBotAccountsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Let <a href=\'{param}\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.'**
+  String arenaAllowBotAccountsDescription(String param);
 
   /// No description provided for @arenaDrawingWithinNbMoves.
   ///
@@ -4423,7 +4447,7 @@ abstract class AppLocalizations {
   /// No description provided for @preferencesExplainPromoteToQueenAutomatically.
   ///
   /// In en, this message translates to:
-  /// **'Hold the <ctrl> key while promoting to temporarily disable auto-promotion'**
+  /// **'Hold the ctrl key while promoting to temporarily disable auto-promotion'**
   String get preferencesExplainPromoteToQueenAutomatically;
 
   /// No description provided for @preferencesWhenPremoving.
@@ -4453,7 +4477,7 @@ abstract class AppLocalizations {
   /// No description provided for @preferencesMultipleChoices.
   ///
   /// In en, this message translates to:
-  /// **'Multiple choices. '**
+  /// **'Multiple choices.'**
   String get preferencesMultipleChoices;
 
   /// No description provided for @preferencesExplainCanThenBeTemporarilyDisabled.
@@ -6249,12 +6273,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I understand that deleted accounts aren\'t recoverable'**
   String get settingsDeleteAccountConfirmText;
-
-  /// No description provided for @gameSetup.
-  ///
-  /// In en, this message translates to:
-  /// **'Game setup'**
-  String get gameSetup;
 
   /// No description provided for @challengeAFriend.
   ///
@@ -8529,6 +8547,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resume'**
   String get resume;
+
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
+  String get stop;
 
   /// No description provided for @youArePlaying.
   ///
@@ -11230,6 +11254,18 @@ abstract class AppLocalizations {
   /// **'Minimum rated games'**
   String get minimumRatedGames;
 
+  /// No description provided for @minimumAccountAge.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum account age'**
+  String get minimumAccountAge;
+
+  /// No description provided for @titledPlayersBypassRestriction.
+  ///
+  /// In en, this message translates to:
+  /// **'Titled players bypass this restriction.'**
+  String get titledPlayersBypassRestriction;
+
   /// No description provided for @minimumRating.
   ///
   /// In en, this message translates to:
@@ -11553,6 +11589,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear search'**
   String get clearSearch;
+
+  /// No description provided for @searchInX.
+  ///
+  /// In en, this message translates to:
+  /// **'Search in \"{param}\"'**
+  String searchInX(String param);
 
   /// No description provided for @thereAreNoResultsForX.
   ///
@@ -12334,6 +12376,12 @@ abstract class AppLocalizations {
   /// **'Kick'**
   String get studyKick;
 
+  /// No description provided for @studyRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get studyRemove;
+
   /// No description provided for @studyLeaveTheStudy.
   ///
   /// In en, this message translates to:
@@ -12856,23 +12904,11 @@ abstract class AppLocalizations {
   /// **'Good move'**
   String get studyGoodMove;
 
-  /// No description provided for @studyMistake.
-  ///
-  /// In en, this message translates to:
-  /// **'Mistake'**
-  String get studyMistake;
-
   /// No description provided for @studyBrilliantMove.
   ///
   /// In en, this message translates to:
   /// **'Brilliant move'**
   String get studyBrilliantMove;
-
-  /// No description provided for @studyBlunder.
-  ///
-  /// In en, this message translates to:
-  /// **'Blunder'**
-  String get studyBlunder;
 
   /// No description provided for @studyInterestingMove.
   ///
@@ -13207,7 +13243,7 @@ abstract class AppLocalizations {
   /// No description provided for @studyLoadGameFromTheWebText.
   ///
   /// In en, this message translates to:
-  /// **'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.'**
+  /// **'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.'**
   String get studyLoadGameFromTheWebText;
 
   /// No description provided for @studyFromFenStringTitle.
@@ -13300,6 +13336,18 @@ abstract class AppLocalizations {
   /// **'Analyse on your device'**
   String get studyAnalyzeOnYourDevice;
 
+  /// No description provided for @studySearchChapters.
+  ///
+  /// In en, this message translates to:
+  /// **'Search chapters'**
+  String get studySearchChapters;
+
+  /// No description provided for @studySearchGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Search games'**
+  String get studySearchGames;
+
   /// No description provided for @studyNbChapters.
   ///
   /// In en, this message translates to:
@@ -13321,7 +13369,7 @@ abstract class AppLocalizations {
   /// No description provided for @studyPasteYourPgnTextHereUpToNbGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
+  /// **'{count, plural, =1{Paste your PGN text here, up to {count} game.} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}'**
   String studyPasteYourPgnTextHereUpToNbGames(int count);
 
   /// No description provided for @teamTeam.
@@ -13359,6 +13407,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Two-factor authentication'**
   String get tfaTwoFactorAuth;
+
+  /// No description provided for @tfaAuthenticationCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication code'**
+  String get tfaAuthenticationCode;
+
+  /// No description provided for @tfaOpenTwoFactorApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the two-factor authentication app on your device to view your authentication code and verify your identity.'**
+  String get tfaOpenTwoFactorApp;
 
   /// No description provided for @timeagoJustNow.
   ///

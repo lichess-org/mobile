@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -79,8 +79,10 @@ void main() {
     expect(find.byType(ListSectionHeader), findsNWidgets(2));
     expect(find.byType(ListSectionRow), findsNWidgets(3));
 
-    String timeOf(int millis) =>
-        DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(millis));
+    String timeOf(int millis) => formatTimeOfDay(
+      tester.element(find.byType(ListSectionRow).first),
+      DateTime.fromMillisecondsSinceEpoch(millis),
+    );
     expect(find.textContaining(timeOf(1673553626465)), findsOneWidget);
     expect(find.textContaining('+5'), findsOneWidget);
     expect(find.textContaining('-5'), findsOneWidget);
