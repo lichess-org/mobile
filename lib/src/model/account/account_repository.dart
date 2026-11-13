@@ -1,6 +1,5 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_pref_types.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
@@ -29,8 +28,6 @@ final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   final aggregator = ref.watch(aggregatorProvider);
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
-
-final closeAccountMutation = Mutation<void>();
 
 class AccountRepository(final LichessClient client, final Aggregator aggregator) {
   Future<User> getProfile() {
@@ -86,7 +83,7 @@ class AccountRepository(final LichessClient client, final Aggregator aggregator)
   Future<void> closeAccount({
     required String username,
     required String password,
-    String token = '',
+    required String token,
     required bool forever,
   }) async {
     final uri = Uri(path: '/account/close');

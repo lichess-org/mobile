@@ -142,8 +142,6 @@ void main() {
       await enterCredentials(tester);
 
       await confirmClose(tester);
-      // The HTTP client retries a rate-limited response once after a back-off.
-      await tester.pump(const Duration(seconds: 2));
       await tester.pumpAndSettle();
 
       expect(find.text(message), findsOneWidget);
@@ -223,6 +221,55 @@ void main() {
     expect(find.byType(CloseAccountScreen), findsNothing);
     expect(requests.where((r) => r.url.path == '/account/close'), hasLength(1));
     expect(requests.where((r) => r.method == 'DELETE' && r.url.path == '/api/token'), isEmpty);
+  });
+
+  testWidgets('leaving the screen while the close is pending still signs out', (tester) async {
+    final response = Completer<http.Response>();
+    final container = await pumpCloseAccount(tester, (request) {
+      if (request.url.path == '/account/close') return response.future;
+      return mockResponse('', 404);
+    });
+    final authSubscription = container.listen(authControllerProvider, (_, _) {});
+    addTearDown(authSubscription.close);
+    await enterCredentials(tester);
+    await confirmClose(tester);
+
+    tester.state<NavigatorState>(find.byType(Navigator)).pop();
+    await tester.pumpAndSettle();
+    expect(find.byType(CloseAccountScreen), findsNothing);
+
+    response.complete(http.Response('', 204));
+    await tester.pumpAndSettle();
+
+    expect(container.read(authControllerProvider), isNull);
+    await tester.runAsync(() async {
+      expect(await container.read(authStorageProvider).read(), isNull);
+    });
+  });
+
+  testWidgets('cancelling the confirmation keeps the field errors', (tester) async {
+    await pumpCloseAccount(tester, (request) {
+      if (request.url.path == '/account/close') {
+        return mockResponse('{"passwd":["Incorrect"]}', 400);
+      }
+      return mockResponse('', 404);
+    });
+    await enterCredentials(tester);
+    await confirmClose(tester);
+    await tester.pumpAndSettle();
+
+    final button = find.widgetWithText(FilledButton, 'Close account');
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('No'));
+    await tester.pumpAndSettle();
+
+    final input = find.descendant(
+      of: find.widgetWithText(TextFormField, 'Password'),
+      matching: find.byType(TextField),
+    );
+    expect(tester.widget<TextField>(input).decoration?.errorText, 'Incorrect password');
   });
 
   testWidgets('kid mode does not hide the close account form', (tester) async {

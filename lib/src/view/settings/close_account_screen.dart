@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -42,23 +41,14 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
     return true;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _usernameController.addListener(_onFieldsChanged);
-    _passwordController.addListener(_onFieldsChanged);
-    _tokenController.addListener(_onFieldsChanged);
-  }
-
-  void _onFieldsChanged() {
-    setState(() {});
-  }
+  late final _fields = Listenable.merge([
+    _usernameController,
+    _passwordController,
+    _tokenController,
+  ]);
 
   @override
   void dispose() {
-    _usernameController.removeListener(_onFieldsChanged);
-    _passwordController.removeListener(_onFieldsChanged);
-    _tokenController.removeListener(_onFieldsChanged);
     _usernameController.dispose();
     _passwordController.dispose();
     _tokenController.dispose();
@@ -67,11 +57,6 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
 
   void _submit() {
     if (ref.read(closeAccountMutation) is MutationPending || !_canSubmit) return;
-    setState(() {
-      _usernameError = null;
-      _passwordError = null;
-      _tokenError = null;
-    });
     showDialog<void>(
       context: context,
       builder: (dialogContext) {
@@ -101,23 +86,22 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
 
   void _performClose() {
     FocusScope.of(context).unfocus();
+    setState(() {
+      _usernameError = null;
+      _passwordError = null;
+      _tokenError = null;
+    });
     final username = _usernameController.text.trim();
     final password = _passwordController.text;
     final token = _showTokenField ? _tokenController.text.trim() : '';
     final forever = _forever;
+    // The mutation signs the user out once the account is closed, so the sign out happens even if
+    // the screen is left while the request is pending.
     closeAccountMutation.run(ref, (tsx) async {
       await tsx
-          .get(accountRepositoryProvider)
+          .get(authControllerProvider.notifier)
           .closeAccount(username: username, password: password, token: token, forever: forever);
     }).ignore();
-  }
-
-  Future<void> _onSuccess() async {
-    await signOutMutation.run(ref, (tsx) async {
-      await tsx.get(authControllerProvider.notifier).signOutLocally();
-    });
-    if (!mounted) return;
-    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
   void _onError(Object error) {
@@ -166,7 +150,7 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
     ref.listen(closeAccountMutation, (_, next) {
       switch (next) {
         case MutationSuccess():
-          _onSuccess();
+          Navigator.of(context).popUntil((route) => route.isFirst);
         case MutationError(:final error):
           _onError(error);
         case _:
@@ -174,12 +158,14 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
       }
     });
 
-    final pending = closeState is MutationPending;
+    // The form stays disabled after a successful close, until the screen is popped.
+    final pending = closeState is MutationPending || closeState is MutationSuccess;
     final subtitleStyle = ListTileTheme.of(context).subtitleTextStyle
         ?.copyWith(fontSize: TextTheme.of(context).bodySmall?.fontSize);
 
     Widget body;
-    if (authUser == null) {
+    // The user is signed out as part of the close: keep the form on screen until it is popped.
+    if (authUser == null && !pending) {
       body = Center(child: Text(context.l10n.mobileMustBeLoggedIn));
     } else {
       body = AutofillGroup(
@@ -200,8 +186,8 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
               autocorrect: false,
               enableSuggestions: false,
               autofillHints: const [AutofillHints.username],
-              textCapitalization: TextCapitalization.none,
-              textInputAction: TextInputAction.next,
+              textCapitalization: .none,
+              textInputAction: .next,
               decoration: InputDecoration(
                 labelText: context.l10n.username,
                 errorText: _usernameError,
@@ -214,7 +200,7 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
               enableSuggestions: false,
               autocorrect: false,
               autofillHints: const [AutofillHints.password],
-              textInputAction: _showTokenField ? TextInputAction.next : TextInputAction.done,
+              textInputAction: _showTokenField ? .next : .done,
               decoration: InputDecoration(
                 labelText: context.l10n.password,
                 errorText: _passwordError,
@@ -236,8 +222,8 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
                 controller: _tokenController,
                 autocorrect: false,
                 enableSuggestions: false,
-                textCapitalization: TextCapitalization.none,
-                textInputAction: TextInputAction.done,
+                textCapitalization: .none,
+                textInputAction: .done,
                 decoration: InputDecoration(
                   labelText: context.l10n.tfaAuthenticationCode,
                   helperText: context.l10n.tfaOpenTwoFactorApp,
@@ -249,7 +235,7 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
             const SizedBox(height: 16.0),
             Card(
               margin: EdgeInsets.zero,
-              clipBehavior: Clip.hardEdge,
+              clipBehavior: .hardEdge,
               child: CheckboxListTile(
                 value: _forever,
                 title: Text(
@@ -270,15 +256,18 @@ class _CloseAccountScreenState() extends ConsumerState<CloseAccountScreen> {
               ),
             ),
             const SizedBox(height: 24.0),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: ColorScheme.of(context).error,
-                foregroundColor: ColorScheme.of(context).onError,
+            ListenableBuilder(
+              listenable: _fields,
+              builder: (context, _) => FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: ColorScheme.of(context).error,
+                  foregroundColor: ColorScheme.of(context).onError,
+                ),
+                onPressed: pending || !_canSubmit ? null : _submit,
+                child: pending
+                    ? const ButtonLoadingIndicator()
+                    : Text(context.l10n.settingsCloseAccount),
               ),
-              onPressed: pending || !_canSubmit ? null : _submit,
-              child: pending
-                  ? const ButtonLoadingIndicator()
-                  : Text(context.l10n.settingsCloseAccount),
             ),
             const SizedBox(height: 8.0),
             TextButton(

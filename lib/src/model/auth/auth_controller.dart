@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:logging/logging.dart';
 
 export 'auth_user.dart';
 
@@ -13,6 +15,8 @@ enum AuthEvent() {
   signIn,
   signOut,
 }
+
+final _logger = Logger('AuthController');
 
 final _authEventsController = StreamController<AuthEvent>.broadcast();
 
@@ -31,6 +35,9 @@ final isLoggedInProvider = Provider.autoDispose<bool>((Ref ref) {
 
 final signInMutation = Mutation<void>();
 final signOutMutation = Mutation<void>();
+
+/// Mutation for closing the account of the signed in user.
+final closeAccountMutation = Mutation<void>();
 
 /// Mutation for requesting the login code email.
 final emailLoginCodeRequestMutation = Mutation<void>();
@@ -87,9 +94,26 @@ class AuthController() extends Notifier<AuthUser?> {
     state = null;
   }
 
-  /// Clears the local session after the server has already revoked its token.
-  Future<void> signOutLocally() async {
-    await ref.read(authStorageProvider).delete();
+  /// Closes the account of the signed in user, then signs them out of the app.
+  ///
+  /// The server revokes the account tokens and unregisters its devices from push notifications
+  /// when it closes the account, so the sign out only clears the local session.
+  Future<void> closeAccount({
+    required String username,
+    required String password,
+    required String token,
+    required bool forever,
+  }) async {
+    await ref
+        .read(accountRepositoryProvider)
+        .closeAccount(username: username, password: password, token: token, forever: forever);
+    try {
+      await ref.read(authStorageProvider).delete();
+    } catch (e, st) {
+      // The account is closed: a failure here must not be reported as a failure to close it. The
+      // stored session is dropped by the next token check, since its token is revoked.
+      _logger.severe('Could not delete the session of the closed account:', e, st);
+    }
     if (!ref.mounted) return;
     state = null;
     _authEventsController.add(AuthEvent.signOut);
