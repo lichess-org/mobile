@@ -72,6 +72,9 @@ class _AccountMenuScreenState()
     with WidgetsBindingObserver {
   bool _pendingKidModeRefresh = false;
 
+  /// Whether the account tile is expanded, showing the profile, account switching and sign out.
+  bool _isAccountExpanded = false;
+
   @override
   void initState() {
     super.initState();
@@ -124,48 +127,88 @@ class _AccountMenuScreenState()
       body: ListView(
         children: [
           if (user != null)
-            ListSection(
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  leading: switch (account) {
-                    AsyncData(:final value) =>
-                      value == null
-                          ? const Icon(Icons.account_circle_outlined, size: 30)
-                          : AccountAvatar(value),
-                    _ => const Icon(Icons.account_circle_outlined, size: 30),
-                  },
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-                  title: AutoSizeText(
-                    user.name,
-                    style: Styles.callout,
-                    maxLines: 1,
-                    minFontSize: 14,
-                    maxFontSize: 18,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  enabled: isOnline,
-                  onTap: () {
-                    _navigate(context, ProfileScreen.buildRoute());
-                  },
-                ),
-                if (kidMode)
+            // Animates the height of the section when the account tile expands or collapses.
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.fastOutSlowIn,
+              alignment: Alignment.topCenter,
+              child: ListSection(
+                children: [
                   ListTile(
-                    textColor: Theme.of(context).colorScheme.primary,
-                    iconColor: Theme.of(context).colorScheme.primary,
-                    leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
-                    title: Text(
-                      context.l10n.kidModeIsEnabled,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    onTap: () {
-                      _pendingKidModeRefresh = true;
-                      launchUrl(lichessUri('/account/kid'));
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    leading: switch (account) {
+                      AsyncData(:final value) =>
+                        value == null
+                            ? const Icon(Icons.account_circle_outlined, size: 30)
+                            : AccountAvatar(value),
+                      _ => const Icon(Icons.account_circle_outlined, size: 30),
                     },
+                    trailing: AnimatedRotation(
+                      turns: _isAccountExpanded ? 0.5 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const Icon(Icons.expand_more),
+                    ),
+                    title: AutoSizeText(
+                      user.name,
+                      style: Styles.callout,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      maxFontSize: 18,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () => setState(() => _isAccountExpanded = !_isAccountExpanded),
                   ),
-              ],
+                  if (_isAccountExpanded) ...[
+                    ListTile(
+                      leading: const Icon(Icons.person_add_outlined),
+                      title: const Text('Add account'),
+                      enabled: isOnline && signInState is! MutationPending,
+                      onTap: () => showSignInOptions(context, ref),
+                    ),
+                    switch (signOutState) {
+                      MutationPending() => const ListTile(
+                        leading: Icon(Icons.logout_outlined),
+                        enabled: false,
+                        title: Center(child: ButtonLoadingIndicator()),
+                      ),
+                      _ => ListTile(
+                        leading: const Icon(Icons.logout_outlined),
+                        title: Text(context.l10n.logOut),
+                        enabled: isOnline,
+                        onTap: () async {
+                          if (!await confirmLeavingAccount(context, ref) || !context.mounted) {
+                            return;
+                          }
+                          _showSignOutConfirmDialog(context, ref);
+                        },
+                      ),
+                    },
+                    if (otherAccounts.isNotEmpty) ...[
+                      const ListSectionSeparator(title: Text('Switch account')),
+                      for (final other in otherAccounts)
+                        _SwitchAccountTile(
+                          account: other,
+                          enabled: isOnline && switchAccountState is! MutationPending,
+                          onTap: () => _switchTo(context, other),
+                        ),
+                    ],
+                  ],
+                  if (kidMode)
+                    ListTile(
+                      textColor: Theme.of(context).colorScheme.primary,
+                      iconColor: Theme.of(context).colorScheme.primary,
+                      leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                      title: Text(
+                        context.l10n.kidModeIsEnabled,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        _pendingKidModeRefresh = true;
+                        launchUrl(lichessUri('/account/kid'));
+                      },
+                    ),
+                ],
+              ),
             )
           else ...[
             Center(
@@ -179,37 +222,35 @@ class _AccountMenuScreenState()
                 child: Text(context.l10n.signIn),
               ),
             ),
+            // Signed out while still signed in to other accounts, after closing or deleting the
+            // active account.
+            if (otherAccounts.isNotEmpty)
+              ListSection(
+                header: const Text('Switch account'),
+                children: [
+                  for (final other in otherAccounts)
+                    _SwitchAccountTile(
+                      account: other,
+                      enabled: isOnline && switchAccountState is! MutationPending,
+                      onTap: () => _switchTo(context, other),
+                    ),
+                ],
+              ),
           ],
-          if (user != null || otherAccounts.isNotEmpty)
-            ListSection(
-              header: otherAccounts.isNotEmpty ? const Text('Switch account') : null,
-              children: [
-                for (final other in otherAccounts)
-                  ListTile(
-                    // Icon sized, to line up with the icons of the other menu entries.
-                    leading: UserAvatar(other.user, radius: 12),
-                    title: UserFullNameWidget(user: other.user, showFlair: false),
-                    enabled: isOnline && switchAccountState is! MutationPending,
-                    onTap: () async {
-                      if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
-                      // The error is surfaced by the [ref.listen] on [switchAccountMutation] above;
-                      // ignore the rethrown future so it does not become an unhandled exception.
-                      switchAccountMutation.run(ref, (tsx) async {
-                        await tsx.get(authControllerProvider.notifier).switchAccount(other);
-                      }).ignore();
-                    },
-                  ),
-                if (user != null)
-                  ListTile(
-                    leading: const Icon(Icons.person_add_outlined),
-                    title: const Text('Add account'),
-                    enabled: isOnline && signInState is! MutationPending,
-                    onTap: () => showSignInOptions(context, ref),
-                  ),
-              ],
-            ),
           ListSection(
             children: [
+              if (user != null)
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.profile),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, ProfileScreen.buildRoute());
+                  },
+                ),
               if (user != null && account.hasValue && !kidMode) ...[
                 ListTile(
                   leading: Badge.count(
@@ -252,23 +293,6 @@ class _AccountMenuScreenState()
                   _navigate(context, SettingsScreen.buildRoute());
                 },
               ),
-              if (user != null)
-                switch (signOutState) {
-                  MutationPending() => const ListTile(
-                    leading: Icon(Icons.logout_outlined),
-                    enabled: false,
-                    title: Center(child: ButtonLoadingIndicator()),
-                  ),
-                  _ => ListTile(
-                    leading: const Icon(Icons.logout_outlined),
-                    title: Text(context.l10n.logOut),
-                    enabled: isOnline,
-                    onTap: () async {
-                      if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
-                      _showSignOutConfirmDialog(context, ref);
-                    },
-                  ),
-                },
             ],
           ),
           ListSection(
@@ -299,6 +323,15 @@ class _AccountMenuScreenState()
         ],
       ),
     );
+  }
+
+  Future<void> _switchTo(BuildContext context, AuthUser account) async {
+    if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
+    // The error is surfaced by the [ref.listen] on [switchAccountMutation] in [build]; ignore the
+    // rethrown future so it does not become an unhandled exception.
+    switchAccountMutation.run(ref, (tsx) async {
+      await tsx.get(authControllerProvider.notifier).switchAccount(account);
+    }).ignore();
   }
 
   void _navigate(BuildContext context, Route<dynamic> route) {
@@ -626,4 +659,22 @@ void _showSwitchAccountErrorSnackBar(BuildContext context, Object error) {
         : context.l10n.mobileSomethingWentWrong,
     type: SnackBarType.error,
   );
+}
+
+/// A tile of the account menu that switches to the other [account] the user is signed in to.
+class const _SwitchAccountTile({
+  required final AuthUser account,
+  required final bool enabled,
+  required final VoidCallback onTap,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      // Icon sized, to line up with the icons of the other menu entries.
+      leading: UserAvatar(account.user, radius: 12),
+      title: UserFullNameWidget(user: account.user, showFlair: false),
+      enabled: enabled,
+      onTap: onTap,
+    );
+  }
 }
