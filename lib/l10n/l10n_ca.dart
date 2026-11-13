@@ -500,6 +500,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'No pots desafiar a tu mateix';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Activitat';
 
   @override

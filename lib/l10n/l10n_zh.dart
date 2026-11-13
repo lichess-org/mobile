@@ -500,6 +500,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => '您无法向自己发起挑战';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => '动态';
 
   @override

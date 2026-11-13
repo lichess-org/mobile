@@ -500,6 +500,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Vi ne povas defii vin mem';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Aktiveco';
 
   @override

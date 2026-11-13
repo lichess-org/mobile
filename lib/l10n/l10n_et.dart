@@ -500,6 +500,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Sa ei saa endale väljakutset esitada';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Aktiivsus';
 
   @override

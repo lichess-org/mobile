@@ -500,6 +500,12 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Du chasch dich nöd sälber use fordere';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Aktivitäte';
 
   @override
