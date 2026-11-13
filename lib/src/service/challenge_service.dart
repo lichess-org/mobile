@@ -233,7 +233,7 @@ class ChallengeService(final Ref ref) {
         if (challenge.variant.isPlaySupported)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.accept),
-            leading: Icon(Icons.check, color: context.lichessColors.good),
+            leading: Icon(Icons.check, color: context.lichessColors.green),
             isDefaultAction: true,
             onPressed: () async => await acceptChallenge(challenge.id),
           ),

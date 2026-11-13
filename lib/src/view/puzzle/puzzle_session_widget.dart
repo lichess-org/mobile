@@ -137,7 +137,7 @@ class const _SessionItem({
   super.key,
 }) extends StatelessWidget {
   Color get good =>
-      brightness == Brightness.light ? LichessColors.good.shade300 : LichessColors.good.shade400;
+      brightness == Brightness.light ? LichessColors.green.shade300 : LichessColors.green.shade400;
 
   Color get error =>
       brightness == Brightness.light ? LichessColors.red.shade300 : LichessColors.red.shade400;

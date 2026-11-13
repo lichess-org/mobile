@@ -59,8 +59,8 @@ enum BroadcastResult() {
   };
 
   Color? colorFor(Side side, BuildContext context) => switch (this) {
-    whiteWins => side == Side.white ? context.lichessColors.good : context.lichessColors.red,
-    blackWins => side == Side.white ? context.lichessColors.red : context.lichessColors.good,
+    whiteWins => side == Side.white ? context.lichessColors.green : context.lichessColors.red,
+    blackWins => side == Side.white ? context.lichessColors.red : context.lichessColors.green,
     _ => null,
   };
 }

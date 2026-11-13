@@ -203,7 +203,7 @@ class _PieceMenuState() extends ConsumerState<_PieceMenu> {
               child: ColoredBox(
                 key: Key('drag-button-${widget.side.name}'),
                 color: editorState.editorPointerMode == EditorPointerMode.drag
-                    ? context.lichessColors.good
+                    ? context.lichessColors.green
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () =>

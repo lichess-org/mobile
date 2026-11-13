@@ -212,8 +212,8 @@ class const _LearnBoard({
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: LichessColors.good, width: 3.0),
-                    color: LichessColors.good.withValues(alpha: 0.15),
+                    border: Border.all(color: LichessColors.green, width: 3.0),
+                    color: LichessColors.green.withValues(alpha: 0.15),
                   ),
                 ),
               ),
@@ -288,7 +288,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             _congrats(l10n, state.levelIndex),
-            style: Styles.title.copyWith(color: context.lichessColors.good),
+            style: Styles.title.copyWith(color: context.lichessColors.green),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),

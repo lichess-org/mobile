@@ -71,9 +71,8 @@ class LichessColors._() {
   // offline: grey
   static const grey = Color(0xCCCCCCCC);
 
-  // good: green
+  // green
   static const green = secondary;
-  static const good = secondary;
 
   static const warn = brag;
 

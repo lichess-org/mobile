@@ -94,7 +94,7 @@ class const _ChaptersSheet({
             title: Text(chapter.name),
             subtitle: Text(practiceChapterKindLabel(context, chapter)),
             trailing: progress.isDone(chapter.id)
-                ? const Icon(Icons.check_circle, color: LichessColors.good)
+                ? const Icon(Icons.check_circle, color: LichessColors.green)
                 : null,
             onTap: () {
               Navigator.of(context).pop();

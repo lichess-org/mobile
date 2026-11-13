@@ -119,7 +119,7 @@ class _ClockState() extends State<StormClockWidget> with SingleTickerProviderSta
                       style: TextStyle(
                         color: currentBonusSeconds! < 0
                             ? context.lichessColors.red
-                            : context.lichessColors.good,
+                            : context.lichessColors.green,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -143,7 +143,7 @@ class _ClockState() extends State<StormClockWidget> with SingleTickerProviderSta
                     style: TextStyle(
                       color: currentBonusSeconds! < 0
                           ? context.lichessColors.red
-                          : context.lichessColors.good,
+                          : context.lichessColors.green,
                       fontSize: _kClockFontSize,
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),

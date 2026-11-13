@@ -677,7 +677,7 @@ class const _BottomBar({
                 ),
                 const SizedBox(width: 5.0),
                 switch (tournament.rounds.firstWhere((round) => round.id == roundId).status) {
-                  RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
+                  RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.green),
                   RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.red),
                   RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
                 },
@@ -734,7 +734,7 @@ class _RoundSelectorState() extends ConsumerState<_RoundSelectorMenu> {
                   )
                 : null,
             trailing: switch (round.status) {
-              RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.good),
+              RoundStatus.finished => Icon(Icons.check, color: context.lichessColors.green),
               RoundStatus.live => Icon(Icons.circle, color: context.lichessColors.red),
               RoundStatus.upcoming => const Icon(Icons.calendar_month, color: Colors.grey),
             },
@@ -779,7 +779,7 @@ class _TournamentSelectorState() extends ConsumerState<_TournamentSelectorMenu> 
             selected: tournament.id == widget.tournament.data.id,
             title: Text(tournament.name),
             trailing: !tournament.active
-                ? Icon(Icons.check, color: context.lichessColors.good)
+                ? Icon(Icons.check, color: context.lichessColors.green)
                 : tournament.live
                 ? Icon(Icons.circle, color: context.lichessColors.red)
                 : null,

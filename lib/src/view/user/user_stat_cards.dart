@@ -61,7 +61,7 @@ class const GameResultsCard({
                         label: context.l10n.wins,
                         count: won,
                         total: total,
-                        color: context.lichessColors.good,
+                        color: context.lichessColors.green,
                       ),
                     ),
                     const VerticalDivider(width: 24.0),
@@ -94,7 +94,7 @@ class const _ResultsBar({required final int won, required final int drawn, requi
   @override
   Widget build(BuildContext context) {
     final segments = [
-      (won, context.lichessColors.good),
+      (won, context.lichessColors.green),
       (drawn, textShade(context, 0.3)),
       (lost, context.lichessColors.red),
     ].where((segment) => segment.$1 > 0);

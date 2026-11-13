@@ -250,7 +250,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                       child: _RatingWidget(
                         data.highestRating,
                         data.highestRatingGame,
-                        context.lichessColors.good,
+                        context.lichessColors.green,
                       ),
                     ),
                     StatCard(
@@ -346,7 +346,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               icon: Icons.trending_up,
               current: data.curWinStreak,
               longest: data.maxWinStreak,
-              color: context.lichessColors.good,
+              color: context.lichessColors.green,
             ),
             cardSpace,
             _ResultStreakCard(
