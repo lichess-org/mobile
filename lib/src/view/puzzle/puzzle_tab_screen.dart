@@ -506,7 +506,7 @@ class const PuzzleAnglePreview({
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: switch (angle) {
-                        PuzzleTheme(themeKey: final themeKey) => [
+                        PuzzleTheme(:final themeKey) => [
                           Text(
                             themeKey.l10n(context.l10n).name,
                             style: Styles.boardPreviewTitle,
@@ -549,7 +549,7 @@ class const PuzzleAnglePreview({
                       children: [
                         Icon(
                           switch (angle) {
-                            PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
+                            PuzzleTheme(:final themeKey) => themeKey.icon,
                             PuzzleOpening() => PuzzleIcons.opening,
                           },
                           size: 34,

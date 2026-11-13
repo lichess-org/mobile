@@ -162,7 +162,9 @@ class _OpeningsTabState() extends State<_OpeningsTab> {
           itemBuilder: (context, index) {
             final position = snapshot.data![index];
             return ListTile(
-              title: Text(position.name),
+              title: Text(
+                position.eco.isEmpty ? position.name : '${position.eco} ${position.name}',
+              ),
               onTap: () => widget.onPositionSelected(position.fen),
             );
           },

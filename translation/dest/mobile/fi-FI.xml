@@ -88,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Harjoitustila</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Suurenna vedettävä nappula</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Edellinen</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Tarkastele aiemmin yrittämiäsi tehtäviä.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Haluatko lopettaa tämän sarjan?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Ei näytettävää, muuta suodatusehtoja</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ei näytettävää. Pelaa ensin muutama sarja Puzzle Stormia.</string>
@@ -146,6 +147,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Järjestelmän värit</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tietokantaa ei voi käyttää offline-tilassa.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Ilmoitetaan myöhemmin</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Liian monta yritystä. Yritä myöhemmin uudelleen.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Päättyneet</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Siirry omaan sijoitukseeni</string>

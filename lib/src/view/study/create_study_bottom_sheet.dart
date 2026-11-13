@@ -196,7 +196,7 @@ class _CreateStudyBottomSheetState() extends ConsumerState<CreateStudyBottomShee
                 ),
               );
             },
-            child: Text(context.l10n.studyCreateStudy, style: Styles.bold),
+            child: Text(context.l10n.studyCreateStudy),
           ),
         ),
       ],

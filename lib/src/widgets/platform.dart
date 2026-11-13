@@ -923,11 +923,21 @@ class const PlatformAppBar({
         final foregroundColor = colorScheme.onSurface;
         // The shell builds the items in its own context: they get the themes of the screen and
         // the icon color of the bar.
+        //
+        // The shell builds a custom item twice: in the route, unpainted, to lay out the bar, and
+        // above the navigator, where it is seen. A hero in it (e.g. a [SearchHeroButton]) is only
+        // enabled in the route, where the transitions of this navigator look for it: above the
+        // navigator, the transitions of the parent navigator would find it next to the one in the
+        // route (multiple heroes with the same tag).
+        final routeNavigator = Navigator.maybeOf(context);
         Widget captured(Widget child) => InheritedTheme.captureAll(
           context,
           IconTheme.merge(
             data: IconThemeData(color: foregroundColor),
-            child: child,
+            child: Builder(
+              builder: (context) =>
+                  HeroMode(enabled: Navigator.maybeOf(context) == routeNavigator, child: child),
+            ),
           ),
         );
         // The glyph of an icon or menu item, sized by the shell (no captured icon theme).

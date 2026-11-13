@@ -116,6 +116,7 @@ class AccountService(final Ref _ref) {
 
     await _ref.read(accountRepositoryProvider).bookmark(id, bookmark: bookmark);
 
+    _ref.invalidate(accountProvider);
     _bookmarkChangesController.add((id, bookmark));
   }
 }

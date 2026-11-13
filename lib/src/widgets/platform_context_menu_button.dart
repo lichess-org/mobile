@@ -28,6 +28,10 @@ const kGlassMenuWidth = 250.0;
 /// selected choice.
 ///
 /// A title too long for one line wraps to two, like in an iOS menu.
+///
+/// Assistive technologies read a toggle as a switch that is on or off, and every action of a group
+/// of choices as selected or not. A group is a [ContextMenuSection], or the actions outside of the
+/// sections.
 List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries) {
   final isCheckMenu = _actionsOf(entries).any((action) => action._hasCheckMark);
   // The package's title style (the theme text color at 90%), with the line height the menu sizes
@@ -67,10 +71,15 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
     return exceeds ? 2 : 1;
   }
 
-  GlassMenuItem item(ContextMenuAction action) {
+  bool isChoiceGroup(Iterable<ContextMenuAction> actions) => actions.any((a) => a.selected);
+  final isTopLevelChoiceGroup = isChoiceGroup(entries.whereType<ContextMenuAction>());
+
+  GlassMenuItem item(ContextMenuAction action, {required bool inChoiceGroup}) {
     final icon = action.icon;
     return GlassMenuItem(
       title: action.label,
+      semanticsChecked: action.toggled,
+      semanticsSelected: action.toggled == null && inChoiceGroup ? action.selected : null,
       titleStyle: titleStyle,
       subtitle: action.subtitle,
       maxLines: maxLines(
@@ -100,7 +109,7 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
       ...switch (entry) {
         final ContextMenuAction action => [
           if (index > 0 && entries[index - 1] is ContextMenuSection) const GlassMenuDivider(),
-          item(action),
+          item(action, inChoiceGroup: isTopLevelChoiceGroup),
         ],
         ContextMenuSection(:final title, :final actions) => [
           if (index > 0) const GlassMenuDivider(),
@@ -109,7 +118,7 @@ List<Widget> glassMenuItems(BuildContext context, List<ContextMenuEntry> entries
               alignment: AlignmentDirectional.centerStart,
               child: Text(title, style: sectionTitleStyle, maxLines: 1, overflow: .ellipsis),
             ),
-          for (final action in actions) item(action),
+          for (final action in actions) item(action, inChoiceGroup: isChoiceGroup(actions)),
         ],
       },
   ];
@@ -176,27 +185,52 @@ class const ContextMenuIconButton({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget buildButton(VoidCallback onPressed) => IconButton(
-      onPressed: onPressed,
-      tooltip: semanticsLabel,
-      color: color,
-      icon: icon,
-      iconSize: isCompact ? 20.0 : null,
-      style: isCompact
-          ? IconButton.styleFrom(
-              visualDensity: VisualDensity.compact,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            )
-          : null,
+    return ContextMenuButton(
+      semanticsLabel: semanticsLabel,
+      actions: actions,
+      consumeOutsideTap: consumeOutsideTap,
+      builder: (context, onPressed) => IconButton(
+        onPressed: onPressed,
+        tooltip: semanticsLabel,
+        color: color,
+        icon: icon,
+        iconSize: isCompact ? 20.0 : null,
+        style: isCompact
+            ? IconButton.styleFrom(
+                visualDensity: VisualDensity.compact,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              )
+            : null,
+      ),
     );
+  }
+}
 
+/// A platform agnostic button opening a context menu, built by [builder].
+///
+/// [builder] gets the callback toggling the menu, to call when the button is pressed. Use
+/// [ContextMenuIconButton] for an icon button.
+///
+/// On iOS 26 and later, the menu is a liquid glass menu that morphs out of the button. Elsewhere it
+/// is a Material menu.
+class const ContextMenuButton({
+  required final Widget Function(BuildContext context, VoidCallback onPressed) builder,
+  required final String semanticsLabel,
+  required final List<ContextMenuEntry> actions,
+
+  /// Whether to consume taps outside the menu to close it (only on Android).
+  final bool consumeOutsideTap = false,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
       return GlassMenu(
         menuWidth: kGlassMenuWidth,
         settings: menuGlassSettings(context),
         semanticLabel: semanticsLabel,
-        // The button is not glass itself: it sits in the glass capsule of the app bar.
-        triggerBuilder: (context, toggleMenu) => buildButton(toggleMenu),
+        // The button is not glass itself.
+        triggerBuilder: (context, toggleMenu) => builder(context, toggleMenu),
         items: glassMenuItems(context, actions),
       );
     }
@@ -212,7 +246,7 @@ class const ContextMenuIconButton({
         ),
         menuChildren: _materialMenuItems(context, actions),
         builder: (BuildContext context, MenuController controller, Widget? child) {
-          return buildButton(() {
+          return builder(context, () {
             if (controller.isOpen) {
               controller.close();
             } else {
@@ -242,38 +276,43 @@ class const ContextMenuTitleButton({
   Widget build(BuildContext context) {
     if (useLiquidGlass(context)) {
       final foregroundColor = ColorScheme.of(context).onSurface;
-      return GlassMenu(
-        menuWidth: kGlassMenuWidth,
-        settings: menuGlassSettings(context),
-        triggerBuilder: (context, toggleMenu) => Semantics(
-          button: true,
-          label: semanticsLabel,
-          child: GlassButton.custom(
-            onTap: toggleMenu,
+      // The menu items take the text alignment of the app bar title, which is centered: a title
+      // that wraps on two lines must stay aligned to the start, like the others.
+      return DefaultTextStyle.merge(
+        textAlign: .start,
+        child: GlassMenu(
+          menuWidth: kGlassMenuWidth,
+          settings: menuGlassSettings(context),
+          triggerBuilder: (context, toggleMenu) => Semantics(
+            button: true,
             label: semanticsLabel,
-            // The glass of the app bar buttons next to it.
-            settings: ios27GlassSettings(context),
-            height: _kGlassTitleButtonHeight,
-            shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
-            // The app bar is isolated, there is no parent glass layer to share.
-            useOwnLayer: true,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: IconTheme.merge(
-                data: IconThemeData(color: foregroundColor),
-                child: Row(
-                  mainAxisSize: .min,
-                  spacing: 6.0,
-                  children: [
-                    Flexible(child: title),
-                    const Icon(CupertinoIcons.chevron_down, size: 14.0),
-                  ],
+            child: GlassButton.custom(
+              onTap: toggleMenu,
+              label: semanticsLabel,
+              // The glass of the app bar buttons next to it.
+              settings: ios27GlassSettings(context),
+              height: _kGlassTitleButtonHeight,
+              shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassTitleButtonHeight / 2),
+              // The app bar is isolated, there is no parent glass layer to share.
+              useOwnLayer: true,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: IconTheme.merge(
+                  data: IconThemeData(color: foregroundColor),
+                  child: Row(
+                    mainAxisSize: .min,
+                    spacing: 6.0,
+                    children: [
+                      Flexible(child: title),
+                      const Icon(CupertinoIcons.chevron_down, size: 14.0),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+          items: glassMenuItems(context, actions),
         ),
-        items: glassMenuItems(context, actions),
       );
     }
 

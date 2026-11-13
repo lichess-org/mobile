@@ -779,6 +779,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get arenaNewTeamBattle => '新建团队战';
 
   @override
+  String get arenaStartDate => '开始日期';
+
+  @override
+  String get arenaEntryConditions => '参赛条件';
+
+  @override
   String get arenaCustomStartDate => '自定义开始日期';
 
   @override
@@ -887,6 +893,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => '联赛和主播对战';
+
+  @override
+  String get arenaAllowBotAccounts => '允许机器人账户';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return '允许<a href=\'$param\' target=\'_blank\'>机器人</a>加入锦标赛并使用其引擎对弈。这通常会劝退人类棋手。';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2369,7 +2383,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => '自动升变为后';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => '按住 <ctrl> 键以临时禁用自动升变';
+  String get preferencesExplainPromoteToQueenAutomatically => '按住 Ctrl 键以临时禁用自动升变';
 
   @override
   String get preferencesWhenPremoving => '预走棋時';
@@ -3340,9 +3354,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => '我了解已删除的账户无法恢复';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '双人对弈';
@@ -4550,6 +4561,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get resume => '继续';
+
+  @override
+  String get stop => '停止';
 
   @override
   String get youArePlaying => '正在对局中！';
@@ -6020,6 +6034,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get minimumRatedGames => '最少排位对局数';
 
   @override
+  String get minimumAccountAge => '最短账户注册时长';
+
+  @override
+  String get titledPlayersBypassRestriction => '头衔棋手可绕过此限制';
+
+  @override
   String get minimumRating => '最低等级分';
 
   @override
@@ -6190,6 +6210,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get clearSearch => '清除搜索';
+
+  @override
+  String searchInX(String param) {
+    return '在 \"$param\" 中搜索';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6893,6 +6918,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyKick => '踢出';
 
   @override
+  String get studyRemove => '移除';
+
+  @override
   String get studyLeaveTheStudy => '离开研习';
 
   @override
@@ -7164,13 +7192,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyGoodMove => '好着';
 
   @override
-  String get studyMistake => '错着';
-
-  @override
   String get studyBrilliantMove => '妙着';
-
-  @override
-  String get studyBlunder => '败着';
 
   @override
   String get studyInterestingMove => '趣味着法';
@@ -7394,6 +7416,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => '本地分析';
 
   @override
+  String get studySearchChapters => '搜索章节';
+
+  @override
+  String get studySearchGames => '搜索对局';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7428,7 +7456,8 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '在此处以 PGN 文本格式粘贴对局。每个对局将创建一个新章节。研习最多可包含 $count 个章节。',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -9576,9 +9605,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get preferencesPromoteToQueenAutomatically => '兵自動升為后';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => '升變的同時按住<ctrl>以暫時取消自動升變';
 
   @override
   String get preferencesWhenPremoving => '預先走棋時';
@@ -14069,13 +14095,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get studyGoodMove => '好棋';
 
   @override
-  String get studyMistake => '失誤';
-
-  @override
   String get studyBrilliantMove => '妙着';
-
-  @override
-  String get studyBlunder => '嚴重失誤';
 
   @override
   String get studyInterestingMove => '有趣的一着';
@@ -14210,16 +14230,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
       count,
       locale: localeName,
       other: '$count位成員',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyPasteYourPgnTextHereUpToNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '在此貼上PGN文本，最多可導入$count個棋局',
     );
     return '$_temp0';
   }

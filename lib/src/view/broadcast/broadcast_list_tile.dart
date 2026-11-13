@@ -35,6 +35,7 @@ class BroadcastListTile extends StatelessWidget {
             location: null,
             dates: null,
             standings: null,
+            regulations: null,
           ),
         ),
         round: BroadcastRound(

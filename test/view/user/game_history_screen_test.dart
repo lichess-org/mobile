@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -15,6 +16,44 @@ import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 void main() {
+  testWidgets('The menu of my games links to my bookmarks', (tester) async {
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/account') {
+        return mockResponse(
+          mockApiAccountResponse('testUser').replaceFirst(
+            '"perfs": {',
+            '"count": {"all": 20, "win": 10, "draw": 2, "loss": 8, "bookmark": 13}, "perfs": {',
+          ),
+          200,
+        );
+      }
+      if (request.url.path == '/api/games/user/testuser') {
+        return mockResponse(mockUserRecentGameResponse('testUser'), 200);
+      }
+      return mockResponse('', 404);
+    });
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const GameHistoryScreen(user: null, isOnline: true),
+      authUser: fakeAuthUser,
+      overrides: {
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+          (ref) => FakeHttpClientFactory(() => mockClient),
+        ),
+      },
+    );
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.more_horiz));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('13 bookmarks'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GameBookmarksScreen), findsOneWidget);
+  });
+
   testWidgets('Games are grouped by day, with their time and rating change', (tester) async {
     final mockClient = MockClient((request) {
       if (request.url.path == '/api/games/user/testuser') {
@@ -40,8 +79,10 @@ void main() {
     expect(find.byType(ListSectionHeader), findsNWidgets(2));
     expect(find.byType(ListSectionRow), findsNWidgets(3));
 
-    String timeOf(int millis) =>
-        DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(millis));
+    String timeOf(int millis) => formatTimeOfDay(
+      tester.element(find.byType(ListSectionRow).first),
+      DateTime.fromMillisecondsSinceEpoch(millis),
+    );
     expect(find.textContaining(timeOf(1673553626465)), findsOneWidget);
     expect(find.textContaining('+5'), findsOneWidget);
     expect(find.textContaining('-5'), findsOneWidget);

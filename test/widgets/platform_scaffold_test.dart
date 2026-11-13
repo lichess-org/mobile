@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
     show GlassContainer, GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
@@ -356,6 +357,46 @@ void main() {
       expect(find.text('Pushed'), findsOneWidget);
       expect(tabNavigatorKey.currentState!.canPop(), isTrue);
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets(
+      'a hero in a pinned action does not clash in a transition of the parent navigator',
+      (tester) async {
+        late BuildContext rootContext;
+        await tester.pumpWidget(
+          await makeTestProviderScopeApp(
+            tester,
+            // Like a tab: a navigator with its own shell, below the root navigator.
+            home: Builder(
+              builder: (context) {
+                rootContext = context;
+                return GlassNavigationShell(
+                  child: Navigator(
+                    onGenerateRoute: (_) => MaterialPageRoute<void>(
+                      builder: (_) => PlatformScaffold(
+                        appBar: PlatformAppBar(
+                          title: const Text('Title'),
+                          actions: [SearchHeroButton(heroTag: 'search', onPressed: () {})],
+                        ),
+                        body: const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        Navigator.of(rootContext)
+            .push(MaterialPageRoute<void>(builder: (_) => const Text('Pushed')));
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+        expect(find.text('Pushed'), findsOneWidget);
+      },
+      variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+    );
 
     testWidgets(
       'a pinned action from actionsBuilder reads providers once its pinned copy is gone',

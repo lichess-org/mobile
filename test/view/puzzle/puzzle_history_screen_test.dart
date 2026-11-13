@@ -89,7 +89,7 @@ void main() {
 
     expect(find.byType(BoardThumbnail), findsNWidgets(4));
 
-    expect(find.text(DateFormat.yMMMd().format(firstPageDate)), findsOneWidget);
+    expect(find.text(DateFormat.yMMMMd().format(firstPageDate)), findsOneWidget);
   });
 
   testWidgets('Scrolling down loads next page', (WidgetTester tester) async {

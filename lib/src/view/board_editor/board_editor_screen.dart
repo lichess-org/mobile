@@ -229,6 +229,7 @@ class _PieceMenuState() extends ConsumerState<_PieceMenu> {
                     : Colors.transparent,
                 child: GestureDetector(
                   child: Draggable(
+                    dragAnchorStrategy: pointerDragAnchorStrategy,
                     data: Piece(role: role, color: widget.side),
                     feedback: PieceDragFeedback(
                       piece: piece,

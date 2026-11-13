@@ -522,6 +522,7 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
       // The side picker already holds the side of the game just played.
+      await tester.ensureVisible(find.text('Play'));
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -558,6 +559,22 @@ void main() {
       expect(find.byType(OpponentSettings), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
+
+    testWidgets('Can dismiss new game bottom sheet by dragging it down', (tester) async {
+      await initOfflineComputerGame(tester);
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+      expect(find.byType(OpponentSettings), findsOneWidget);
+
+      await tester.fling(find.byType(OpponentSettings), const Offset(0, 600), 2000);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(OpponentSettings), findsNothing);
+      expect(find.byType(Chessboard), findsOneWidget);
+    }, variant: kPlatformVariant);
 
     testWidgets('Can start game with a different Stockfish level', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
@@ -2075,6 +2092,7 @@ void main() {
         of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
+      await tester.ensureVisible(practiceSwitch);
       await tester.tap(practiceSwitch);
       await tester.pump();
 
@@ -2121,6 +2139,7 @@ void main() {
         of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
+      await tester.ensureVisible(practiceSwitch);
       await tester.tap(practiceSwitch);
       await tester.pump();
 
@@ -2365,6 +2384,7 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
     of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
     matching: find.byType(Switch),
   );
+  await tester.ensureVisible(practiceSwitch);
   await tester.tap(practiceSwitch);
   await tester.pump();
 

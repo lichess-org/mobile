@@ -79,6 +79,7 @@
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Resht së shfaquri kërcënimin</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Ngjyra sistemi</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Temë</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Për t’u njoftuar</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Të plotësuar</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Kalo te faqja ime</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Varianti %s nuk mbulohet në këtë version.</string>

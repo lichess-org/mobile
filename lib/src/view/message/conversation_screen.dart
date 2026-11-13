@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/chat/chat_context_menu.dart';
@@ -71,12 +72,11 @@ class _ConversationScreenState() extends ConsumerState<ConversationScreen> with 
   Widget build(BuildContext context) {
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        centerTitle: false, // user name can be long
         titleSpacing: 0,
-        title: ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: UserAvatar(widget.user, radius: 20),
-          title: UserFullNameWidget(user: widget.user, showFlair: false),
-          subtitle: Text(widget.user.isOnline == true ? context.l10n.online : context.l10n.offline),
+        title: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          child: UserAppBarTitleWidget(user: widget.user, isOnline: widget.user.isOnline == true),
           onTap: () {
             Navigator.push(context, UserOrProfileScreen.buildRoute(widget.user))
             // invalidate to refresh potential blocking status change
@@ -321,7 +321,7 @@ class const _MessageBubble({
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final time = DateFormat.Hm().format(message.date);
+    final time = formatTimeOfDay(context, message.date);
 
     return ChatBubbleContextMenu(
       message: message.text,
@@ -404,7 +404,7 @@ class const _MessageContent({
           text: text,
           linkifiers: AppLinksService.kLichessLinkifiers,
           style: TextStyle(color: textColor),
-          linkStyle: Styles.linkStyle,
+          linkStyle: Styles.linkStyle(context).copyWith(decoration: TextDecoration.underline),
           onOpen: onLinkOpen,
           trailing: spacer,
         ),
