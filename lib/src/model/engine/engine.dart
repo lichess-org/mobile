@@ -465,7 +465,8 @@ class Engine(
       // Affects notation only. Life would be easier if everyone would always unconditionally use
       // this mode.
       'UCI_Chess960': 'true',
-      if (spec.slot == EngineSlot.fairy) 'UCI_Variant': request.variant.fairy,
+      if (spec.slot == EngineSlot.fairy || spec.slot == EngineSlot.external)
+        'UCI_Variant': request.variant.fairy,
     }..removeWhere((name, _) => !_declaresOption(name));
 
     final wanted = {...own, ...request.options.unlock};

@@ -1,4 +1,5 @@
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine.dart';
 import 'package:meta/meta.dart';
 import 'package:multistockfish/multistockfish.dart';
 
@@ -79,4 +80,24 @@ final class const Lc0Spec() extends EngineSpec {
 
   @override
   String toString() => 'Lc0Spec()';
+}
+
+/// An engine the user registered on lichess.org, reached through the Lichess engine broker.
+///
+/// Equality is by registration id, so an engine renamed on the website is still the same engine.
+final class const ExternalEngineSpec(final ExternalEngine engine) extends EngineSpec {
+  @override
+  EngineSlot get slot => .external;
+
+  @override
+  String get label => 'external';
+
+  @override
+  bool operator ==(Object other) => other is ExternalEngineSpec && other.engine.id == engine.id;
+
+  @override
+  int get hashCode => engine.id.hashCode;
+
+  @override
+  String toString() => 'ExternalEngineSpec(${engine.id})';
 }

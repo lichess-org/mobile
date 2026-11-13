@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -17,6 +18,8 @@ import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_repository.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/ui_events.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
@@ -125,12 +128,8 @@ class PositionEvaluator(
   /// disposes it once the grace window passes with nobody else watching.
   ProviderSubscription<AsyncValue<Engine>>? _engineSubscription;
 
-  /// The flavor [_spec] was resolved from.
-  ///
-  /// The *requested* flavor, not the effective one, so that a latestNoNNUE→light fallback does not
-  /// make every later latestNoNNUE request look like a change of engine. The variant is not part
-  /// of this: it is a per-search option now, so two variants share one Fairy-Stockfish engine.
-  StockfishFlavor? _engineFlavor;
+  /// The choice [_spec] was resolved from.
+  _EngineChoice? _engineChoice;
 
   /// Set while the spec for a flavor is being resolved, which is async because it depends on
   /// whether the NNUE file is on disk.
@@ -216,6 +215,16 @@ class PositionEvaluator(
   /// The work being evaluated, if any.
   EvalWork? get currentWork => state.currentWork;
 
+  /// Whether the external engine the user chose is in use, including while it starts.
+  ///
+  /// False once it has fallen back to this device's engine.
+  bool get usesExternalEngine {
+    final id = _chosenExternalEngineId;
+    if (id == null) return false;
+    if (_resolvingSpec || _engineChoice?.externalEngineId != id) return true;
+    return _spec is ExternalEngineSpec;
+  }
+
   /// Stops the current evaluation.
   ///
   /// The engine stops computing further but the evaluation state is not cleared: it goes on
@@ -277,9 +286,9 @@ class PositionEvaluator(
 
     _setEvalWork(work);
 
-    final flavor = _flavorFor(work);
+    final choice = _choiceFor(work);
 
-    if (_engineFlavor == flavor) {
+    if (_engineChoice == choice) {
       // Already asking for the right engine. It may not be ready yet, in which case the work runs
       // when it is.
       if (_engine case final engine?) {
@@ -296,21 +305,21 @@ class PositionEvaluator(
       return;
     }
 
-    unawaited(_acquireEngine(flavor));
+    unawaited(_acquireEngine(choice));
   }
 
-  /// Points the service at the engine [flavor] needs, and lets go of the previous one.
-  Future<void> _acquireEngine(StockfishFlavor flavor) async {
+  /// Points the service at the engine [choice] needs, and lets go of the previous one.
+  Future<void> _acquireEngine(_EngineChoice choice) async {
     final generation = _generation;
     _resolvingSpec = true;
     _setEngine(const AsyncLoading());
 
     try {
-      final spec = await _resolveSpec(flavor);
+      final spec = await _resolveSpec(choice);
       if (generation != _generation) return;
 
       _logger.fine('Using engine: $spec, budget: $budget');
-      _engineFlavor = flavor;
+      _engineChoice = choice;
       _watchEngine(spec);
     } finally {
       if (generation == _generation) _resolvingSpec = false;
@@ -337,7 +346,7 @@ class PositionEvaluator(
 
     if (value case AsyncError(:final error, :final stackTrace)) {
       _detachEngine();
-      _handleFailure(_asFailure(error, stackTrace, spec));
+      _handleFailure(_asFailure(error, stackTrace, spec), spec);
       _releaseEngine(invalidate: true);
       _setEngine(AsyncError(error, stackTrace));
       _abandonPendingWork();
@@ -390,7 +399,7 @@ class PositionEvaluator(
     _engineSubscription = null;
     final spec = _spec;
     _spec = null;
-    _engineFlavor = null;
+    _engineChoice = null;
     _resolvingSpec = false;
     if (invalidate && spec != null) ref.invalidate(engineProvider(spec));
   }
@@ -407,9 +416,16 @@ class PositionEvaluator(
     ),
   }.withContext(maxMemoryInMb: budget.maxMemoryInMb);
 
-  /// The spec for [flavor], falling back to the light engine when the NNUE file is not on disk.
-  Future<EngineSpec> _resolveSpec(StockfishFlavor flavor) async {
-    switch (flavor) {
+  /// The spec for [choice], falling back to this device's engine when the external one is
+  /// unavailable, and to the light engine when the NNUE file is not on disk.
+  Future<EngineSpec> _resolveSpec(_EngineChoice choice) async {
+    if (choice.externalEngineId case final id?) {
+      final engine = await _findExternalEngine(id);
+      if (engine != null) return ExternalEngineSpec(engine);
+      _logger.warning('External engine $id is unavailable, falling back to this device');
+    }
+
+    switch (choice.flavor) {
       case StockfishFlavor.variant:
         return const StockfishSpec.fairy();
       case StockfishFlavor.light:
@@ -423,12 +439,42 @@ class PositionEvaluator(
     }
   }
 
-  /// The flavor to evaluate [work] with.
+  /// The registered engine [id], if the user still has it and it plays the context's variant.
+  Future<ExternalEngine?> _findExternalEngine(String id) async {
+    // The list is auto-disposed, so a bare read could let it go before the fetch completes.
+    final subscription = ref.listen(externalEnginesProvider, (_, _) {});
+    try {
+      final engines = await ref.read(externalEnginesProvider.future);
+      return findExternalEngine(engines, id, context.variant);
+    } catch (e, st) {
+      _logger.warning('Could not fetch the external engines', e, st);
+      return null;
+    } finally {
+      subscription.close();
+    }
+  }
+
+  /// The engine to evaluate [work] with.
   ///
   /// The material is read from the root of the tree rather than from the position being evaluated,
   /// so that the engine cannot change under the user as pieces come off the board.
-  StockfishFlavor _flavorFor(EvalWork work) =>
-      evaluatorFlavorFor(ref, work.variant, work.initialPosition, enginePref: context.enginePref);
+  _EngineChoice _choiceFor(EvalWork work) => (
+    flavor: evaluatorFlavorFor(
+      ref,
+      work.variant,
+      work.initialPosition,
+      enginePref: context.enginePref,
+    ),
+    externalEngineId: _chosenExternalEngineId,
+  );
+
+  /// The external engine the user chose, if any.
+  ///
+  /// A context that names its own engine (practice mode, offline games) keeps it, and a logged out
+  /// user has no external engine.
+  String? get _chosenExternalEngineId => context.enginePref == null && ref.read(isLoggedInProvider)
+      ? ref.read(engineEvaluationPreferencesProvider).externalEngineId
+      : null;
 
   /// Runs whatever work is current on the engine that has just become available.
   void _computeCurrentWork() {
@@ -591,25 +637,33 @@ class PositionEvaluator(
 
   /// Logs a failure, reports it to Crashlytics, and tells the user about it if the engine is not
   /// coming back.
-  void _handleFailure(EngineFailure failure) {
+  void _handleFailure(EngineFailure failure, EngineSpec spec) {
     _logger.severe(failure.toString(), failure.error, failure.stackTrace);
 
     if (failure.isUnrecoverable) {
       _unrecoverableFailure = failure;
     }
 
-    // Fire and forget: reportEngineFailure never throws.
-    reportEngineFailure(failure);
+    // An unreachable provider is not an app defect.
+    if (spec is! ExternalEngineSpec) {
+      // Fire and forget: reportEngineFailure never throws.
+      reportEngineFailure(failure);
+    }
 
-    _notifyUser(failure);
+    _notifyUser(failure, spec: spec);
   }
 
-  /// Reports an engine failure the user cannot work around.
+  /// Tells the user about a failure they can act on: an engine gone until the app restarts, or an
+  /// external engine, whose failures the lichess website shows too.
   ///
-  /// Recoverable failures are left to the engine button, which already shows an error state; only
-  /// an engine that will not come back until the app is restarted is worth interrupting for.
-  void _notifyUser(EngineFailure failure) {
-    if (!failure.isUnrecoverable) return;
+  /// Other failures are left to the engine button, which already shows an error state.
+  void _notifyUser(EngineFailure failure, {EngineSpec? spec}) {
+    final message = switch (spec) {
+      ExternalEngineSpec() => failure.message,
+      _ when failure.isUnrecoverable => _kUnrecoverableEngineMessage,
+      _ => null,
+    };
+    if (message == null) return;
 
     final now = DateTime.now();
     if (_lastUserNotification != null &&
@@ -617,7 +671,7 @@ class PositionEvaluator(
       return;
     }
 
-    ref.read(uiEventBusProvider).emit(const ShowErrorEvent(_kUnrecoverableEngineMessage));
+    ref.read(uiEventBusProvider).emit(ShowErrorEvent(message));
     _lastUserNotification = now;
   }
 
@@ -671,6 +725,14 @@ class PositionEvaluator(
     _evalController.close();
   }
 }
+
+/// What the evaluator asked for: a flavor, and the external engine chosen over it if any.
+///
+/// The *requested* flavor, not the effective one, so that a latestNoNNUE→light fallback does not
+/// make every later latestNoNNUE request look like a change of engine. The same goes for an
+/// external engine that fell back to this device. The variant is not part of this: it is a
+/// per-search option now, so two variants share one Fairy-Stockfish engine.
+typedef _EngineChoice = ({StockfishFlavor flavor, String? externalEngineId});
 
 /// A record type holding the current engine evaluation state.
 typedef EngineEvaluationState = ({

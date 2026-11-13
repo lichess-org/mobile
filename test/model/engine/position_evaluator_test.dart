@@ -3,10 +3,12 @@ import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/engine_factory.dart';
+import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_providers.dart';
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
@@ -14,11 +16,15 @@ import 'package:lichess_mobile/src/model/engine/evaluation_context.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
+import 'package:lichess_mobile/src/model/ui_events.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 
 import '../../binding.dart';
 import '../../test_container.dart';
+import '../auth/fake_auth_storage.dart';
 import 'fake_engine.dart';
+import 'fake_external_engines.dart';
 import 'fake_stockfish_nnue_service.dart';
 
 /// The engine's lifecycle, as these tests read it off [EngineEvaluationState].
@@ -57,11 +63,23 @@ EvaluationContext makeContext({
   StringId? id,
   Variant variant = Variant.standard,
   Position? initialPosition,
+  ChessEnginePref? enginePref,
 }) => EvaluationContext(
   id: id ?? const StringId('test'),
   variant: variant,
   initialPosition: initialPosition ?? Chess.initial,
+  enginePref: enginePref,
 );
+
+/// Stands in for [isLoggedInProvider] in a test that logs the user out part way through.
+final loggedInProvider = NotifierProvider<LoggedIn, bool>(LoggedIn.new);
+
+class LoggedIn() extends Notifier<bool> {
+  @override
+  bool build() => true;
+
+  void logOut() => state = false;
+}
 
 /// Chooses the engine the evaluator will use for the official chess variants.
 Future<void> setEnginePref(ProviderContainer container, ChessEnginePref pref) =>
@@ -1221,6 +1239,224 @@ void main() {
         service.state.spec,
         isA<StockfishSpec>().having((s) => s.nnuePath, 'nnuePath', isNotNull),
       );
+    });
+  });
+
+  group('PositionEvaluator external engines', () {
+    const registration = testExternalEngine;
+
+    /// A container whose logged in user has registered the engine on lichess.org.
+    Future<ProviderContainer> containerWithRegistration() => makeContainer(
+      overrides: {
+        httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+          (ref) => externalEnginesClientFactory([registration]),
+        ),
+      },
+      authUser: fakeAuthUser,
+    );
+
+    Future<void> chooseExternalEngine(ProviderContainer container, String? id) =>
+        container.read(engineEvaluationPreferencesProvider.notifier).setExternalEngine(id);
+
+    test('evaluates with the chosen engine when it is registered for the variant', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const ExternalEngineSpec(registration));
+      expect(fakeEngine.spec, const ExternalEngineSpec(registration));
+    });
+
+    test('falls back to Fairy-Stockfish on a variant the engine is not registered for', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final context = makeContext(variant: Variant.atomic);
+      final service = readEvaluator(container, context);
+
+      service.evaluate(makeWork(variant: Variant.atomic));
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.fairy());
+    });
+
+    test('falls back to this device when the chosen engine is not registered', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, 'eei_deletedOnTheWebsite');
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('falls back to this device when the engines cannot be fetched', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => externalEnginesClientFactory([], status: 500),
+          ),
+        },
+        authUser: fakeAuthUser,
+      );
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('logging out moves the next evaluation back to this device', () async {
+      final container = await makeContainer(
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => externalEnginesClientFactory([registration]),
+          ),
+          isLoggedInProvider: isLoggedInProvider.overrideWith((ref) => ref.watch(loggedInProvider)),
+        },
+      );
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+      expect(service.state.spec, const ExternalEngineSpec(registration));
+
+      container.read(loggedInProvider.notifier).logOut();
+      service.evaluate(makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4'))));
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('uses the external engine from the moment it is chosen', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      expect(service.usesExternalEngine, isTrue);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.usesExternalEngine, isTrue);
+    });
+
+    test('does not use the external engine once it fell back to this device', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container, makeContext(variant: Variant.atomic));
+
+      service.evaluate(makeWork(variant: Variant.atomic));
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.fairy());
+      expect(service.usesExternalEngine, isFalse);
+    });
+
+    test('a logged out user does not use the external engine', () async {
+      final container = await makeContainer();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      expect(service.usesExternalEngine, isFalse);
+    });
+
+    test('practice and offline games keep their own engine', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final context = makeContext(enginePref: ChessEnginePref.sfLight);
+      final service = readEvaluator(container, context);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.light());
+    });
+
+    test('choosing an engine moves the next evaluation onto it, and choosing none moves it '
+        'back', () async {
+      final container = await containerWithRegistration();
+      final service = readEvaluator(container);
+
+      await chooseExternalEngine(container, registration.id);
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const ExternalEngineSpec(registration));
+      expect(fakeEngine.startCount, 1);
+
+      await chooseExternalEngine(container, null);
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+
+      expect(service.state.spec, const StockfishSpec.light());
+      expect(fakeEngine.startCount, 2);
+    });
+
+    test('evaluating twice with the same engine chosen starts it once', () async {
+      final container = await containerWithRegistration();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+      service.evaluate(makeWork(path: UciPath.fromId(UciCharPair.fromUci('e2e4'))));
+      await pumpEventQueue();
+
+      expect(service.state.spec, const ExternalEngineSpec(registration));
+      expect(fakeEngine.startCount, 1);
+    });
+
+    test('a failed external engine is not reported to Crashlytics', () async {
+      final container = await containerWithRegistration();
+      final crashlytics = testBinding.firebaseCrashlytics;
+      crashlytics.recordedErrors.clear();
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+      fakeEngine.kill(
+        const EngineFailure(
+          kind: EngineFailureKind.runtime,
+          message: 'The engine broker answered 503',
+          engine: 'external',
+        ),
+      );
+      await pumpEventQueue();
+
+      expect(service.state.lifecycle, EngineLifecycle.error);
+      expect(crashlytics.recordedErrors, isEmpty);
+    });
+
+    test('a failed external engine is shown to the user', () async {
+      final container = await containerWithRegistration();
+      final events = <UiEvent>[];
+      final subscription = container.read(uiEventBusProvider).stream.listen(events.add);
+      addTearDown(subscription.cancel);
+      await chooseExternalEngine(container, registration.id);
+      final service = readEvaluator(container);
+
+      service.evaluate(makeWork());
+      await pumpEventQueue();
+      fakeEngine.kill(
+        const EngineFailure(
+          kind: EngineFailureKind.runtime,
+          message: 'Your external engine does not appear to be connected.',
+          engine: 'external',
+        ),
+      );
+      await pumpEventQueue();
+
+      expect(events.whereType<ShowErrorEvent>().map((event) => event.message), [
+        'Your external engine does not appear to be connected.',
+      ]);
     });
   });
 

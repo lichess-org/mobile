@@ -1,6 +1,10 @@
+import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_repository.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -16,6 +20,10 @@ class const EngineSettingsWidget({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
+
+    final engines =
+        ref.watch(externalEnginesProvider).value ?? const IListConst<ExternalEngine>([]);
+    final chosen = engines.firstWhereOrNull((engine) => engine.id == prefs.externalEngineId);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -54,7 +62,8 @@ class const EngineSettingsWidget({
                 labelBuilder: (value) => value.toInt().toString(),
                 onChangeEnd: (value) => onSetNumEvalLines!.call(value.toInt()),
               ),
-            if (maxEngineCores > 1)
+            // an external engine always gets the threads it was registered with
+            if (chosen == null && maxEngineCores > 1)
               SliderSettingsTile(
                 title: Text(context.l10n.threads),
                 explanation: context.l10n.threadsDescriptionMobile,

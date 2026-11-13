@@ -3,8 +3,10 @@ import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_repository.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -27,6 +29,7 @@ class const EngineButton({
     final (:engine, :engineSpec, eval: localEval, :isComputing, currentWork: _) = ref.watch(
       engineEvaluationProvider(filters),
     );
+    final chosenExternalEngine = ref.watch(chosenExternalEngineProvider(filters.context));
     final eval = pickBestClientEval(localEval: localEval, savedEval: savedEval);
 
     final colorScheme = ColorScheme.of(context);
@@ -46,13 +49,21 @@ class const EngineButton({
       fontSize: 11,
     );
 
+    final badge = !prefs.isEnabled
+        ? null
+        : engineSpec is ExternalEngineSpec
+        ? 'EXT'
+        : eval is CloudEval
+        ? 'CLOUD'
+        : null;
+
     final chip = Badge(
       offset: const Offset(4, -7),
       backgroundColor: ColorScheme.of(context).tertiaryContainer,
       textColor: ColorScheme.of(context).onTertiaryContainer,
-      label: prefs.isEnabled && eval is CloudEval ? const Text('CLOUD') : null,
+      label: badge != null ? Text(badge) : null,
       textStyle: const TextStyle(fontSize: 8),
-      isLabelVisible: prefs.isEnabled && eval is CloudEval,
+      isLabelVisible: badge != null,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -101,7 +112,9 @@ class const EngineButton({
     );
 
     final engineLabel =
-        engineShortLabel(engine?.value, spec: engineSpec) ?? prefs.enginePref.shortLabel;
+        engineShortLabel(engine?.value, spec: engineSpec) ??
+        chosenExternalEngine?.name ??
+        prefs.enginePref.shortLabel;
     final engineLabelStyle = TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: textColor);
 
     return PlatformPopover(
@@ -122,25 +135,43 @@ class const EngineButton({
                 children: [
                   chip,
                   // The net size goes on its own line, to keep the capsule narrow.
-                  Text(
-                    engineLabel.replaceFirst(' $lightNetSizeMB', '\n$lightNetSizeMB'),
-                    style: engineLabelStyle.copyWith(height: 1.1),
+                  Flexible(
+                    child: Text(
+                      engineLabel.replaceFirst(' $lightNetSizeMB', '\n$lightNetSizeMB'),
+                      style: engineLabelStyle.copyWith(height: 1.1),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),
             )
-          : Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                SemanticIconButton(
-                  semanticsLabel: context.l10n.toggleLocalEvaluation,
-                  onPressed: onTap,
-                  onLongPress: showPopover,
-                  icon: chip,
-                ),
-                Positioned(bottom: -6, child: Text(engineLabel, style: engineLabelStyle)),
-              ],
+          : LayoutBuilder(
+              builder: (context, constraints) => Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  SemanticIconButton(
+                    semanticsLabel: context.l10n.toggleLocalEvaluation,
+                    onPressed: onTap,
+                    onLongPress: showPopover,
+                    icon: chip,
+                  ),
+                  Positioned(
+                    bottom: -6,
+                    // No wider than the button's place in the bar.
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: constraints.maxWidth),
+                      child: Text(
+                        engineLabel,
+                        style: engineLabelStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }
@@ -352,11 +383,18 @@ class const _EnginePopup({
 
     final knps = isComputing ? ', ${localEval?.knps.round()}kn/s' : '';
 
-    final displayName = engineDisplayName(engine?.value, spec: engineSpec);
+    final externalEngine = switch (engineSpec) {
+      ExternalEngineSpec(:final engine) => engine,
+      null => ref.watch(chosenExternalEngineProvider(filters.context)),
+      _ => null,
+    };
+    final displayName = externalEngine?.name ?? engineDisplayName(engine?.value, spec: engineSpec);
 
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16.0),
-      leading: Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
+      leading: externalEngine != null
+          ? const Icon(Icons.computer, size: 44)
+          : Image.asset('assets/images/stockfish/icon.webp', width: 44, height: 44),
       title: Text(displayName),
       subtitle: currentEval != null ? Text(context.l10n.depthX('${currentEval.depth}$knps')) : null,
       trailing: canGoDeeper

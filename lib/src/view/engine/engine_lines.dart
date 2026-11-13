@@ -7,8 +7,10 @@ import 'package:lichess_mobile/src/model/analysis/common_analysis_state.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_repository.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -32,17 +34,20 @@ class _EngineLinesState() extends ConsumerState<EngineLines> {
     final numEvalLines = ref.watch(
       engineEvaluationPreferencesProvider.select((p) => p.numEvalLines),
     );
-    final localEval = ref.watch(engineEvaluationProvider(widget.filters)).eval;
+    final evaluation = ref.watch(engineEvaluationProvider(widget.filters));
     final eval = pickBestClientEval(
-      localEval: localEval,
+      localEval: evaluation.eval,
       savedEval: widget.analysisState.currentNode.eval,
     );
     // save the last eval to display when the current eval is not yet available to avoid flickering
     if (eval != null) lastEval = eval;
 
+    final isExternal = ref.watch(chosenExternalEngineProvider(widget.filters.context)) != null;
+
     final emptyLines = List.filled(numEvalLines, const Engineline.empty());
 
-    final evalOrLastEval = eval ?? lastEval;
+    // an external engine is too slow for the last eval to stand in for the next one
+    final evalOrLastEval = eval ?? (isExternal ? null : lastEval);
 
     final content =
         widget.analysisState.currentPosition?.isGameOver != false &&
@@ -59,6 +64,24 @@ class _EngineLinesState() extends ConsumerState<EngineLines> {
                       ),
                     )
                     .toList()
+              : isExternal
+              ? <Widget>[
+                  SizedBox(
+                    height: kEngineLineHeight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          evaluation.engine is AsyncError
+                              ? context.l10n.engineFailed
+                              : context.l10n.loadingEngine,
+                          style: TextStyle(color: textShade(context, 0.8)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]
               : emptyLines);
 
     if (content.length < numEvalLines) {
