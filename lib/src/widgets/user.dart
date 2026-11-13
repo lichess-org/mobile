@@ -49,6 +49,9 @@ class const UserAppBarTitleWidget({
 
   /// The last time the user was seen active, shown when [isOnline] is false.
   final DateTime? seenAt,
+
+  /// Shown instead of the [UserAvatar] of [user], e.g. the [AccountAvatar] of the signed in user.
+  final Widget? avatar,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -59,7 +62,7 @@ class const UserAppBarTitleWidget({
     return Row(
       mainAxisSize: .min,
       children: [
-        UserAvatar(user, radius: 20),
+        avatar ?? UserAvatar(user, radius: 20),
         const SizedBox(width: 8),
         Flexible(
           child: Column(
@@ -328,6 +331,36 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
           ? ColorScheme.of(context).surfaceContainer
           : _colorForInitial(initial, Theme.of(context).brightness),
       child: showFlair ? null : Text(initial, style: const TextStyle(color: Colors.white)),
+    );
+  }
+}
+
+/// The avatar of the signed in user's account, as shown by the account button.
+///
+/// Shows the account flair if available, otherwise the account initials.
+class const AccountAvatar(final User account, {final double radius = 20.0, super.key})
+    extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<AccountAvatar> createState() => _AccountAvatarState();
+}
+
+class _AccountAvatarState() extends ConsumerState<AccountAvatar> {
+  bool _errorLoadingFlair = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final client = ref.watch(imageClientProvider);
+    final flair = widget.account.flair;
+    final showFlair = flair != null && !_errorLoadingFlair;
+
+    return CircleAvatar(
+      radius: widget.radius,
+      foregroundImage: showFlair ? HttpNetworkImage(lichessFlairSrc(flair), client) : null,
+      onForegroundImageError: showFlair
+          ? (_, _) => setState(() => _errorLoadingFlair = true)
+          : null,
+      backgroundColor: showFlair ? ColorScheme.of(context).surfaceContainer : null,
+      child: showFlair ? null : Text(widget.account.initials),
     );
   }
 }

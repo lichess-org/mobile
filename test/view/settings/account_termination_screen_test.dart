@@ -225,6 +225,7 @@ void main() {
         });
         expect(find.text('Root'), findsOneWidget);
         expect(find.text('Settings'), findsNothing);
+        expect(find.text('This account is closed.'), findsOneWidget);
         expect(find.byType(AccountTerminationScreen), findsNothing);
         expect(requests.where((r) => r.url.path == '/account/close'), hasLength(1));
         expect(requests.where((r) => r.method == 'DELETE' && r.url.path == '/api/token'), isEmpty);
@@ -419,6 +420,14 @@ void main() {
       });
       expect(find.text('Root'), findsOneWidget);
       expect(find.byType(AccountTerminationScreen), findsNothing);
+      expect(find.text('Account deletion is pending'), findsOneWidget);
+      expect(
+        find.textContaining('scheduled for complete deletion in 7 days from now'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+      expect(find.text('Account deletion is pending'), findsNothing);
     });
 
     testWidgets('maps an incorrect password to the password field', (tester) async {

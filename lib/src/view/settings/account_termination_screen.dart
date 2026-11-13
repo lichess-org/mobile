@@ -196,7 +196,38 @@ class _AccountTerminationScreenState() extends ConsumerState<AccountTerminationS
     ref.listen(_mutation, (_, next) {
       switch (next) {
         case MutationSuccess():
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          // Taken before popping, to inform the user on the screen below.
+          final navigator = Navigator.of(context);
+          final snackBar = SnackBarPresenter.of(context);
+          final closedMessage = context.l10n.settingsThisAccountIsClosed;
+          final okLabel = context.l10n.mobileOkButton;
+          navigator.popUntil((route) => route.isFirst);
+          switch (widget.termination) {
+            case .close:
+              snackBar.show(closedMessage, type: .success);
+            case .delete:
+              // The wording of the page lichess.org shows after a deletion
+              // (/account/delete/done): the user must know that they can still cancel it.
+              showDialog<void>(
+                context: navigator.context,
+                builder: (dialogContext) => AlertDialog.adaptive(
+                  title: const Text('Account deletion is pending'),
+                  content: const Text(
+                    'Your account has been closed, and is scheduled for complete deletion in 7 '
+                    'days from now.\n\n'
+                    'You can reopen your account and cancel the scheduled deletion by logging '
+                    'into your account.\n\n'
+                    "If you don't log into your account, it will be permanently deleted.",
+                  ),
+                  actions: [
+                    PlatformDialogAction(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: Text(okLabel),
+                    ),
+                  ],
+                ),
+              );
+          }
         case MutationError(:final error):
           _onError(error);
         case _:

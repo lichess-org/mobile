@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -261,7 +263,16 @@ class _AccountPreferencesScreenState()
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.mobileAccountPreferences),
+        title: Row(
+          mainAxisSize: .min,
+          children: [
+            if (ref.watch(accountProvider) case AsyncData(value: final User account)) ...[
+              AccountAvatar(account, radius: 14.0),
+              const SizedBox(width: 8.0),
+            ],
+            Flexible(child: Text(context.l10n.mobileAccountPreferences, overflow: .ellipsis)),
+          ],
+        ),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,
