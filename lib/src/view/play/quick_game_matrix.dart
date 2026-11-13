@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -109,7 +110,7 @@ class const _SectionChoices({
                 speed: choice.speed,
                 onTap: connectionStatus == LichessConnectionStatus.online
                     ? () {
-                        Navigator.of(context, rootNavigator: true).push(
+                        Navigator.of(context).pushHidingTabBar(
                           GameScreen.buildRoute(
                             source: LobbySource(GameSeek.fastPairing(choice, authUser)),
                           ),
@@ -140,9 +141,7 @@ class const _SectionChoices({
                           context: context,
                           useRootNavigator: true,
                           isScrollControlled: true,
-                          builder: (context) {
-                            return const PlayBottomSheet();
-                          },
+                          builder: (_) => PlayBottomSheet(navigator: Navigator.of(context)),
                         );
                       }
                     : null,
@@ -171,7 +170,9 @@ class const _ChoiceChip({
         ? scaffoldOpacity > 0
               ? Colors.white10
               : ColorScheme.of(context).surfaceContainerLow
-        : ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.50);
+        // Translucent, so that the logo behind the tiles shows through.
+        : Theme.of(context).cardTheme.color?.withValues(alpha: 0.65) ??
+              ColorScheme.of(context).surfaceContainerHighest.withValues(alpha: 0.65);
 
     return Opacity(
       opacity: onTap != null ? 1.0 : 0.5,

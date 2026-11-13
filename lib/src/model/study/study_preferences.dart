@@ -60,10 +60,6 @@ class StudyPreferencesNotifier() extends Notifier<StudyPrefs> with PreferencesSt
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -71,24 +67,22 @@ sealed class const StudyPrefs._() with _$StudyPrefs implements Serializable, Com
   const factory({
     required bool showVariationArrows,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
-    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
     @JsonKey(defaultValue: StudyListOrder.hot) required StudyListOrder listOrder,
   }) = _StudyPrefs;
 
   static const defaults = StudyPrefs(
     showVariationArrows: false,
     showEvaluationGauge: true,
-    showEngineLines: true,
+    showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
     listOrder: StudyListOrder.hot,
   );
 

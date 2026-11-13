@@ -18,8 +18,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/view/settings/sound_toggle_button.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
@@ -39,7 +40,7 @@ class const LearnStageScreen({required final LearnStage stage, super.key}) exten
         appBar: PlatformAppBar(
           compactButtons: true,
           title: Text('${context.l10n.learnStageX('$stageNumber')}: ${stage.title(context.l10n)}'),
-          actions: const [ToggleSoundButton()],
+          actionsBuilder: (context, ref) => [soundToggleButton(ref)],
         ),
         // The controller reads the saved progress to pick the level to start with.
         body: switch (ref.watch(learnProgressProvider)) {
@@ -103,21 +104,21 @@ class _BodyState() extends ConsumerState<_Body> {
             builder: (context, constraints) {
               final isTablet = isTabletOrLarger(context);
               final isLandscape = constraints.biggest.aspectRatio > 1;
-              final defaultBoardSize = constraints.biggest.shortestSide;
-              final remainingHeight = constraints.maxHeight - defaultBoardSize;
-              final boardSize = isTablet || isLandscape || remainingHeight < kSmallHeightMinusBoard
-                  ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                  : defaultBoardSize;
+              // Like the analysis board, the board never spans the whole screen width.
+              final boardPadding = isTablet || isLandscape
+                  ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                  : isShortVerticalScreen(context)
+                  ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                  : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+              final boardSize = constraints.biggest.shortestSide - boardPadding.horizontal;
 
               final settings = boardPrefs
-                  .toBoardSettings(Variant.standard)
+                  .toBoardSettings(Variant.standard, appBrightness: Theme.of(context).brightness)
                   .copyWith(
                     enablePremoves: false,
                     autoQueenPromotion: false,
-                    borderRadius: isTablet || isLandscape
-                        ? Styles.boardBorderRadius
-                        : BorderRadius.zero,
-                    boxShadow: isTablet || isLandscape ? boardShadows : const <BoxShadow>[],
+                    borderRadius: Styles.boardBorderRadius,
+                    boxShadow: boardShadows,
                   );
 
               final board = _LearnBoard(
@@ -135,21 +136,13 @@ class _BodyState() extends ConsumerState<_Body> {
               return isLandscape
                   ? Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     )
                   : Column(
                       children: [
-                        Padding(
-                          padding: boardSize < defaultBoardSize
-                              ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                              : EdgeInsets.zero,
-                          child: board,
-                        ),
+                        Padding(padding: boardPadding, child: board),
                         Expanded(child: table),
                       ],
                     );
@@ -207,7 +200,7 @@ class const _LearnBoard({
                 CustomShape(orig: apple, scale: 0.8, child: const _Apple()),
             },
             annotations: threat != null
-                ? {threat: const Annotation(symbol: '!', color: LichessColors.error)}
+                ? {threat: const Annotation(symbol: '!', color: LichessColors.red)}
                 : const {},
           ),
           if (highlightedRank != null)
@@ -219,8 +212,8 @@ class const _LearnBoard({
               child: IgnorePointer(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    border: Border.all(color: LichessColors.good, width: 3.0),
-                    color: LichessColors.good.withValues(alpha: 0.15),
+                    border: Border.all(color: LichessColors.green, width: 3.0),
+                    color: LichessColors.green.withValues(alpha: 0.15),
                   ),
                 ),
               ),
@@ -279,7 +272,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             l10n.learnPuzzleFailed,
-            style: Styles.title.copyWith(color: context.lichessColors.error),
+            style: Styles.title.copyWith(color: context.lichessColors.red),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),
@@ -295,7 +288,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             _congrats(l10n, state.levelIndex),
-            style: Styles.title.copyWith(color: context.lichessColors.good),
+            style: Styles.title.copyWith(color: context.lichessColors.green),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),
@@ -449,12 +442,26 @@ class const _Overlay({required final Widget child, final VoidCallback? onDismiss
                   padding: Styles.bodyPadding,
                   child: GestureDetector(
                     onTap: () {},
-                    child: Card(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(24.0),
-                        child: child,
-                      ),
-                    ),
+                    child: Theme.of(context).platform == TargetPlatform.iOS
+                        // Shown over the board, which the glass would let show through too much.
+                        ? GlassModalCard(
+                            tinted: true,
+                            child: Material(
+                              type: MaterialType.transparency,
+                              child: SingleChildScrollView(
+                                padding: const EdgeInsets.all(24.0),
+                                child: child,
+                              ),
+                            ),
+                          )
+                        : Card(
+                            // The dialog color, opaque enough with a background theme.
+                            color: DialogTheme.of(context).backgroundColor,
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.all(24.0),
+                              child: child,
+                            ),
+                          ),
                   ),
                 ),
               ),

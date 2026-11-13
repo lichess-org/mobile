@@ -4,7 +4,6 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -166,10 +165,10 @@ class const GamePlayer({
                             text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
                               color: player.ratingDiff! > 0
-                                  ? context.lichessColors.good
+                                  ? context.lichessColors.green
                                   : player.ratingDiff! == 0
-                                  ? context.lichessColors.brag
-                                  : context.lichessColors.error,
+                                  ? textShade(context, Styles.subtitleOpacity)
+                                  : context.lichessColors.red,
                             ),
                           ),
                       ],
@@ -235,21 +234,13 @@ class const GamePlayer({
             child: Padding(
               padding: const EdgeInsets.only(right: 16.0),
               child: shouldLinkToUserProfile
-                  ? Consumer(
-                      builder: (context, ref, _) {
-                        return GestureDetector(
-                          onTap: player.user != null
-                              ? () {
-                                  if (mePlaying) {
-                                    ref.invalidate(accountProvider);
-                                  }
-                                  Navigator.of(context)
-                                      .push(UserOrProfileScreen.buildRoute(player.user!));
-                                }
-                              : null,
-                          child: playerWidget,
-                        );
-                      },
+                  ? GestureDetector(
+                      onTap: player.user != null
+                          ? () =>
+                                Navigator.of(context)
+                                    .push(UserOrProfileScreen.buildRoute(player.user!))
+                          : null,
+                      child: playerWidget,
                     )
                   : playerWidget,
             ),
@@ -272,7 +263,7 @@ class const ConfirmMove({
       children: [
         SemanticIconButton(
           icon: const Icon(CupertinoIcons.xmark_rectangle_fill),
-          color: context.lichessColors.error,
+          color: context.lichessColors.red,
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
           padding: const EdgeInsets.all(10),
@@ -288,7 +279,7 @@ class const ConfirmMove({
         ),
         SemanticIconButton(
           icon: const Icon(CupertinoIcons.checkmark_rectangle_fill),
-          color: context.lichessColors.good,
+          color: context.lichessColors.green,
           iconSize: 35,
           semanticsLabel: context.l10n.accept,
           padding: const EdgeInsets.all(10),
@@ -458,7 +449,7 @@ class _MoveExpirationState() extends ConsumerState<MoveExpiration> {
     return secs <= 20
         ? Text(
             context.l10n.nbSecondsToPlayTheFirstMove(secs),
-            style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.error : null),
+            style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.red : null),
           )
         : const Text('');
   }

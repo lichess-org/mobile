@@ -57,7 +57,7 @@ Lichess üzerindeki bilgisayar analizi Stockfish tarafından desteklenir.</strin
 Ender durumlarda zorunlu hamleler veya hisar taktiği gibi sebeplerden dolayı beraberliğe otomatik olarak karar vermek zor olabilir. Normal şartlar altında her zaman, süresi bitmeyen oyuncunun lehine karar veririz.
 
 Rakip şahın hareketini engelleyebilecek herhangi bir taş varsa tek at veya tek fil ile matın mümkün olduğunu unutmayın.</string>
-  <string name="fideHandbook">FIDE el kitabı</string>
+  <string name="fideHandbook">FIDE kuralları</string>
   <string name="fideHandbookX">FIDE satranç kuralları %s</string>
   <string name="discoveringEnPassant">İki kare sürdüğüm piyonu rakip tuhaf bir şekilde yedi. Bu nasıl olur? (geçerken alma)</string>
   <string name="explainingEnPassant">Bu \"geçerken alma\" olarak bilinen yasal bir hamledir. Vikipedi\'de bu konu üzerine %1$s mevcut.
@@ -69,7 +69,7 @@ Geçerken alma kuralı FIDE tarafından şöyle açıklanır (%2$s):
 Geçerken alma kuralı üzerine biraz pratik yapmak için %3$s göz atın.</string>
   <string name="goodIntroduction">güzel bir açıklama</string>
   <string name="lichessTraining">Lichess egzersizlerine</string>
-  <string name="watchIMRosenCheckmate">Uluslararası Usta Eric Rosen\'in matını izleyin %s.</string>
+  <string name="watchIMRosenCheckmate">Uluslararası Usta Eric Rosen\'in &lt;a href=\'%s\' target=\'_blank\'&gt;geçerken alma&lt;/a&gt; ile mat edişini izleyin.</string>
   <string name="threefoldRepetition">Üç konum tekrarı</string>
   <string name="threefoldRepetitionExplanation">Aynı pozisyonun üç kez tekrarlanması durumunda oyuncular %1$s sebebiyle beraberlik talebine bulunabilirler. Lichess\'te %2$s maddesinde belirtilen resmî kurallar esas alınır.</string>
   <string name="threefoldRepetitionLowerCase">üç konum tekrarı</string>

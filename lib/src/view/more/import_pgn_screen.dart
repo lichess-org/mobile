@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -40,7 +41,7 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
         final game = games.first;
         final rule = Rule.fromPgn(game.headers['Variant']);
 
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context).pushHidingTabBar(
           AnalysisScreen.buildRoute(
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
@@ -53,7 +54,7 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
           ),
         );
       } else {
-        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
+        Navigator.of(context).pushHidingTabBar(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);

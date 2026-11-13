@@ -14,9 +14,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
@@ -25,6 +23,7 @@ import 'package:lichess_mobile/src/view/message/contacts_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/team/team_updates_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -33,17 +32,22 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-/// Account menu screen opened by [AccountMenuButton].
+/// Opens the account menu ([AccountMenuScreen]).
 ///
-/// On Android it is pushed as a full-screen page. On iOS it is presented
-/// inside a [CupertinoSheetRoute] with nested navigation.
-class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
-  static Route<void> buildRoute(BuildContext context) {
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return buildScreenRoute(screen: const AccountMenuScreen());
-    }
+/// On iOS it is the first page of a navigation sheet ([showAdaptiveNavigationSheet]) covering the
+/// tab bar, in which the screens it opens are pushed. On Android it is pushed as a full-screen page
+/// sliding from the right.
+Future<void> showAccountMenu(BuildContext context) {
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
+    return showAdaptiveNavigationSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      builder: (_) => const AccountMenuScreen(),
+    );
+  }
 
-    return PageRouteBuilder<void>(
+  return Navigator.of(context).push(
+    PageRouteBuilder<void>(
       pageBuilder: (_, a, b) => const AccountMenuScreen(),
       transitionsBuilder: (_, animation, b, child) {
         final tween = Tween(
@@ -52,9 +56,12 @@ class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
         ).chain(CurveTween(curve: Curves.easeInOut));
         return SlideTransition(position: animation.drive(tween), child: child);
       },
-    );
-  }
+    ),
+  );
+}
 
+/// Account menu screen, opened by [AccountMenuButton] with [showAccountMenu].
+class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
@@ -62,7 +69,6 @@ class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
 class _AccountMenuScreenState()
     extends ConsumerState<AccountMenuScreen>
     with WidgetsBindingObserver {
-  bool _errorLoadingFlair = false;
   bool _pendingKidModeRefresh = false;
 
   @override
@@ -87,7 +93,6 @@ class _AccountMenuScreenState()
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.read(defaultClientProvider);
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
@@ -116,6 +121,7 @@ class _AccountMenuScreenState()
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.mobileAccount),
+        // On iOS the close button of the sheet is implied.
         automaticallyImplyLeading: Theme.of(context).platform == TargetPlatform.iOS,
         actions: [
           if (Theme.of(context).platform != TargetPlatform.iOS)
@@ -133,21 +139,7 @@ class _AccountMenuScreenState()
                     AsyncData(:final value) =>
                       value == null
                           ? const Icon(Icons.account_circle_outlined, size: 30)
-                          : CircleAvatar(
-                              radius: 20,
-                              foregroundImage: value.flair != null && !_errorLoadingFlair
-                                  ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                                  : null,
-                              onForegroundImageError: value.flair != null
-                                  ? (error, _) => setState(() => _errorLoadingFlair = true)
-                                  : null,
-                              backgroundColor: value.flair == null || _errorLoadingFlair
-                                  ? null
-                                  : ColorScheme.of(context).surfaceContainer,
-                              child: value.flair == null || _errorLoadingFlair
-                                  ? Text(value.initials)
-                                  : null,
-                            ),
+                          : AccountAvatar(value),
                     _ => const Icon(Icons.account_circle_outlined, size: 30),
                   },
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -163,7 +155,6 @@ class _AccountMenuScreenState()
                   ),
                   enabled: isOnline,
                   onTap: () {
-                    ref.invalidate(accountProvider);
                     _navigate(context, ProfileScreen.buildRoute());
                   },
                 ),
@@ -185,7 +176,7 @@ class _AccountMenuScreenState()
             )
           else ...[
             Center(
-              child: FilledButton(
+              child: FilledButton.tonal(
                 onPressed: isOnline
                     ? switch (signInState) {
                         MutationPending() => null,
@@ -361,11 +352,7 @@ class _AccountMenuScreenState()
   }
 }
 
-/// Avatar button that opens the account menu.
-///
-/// On Android opens [AccountMenuScreen] as a full-screen page sliding from the
-/// right. On iOS opens the same screen inside a [CupertinoSheetRoute] with
-/// nested navigation.
+/// Avatar button that opens the account menu ([showAccountMenu]).
 ///
 /// Swiping down or up on the avatar switches to the next or previous of the accounts the user is
 /// signed in to, as a shortcut to the account menu's "Switch account" list.
@@ -375,8 +362,6 @@ class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
 }
 
 class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
-  bool _errorLoadingFlair = false;
-
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
 
@@ -431,14 +416,11 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final client = ref.watch(defaultClientProvider);
     // Watched so that the other accounts are already known when the user swipes.
     final hasOtherAccounts = ref.watch(otherAccountsProvider).value?.isNotEmpty ?? false;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
-    void openMenu() {
-      Navigator.of(context).push(AccountMenuScreen.buildRoute(context));
-    }
+    void openMenu() => showAccountMenu(context);
 
     final button = switch (account) {
       AsyncData(:final value) => Badge.count(
@@ -459,18 +441,9 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
                   Icons.account_circle_outlined,
                   size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
                 )
-              : CircleAvatar(
+              : AccountAvatar(
+                  value,
                   radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
-                  foregroundImage: value.flair != null && !_errorLoadingFlair
-                      ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                      : null,
-                  onForegroundImageError: value.flair != null
-                      ? (error, _) => setState(() => _errorLoadingFlair = true)
-                      : null,
-                  backgroundColor: value.flair == null || _errorLoadingFlair
-                      ? null
-                      : ColorScheme.of(context).surfaceContainer,
-                  child: value.flair == null || _errorLoadingFlair ? Text(value.initials) : null,
                 ),
           onPressed: openMenu,
         ),
@@ -521,7 +494,7 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.about)),
+      appBar: PlatformAppBar(title: Text(context.l10n.about), largeTitle: true),
       body: ListView(
         children: [
           ListSection(

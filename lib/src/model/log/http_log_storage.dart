@@ -60,14 +60,27 @@ class const HttpLogStorage(final Database _db) {
     String httpLogId, {
     required int responseCode,
     required DateTime responseDateTime,
+    required HttpLogCache? cache,
   }) async {
     await _db.update(
       kHttpLogStorageTable,
       {
         'responseCode': responseCode,
         'responseDateTime': responseDateTime.toIso8601String(),
+        'cache': cache?.name,
         'lastModified': DateTime.now().toIso8601String(),
       },
+      where: 'httpLogId = ?',
+      whereArgs: [httpLogId],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Sets the size of the response body, once it has been fully received.
+  Future<void> updateWithResponseSize(String httpLogId, {required int responseSize}) async {
+    await _db.update(
+      kHttpLogStorageTable,
+      {'responseSize': responseSize, 'lastModified': DateTime.now().toIso8601String()},
       where: 'httpLogId = ?',
       whereArgs: [httpLogId],
       conflictAlgorithm: ConflictAlgorithm.replace,
@@ -93,6 +106,15 @@ class const HttpLogStorage(final Database _db) {
   }
 }
 
+/// The http client cache that served a response.
+enum HttpLogCache() {
+  /// The in-memory cache of the http clients.
+  memory,
+
+  /// The on-disk cache of the image http client.
+  disk,
+}
+
 /// Represents an HTTP log entry.
 @Freezed(fromJson: true, toJson: true)
 sealed class const HttpLogEntry._() with _$HttpLogEntry {
@@ -104,9 +126,17 @@ sealed class const HttpLogEntry._() with _$HttpLogEntry {
     int? responseCode,
     DateTime? responseDateTime,
     String? errorMessage,
+
+    /// The http client cache that served the response, or `null` if it came from the network.
+    HttpLogCache? cache,
+
+    /// The size in bytes of the response body, once it has been fully received.
+    int? responseSize,
   }) = _HttpLogEntry;
 
   bool get hasResponse => responseCode != null && responseCode != 0;
+
+  bool get fromCache => cache != null;
 
   Duration? get elapsed {
     if (responseDateTime == null) return null;

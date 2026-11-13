@@ -160,7 +160,7 @@ class _ClockTileState() extends ConsumerState<ClockTile> with SingleTickerProvid
     final colorScheme = ColorScheme.of(context);
     final activeColor = darken(colorScheme.primaryFixedDim, 0.25);
     final normalBackground = clockState.isFlagged(playerType)
-        ? context.lichessColors.error.withValues(alpha: 0.7)
+        ? context.lichessColors.red.withValues(alpha: 0.7)
         : clockState.isPlayersTurn(playerType)
         ? activeColor
         : colorScheme.surfaceContainerHighest;
@@ -181,7 +181,7 @@ class _ClockTileState() extends ConsumerState<ClockTile> with SingleTickerProvid
     );
 
     final clockOrientation = ref.watch(clockToolControllerProvider).clockOrientation;
-    final emergencyColor = context.lichessColors.error;
+    final emergencyColor = context.lichessColors.red;
 
     return AnimatedOpacity(
       opacity: clockState.paused ? 0.8 : 1.0,

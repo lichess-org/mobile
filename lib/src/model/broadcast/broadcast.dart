@@ -59,8 +59,8 @@ enum BroadcastResult() {
   };
 
   Color? colorFor(Side side, BuildContext context) => switch (this) {
-    whiteWins => side == Side.white ? context.lichessColors.good : context.lichessColors.error,
-    blackWins => side == Side.white ? context.lichessColors.error : context.lichessColors.good,
+    whiteWins => side == Side.white ? context.lichessColors.green : context.lichessColors.red,
+    blackWins => side == Side.white ? context.lichessColors.red : context.lichessColors.green,
     _ => null,
   };
 }
@@ -118,6 +118,7 @@ typedef BroadcastTournamentInformation = ({
   BroadcastTournamentDates? dates,
   Uri? website,
   Uri? standings,
+  Uri? regulations,
 });
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});

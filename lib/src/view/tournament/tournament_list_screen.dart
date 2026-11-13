@@ -1,14 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_faq.dart';
@@ -80,13 +81,14 @@ class _TournamentListScreenState()
         ref.invalidate(tournamentsProvider);
       },
       child: PlatformScaffold(
+        plainList: true,
         appBar: PlatformAppBar(
           title: Text(context.l10n.arenaArenaTournaments),
           actions: [
             IconButton(
               icon: const Icon(Icons.help_outline),
               tooltip: context.l10n.tournamentFAQ,
-              onPressed: () => Navigator.of(context).push(TournamentFAQScreen.buildRoute()),
+              onPressed: () => showTournamentFaqSheet(context),
             ),
           ],
           bottom: PlatformTabBar(
@@ -244,8 +246,6 @@ Color? _iconColor(LightTournament tournament) {
 
 class const _TournamentListItem({required final LightTournament tournament})
     extends StatelessWidget {
-  static final _hourMinuteFormat = DateFormat.Hm();
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -259,7 +259,7 @@ class const _TournamentListItem({required final LightTournament tournament})
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            '${_hourMinuteFormat.format(tournament.startsAt)} - ${_hourMinuteFormat.format(tournament.finishesAt)}',
+            formatTimeOfDay(context, tournament.startsAt),
             style: const TextStyle(fontSize: 14, fontFeatures: [FontFeature.tabularFigures()]),
           ),
           Text.rich(
@@ -276,10 +276,8 @@ class const _TournamentListItem({required final LightTournament tournament})
           ),
         ],
       ),
-      onTap: () => Navigator.of(
-        context,
-        rootNavigator: true,
-      ).push(TournamentScreen.buildRoute(tournament.id)),
+      onTap: () =>
+          Navigator.of(context).pushHidingTabBar(TournamentScreen.buildRoute(tournament.id)),
     );
   }
 }

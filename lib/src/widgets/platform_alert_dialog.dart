@@ -1,8 +1,8 @@
 import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoColors;
 import 'package:lichess_mobile/src/widgets/glass_modal.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart' show useLiquidGlass;
+import 'package:lichess_mobile/src/widgets/platform.dart' show ios27GlassSettings, useLiquidGlass;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart'
-    show GlassButton, LiquidGlassSettings, LiquidRoundedSuperellipse;
+    show GlassButton, LiquidRoundedSuperellipse;
 import 'package:material_ui/material_ui.dart';
 
 const _kGlassDialogButtonHeight = 44.0;
@@ -31,6 +31,10 @@ class const PlatformAlertDialog({
 
   /// Passed to [AlertDialog.scrollable] on Android. The iOS content always scrolls when too tall.
   final bool scrollable = false,
+
+  /// Whether the iOS dialog is fully opaque, for a dialog shown over a board. See
+  /// [GlassModalCard.opaque].
+  final bool opaque = false,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class const PlatformAlertDialog({
     final labelColor = CupertinoColors.label.resolveFrom(context);
     final iosActions = actions ?? const <Widget>[];
     return GlassDialogFrame(
+      opaque: opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,7 +169,7 @@ class const PlatformDialogAction({
       shape: const LiquidRoundedSuperellipse(borderRadius: _kGlassDialogButtonHeight / 2),
       // Over the dialog card, which has its own glass layer.
       useOwnLayer: true,
-      settings: const LiquidGlassSettings(),
+      settings: ios27GlassSettings(context),
       child: label,
     );
   }

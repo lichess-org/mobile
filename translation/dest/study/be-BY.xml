@@ -53,7 +53,6 @@
   <string name="annotateWithGlyphs">Дадаць знакавую анатацыю</string>
   <string name="theChapterIsTooShortToBeAnalysed">Раздел занадта кароткі для аналізу.</string>
   <string name="onlyContributorsCanRequestAnalysis">Толькі рэдактары навучання могуць запрасіць камп\'ютарны аналіз.</string>
-  <string name="getAFullComputerAnalysis">Атрымайце поўны серверны кампутарны аналіз галоўнай лініі.</string>
   <string name="makeSureTheChapterIsComplete">Пераканайцеся, што раздзел гатоў. Вы можаце запрасіць аналіз толькі адзін раз.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Усе сінхранізаваныя ўдзельнікі застаюцца на аднолькавай пазіцыі</string>
   <string name="shareChanges">Падзяліцца зменамі з гледачамі та захаваць іх на серверы</string>
@@ -102,12 +101,6 @@
   <string name="loadAPositionFromFen">Загрузіць пазіцыю з FEN</string>
   <string name="loadAGameFromPgn">Загрузіць гульні з PGN</string>
   <string name="automatic">Аўтаматычна</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Устаўце сюды ваш PGN тэкст, не больш за %s гульню</item>
-    <item quantity="few">Устаўце сюды ваш PGN тэкст, не больш за %s гульні</item>
-    <item quantity="many">Устаўце сюды ваш PGN тэкст, не больш за %s гульняў</item>
-    <item quantity="other">Устаўце сюды ваш PGN тэкст, не больш за %s гульняў</item>
-  </plurals>
   <string name="urlOfTheGame">URL гульняў, адзін на радок</string>
   <string name="createChapter">Стварыць раздзел</string>
   <string name="createStudy">Стварыць навучанне</string>
@@ -127,16 +120,13 @@
   <string name="noLetPeopleBrowseFreely">Не: хай людзі вольна праглядаюць пазіцыі</string>
   <string name="pinnedStudyComment">Замацаваць каментар да занятку</string>
   <string name="start">Пачаць</string>
-  <string name="save">Захаваць</string>
   <string name="clearChat">Ачысціць чат</string>
   <string name="deleteTheStudyChatHistory">Выдаліць гісторыю чата навучання цалкам? Гэта нельга будзе адмяніць!</string>
   <string name="deleteStudy">Выдаліць навучанне</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Выдаліць навучанне поўнасцю? Гэта нельга будзе адмяніць! Увядзіце назву навучання каб падцвердзіць: %s</string>
   <string name="whereDoYouWantToStudyThat">Дзе вы жадаеце навучацца?</string>
   <string name="goodMove">Добры ход</string>
-  <string name="mistake">Памылка</string>
   <string name="brilliantMove">Бліскучы ход</string>
-  <string name="blunder">Позех</string>
   <string name="interestingMove">Цікавы ход</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Сумнеўны ход</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Адзіны ход</string>

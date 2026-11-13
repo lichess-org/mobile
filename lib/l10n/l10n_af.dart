@@ -30,6 +30,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -153,6 +159,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get mobileHomeTab => 'Tuis';
+
+  @override
+  String get mobileHttpLogs => 'Network logs';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -276,6 +285,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobilePreviousPage => 'Previous';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Wil jy hierdie lopie beëindig?';
 
   @override
@@ -387,6 +399,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -445,6 +460,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Tema';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -779,6 +797,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nuwe Span Geveg';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Aangepaste begin datum';
 
   @override
@@ -887,6 +911,14 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1416,6 +1448,14 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'Oefen slegs sommige rye & kolomme';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'Leer skaak';
@@ -2365,7 +2405,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promoveer outomaties tot Dame';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Druk die <ctrl>-sleutel terwyl jy promoveer om outo-promovering tydelik te deaktiveer';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Tydens vooraf-skuiwe';
@@ -2380,7 +2420,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Skuif bevestiging';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -2476,7 +2516,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2504,6 +2544,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2897,9 +2940,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get puzzleThemeCastling => 'Kasteel';
 
   @override
-  String get puzzleThemeEnPassant => 'En passant';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Bring die koning in veiligheid en sit die toring in vir aanval.';
 
   @override
@@ -2991,6 +3031,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => '\'N Taktiek tydens die laaste fase van die wedstryd.';
+
+  @override
+  String get puzzleThemeEnPassant => 'En passant';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3339,9 +3382,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Challenge a friend';
@@ -3788,6 +3828,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get engineSettings => 'Engine settings';
+
+  @override
+  String get engine => 'Engine';
 
   @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
@@ -4416,6 +4459,11 @@ class AppLocalizationsAf extends AppLocalizations {
   String get noNetwork => 'Vanlyn af';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Gunsteling opponente';
 
   @override
@@ -4541,6 +4589,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get resume => 'Hervat';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Jy speel nou!';
@@ -4782,9 +4833,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get reason => 'Rede';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Kul';
 
   @override
@@ -4801,9 +4849,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5383,7 +5428,13 @@ class AppLocalizationsAf extends AppLocalizations {
   String get downloadImported => 'Aflaai ingevoer';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'Laai alle spelle af';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'Kruistabel';
@@ -6011,6 +6062,12 @@ class AppLocalizationsAf extends AppLocalizations {
   String get minimumRatedGames => 'Minimum gegradeerde spelle';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimum gradering';
 
   @override
@@ -6150,7 +6207,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get showMeEverything => 'Wys vir my alles';
 
   @override
-  String get lichessPatronInfo => 'Lichess is \'n liefdadigheidsorganisasie en heeltemal gratis/libre oopbron sagteware.\nAlle bestuurskostes, ontwikkeling en inhoud word heeltemal gefinansier deur lede bydraes.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'Nothing to see here at the moment.';
@@ -6181,6 +6238,11 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6927,6 +6989,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyKick => 'Verwyder';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Verlaat die studie';
 
   @override
@@ -6958,9 +7023,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis => 'Slegs die studie bydraers kan versoek om \'n rekenaar analise te doen.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'Kry \'n vol-bediener rekenaar analise van die hooflyn.';
 
   @override
   String get studyMakeSureTheChapterIsComplete => 'Maak seker dat die hoofstuk volledig is. Jy kan slegs eenkeer \'n analise versoek.';
@@ -7181,9 +7243,6 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyStart => 'Begin';
 
   @override
-  String get studySave => 'Stoor';
-
-  @override
   String get studyClearChat => 'Maak die gesprek skoon';
 
   @override
@@ -7204,13 +7263,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyGoodMove => 'Goeie skuif';
 
   @override
-  String get studyMistake => 'Fout';
-
-  @override
   String get studyBrilliantMove => 'Skitterende skuif';
-
-  @override
-  String get studyBlunder => 'Flater';
 
   @override
   String get studyInterestingMove => 'Interesante skuif';
@@ -7386,7 +7439,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Vanaf \'n FEN-string';
@@ -7417,6 +7470,27 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'White defeat, but Black can\'t win';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
+
+  @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
 
   @override
   String studyNbChapters(int count) {
@@ -7456,8 +7530,8 @@ class AppLocalizationsAf extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Plak jou PGN teks hier, tot by $count spelle',
-      one: 'Plak jou PGN teks hier, tot by $count spel',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7495,6 +7569,12 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tweeledige verifikasie';
+
+  @override
+  String get tfaAuthenticationCode => 'Verifikasie kode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Maak die twee-faktor verifikasie toep of jou toestel oop om die verifikasie kode te sien en jou identiteit te bevestig.';
 
   @override
   String get timeagoJustNow => 'sopas';

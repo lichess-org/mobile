@@ -52,7 +52,7 @@ class const GameRepository(
   }
 
   Future<void> requestServerAnalysis(GameId id) async {
-    await client.postRead(Uri(path: '/$id/request-analysis'));
+    await client.postRead(Uri(path: '/game/$id/request-analysis'));
   }
 
   Future<IList<LightExportedGameWithPov>> getUserGames(
@@ -161,14 +161,16 @@ class const GameRepository(
     Move? moveToPlay,
   }) async {
     final uri = Uri(
-      path: moveToPlay != null ? '$gameId/forecasts/${moveToPlay.uci}' : '$gameId/forecasts',
+      path: moveToPlay != null
+          ? '/game/$gameId/forecasts/${moveToPlay.uci}'
+          : '/game/$gameId/forecasts',
     );
     await client.postRead(uri, body: forecast, headers: {'Content-type': 'application/json'});
   }
 
   Future<PlayableGame> getActiveCorrespondenceGame(GameFullId id) {
     return client.readJson(
-      Uri(path: '/$id/forecasts'),
+      Uri(path: '/game/$id/forecasts'),
       headers: {'Accept': 'application/json'},
       mapper: PlayableGame.fromServerJson,
     );

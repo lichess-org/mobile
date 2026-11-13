@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/learn/learn_progress.dart';
 import 'package:lichess_mobile/src/model/learn/learn_score.dart';
 import 'package:lichess_mobile/src/model/learn/learn_stages.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/learn/learn_stage_screen.dart';
@@ -99,10 +100,8 @@ class const _Body({required final LearnProgress progress}) extends StatelessWidg
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
-                onTap: () => Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(LearnStageScreen.buildRoute(stage)),
+                onTap: () =>
+                    Navigator.of(context).pushHidingTabBar(LearnStageScreen.buildRoute(stage)),
               ),
             ],
           ),
@@ -134,8 +133,7 @@ class const _StageTile({required final LearnStage stage, required final LearnPro
           : completed > 0
           ? Text('$completed / ${stage.levels.length}')
           : null,
-      onTap: () =>
-          Navigator.of(context, rootNavigator: true).push(LearnStageScreen.buildRoute(stage)),
+      onTap: () => Navigator.of(context).pushHidingTabBar(LearnStageScreen.buildRoute(stage)),
     );
   }
 }

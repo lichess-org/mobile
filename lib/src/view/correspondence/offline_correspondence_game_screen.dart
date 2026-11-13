@@ -214,6 +214,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },
               userActionsBar: BottomBar(
+                cupertinoGlass: true,
                 children: [
                   BottomBarButton(
                     label: context.l10n.flipBoard,
@@ -275,23 +276,27 @@ class _BodyState() extends ConsumerState<_Body> {
                         : null,
                     icon: Icons.save,
                   ),
-                  RepeatButton(
-                    onLongPress: canGoBackward ? () => moveBackward() : null,
-                    child: BottomBarButton(
-                      onTap: canGoBackward ? () => moveBackward() : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
-                  ),
-                  RepeatButton(
-                    onLongPress: canGoForward ? () => moveForward() : null,
-                    child: BottomBarButton(
-                      onTap: canGoForward ? () => moveForward() : null,
-                      label: context.l10n.next,
-                      icon: CupertinoIcons.chevron_forward,
-                      showTooltip: false,
-                    ),
+                  BottomBarGroup(
+                    children: [
+                      RepeatButton(
+                        onLongPress: canGoBackward ? () => moveBackward() : null,
+                        child: BottomBarButton(
+                          onTap: canGoBackward ? () => moveBackward() : null,
+                          label: 'Previous',
+                          icon: CupertinoIcons.chevron_back,
+                          showTooltip: false,
+                        ),
+                      ),
+                      RepeatButton(
+                        onLongPress: canGoForward ? () => moveForward() : null,
+                        child: BottomBarButton(
+                          onTap: canGoForward ? () => moveForward() : null,
+                          label: context.l10n.next,
+                          icon: CupertinoIcons.chevron_forward,
+                          showTooltip: false,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

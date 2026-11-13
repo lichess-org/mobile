@@ -40,6 +40,9 @@ mode if it's not ready yet) to let others know that you're working on it.
 - Make sure your code follows the [coding style guide](https://github.com/lichess-org/mobile/blob/main/docs/coding_style.md)
 - Don't manually edit the `app_en.arb` file! See the [internalizations docs](https://github.com/lichess-org/mobile/blob/main/docs/internationalisation.md) for instructions on how to add new translations.
 - If possible, write a new widget test for your bugfix or new feature.
+- Test your changes on iOS and Android. If you don't own an iOS device, test them with
+  [device preview](https://github.com/lichess-org/mobile/blob/main/docs/setting_dev_env.md#device-preview),
+  especially if they touch the UI: check both the liquid glass design and the iOS design before 26.
 - Consider adding a screenshot and/or screen recording to the PR description.
   This is mandatory for UI changes, as it is very helpful for reviewers to
   understand the changes.

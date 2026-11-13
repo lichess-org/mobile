@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_federation.dart';
@@ -117,7 +118,9 @@ class const BroadcastPlayerResultsScreen({
 
     final playerResults = asyncData.value?.$1;
     final fideId = playerResults?.playerWithOverallResult.player.fideId;
-    final isFollowing = playerResults?.isFollowing;
+    final isFollowing = fideId != null
+        ? ref.watch(_followingOverrideProvider(fideId)) ?? playerResults?.isFollowing
+        : null;
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -128,11 +131,30 @@ class const BroadcastPlayerResultsScreen({
             : const SizedBox.shrink(),
         actions: [
           if (fideId != null && isFollowing != null)
-            _FollowPlayerButton(fideId: fideId, isFollowing: isFollowing),
+            SemanticIconButton(
+              icon: Icon(isFollowing ? Icons.star : Icons.star_border),
+              semanticsLabel: isFollowing ? context.l10n.unfollow : context.l10n.follow,
+              onPressed: () async {
+                final newValue = !isFollowing;
+                final override = ref.read(_followingOverrideProvider(fideId).notifier);
+                override.state = newValue;
+                try {
+                  await ref.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
+                } catch (_) {
+                  if (!context.mounted) return;
+                  override.state = !newValue;
+                  showSnackBar(
+                    context,
+                    'Could not update the follow status',
+                    type: SnackBarType.error,
+                  );
+                }
+              },
+            ),
           if (asyncData case AsyncData(value: final data))
             SemanticIconButton(
               icon: const PlatformShareIcon(),
-              semanticsLabel: context.l10n.studyShareAndExport,
+              semanticsLabel: context.l10n.mobileShare,
               onPressed: () {
                 final (playerData, tournament) = data;
                 final playerId = playerData.playerWithOverallResult.player.id;
@@ -155,47 +177,13 @@ class const BroadcastPlayerResultsScreen({
   }
 }
 
-/// App bar button to follow or unfollow a FIDE player.
+/// The follow status of a player set from the app bar, until the screen is closed.
 ///
-/// The toggled value is kept locally so the button reacts immediately, without refetching the
-/// player. It is reverted if the request fails.
-class const _FollowPlayerButton({required final FideId fideId, required final bool isFollowing})
-    extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_FollowPlayerButton> createState() => _FollowPlayerButtonState();
-}
-
-class _FollowPlayerButtonState() extends ConsumerState<_FollowPlayerButton> {
-  bool? _isFollowing;
-
-  bool get _value => _isFollowing ?? widget.isFollowing;
-
-  Future<void> _toggle() async {
-    final newValue = !_value;
-    setState(() {
-      _isFollowing = newValue;
-    });
-
-    try {
-      await ref.read(broadcastRepositoryProvider).setFollowingPlayer(widget.fideId, newValue);
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _isFollowing = !newValue;
-      });
-      showSnackBar(context, 'Could not update the follow status', type: SnackBarType.error);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SemanticIconButton(
-      icon: Icon(_value ? Icons.star : Icons.star_border),
-      semanticsLabel: _value ? context.l10n.unfollow : context.l10n.follow,
-      onPressed: _toggle,
-    );
-  }
-}
+/// The button reacts immediately, without refetching the player. The status is reverted if the
+/// request fails.
+final _followingOverrideProvider = StateProvider.autoDispose.family<bool?, FideId>(
+  (ref, _) => null,
+);
 
 final _playerAndTournamentProvider = FutureProvider.autoDispose
     .family<

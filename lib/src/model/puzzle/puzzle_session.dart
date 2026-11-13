@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -41,7 +41,7 @@ class PuzzleSession(final PuzzleSessionParams params) extends Notifier<PuzzleSes
     await _update((d) {
       final newAttempts = d.attempts.replaceFirstWhere(
         (p) => p.id == id,
-        (p) => p?.copyWith(win: win) ?? PuzzleAttempt(id: id, win: win),
+        (_) => PuzzleAttempt(id: id, win: win),
         addIfNotFound: true,
       );
       final newState = d.copyWith(

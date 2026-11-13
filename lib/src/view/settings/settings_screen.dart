@@ -4,10 +4,13 @@ import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +19,7 @@ import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/settings/app_log_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/board_settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/broadcast_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/engine_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/http_log_screen.dart';
 import 'package:lichess_mobile/src/view/settings/sound_settings_screen.dart';
@@ -27,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,6 +47,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
+    final account = ref.watch(accountProvider);
     final signOutState = ref.watch(signOutMutation);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
@@ -54,7 +60,11 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.manage_accounts_outlined),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  leading: switch (account) {
+                    AsyncData(:final User value) => AccountAvatar(value),
+                    _ => const Icon(Icons.manage_accounts_outlined),
+                  },
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
@@ -121,6 +131,16 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
                   Navigator.of(context).push(EngineSettingsScreen.buildRoute());
                 },
               ),
+              ListTile(
+                leading: const Icon(LichessIcons.radio_tower_lichess),
+                title: Text(context.l10n.broadcastBroadcasts, overflow: .ellipsis),
+                trailing: Theme.of(context).platform == .iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  Navigator.of(context).push(BroadcastSettingsScreen.buildRoute());
+                },
+              ),
               SettingsListTile(
                 icon: const Icon(Icons.language_outlined),
                 settingsLabel: Text(context.l10n.language),
@@ -154,7 +174,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.http),
-                title: const Text('HTTP logs'),
+                title: Text(context.l10n.mobileHttpLogs),
                 onTap: () => Navigator.push(context, HttpLogScreen.buildRoute()),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
@@ -162,7 +182,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               ),
               ListTile(
                 leading: const Icon(Icons.bug_report),
-                title: const Text('App Logs'),
+                title: Text(context.l10n.mobileAppLogs),
                 trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,

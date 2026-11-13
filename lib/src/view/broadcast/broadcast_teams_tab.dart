@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -73,9 +75,8 @@ class const BroadcastTeamsList(
     );
 
     return switch (round) {
-      AsyncData(:final value) => CustomScrollView(
+      AsyncData(:final value) => SliverMainAxisGroup(
         slivers: [
-          SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
           if (showTeamScores)
             SliverSafeArea(
               bottom: false,
@@ -115,36 +116,21 @@ class const _TeamStandingsButton({required final BroadcastTournamentId tournamen
     extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: Styles.horizontalBodyPadding.copyWith(top: 12.0, bottom: 8.0),
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.all(16.0),
-          shape: RoundedRectangleBorder(borderRadius: .circular(8.0)),
-          side: BorderSide(color: colorScheme.primary, width: 0.8),
+    return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.leaderboard),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastTeamResults),
+          onTap: () {
+            Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
+          },
         ),
-        onPressed: () {
-          Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
-        },
-        child: Row(
-          mainAxisAlignment: .spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.leaderboard, color: colorScheme.secondary),
-                const SizedBox(width: 12),
-                Text(
-                  context.l10n.broadcastTeamResults,
-                  style: TextStyle(fontWeight: .bold, color: colorScheme.secondary, fontSize: 16),
-                ),
-              ],
-            ),
-            Icon(Icons.chevron_right, color: colorScheme.secondary),
-          ],
-        ),
-      ),
+      ],
     );
   }
 }
@@ -173,9 +159,8 @@ class const _TeamMatchCard({
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      margin: const EdgeInsets.all(4.0),
       clipBehavior: .hardEdge,
-      elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

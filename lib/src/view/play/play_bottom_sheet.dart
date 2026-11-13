@@ -15,7 +15,7 @@ class const FloatingPlayButton({super.key}) extends ConsumerWidget {
           context: context,
           useRootNavigator: true,
           isScrollControlled: true,
-          builder: (context) => const PlayBottomSheet(),
+          builder: (_) => PlayBottomSheet(navigator: Navigator.of(context)),
         );
       },
       tooltip: context.l10n.play,
@@ -25,12 +25,17 @@ class const FloatingPlayButton({super.key}) extends ConsumerWidget {
   }
 }
 
-class const PlayBottomSheet() extends ConsumerWidget {
+/// The play menu in a sheet presented on the root navigator, to cover the tab bar.
+class const PlayBottomSheet({
+  /// The navigator of the screen that presents the sheet, where its screens are pushed (see
+  /// [PlayMenu.navigator]).
+  required final NavigatorState navigator,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const BottomSheetScrollableContainer(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
-      children: [PlayMenu()],
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      children: [PlayMenu(navigator: navigator)],
     );
   }
 }

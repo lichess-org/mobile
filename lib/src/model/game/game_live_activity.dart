@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
@@ -263,7 +264,7 @@ class GameLiveActivityChannel._() {
 
   static final _log = Logger('GameLiveActivity');
 
-  static bool get _isIOS => defaultTargetPlatform == TargetPlatform.iOS;
+  static bool get _isIOS => Platform.isIOS;
 
   final _stateChanges = StreamController<({String id, LiveActivityState state})>.broadcast();
 

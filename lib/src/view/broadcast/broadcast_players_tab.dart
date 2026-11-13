@@ -28,7 +28,7 @@ final playersAndTournamentProvider = FutureProvider.autoDispose
       return (players, tournament);
     });
 
-/// A tab that displays the players participating in a broadcast tournament.
+/// A tab that displays the players participating in a broadcast tournament, as a sliver.
 class const BroadcastPlayersTab({required final BroadcastTournamentId tournamentId})
     extends ConsumerWidget {
   @override
@@ -177,9 +177,8 @@ class _BroadcastPlayersListState() extends ConsumerState<BroadcastPlayersList> {
 
     final mediaQueryPadding = MediaQuery.paddingOf(context);
 
-    return CustomScrollView(
+    return SliverMainAxisGroup(
       slivers: [
-        SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
         SliverSafeArea(
           bottom: false,
           sliver: SliverToBoxAdapter(
