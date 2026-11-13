@@ -31,7 +31,7 @@ class const ConnectedIcon({
       message: label,
       child: Icon(
         isConnected ? Symbols.circle : Symbols.wifi_off,
-        color: isConnected ? context.lichessColors.good : textShade(context, 0.3),
+        color: isConnected ? context.lichessColors.green : textShade(context, 0.3),
         size: size,
         fill: 1,
       ),
@@ -285,7 +285,7 @@ class UserFullNameWidget extends ConsumerWidget {
               fontWeight: .w400,
               fontSize: contextTextStyle.fontSize != null ? contextTextStyle.fontSize! - 3 : 13,
               color: ratingDiff! > 0
-                  ? context.lichessColors.good
+                  ? context.lichessColors.green
                   : ratingDiff! == 0
                   ? textShade(context, Styles.subtitleOpacity)
                   : context.lichessColors.red,

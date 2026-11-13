@@ -215,7 +215,7 @@ class const _PuzzleResult(final PuzzleHistoryEntry entry) extends StatelessWidge
   Widget build(BuildContext context) {
     return ColoredBox(
       color: entry.win
-          ? context.lichessColors.good.withValues(alpha: 0.7)
+          ? context.lichessColors.green.withValues(alpha: 0.7)
           : context.lichessColors.red.withValues(alpha: 0.7),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 3),

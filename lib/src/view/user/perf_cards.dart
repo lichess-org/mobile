@@ -120,7 +120,7 @@ class const PerfCards({
                                         ? LichessIcons.arrow_full_upperright
                                         : LichessIcons.arrow_full_lowerright,
                                     color: userPerf.progression > 0
-                                        ? context.lichessColors.good
+                                        ? context.lichessColors.green
                                         : context.lichessColors.red,
                                     size: 12,
                                   ),
@@ -131,7 +131,7 @@ class const PerfCards({
                                       maxLines: 1,
                                       style: TextStyle(
                                         color: userPerf.progression > 0
-                                            ? context.lichessColors.good
+                                            ? context.lichessColors.green
                                             : context.lichessColors.red,
                                         fontSize: 11,
                                       ),

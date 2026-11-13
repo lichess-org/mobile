@@ -116,7 +116,7 @@ class const _Table({required final PracticeEngineState state}) extends ConsumerW
         switch (state.status) {
           .solved => const PracticeFeedbackLine(
             icon: Icons.check_circle,
-            color: LichessColors.good,
+            color: LichessColors.green,
             text: 'Success!',
           ),
           .failed => PracticeFeedbackLine(
@@ -169,7 +169,7 @@ extension on MoveVerdict {
   };
 
   Color get color => switch (this) {
-    .goodMove || .notBest => LichessColors.good,
+    .goodMove || .notBest => LichessColors.green,
     .inaccuracy => LichessColors.inaccuracy,
     .mistake => LichessColors.mistake,
     .blunder => LichessColors.blunder,

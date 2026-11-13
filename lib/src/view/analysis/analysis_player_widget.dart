@@ -129,12 +129,12 @@ class const AnalysisPlayerWidget({
                       color: switch (result!) {
                         AnalysisGameResult.whiteWins =>
                           side == Side.white
-                              ? context.lichessColors.good
+                              ? context.lichessColors.green
                               : context.lichessColors.red,
                         AnalysisGameResult.blackWins =>
                           side == Side.white
                               ? context.lichessColors.red
-                              : context.lichessColors.good,
+                              : context.lichessColors.green,
                         _ => null,
                       },
                     ),

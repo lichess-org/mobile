@@ -165,7 +165,7 @@ class const GamePlayer({
                             text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                             style: TextStyle(
                               color: player.ratingDiff! > 0
-                                  ? context.lichessColors.good
+                                  ? context.lichessColors.green
                                   : player.ratingDiff! == 0
                                   ? textShade(context, Styles.subtitleOpacity)
                                   : context.lichessColors.red,
@@ -279,7 +279,7 @@ class const ConfirmMove({
         ),
         SemanticIconButton(
           icon: const Icon(CupertinoIcons.checkmark_rectangle_fill),
-          color: context.lichessColors.good,
+          color: context.lichessColors.green,
           iconSize: 35,
           semanticsLabel: context.l10n.accept,
           padding: const EdgeInsets.all(10),

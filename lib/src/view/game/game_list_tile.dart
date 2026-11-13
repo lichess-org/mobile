@@ -90,7 +90,7 @@ class const GameListTile({
         : game.winner == null
         ? textShade(context, Styles.subtitleOpacity)
         : game.winner == youAre
-        ? context.lichessColors.good
+        ? context.lichessColors.green
         : context.lichessColors.red;
 
     // The rating change when there is one, else a symbol of the result.
@@ -269,7 +269,7 @@ class const GameContextMenu({
                                   color: game.winner == null
                                       ? textShade(context, Styles.subtitleOpacity)
                                       : game.winner == mySide
-                                      ? context.lichessColors.good
+                                      ? context.lichessColors.green
                                       : context.lichessColors.red,
                                 ),
                               ),

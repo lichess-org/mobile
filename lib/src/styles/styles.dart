@@ -100,7 +100,7 @@ Color lighten(Color c, [double amount = .1]) {
 class const LichessCustomColors({
   required final Color cyan,
   required final Color brag,
-  required final Color good,
+  required final Color green,
   required final Color red,
   required final Color fancy,
   required final Color purple,
@@ -110,7 +110,7 @@ class const LichessCustomColors({
   LichessCustomColors copyWith({
     Color? cyan,
     Color? brag,
-    Color? good,
+    Color? green,
     Color? red,
     Color? fancy,
     Color? purple,
@@ -119,7 +119,7 @@ class const LichessCustomColors({
     return LichessCustomColors(
       cyan: cyan ?? this.cyan,
       brag: brag ?? this.brag,
-      good: good ?? this.good,
+      green: green ?? this.green,
       red: red ?? this.red,
       fancy: fancy ?? this.fancy,
       purple: purple ?? this.purple,
@@ -135,7 +135,7 @@ class const LichessCustomColors({
     return LichessCustomColors(
       cyan: Color.lerp(cyan, other.cyan, t) ?? cyan,
       brag: Color.lerp(brag, other.brag, t) ?? brag,
-      good: Color.lerp(good, other.good, t) ?? good,
+      green: Color.lerp(green, other.green, t) ?? green,
       red: Color.lerp(red, other.red, t) ?? red,
       fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
       purple: Color.lerp(purple, other.purple, t) ?? purple,
@@ -147,7 +147,7 @@ class const LichessCustomColors({
     return copyWith(
       cyan: cyan.harmonizeWith(colorScheme.primary),
       brag: brag.harmonizeWith(colorScheme.primary),
-      good: good.harmonizeWith(colorScheme.primary),
+      green: green.harmonizeWith(colorScheme.primary),
       red: red.harmonizeWith(colorScheme.primary),
       fancy: fancy.harmonizeWith(colorScheme.primary),
       purple: purple.harmonizeWith(colorScheme.primary),
@@ -159,7 +159,7 @@ class const LichessCustomColors({
 const lichessCustomColors = LichessCustomColors(
   cyan: LichessColors.cyan,
   brag: LichessColors.brag,
-  good: LichessColors.good,
+  green: LichessColors.green,
   red: LichessColors.red,
   fancy: LichessColors.fancy,
   purple: LichessColors.purple,
