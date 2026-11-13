@@ -89,17 +89,14 @@ class _AccountTerminationScreenState() extends ConsumerState<AccountTerminationS
 
   void _submit() {
     if (ref.read(_mutation) is MutationPending || !_canSubmit) return;
-    // Ticking the "I understand" checkbox is the confirmation of a deletion, as on the website.
-    if (_isDelete) {
-      _performTermination();
-      return;
-    }
     showDialog<void>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog.adaptive(
           title: Text(
-            context.l10n.settingsCloseAccountAreYouSure,
+            _isDelete
+                ? 'Are you sure you want to delete your account?'
+                : context.l10n.settingsCloseAccountAreYouSure,
             style: TextTheme.of(context).bodyLarge,
           ),
           actions: [

@@ -387,7 +387,7 @@ void main() {
     FilledButton deleteButton(WidgetTester tester) =>
         tester.widget<FilledButton>(find.widgetWithText(FilledButton, 'Delete your account'));
 
-    testWidgets('requires the acknowledgement and has no confirmation dialog', (tester) async {
+    testWidgets('requires the acknowledgement and a confirmation', (tester) async {
       final requests = <http.Request>[];
       final container = await pumpTermination(tester, (request) {
         requests.add(request);
@@ -405,8 +405,11 @@ void main() {
       await tester.ensureVisible(button);
       await tester.tap(button);
       await tester.pumpAndSettle();
+      expect(find.text('Are you sure you want to delete your account?'), findsOneWidget);
+      expect(requests.where((r) => r.url.path == '/account/delete'), isEmpty);
+      await tester.tap(find.text('Yes'));
+      await tester.pumpAndSettle();
 
-      expect(find.text('Yes'), findsNothing);
       final deletes = requests.where((r) => r.url.path == '/account/delete');
       expect(deletes, hasLength(1));
       expect(deletes.single.bodyFields, {
@@ -442,6 +445,8 @@ void main() {
       final button = find.widgetWithText(FilledButton, 'Delete your account');
       await tester.ensureVisible(button);
       await tester.tap(button);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       final input = find.descendant(
