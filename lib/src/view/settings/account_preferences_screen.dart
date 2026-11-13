@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/settings/close_account_screen.dart';
+import 'package:lichess_mobile/src/view/settings/account_termination_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -226,19 +226,26 @@ class _AccountPreferencesScreenState()
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
-                    leading: const Icon(Symbols.dangerous),
-                    title: Text(context.l10n.mobileDeleteYourAccount),
-                    trailing: const OpenInNewIcon(),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.mobileDeleteYourAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      launchUrl(lichessUri('/account/delete'));
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.delete));
                     },
                   )
                 else
                   ListTile(
-                    leading: const Icon(Symbols.dangerous),
-                    title: Text(context.l10n.settingsCloseAccount),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.settingsCloseAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      Navigator.of(context).push(CloseAccountScreen.buildRoute());
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.close));
                     },
                   ),
               ],

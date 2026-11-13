@@ -281,15 +281,18 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
 /// - puzzle batch downloads (`GET /api/puzzle/batch/…`) are issued once per puzzle angle, so a
 ///   retry doubles an already large burst against an endpoint that has just said it is receiving
 ///   too many requests;
-/// - account closing (`POST /account/close`) checks the password under the password hasher rate
-///   limit, so a retry sends the credentials again and counts as another attempt.
+/// - account closing and deletion (`POST /account/close`, `POST /account/delete`) check the
+///   password under the password hasher rate limit, so a retry sends the credentials again and
+///   counts as another attempt.
 @visibleForTesting
 bool shouldRetryOn429(BaseResponse response) {
   if (response.statusCode != 429) return false;
   final request = response.request;
   if (request == null) return true;
   final path = request.url.path;
-  return !path.startsWith('/api/puzzle/batch/') && path != '/account/close';
+  return !path.startsWith('/api/puzzle/batch/') &&
+      path != '/account/close' &&
+      path != '/account/delete';
 }
 
 Duration _defaultDelay(int retryCount) =>

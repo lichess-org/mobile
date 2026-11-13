@@ -39,6 +39,9 @@ final signOutMutation = Mutation<void>();
 /// Mutation for closing the account of the signed in user.
 final closeAccountMutation = Mutation<void>();
 
+/// Mutation for deleting the account of the signed in user.
+final deleteAccountMutation = Mutation<void>();
+
 /// Mutation for requesting the login code email.
 final emailLoginCodeRequestMutation = Mutation<void>();
 
@@ -95,9 +98,6 @@ class AuthController() extends Notifier<AuthUser?> {
   }
 
   /// Closes the account of the signed in user, then signs them out of the app.
-  ///
-  /// The server revokes the account tokens and unregisters its devices from push notifications
-  /// when it closes the account, so the sign out only clears the local session.
   Future<void> closeAccount({
     required String username,
     required String password,
@@ -107,6 +107,20 @@ class AuthController() extends Notifier<AuthUser?> {
     await ref
         .read(accountRepositoryProvider)
         .closeAccount(username: username, password: password, token: token, forever: forever);
+    await _signOutTerminatedAccount();
+  }
+
+  /// Schedules the deletion of the account of the signed in user, then signs them out of the app.
+  Future<void> deleteAccount({required String username, required String password}) async {
+    await ref.read(accountRepositoryProvider).deleteAccount(username: username, password: password);
+    await _signOutTerminatedAccount();
+  }
+
+  /// Signs out of a closed or deleted account.
+  ///
+  /// The server revokes the account tokens and unregisters its devices from push notifications
+  /// when it closes or deletes the account, so the sign out only clears the local session.
+  Future<void> _signOutTerminatedAccount() async {
     try {
       await ref.read(authStorageProvider).delete();
     } catch (e, st) {

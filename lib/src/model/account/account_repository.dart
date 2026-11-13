@@ -97,6 +97,15 @@ class AccountRepository(final LichessClient client, final Aggregator aggregator)
       },
     );
   }
+
+  /// Schedules the deletion of the account, after the user acknowledged that it is not recoverable.
+  Future<void> deleteAccount({required String username, required String password}) async {
+    final uri = Uri(path: '/account/delete');
+    await client.postRead(
+      uri,
+      body: {'username': username, 'passwd': password, 'understand': 'true'},
+    );
+  }
 }
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {

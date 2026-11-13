@@ -64,6 +64,10 @@ void main() {
       // The password check is rate-limited, so a retry counts as another attempt.
       expect(shouldRetryOn429(response(429, method: 'POST', path: '/account/close')), isFalse);
     });
+
+    test('does not retry an account deletion (POST /account/delete)', () {
+      expect(shouldRetryOn429(response(429, method: 'POST', path: '/account/delete')), isFalse);
+    });
   });
 
   group('isCachedResponse', () {
