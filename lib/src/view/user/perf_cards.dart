@@ -79,7 +79,9 @@ class const PerfCards({
               ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (_, index) {
+                // Uses the build context: theme reads on the item builder context are not updated
+                // when the theme changes.
                 final perf = userPerfs[index];
                 final userPerf = user.perfs[perf]!;
                 final bool isPerfWithoutStats = Perf.streak == perf;
