@@ -168,7 +168,7 @@ class const GamePlayer({
                                   ? context.lichessColors.good
                                   : player.ratingDiff! == 0
                                   ? textShade(context, Styles.subtitleOpacity)
-                                  : context.lichessColors.error,
+                                  : context.lichessColors.red,
                             ),
                           ),
                       ],
@@ -263,7 +263,7 @@ class const ConfirmMove({
       children: [
         SemanticIconButton(
           icon: const Icon(CupertinoIcons.xmark_rectangle_fill),
-          color: context.lichessColors.error,
+          color: context.lichessColors.red,
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
           padding: const EdgeInsets.all(10),
@@ -449,7 +449,7 @@ class _MoveExpirationState() extends ConsumerState<MoveExpiration> {
     return secs <= 20
         ? Text(
             context.l10n.nbSecondsToPlayTheFirstMove(secs),
-            style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.error : null),
+            style: TextStyle(color: widget.mePlaying && emerg ? context.lichessColors.red : null),
           )
         : const Text('');
   }

@@ -377,7 +377,7 @@ class _RatingHistoryChartState() extends State<RatingHistoryChart> {
 Color? _changeColor(BuildContext context, int change) => change > 0
     ? context.lichessColors.good
     : change < 0
-    ? context.lichessColors.error
+    ? context.lichessColors.red
     : textShade(context, 0.5);
 
 String _formatChange(int change) => change > 0 ? '+$change' : '$change';

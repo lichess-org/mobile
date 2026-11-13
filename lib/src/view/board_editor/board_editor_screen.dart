@@ -251,7 +251,7 @@ class _PieceMenuState() extends ConsumerState<_PieceMenu> {
               height: squareSize,
               child: ColoredBox(
                 color: editorState.deletePiecesActive
-                    ? context.lichessColors.error
+                    ? context.lichessColors.red
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () =>

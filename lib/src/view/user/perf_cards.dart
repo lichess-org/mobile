@@ -121,7 +121,7 @@ class const PerfCards({
                                         : LichessIcons.arrow_full_lowerright,
                                     color: userPerf.progression > 0
                                         ? context.lichessColors.good
-                                        : context.lichessColors.error,
+                                        : context.lichessColors.red,
                                     size: 12,
                                   ),
                                   Flexible(
@@ -132,7 +132,7 @@ class const PerfCards({
                                       style: TextStyle(
                                         color: userPerf.progression > 0
                                             ? context.lichessColors.good
-                                            : context.lichessColors.error,
+                                            : context.lichessColors.red,
                                         fontSize: 11,
                                       ),
                                     ),

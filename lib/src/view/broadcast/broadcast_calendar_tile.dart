@@ -22,7 +22,7 @@ class const BroadcastCalendarFallbackIcon({super.key, required final bool isLive
       child: Center(
         child: Icon(
           LichessIcons.radio_tower_lichess,
-          color: isLive ? context.lichessColors.error : null,
+          color: isLive ? context.lichessColors.red : null,
         ),
       ),
     );
@@ -70,7 +70,7 @@ class const BroadcastCalendarTile({required final Broadcast broadcast}) extends 
                 children: [
                   TextSpan(
                     text: 'LIVE · ',
-                    style: TextStyle(color: context.lichessColors.error, fontWeight: .bold),
+                    style: TextStyle(color: context.lichessColors.red, fontWeight: .bold),
                   ),
                   TextSpan(text: subtitle),
                 ],

@@ -185,7 +185,7 @@ class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extend
                   Text(
                     httpLog.responseCode!.toString(),
                     style: TextStyle(
-                      color: httpLog.responseCode! >= 400 ? context.lichessColors.error : null,
+                      color: httpLog.responseCode! >= 400 ? ColorScheme.of(context).error : null,
                       fontFeatures: const [FontFeature.tabularFigures()],
                       fontSize: 12,
                     ),
@@ -214,7 +214,7 @@ class const HttpLogTile({super.key, required final HttpLogEntry httpLog}) extend
           letterSpacing: -0.15,
           color: httpLog.hasResponse
               ? httpLog.responseCode! >= 400
-                    ? context.lichessColors.error
+                    ? ColorScheme.of(context).error
                     : null
               : textShade(context, 0.7),
         ),

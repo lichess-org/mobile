@@ -62,7 +62,7 @@ class const UserActivityEntry({
     final theme = Theme.of(context);
     final emptySubtitle = theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
 
-    final redColor = context.lichessColors.error;
+    final redColor = context.lichessColors.red;
     final greenColor = context.lichessColors.good;
 
     return Column(
@@ -348,7 +348,7 @@ class const BriefGameResultBox({
             if (draw != 0) _ResultBox(number: draw, color: Colors.grey),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(width: _spaceWidth),
-            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.error),
+            if (loss != 0) _ResultBox(number: loss, color: context.lichessColors.red),
           ],
         ),
       ),

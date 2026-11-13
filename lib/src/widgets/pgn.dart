@@ -33,7 +33,7 @@ Color? _nagColor(BuildContext context, int nag) {
     1 => Colors.lightGreen.harmonizeWith(colorScheme.primary),
     2 => context.lichessColors.brag,
     3 => Colors.teal.harmonizeWith(colorScheme.primary),
-    4 => context.lichessColors.error,
+    4 => context.lichessColors.red,
     5 => context.lichessColors.purple,
     6 => context.lichessColors.cyan,
     int() => null,

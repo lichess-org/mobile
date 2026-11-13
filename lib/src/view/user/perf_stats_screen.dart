@@ -258,7 +258,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
                       child: _RatingWidget(
                         data.lowestRating,
                         data.lowestRatingGame,
-                        context.lichessColors.error,
+                        context.lichessColors.red,
                       ),
                     ),
                   ]),
@@ -354,7 +354,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
               icon: Icons.trending_down,
               current: data.curLossStreak,
               longest: data.maxLossStreak,
-              color: context.lichessColors.error,
+              color: context.lichessColors.red,
             ),
             cardSpace,
             Card(

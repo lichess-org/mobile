@@ -285,7 +285,7 @@ class UserFullNameWidget extends ConsumerWidget {
                   ? context.lichessColors.good
                   : ratingDiff! == 0
                   ? textShade(context, Styles.subtitleOpacity)
-                  : context.lichessColors.error,
+                  : context.lichessColors.red,
             ),
           ),
         ],

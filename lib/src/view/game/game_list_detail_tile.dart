@@ -213,7 +213,7 @@ class const GameListDetailTile({
                                           ? textShade(context, Styles.subtitleOpacity)
                                           : game.winner == mySide
                                           ? context.lichessColors.good
-                                          : context.lichessColors.error,
+                                          : context.lichessColors.red,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)
