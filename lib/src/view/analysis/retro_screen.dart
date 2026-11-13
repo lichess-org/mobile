@@ -342,7 +342,7 @@ class const _FeedbackWidget(final RetroOptions options) extends ConsumerWidget {
               title: Text(context.l10n.puzzleGoodMove),
             ),
             RetroFeedback.incorrect => FeedbackTile(
-              leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
+              leading: Icon(Icons.close, size: 36, color: context.lichessColors.red),
               title: Text(context.l10n.youCanDoBetter),
               subtitle: state.pov == Side.white
                   ? Text(context.l10n.tryAnotherMoveForWhite)

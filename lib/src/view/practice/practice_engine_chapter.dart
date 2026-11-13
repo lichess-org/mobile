@@ -121,7 +121,7 @@ class const _Table({required final PracticeEngineState state}) extends ConsumerW
           ),
           .failed => PracticeFeedbackLine(
             icon: Icons.cancel,
-            color: LichessColors.error,
+            color: LichessColors.red,
             text: goal.describe(playerSide: chapter.orientation, movesLeft: goal.movesAllowed ?? 0),
           ),
           .ongoing => Text(

@@ -17,12 +17,12 @@ const _corePalettesSize = 5;
 /// Number of colors sent by the Android OS for each color scheme.
 const _colorSchemeSize = 43;
 
-/// The Material error palette.
+/// The Material error palette (hue 25, chroma 84).
 ///
 /// The core palette exposed by the Android OS does not include an error palette, so the Material
 /// color system falls back to this fixed one (it is also the default error palette of
 /// [DynamicScheme]).
-final _errorPalette = TonalPalette.of(25, 84);
+final materialErrorPalette = TonalPalette.of(25, 84);
 
 CorePalettes? _corePalettes;
 
@@ -122,7 +122,7 @@ ChessboardColorScheme _boardColorSchemeFromPalettes(CorePalettes palettes) {
     lastMove: HighlightDetails(solidColor: Color(palettes.tertiary.get(80)).withValues(alpha: 0.6)),
     selected: HighlightDetails(solidColor: Color(palettes.neutral.get(40)).withValues(alpha: 0.80)),
     validMoves: Color(palettes.neutral.get(40)).withValues(alpha: 0.40),
-    validPremoves: Color(_errorPalette.get(40)).withValues(alpha: 0.30),
+    validPremoves: Color(materialErrorPalette.get(40)).withValues(alpha: 0.30),
   );
 }
 
@@ -223,10 +223,10 @@ ColorScheme _colorSchemeFromPalettes(CorePalettes palettes, Brightness brightnes
         tertiaryFixedDim: Color(palettes.tertiary.get(80)),
         onTertiaryFixed: Color(palettes.tertiary.get(10)),
         onTertiaryFixedVariant: Color(palettes.tertiary.get(30)),
-        error: Color(_errorPalette.get(40)),
-        onError: Color(_errorPalette.get(100)),
-        errorContainer: Color(_errorPalette.get(90)),
-        onErrorContainer: Color(_errorPalette.get(10)),
+        error: Color(materialErrorPalette.get(40)),
+        onError: Color(materialErrorPalette.get(100)),
+        errorContainer: Color(materialErrorPalette.get(90)),
+        onErrorContainer: Color(materialErrorPalette.get(10)),
         surface: Color(palettes.neutral.get(98)),
         onSurface: Color(palettes.neutral.get(10)),
         surfaceDim: Color(palettes.neutral.get(87)),
@@ -269,10 +269,10 @@ ColorScheme _colorSchemeFromPalettes(CorePalettes palettes, Brightness brightnes
         tertiaryFixedDim: Color(palettes.tertiary.get(80)),
         onTertiaryFixed: Color(palettes.tertiary.get(10)),
         onTertiaryFixedVariant: Color(palettes.tertiary.get(30)),
-        error: Color(_errorPalette.get(80)),
-        onError: Color(_errorPalette.get(20)),
-        errorContainer: Color(_errorPalette.get(30)),
-        onErrorContainer: Color(_errorPalette.get(90)),
+        error: Color(materialErrorPalette.get(80)),
+        onError: Color(materialErrorPalette.get(20)),
+        errorContainer: Color(materialErrorPalette.get(30)),
+        onErrorContainer: Color(materialErrorPalette.get(90)),
         surface: Color(palettes.neutral.get(6)),
         onSurface: Color(palettes.neutral.get(90)),
         surfaceDim: Color(palettes.neutral.get(6)),

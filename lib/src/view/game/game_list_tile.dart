@@ -91,7 +91,7 @@ class const GameListTile({
         ? textShade(context, Styles.subtitleOpacity)
         : game.winner == youAre
         ? context.lichessColors.good
-        : context.lichessColors.error;
+        : context.lichessColors.red;
 
     // The rating change when there is one, else a symbol of the result.
     final result = ratingDiff != null && !isAborted
@@ -270,7 +270,7 @@ class const GameContextMenu({
                                       ? textShade(context, Styles.subtitleOpacity)
                                       : game.winner == mySide
                                       ? context.lichessColors.good
-                                      : context.lichessColors.error,
+                                      : context.lichessColors.red,
                                 ),
                               ),
                             if (game.opening != null)

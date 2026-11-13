@@ -200,7 +200,7 @@ class const _LearnBoard({
                 CustomShape(orig: apple, scale: 0.8, child: const _Apple()),
             },
             annotations: threat != null
-                ? {threat: const Annotation(symbol: '!', color: LichessColors.error)}
+                ? {threat: const Annotation(symbol: '!', color: LichessColors.red)}
                 : const {},
           ),
           if (highlightedRank != null)
@@ -272,7 +272,7 @@ class const _Table({required final LearnStageState state}) extends ConsumerWidge
         children: [
           Text(
             l10n.learnPuzzleFailed,
-            style: Styles.title.copyWith(color: context.lichessColors.error),
+            style: Styles.title.copyWith(color: context.lichessColors.red),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12.0),

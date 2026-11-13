@@ -15,7 +15,8 @@ const kSliderTheme = SliderThemeData(
 /// Generates a [ColorScheme] from [seedColor] whose primary color looks like an iOS accent color.
 ///
 /// The scheme is the Material tonal spot one, as on Android, except for the primary color, which is
-/// more saturated, like an iOS accent color.
+/// more saturated, like an iOS accent color, and the error color, which is a vibrant red like the
+/// iOS system red rather than the pastel one of the Material dark scheme.
 ColorScheme makeIOSAccentColorScheme({required Color seedColor, required Brightness brightness}) {
   final isDark = brightness == .dark;
   final sourceHct = Hct.fromInt(seedColor.toARGB32());
@@ -30,6 +31,8 @@ ColorScheme makeIOSAccentColorScheme({required Color seedColor, required Brightn
     onPrimary: tone(100),
     inversePrimary: tone(inverseAccentTone),
     surfaceTint: tone(accentTone),
+    error: Color(materialErrorPalette.get(isDark ? _kIOSErrorDarkTone : _kIOSAccentLightTone)),
+    onError: Color(materialErrorPalette.get(100)),
   );
 }
 
@@ -45,6 +48,11 @@ const _kIOSAccentLightTone = 50;
 /// are lighter than the iOS ones and the primary color less saturated, which both lower its
 /// contrast.
 const _kIOSAccentDarkTone = 64;
+
+/// Tone of the iOS error color in dark mode, the one of the iOS dark system red (chroma 90): the
+/// Material error palette keeps its full chroma 84 there, while it is clipped to 67 at the accent
+/// tone 64, which looks pastel.
+const _kIOSErrorDarkTone = 58;
 
 ThemeData makeAppTheme(
   BuildContext context, {

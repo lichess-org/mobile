@@ -82,7 +82,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 solidColor:
                     (trainingState.lastGuess == Guess.correct
                             ? context.lichessColors.good
-                            : context.lichessColors.error)
+                            : context.lichessColors.red)
                         .withValues(alpha: 0.5),
               ),
             ),
@@ -129,7 +129,7 @@ class _BodyState() extends ConsumerState<_Body> {
                             maxWidth: boardSize,
                             timeFractionElapsed: trainingState.timeFractionElapsed,
                             color: trainingState.lastGuess == Guess.incorrect
-                                ? context.lichessColors.error
+                                ? context.lichessColors.red
                                 : context.lichessColors.good,
                           ),
                           _TrainingBoard(
@@ -285,7 +285,7 @@ class const _ScoreAndTrainingButton({
             score: score,
             size: scoreSize,
             color: trainingState.lastGuess == Guess.incorrect
-                ? context.lichessColors.error
+                ? context.lichessColors.red
                 : context.lichessColors.good,
           ),
           button,

@@ -74,7 +74,7 @@ class const GameResultsCard({
                         label: context.l10n.losses,
                         count: lost,
                         total: total,
-                        color: context.lichessColors.error,
+                        color: context.lichessColors.red,
                       ),
                     ),
                   ],
@@ -96,7 +96,7 @@ class const _ResultsBar({required final int won, required final int drawn, requi
     final segments = [
       (won, context.lichessColors.good),
       (drawn, textShade(context, 0.3)),
-      (lost, context.lichessColors.error),
+      (lost, context.lichessColors.red),
     ].where((segment) => segment.$1 > 0);
     return ExcludeSemantics(
       child: SizedBox(

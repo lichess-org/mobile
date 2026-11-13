@@ -35,13 +35,13 @@ class const UserProfileWidget({required final User user, final int bioMaxLines =
                 padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
                   children: [
-                    Icon(Icons.error, color: context.lichessColors.error),
+                    Icon(Icons.error, color: context.lichessColors.red),
                     const SizedBox(width: 5),
                     Flexible(
                       child: Text(
                         context.l10n.thisAccountViolatedTos,
                         style: TextStyle(
-                          color: context.lichessColors.error,
+                          color: context.lichessColors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

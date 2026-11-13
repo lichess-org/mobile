@@ -446,7 +446,7 @@ class const _MatchHistoryTable({
           if (match.points == '1') {
             pointsColor = context.lichessColors.good;
           } else if (match.points == '0') {
-            pointsColor = context.lichessColors.error;
+            pointsColor = context.lichessColors.red;
           }
 
           return TableRow(

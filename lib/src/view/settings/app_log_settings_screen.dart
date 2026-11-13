@@ -192,7 +192,7 @@ class const _LogTile({required final AppLogEntry entry}) extends StatelessWidget
     final subtitleStyle = TextStyle(color: textShade(context, 0.7), fontSize: 12);
 
     final (levelIcon, levelColor) = entry.levelValue >= Level.SEVERE.value
-        ? (Icons.error_outline, Colors.red)
+        ? (Icons.error_outline, ColorScheme.of(context).error)
         : entry.levelValue >= Level.WARNING.value
         ? (Icons.warning_amber_outlined, Colors.orange)
         : (Icons.info_outline, textShade(context, 0.7));

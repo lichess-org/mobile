@@ -964,7 +964,7 @@ class const _Verdicts(final Verdicts verdicts) extends ConsumerWidget {
           color: isLoggedIn
               ? verdicts.accepted
                     ? context.lichessColors.good
-                    : context.lichessColors.error
+                    : context.lichessColors.red
               : null,
           size: 30.0,
         ),
@@ -980,7 +980,7 @@ class const _Verdicts(final Verdicts verdicts) extends ConsumerWidget {
                     color: isLoggedIn
                         ? verdict.ok
                               ? context.lichessColors.good
-                              : context.lichessColors.error
+                              : context.lichessColors.red
                         : null,
                   ),
                 ),
@@ -1613,7 +1613,7 @@ class const _PairingTile({
         : pairing.status == GameStatus.draw ||
               pairing.status == GameStatus.insufficientMaterialClaim
         ? null
-        : context.lichessColors.error;
+        : context.lichessColors.red;
 
     return ListTile(
       contentPadding: const EdgeInsetsDirectional.only(start: 16.0, end: 16.0),

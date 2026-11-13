@@ -61,7 +61,7 @@ class const ChallengeListItem({
           SwipeAction(
             icon: Icons.close,
             onPressed: onCancel!,
-            backgroundColor: context.lichessColors.error,
+            backgroundColor: context.lichessColors.red,
             foregroundColor: Colors.white,
             label: context.l10n.cancel,
           )
@@ -69,7 +69,7 @@ class const ChallengeListItem({
           SwipeAction(
             icon: Icons.close,
             onPressed: () => onDecline!(null),
-            backgroundColor: context.lichessColors.error,
+            backgroundColor: context.lichessColors.red,
             foregroundColor: Colors.white,
             label: context.l10n.decline,
           ),

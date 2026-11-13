@@ -155,7 +155,7 @@ class _BodyState() extends ConsumerState<_Body> {
                       ],
                       endActions: [
                         SwipeAction(
-                          backgroundColor: context.lichessColors.error,
+                          backgroundColor: context.lichessColors.red,
                           onPressed: () => onRemoveBookmark(context),
                           icon: Icons.bookmark_remove_outlined,
                           label: context.l10n.mobileRemoveBookmark,

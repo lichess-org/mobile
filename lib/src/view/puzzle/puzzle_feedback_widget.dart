@@ -53,7 +53,7 @@ class const PuzzleFeedbackWidget({
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return FeedbackTile(
-            leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
+            leading: Icon(Icons.close, size: 36, color: context.lichessColors.red),
             title: Text(context.l10n.puzzleNotTheMove, overflow: TextOverflow.ellipsis),
             subtitle: Text(
               context.l10n.puzzleTrySomethingElse,

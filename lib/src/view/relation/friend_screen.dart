@@ -329,7 +329,7 @@ class const _Following(
                             });
                           }
                         },
-                        backgroundColor: context.lichessColors.error,
+                        backgroundColor: context.lichessColors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.person_remove,
                         label: context.l10n.unfollow,
