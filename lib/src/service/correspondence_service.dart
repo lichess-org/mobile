@@ -19,7 +19,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKeyProvider;
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -35,13 +35,13 @@ final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) 
 /// Service that manages correspondence games.
 class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   StreamSubscription<ParsedLocalNotification>? _notificationResponseSubscription;
-  StreamSubscription<ReceivedFcmMessage>? _fcmSubscription;
+  StreamSubscription<ReceivedPushMessage>? _pushSubscription;
 
   void start() {
-    _fcmSubscription = NotificationService.fcmMessageStream.listen((data) {
-      final (message: fcmMessage, :fromBackground) = data;
-      switch (fcmMessage) {
-        case CorresGameUpdateFcmMessage(:final fullId, :final game):
+    _pushSubscription = NotificationService.pushMessageStream.listen((data) {
+      final (message: pushMessage, :fromBackground) = data;
+      switch (pushMessage) {
+        case CorresGameUpdatePushMessage(:final fullId, :final game):
           if (game != null) {
             _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
           }
@@ -63,7 +63,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   }
 
   void dispose() {
-    _fcmSubscription?.cancel();
+    _pushSubscription?.cancel();
     _notificationResponseSubscription?.cancel();
   }
 

@@ -8,13 +8,15 @@ import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/service/app_log_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show LiquidGlassWidgets;
 import 'package:material_ui/material_ui.dart';
 
-Future<void> bootstrapApp(
-  LichessBindingBase Function() initializeBinding, {
+Future<void> bootstrapApp({
+  required LichessBindingBase Function() initializeBinding,
+  required NotificationService Function(Ref) notificationServiceFactory,
   Widget app = const AppInitializationScreen(),
 }) async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -49,7 +51,14 @@ Future<void> bootstrapApp(
     LiquidGlassWidgets.wrap(
       theme: const .ios27(),
       brightnessResolver: Theme.maybeBrightnessOf,
-      child: ProviderScope(observers: [ProviderLogger()], retry: lichessProviderRetry, child: app),
+      child: ProviderScope(
+        observers: [ProviderLogger()],
+        retry: lichessProviderRetry,
+        overrides: [
+          notificationServiceFactoryProvider.overrideWithValue(notificationServiceFactory),
+        ],
+        child: app,
+      ),
     ),
   );
 }

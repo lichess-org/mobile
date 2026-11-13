@@ -15,7 +15,8 @@ import 'package:lichess_mobile/src/model/engine/thinking_time.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/fcm_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -81,6 +82,9 @@ Future<ProviderContainer> makeContainer({
     connectivityPluginProvider: connectivityPluginProvider.overrideWith((_) {
       return FakeConnectivity();
     }),
+    notificationServiceProvider: notificationServiceFactoryProvider.overrideWith(
+      (_) => FcmService.new,
+    ),
     notificationDisplayProvider: notificationDisplayProvider.overrideWith((ref) {
       return FakeNotificationDisplay();
     }),
