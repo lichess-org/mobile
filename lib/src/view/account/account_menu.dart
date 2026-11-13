@@ -38,18 +38,20 @@ import 'package:url_launcher/url_launcher.dart';
 /// On iOS it is the first page of a navigation sheet ([showAdaptiveNavigationSheet]) covering the
 /// tab bar, in which the screens it opens are pushed. On Android it is pushed as a full-screen page
 /// sliding from the right.
-Future<void> showAccountMenu(BuildContext context) {
+///
+/// With [expandAccount], the account tile is expanded, showing the account switching.
+Future<void> showAccountMenu(BuildContext context, {bool expandAccount = false}) {
   if (Theme.of(context).platform == TargetPlatform.iOS) {
     return showAdaptiveNavigationSheet<void>(
       context: context,
       useRootNavigator: true,
-      builder: (_) => const AccountMenuScreen(),
+      builder: (_) => AccountMenuScreen(expandAccount: expandAccount),
     );
   }
 
   return Navigator.of(context).push(
     PageRouteBuilder<void>(
-      pageBuilder: (_, a, b) => const AccountMenuScreen(),
+      pageBuilder: (_, a, b) => AccountMenuScreen(expandAccount: expandAccount),
       transitionsBuilder: (_, animation, b, child) {
         final tween = Tween(
           begin: const Offset(1.0, 0.0),
@@ -62,7 +64,12 @@ Future<void> showAccountMenu(BuildContext context) {
 }
 
 /// Account menu screen, opened by [AccountMenuButton] with [showAccountMenu].
-class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
+class const AccountMenuScreen({
+  super.key,
+
+  /// Whether the account tile is expanded at first.
+  final bool expandAccount = false,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
@@ -72,8 +79,8 @@ class _AccountMenuScreenState()
     with WidgetsBindingObserver {
   bool _pendingKidModeRefresh = false;
 
-  /// Whether the account tile is expanded, showing the profile, account switching and sign out.
-  bool _isAccountExpanded = false;
+  /// Whether the account tile is expanded, showing the account switching and sign out.
+  late bool _isAccountExpanded = widget.expandAccount;
 
   @override
   void initState() {
@@ -104,7 +111,15 @@ class _AccountMenuScreenState()
 
     ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
     ref.listen(switchAccountMutation, (_, next) {
-      if (next case MutationError(:final error)) _showSwitchAccountErrorSnackBar(context, error);
+      if (next case MutationError(:final error)) {
+        showSnackBar(
+          context,
+          error is AccountSessionExpiredException
+              ? 'Your session has expired, please sign in again.'
+              : context.l10n.mobileSomethingWentWrong,
+          type: SnackBarType.error,
+        );
+      }
     });
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
@@ -133,6 +148,7 @@ class _AccountMenuScreenState()
               curve: Curves.fastOutSlowIn,
               alignment: Alignment.topCenter,
               child: ListSection(
+                hasLeading: true,
                 children: [
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -226,6 +242,7 @@ class _AccountMenuScreenState()
             // active account.
             if (otherAccounts.isNotEmpty)
               ListSection(
+                hasLeading: true,
                 header: const Text('Switch account'),
                 children: [
                   for (final other in otherAccounts)
@@ -238,6 +255,7 @@ class _AccountMenuScreenState()
               ),
           ],
           ListSection(
+            hasLeading: true,
             children: [
               if (user != null)
                 ListTile(
@@ -296,6 +314,7 @@ class _AccountMenuScreenState()
             ],
           ),
           ListSection(
+            hasLeading: true,
             children: [
               if (Theme.of(context).platform == TargetPlatform.android)
                 ListTile(
@@ -384,70 +403,26 @@ class _AccountMenuScreenState()
 
 /// Avatar button that opens the account menu ([showAccountMenu]).
 ///
-/// Swiping down or up on the avatar switches to the next or previous of the accounts the user is
-/// signed in to, as a shortcut to the account menu's "Switch account" list.
-class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
-}
-
-class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
+/// When signed in, a long press opens it with the account tile expanded, as a shortcut to switch
+/// accounts.
+class const AccountMenuButton({super.key}) extends ConsumerWidget {
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
-
-  /// How far down, or up, the avatar must be dragged to switch accounts.
-  static const _switchDragDistance = 24.0;
-
-  /// How far down the avatar has been dragged so far, negative when dragged up.
-  ///
-  /// The distance is used rather than the velocity of the drag, which is zero when the finger stops
-  /// before it is lifted.
-  double _dragDistance = 0;
-
-  /// Switches to the account after the active one when [step] is 1, or before it when [step] is -1.
-  ///
-  /// The accounts are in a fixed order, by name, so that swiping again and again in the same
-  /// direction goes through all of them in turn, and swiping the other way goes back.
-  Future<void> _switchAccount({required int step}) async {
-    final active = ref.read(authControllerProvider);
-    final others = ref.read(otherAccountsProvider).value;
-    if (active == null || others == null || others.isEmpty) return;
-    if (!ref.read(isDeviceOnlineProvider)) return;
-    if (ref.read(switchAccountMutation) is MutationPending) return;
-
-    final accounts = [active, ...others]
-      ..sort((a, b) => a.user.name.toLowerCase().compareTo(b.user.name.toLowerCase()));
-    final next = accounts[(accounts.indexOf(active) + step) % accounts.length];
-    if (!await confirmLeavingAccount(context, ref) || !mounted) return;
-    HapticFeedback.selectionClick();
-    try {
-      await switchAccountMutation.run(ref, (tsx) async {
-        await tsx.get(authControllerProvider.notifier).switchAccount(next);
-      });
-      if (!mounted) return;
-      showSnackBar(context, 'Switched to ${next.user.name}');
-    } catch (e) {
-      if (!mounted) return;
-      _showSwitchAccountErrorSnackBar(context, e);
-    }
-  }
 
   /// Size of the button on iOS, where it fills the glass capsule of the navigation bar.
   static const _cupertinoButtonSize = 44.0;
   static const _cupertinoAvatarRadius = 20.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    // Watched so that the other accounts are already known when the user swipes.
-    final hasOtherAccounts = ref.watch(otherAccountsProvider).value?.isNotEmpty ?? false;
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     void openMenu() => showAccountMenu(context);
 
-    final button = switch (account) {
+    return switch (account) {
       AsyncData(:final value) => Badge.count(
         offset: const Offset(-4, 0),
         count: unreadMessages,
@@ -460,17 +435,28 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
                   height: _cupertinoButtonSize,
                 )
               : null,
-          tooltip: value == null ? context.l10n.signIn : value.username,
+          // No tooltip when signed in: it would take the long press, which opens the menu. The
+          // username is the semantics label instead.
+          tooltip: value == null ? context.l10n.signIn : null,
           icon: value == null
               ? Icon(
                   Icons.account_circle_outlined,
                   size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
                 )
-              : AccountAvatar(
-                  value,
-                  radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
+              : Semantics(
+                  label: value.username,
+                  child: AccountAvatar(
+                    value,
+                    radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
+                  ),
                 ),
           onPressed: openMenu,
+          onLongPress: value == null
+              ? null
+              : () {
+                  HapticFeedback.mediumImpact();
+                  showAccountMenu(context, expandAccount: true);
+                },
         ),
       ),
       _ => IconButton(
@@ -489,21 +475,6 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
         onPressed: openMenu,
       ),
     };
-
-    if (account.value == null || !hasOtherAccounts) return button;
-
-    return GestureDetector(
-      onVerticalDragStart: (_) => _dragDistance = 0,
-      onVerticalDragUpdate: (details) => _dragDistance += details.delta.dy,
-      onVerticalDragEnd: (_) {
-        if (_dragDistance >= _switchDragDistance) {
-          _switchAccount(step: 1);
-        } else if (_dragDistance <= -_switchDragDistance) {
-          _switchAccount(step: -1);
-        }
-      },
-      child: button,
-    );
   }
 }
 
@@ -648,17 +619,6 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
       ),
     );
   }
-}
-
-/// Tells the user that switching accounts failed with [error].
-void _showSwitchAccountErrorSnackBar(BuildContext context, Object error) {
-  showSnackBar(
-    context,
-    error is AccountSessionExpiredException
-        ? 'Your session has expired, please sign in again.'
-        : context.l10n.mobileSomethingWentWrong,
-    type: SnackBarType.error,
-  );
 }
 
 /// A tile of the account menu that switches to the other [account] the user is signed in to.
