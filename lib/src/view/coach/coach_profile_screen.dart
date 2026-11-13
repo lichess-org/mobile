@@ -193,12 +193,7 @@ class const _TextSection({required final String title, required final String bod
     return ListSection(
       header: Text(title),
       hasLeading: true,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: Text(body.trim()),
-        ),
-      ],
+      children: [ListTile(title: Text(body.trim()))],
     );
   }
 }
