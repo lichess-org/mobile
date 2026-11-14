@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
 import 'package:lichess_mobile/src/view/offline_computer/opponent_settings.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -467,7 +468,8 @@ void main() {
       expect(find.byType(Image), findsWidgets);
 
       // Verify Stockfish name with level
-      expect(find.textContaining('Stockfish'), findsOneWidget);
+      expect(find.text('Stockfish level 4'), findsOneWidget);
+      expect(find.text('BOT'), findsOneWidget);
     });
 
     testWidgets('Takeback button is disabled at game start', (tester) async {
@@ -728,7 +730,9 @@ void main() {
       expect(hintWidget.onTap, isNull);
     });
 
-    testWidgets('Loading saved game restores position', (tester) async {
+    testWidgets('Loading saved game restores position and engine identity in analysis', (
+      tester,
+    ) async {
       final gameStorage = MockOfflineComputerGameStorage();
 
       // Return a saved game with moves already played (e4, e5)
@@ -812,6 +816,20 @@ void main() {
       // Move list should show the played moves
       expect(find.text('e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Analysis board'));
+      await tester.pumpAndSettle();
+
+      final engineHeader = find.byWidgetPredicate(
+        (widget) => widget is PgnPlayerWidget && widget.player.side == .black,
+      );
+      expect(
+        find.descendant(of: engineHeader, matching: find.text('Stockfish level 1')),
+        findsOneWidget,
+      );
+      expect(find.descendant(of: engineHeader, matching: find.text('BOT')), findsOneWidget);
     });
 
     testWidgets('Last move is highlighted when loading a saved game', (tester) async {
