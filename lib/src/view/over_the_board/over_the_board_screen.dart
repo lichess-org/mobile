@@ -385,7 +385,6 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
               ),
             ),
           ),
-        ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: onFlipBoard,
