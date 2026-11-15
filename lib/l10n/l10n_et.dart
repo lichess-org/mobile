@@ -7742,6 +7742,9 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Viimased blogipostitused';
+
+  @override
   String get variantStandard => 'Tavaline';
 
   @override

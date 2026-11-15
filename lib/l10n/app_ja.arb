@@ -2214,6 +2214,7 @@
   "timeagoNbHoursRemaining": "{count, plural, other{残り {count} 時間}}",
   "ublogCommunity": "コミュニティ",
   "ublogXBlog": "{param} のブログ",
+  "ublogLatestBlogPosts": "最新のブログ投稿",
   "variantStandard": "スタンダード",
   "variantStandardTitle": "チェスの標準ルール (FIDE)",
   "variantChess960": "チェス960",

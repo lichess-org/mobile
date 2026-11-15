@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 final _coachProfileProvider = FutureProvider.autoDispose.family<CoachProfile, String>((
@@ -139,6 +140,19 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
           _TextSection(title: context.l10n.coachBestSkills, body: skills),
         if (profile.methodology case final methodology?)
           _TextSection(title: context.l10n.coachTeachingMethod, body: methodology),
+        if (profile.posts.isNotEmpty)
+          ListSection(
+            header: Text(context.l10n.ublogLatestBlogPosts),
+            hasLeading: true,
+            children: [
+              for (final post in profile.posts)
+                ListTile(
+                  leading: const Icon(Icons.article),
+                  title: Text(post.title, maxLines: 2, overflow: TextOverflow.ellipsis),
+                  onTap: () => launchUrl(lichessUri(post.url.toString())),
+                ),
+            ],
+          ),
         if (profile.youtubeVideos.isNotEmpty)
           ListSection(
             header: Text(context.l10n.coachYoutubeVideos),

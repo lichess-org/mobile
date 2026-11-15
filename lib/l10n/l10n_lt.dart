@@ -7924,6 +7924,9 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Vėliausi tinklaraščio įrašai';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

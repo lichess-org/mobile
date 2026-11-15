@@ -13522,6 +13522,12 @@ abstract class AppLocalizations {
   /// **'{param}\'s Blog'**
   String ublogXBlog(String param);
 
+  /// No description provided for @ublogLatestBlogPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest blog posts'**
+  String get ublogLatestBlogPosts;
+
   /// No description provided for @variantStandard.
   ///
   /// In en, this message translates to:

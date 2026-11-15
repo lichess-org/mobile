@@ -7742,6 +7742,9 @@ class AppLocalizationsSv extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Senaste blogginläggen';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

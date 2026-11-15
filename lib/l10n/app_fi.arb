@@ -2070,6 +2070,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} tunti jäljellä} other{{count} tuntia jäljellä}}",
   "ublogCommunity": "Yhteisön blogit",
   "ublogXBlog": "Käyttäjän {param} blogi",
+  "ublogLatestBlogPosts": "Uusimmat blogikirjoitukset",
   "variantStandard": "Normaali",
   "variantStandardTitle": "Shakin perussäännöt (FIDE)",
   "variantChess960": "Shakki960",

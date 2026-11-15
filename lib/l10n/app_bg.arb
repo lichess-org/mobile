@@ -1971,6 +1971,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{остава {count} час} other{остават {count} часа}}",
   "ublogCommunity": "Общност",
   "ublogXBlog": "Блогът на {param}",
+  "ublogLatestBlogPosts": "Последни публикации в блога",
   "variantStandard": "Стандартен",
   "variantStandardTitle": "Стандартни правила на шаха (ФИДЕ)",
   "variantChess960": "Шах960",

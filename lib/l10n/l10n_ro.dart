@@ -7834,6 +7834,9 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Ultimele postări pe blog';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

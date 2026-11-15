@@ -2098,6 +2098,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} time tilbage} other{{count} timer tilbage}}",
   "ublogCommunity": "Fællesskab",
   "ublogXBlog": "Blog - {param}",
+  "ublogLatestBlogPosts": "Seneste blog-indlæg",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardregler for skak (FIDE)",
   "variantChess960": "Skak960",

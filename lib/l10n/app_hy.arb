@@ -1610,5 +1610,6 @@
   "timeagoNbWeeksAgo": "{count, plural, =1{{count} շաբաթ առաջ} other{{count} շաբաթ առաջ}}",
   "timeagoNbMonthsAgo": "{count, plural, =1{{count} ամիս առաջ} other{{count} ամիս առաջ}}",
   "timeagoNbYearsAgo": "{count, plural, =1{{count} տարի առաջ} other{{count} տարի առաջ}}",
-  "ublogXBlog": "{param}-ի բլոգ"
+  "ublogXBlog": "{param}-ի բլոգ",
+  "ublogLatestBlogPosts": "Թարմ Բլոգի գրառումներ"
 }

@@ -2118,6 +2118,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{залишилася {count} година} few{залишилося {count} години} many{залишилося {count} годин} other{залишилося {count} години}}",
   "ublogCommunity": "Спільнота",
   "ublogXBlog": "Блог {param}",
+  "ublogLatestBlogPosts": "Останні дописи у блозі",
   "variantStandard": "Стандартні шахи",
   "variantStandardTitle": "Стандартні правила шахів (FIDE)",
   "variantChess960": "Шахи-960",

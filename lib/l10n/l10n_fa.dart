@@ -7742,6 +7742,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'تازه‌ترین وبنوشته‌ها';
+
+  @override
   String get variantStandard => 'اِستانده';
 
   @override

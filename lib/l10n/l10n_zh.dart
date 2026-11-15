@@ -7650,6 +7650,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => '最新博客文章';
+
+  @override
   String get variantStandard => '标准';
 
   @override
@@ -14362,6 +14365,9 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String ublogXBlog(String param) {
     return '$param的部落格';
   }
+
+  @override
+  String get ublogLatestBlogPosts => '最新的部落格';
 
   @override
   String get variantStandard => '標準';

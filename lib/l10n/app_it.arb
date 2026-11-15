@@ -2012,6 +2012,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} ora rimanente} other{{count} ore rimanenti}}",
   "ublogCommunity": "Comunità",
   "ublogXBlog": "Blog di {param}",
+  "ublogLatestBlogPosts": "Ultimi post del blog",
   "variantStandard": "Standard",
   "variantStandardTitle": "Regole standard degli scacchi (FIDE)",
   "variantChess960": "Scacchi960",

@@ -7650,6 +7650,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => '최근 블로그 글';
+
+  @override
   String get variantStandard => '스탠다드';
 
   @override

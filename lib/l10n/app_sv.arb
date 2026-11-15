@@ -1921,6 +1921,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} timme återstår} other{{count} timmar återstår}}",
   "ublogCommunity": "Gemenskap",
   "ublogXBlog": "{param}s blogg",
+  "ublogLatestBlogPosts": "Senaste blogginläggen",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardregler för schack (FIDE)",
   "variantChess960": "Schack960",

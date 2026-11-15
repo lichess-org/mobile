@@ -7650,6 +7650,9 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Các bài blog mới nhất';
+
+  @override
   String get variantStandard => 'Tiêu chuẩn';
 
   @override

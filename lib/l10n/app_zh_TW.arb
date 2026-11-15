@@ -1905,6 +1905,7 @@
   "timeagoNbHoursRemaining": "{count, plural, other{還剩 {count} 小時}}",
   "ublogCommunity": "社群",
   "ublogXBlog": "{param}的部落格",
+  "ublogLatestBlogPosts": "最新的部落格",
   "variantStandard": "標準",
   "variantStandardTitle": "標準西洋棋規則（國際棋聯）",
   "variantChess960": "Chess960",

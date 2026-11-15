@@ -7742,6 +7742,9 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Uusimmat blogikirjoitukset';
+
+  @override
   String get variantStandard => 'Normaali';
 
   @override

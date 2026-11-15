@@ -2219,6 +2219,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} Stunde verbleiben} other{{count} Stunden verbleiben}}",
   "ublogCommunity": "Gemeinschaft",
   "ublogXBlog": "Blog von {param}",
+  "ublogLatestBlogPosts": "Neueste Blog-Beiträge",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardschachregeln (FIDE)",
   "variantChess960": "Schach960",

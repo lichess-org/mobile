@@ -7831,6 +7831,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Najnovije objave na blogu';
+
+  @override
   String get variantStandard => 'Standardni šah';
 
   @override

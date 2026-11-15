@@ -2219,6 +2219,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} saat kaldı} other{{count} saat kaldı}}",
   "ublogCommunity": "Topluluk",
   "ublogXBlog": "{param} Bloğu",
+  "ublogLatestBlogPosts": "Son blog gönderileri",
   "variantStandard": "Standart",
   "variantStandardTitle": "Satrancın standart kuralları (FIDE)",
   "variantChess960": "Satranç960",

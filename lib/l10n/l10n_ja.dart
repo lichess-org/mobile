@@ -7650,6 +7650,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => '最新のブログ投稿';
+
+  @override
   String get variantStandard => 'スタンダード';
 
   @override

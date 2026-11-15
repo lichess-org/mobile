@@ -1,6 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/blog/blog.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'coach.freezed.dart';
@@ -79,6 +80,7 @@ sealed class CoachProfile with _$CoachProfile {
     String? picture,
     required IList<String> youtubeVideos,
     required IList<String> studies,
+    required IList<BlogPost> posts,
     String? description,
     String? playingExperience,
     String? teachingExperience,
@@ -102,6 +104,7 @@ sealed class CoachProfile with _$CoachProfile {
       picture: pick('coach', 'picture').asStringOrNull(),
       youtubeVideos: _parseYoutubeUrls(profile('youtubeVideos').asStringOrNull() ?? ''),
       studies: _parseStudyIds(profile('publicStudies').asStringOrNull() ?? ''),
+      posts: pick('posts').asListOrEmpty(BlogPost.fromPick).toIList(),
       description: profile('description').asStringOrNull(),
       playingExperience: profile('playingExperience').asStringOrNull(),
       teachingExperience: profile('teachingExperience').asStringOrNull(),

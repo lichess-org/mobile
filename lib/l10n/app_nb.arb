@@ -2066,6 +2066,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} time igjen} other{{count} timer igjen}}",
   "ublogCommunity": "Fellesskap",
   "ublogXBlog": "Bloggen til {param}",
+  "ublogLatestBlogPosts": "Siste blogginnlegg",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standardregler for sjakk (FIDE)",
   "variantChess960": "Sjakk-960",

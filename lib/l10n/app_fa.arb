@@ -2148,6 +2148,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} ساعت باقی مانده} other{{count} ساعت باقی مانده}}",
   "ublogCommunity": "همدارگان",
   "ublogXBlog": "وبنوشتِ {param}",
+  "ublogLatestBlogPosts": "تازه‌ترین وبنوشته‌ها",
   "variantStandard": "اِستانده",
   "variantStandardTitle": "قانون‌های اِستاندهٔ شطرنج (فیده)",
   "variantChess960": "شطرنج۹۶۰",

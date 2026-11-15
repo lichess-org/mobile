@@ -2073,6 +2073,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{še {count} ura} =2{še {count} uri} few{še {count} ure} other{še {count} ur}}",
   "ublogCommunity": "Skupnost",
   "ublogXBlog": "{param} blog",
+  "ublogLatestBlogPosts": "Zadnje objave na blogu",
   "variantStandard": "Običajno",
   "variantStandardTitle": "Standardna pravila šaha (FIDE)",
   "variantChess960": "Šah960",

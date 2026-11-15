@@ -7832,6 +7832,9 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'פוסטים אחרונים';
+
+  @override
   String get variantStandard => 'רגיל';
 
   @override

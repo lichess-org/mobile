@@ -7926,6 +7926,9 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Останні дописи у блозі';
+
+  @override
   String get variantStandard => 'Стандартні шахи';
 
   @override

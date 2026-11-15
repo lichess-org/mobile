@@ -1982,6 +1982,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Preostao je {count} sat} few{Preostalo je {count} sata} other{Preostalo je {count} sati}}",
   "ublogCommunity": "Zajednica",
   "ublogXBlog": "Blog korisnika {param}",
+  "ublogLatestBlogPosts": "Najnoviji blog članci",
   "variantStandard": "Standardna",
   "variantStandardTitle": "Standardna pravila šaha (FIDE)",
   "variantChess960": "Šah960",

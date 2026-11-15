@@ -7742,6 +7742,9 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Blogeko azken sarrerak';
+
+  @override
   String get variantStandard => 'Ohikoa';
 
   @override

@@ -1993,6 +1993,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{ostáva {count} hodina} few{ostávajú {count} hodiny} many{ostáva {count} hodín} other{ostáva {count} hodín}}",
   "ublogCommunity": "Komunita",
   "ublogXBlog": "Blog užívateľa {param}",
+  "ublogLatestBlogPosts": "Najnovšie príspevky na blogu",
   "variantStandard": "Štandard",
   "variantStandardTitle": "Štandardné pravidlá šachu (FIDE)",
   "variantChess960": "Šach960",

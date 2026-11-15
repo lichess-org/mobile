@@ -7926,6 +7926,9 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Najnowsze wpisy na blogu';
+
+  @override
   String get variantStandard => 'Standardowe';
 
   @override

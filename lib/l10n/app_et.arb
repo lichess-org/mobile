@@ -1760,6 +1760,7 @@
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} minut jäänud} other{{count} minutit jäänud}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} tund jäänud} other{{count} tundi jäänud}}",
   "ublogXBlog": "Kasutaja {param} blogi",
+  "ublogLatestBlogPosts": "Viimased blogipostitused",
   "variantStandard": "Tavaline",
   "variantStandardTitle": "Tavapäraste malereeglitega (FIDE)",
   "variantChess960": "Male960",

@@ -2219,6 +2219,7 @@
   "timeagoNbHoursRemaining": "{count, plural, other{{count}시간 남음}}",
   "ublogCommunity": "커뮤니티",
   "ublogXBlog": "{param}의 블로그",
+  "ublogLatestBlogPosts": "최근 블로그 글",
   "variantStandard": "스탠다드",
   "variantStandardTitle": "체스(FIDE)의 표준 규칙",
   "variantChess960": "체스960",

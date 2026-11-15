@@ -2039,6 +2039,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Zbývá {count} hodina} few{Zbývají {count} hodiny} many{Zbývá {count} hodin} other{Zbývá {count} hodin}}",
   "ublogCommunity": "Komunita",
   "ublogXBlog": "Blog hráče {param}",
+  "ublogLatestBlogPosts": "Poslední příspěvky na blogu",
   "variantStandard": "Standardní",
   "variantStandardTitle": "Standardní pravidla šachů (FIDE)",
   "variantChess960": "Fischerovy šachy",

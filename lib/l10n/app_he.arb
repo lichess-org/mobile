@@ -1816,6 +1816,7 @@
   "timeagoNbMinutesRemaining": "{count, plural, =1{דקה {count} נותרה} =2{{count} דקות נותרו} other{{count} דקות נותרו}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{שעה {count} נותרה} =2{{count} שעות נותרו} other{{count} שעות נותרו}}",
   "ublogXBlog": "הבלוג של {param}",
+  "ublogLatestBlogPosts": "פוסטים אחרונים",
   "variantStandard": "רגיל",
   "variantKingOfTheHillTitle": "לבוא את המלך שלך למרכז כדי לנצח."
 }

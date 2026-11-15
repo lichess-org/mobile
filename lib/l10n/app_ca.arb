@@ -2131,6 +2131,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Queda {count} hora} other{Queden {count} hores}}",
   "ublogCommunity": "Comunitat",
   "ublogXBlog": "Blog de {param}",
+  "ublogLatestBlogPosts": "Últimes publicacions al blog",
   "variantStandard": "Estàndard",
   "variantStandardTitle": "Regles d'escacs estàndard (FIDE)",
   "variantChess960": "Escacs 960",

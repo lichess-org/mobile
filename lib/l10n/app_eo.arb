@@ -1862,6 +1862,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} horo restas} other{{count} horoj restas}}",
   "ublogCommunity": "Komunumo",
   "ublogXBlog": "Blogo de {param}",
+  "ublogLatestBlogPosts": "Plej novaj blogafiŝoj",
   "variantStandard": "Normala",
   "variantStandardTitle": "Normal reguloj ŝakaj (FIDE)",
   "variantChess960": "Ŝako 960",

@@ -2064,6 +2064,7 @@
   "timeagoNbHoursRemaining": "{count, plural, other{còn {count} giờ}}",
   "ublogCommunity": "Cộng đồng",
   "ublogXBlog": "Bài viết của {param}",
+  "ublogLatestBlogPosts": "Các bài blog mới nhất",
   "variantStandard": "Tiêu chuẩn",
   "variantStandardTitle": "Luật cờ vua tiêu chuẩn (FIDE)",
   "variantChess960": "Chess960",

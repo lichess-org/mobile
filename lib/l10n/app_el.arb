@@ -2073,6 +2073,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{απομένει {count} ώρα} other{απομένουν {count} ώρες}}",
   "ublogCommunity": "Κοινότητα",
   "ublogXBlog": "Ιστολόγιο του χρήστη {param}",
+  "ublogLatestBlogPosts": "Πρόσφατες αναρτήσεις",
   "variantStandard": "Κανονικό",
   "variantStandardTitle": "Πρότυποι κανόνες του σκακιού (FIDE)",
   "variantChess960": "Σκάκι960",

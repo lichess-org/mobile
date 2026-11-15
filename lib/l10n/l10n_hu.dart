@@ -7742,6 +7742,9 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Legutóbbi blogbejegyzések';
+
+  @override
   String get variantStandard => 'Normál';
 
   @override

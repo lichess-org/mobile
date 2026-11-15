@@ -2060,6 +2060,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hora restante} other{{count} horas restantes}}",
   "ublogCommunity": "Comunidade",
   "ublogXBlog": "Blog de {param}",
+  "ublogLatestBlogPosts": "Últimas publicações no blog",
   "variantStandard": "Padrão",
   "variantStandardTitle": "Regras padrão do xadrez (FIDE)",
   "variantChess960": "Xadrez960",

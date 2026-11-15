@@ -7742,6 +7742,9 @@ class AppLocalizationsUz extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Soʻnggi blog postlar';
+
+  @override
   String get variantStandard => 'Standart';
 
   @override

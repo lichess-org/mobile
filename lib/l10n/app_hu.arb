@@ -1948,6 +1948,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} óra van hátra} other{{count} óra van hátra}}",
   "ublogCommunity": "Közösség",
   "ublogXBlog": "{param} blogja",
+  "ublogLatestBlogPosts": "Legutóbbi blogbejegyzések",
   "variantStandard": "Normál",
   "variantStandardTitle": "Standard sakk szabályok (FIDE)",
   "variantChess960": "Fischer Random",

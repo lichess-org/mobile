@@ -2055,6 +2055,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} Schtund blibt} other{{count} Schtunde blibed}}",
   "ublogCommunity": "G'meinschaft",
   "ublogXBlog": "{param}'s Blog",
+  "ublogLatestBlogPosts": "Neuschti Blog-Biträg",
   "variantStandard": "Schtandard",
   "variantStandardTitle": "Schtandard-Schachregle (FIDE)",
   "variantChess960": "Chess960",

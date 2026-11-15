@@ -2216,6 +2216,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} uur resterend} other{{count} uur resterend}}",
   "ublogCommunity": "Gemeenschap",
   "ublogXBlog": "Blog van {param}",
+  "ublogLatestBlogPosts": "Meest recente blogberichten",
   "variantStandard": "Standaard",
   "variantStandardTitle": "Standaard schaakregels (FIDE)",
   "variantChess960": "Schaak 960",

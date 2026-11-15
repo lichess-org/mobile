@@ -2219,6 +2219,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{o oră rămasă} few{{count} ore rămase} other{{count} de ore rămase}}",
   "ublogCommunity": "Comunitate",
   "ublogXBlog": "Blog-ul lui {param}",
+  "ublogLatestBlogPosts": "Ultimele postări pe blog",
   "variantStandard": "Standard",
   "variantStandardTitle": "Reguli de șah standard (FIDE)",
   "variantChess960": "Chess960",

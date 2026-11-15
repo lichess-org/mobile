@@ -7742,6 +7742,9 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Πρόσφατες αναρτήσεις';
+
+  @override
   String get variantStandard => 'Κανονικό';
 
   @override

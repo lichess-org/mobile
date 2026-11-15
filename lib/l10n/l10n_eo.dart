@@ -7742,6 +7742,9 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Plej novaj blogafiŝoj';
+
+  @override
   String get variantStandard => 'Normala';
 
   @override

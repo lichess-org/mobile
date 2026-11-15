@@ -7926,6 +7926,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Najnovšie príspevky na blogu';
+
+  @override
   String get variantStandard => 'Štandard';
 
   @override

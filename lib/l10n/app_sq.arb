@@ -1956,6 +1956,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Edhe {count} orë} other{Edhe {count} orë}}",
   "ublogCommunity": "Bashkësi",
   "ublogXBlog": "Blogu i {param}",
+  "ublogLatestBlogPosts": "Postimet më të reja në blog",
   "variantStandard": "Standard",
   "variantStandardTitle": "Rregulla standarde shahu (FIDE)",
   "variantChess960": "Chess960",

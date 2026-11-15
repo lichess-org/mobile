@@ -2066,6 +2066,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{остался {count} час} few{осталось {count} часа} many{осталось {count} часов} other{осталось {count} часов}}",
   "ublogCommunity": "Сообщество",
   "ublogXBlog": "Блог {param}",
+  "ublogLatestBlogPosts": "Свежие записи в блоге",
   "variantStandard": "Шахматы",
   "variantStandardTitle": "Стандартные правила шахмат (FIDE)",
   "variantChess960": "Шахматы Фишера",

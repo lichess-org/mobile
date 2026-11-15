@@ -71,7 +71,7 @@ const whiteLists = {
     'lastLogin',
     'lichessRating',
   ],
-  'ublog': ['community', 'xBlog'],
+  'ublog': ['community', 'xBlog', 'latestBlogPosts'],
   'patron': ['donate', 'lichessPatron', 'becomePatron'],
   'contact': ['contact', 'contactLichess'],
   'recap': ['recapReady', 'awaitQuestion'],

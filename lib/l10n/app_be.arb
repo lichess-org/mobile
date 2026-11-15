@@ -1821,6 +1821,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Засталася {count} гадзіна} few{Засталося {count} гадзіны} many{Засталося {count} гадзін} other{Засталося {count} гадзіны}}",
   "ublogCommunity": "Супольнасць",
   "ublogXBlog": "Блог {param}",
+  "ublogLatestBlogPosts": "Апошнія допісы ў блогу",
   "variantStandard": "Звычайныя шахматы",
   "variantStandardTitle": "Стандартныя правілы шахмат (ФІДЭ)",
   "variantChess960": "Шахматы Фішара",

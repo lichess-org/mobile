@@ -7740,6 +7740,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Latest blog posts';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
@@ -15079,6 +15082,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String ublogXBlog(String param) {
     return '$param\'s Blog';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Latest blog posts';
 
   @override
   String get variantStandard => 'Standard';

@@ -87,7 +87,26 @@ const _profileResponse = '''
     "createdAt": 1650000000000,
     "updatedAt": 1750000000000
   },
-  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"},
+  "posts": [
+    {
+      "id": "1nH0b0kY",
+      "title": "Chess sparring",
+      "slug": "chess-sparring",
+      "createdAt": 1750000000000,
+      "url": "/@/toniaa/blog/chess-sparring/1nH0b0kY",
+      "author": {"id": "toniaa", "name": "toniaa"}
+    },
+    {
+      "id": "kQ2z9WpX",
+      "title": "Endgame fundamentals",
+      "slug": "endgame-fundamentals",
+      "createdAt": 1740000000000,
+      "url": "/@/toniaa/blog/endgame-fundamentals/kQ2z9WpX",
+      "author": {"id": "toniaa", "name": "toniaa"},
+      "image": "https://image.lichess.org/ublog/post/kQ2z9WpX.jpg"
+    }
+  ]
 }
 ''';
 
@@ -229,6 +248,40 @@ void main() {
       expect(find.textContaining('youtube.com'), findsNothing);
       expect(find.textContaining('youtu.be'), findsNothing);
       expect(find.byType(HttpNetworkImageWidget), findsNWidgets(3));
+    });
+
+    testWidgets('profile shows the latest blog posts', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Latest blog posts'), findsOneWidget);
+      expect(find.text('Chess sparring'), findsOneWidget);
+      expect(find.text('Endgame fundamentals'), findsOneWidget);
+      expect(find.textContaining('/@/toniaa/blog'), findsNothing);
     });
 
     testWidgets('profile hides youtube section when there are no videos', (tester) async {

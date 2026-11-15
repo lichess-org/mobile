@@ -7914,6 +7914,9 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Апошнія допісы ў блогу';
+
+  @override
   String get variantStandard => 'Звычайныя шахматы';
 
   @override

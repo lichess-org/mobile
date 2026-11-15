@@ -2071,6 +2071,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} hour remaining} other{{count} hours remaining}}",
   "ublogCommunity": "Community",
   "ublogXBlog": "{param}'s Blog",
+  "ublogLatestBlogPosts": "Latest blog posts",
   "variantStandard": "Standard",
   "variantStandardTitle": "Standard rules of chess (FIDE)",
   "variantChess960": "Chess960",

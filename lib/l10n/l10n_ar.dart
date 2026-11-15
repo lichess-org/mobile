@@ -8110,6 +8110,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'أخر منشورات المدونة';
+
+  @override
   String get variantStandard => 'الأساسي';
 
   @override

@@ -7926,6 +7926,9 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Poslední příspěvky na blogu';
+
+  @override
   String get variantStandard => 'Standardní';
 
   @override

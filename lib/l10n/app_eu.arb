@@ -2070,6 +2070,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{Ordu {count} falta da} other{{count} ordu falta dira}}",
   "ublogCommunity": "Komunitatea",
   "ublogXBlog": "{param} erabiltzailearen Bloga",
+  "ublogLatestBlogPosts": "Blogeko azken sarrerak",
   "variantStandard": "Ohikoa",
   "variantStandardTitle": "Xakearen Lege arruntak (FIDE)",
   "variantChess960": "960 xakea",

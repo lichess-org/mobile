@@ -7742,6 +7742,9 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Meest recente blogberichten';
+
+  @override
   String get variantStandard => 'Standaard';
 
   @override

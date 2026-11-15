@@ -7742,6 +7742,9 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Jongste webjoernaal inskrywings';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

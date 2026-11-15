@@ -7742,6 +7742,9 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Postimet më të reja në blog';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

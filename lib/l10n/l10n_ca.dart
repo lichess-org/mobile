@@ -7742,6 +7742,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Últimes publicacions al blog';
+
+  @override
   String get variantStandard => 'Estàndard';
 
   @override

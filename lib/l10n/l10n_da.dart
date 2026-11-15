@@ -7742,6 +7742,9 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Seneste blog-indlæg';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

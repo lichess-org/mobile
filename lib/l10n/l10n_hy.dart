@@ -7742,6 +7742,9 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Թարմ Բլոգի գրառումներ';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override

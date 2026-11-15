@@ -7656,6 +7656,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Postingan blog terbaru';
+
+  @override
   String get variantStandard => 'Standar';
 
   @override

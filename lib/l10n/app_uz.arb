@@ -2099,6 +2099,7 @@
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} soat qoldi} other{{count} soat qoldi}}",
   "ublogCommunity": "Hamjamiyat",
   "ublogXBlog": "{param}'ning blogi",
+  "ublogLatestBlogPosts": "Soʻnggi blog postlar",
   "variantStandard": "Standart",
   "variantStandardTitle": "Standart shaxmat qoidalari (FIDE)",
   "variantChess960": "Fisher shaxmati",

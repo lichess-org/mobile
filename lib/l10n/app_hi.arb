@@ -1659,5 +1659,6 @@
   "timeagoNbYearsAgo": "{count, plural, =1{{count} वर्ष पहले} other{{count} वर्षों पहले}}",
   "timeagoNbMinutesRemaining": "{count, plural, =1{{count} मिनट बचा है} other{{count} मिनट बचे हैं}}",
   "timeagoNbHoursRemaining": "{count, plural, =1{{count} घंटा बचा है} other{{count} घंटे बचे हैं}}",
-  "ublogXBlog": "{param} का ब्लॉग"
+  "ublogXBlog": "{param} का ब्लॉग",
+  "ublogLatestBlogPosts": "नवीनतम ब्लॉग पोस्ट"
 }

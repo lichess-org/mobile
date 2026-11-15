@@ -7742,6 +7742,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Neuschti Blog-Biträg';
+
+  @override
   String get variantStandard => 'Schtandard';
 
   @override

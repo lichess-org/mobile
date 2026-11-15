@@ -7926,6 +7926,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Свежие записи в блоге';
+
+  @override
   String get variantStandard => 'Шахматы';
 
   @override

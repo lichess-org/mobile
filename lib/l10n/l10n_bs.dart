@@ -7834,6 +7834,9 @@ class AppLocalizationsBs extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Najnoviji blog članci';
+
+  @override
   String get variantStandard => 'Standardna';
 
   @override

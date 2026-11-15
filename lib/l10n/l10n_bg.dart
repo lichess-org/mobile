@@ -7742,6 +7742,9 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Последни публикации в блога';
+
+  @override
   String get variantStandard => 'Стандартен';
 
   @override

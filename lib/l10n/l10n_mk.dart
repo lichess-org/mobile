@@ -7742,6 +7742,9 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
+  String get ublogLatestBlogPosts => 'Latest blog posts';
+
+  @override
   String get variantStandard => 'Standard';
 
   @override
