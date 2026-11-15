@@ -165,6 +165,7 @@ PGN скопійовано.
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Системні кольори</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Ендшпільні таблиці недоступні офлайн.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Тема</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Бути проголошеним</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">• 
 Забагато спроб. Будь ласка, спробуйте пізніше.
 </string>

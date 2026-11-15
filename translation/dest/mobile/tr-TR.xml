@@ -130,7 +130,7 @@
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Meydan okuma bağlantısını paylaşın</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN\'yi paylaş</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oyun linkini paylaş</string>
-  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Yerel analiz PGN\'sini paylaşın</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Yerel analiz PGN\'sini paylaş</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Konumu FEN olarak paylaş</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Bulmacayı paylaş</string>
   <string name="showComments" comment="Shown in the analysis screen.">Yorumları göster</string>
@@ -141,7 +141,7 @@
   <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">E-posta ile giriş yap</string>
   <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Basit gecikme</string>
   <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Küçük tahta</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Birşeyler ters gitti.</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Bir şeyler ters gitti.</string>
   <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Arkadaşları sıralayın</string>
   <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Tehtidi göstermeyi durdur</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistem renkleri</string>
