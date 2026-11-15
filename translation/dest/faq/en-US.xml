@@ -65,7 +65,7 @@ It is described in sections 3.7.3.1 and 3.7.3.2 of the %2$s:
 See the %3$s on this move for some practice with it.</string>
   <string name="goodIntroduction">good introduction</string>
   <string name="lichessTraining">Lichess training</string>
-  <string name="watchIMRosenCheckmate">Watch International Master Eric Rosen checkmate %s.</string>
+  <string name="watchIMRosenCheckmate">Watch International Master Eric Rosen checkmate &lt;a href=\'%s\' target=\'_blank\'&gt;en passant&lt;/a&gt;.</string>
   <string name="threefoldRepetition">Threefold repetition</string>
   <string name="threefoldRepetitionExplanation">If a position occurs three times, players can claim a draw by %1$s. Lichess implements the official FIDE rules, as described in Article 9.2 of the %2$s.</string>
   <string name="threefoldRepetitionLowerCase">threefold repetition</string>
@@ -166,6 +166,8 @@ The red mute icon alerts you when your browser is blocking sound. Most browsers 
 3. Click Cookies and Site Permissions
 4. Scroll down and click Media autoplay
 5. Add lichess.org to Allow</string>
+  <string name="makeBotTitle">Make a bot on Lichess?</string>
+  <string name="makeBotDescription">To learn how to build a &lt;a href=\'%1$s\'&gt;custom chess bot&lt;/a&gt; to play on Lichess, please read &lt;a href=\'%2$s\'&gt;this blog post about creating bots&lt;/a&gt;.</string>
   <string name="stopMyselfFromPlaying">Stop myself from playing?</string>
   <string name="mentalHealthCondition">stand-alone mental health condition</string>
   <string name="lichessUserstyles">Lichess userstyles</string>

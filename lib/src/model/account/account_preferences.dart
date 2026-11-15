@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_pref_types.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 
 export 'account_pref_types.dart';
@@ -100,6 +101,11 @@ class AccountPreferences() extends AsyncNotifier<AccountPrefState> {
       _setPref('challenge', value, (prefs) => prefs.copyWith(challenge: value));
   Future<void> setMessage(Message value) =>
       _setPref('message', value, (prefs) => prefs.copyWith(message: value));
+  Future<void> setFavoriteFederation(FederationId? value) => _setPref(
+    'favFed',
+    FavoriteFederation(value),
+    (prefs) => prefs.copyWith(favoriteFederation: value),
+  );
 
   Future<void> _setPref<T>(
     String key,

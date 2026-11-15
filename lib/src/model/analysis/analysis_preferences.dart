@@ -59,10 +59,6 @@ class AnalysisPreferences() extends Notifier<AnalysisPrefs> with PreferencesStor
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -72,25 +68,23 @@ sealed class const AnalysisPrefs._()
   const factory({
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     required bool showEvaluationGauge,
-    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
     required bool showBestMoveArrow,
     required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showLocalMoveVerdicts,
     required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _AnalysisPrefs;
 
   static const defaults = AnalysisPrefs(
     enableServerAnalysis: true,
     showEvaluationGauge: true,
-    showEngineLines: true,
+    showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
     showLocalMoveVerdicts: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
   );
 
   factory fromJson(Map<String, dynamic> json) {

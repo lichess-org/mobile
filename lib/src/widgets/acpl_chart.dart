@@ -50,7 +50,7 @@ class const AcplChart({required final AcplChartParams params, super.key}) extend
 
     return Center(
       child: AspectRatio(
-        aspectRatio: 2.5,
+        aspectRatio: 3.9,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LayoutBuilder(

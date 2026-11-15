@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_player.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -87,6 +88,7 @@ class _PgnGamesListScreenState() extends State<PgnGamesListScreen> {
                   padding: Styles.horizontalBodyPadding.add(const EdgeInsets.only(bottom: 8)),
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     onChanged: (value) {
                       setState(() {
                         _searchQuery = value;
@@ -116,7 +118,7 @@ class _PgnGamesListScreenState() extends State<PgnGamesListScreen> {
             subtitle: Text(gameData.subtitle, overflow: .ellipsis, maxLines: 1),
             onTap: () {
               final game = widget.games[filteredIndices[index]];
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pushHidingTabBar(
                 AnalysisScreen.buildRoute(
                   AnalysisOptions.pgn(
                     // TODO generate unique id for each game, maybe based on the PGN headers?

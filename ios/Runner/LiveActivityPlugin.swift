@@ -14,6 +14,9 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   /// How long lila-ws takes to count a silent socket (the app suspended) as gone: it drops the
   /// clients whose last ping is more than 30 s old.
   private static let silentSocketTimeout: TimeInterval = 30
+  /// How long an activity stays active after the alert of its game's result, for the system to
+  /// show the alert before the activity ends.
+  private static let resultAlertDuration: TimeInterval = 3
   private static let leftNotificationPrefix = "org.lichess.liveActivity.left."
 
   private let channel: FlutterMethodChannel
@@ -165,10 +168,54 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   private func end(args: [String: Any], result: @escaping FlutterResult) {
     do {
       let activity = try find(args["id"])
+      let state: GameActivityAttributes.ContentState? =
+        args["state"] is NSNull || args["state"] == nil ? nil : try decode(args["state"])
+      let dismissAfter = TimeInterval(args["dismissAfter"] as? Int ?? 0) / 1000
+      // No `staleDate`: an ended activity is no longer the game the user left.
+      let content = state.map { ActivityContent(state: $0, staleDate: nil) }
+      let dismissDate = Date().addingTimeInterval(dismissAfter)
+      let policy: ActivityUIDismissalPolicy = dismissAfter > 0 ? .after(dismissDate) : .immediate
+      // `end` can't alert, so the result is first shown by an update that does.
+      let alert = isInBackground
+        ? state.flatMap { Self.resultAlert(myColor: activity.attributes.myColor, state: $0) }
+        : nil
+      guard let content, let alert else {
+        forget(activity.id)
+        enqueue {
+          await activity.end(content, dismissalPolicy: policy)
+          result(nil)
+        }
+        return
+      }
+
+      // The system removes an ended activity from the Dynamic Island at once, which would cut the
+      // alert short: the activity ends a moment after it, and the dismissal policy keeps it on the
+      // Lock Screen until `dismissDate`. Its own background task, begun before `forget` ends the
+      // game's one, keeps the app running meanwhile.
+      let application = UIApplication.shared
+      var holdTask = UIBackgroundTaskIdentifier.invalid
+      holdTask = application.beginBackgroundTask(withName: "LiveActivityResult") {
+        application.endBackgroundTask(holdTask)
+        holdTask = .invalid
+      }
+      let hold =
+        holdTask == .invalid
+        ? 0
+        : max(
+          0, min(Self.resultAlertDuration, application.backgroundTimeRemaining - Self.staleMargin))
       forget(activity.id)
       enqueue {
-        await activity.end(nil, dismissalPolicy: .immediate)
+        await activity.update(content, alertConfiguration: alert)
         result(nil)
+      }
+      // Not waited for in the chain, which would hold back the updates of another activity.
+      DispatchQueue.main.asyncAfter(deadline: .now() + hold) { [weak self] in
+        self?.enqueue {
+          await activity.end(content, dismissalPolicy: policy)
+          guard holdTask != .invalid else { return }
+          application.endBackgroundTask(holdTask)
+          holdTask = .invalid
+        }
       }
     } catch {
       result(Self.flutterError(error))
@@ -410,6 +457,22 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
     return AlertConfiguration(title: "Your turn", body: body, sound: .default)
   }
 
+  /// An alert for when the game is over, with its result.
+  @available(iOS 16.2, *)
+  private static func resultAlert(
+    myColor: GameActivityAttributes.Side,
+    state: GameActivityAttributes.ContentState
+  ) -> AlertConfiguration? {
+    guard let result = state.result else { return nil }
+    let body: LocalizedStringResource =
+      switch result {
+      case .draw: "Draw"
+      case .aborted: "Game aborted"
+      case .whiteWins, .blackWins: result.isVictory(for: myColor) ? "Victory" : "Defeat"
+      }
+    return AlertConfiguration(title: "Game Over", body: body, sound: .default)
+  }
+
   /// Runs `operation` after every activity operation enqueued before it, on the main actor, where
   /// Flutter results must be sent.
   private func enqueue(_ operation: @escaping @MainActor () async -> Void) {
@@ -422,18 +485,16 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
 
   @available(iOS 16.2, *)
   private func observe(_ activity: Activity<GameActivityAttributes>) {
-    Task { [weak self] in
+    Task { @MainActor [weak self] in
       for await state in activity.activityStateUpdates {
-        await MainActor.run {
-          #if DEBUG
-            NSLog("LiveActivityPlugin: %@ state %@", activity.id, Self.name(of: state))
-          #endif
-          if state == .dismissed || state == .ended {
-            self?.forget(activity.id)
-          }
-          self?.channel.invokeMethod(
-            "onActivityState", arguments: ["id": activity.id, "state": Self.name(of: state)])
+        #if DEBUG
+          NSLog("LiveActivityPlugin: %@ state %@", activity.id, Self.name(of: state))
+        #endif
+        if state == .dismissed || state == .ended {
+          self?.forget(activity.id)
         }
+        self?.channel.invokeMethod(
+          "onActivityState", arguments: ["id": activity.id, "state": Self.name(of: state)])
       }
     }
   }
@@ -459,6 +520,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   @available(iOS 16.2, *)
   private static func name(of state: ActivityState) -> String {
     switch state {
+    case .pending: return "pending"
     case .active: return "active"
     case .ended: return "ended"
     case .dismissed: return "dismissed"

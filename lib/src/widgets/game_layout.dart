@@ -373,7 +373,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
         final isTablet = isTabletOrLarger(context);
 
         final defaultSettings = boardPrefs
-            .toBoardSettings(variant)
+            .toBoardSettings(variant, appBrightness: Theme.of(context).brightness)
             .copyWith(
               borderRadius: isTablet ? Styles.boardBorderRadius : BorderRadius.zero,
               boxShadow: isTablet ? boardShadows : const <BoxShadow>[],

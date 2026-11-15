@@ -5,7 +5,6 @@ import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -391,20 +391,20 @@ void main() {
       await tester.drag(
         find.descendant(
           of: find.widgetWithText(PuzzleAnglePreview, 'A00'),
-          matching: find.byType(Slidable),
+          matching: find.byType(SwipeActions),
         ),
         const Offset(-150, 0),
       );
       await tester.pumpAndSettle();
 
-      expect(find.widgetWithText(SlidableAction, 'Delete'), findsOneWidget);
+      expect(find.text('Delete'), findsOneWidget);
 
-      await tester.tap(find.widgetWithText(SlidableAction, 'Delete'));
+      await tester.tap(find.text('Delete'));
 
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(PuzzleAnglePreview, 'A00'), findsNothing);
-    });
+    }, variant: kPlatformVariant);
 
     testWidgets('listing angles does not download puzzles', (WidgetTester tester) async {
       // Regression test: the previews used to read [nextPuzzleProvider], which refills the offline

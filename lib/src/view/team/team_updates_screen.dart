@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/team/team.dart';
 import 'package:lichess_mobile/src/model/team/team_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -131,10 +132,9 @@ class const _ChannelsList({required final IList<TeamUpdatesByTeam> teams}) exten
                 ? Badge.count(count: entry.unread)
                 : null,
             onTap: () async {
-              await Navigator.of(
-                context,
-                rootNavigator: true,
-              ).push(TeamChannelScreen.buildRoute(teamId: entry.team.id, initialTeam: entry.team));
+              await Navigator.of(context).pushHidingTabBar(
+                TeamChannelScreen.buildRoute(teamId: entry.team.id, initialTeam: entry.team),
+              );
               ref.invalidate(teamUpdatesProvider);
             },
           );

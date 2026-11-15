@@ -37,6 +37,7 @@
   <string name="spectator">Tilskuer</string>
   <string name="contributor">Bidragsyder</string>
   <string name="kick">Smid ud</string>
+  <string name="remove" comment="Used to remove a user from a study.&#10;&#10;Shown to the right of a user that has been added to the study e.g. as a contributor to that study.">Fjern</string>
   <string name="leaveTheStudy">Forlad dette studie</string>
   <string name="youAreNowAContributor">Du er nu bidragsyder</string>
   <string name="youAreNowASpectator">Du er nu tilskuer</string>
@@ -48,7 +49,6 @@
   <string name="annotateWithGlyphs">Annoter med glyffer</string>
   <string name="theChapterIsTooShortToBeAnalysed">Dette kapitel er for kort til at blive analyseret.</string>
   <string name="onlyContributorsCanRequestAnalysis">Kun studiets bidragsydere kan anmode om en computeranalyse.</string>
-  <string name="getAFullComputerAnalysis">Få en fuld server-computeranalyse af hovedlinjen.</string>
   <string name="makeSureTheChapterIsComplete">Sikr dig at kapitlet er færdigt. Du kan kun anmode om analyse én gang.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Alle SYNC medlemmer forbliver på samme stilling</string>
   <string name="shareChanges">Del ændringer med tilskuere og gem dem på serveren</string>
@@ -100,10 +100,6 @@
   <string name="loadAPositionFromFen">Indlæs en stilling fra FEN</string>
   <string name="loadAGameFromPgn">Indlæs et parti fra PGN</string>
   <string name="automatic">Automatisk</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Indsæt din PGN-tekst her, op til %s parti</item>
-    <item quantity="other">Indsæt din PGN-tekst her, op til %s partier</item>
-  </plurals>
   <string name="urlOfTheGame">URL for partiet</string>
   <string name="createChapter">Opret kapitel</string>
   <string name="createStudy">Opret studie</string>
@@ -123,16 +119,13 @@
   <string name="noLetPeopleBrowseFreely">Nej: lad folk gennemse frit</string>
   <string name="pinnedStudyComment">Fastgjort studie-kommentar</string>
   <string name="start">Start</string>
-  <string name="save">Gem</string>
   <string name="clearChat">Ryd chat</string>
   <string name="deleteTheStudyChatHistory">Slet studiets chat-historik? Du kan ikke fortryde!</string>
   <string name="deleteStudy">Slet studie</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Slet hele studiet? Det kan ikke fortrydes! Skriv navnet på studiet for at bekræfte: %s</string>
   <string name="whereDoYouWantToStudyThat">Hvor vil du studere det?</string>
   <string name="goodMove">Godt træk</string>
-  <string name="mistake">Fejl</string>
   <string name="brilliantMove">Fremragende træk</string>
-  <string name="blunder">Brøler</string>
   <string name="interestingMove">Interessant træk</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Tvivlsomt træk</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Eneste mulige træk</string>
@@ -199,4 +192,9 @@
   <string name="doubleDefeat">Dobbelt nederlag</string>
   <string name="blackDefeatWhiteCanNotWin">Sort nederlag, men hvid kan ikke vinde</string>
   <string name="whiteDefeatBlackCanNotWin">Hvidt nederlag, men sort kan ikke vinde</string>
+  <string name="analysisEditor">Analyse-editor</string>
+  <string name="clearLocal">Ryd lokal analyse?</string>
+  <string name="clearPublished">Ryd offentliggjort analyse?</string>
+  <string name="requestAServerAnalysis">Anmod om en serveranalyse</string>
+  <string name="analyzeOnYourDevice">Analyser på din enhed</string>
 </resources>
