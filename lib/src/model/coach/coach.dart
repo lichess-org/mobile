@@ -2,6 +2,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/blog/blog.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'coach.freezed.dart';
@@ -9,7 +10,6 @@ part 'coach.freezed.dart';
 final RegExp _youtubeVideoIdRegex = RegExp(
   r'(?:youtube\.com|youtu\.be)/(?:watch)?(?:\?v=)?([^"&?/ ]{11})',
 );
-final RegExp _studyIdRegex = RegExp(r'lichess\.org/study/(\w{8})');
 
 IList<String> _parseYoutubeUrls(String text) {
   return text
@@ -25,16 +25,6 @@ IList<String> _parseYoutubeUrls(String text) {
 String youtubeThumbnailUrl(String videoUrl) {
   final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
   return id != null ? 'https://i.ytimg.com/vi/$id/hqdefault.jpg' : videoUrl;
-}
-
-IList<String> _parseStudyIds(String text) {
-  return text
-      .split('\n')
-      .map(_studyIdRegex.firstMatch)
-      .nonNulls
-      .map((match) => match[1]!)
-      .take(6)
-      .toIList();
 }
 
 @freezed
@@ -79,7 +69,7 @@ sealed class CoachProfile with _$CoachProfile {
     String? hourlyRate,
     String? picture,
     required IList<String> youtubeVideos,
-    required IList<String> studies,
+    required IList<StudyPageItem> studies,
     required IList<BlogPost> posts,
     String? description,
     String? playingExperience,
@@ -103,7 +93,9 @@ sealed class CoachProfile with _$CoachProfile {
       hourlyRate: profile('hourlyRate').asStringOrNull(),
       picture: pick('coach', 'picture').asStringOrNull(),
       youtubeVideos: _parseYoutubeUrls(profile('youtubeVideos').asStringOrNull() ?? ''),
-      studies: _parseStudyIds(profile('publicStudies').asStringOrNull() ?? ''),
+      studies: pick('studies')
+          .asListOrEmpty((it) => StudyPageItem.fromJson(it.asMapOrThrow()))
+          .toIList(),
       posts: pick('posts').asListOrEmpty(BlogPost.fromPick).toIList(),
       description: profile('description').asStringOrNull(),
       playingExperience: profile('playingExperience').asStringOrNull(),

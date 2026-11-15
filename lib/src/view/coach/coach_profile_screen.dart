@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -175,14 +174,14 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             header: Text(context.l10n.coachPublicStudies),
             hasLeading: true,
             children: [
-              for (final studyId in profile.studies)
+              for (final study in profile.studies)
                 ListTile(
                   leading: const Icon(Icons.book),
-                  title: Text(studyId, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  title: Text(study.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                   onTap: () => Navigator.of(
                     context,
                     rootNavigator: true,
-                  ).push(StudyScreen.buildRoute((id: StudyId(studyId), initialChapter: null))),
+                  ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
                 ),
             ],
           ),

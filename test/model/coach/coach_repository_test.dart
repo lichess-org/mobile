@@ -177,7 +177,21 @@ void main() {
     "createdAt": 1650000000000,
     "updatedAt": 1750000000000
   },
-  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"},
+  "studies": [
+    {
+      "id": "ZalBgXT3",
+      "name": "Rook endgames mastery",
+      "liked": false,
+      "likes": 12,
+      "updatedAt": 1740000000000,
+      "owner": {"id": "toniaa", "name": "toniaa"},
+      "topics": [],
+      "members": [],
+      "chapters": ["Lucena position", "Philidor position"],
+      "visibility": "public"
+    }
+  ]
 }
 ''';
 
@@ -203,7 +217,8 @@ void main() {
         profile.youtubeVideos,
         const IListConst(['https://www.youtube.com/watch?v=wEwoyYp_iw8']),
       );
-      expect(profile.studies, const IListConst(['JbWtuaeK']));
+      expect(profile.studies.single.id.value, 'ZalBgXT3');
+      expect(profile.studies.single.name, 'Rook endgames mastery');
       expect(profile.youtubeChannel, 'https://youtube.com/@toniaa');
     });
   });

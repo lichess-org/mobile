@@ -106,6 +106,33 @@ const _profileResponse = '''
       "author": {"id": "toniaa", "name": "toniaa"},
       "image": "https://image.lichess.org/ublog/post/kQ2z9WpX.jpg"
     }
+  ],
+  "studies": [
+    {
+      "id": "ZalBgXT3",
+      "name": "Rook endgames mastery",
+      "liked": false,
+      "likes": 12,
+      "updatedAt": 1740000000000,
+      "owner": {"id": "toniaa", "name": "toniaa"},
+      "topics": [],
+      "members": [],
+      "chapters": ["Lucena position", "Philidor position"],
+      "visibility": "public"
+    },
+    {
+      "id": "qM9nVb2k",
+      "name": "Opening principles",
+      "liked": true,
+      "likes": 34,
+      "updatedAt": 1730000000000,
+      "owner": {"id": "toniaa", "name": "toniaa"},
+      "topics": [],
+      "members": [],
+      "chapters": ["Center control"],
+      "flair": "lichess.bold",
+      "visibility": "public"
+    }
   ]
 }
 ''';
@@ -282,6 +309,47 @@ void main() {
       expect(find.text('Chess sparring'), findsOneWidget);
       expect(find.text('Endgame fundamentals'), findsOneWidget);
       expect(find.textContaining('/@/toniaa/blog'), findsNothing);
+    });
+
+    testWidgets('profile shows public studies with their names', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      await tester.dragUntilVisible(
+        find.text('Rook endgames mastery'),
+        find.byType(ListView),
+        const Offset(0, -200),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Public studies'), findsOneWidget);
+      expect(find.text('Rook endgames mastery'), findsOneWidget);
+      expect(find.text('Opening principles'), findsOneWidget);
+      expect(find.textContaining('ZalBgXT3'), findsNothing);
     });
 
     testWidgets('profile hides youtube section when there are no videos', (tester) async {
