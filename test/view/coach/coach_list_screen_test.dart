@@ -91,6 +91,28 @@ const _profileResponse = '''
 }
 ''';
 
+const _profileChannelOnlyResponse = '''
+{
+  "coach": {
+    "id": "toniaa",
+    "listed": true,
+    "available": true,
+    "profile": {
+      "headline": "Learn chess the fun way",
+      "hourlyRate": "25 EUR",
+      "youtubeChannel": "https://efour-davorrogic.hr/"
+    },
+    "picture": "https://example.com/toniaa.webp",
+    "nbReviews": 12,
+    "user": {"rating": 2434, "seenAt": 1760000000000},
+    "languages": ["el-GR", "en-US"],
+    "createdAt": 1650000000000,
+    "updatedAt": 1750000000000
+  },
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
+}
+''';
+
 const _userResponse = '''
 {
   "id": "toniaa",
@@ -207,6 +229,37 @@ void main() {
       expect(find.textContaining('youtube.com'), findsNothing);
       expect(find.textContaining('youtu.be'), findsNothing);
       expect(find.byType(HttpNetworkImageWidget), findsNWidgets(3));
+    });
+
+    testWidgets('profile hides youtube section when there are no videos', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileChannelOnlyResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('YouTube videos'), findsNothing);
     });
 
     testWidgets('profile shows user API data in the overview card', (tester) async {

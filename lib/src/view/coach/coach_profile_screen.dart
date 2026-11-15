@@ -139,7 +139,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
           _TextSection(title: context.l10n.coachBestSkills, body: skills),
         if (profile.methodology case final methodology?)
           _TextSection(title: context.l10n.coachTeachingMethod, body: methodology),
-        if (profile.youtubeChannel != null || profile.youtubeVideos.isNotEmpty)
+        if (profile.youtubeVideos.isNotEmpty)
           ListSection(
             header: Text(context.l10n.coachYoutubeVideos),
             hasLeading: true,
