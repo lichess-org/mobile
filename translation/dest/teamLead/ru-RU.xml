@@ -4,15 +4,15 @@
   <string name="permPublicDesc">Иметь статус руководителя на странице клуба</string>
   <string name="permSettingsName">Настройки</string>
   <string name="permTourName">Турниры</string>
+  <string name="permCommDesc">Моделировать форум и чат клуба</string>
   <string name="permRequestDesc">Принимать или отклонять запросы на вступление</string>
   <string name="permRemoveName">Удалить</string>
+  <string name="permAdminDesc">Менять возможности руководителей</string>
   <string name="demoteLeaderNote">Чтобы убрать руководителя клуба, уберите все его возможности.</string>
   <string name="manuallyReviewAdmissionRequests">Ручная проверка запросов на вступление</string>
   <string name="hideMembersDesc" comment="Checkbox label: option to hide the team member list from non-members">Скрывать список участников команды от посторонних.</string>
   <string name="onlyLeaderLeavesTeam">Пожалуйста, добавьте нового руководителя клуба перед тем, как покинуть или закрыть клуб.</string>
-  <string name="kickSomeone">Исключить кого-то из клуба</string>
-  <string name="removeSomeone">Убрать кого-то из клуба</string>
-  <string name="whoToKick">Кого вы хотите исключить из клуба?</string>
+  <string name="removeSomeone">Убрать кого-то</string>
   <string name="whoToRemove">Кого вы хотите убрать из клуба?</string>
   <plurals name="xJoinRequests">
     <item quantity="one">%s запрос на вступление</item>
@@ -28,7 +28,7 @@
   <string name="teamDescriptionHelp">Полное описание, видимое на странице клуба.</string>
   <string name="closeTeam">Расформировать клуб</string>
   <string name="closeTeamDescription">Закрывает клуб навсегда.</string>
-  <string name="forumVisibilityHelp">Кто может видеть форум команды на странице команды?&lt;br&gt;Только участники команды могут оставлять сообщения на форуме команды.</string>
+  <string name="forumVisibilityHelp">Кто может видеть форум команды на странице клуба?&lt;br&gt;Только участники команды могут оставлять сообщения на форуме команды.</string>
   <string name="forumVisibilityNone">Скрыть форум</string>
   <string name="listTheTeamsThatWillCompete">Список клубов, которые будут участвовать в этом турнире.</string>
   <string name="thisTeamBattleIsOver">Этот турнир закончился, вы не можете изменять клубы.</string>
