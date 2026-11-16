@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,7 +50,7 @@ class const _BroadcastOverviewTitle({required final BroadcastTournamentId tourna
     return WhenRouteSettled(
       ready: name != null,
       placeholder: const SizedBox.shrink(),
-      builder: (context) => Text(name!),
+      builder: (context) => AppBarTitleText(name!, maxLines: 2),
     );
   }
 }
