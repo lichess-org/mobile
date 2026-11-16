@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Priimti lygiąsias?</string>
+  <string name="account" comment="The account screen title.">Paskyra</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Paskyros nuostatos</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Šie nustatymai taikomi jūsų „Lichess“ paskyrai ir bus naudojami visuose įrenginiuose.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Pridėti prie studijų</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Leisti atšaukti ėjimus ir rodyti patarimus</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Namai</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
   <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Žaidimas lentoje</string>
