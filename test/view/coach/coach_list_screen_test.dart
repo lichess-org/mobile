@@ -526,6 +526,10 @@ void main() {
 
       expect(find.text('Chess Sparring Academy'), findsOneWidget);
       expect(find.text('1.2K subscribers • 438 videos'), findsOneWidget);
+      expect(
+        tester.getRect(find.text('Chess Sparring Academy')).top,
+        lessThan(tester.getRect(find.byType(HttpNetworkImageWidget).last).top),
+      );
     });
 
     testWidgets('profile shows the latest blog posts', (tester) async {

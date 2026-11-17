@@ -165,6 +165,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             header: Text(context.l10n.coachYoutubeVideos),
             hasLeading: true,
             children: [
+              if (profile.youtubeChannel case final channel?) _YoutubeChannelTile(url: channel),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Column(
@@ -174,7 +175,6 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                   ],
                 ),
               ),
-              if (profile.youtubeChannel case final channel?) _YoutubeChannelTile(url: channel),
             ],
           ),
         if (profile.studies.isNotEmpty)
