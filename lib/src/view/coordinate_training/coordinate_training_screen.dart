@@ -312,9 +312,16 @@ class const _Score({
         width: size,
         height: size,
         child: Center(
-          child: Text(
-            score.toString(),
-            style: Styles.bold.copyWith(color: Colors.white, fontSize: 24.0),
+          // The square has a fixed size: with a large text size, a score of 2 digits or more would
+          // wrap and its last digits would be drawn outside of the square. Shrink it instead.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              score.toString(),
+              style: Styles.bold.copyWith(color: Colors.white, fontSize: 24.0),
+              maxLines: 1,
+              softWrap: false,
+            ),
           ),
         ),
       ),
