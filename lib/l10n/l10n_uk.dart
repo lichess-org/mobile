@@ -500,6 +500,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Не можна кидати виклик собі';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Активність';
 
   @override

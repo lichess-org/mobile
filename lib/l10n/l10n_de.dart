@@ -500,6 +500,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Du kannst dich nicht selbst herausfordern';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Verlauf';
 
   @override

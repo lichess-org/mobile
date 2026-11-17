@@ -500,6 +500,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Nu te poți provoca singur';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Activitate';
 
   @override
