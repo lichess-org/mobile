@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
+import 'package:lichess_mobile/src/model/coach/youtube_oembed.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -197,9 +198,10 @@ class const _InfoRow({required final Widget value, final String? label}) extends
   }
 }
 
-class const _YoutubeVideoThumbnail({required final String url}) extends StatelessWidget {
+class const _YoutubeVideoThumbnail({required final String url}) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final title = ref.watch(youtubeVideoTitleProvider(url)).value;
     return InkWell(
       onTap: () => launchUrlString(url),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -207,14 +209,47 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Stateles
         aspectRatio: 4 / 3,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          child: ColoredBox(
-            color: ColorScheme.of(context).surfaceContainerHighest,
-            child: HttpNetworkImageWidget(
-              youtubeThumbnailUrl(url),
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) =>
-                  const Icon(Icons.play_circle_outline, size: 40.0, color: Colors.white70),
-            ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              ColoredBox(
+                color: ColorScheme.of(context).surfaceContainerHighest,
+                child: HttpNetworkImageWidget(
+                  youtubeThumbnailUrl(url),
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) =>
+                      const Icon(Icons.play_circle_outline, size: 40.0, color: Colors.white70),
+                ),
+              ),
+              if (title case final title?)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black87, Colors.transparent],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 24.0),
+                      child: Text(
+                        title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          shadows: [Shadow(blurRadius: 4.0, color: Colors.black54)],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -372,6 +372,44 @@ void main() {
       expect(find.byType(HttpNetworkImageWidget), findsNWidgets(3));
     });
 
+    testWidgets('profile shows youtube video titles over the thumbnails', (tester) async {
+      final client = MockClient((request) async {
+        if (request.url.host == 'www.youtube.com' && request.url.path == '/oembed') {
+          return http.Response(
+            '{"title":"${request.url.queryParameters['url']!.contains('dQw4w9WgXcQ') ? 'First video title' : 'Second video title'}"}',
+            200,
+          );
+        }
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('First video title'), findsOneWidget);
+      expect(find.text('Second video title'), findsOneWidget);
+    });
+
     testWidgets('profile shows the latest blog posts', (tester) async {
       final client = MockClient((request) async {
         switch (request.url.path) {
