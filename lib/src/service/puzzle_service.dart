@@ -150,11 +150,14 @@ class PuzzleService(
 
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
-
+    /// Lichess server rejects requests with 100+ solutions, so we need to limit batch.
+    /// Leftover soltuions will be sent on next [_syncAndLoadData] call, which 
+    /// will be called once on next puzzle.
+    final solvedBatch = solved.sublist(0, 70);
     final deficit = max(0, queueLength - unsolved.length);
 
     // anonymous users can't solve puzzles, so their sync only ever downloads
-    final isSolving = solved.isNotEmpty && userId != null;
+    final isSolving = solvedBatch.isNotEmpty && userId != null;
 
     // Back off while the server is rate-limiting solves: keep serving from the
     // local unsolved queue instead of firing another solveBatch that will 429
@@ -165,16 +168,17 @@ class PuzzleService(
       return Result.value((data, null, null));
     }
 
-    if (deficit > 0 || solved.isNotEmpty) {
-      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solved.length})');
+    if (deficit > 0 || solvedBatch.isNotEmpty) {
+      _log.fine('Will sync puzzles with lichess (deficit: $deficit, solved: ${solvedBatch.length})');
 
       final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
+      
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           isSolving
               ? PuzzleRepository(client)
-                    .solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+                    .solveBatch(nb: deficit, solved: solvedBatch, angle: angle, difficulty: difficulty)
               : PuzzleRepository(client)
                     .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
@@ -197,7 +201,7 @@ class PuzzleService(
               // Arm the back-off when the server rejects a solve flush with 429,
               // so later solves stop hammering it and the UI can warn the user.
               if (isSolving && error is ServerException && error.statusCode == 429) {
-                _ref.read(puzzleSolveLimiterProvider.notifier).markLimited(solved.length);
+                _ref.read(puzzleSolveLimiterProvider.notifier).markLimited(solvedBatch.length);
               }
               return Result.value((data, null, null, false));
             },
