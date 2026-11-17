@@ -46,14 +46,10 @@ abstract class const OfflineComputerGame._()
     @Default(false) bool practiceMode,
 
     /// The player's data.
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default(Player(onGame: true))
-    Player humanPlayer,
+    @Default(Player(onGame: true)) Player humanPlayer,
 
     /// The engine player's data.
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default(Player(onGame: true))
-    Player enginePlayer,
+    @Default(Player(onGame: true)) Player enginePlayer,
 
     Side? winner,
     bool? isThreefoldRepetition,
@@ -81,8 +77,12 @@ abstract class const OfflineComputerGame._()
 /// The [Player] standing for [opponent].
 Player enginePlayerFor(OpponentSpec opponent) => Player(
   onGame: true,
-  user: switch (opponent) {
-    StockfishOpponentSpec() => const LightUser(id: UserId('stockfish'), name: 'Stockfish'),
-    MaiaOpponentSpec() => const LightUser(id: UserId('maia'), name: 'Maia'),
-  },
+  user: LightUser(
+    id: switch (opponent) {
+      StockfishOpponentSpec() => const UserId('stockfish'),
+      MaiaOpponentSpec() => const UserId('maia'),
+    },
+    name: opponent.displayName,
+    title: 'BOT',
+  ),
 );
