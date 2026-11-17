@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -51,12 +52,12 @@ import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/rich_link_text.dart';
 import 'package:lichess_mobile/src/widgets/side_indicator.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:path_provider/path_provider.dart' show getTemporaryDirectory;
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class const TournamentScreen({required final TournamentId id, final UserId? initialPlayerId})
     extends ConsumerStatefulWidget {
@@ -626,7 +627,9 @@ class const _ExpandableDescription({
               Semantics(
                 link: true,
                 child: GestureDetector(
-                  onTap: () => launchUrl(lichessUri('/page/lichess-prizes')),
+                  onTap: () => ref
+                      .read(appLinksServiceProvider)
+                      .onLinkifyOpen(context, UrlElement('/page/lichess-prizes')),
                   child: Text('Prizes', style: Styles.linkStyle(context)),
                 ),
               ),
@@ -643,7 +646,7 @@ class const _ExpandableDescription({
             softLineBreak: true,
             onTapLink: (text, url, title) {
               if (url != null) {
-                launchUrl(Uri.parse(url));
+                ref.read(appLinksServiceProvider).onLinkifyOpen(context, UrlElement(url));
               }
             },
           ),
