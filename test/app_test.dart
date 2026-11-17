@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -19,6 +20,42 @@ import 'test_helpers.dart';
 import 'test_provider_scope.dart';
 
 void main() {
+  testWidgets('Opening the app refreshes the Android broadcast widget', (tester) async {
+    final calls = <MethodCall>[];
+    final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    const channel = MethodChannel('home_widget');
+    messenger.setMockMethodCallHandler(channel, (methodCall) async {
+      calls.add(methodCall);
+      return true;
+    });
+    addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+
+    final app = await makeTestProviderScope(tester, child: const Application());
+
+    await tester.pumpWidget(app);
+    await tester.pump(const Duration(milliseconds: 100));
+
+    // The widget reads the host from the widget storage, so it must be saved before the refresh.
+    final saveHost = calls.indexWhere(
+      (call) =>
+          call.method == 'saveWidgetData' &&
+          (call.arguments as Map<Object?, Object?>)['id'] == 'lichessHost',
+    );
+    final refresh = calls.indexWhere(
+      (call) =>
+          call.method == 'updateWidget' &&
+          (call.arguments as Map<Object?, Object?>)['qualifiedAndroidName'] ==
+              'org.lichess.mobileV2.widgets.BroadcastWidgetProvider',
+    );
+
+    expect(saveHost, isNot(-1));
+    if (defaultTargetPlatform == .android) {
+      expect(refresh, greaterThan(saveHost));
+    } else {
+      expect(refresh, -1);
+    }
+  }, variant: kPlatformVariant);
+
   testWidgets('App loads', (tester) async {
     final app = await makeTestProviderScope(tester, child: const Application());
 

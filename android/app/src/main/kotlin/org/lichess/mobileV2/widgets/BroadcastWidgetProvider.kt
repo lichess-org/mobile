@@ -24,6 +24,7 @@ import android.widget.RemoteViews
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.net.UnknownHostException
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -35,6 +36,7 @@ import org.lichess.mobileV2.MainActivity
 class BroadcastWidgetProvider : AppWidgetProvider() {
 
     companion object {
+        private const val FETCH_ATTEMPTS = 3
         private val THUMBNAIL_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(12)
     }
 
@@ -83,7 +85,7 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         try {
             val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
             val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
-            val broadcasts = fetchBroadcasts(lichessHost)
+            val broadcasts = fetchBroadcastsWithRetry(lichessHost)
 
             remoteViews.removeAllViews(R.id.broadcast_list)
 
@@ -224,45 +226,59 @@ class BroadcastWidgetProvider : AppWidgetProvider() {
         itemViews.setInt(R.id.item_thumbnail, "setColorFilter", context.getColor(R.color.widget_text_secondary))
     }
 
-    private fun fetchBroadcasts(lichessHost: String): List<BroadcastItem> {
-        try {
-            val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
-            val url = URL("$scheme://$lichessHost/api/broadcast/top")
-            val connection = url.openConnection() as HttpURLConnection
-            connection.connectTimeout = 10000
-            connection.readTimeout = 10000
-            connection.setRequestProperty("Accept", "application/json")
-            
+    // Since Android 15 the system cuts the network of an app idling in the background, and gives it
+    // back only shortly after a broadcast wakes it up. A request made before that fails right away
+    // with an UnknownHostException, so retry it a few times before giving up.
+    private fun fetchBroadcastsWithRetry(lichessHost: String): List<BroadcastItem> {
+        var attempt = 1
+        while (true) {
             try {
-                return connection.inputStream.use { stream ->
-                    val jsonString = stream.bufferedReader().use { it.readText() }
-                    val active = JSONObject(jsonString).getJSONArray("active")
-                    
-                    (0 until active.length()).map { i ->
-                        val item = active.getJSONObject(i)
-                        val tour = item.getJSONObject("tour")
-                        val round = item.getJSONObject("round")
-                        val id = item.optJSONObject("roundToLink")?.optString("id")?.takeIf { it.isNotBlank() } ?: round.getString("id")
-                        val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
-
-                        BroadcastItem(
-                            id = id,
-                            title = title,
-                            roundName = round.getString("name"),
-                            tourSlug = tour.getString("slug"),
-                            roundSlug = round.getString("slug"),
-                            isLive = round.optBoolean("ongoing", false),
-                            startsAt = round.optLong("startsAt", 0),
-                            imageUrl = tour.optString("image").takeIf { !it.isNullOrBlank() }
-                        )
-                    }
-                }
-            } finally {
-                connection.disconnect()
+                return fetchBroadcasts(lichessHost)
+            } catch (e: UnknownHostException) {
+                if (attempt == FETCH_ATTEMPTS) throw e
+                Log.w("BroadcastWidget", "Network not ready (attempt $attempt), retrying: $e")
+                Thread.sleep(attempt * 1000L)
+                attempt++
             }
-        } catch (e: Exception) {
-            Log.e("BroadcastWidget", "Error fetching broadcasts", e)
-            return emptyList()
+        }
+    }
+
+    // Throws on network or JSON errors, so that a failed update leaves the widget as it was instead
+    // of showing that there are no broadcasts.
+    private fun fetchBroadcasts(lichessHost: String): List<BroadcastItem> {
+        val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
+        val url = URL("$scheme://$lichessHost/api/broadcast/top")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.connectTimeout = 10000
+        connection.readTimeout = 10000
+        connection.setRequestProperty("Accept", "application/json")
+        
+        try {
+            return connection.inputStream.use { stream ->
+                val jsonString = stream.bufferedReader().use { it.readText() }
+                val active = JSONObject(jsonString).getJSONArray("active")
+                
+                (0 until active.length()).map { i ->
+                    val item = active.getJSONObject(i)
+                    val tour = item.getJSONObject("tour")
+                    val round = item.getJSONObject("round")
+                    val id = item.optJSONObject("roundToLink")?.optString("id")?.takeIf { it.isNotBlank() } ?: round.getString("id")
+                    val title = item.optString("group").takeIf { !it.isNullOrBlank() } ?: tour.getString("name")
+
+                    BroadcastItem(
+                        id = id,
+                        title = title,
+                        roundName = round.getString("name"),
+                        tourSlug = tour.getString("slug"),
+                        roundSlug = round.getString("slug"),
+                        isLive = round.optBoolean("ongoing", false),
+                        startsAt = round.optLong("startsAt", 0),
+                        imageUrl = tour.optString("image").takeIf { !it.isNullOrBlank() }
+                    )
+                }
+            }
+        } finally {
+            connection.disconnect()
         }
     }
 
