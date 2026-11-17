@@ -159,9 +159,8 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Wrap(
+                child: Column(
                   spacing: 8.0,
-                  runSpacing: 8.0,
                   children: [
                     for (final video in profile.youtubeVideos) _YoutubeVideoThumbnail(url: video),
                   ],
@@ -204,9 +203,8 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Stateles
     return InkWell(
       onTap: () => launchUrlString(url),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      child: SizedBox(
-        width: 160.0,
-        height: 120.0,
+      child: AspectRatio(
+        aspectRatio: 4 / 3,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           child: ColoredBox(

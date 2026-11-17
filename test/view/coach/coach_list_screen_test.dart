@@ -61,6 +61,72 @@ const _listResponse = '''
 }
 ''';
 
+const _listPage1Response = '''
+{
+  "currentPage": 1,
+  "maxPerPage": 1,
+  "currentPageResults": [
+    {
+      "coach": {
+        "id": "toniaa",
+        "listed": true,
+        "available": true,
+        "profile": {"headline": "Learn chess the fun way", "hourlyRate": "25 EUR"},
+        "picture": null,
+        "nbReviews": 12,
+        "user": {"rating": 2434, "seenAt": 1760000000000},
+        "languages": ["en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
+    }
+  ],
+  "previousPage": null,
+  "nextPage": 2,
+  "nbResults": 2,
+  "nbPages": 2,
+  "lang": "all",
+  "order": "login",
+  "country": "all",
+  "languages": [],
+  "countries": []
+}
+''';
+
+const _listPage2Response = '''
+{
+  "currentPage": 2,
+  "maxPerPage": 1,
+  "currentPageResults": [
+    {
+      "coach": {
+        "id": "coach2",
+        "listed": true,
+        "available": false,
+        "profile": {"headline": null, "hourlyRate": null},
+        "picture": null,
+        "nbReviews": 0,
+        "user": {"rating": 2200, "seenAt": 1760000000000},
+        "languages": ["en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "coach2", "name": "coach2"}
+    }
+  ],
+  "previousPage": 1,
+  "nextPage": null,
+  "nbResults": 2,
+  "nbPages": 2,
+  "lang": "all",
+  "order": "login",
+  "country": "all",
+  "languages": [],
+  "countries": []
+}
+''';
+
 const _profileResponse = '''
 {
   "coach": {
@@ -209,6 +275,35 @@ void main() {
       expect(pictureRect.left, tileRect.left + 16.0);
       expect(pictureRect.width, pictureRect.height);
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
+    });
+
+    testWidgets('automatically loads the next page when the list does not fill the screen', (
+      tester,
+    ) async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/coach/all/all/login') {
+          return http.Response(
+            request.url.queryParameters['page'] == '2' ? _listPage2Response : _listPage1Response,
+            200,
+          );
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CoachListTile), findsNWidgets(2));
     });
 
     testWidgets('tapping a coach opens the profile', (tester) async {

@@ -50,17 +50,19 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
   }
 
   void _scrollListener() {
-    if (!requestedNextPage &&
+    _maybeRequestNextPage();
+  }
+
+  void _maybeRequestNextPage() {
+    final page = ref.read(coachListControllerProvider(_filters));
+    final value = page.value;
+    if (requestedNextPage || value == null || value.nextPage == null || page.isLoading) return;
+    if (_scrollController.hasClients &&
         _scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 300) {
-      final page = ref.read(coachListControllerProvider(_filters));
-
-      if (!page.isLoading) {
-        setState(() {
-          requestedNextPage = true;
-        });
-
-        ref.read(coachListControllerProvider(_filters).notifier).next();
-      }
+      setState(() {
+        requestedNextPage = true;
+      });
+      ref.read(coachListControllerProvider(_filters).notifier).next();
     }
   }
 
@@ -170,8 +172,15 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
             setState(() {
               requestedNextPage = false;
             });
+            _maybeRequestNextPage();
           }
         });
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _maybeRequestNextPage();
       }
     });
 
