@@ -107,12 +107,8 @@ class PuzzleService(
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
   }) async {
     puzzleStorage.save(puzzle: puzzle);
-    const emptyBatch = PuzzleBatch(
-      solved: IListConst([]),
-      unsolved: IListConst([]),
-    );
-    final data =
-        await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
+    const emptyBatch = PuzzleBatch(solved: IListConst([]), unsolved: IListConst([]));
+    final data = await batchStorage.fetch(userId: userId, angle: angle) ?? emptyBatch;
     await batchStorage.save(
       userId: userId,
       angle: angle,
@@ -134,10 +130,7 @@ class PuzzleService(
   }
 
   /// Deletes the puzzle batch of [angle] from the local storage.
-  Future<void> deleteBatch({
-    required UserId? userId,
-    required PuzzleAngle angle,
-  }) async {
+  Future<void> deleteBatch({required UserId? userId, required PuzzleAngle angle}) async {
     await batchStorage.delete(userId: userId, angle: angle);
   }
 
@@ -149,8 +142,10 @@ class PuzzleService(
   ///
   /// This method should never fail, as if the network is down it will fallback
   /// to the local database.
-  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)>
-  _syncAndLoadData(UserId? userId, PuzzleAngle angle) async {
+  FutureResult<(PuzzleBatch?, PuzzleGlicko?, IList<PuzzleRound>?)> _syncAndLoadData(
+    UserId? userId,
+    PuzzleAngle angle,
+  ) async {
     final data = await batchStorage.fetch(userId: userId, angle: angle);
 
     final unsolved = data?.unsolved ?? IList(const []);
@@ -184,17 +179,11 @@ class PuzzleService(
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           isSolving
-              ? PuzzleRepository(client).solveBatch(
-                  nb: deficit,
-                  solved: solvedBatch,
-                  angle: angle,
-                  difficulty: difficulty,
-                )
-              : PuzzleRepository(client).selectBatch(
-                  nb: deficit,
-                  angle: angle,
-                  difficulty: difficulty,
-                ),
+              ? PuzzleRepository(
+                  client,
+                ).solveBatch(nb: deficit, solved: solvedBatch, angle: angle, difficulty: difficulty)
+              : PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
       );
 
@@ -214,12 +203,8 @@ class PuzzleService(
             (error, _) {
               // Arm the back-off when the server rejects a solve flush with 429,
               // so later solves stop hammering it and the UI can warn the user.
-              if (isSolving &&
-                  error is ServerException &&
-                  error.statusCode == 429) {
-                _ref
-                    .read(puzzleSolveLimiterProvider.notifier)
-                    .markLimited(solvedBatch.length);
+              if (isSolving && error is ServerException && error.statusCode == 429) {
+                _ref.read(puzzleSolveLimiterProvider.notifier).markLimited(solvedBatch.length);
               }
               return Result.value((data, null, null, false));
             },
@@ -227,11 +212,7 @@ class PuzzleService(
           .flatMap((tuple) async {
             final (newBatch, glicko, rounds, shouldSave) = tuple;
             if (newBatch != null && shouldSave) {
-              await batchStorage.save(
-                userId: userId,
-                angle: angle,
-                data: newBatch,
-              );
+              await batchStorage.save(userId: userId, angle: angle, data: newBatch);
             }
             return Result.value((newBatch, glicko, rounds));
           });
