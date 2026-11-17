@@ -4,11 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
+import 'package:lichess_mobile/src/model/coach/youtube_channel.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
@@ -145,7 +147,6 @@ const _profileResponse = '''
       "skills": null,
       "methodology": null,
       "youtubeVideos": "https://www.youtube.com/watch?v=dQw4w9WgXcQ\\r\\nhttps://youtu.be/9bZkp7q19f0",
-      "youtubeChannel": "https://www.youtube.com/@cleverqueen",
       "publicStudies": null
     },
     "picture": "https://example.com/toniaa.webp",
@@ -155,7 +156,7 @@ const _profileResponse = '''
     "createdAt": 1650000000000,
     "updatedAt": 1750000000000
   },
-  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"},
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM", "patronColor": 5},
   "posts": [
     {
       "id": "1nH0b0kY",
@@ -225,6 +226,36 @@ const _profileChannelOnlyResponse = '''
   },
   "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
 }
+''';
+
+const _profileWithChannelResponse = '''
+{
+  "coach": {
+    "id": "toniaa",
+    "listed": true,
+    "available": true,
+    "profile": {
+      "headline": "Learn chess the fun way",
+      "hourlyRate": "25 EUR",
+      "youtubeVideos": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "youtubeChannel": "https://www.youtube.com/@cleverqueen",
+      "publicStudies": null
+    },
+    "picture": "https://example.com/toniaa.webp",
+    "nbReviews": 12,
+    "user": {"rating": 2434, "seenAt": 1760000000000},
+    "languages": ["el-GR", "en-US"],
+    "createdAt": 1650000000000,
+    "updatedAt": 1750000000000
+  },
+  "user": {"id": "toniaa", "name": "toniaa", "title": "WFM"}
+}
+''';
+
+const _channelPageResponse = r'''
+<html><head><title>Chess Sparring Academy - YouTube</title></head><body>
+<script>ytInitialData = {"channelMetadataRenderer":{"title":"Chess Sparring Academy"},"header":{"c4TabbedHeaderRenderer":{"avatar":{"thumbnails":[{"url":"https:\/\/yt3.example.com\/avatar.jpg=s900"}]}}},"metadataParts":[{"text":{"content":"1.2K subscribers"},"accessibilityLabel":"1.2K subscribers"},{"text":{"content":"438 videos"}}],"delimiter":"\u2022"};</script>
+</body></html>
 ''';
 
 const _userResponse = '''
@@ -416,6 +447,85 @@ void main() {
 
       expect(find.text('First video title'), findsOneWidget);
       expect(find.text('Second video title'), findsOneWidget);
+    });
+
+    testWidgets('profile app bar shows the coach title and patron icon', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('WFM'), findsOneWidget);
+      expect(find.byType(PatronIcon), findsOneWidget);
+    });
+
+    testWidgets('profile shows the youtube channel tile under the videos section', (tester) async {
+      final pngBytes = base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      );
+      final client = MockClient((request) async {
+        if (request.url.host == 'i.ytimg.com') {
+          return http.Response.bytes(pngBytes, 200, headers: {'content-type': 'image/png'});
+        }
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileWithChannelResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+      final scrapeClient = MockClient((request) async {
+        if (request.url.host == 'www.youtube.com' && request.url.path == '/@cleverqueen') {
+          return http.Response(_channelPageResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+          youtubeScrapeClientProvider: youtubeScrapeClientProvider.overrideWith(
+            (ref) => scrapeClient,
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Chess Sparring Academy'), findsOneWidget);
+      expect(find.text('1.2K subscribers • 438 videos'), findsOneWidget);
     });
 
     testWidgets('profile shows the latest blog posts', (tester) async {

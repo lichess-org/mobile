@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
+import 'package:lichess_mobile/src/model/coach/youtube_channel.dart';
 import 'package:lichess_mobile/src/model/coach/youtube_oembed.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -41,7 +43,12 @@ class const CoachProfileScreen({required final String username, super.key}) exte
     final profile = ref.watch(_coachProfileProvider(username));
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(username)),
+      appBar: PlatformAppBar(
+        title: switch (profile) {
+          AsyncData(:final value) => UserFullNameWidget(user: value.user),
+          _ => Text(username),
+        },
+      ),
       body: switch (profile) {
         AsyncData(:final value) => _Body(profile: value),
         AsyncError() => FullScreenRetryRequest(
@@ -167,6 +174,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                   ],
                 ),
               ),
+              if (profile.youtubeChannel case final channel?) _YoutubeChannelTile(url: channel),
             ],
           ),
         if (profile.studies.isNotEmpty)
@@ -256,6 +264,40 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Consumer
           ),
         ),
       ),
+    );
+  }
+}
+
+class const _YoutubeChannelTile({required final String url}) extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final channel = ref
+        .watch(youtubeChannelInfoProvider((url: url, languageCode: languageCode)))
+        .value;
+    if (channel == null) return const SizedBox.shrink();
+    final counts = [?channel.subscriberText, ?channel.videoCountText].join(' • ');
+    return ListTile(
+      leading: switch (channel.avatarUrl) {
+        final avatar? => ClipOval(
+          child: SizedBox(
+            width: 48.0,
+            height: 48.0,
+            child: HttpNetworkImageWidget(
+              avatar,
+              fit: BoxFit.cover,
+              cacheWidth: 96,
+              errorBuilder: (_, _, _) => const Icon(Icons.subscriptions),
+            ),
+          ),
+        ),
+        _ => const CircleAvatar(child: Icon(Icons.subscriptions)),
+      },
+      title: Text(channel.title ?? url, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: counts.isNotEmpty
+          ? Text(counts, maxLines: 1, overflow: TextOverflow.ellipsis)
+          : null,
+      onTap: () => launchUrlString(url),
     );
   }
 }
