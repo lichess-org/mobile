@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -297,7 +299,9 @@ class _CodeFormState() extends ConsumerState<_CodeForm> {
           TextFormField(
             controller: controller,
             autofocus: true,
-            autofillHints: const [AutofillHints.oneTimeCode],
+            autofillHints: Platform.isAndroid
+                ? const [AutofillHints.emailOTPCode]
+                : const [AutofillHints.oneTimeCode],
             textInputAction: TextInputAction.done,
             autocorrect: false,
             enableSuggestions: false,
