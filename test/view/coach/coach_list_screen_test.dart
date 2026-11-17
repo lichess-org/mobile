@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -339,7 +341,13 @@ void main() {
     });
 
     testWidgets('profile shows youtube thumbnails instead of video links', (tester) async {
+      final pngBytes = base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      );
       final client = MockClient((request) async {
+        if (request.url.host == 'i.ytimg.com') {
+          return http.Response.bytes(pngBytes, 200, headers: {'content-type': 'image/png'});
+        }
         switch (request.url.path) {
           case '/coach/all/all/login':
             return http.Response(_listResponse, 200);

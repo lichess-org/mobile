@@ -206,7 +206,7 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Consumer
       onTap: () => launchUrlString(url),
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       child: AspectRatio(
-        aspectRatio: 4 / 3,
+        aspectRatio: 16 / 9,
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           child: Stack(
@@ -217,8 +217,24 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Consumer
                 child: HttpNetworkImageWidget(
                   youtubeThumbnailUrl(url),
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) =>
-                      const Icon(Icons.play_circle_outline, size: 40.0, color: Colors.white70),
+                  errorBuilder: (_, _, _) => HttpNetworkImageWidget(
+                    youtubeFallbackThumbnailUrl(url),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) =>
+                        const Icon(Icons.play_circle_outline, size: 40.0, color: Colors.white70),
+                  ),
+                ),
+              ),
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xB3000000), Colors.transparent],
+                      stops: [0.0, 0.4],
+                    ),
+                  ),
                 ),
               ),
               if (title case final title?)
@@ -226,26 +242,13 @@ class const _YoutubeVideoThumbnail({required final String url}) extends Consumer
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: DecoratedBox(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.black87, Colors.transparent],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 24.0),
-                      child: Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          shadows: [Shadow(blurRadius: 4.0, color: Colors.black54)],
-                        ),
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

@@ -24,7 +24,12 @@ IList<String> _parseYoutubeUrls(String text) {
 
 String youtubeThumbnailUrl(String videoUrl) {
   final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
-  return id != null ? 'https://i.ytimg.com/vi/$id/hqdefault.jpg' : videoUrl;
+  return id != null ? 'https://i.ytimg.com/vi/$id/maxresdefault.jpg' : videoUrl;
+}
+
+String youtubeFallbackThumbnailUrl(String videoUrl) {
+  final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
+  return id != null ? 'https://i.ytimg.com/vi/$id/mqdefault.jpg' : videoUrl;
 }
 
 @freezed
