@@ -48,13 +48,7 @@ class const CoachProfileScreen({required final String username, super.key}) exte
     final profile = ref.watch(_coachProfileProvider(username));
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(
-        titleSpacing: 0,
-        title: switch (profile) {
-          AsyncData(:final value) => UserFullNameWidget(user: value.user, showFlair: false),
-          _ => Text(username),
-        },
-      ),
+      appBar: PlatformAppBar(title: Text(username)),
       body: switch (profile) {
         AsyncData(:final value) => _Body(profile: value),
         AsyncError() => FullScreenRetryRequest(
@@ -84,8 +78,31 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
           child: Column(
             children: [
               CoachPicture(url: profile.picture, size: 120.0),
+              const SizedBox(height: 8.0),
+              if (profile.user.isPatron || profile.user.title != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (profile.user.isPatron) ...[
+                      PatronIcon(color: profile.user.patronColor, size: 20.0),
+                      const SizedBox(width: 6.0),
+                    ],
+                    if (profile.user.title case final title?)
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: title == 'BOT'
+                              ? context.lichessColors.fancy
+                              : context.lichessColors.brag,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                        ),
+                      ),
+                  ],
+                ),
               if (profile.headline case final headline?) ...[
-                const SizedBox(height: 12.0),
+                if (profile.user.isPatron || profile.user.title != null)
+                  const SizedBox(height: 8.0),
                 Text(
                   headline,
                   textAlign: TextAlign.center,

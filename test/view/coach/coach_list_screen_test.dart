@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -494,6 +495,10 @@ void main() {
 
       expect(find.text('WFM'), findsOneWidget);
       expect(find.byType(PatronIcon), findsOneWidget);
+      expect(
+        tester.widget<PlatformAppBar>(find.byType(PlatformAppBar)).title,
+        isA<Text>().having((text) => text.data, 'data', 'toniaa'),
+      );
     });
 
     testWidgets('profile shows the youtube channel tile under the videos section', (tester) async {
