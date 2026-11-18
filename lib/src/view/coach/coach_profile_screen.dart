@@ -49,8 +49,9 @@ class const CoachProfileScreen({required final String username, super.key}) exte
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
+        titleSpacing: 0,
         title: switch (profile) {
-          AsyncData(:final value) => UserFullNameWidget(user: value.user),
+          AsyncData(:final value) => UserFullNameWidget(user: value.user, showFlair: false),
           _ => Text(username),
         },
       ),
@@ -79,7 +80,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
     return ListView(
       children: [
         Padding(
-          padding: Styles.horizontalBodyPadding,
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
