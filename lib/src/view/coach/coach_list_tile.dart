@@ -8,10 +8,12 @@ import 'package:material_ui/material_ui.dart';
 class const CoachListTile({required final CoachPreview coach, super.key}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final headline = coach.headline?.trim();
+    final hourlyRate = coach.hourlyRate?.trim();
     final details = [
-      ?coach.headline,
+      if (headline != null && headline.isNotEmpty) headline,
       if (coach.languages.isNotEmpty) coach.languages.join(', '),
-      ?coach.hourlyRate,
+      if (hourlyRate != null && hourlyRate.isNotEmpty) hourlyRate,
     ].join(' • ');
 
     return ListTile(

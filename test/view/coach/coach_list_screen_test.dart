@@ -316,6 +316,34 @@ void main() {
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
     });
 
+    testWidgets('coach list trims empty headline and hourly rate', (tester) async {
+      final emptyDetailsResponse = _listResponse
+          .replaceFirst('"headline": "Learn chess the fun way"', '"headline": ""')
+          .replaceFirst('"hourlyRate": "25 EUR"', '"hourlyRate": ""');
+      final client = MockClient((request) async {
+        if (request.url.path == '/coach/all/all/login') {
+          return http.Response(emptyDetailsResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.text('el-GR, en-US'), findsOneWidget);
+      expect(find.textContaining(' • '), findsNothing);
+    });
+
     testWidgets('automatically loads the next page when the list does not fill the screen', (
       tester,
     ) async {
