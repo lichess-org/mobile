@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -303,9 +304,15 @@ class const _YoutubeChannelTile({required final String url}) extends ConsumerWid
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final languageCode = Localizations.localeOf(context).languageCode;
-    final channel = ref
-        .watch(youtubeChannelInfoProvider((url: url, languageCode: languageCode)))
-        .value;
+    final channelAsync = ref.watch(
+      youtubeChannelInfoProvider((url: url, languageCode: languageCode)),
+    );
+    if (channelAsync.isLoading) {
+      return const Shimmer(
+        child: ShimmerLoading(isLoading: true, child: _YoutubeChannelTileSkeleton()),
+      );
+    }
+    final channel = channelAsync.value;
     if (channel == null) return const SizedBox.shrink();
     final counts = [?channel.subscriberText, ?channel.videoCountText].join(' • ');
     return ListTile(
@@ -329,6 +336,45 @@ class const _YoutubeChannelTile({required final String url}) extends ConsumerWid
           ? Text(counts, maxLines: 1, overflow: TextOverflow.ellipsis)
           : null,
       onTap: () => launchUrlString(url),
+    );
+  }
+}
+
+class const _YoutubeChannelTileSkeleton() extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: Row(
+        children: [
+          const CircleAvatar(radius: 24.0, backgroundColor: Colors.black),
+          const SizedBox(width: 16.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 20.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Container(
+                  width: 160.0,
+                  height: 14.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

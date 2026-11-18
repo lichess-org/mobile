@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -611,6 +613,56 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ConversationScreen), findsOneWidget);
+    });
+
+    testWidgets('youtube channel tile shows a shimmer while loading', (tester) async {
+      final pngBytes = base64Decode(
+        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      );
+      final completer = Completer<http.Response>();
+      final client = MockClient((request) async {
+        if (request.url.host == 'i.ytimg.com') {
+          return http.Response.bytes(pngBytes, 200, headers: {'content-type': 'image/png'});
+        }
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileWithChannelResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+      final scrapeClient = MockClient((request) => completer.future);
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+          youtubeScrapeClientProvider: youtubeScrapeClientProvider.overrideWith(
+            (ref) => scrapeClient,
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(Shimmer), findsWidgets);
+      expect(find.text('Chess Sparring Academy'), findsNothing);
+
+      completer.complete(http.Response(_channelPageResponse, 200));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Shimmer), findsNothing);
+      expect(find.text('Chess Sparring Academy'), findsOneWidget);
     });
 
     testWidgets('profile shows the latest blog posts', (tester) async {
