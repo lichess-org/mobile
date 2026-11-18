@@ -4,6 +4,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -142,6 +143,19 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       _evaluatorSubscription = null;
       _evaluatorContext = null;
     });
+
+    final appLifecycleListener = AppLifecycleListener(
+      onPause: () {
+        if (!state.hasValue) return;
+        _evalRequestDebounce.cancel();
+        _localEngineAfterDelayDebounce.cancel();
+        _evaluator.release();
+      },
+      onRestart: () {
+        if (state.hasValue) requestEval();
+      },
+    );
+    ref.onDispose(appLifecycleListener.dispose);
 
     final whenComplete = super.runBuild();
 
