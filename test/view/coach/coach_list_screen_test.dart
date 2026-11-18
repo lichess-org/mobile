@@ -374,6 +374,7 @@ void main() {
       expect(find.text('About me'), findsOneWidget);
       expect(find.text('I teach chess for a living'), findsOneWidget);
       expect(find.text('Learn chess the fun way'), findsOneWidget);
+      expect(tester.widget<Text>(find.text('Learn chess the fun way')).textAlign, TextAlign.center);
     });
 
     testWidgets('profile shows youtube thumbnails instead of video links', (tester) async {
@@ -410,10 +411,16 @@ void main() {
       await tester.tap(find.byType(CoachListTile).first);
       await tester.pumpAndSettle();
 
+      await tester.drag(find.byType(ListView).last, const Offset(0, -600));
+      await tester.pumpAndSettle();
+
       expect(find.text('YouTube videos'), findsOneWidget);
       expect(find.textContaining('youtube.com'), findsNothing);
       expect(find.textContaining('youtu.be'), findsNothing);
-      expect(find.byType(HttpNetworkImageWidget), findsNWidgets(3));
+      final thumbnails = tester
+          .widgetList<HttpNetworkImageWidget>(find.byType(HttpNetworkImageWidget))
+          .where((widget) => widget.url.contains('i.ytimg.com'));
+      expect(thumbnails, hasLength(2));
     });
 
     testWidgets('profile shows youtube video titles over the thumbnails', (tester) async {
@@ -448,6 +455,9 @@ void main() {
       await tester.pumpAndSettle();
 
       await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      await tester.drag(find.byType(ListView).last, const Offset(0, -600));
       await tester.pumpAndSettle();
 
       expect(find.text('First video title'), findsOneWidget);

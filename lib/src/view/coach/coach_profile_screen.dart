@@ -81,23 +81,17 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
       children: [
         Padding(
           padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
               CoachPicture(url: profile.picture, size: 120.0),
-              const SizedBox(width: 16.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (profile.headline case final headline?)
-                      Text(
-                        headline,
-                        style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
-                      ),
-                  ],
+              if (profile.headline case final headline?) ...[
+                const SizedBox(height: 12.0),
+                Text(
+                  headline,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                 ),
-              ),
+              ],
             ],
           ),
         ),
