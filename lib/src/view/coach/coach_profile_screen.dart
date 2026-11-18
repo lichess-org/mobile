@@ -12,7 +12,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -89,6 +91,35 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                         headline,
                         style: TextStyle(color: textShade(context, Styles.subtitleOpacity)),
                       ),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => Navigator.of(
+                              context,
+                              rootNavigator: true,
+                            ).push(UserOrProfileScreen.buildRoute(profile.user)),
+                            icon: const Icon(Icons.person, size: 18.0),
+                            label: Text(context.l10n.profile, overflow: TextOverflow.ellipsis),
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => Navigator.of(
+                              context,
+                              rootNavigator: true,
+                            ).push(ConversationScreen.buildRoute(user: profile.user)),
+                            icon: const Icon(Icons.chat_bubble_outline, size: 18.0),
+                            label: Text(
+                              context.l10n.composeMessage,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

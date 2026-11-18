@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
+import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -530,6 +532,85 @@ void main() {
         tester.getRect(find.text('Chess Sparring Academy')).top,
         lessThan(tester.getRect(find.byType(HttpNetworkImageWidget).last).top),
       );
+    });
+
+    testWidgets('profile buttons open the lichess profile and a direct message', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          case '/api/user/toniaa':
+            return http.Response(_userResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(OutlinedButton), findsNWidgets(2));
+
+      await tester.tap(find.byType(OutlinedButton).first);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(UserScreen), findsOneWidget);
+    });
+
+    testWidgets('profile message button opens a conversation', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          case '/inbox/toniaa':
+            return http.Response(
+              '{"me":{"name":"me","id":"me"},"bot":false,"convo":{"user":{"name":"toniaa","id":"toniaa"},"msgs":[],"postable":true}}',
+              200,
+            );
+          case '/api/user/toniaa':
+            return http.Response(_userResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(OutlinedButton).last);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ConversationScreen), findsOneWidget);
     });
 
     testWidgets('profile shows the latest blog posts', (tester) async {
