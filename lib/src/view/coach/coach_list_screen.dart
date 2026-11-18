@@ -100,9 +100,6 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
                     order = value;
                     requestedNextPage = false;
                   });
-                  if (_scrollController.hasClients) {
-                    _scrollController.jumpTo(0);
-                  }
                   Navigator.of(context).pop();
                 }
               },
