@@ -1378,6 +1378,14 @@ class AppLocalizationsEu extends AppLocalizations {
   String get coachNotAccepting => 'Orain ez du ikaslerik onartzen';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Ikusi $param erabiltzailearen profila';
+  }
+
+  @override
+  String get coachSendPM => 'Mezu pribatua bidali';
+
+  @override
   String get coachAboutMe => 'Niri buruz';
 
   @override

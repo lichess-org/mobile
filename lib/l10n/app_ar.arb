@@ -376,6 +376,8 @@
   "coachAvailability": "حالة التوفر",
   "coachAccepting": "قبول الطلاب",
   "coachNotAccepting": "عدم قبول الطلاب في الوقت الراهن",
+  "coachViewXProfile": "عرض ملف Lichess الخاص بـ {param}",
+  "coachSendPM": "أرسل رسالة خاصة",
   "coachAboutMe": "معلومات عني",
   "coachPlayingExperience": "تجربة اللعب",
   "coachTeachingExperience": "خبرة التدريس",

@@ -127,6 +127,8 @@
   "coachAvailability": "Pieejamība",
   "coachAccepting": "Pieņem skolēnus",
   "coachNotAccepting": "Pašlaik nepieņem skolēnus",
+  "coachViewXProfile": "Skatīt {param} Lichess profilu",
+  "coachSendPM": "Sūtīt privātu ziņu",
   "coachAboutMe": "Par mani",
   "coachPlayingExperience": "Spēlēšanas pieredze",
   "coachTeachingExperience": "Mācīšanas pieredze",

@@ -326,6 +326,8 @@
   "coachAvailability": "Tilgængelighed",
   "coachAccepting": "Accepterer elever",
   "coachNotAccepting": "Accepterer ikke elever i øjeblikket",
+  "coachViewXProfile": "Se {param} Lichess-profil",
+  "coachSendPM": "Send en privat besked",
   "coachAboutMe": "Om mig",
   "coachPlayingExperience": "Spilerfaring",
   "coachTeachingExperience": "Undervisningserfaring",

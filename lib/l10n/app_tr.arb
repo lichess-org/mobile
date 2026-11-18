@@ -376,6 +376,8 @@
   "coachAvailability": "Uygunluk durumu",
   "coachAccepting": "Öğrenci kabul ediyor",
   "coachNotAccepting": "Şu anda öğrenci kabul etmiyor",
+  "coachViewXProfile": "{param} adlı eğitmenin Lichess profilini ziyaret et",
+  "coachSendPM": "Özel mesaj gönder",
   "coachAboutMe": "Hakkımda",
   "coachPlayingExperience": "Oyun tecrübesi",
   "coachTeachingExperience": "Eğitim tecrübesi",

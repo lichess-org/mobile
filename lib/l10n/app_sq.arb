@@ -282,6 +282,8 @@
   "coachAvailability": "Disponueshmeria",
   "coachAccepting": "Pranon nxënës",
   "coachNotAccepting": "Hëpërhë nuk pranon nxënës",
+  "coachViewXProfile": "Shihni profilin Lichess të {param}",
+  "coachSendPM": "Dërgojini një mesazh privat",
   "coachAboutMe": "Rreth meje",
   "coachPlayingExperience": "Përvojë lojërash",
   "coachTeachingExperience": "Përvojë në mësimdhënie",

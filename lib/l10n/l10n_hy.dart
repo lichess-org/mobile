@@ -1378,6 +1378,14 @@ class AppLocalizationsHy extends AppLocalizations {
   String get coachNotAccepting => 'Ժամանակավորապես չեմ ընդունում աշակերտների';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Դիտել $param-ի Lichess-ի էջը';
+  }
+
+  @override
+  String get coachSendPM => 'Ուղարկել անձնական հաղորդագրություն';
+
+  @override
   String get coachAboutMe => 'Իմ մասին';
 
   @override

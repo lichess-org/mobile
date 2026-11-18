@@ -320,6 +320,8 @@
   "coachAvailability": "Verfüegbarkeit",
   "coachAccepting": "Akzeptiert neui Schüeler",
   "coachNotAccepting": "Akzeptiert momentan kei neui Schüeler",
+  "coachViewXProfile": "Lichess-Profil von {param}",
+  "coachSendPM": "Schick e privati Nachricht",
   "coachAboutMe": "Über mich",
   "coachPlayingExperience": "Schpielerfahrig",
   "coachTeachingExperience": "Lehr-Erfahrig",

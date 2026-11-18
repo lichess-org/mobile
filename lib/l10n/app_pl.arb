@@ -360,6 +360,8 @@
   "coachAvailability": "Dostępność",
   "coachAccepting": "Przyjmuje uczniów",
   "coachNotAccepting": "Nie przyjmuje uczniów w tej chwili",
+  "coachViewXProfile": "Zobacz profil Lichess {param}",
+  "coachSendPM": "Wyślij prywatną wiadomość",
   "coachAboutMe": "O mnie",
   "coachPlayingExperience": "Osiągnięcia w grze w szachy",
   "coachTeachingExperience": "Doświadczenie dydaktyczne",

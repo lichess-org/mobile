@@ -1378,6 +1378,14 @@ class AppLocalizationsKk extends AppLocalizations {
   String get coachNotAccepting => 'Әзірге шәкірттерді қабылдау жоқ';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param төлқұжатын қарау';
+  }
+
+  @override
+  String get coachSendPM => 'Жеке хабар жіберу';
+
+  @override
   String get coachAboutMe => 'Өзім туралы';
 
   @override

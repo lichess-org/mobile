@@ -1378,6 +1378,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get coachNotAccepting => 'Not accepting students at the moment';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'View $param Lichess profile';
+  }
+
+  @override
+  String get coachSendPM => 'Send a private message';
+
+  @override
   String get coachAboutMe => 'About me';
 
   @override
@@ -9013,6 +9021,14 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get coachNotAccepting => 'Not accepting students at the moment';
+
+  @override
+  String coachViewXProfile(String param) {
+    return 'View $param Lichess profile';
+  }
+
+  @override
+  String get coachSendPM => 'Send a private message';
 
   @override
   String get coachAboutMe => 'About me';

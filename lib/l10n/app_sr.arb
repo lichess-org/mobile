@@ -176,6 +176,8 @@
   "coachAvailability": "Доступност",
   "coachAccepting": "Прихвата ученике",
   "coachNotAccepting": "Тренутно не прихвата ученике",
+  "coachViewXProfile": "Погледај {param} Lichess профил",
+  "coachSendPM": "Пошаљи приватну поруку",
   "coachAboutMe": "О мени",
   "coachPlayingExperience": "Искуство у игрању",
   "coachTeachingExperience": "Искуство у подучавању",

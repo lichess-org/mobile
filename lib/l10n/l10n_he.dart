@@ -1399,6 +1399,14 @@ class AppLocalizationsHe extends AppLocalizations {
   String get coachNotAccepting => 'לא מקבל/ת תלמידים בזמן זה';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'הצגת הפרופיל של $param';
+  }
+
+  @override
+  String get coachSendPM => 'שליחת הודעה פרטית';
+
+  @override
   String get coachAboutMe => 'אודות';
 
   @override

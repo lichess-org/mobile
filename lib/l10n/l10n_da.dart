@@ -1378,6 +1378,14 @@ class AppLocalizationsDa extends AppLocalizations {
   String get coachNotAccepting => 'Accepterer ikke elever i øjeblikket';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Se $param Lichess-profil';
+  }
+
+  @override
+  String get coachSendPM => 'Send en privat besked';
+
+  @override
   String get coachAboutMe => 'Om mig';
 
   @override

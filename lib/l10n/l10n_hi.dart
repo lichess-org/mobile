@@ -1378,6 +1378,14 @@ class AppLocalizationsHi extends AppLocalizations {
   String get coachNotAccepting => 'फिलहाल छात्रों को स्वीकार नहीं कर रहे हैं';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param की लिचेस प्रोफ़ाइल देखें';
+  }
+
+  @override
+  String get coachSendPM => 'निजी संदेश भेजें';
+
+  @override
   String get coachAboutMe => 'मेरे बारे में';
 
   @override

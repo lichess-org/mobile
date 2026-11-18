@@ -202,6 +202,8 @@
   "coachAvailability": "उपलब्धता",
   "coachAccepting": "छात्रों को स्वीकार करना",
   "coachNotAccepting": "फिलहाल छात्रों को स्वीकार नहीं कर रहे हैं",
+  "coachViewXProfile": "{param} की लिचेस प्रोफ़ाइल देखें",
+  "coachSendPM": "निजी संदेश भेजें",
   "coachAboutMe": "मेरे बारे में",
   "coachPlayingExperience": "खेल का अनुभव",
   "coachTeachingExperience": "पढ़ाने का तज़ुर्बा",

@@ -230,6 +230,8 @@
   "coachAvailability": "זמינות",
   "coachAccepting": "מקבל/ת תלמידים",
   "coachNotAccepting": "לא מקבל/ת תלמידים בזמן זה",
+  "coachViewXProfile": "הצגת הפרופיל של {param}",
+  "coachSendPM": "שליחת הודעה פרטית",
   "coachAboutMe": "אודות",
   "coachPlayingExperience": "ניסיון משחק",
   "coachTeachingExperience": "ניסיון לימוד",

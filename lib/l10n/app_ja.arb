@@ -375,6 +375,8 @@
   "coachAvailability": "生徒募集",
   "coachAccepting": "生徒を募集中です",
   "coachNotAccepting": "現在、生徒を募集していません",
+  "coachViewXProfile": "{param} の Lichess プロフィールを見る",
+  "coachSendPM": "プライベートメッセージを送る",
   "coachAboutMe": "プロフィール",
   "coachPlayingExperience": "競技歴",
   "coachTeachingExperience": "指導歴",

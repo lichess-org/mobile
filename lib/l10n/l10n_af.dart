@@ -1378,6 +1378,14 @@ class AppLocalizationsAf extends AppLocalizations {
   String get coachNotAccepting => 'Aanvaar nie tans studente nie';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Sien $param se Lichess profiel';
+  }
+
+  @override
+  String get coachSendPM => 'Stuur \'n privaat boodskap';
+
+  @override
   String get coachAboutMe => 'Wie is ek?';
 
   @override

@@ -375,6 +375,8 @@
   "coachAvailability": "Disponibilidad",
   "coachAccepting": "Acepta estudiantes",
   "coachNotAccepting": "Actualmente, no acepta estudiantes",
+  "coachViewXProfile": "Ver el perfil de Lichess de {param}",
+  "coachSendPM": "Enviar un mensaje privado",
   "coachAboutMe": "Sobre mí",
   "coachPlayingExperience": "Experiencia como jugador",
   "coachTeachingExperience": "Experiencia docente",

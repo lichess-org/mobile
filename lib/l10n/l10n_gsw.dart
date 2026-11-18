@@ -1378,6 +1378,14 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get coachNotAccepting => 'Akzeptiert momentan kei neui Schüeler';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Lichess-Profil von $param';
+  }
+
+  @override
+  String get coachSendPM => 'Schick e privati Nachricht';
+
+  @override
   String get coachAboutMe => 'Über mich';
 
   @override

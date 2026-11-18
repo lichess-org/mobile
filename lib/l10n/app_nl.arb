@@ -374,6 +374,8 @@
   "coachAvailability": "Toegankelijkheid",
   "coachAccepting": "Neemt studenten aan",
   "coachNotAccepting": "Neemt momenteel geen studenten aan",
+  "coachViewXProfile": "{param}'s profiel bekijken",
+  "coachSendPM": "Privébericht sturen",
   "coachAboutMe": "Over mij",
   "coachPlayingExperience": "Speelervaring",
   "coachTeachingExperience": "Onderwijservaring",

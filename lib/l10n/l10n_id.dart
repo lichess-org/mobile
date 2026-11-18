@@ -1359,6 +1359,14 @@ class AppLocalizationsId extends AppLocalizations {
   String get coachNotAccepting => 'Tidak menerima murid saat ini';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Lihat $param profil Lichess';
+  }
+
+  @override
+  String get coachSendPM => 'Kirim pesan pribadi';
+
+  @override
   String get coachAboutMe => 'Tentang saya';
 
   @override

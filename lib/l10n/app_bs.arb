@@ -292,6 +292,8 @@
   "coachAvailability": "Dostupnost",
   "coachAccepting": "Prihvatam učenike",
   "coachNotAccepting": "Trenutno ne prihvatam učenike",
+  "coachViewXProfile": "Pogledajte profil {param}",
+  "coachSendPM": "Pošaljite privatnu poruku",
   "coachAboutMe": "O meni",
   "coachPlayingExperience": "Igračko iskustvo",
   "coachTeachingExperience": "Predavačko iskustvo",

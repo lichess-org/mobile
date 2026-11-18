@@ -1378,6 +1378,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get coachNotAccepting => 'Não está a aceitar alunos de momento';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Ver perfil de $param no Lichess';
+  }
+
+  @override
+  String get coachSendPM => 'Enviar uma mensagem privada';
+
+  @override
   String get coachAboutMe => 'Sobre mim';
 
   @override
@@ -9177,6 +9185,14 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get coachNotAccepting => 'Não aceita alunos no momento';
+
+  @override
+  String coachViewXProfile(String param) {
+    return 'Ver o perfil Lichess de $param';
+  }
+
+  @override
+  String get coachSendPM => 'Enviar uma mensagem privada';
 
   @override
   String get coachAboutMe => 'Sobre mim';

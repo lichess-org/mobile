@@ -1378,6 +1378,14 @@ class AppLocalizationsEo extends AppLocalizations {
   String get coachNotAccepting => 'Ne akceptas lernantojn nuntempe';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Vidu la Lichess profilon de $param';
+  }
+
+  @override
+  String get coachSendPM => 'Sendi privatan mesaĝon';
+
+  @override
   String get coachAboutMe => 'Pri mi';
 
   @override

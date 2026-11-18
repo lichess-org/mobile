@@ -1378,6 +1378,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get coachNotAccepting => 'N\'accepte plus d\'élèves pour le moment';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Voir le profil Lichess de $param';
+  }
+
+  @override
+  String get coachSendPM => 'Envoyer un message privé';
+
+  @override
   String get coachAboutMe => 'À propos de moi';
 
   @override

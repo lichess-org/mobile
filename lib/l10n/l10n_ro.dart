@@ -1400,6 +1400,14 @@ class AppLocalizationsRo extends AppLocalizations {
   String get coachNotAccepting => 'Nu acceptă studenți momentan';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Vezi profilul Lichess $param';
+  }
+
+  @override
+  String get coachSendPM => 'Trimite un mesaj privat';
+
+  @override
   String get coachAboutMe => 'Despre mine';
 
   @override

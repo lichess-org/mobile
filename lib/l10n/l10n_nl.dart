@@ -1378,6 +1378,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String get coachNotAccepting => 'Neemt momenteel geen studenten aan';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param\'s profiel bekijken';
+  }
+
+  @override
+  String get coachSendPM => 'Privébericht sturen';
+
+  @override
   String get coachAboutMe => 'Over mij';
 
   @override

@@ -67,6 +67,8 @@ const whiteLists = {
     'teachingMethod',
     'publicStudies',
     'youtubeVideos',
+    'viewXProfile',
+    'sendPM',
     'allCountries',
     'lastLogin',
     'lichessRating',

@@ -325,6 +325,8 @@
   "coachAvailability": "Bandlik holati",
   "coachAccepting": "Oʻquvchilarni qabul qilmoqda",
   "coachNotAccepting": "Hozirgi vaqtda oʻquvchi qabul qilmayapti",
+  "coachViewXProfile": "{param} Lichess profilini koʻrish",
+  "coachSendPM": "Shaxsiy xabar joʻnatish",
   "coachAboutMe": "Men haqimda",
   "coachPlayingExperience": "Oʻyin tajribam",
   "coachTeachingExperience": "Dars berish tajribam",

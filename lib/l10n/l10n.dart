@@ -2458,6 +2458,18 @@ abstract class AppLocalizations {
   /// **'Not accepting students at the moment'**
   String get coachNotAccepting;
 
+  /// No description provided for @coachViewXProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View {param} Lichess profile'**
+  String coachViewXProfile(String param);
+
+  /// No description provided for @coachSendPM.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a private message'**
+  String get coachSendPM;
+
   /// No description provided for @coachAboutMe.
   ///
   /// In en, this message translates to:

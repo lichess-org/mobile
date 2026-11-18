@@ -1378,6 +1378,14 @@ class AppLocalizationsEt extends AppLocalizations {
   String get coachNotAccepting => 'Ei võta tudengeid hetkel';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Vaata $param Lichess profiil';
+  }
+
+  @override
+  String get coachSendPM => 'Saada privaatsõnum';
+
+  @override
   String get coachAboutMe => 'Minust';
 
   @override

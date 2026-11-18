@@ -1378,6 +1378,14 @@ class AppLocalizationsNb extends AppLocalizations {
   String get coachNotAccepting => 'Ikke åpen for nye elever';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Vis profilen til $param';
+  }
+
+  @override
+  String get coachSendPM => 'Send en direktemelding';
+
+  @override
   String get coachAboutMe => 'Om meg';
 
   @override

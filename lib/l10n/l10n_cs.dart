@@ -1422,6 +1422,14 @@ class AppLocalizationsCs extends AppLocalizations {
   String get coachNotAccepting => 'Momentálně nepřijímá studenty';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Zobrazit Lichess profil $param';
+  }
+
+  @override
+  String get coachSendPM => 'Odeslat soukromou zprávu';
+
+  @override
   String get coachAboutMe => 'O mně';
 
   @override

@@ -187,6 +187,8 @@
   "coachAvailability": "Ketersediaan",
   "coachAccepting": "Penerimaan murid",
   "coachNotAccepting": "Tidak menerima murid saat ini",
+  "coachViewXProfile": "Lihat {param} profil Lichess",
+  "coachSendPM": "Kirim pesan pribadi",
   "coachAboutMe": "Tentang saya",
   "coachPlayingExperience": "Pengalaman bermain",
   "coachTeachingExperience": "Pengalaman mengajar",

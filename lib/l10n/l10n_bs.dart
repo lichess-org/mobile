@@ -1400,6 +1400,14 @@ class AppLocalizationsBs extends AppLocalizations {
   String get coachNotAccepting => 'Trenutno ne prihvatam učenike';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Pogledajte profil $param';
+  }
+
+  @override
+  String get coachSendPM => 'Pošaljite privatnu poruku';
+
+  @override
   String get coachAboutMe => 'O meni';
 
   @override

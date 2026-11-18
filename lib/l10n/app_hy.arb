@@ -112,6 +112,8 @@
   "coachAvailability": "Հասանելիությունը",
   "coachAccepting": "Ընդունում եմ աշակերտների",
   "coachNotAccepting": "Ժամանակավորապես չեմ ընդունում աշակերտների",
+  "coachViewXProfile": "Դիտել {param}-ի Lichess-ի էջը",
+  "coachSendPM": "Ուղարկել անձնական հաղորդագրություն",
   "coachAboutMe": "Իմ մասին",
   "coachPlayingExperience": "Խաղացողի ստաժը",
   "coachTeachingExperience": "Մարզչի ստաժը",

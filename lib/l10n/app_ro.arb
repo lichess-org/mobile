@@ -376,6 +376,8 @@
   "coachAvailability": "Disponibilitate",
   "coachAccepting": "Acceptă cursanți",
   "coachNotAccepting": "Nu acceptă studenți momentan",
+  "coachViewXProfile": "Vezi profilul Lichess {param}",
+  "coachSendPM": "Trimite un mesaj privat",
   "coachAboutMe": "Despre mine",
   "coachPlayingExperience": "Experiență",
   "coachTeachingExperience": "Experiență de predare",

@@ -1422,6 +1422,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coachNotAccepting => 'Nie przyjmuje uczniów w tej chwili';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Zobacz profil Lichess $param';
+  }
+
+  @override
+  String get coachSendPM => 'Wyślij prywatną wiadomość';
+
+  @override
   String get coachAboutMe => 'O mnie';
 
   @override

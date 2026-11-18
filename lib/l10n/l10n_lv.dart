@@ -1397,6 +1397,14 @@ class AppLocalizationsLv extends AppLocalizations {
   String get coachNotAccepting => 'Pašlaik nepieņem skolēnus';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Skatīt $param Lichess profilu';
+  }
+
+  @override
+  String get coachSendPM => 'Sūtīt privātu ziņu';
+
+  @override
   String get coachAboutMe => 'Par mani';
 
   @override

@@ -322,6 +322,8 @@
   "coachAvailability": "Sẵn sàng",
   "coachAccepting": "Đang nhận học viên",
   "coachNotAccepting": "Hiện tại không nhận học viên",
+  "coachViewXProfile": "Xem hồ sơ Lichess của {param}",
+  "coachSendPM": "Gửi tin nhắn riêng",
   "coachAboutMe": "Giới thiệu và các thông tin về tôi",
   "coachPlayingExperience": "Kinh nghiệm chơi cờ",
   "coachTeachingExperience": "Kinh nghiệm dạy cờ",

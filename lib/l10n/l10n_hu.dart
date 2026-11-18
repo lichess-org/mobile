@@ -1378,6 +1378,14 @@ class AppLocalizationsHu extends AppLocalizations {
   String get coachNotAccepting => 'Jelenleg nem fogad tanulókat';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param Lichess profilja';
+  }
+
+  @override
+  String get coachSendPM => 'Privát üzenet küldése';
+
+  @override
   String get coachAboutMe => 'Rólam';
 
   @override

@@ -1356,6 +1356,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get coachNotAccepting => 'Hiện tại không nhận học viên';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Xem hồ sơ Lichess của $param';
+  }
+
+  @override
+  String get coachSendPM => 'Gửi tin nhắn riêng';
+
+  @override
   String get coachAboutMe => 'Giới thiệu và các thông tin về tôi';
 
   @override

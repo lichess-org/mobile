@@ -319,6 +319,8 @@
   "coachAvailability": "Razpoložljivost",
   "coachAccepting": "Sprejemanje študentov",
   "coachNotAccepting": "Trenutno ne sprejemamo študentov",
+  "coachViewXProfile": "Ogled Lichess profila {param}",
+  "coachSendPM": "Pošlji zasebno sporočilo",
   "coachAboutMe": "O meni",
   "coachPlayingExperience": "Šahovske izkušnje",
   "coachTeachingExperience": "Izkušnja poučevanja",

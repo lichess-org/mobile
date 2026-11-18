@@ -1356,6 +1356,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get coachNotAccepting => '지금은 학생을 받고 있지 않음';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param의 Lichess 프로필 보기';
+  }
+
+  @override
+  String get coachSendPM => '비공개 메시지 보내기';
+
+  @override
   String get coachAboutMe => '자기소개';
 
   @override

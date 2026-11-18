@@ -227,6 +227,8 @@
   "coachAvailability": "Есігіңіз ашық",
   "coachAccepting": "Шәкірттерді қабылдау",
   "coachNotAccepting": "Әзірге шәкірттерді қабылдау жоқ",
+  "coachViewXProfile": "{param} төлқұжатын қарау",
+  "coachSendPM": "Жеке хабар жіберу",
   "coachAboutMe": "Өзім туралы",
   "coachPlayingExperience": "Шахмат тәжірибем",
   "coachTeachingExperience": "Жаттықтыру тәжірибем",

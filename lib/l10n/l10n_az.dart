@@ -1378,6 +1378,14 @@ class AppLocalizationsAz extends AppLocalizations {
   String get coachNotAccepting => 'Hal-hazırda tələbə qəbul etmir';
 
   @override
+  String coachViewXProfile(String param) {
+    return '$param müəllimin Lichess profilinə bax';
+  }
+
+  @override
+  String get coachSendPM => 'Özəl bir mesaj göndər';
+
+  @override
   String get coachAboutMe => 'Haqqımda';
 
   @override

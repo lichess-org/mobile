@@ -1378,6 +1378,14 @@ class AppLocalizationsSv extends AppLocalizations {
   String get coachNotAccepting => 'Tar inte emot studenter just nu';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'Visa $param Lichess-profil';
+  }
+
+  @override
+  String get coachSendPM => 'Skicka ett privat meddelande';
+
+  @override
   String get coachAboutMe => 'Om mig';
 
   @override

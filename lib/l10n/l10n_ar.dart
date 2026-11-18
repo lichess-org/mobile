@@ -1466,6 +1466,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get coachNotAccepting => 'عدم قبول الطلاب في الوقت الراهن';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'عرض ملف Lichess الخاص بـ $param';
+  }
+
+  @override
+  String get coachSendPM => 'أرسل رسالة خاصة';
+
+  @override
   String get coachAboutMe => 'معلومات عني';
 
   @override

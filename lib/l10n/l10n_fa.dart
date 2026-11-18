@@ -1378,6 +1378,14 @@ class AppLocalizationsFa extends AppLocalizations {
   String get coachNotAccepting => 'در حال حاضر پذیرای دانشجویان نیستم';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'رُخ‌نمای $param در Lichess را ببینید';
+  }
+
+  @override
+  String get coachSendPM => 'یک پیام خصوصی ارسال کنید';
+
+  @override
   String get coachAboutMe => 'درباره من';
 
   @override

@@ -323,6 +323,8 @@
   "coachAvailability": "Доступность",
   "coachAccepting": "Принимаю учеников",
   "coachNotAccepting": "Временно не принимаю учеников",
+  "coachViewXProfile": "Посмотреть Lichess профиль {param}",
+  "coachSendPM": "Отправить личное сообщение",
   "coachAboutMe": "Обо мне",
   "coachPlayingExperience": "Игровой стаж",
   "coachTeachingExperience": "Тренерский стаж",

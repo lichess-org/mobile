@@ -376,6 +376,8 @@
   "coachAvailability": "Dispoñibilidade",
   "coachAccepting": "Acepta estudantes",
   "coachNotAccepting": "Non acepta estudantes neste momento",
+  "coachViewXProfile": "Ver o perfil de {param}",
+  "coachSendPM": "Enviar mensaxe privada",
   "coachAboutMe": "Sobre min",
   "coachPlayingExperience": "Experiencia como xogador",
   "coachTeachingExperience": "Experiencia como adestrador",

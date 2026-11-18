@@ -1378,6 +1378,14 @@ class AppLocalizationsMk extends AppLocalizations {
   String get coachNotAccepting => 'не прифаќа студенти во моментот';
 
   @override
+  String coachViewXProfile(String param) {
+    return 'View $param Lichess profile';
+  }
+
+  @override
+  String get coachSendPM => 'испрати приватна порака';
+
+  @override
   String get coachAboutMe => 'About me';
 
   @override

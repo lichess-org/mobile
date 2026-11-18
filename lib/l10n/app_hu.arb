@@ -292,6 +292,8 @@
   "coachAvailability": "Rendelkezésre állás",
   "coachAccepting": "Fogad tanulókat",
   "coachNotAccepting": "Jelenleg nem fogad tanulókat",
+  "coachViewXProfile": "{param} Lichess profilja",
+  "coachSendPM": "Privát üzenet küldése",
   "coachAboutMe": "Rólam",
   "coachPlayingExperience": "Játéktapasztalat",
   "coachTeachingExperience": "Oktatói tapasztalat",

@@ -186,6 +186,8 @@
   "coachAvailability": "Saadavus",
   "coachAccepting": "Võtan vastu õpilasi",
   "coachNotAccepting": "Ei võta tudengeid hetkel",
+  "coachViewXProfile": "Vaata {param} Lichess profiil",
+  "coachSendPM": "Saada privaatsõnum",
   "coachAboutMe": "Minust",
   "coachPlayingExperience": "Mängukogemus",
   "coachTeachingExperience": "Õpetuskogemus",

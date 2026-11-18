@@ -1356,6 +1356,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get coachNotAccepting => '目前不接收学生';
 
   @override
+  String coachViewXProfile(String param) {
+    return '查看 $param 的 Lichess 个人资料';
+  }
+
+  @override
+  String get coachSendPM => '发送私信';
+
+  @override
   String get coachAboutMe => '自我介绍';
 
   @override
@@ -8715,6 +8723,14 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get coachNotAccepting => '目前不接受新學生';
+
+  @override
+  String coachViewXProfile(String param) {
+    return '查看$param的Lichess 帳戶';
+  }
+
+  @override
+  String get coachSendPM => '發送私人訊息';
 
   @override
   String get coachAboutMe => '關於我';

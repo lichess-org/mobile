@@ -376,6 +376,8 @@
   "coachAvailability": "是否接受新学生",
   "coachAccepting": "接收学生",
   "coachNotAccepting": "目前不接收学生",
+  "coachViewXProfile": "查看 {param} 的 Lichess 个人资料",
+  "coachSendPM": "发送私信",
   "coachAboutMe": "自我介绍",
   "coachPlayingExperience": "对弈经验",
   "coachTeachingExperience": "教学经验",
