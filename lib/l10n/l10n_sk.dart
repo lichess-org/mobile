@@ -163,6 +163,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => 'Vysielajúci strímeri';
 
   @override
@@ -1420,11 +1423,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get coachNotAccepting => 'Momentálne neprijíma študentov';
-
-  @override
-  String coachViewXProfile(String param) {
-    return 'Prezrieť si $param Lichess profil';
-  }
 
   @override
   String get coachSendPM => 'Poslať súkromnú správu';

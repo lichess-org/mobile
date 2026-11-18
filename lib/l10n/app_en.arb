@@ -85,6 +85,7 @@
     }
   },
   "mobileInvalidOrExpiredLoginCode": "This code is invalid or has expired.",
+  "mobileLichessProfile": "Lichess profile",
   "mobileLiveStreamers": "Live streamers",
   "mobileLocalDatabaseSize": "Local database size",
   "mobileMoveOnRelease": "Move on release",
@@ -783,14 +784,6 @@
   "coachAvailability": "Availability",
   "coachAccepting": "Accepting students",
   "coachNotAccepting": "Not accepting students at the moment",
-  "coachViewXProfile": "View {param} Lichess profile",
-  "@coachViewXProfile": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
   "coachSendPM": "Send a private message",
   "coachAboutMe": "About me",
   "coachPlayingExperience": "Playing experience",

@@ -376,7 +376,6 @@
   "coachAvailability": "신청 가능",
   "coachAccepting": "학생을 받는 중",
   "coachNotAccepting": "지금은 학생을 받고 있지 않음",
-  "coachViewXProfile": "{param}의 Lichess 프로필 보기",
   "coachSendPM": "비공개 메시지 보내기",
   "coachAboutMe": "자기소개",
   "coachPlayingExperience": "플레이 경험",

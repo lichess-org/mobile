@@ -163,6 +163,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '유효하지 않거나 만료된 코드입니다.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => '방송 중인 스트리머';
 
   @override
@@ -1354,11 +1357,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get coachNotAccepting => '지금은 학생을 받고 있지 않음';
-
-  @override
-  String coachViewXProfile(String param) {
-    return '$param의 Lichess 프로필 보기';
-  }
 
   @override
   String get coachSendPM => '비공개 메시지 보내기';

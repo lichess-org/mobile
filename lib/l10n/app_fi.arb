@@ -324,7 +324,6 @@
   "coachAvailability": "Saatavuus",
   "coachAccepting": "Hyväksyn oppilaita",
   "coachNotAccepting": "En ota oppilaita tällä hetkellä",
-  "coachViewXProfile": "Näytä {param}:n Lichess-profiili",
   "coachSendPM": "Lähetä yksityisviesti",
   "coachAboutMe": "Tietoa minusta",
   "coachPlayingExperience": "Pelikokemus",

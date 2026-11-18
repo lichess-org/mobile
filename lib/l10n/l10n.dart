@@ -484,6 +484,12 @@ abstract class AppLocalizations {
   /// **'This code is invalid or has expired.'**
   String get mobileInvalidOrExpiredLoginCode;
 
+  /// No description provided for @mobileLichessProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess profile'**
+  String get mobileLichessProfile;
+
   /// No description provided for @mobileLiveStreamers.
   ///
   /// In en, this message translates to:
@@ -2457,12 +2463,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not accepting students at the moment'**
   String get coachNotAccepting;
-
-  /// No description provided for @coachViewXProfile.
-  ///
-  /// In en, this message translates to:
-  /// **'View {param} Lichess profile'**
-  String coachViewXProfile(String param);
 
   /// No description provided for @coachSendPM.
   ///

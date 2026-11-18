@@ -568,7 +568,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(OutlinedButton), findsNWidgets(2));
-      expect(find.text('View toniaa Lichess profile'), findsOneWidget);
+      expect(find.text('Lichess profile'), findsOneWidget);
       expect(find.text('Send a private message'), findsOneWidget);
       expect(find.byIcon(Icons.person_outlined), findsOneWidget);
       expect(find.byIcon(Icons.chat_bubble_outline), findsOneWidget);

@@ -274,7 +274,6 @@
   "coachAvailability": "Tillgänglighet",
   "coachAccepting": "Accepterar studenter",
   "coachNotAccepting": "Tar inte emot studenter just nu",
-  "coachViewXProfile": "Visa {param} Lichess-profil",
   "coachSendPM": "Skicka ett privat meddelande",
   "coachAboutMe": "Om mig",
   "coachPlayingExperience": "Schack-erfarenhet",

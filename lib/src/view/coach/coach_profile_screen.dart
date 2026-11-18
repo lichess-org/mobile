@@ -112,10 +112,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                     rootNavigator: true,
                   ).push(UserOrProfileScreen.buildRoute(profile.user)),
                   icon: const Icon(Icons.person_outlined),
-                  label: Text(
-                    context.l10n.coachViewXProfile(profile.user.name),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  label: Text(context.l10n.mobileLichessProfile, overflow: TextOverflow.ellipsis),
                 ),
               ),
               const SizedBox(width: 8.0),
@@ -397,7 +394,7 @@ class const _TextSection({required final String title, required final String bod
     return ListSection(
       header: Text(title),
       hasLeading: true,
-      children: [ListTile(title: Text(body.trim(), textAlign: TextAlign.justify))],
+      children: [ListTile(title: Text(body.trim()))],
     );
   }
 }

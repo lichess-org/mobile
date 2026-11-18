@@ -163,6 +163,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => 'Live Streamer';
 
   @override
@@ -1376,11 +1379,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get coachNotAccepting => 'Akzeptiert momentan kei neui Schüeler';
-
-  @override
-  String coachViewXProfile(String param) {
-    return 'Lichess-Profil von $param';
-  }
 
   @override
   String get coachSendPM => 'Schick e privati Nachricht';

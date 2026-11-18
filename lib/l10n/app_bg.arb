@@ -297,7 +297,6 @@
   "coachAvailability": "Достъпност",
   "coachAccepting": "Приемащ ученици",
   "coachNotAccepting": "В момента не приема студенти",
-  "coachViewXProfile": "Вижте Lichess профила на {param}",
   "coachSendPM": "Изпратете лично съобщение",
   "coachAboutMe": "За мен",
   "coachPlayingExperience": "Игрален опит",

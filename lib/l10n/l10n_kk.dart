@@ -163,6 +163,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => 'Эфирдегі стримерлер';
 
   @override
@@ -1376,11 +1379,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get coachNotAccepting => 'Әзірге шәкірттерді қабылдау жоқ';
-
-  @override
-  String coachViewXProfile(String param) {
-    return '$param төлқұжатын қарау';
-  }
 
   @override
   String get coachSendPM => 'Жеке хабар жіберу';

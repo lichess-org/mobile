@@ -163,6 +163,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => 'Reaalajas striimijad';
 
   @override
@@ -1376,11 +1379,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get coachNotAccepting => 'Ei võta tudengeid hetkel';
-
-  @override
-  String coachViewXProfile(String param) {
-    return 'Vaata $param Lichess profiil';
-  }
 
   @override
   String get coachSendPM => 'Saada privaatsõnum';

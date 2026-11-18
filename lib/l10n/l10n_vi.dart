@@ -163,6 +163,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
 
   @override
@@ -1354,11 +1357,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get coachNotAccepting => 'Hiện tại không nhận học viên';
-
-  @override
-  String coachViewXProfile(String param) {
-    return 'Xem hồ sơ Lichess của $param';
-  }
 
   @override
   String get coachSendPM => 'Gửi tin nhắn riêng';
