@@ -312,6 +312,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileSelectAStudy => 'Sélectionner une étude';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'M\'envoyer un code';
 
   @override

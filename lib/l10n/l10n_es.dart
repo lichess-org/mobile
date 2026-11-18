@@ -312,6 +312,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileSelectAStudy => 'Selecciona un estudio';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Recibir un código';
 
   @override

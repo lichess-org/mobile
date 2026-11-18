@@ -312,6 +312,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileSelectAStudy => '연구 선택';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => '코드 보내기';
 
   @override

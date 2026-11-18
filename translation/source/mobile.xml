@@ -97,6 +97,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
   <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Select a study</string>
+  <string name="sendMessage" comment="Label of the button starting a direct message with a coach.">Send message</string>
   <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Send me a code</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analysis</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>

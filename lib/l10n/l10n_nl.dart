@@ -312,6 +312,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSelectAStudy => 'Selecteer een studie';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Stuur me een code';
 
   @override

@@ -123,7 +123,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                     ).push(ConversationScreen.buildRoute(user: profile.user));
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
-                  label: Text(context.l10n.composeMessage, overflow: TextOverflow.ellipsis),
+                  label: Text(context.l10n.mobileSendMessage, overflow: TextOverflow.ellipsis),
                 ),
               ),
             ],

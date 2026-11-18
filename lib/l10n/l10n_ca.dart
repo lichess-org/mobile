@@ -312,6 +312,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileSelectAStudy => 'Selecciona un estudi';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Envia\'m un codi';
 
   @override

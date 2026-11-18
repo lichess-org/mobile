@@ -312,6 +312,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileSelectAStudy => 'Bir çalışma seçin';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Bana bir kod gönder';
 
   @override

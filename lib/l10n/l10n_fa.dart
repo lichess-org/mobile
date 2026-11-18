@@ -312,6 +312,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileSelectAStudy => 'Select a study';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Send me a code';
 
   @override

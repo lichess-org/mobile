@@ -312,6 +312,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSelectAStudy => 'Selecciona un estudo';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Envíame un código';
 
   @override

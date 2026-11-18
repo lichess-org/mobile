@@ -312,6 +312,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileSelectAStudy => 'Selectează un studiu';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Trimite-mi un cod';
 
   @override

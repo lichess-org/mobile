@@ -778,6 +778,12 @@ abstract class AppLocalizations {
   /// **'Select a study'**
   String get mobileSelectAStudy;
 
+  /// No description provided for @mobileSendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get mobileSendMessage;
+
   /// No description provided for @mobileSendMeACode.
   ///
   /// In en, this message translates to:

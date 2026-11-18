@@ -312,6 +312,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileSelectAStudy => '研究を選択';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'コードを送ってもらう';
 
   @override

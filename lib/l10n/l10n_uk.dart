@@ -312,6 +312,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileSelectAStudy => 'Вибір дослідження';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => 'Send me a code';
 
   @override

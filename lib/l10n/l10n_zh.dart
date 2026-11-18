@@ -312,6 +312,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileSelectAStudy => '选择研习';
 
   @override
+  String get mobileSendMessage => 'Send message';
+
+  @override
   String get mobileSendMeACode => '向我发送验证码';
 
   @override
