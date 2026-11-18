@@ -79,7 +79,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
     return ListView(
       children: [
         Padding(
-          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+          padding: Styles.horizontalBodyPadding,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -100,43 +100,43 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             ],
           ),
         ),
+        Padding(
+          padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => Navigator.of(
+                    context,
+                    rootNavigator: true,
+                  ).push(UserOrProfileScreen.buildRoute(profile.user)),
+                  icon: const Icon(Icons.person_outlined),
+                  label: const Text('Lichess profile', overflow: TextOverflow.ellipsis),
+                ),
+              ),
+              const SizedBox(width: 8.0),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    if (!ref.read(isLoggedInProvider)) {
+                      showSignInOptions(context, ref);
+                      return;
+                    }
+                    Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(ConversationScreen.buildRoute(user: profile.user));
+                  },
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  label: Text(context.l10n.composeMessage, overflow: TextOverflow.ellipsis),
+                ),
+              ),
+            ],
+          ),
+        ),
         ListSection(
           hasLeading: true,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => Navigator.of(
-                        context,
-                        rootNavigator: true,
-                      ).push(UserOrProfileScreen.buildRoute(profile.user)),
-                      icon: const Icon(Icons.person_outlined),
-                      label: Text(context.l10n.profile, overflow: TextOverflow.ellipsis),
-                    ),
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        if (!ref.read(isLoggedInProvider)) {
-                          showSignInOptions(context, ref);
-                          return;
-                        }
-                        Navigator.of(
-                          context,
-                          rootNavigator: true,
-                        ).push(ConversationScreen.buildRoute(user: profile.user));
-                      },
-                      icon: const Icon(Icons.chat_bubble_outline),
-                      label: Text(context.l10n.composeMessage, overflow: TextOverflow.ellipsis),
-                    ),
-                  ),
-                ],
-              ),
-            ),
             if (userInfo case final info? when info.location != null || info.country != null)
               _InfoRow(
                 label: context.l10n.coachLocation,
