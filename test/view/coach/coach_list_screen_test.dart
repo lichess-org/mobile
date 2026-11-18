@@ -278,6 +278,11 @@ const _userResponse = '''
 }
 ''';
 
+Future<void> closeFilterSheet(WidgetTester tester) async {
+  Navigator.of(tester.element(find.byType(CoachListScreen)), rootNavigator: true).pop();
+  await tester.pumpAndSettle();
+}
+
 void main() {
   group('CoachListScreen', () {
     testWidgets('shows coaches with a 1:1 picture on the left side', (tester) async {
@@ -970,6 +975,7 @@ void main() {
 
       await tester.tap(find.text('Lichess rating'));
       await tester.pumpAndSettle();
+      await closeFilterSheet(tester);
 
       expect(requestedOrders, ['login', 'rating']);
     });
@@ -1002,6 +1008,7 @@ void main() {
 
       await tester.tap(find.text('English (US)'));
       await tester.pumpAndSettle();
+      await closeFilterSheet(tester);
 
       expect(requestedPaths, ['/coach/all/all/login', '/coach/en-US/all/login']);
     });
@@ -1036,9 +1043,7 @@ void main() {
 
       await tester.tap(find.text('Greece'));
       await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Done'));
-      await tester.pumpAndSettle();
+      await closeFilterSheet(tester);
 
       expect(requestedPaths, ['/coach/all/all/login']);
       expect(find.text('Sign in with the browser'), findsOneWidget);
@@ -1102,9 +1107,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(BottomSheet), findsOneWidget);
-      await tester.ensureVisible(find.text('Done'));
-      await tester.tap(find.text('Done'));
-      await tester.pumpAndSettle();
+      await closeFilterSheet(tester);
 
       expect(find.byType(BottomSheet), findsNothing);
       expect(find.byType(CoachListTile), findsNWidgets(2));

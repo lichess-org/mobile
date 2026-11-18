@@ -66,10 +66,10 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
     }
   }
 
-  void _openFilterSheet(CoachListPage? page) {
-    final newLanguage = language;
+  Future<void> _openFilterSheet(CoachListPage? page) async {
+    var newLanguage = language;
     var newCountry = country;
-    final newOrder = order;
+    var newOrder = order;
 
     final languages = [kAllCoachesFilter, ...?page?.languages];
     final countries = [
@@ -77,7 +77,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
       ...?page?.countries,
     ];
 
-    showModalBottomSheet<void>(
+    await showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,
       isScrollControlled: true,
@@ -96,11 +96,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               choiceLabel: (choice) => Text(choice.l10n(context.l10n)),
               onSelected: (value, selected) {
                 if (selected) {
-                  setState(() {
-                    order = value;
-                    requestedNextPage = false;
-                  });
-                  Navigator.of(context).pop();
+                  setSheetState(() => newOrder = value);
                 }
               },
             ),
@@ -110,11 +106,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               groupValue: newLanguage,
               onChanged: (value) {
                 if (value != null) {
-                  setState(() {
-                    language = value;
-                    requestedNextPage = false;
-                  });
-                  Navigator.of(context).pop();
+                  setSheetState(() => newLanguage = value);
                 }
               },
               child: Column(
@@ -146,27 +138,23 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               ),
             ),
             const SizedBox(height: 16.0),
-            FilledButton(
-              onPressed: () {
-                if (newCountry != kAllCoachesFilter && !ref.read(isLoggedInProvider)) {
-                  Navigator.of(context).pop();
-                  showSignInOptions(this.context, ref);
-                  return;
-                }
-                setState(() {
-                  language = newLanguage;
-                  country = newCountry;
-                  order = newOrder;
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text(context.l10n.done),
-            ),
-            const SizedBox(height: 16.0),
           ],
         ),
       ),
     );
+
+    if (!mounted) return;
+    if (newCountry != kAllCoachesFilter && !ref.read(isLoggedInProvider)) {
+      showSignInOptions(context, ref);
+      return;
+    }
+    if (newLanguage == language && newCountry == country && newOrder == order) return;
+    setState(() {
+      language = newLanguage;
+      country = newCountry;
+      order = newOrder;
+      requestedNextPage = false;
+    });
   }
 
   @override
