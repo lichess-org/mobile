@@ -79,7 +79,7 @@ const whiteLists = {
   'search': ['search', 'sortBy'],
   'streamer': ['lichessStreamers'],
   'team': ['nbLeadersPerTeam', 'battleOfNbTeams', 'incorrectEntryCode', 'team', 'teamUpdates'],
-  'tfa': ['twoFactorAuth'],
+  'tfa': ['twoFactorAuth', 'authenticationCode', 'openTwoFactorApp'],
   'variant': [
     'standard',
     'standardTitle',

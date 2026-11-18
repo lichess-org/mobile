@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -72,9 +73,6 @@ class const LearnTabScreen({super.key}) extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Text(context.l10n.learnMenu),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),
@@ -109,9 +107,6 @@ class const _Body() extends ConsumerWidget {
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
       child: HapticRefreshIndicator(
-        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-            ? MediaQuery.paddingOf(context).top + kToolbarHeight
-            : 0.0,
         onRefresh: () => _refreshData(ref),
         child: ListView(
           controller: learnScrollController,
@@ -128,8 +123,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.chessBasics, style: Styles.callout),
-                  onTap: () =>
-                      Navigator.of(context, rootNavigator: true).push(LearnScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).push(LearnScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.exercise),
@@ -137,8 +131,7 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.practice, style: Styles.callout),
-                  onTap: () =>
-                      Navigator.of(context, rootNavigator: true).push(PracticeScreen.buildRoute()),
+                  onTap: () => Navigator.of(context).push(PracticeScreen.buildRoute()),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.where_to_vote),
@@ -146,43 +139,59 @@ class const _Body() extends ConsumerWidget {
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-                  onTap: () => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(CoordinateTrainingScreen.buildRoute()),
+                  onTap: () =>
+                      Navigator.of(context).pushHidingTabBar(CoordinateTrainingScreen.buildRoute()),
                 ),
               ],
             ),
             // Learn, practice and coordinate training work offline, so only the studies are
             // replaced by the outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
-            if (connectionStatus == LichessConnectionStatus.online) ...[
+            if (connectionStatus == LichessConnectionStatus.networkDown)
               ListSection(
                 header: Text(context.l10n.studyMenu),
-                onHeaderTap: () =>
-                    Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
                 hasLeading: true,
                 margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                 children: [
-                  ...(switch (ref.watch(_hotStudiesProvider)) {
-                    AsyncData(:final value) =>
-                      value
-                          .take(5)
-                          .map(
-                            (study) => StudyListItem(
-                              study: study,
-                              titleMaxLines: 1,
-                              onTap: (context, study) => Navigator.of(
-                                context,
-                                rootNavigator: true,
-                              ).push(StudyScreen.buildRoute((id: study.id, initialChapter: null))),
-                            ),
-                          )
-                          .toList(growable: false),
-                    _ => [],
-                  }),
+                  ListTile(
+                    // Grey, unlike the icons of the tappable rows.
+                    leading: Icon(
+                      Icons.cloud_off_outlined,
+                      color: textShade(context, Styles.subtitleOpacity),
+                    ),
+                    title: const Text('Studies are not available offline.'),
+                  ),
                 ],
               ),
+            if (connectionStatus == LichessConnectionStatus.online) ...[
+              switch (ref.watch(_hotStudiesProvider)) {
+                AsyncData(:final value) => ListSection(
+                  header: Text(context.l10n.studyMenu),
+                  onHeaderTap: () =>
+                      Navigator.of(context).pushHidingTabBar(StudyListScreen.buildRoute()),
+                  hasLeading: true,
+                  children: [
+                    for (final study in value.take(5))
+                      StudyListItem(
+                        study: study,
+                        titleMaxLines: 1,
+                        onTap: (context, study) => Navigator.of(context).pushHidingTabBar(
+                          StudyScreen.buildRoute((id: study.id, initialChapter: null)),
+                        ),
+                      ),
+                  ],
+                ),
+                AsyncError() => const Padding(
+                  padding: Styles.bodySectionPadding,
+                  child: Text('Could not load studies.'),
+                ),
+                _ => Shimmer(
+                  child: ShimmerLoading(
+                    isLoading: true,
+                    child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
+                  ),
+                ),
+              },
               if (haveIStudies || haveIFavoriteStudies)
                 ListSection(
                   hasLeading: true,
@@ -196,7 +205,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
                               )
                             : null,
@@ -209,7 +218,7 @@ class const _Body() extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyFavoriteStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
                               )
                             : null,

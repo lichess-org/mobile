@@ -51,7 +51,6 @@
   <string name="annotateWithGlyphs">Pribilježi glifovima</string>
   <string name="theChapterIsTooShortToBeAnalysed">Poglavlje je prekratko za analizu.</string>
   <string name="onlyContributorsCanRequestAnalysis">Samo suradnici u studiji mogu zahtijevati računalnu analizu.</string>
-  <string name="getAFullComputerAnalysis">Dobi potpunu analizu \"main-line\" od servera.</string>
   <string name="makeSureTheChapterIsComplete">Budite sigurni da je poglavlje gotovo. Zahtjev za računalnom analizom se može dobiti samo jednom.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Svi sinkronizirani članovi ostaju na istoj poziciji</string>
   <string name="shareChanges">Podijeli promjene sa gledateljima i pohrani ih na server</string>
@@ -102,11 +101,6 @@
   <string name="loadAPositionFromFen">Učitaj poziciju od FENa</string>
   <string name="loadAGameFromPgn">Učitaj igru od PGNa</string>
   <string name="automatic">Automatski</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Ovdje zalijepite svoj PGN tekst, do %s igre</item>
-    <item quantity="few">Ovdje zalijepite svoj PGN tekst, do %s igri</item>
-    <item quantity="other">Ovdje zalijepite svoj PGN tekst, do %s igara</item>
-  </plurals>
   <string name="urlOfTheGame">URL igre</string>
   <string name="createChapter">Stvori poglavlje</string>
   <string name="createStudy">Stvori studiju</string>
@@ -126,16 +120,13 @@
   <string name="noLetPeopleBrowseFreely">Ne: neka ljudi slobodno pregledavaju</string>
   <string name="pinnedStudyComment">Stalni komentar na studije</string>
   <string name="start">Start</string>
-  <string name="save">Spremi</string>
   <string name="clearChat">Očistite razgovor</string>
   <string name="deleteTheStudyChatHistory">Dali želite obrisati povijest razgovora? Nakon ovoga nema povratka!</string>
   <string name="deleteStudy">Izbriši studiju</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Izbrisati cijelu studiju? Nema povratka! Ukucajte naziv studije da potvrdite: %s</string>
   <string name="whereDoYouWantToStudyThat">Gdje želiš to studirati?</string>
   <string name="goodMove">Dobar potez</string>
-  <string name="mistake">Greška</string>
   <string name="brilliantMove">Briljantan potez</string>
-  <string name="blunder">Gruba greška</string>
   <string name="interestingMove">Zanimljiv potez</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Sumnjiv potez</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Jedini potez</string>

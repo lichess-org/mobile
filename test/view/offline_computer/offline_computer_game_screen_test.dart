@@ -29,7 +29,9 @@ import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_player_widget.dart';
 import 'package:lichess_mobile/src/view/offline_computer/offline_computer_game_screen.dart';
+import 'package:lichess_mobile/src/view/offline_computer/opponent_settings.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -95,10 +97,9 @@ void main() {
 
       // Verify new game bottom sheet is displayed
 
-      // Verify the opponent tile is shown, with the default opponent on it
-      expect(find.text('Opponent'), findsOneWidget);
-      // Once on the tile, once on the engine player behind the sheet.
-      expect(find.text('Stockfish level 4'), findsNWidgets(2));
+      // Verify the opponent settings are shown, on the default opponent
+      expect(find.byType(OpponentSettings), findsOneWidget);
+      expect(find.text('Level: 4'), findsOneWidget);
 
       // Verify side selection (label is "Side" with value showing default "Random side")
       expect(find.text('Side'), findsOneWidget);
@@ -390,7 +391,7 @@ void main() {
       // Verify new game bottom sheet is shown with all options
       await tester.ensureVisible(find.text('Side'));
       expect(find.text('Side'), findsOneWidget);
-      expect(find.text('Opponent'), findsOneWidget);
+      expect(find.byType(OpponentSettings), findsOneWidget);
     });
 
     testWidgets('Menu button opens action sheet', (tester) async {
@@ -467,7 +468,8 @@ void main() {
       expect(find.byType(Image), findsWidgets);
 
       // Verify Stockfish name with level
-      expect(find.textContaining('Stockfish'), findsOneWidget);
+      expect(find.text('Stockfish level 4'), findsOneWidget);
+      expect(find.text('BOT'), findsOneWidget);
     });
 
     testWidgets('Takeback button is disabled at game start', (tester) async {
@@ -522,6 +524,7 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
       // The side picker already holds the side of the game just played.
+      await tester.ensureVisible(find.text('Play'));
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -546,18 +549,34 @@ void main() {
       await tester.tap(find.text('New game'));
       await tester.pumpAndSettle();
 
-      // Verify bottom sheet is shown (has Play button and the opponent tile)
+      // Verify bottom sheet is shown (has Play button and the opponent settings)
       expect(find.text('Play'), findsOneWidget);
-      expect(find.text('Opponent'), findsOneWidget);
+      expect(find.byType(OpponentSettings), findsOneWidget);
 
       // Dismiss the bottom sheet by tapping the barrier (scrim)
       await tester.tapAt(Offset.zero);
       await tester.pumpAndSettle();
 
       // Bottom sheet should be closed, game should still be visible
-      expect(find.text('Opponent'), findsNothing);
+      expect(find.byType(OpponentSettings), findsNothing);
       expect(find.byType(Chessboard), findsOneWidget);
     });
+
+    testWidgets('Can dismiss new game bottom sheet by dragging it down', (tester) async {
+      await initOfflineComputerGame(tester);
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+      expect(find.byType(OpponentSettings), findsOneWidget);
+
+      await tester.fling(find.byType(OpponentSettings), const Offset(0, 600), 2000);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(OpponentSettings), findsNothing);
+      expect(find.byType(Chessboard), findsOneWidget);
+    }, variant: kPlatformVariant);
 
     testWidgets('Can start game with a different Stockfish level', (tester) async {
       final gameStorage = MockOfflineComputerGameStorage();
@@ -575,10 +594,7 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // The level lives in the opponent picker now
-      await tester.tap(find.text('Opponent'));
-      await tester.pumpAndSettle();
-
+      // The level is in the new game sheet
       final slider = find.byType(Slider);
       expect(slider, findsOneWidget);
 
@@ -586,11 +602,7 @@ void main() {
       await tester.drag(slider, const Offset(100, 0));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('OK'));
-      await tester.pumpAndSettle();
-
-      // Only the engine player behind the sheet still says level 4; the tile has moved on.
-      expect(find.text('Stockfish level 4'), findsOneWidget);
+      expect(find.text('Level: 4'), findsNothing);
 
       // Select white and start game
       await selectSide(tester, Side.white);
@@ -628,8 +640,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      expect(find.text('Maia 2200'), findsNothing);
-      expect(find.text('Maia ${MaiaRating.defaultRating.rating}'), findsWidgets);
+      expect(find.text('Strength: 2200'), findsNothing);
+      expect(find.text('Strength: ${MaiaRating.defaultRating.rating}'), findsOneWidget);
 
       final container = ProviderScope.containerOf(
         tester.element(find.byType(OfflineComputerGameScreen)),
@@ -718,7 +730,9 @@ void main() {
       expect(hintWidget.onTap, isNull);
     });
 
-    testWidgets('Loading saved game restores position', (tester) async {
+    testWidgets('Loading saved game restores position and engine identity in analysis', (
+      tester,
+    ) async {
       final gameStorage = MockOfflineComputerGameStorage();
 
       // Return a saved game with moves already played (e4, e5)
@@ -802,6 +816,20 @@ void main() {
       // Move list should show the played moves
       expect(find.text('e4'), findsOneWidget);
       expect(find.text('e5'), findsOneWidget);
+
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Analysis board'));
+      await tester.pumpAndSettle();
+
+      final engineHeader = find.byWidgetPredicate(
+        (widget) => widget is PgnPlayerWidget && widget.player.side == .black,
+      );
+      expect(
+        find.descendant(of: engineHeader, matching: find.text('Stockfish level 1')),
+        findsOneWidget,
+      );
+      expect(find.descendant(of: engineHeader, matching: find.text('BOT')), findsOneWidget);
     });
 
     testWidgets('Last move is highlighted when loading a saved game', (tester) async {
@@ -1696,7 +1724,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Default is "Next to play", just tap Play
+      // Default is "Next to play", just tap Play (below the position preview and the opponent)
+      await tester.ensureVisible(find.text('Play'));
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -1730,7 +1759,8 @@ void main() {
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
 
-      // Default is "Next to play", just tap Play
+      // Default is "Next to play", just tap Play (below the position preview and the opponent)
+      await tester.ensureVisible(find.text('Play'));
       await tester.tap(find.text('Play'));
       await tester.pumpAndSettle();
 
@@ -2080,6 +2110,7 @@ void main() {
         of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
+      await tester.ensureVisible(practiceSwitch);
       await tester.tap(practiceSwitch);
       await tester.pump();
 
@@ -2126,6 +2157,7 @@ void main() {
         of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
         matching: find.byType(Switch),
       );
+      await tester.ensureVisible(practiceSwitch);
       await tester.tap(practiceSwitch);
       await tester.pump();
 
@@ -2370,6 +2402,7 @@ Future<Rect> initPracticeModeGame(WidgetTester tester, {Side side = Side.white})
     of: find.ancestor(of: find.text('Practice mode'), matching: find.byType(SwitchSettingTile)),
     matching: find.byType(Switch),
   );
+  await tester.ensureVisible(practiceSwitch);
   await tester.tap(practiceSwitch);
   await tester.pump();
 

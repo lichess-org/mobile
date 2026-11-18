@@ -36,6 +36,7 @@ class const PracticeGamebookChapterBody({required final PracticeGamebookChapter 
       }.lock,
       table: _Table(state: state),
       bottomBar: BottomBar(
+        cupertinoGlass: true,
         children: [
           BottomBarButton(
             label: context.l10n.studyPlayAgain,
@@ -82,9 +83,9 @@ class const _Table({required final PracticeGamebookState state}) extends Consume
     final hint = state.hint;
     final result = switch (state.feedback) {
       .play => null,
-      .good => (Icons.check_circle, LichessColors.good, context.l10n.studyGoodMove),
-      .bad => (Icons.cancel, LichessColors.error, context.l10n.puzzleNotTheMove),
-      .end => (Icons.check_circle, LichessColors.good, context.l10n.studyYouCompletedThisLesson),
+      .good => (Icons.check_circle, LichessColors.green, context.l10n.studyGoodMove),
+      .bad => (Icons.cancel, LichessColors.red, context.l10n.puzzleNotTheMove),
+      .end => (Icons.check_circle, LichessColors.green, context.l10n.studyYouCompletedThisLesson),
     };
     final comment =
         state.comment ?? (state.feedback == .play ? context.l10n.studyWhatWouldYouPlay : null);

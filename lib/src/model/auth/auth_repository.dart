@@ -168,6 +168,24 @@ class AuthRepository(final Ref _ref, final FlutterAppAuth _appAuth) {
     await _client.deleteRead(Uri(path: '/api/token'));
   }
 
+  /// Revokes the token of [authUser], which need not be the active session.
+  Future<void> revokeToken(AuthUser authUser) async {
+    // The default client is used on purpose: a 401 response from [lichessClientProvider] would be
+    // taken for a 401 of the active session.
+    final url = lichessUri('/api/token');
+    final response = await _ref
+        .read(defaultClientProvider)
+        .delete(url, headers: {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'});
+    if (response.statusCode >= 400 && response.statusCode != 401) {
+      throw ServerException(
+        response.statusCode,
+        'Could not revoke the token: ${response.statusCode}',
+        url,
+        null,
+      );
+    }
+  }
+
   /// Check if the given authUser token is valid.
   Future<bool> checkToken(AuthUser authUser) async {
     final defaultClient = _ref.read(defaultClientProvider);

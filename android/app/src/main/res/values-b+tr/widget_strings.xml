@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->
+<resources>
+    <string name="daily_puzzle_title">Günlük Bulmaca</string>
+    <string name="broadcast_title">Canlı Turnuvalar</string>
+</resources>
