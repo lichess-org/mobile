@@ -65,6 +65,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider(profile.user.id));
     final userInfo = user.value?.profile;
+    final headline = profile.headline?.trim();
     final perfRatings = <String>[
       for (final perf in const [Perf.bullet, Perf.blitz, Perf.rapid, Perf.classical])
         if (user.value?.perfs[perf] case final perfRating?)
@@ -84,7 +85,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                 showFlair: false,
                 style: const TextStyle(fontSize: 20.0),
               ),
-              if (profile.headline case final headline?) ...[
+              if (headline != null && headline.isNotEmpty) ...[
                 const SizedBox(height: 8.0),
                 Text(
                   headline,

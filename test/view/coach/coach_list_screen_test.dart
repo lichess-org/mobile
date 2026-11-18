@@ -378,6 +378,44 @@ void main() {
       expect(tester.widget<Text>(find.text('Learn chess the fun way')).textAlign, TextAlign.center);
     });
 
+    testWidgets('profile with an empty headline has no blank line above the buttons', (
+      tester,
+    ) async {
+      final emptyHeadlineResponse = _profileResponse.replaceFirst(
+        '"headline": "Learn chess the fun way"',
+        '"headline": ""',
+      );
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(emptyHeadlineResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      expect(find.text(''), findsNothing);
+      expect(find.byType(OutlinedButton), findsNWidgets(2));
+    });
+
     testWidgets('profile shows youtube thumbnails instead of video links', (tester) async {
       final pngBytes = base64Decode(
         'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
