@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/coach/youtube_oembed.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -189,7 +190,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             children: [
               for (final post in profile.posts)
                 ListTile(
-                  leading: const Icon(Icons.article),
+                  leading: const Icon(LichessIcons.book_lichess),
                   title: Text(post.title, maxLines: 2, overflow: TextOverflow.ellipsis),
                   onTap: () => launchUrl(lichessUri(post.url.toString())),
                 ),
@@ -219,7 +220,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             children: [
               for (final study in profile.studies)
                 ListTile(
-                  leading: const Icon(Icons.book),
+                  leading: const Icon(LichessIcons.study),
                   title: Text(study.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                   onTap: () => Navigator.of(
                     context,

@@ -7,6 +7,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/coach/youtube_channel.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
@@ -354,7 +355,11 @@ void main() {
           .widgetList<CoachListTile>(find.byType(CoachListTile))
           .map((tile) => tile.coach.user.name)
           .toList();
-      expect(names.length, names.toSet().length, reason: 'duplicate rows: ${requestedPages.join(',')}');
+      expect(
+        names.length,
+        names.toSet().length,
+        reason: 'duplicate rows: ${requestedPages.join(',')}',
+      );
     });
 
     testWidgets('shows coaches with a 1:1 picture on the left side', (tester) async {
@@ -901,6 +906,7 @@ void main() {
       expect(find.text('Chess sparring'), findsOneWidget);
       expect(find.text('Endgame fundamentals'), findsOneWidget);
       expect(find.textContaining('/@/toniaa/blog'), findsNothing);
+      expect(find.byIcon(LichessIcons.book_lichess), findsNWidgets(2));
     });
 
     testWidgets('profile shows public studies with their names', (tester) async {
@@ -942,6 +948,7 @@ void main() {
       expect(find.text('Rook endgames mastery'), findsOneWidget);
       expect(find.text('Opening principles'), findsOneWidget);
       expect(find.textContaining('ZalBgXT3'), findsNothing);
+      expect(find.byIcon(LichessIcons.study), findsNWidgets(2));
     });
 
     testWidgets('profile hides youtube section when there are no videos', (tester) async {
