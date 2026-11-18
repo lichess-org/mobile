@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
 import 'package:lichess_mobile/src/model/coach/youtube_channel.dart';
@@ -10,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/message/conversation_screen.dart';
@@ -108,10 +110,16 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                         const SizedBox(width: 8.0),
                         Expanded(
                           child: OutlinedButton.icon(
-                            onPressed: () => Navigator.of(
-                              context,
-                              rootNavigator: true,
-                            ).push(ConversationScreen.buildRoute(user: profile.user)),
+                            onPressed: () {
+                              if (!ref.read(isLoggedInProvider)) {
+                                showSignInOptions(context, ref);
+                                return;
+                              }
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).push(ConversationScreen.buildRoute(user: profile.user));
+                            },
                             icon: const Icon(Icons.chat_bubble_outline, size: 18.0),
                             label: Text(
                               context.l10n.composeMessage,

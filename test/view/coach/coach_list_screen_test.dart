@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../model/auth/fake_auth_storage.dart';
 import '../../network/fake_http_client_factory.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -596,6 +597,7 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: const CoachListScreen(),
+        authUser: fakeAuthUser,
         overrides: {
           httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => client);
@@ -613,6 +615,41 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ConversationScreen), findsOneWidget);
+    });
+
+    testWidgets('profile message button asks to sign in when logged out', (tester) async {
+      final client = MockClient((request) async {
+        switch (request.url.path) {
+          case '/coach/all/all/login':
+            return http.Response(_listResponse, 200);
+          case '/coach/toniaa':
+            return http.Response(_profileResponse, 200);
+          default:
+            return http.Response('', 404);
+        }
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(CoachListTile).first);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(OutlinedButton).last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Sign in with the browser'), findsOneWidget);
+      expect(find.byType(ConversationScreen), findsNothing);
     });
 
     testWidgets('youtube channel tile shows a shimmer while loading', (tester) async {
