@@ -8,9 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/binding/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -19,11 +18,8 @@ import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/clock/chess_clock.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -35,6 +31,10 @@ import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
+import 'package:lichess_mobile/src/service/correspondence_service.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 
@@ -250,11 +250,6 @@ class GameController(final GameFullId gameFullId)
   void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
-      return;
-    }
-
     final (Position, String) sanResult;
     try {
       sanResult = curState.game.lastPosition.makeSan(move);
@@ -270,6 +265,13 @@ class GameController(final GameFullId gameFullId)
     }
     final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, move);
+
+    if (curState.shouldConfirmMove && isPremove != true) {
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
+      return;
+    }
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
@@ -350,6 +352,9 @@ class GameController(final GameFullId gameFullId)
         moveToConfirm: null,
       ),
     );
+
+    ref.read(soundServiceProvider).play(.confirmation);
+
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,
@@ -990,7 +995,7 @@ class GameController(final GameFullId gameFullId)
           curState.copyWith(
             lastDrawOfferAtPly: side != null && side == curState.game.youAre
                 ? curState.game.lastPly
-                : null,
+                : curState.lastDrawOfferAtPly,
             game: curState.game.copyWith(
               white: curState.game.white.copyWith(
                 offeringDraw: side == null ? null : side == Side.white,

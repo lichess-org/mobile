@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="contact">Контакт</string>
-  <string name="contactLichess">Контактирај Lichess</string>
-  <string name="whatCanWeHelpYouWith">Са чиме ти моћемо помоћи?</string>
-  <string name="visitThisPage">Посети ову страницу да решиш проблем</string>
+  <string name="contactLichess">Контактирајте Lichess</string>
+  <string name="whatCanWeHelpYouWith">Како Вам можемо помоћи?</string>
+  <string name="visitThisPage">Посетите ову страницу да решите проблем</string>
   <string name="iCantLogIn">Не могу се пријавити</string>
   <string name="noConfirmationEmail">Нисам примио/ла мој имејл потврде</string>
   <string name="forgotPassword">Заборавио/ла сам лозинку</string>
@@ -53,7 +53,6 @@
   <string name="ratedGame">Провери да си одиграо/ла рангирану партију. Нерангиране партије не утичу на играчев рејтинг.</string>
   <string name="botRatingAbuse">У одређеним случајевима када се игра против бот налога, рангирана партије можда не додели бодове ако установимо да играч злоупотребљава бота за рејтинг бодове.</string>
   <string name="errorPage">Страница грешке</string>
-  <string name="reportErrorPage">Ако си видео/ла страницу грешке, можеш је пријавити:</string>
   <string name="banAppeal">Жалба на забрану или IP ограничење</string>
   <string name="engineAppeal">Ознака рачунара или варања</string>
   <string name="sendAppealTo">Можеш послати жалбу на %s.</string>

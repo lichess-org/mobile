@@ -64,7 +64,6 @@
 Δείτε την %3$s σε αυτή την κίνηση για να εξασκηθείτε.</string>
   <string name="goodIntroduction">καλή εισαγωγή</string>
   <string name="lichessTraining">εκπαίδευση του Lichess</string>
-  <string name="watchIMRosenCheckmate">Παρακολουθήστε τον Διεθνή Μετρ Eric Rosen να κάνει ματ %s.</string>
   <string name="threefoldRepetition">Τριπλή επανάληψη</string>
   <string name="threefoldRepetitionExplanation">Αν μια θέση επαναληφθεί τρεις φορές, οι παίκτες μπορούν να ισχυριστούν ισοπαλία από τον κανόνα της %1$s. Το Lichess εφαρμόζει τους επίσημους κανόνες FIDE, όπως περιγράφονται στο άρθρο 9.2 του %2$s.</string>
   <string name="threefoldRepetitionLowerCase">τριπλή επανάληψη</string>
@@ -159,6 +158,7 @@
 3. Κάντε κλικ στην επιλογή Cookies και άδειες ιστοσελίδας
 4. Κάντε κύλιση προς τα κάτω και κάντε κλικ στην αυτόματη αναπαραγωγή πολυμέσων
 5. Προσθέστε το lichess.org στο επιτρέπω</string>
+  <string name="makeBotTitle">Πώς να δημιουργήσετε ένα μποτ στο Lichess;</string>
   <string name="stopMyselfFromPlaying">Να σταματήσω τον εαυτό μου από το να παίζει;</string>
   <string name="mentalHealthCondition">αυτόνομη κατάσταση ψυχικής υγείας</string>
   <string name="lichessUserstyles">Lichess userstyles</string>

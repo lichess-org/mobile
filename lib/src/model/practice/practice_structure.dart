@@ -247,7 +247,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
             pick('shapes').asListOrNull((shape) {
               final pgn = shape.asStringOrThrow();
               return PgnCommentShape.fromPgn(pgn) ??
-                  (throw PickException('Invalid shape "$pgn" at ${shape.debugParsingExit}'));
+                  (throw PickException.fromPick(shape, 'invalid shape'));
             })?.lock ??
             const IListConst([]),
       ),
@@ -269,9 +269,7 @@ sealed class const PracticeChapter._() with _$PracticeChapter {
         description: description,
         pgn: pick('pgn').asStringOrThrow(),
       ),
-      final kind => throw PickException(
-        'Unknown practice chapter kind "$kind" at ${pick.debugParsingExit}',
-      ),
+      _ => throw PickException.fromPick(pick('kind'), 'unknown practice chapter kind'),
     };
   }
 }

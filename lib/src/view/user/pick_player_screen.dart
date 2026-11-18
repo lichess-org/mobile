@@ -30,7 +30,22 @@ class const PickPlayerScreen({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title),
+      appBar: PlatformAppBar(
+        title: title,
+        actions: [
+          SearchHeroButton(
+            heroTag: SearchScreen.heroTag,
+            onPressed: () => Navigator.of(context).push(
+              SearchScreen.buildRoute(
+                onUserTap: (user) {
+                  Navigator.of(context).pop();
+                  onUserTap(user);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
       body: _Body(onUserTap: onUserTap),
     );
   }
@@ -47,8 +62,7 @@ class const _Body({required final void Function(LightUser) onUserTap}) extends C
       return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
     }
 
-    return _PlayersList(
-      onUserTap: onUserTap,
+    return ListView(
       children: [
         switch (online) {
           AsyncData(:final value) when value.isNotEmpty => ListSection(
@@ -74,53 +88,6 @@ class const _Body({required final void Function(LightUser) onUserTap}) extends C
       ],
     );
   }
-}
-
-class const _PlayersList({
-  required final void Function(LightUser) onUserTap,
-  required final List<Widget> children,
-}) extends StatefulWidget {
-  @override
-  State<_PlayersList> createState() => _PlayersListState();
-}
-
-class _PlayersListState() extends State<_PlayersList> {
-  final _searchFocusNode = _AlwaysDisabledFocusNode();
-
-  @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: PlatformSearchBar(
-            hintText: context.l10n.searchSearch,
-            focusNode: _searchFocusNode,
-            onTap: () => Navigator.of(context).push(
-              SearchScreen.buildRoute(
-                onUserTap: (user) {
-                  Navigator.of(context).pop();
-                  widget.onUserTap(user);
-                },
-              ),
-            ),
-          ),
-        ),
-        ...widget.children,
-      ],
-    );
-  }
-}
-
-class _AlwaysDisabledFocusNode() extends FocusNode {
-  @override
-  bool get hasFocus => false;
 }
 
 class const _FriendTile({

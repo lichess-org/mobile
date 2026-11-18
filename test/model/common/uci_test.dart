@@ -17,6 +17,19 @@ void main() {
     // drops
     expect(UciCharPair.fromMove(Move.parse('P@a1')!).toString(), '#\x8f');
     expect(UciCharPair.fromMove(Move.parse('Q@h8')!).toString(), 'b\x8b');
+
+    // disambiguation for duplicate variations
+    const base = UciCharPair('T', 'd');
+    expect(UciCharPair.disambiguated(base, 0), base);
+    final disambiguated1 = UciCharPair.disambiguated(base, 1);
+    final disambiguated2 = UciCharPair.disambiguated(base, 2);
+    expect(disambiguated1 != base, true);
+    expect(disambiguated2 != disambiguated1, true);
+    expect(disambiguated1.basePair, base);
+    expect(disambiguated2.basePair, base);
+    expect(base.basePair, base);
+    expect(disambiguated1.toString().length, 2);
+    expect(disambiguated2.toString().length, 2);
   });
 
   group('UciPath', () {

@@ -2,15 +2,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/auth/parental_pin.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/parental_pin_dialog.dart';
+import 'package:lichess_mobile/src/view/settings/account_termination_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -50,6 +56,57 @@ class _AccountPreferencesScreenState()
     }
   }
 
+  /// Sets the parental PIN if there is none, or else changes or removes it after checking it.
+  Future<void> _editParentalPin(BuildContext context, {required bool hasParentalPin}) async {
+    if (!hasParentalPin) {
+      await showAdaptiveDialog<bool>(
+        context: context,
+        builder: (_) => const ParentalPinDialog(mode: .create),
+      );
+      return;
+    }
+
+    final verified = await showAdaptiveDialog<bool>(
+      context: context,
+      builder: (_) => const ParentalPinDialog(mode: .verify),
+    );
+    if (verified != true || !context.mounted) return;
+
+    final change = await showAdaptiveDialog<bool>(
+      context: context,
+      builder: (dialogContext) => PlatformAlertDialog(
+        title: const Text('Parental PIN'),
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('Change PIN'),
+          ),
+          PlatformDialogAction(
+            cupertinoIsDestructiveAction: true,
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('Remove PIN'),
+          ),
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.l10n.cancel),
+          ),
+        ],
+      ),
+    );
+    if (!context.mounted) return;
+    switch (change) {
+      case true:
+        await showAdaptiveDialog<bool>(
+          context: context,
+          builder: (_) => const ParentalPinDialog(mode: .create),
+        );
+      case false:
+        await ref.read(parentalPinProvider.notifier).removePin();
+      case null:
+        break;
+    }
+  }
+
   Future<void> _setPref(Future<void> Function() f) async {
     setState(() {
       isLoading = true;
@@ -69,7 +126,9 @@ class _AccountPreferencesScreenState()
   Widget build(BuildContext context) {
     final accountPrefs = ref.watch(accountPreferencesProvider);
     final authUser = ref.watch(authControllerProvider);
-    final kidMode = ref.watch(kidModeProvider).value ?? false;
+    final kidModeState = ref.watch(kidModeProvider);
+    final kidMode = kidModeState.value ?? false;
+    final hasParentalPin = ref.watch(parentalPinProvider).value ?? false;
 
     final content = accountPrefs.when(
       data: (data) {
@@ -195,6 +254,18 @@ class _AccountPreferencesScreenState()
                     launchUrl(lichessUri('/account/kid'));
                   },
                 ),
+                // Only set up from an account not in kid mode, so that a kid can't set it.
+                if (kidModeState.value == false)
+                  ListTile(
+                    leading: const Icon(Symbols.pin),
+                    title: const Text('Parental PIN'),
+                    subtitle: Text(
+                      hasParentalPin
+                          ? 'Asked before switching account or signing out in kid mode'
+                          : 'Off',
+                    ),
+                    onTap: () => _editParentalPin(context, hasParentalPin: hasParentalPin),
+                  ),
               ],
             ),
             ListSection(
@@ -225,20 +296,26 @@ class _AccountPreferencesScreenState()
               children: [
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   ListTile(
-                    leading: const Icon(Symbols.dangerous),
-                    title: Text(context.l10n.mobileDeleteYourAccount),
-                    trailing: const OpenInNewIcon(),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.mobileDeleteYourAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      launchUrl(lichessUri('/account/delete'));
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.delete));
                     },
                   )
                 else
                   ListTile(
-                    leading: const Icon(Icons.dangerous_outlined),
-                    title: Text(context.l10n.settingsCloseAccount),
-                    trailing: const OpenInNewIcon(),
+                    leading: Icon(Symbols.dangerous, color: ColorScheme.of(context).error),
+                    title: Text(
+                      context.l10n.settingsCloseAccount,
+                      style: TextStyle(color: ColorScheme.of(context).error),
+                    ),
                     onTap: () {
-                      launchUrl(lichessUri('/account/close'));
+                      Navigator.of(context)
+                          .push(AccountTerminationScreen.buildRoute(AccountTermination.close));
                     },
                   ),
               ],
@@ -254,7 +331,16 @@ class _AccountPreferencesScreenState()
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(context.l10n.mobileAccountPreferences),
+        title: Row(
+          mainAxisSize: .min,
+          children: [
+            if (ref.watch(accountProvider) case AsyncData(value: final User account)) ...[
+              AccountAvatar(account, radius: 14.0),
+              const SizedBox(width: 8.0),
+            ],
+            Flexible(child: Text(context.l10n.mobileAccountPreferences, overflow: .ellipsis)),
+          ],
+        ),
         actions: [if (isLoading) const PlatformAppBarLoadingIndicator()],
       ),
       body: content,

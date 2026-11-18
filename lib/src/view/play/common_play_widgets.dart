@@ -104,7 +104,7 @@ class _PlayRatingRangeState() extends State<PlayRatingRange> {
             behavior: HitTestBehavior.opaque,
             onTap: () => showAdaptiveDialog<void>(
               context: context,
-              builder: (context) => AlertDialog.adaptive(
+              builder: (context) => PlatformAlertDialog(
                 content: Text(context.l10n.cannotFilterByUnstableRating),
                 actions: [
                   PlatformDialogAction(

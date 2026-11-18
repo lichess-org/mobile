@@ -1,12 +1,11 @@
-import 'package:dartchess/dartchess.dart' show Side;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
-import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/service/create_game_service.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 part 'game_screen_providers.freezed.dart';
@@ -183,21 +182,6 @@ class IsBoardTurnedNotifier() extends Notifier<bool> {
     state = !state;
   }
 }
-
-/// A provider that indicates whether the game is bookmarked.
-final isGameBookmarkedProvider = FutureProvider.autoDispose.family<bool, GameFullId>((
-  Ref ref,
-  GameFullId gameId,
-) async {
-  return (await ref.watch(gameControllerProvider(gameId).future)).game.bookmarked ?? false;
-}, name: 'IsGameBookmarkedProvider');
-
-/// A provider that exposes data needed for sharing the game.
-final gameShareDataProvider = FutureProvider.autoDispose
-    .family<({bool finished, Side? pov}), GameFullId>((Ref ref, GameFullId gameId) async {
-      final state = await ref.watch(gameControllerProvider(gameId).future);
-      return (finished: state.game.finished, pov: state.game.youAre);
-    }, name: 'GameShareDataProvider');
 
 /// User game preferences, defined server-side.
 final userGamePrefsProvider = FutureProvider.autoDispose

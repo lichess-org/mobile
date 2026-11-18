@@ -9,7 +9,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/chat/chat_mixin.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -20,6 +19,7 @@ import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 
 part 'tv_game_controller.freezed.dart';
 
@@ -277,9 +277,18 @@ class TvGameController(final TvGameControllerParams params)
 
       case 'endData':
         final endData = GameEndEvent.fromJson(event.data as Map<String, dynamic>);
-        TvGameState newState = state.requireValue.copyWith(
-          game: state.requireValue.game.copyWith(status: endData.status, winner: endData.winner),
+        final curState = state.requireValue;
+
+        TvGameState newState = curState.copyWith(
+          game: curState.game.copyWith(
+            status: endData.status,
+            winner: endData.winner,
+            boosted: endData.boosted,
+            white: curState.game.white.copyWith(ratingDiff: endData.ratingDiff?.white),
+            black: curState.game.black.copyWith(ratingDiff: endData.ratingDiff?.black),
+          ),
         );
+
         if (endData.clock != null) {
           newState = newState.copyWith.game.clock!(
             white: endData.clock!.white,

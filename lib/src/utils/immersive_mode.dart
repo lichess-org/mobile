@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -81,9 +82,7 @@ class const ImmersiveMode._() {
   Future<void> disable() async {
     final wakeFuture = WakelockPlus.disable();
 
-    final androidInfo = defaultTargetPlatform == TargetPlatform.android
-        ? await DeviceInfoPlugin().androidInfo
-        : null;
+    final androidInfo = Platform.isAndroid ? await DeviceInfoPlugin().androidInfo : null;
 
     final setUiModeFuture = androidInfo == null || androidInfo.version.sdkInt >= 29
         ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)

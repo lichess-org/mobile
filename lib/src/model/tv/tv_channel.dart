@@ -73,7 +73,7 @@ extension TvChannelExtension on Pick {
         return TvChannel.nameMap[value]!;
       }
     }
-    throw PickException("value $value at $debugParsingExit can't be casted to TvChannel");
+    throw PickException.fromPick(this, "can't be casted to TvChannel");
   }
 
   TvChannel? asTvChannelOrNull() {

@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">Visszalépés (az ellenfél beleegyezésével)</string>
   <string name="inCasualGamesOnly">Csak rangsorolás nélküli játékok esetén</string>
   <string name="promoteToQueenAutomatically">Gyalog automatikus előléptetése vezérré</string>
-  <string name="explainPromoteToQueenAutomatically">Gyalogátváltozáskor tartsd lenyomva a &lt;ctrl&gt; billentyűt, hogy a gyalog ne változzon át automatikusan</string>
   <string name="whenPremoving">Előre meghatározott lépés esetén</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Háromszori ismétlés esetén automatikus döntetlenigénylés</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Ha a hátralévő idő &lt; 30 másodperc</string>
@@ -58,6 +57,7 @@
   <string name="notifyStreamStart">Egy streamer műsort ad</string>
   <string name="notifyGameEvent">Levelező mérkőzés</string>
   <string name="notifyChallenge">Kihívás</string>
+  <string name="notifyBroadcasts">Közvetítések</string>
   <string name="notifyTimeAlarm">Hamarosan lejár az idő levelezős játszmában</string>
   <string name="notifyBell">Hangjelzés a Lichessen belül</string>
   <string name="notifyPush">Értesítés mobileszközön, amikor nem vagy fenn Lichessen</string>
@@ -66,4 +66,6 @@
   <string name="bellNotificationSound">Hangjelzés</string>
   <string name="blindfold" comment="As in Blindfold chess">Vakjátszma mód</string>
   <string name="showClockOnTheLeft" comment="During the game on a mobile device, show the clock on the left side of the screen. Only applies to mobile devices.">Mobil eszközökön a bal oldalon jelenjen meg</string>
+  <string name="boardSettings">Tábla</string>
+  <string name="analysisSettings">Elemzés beállításai</string>
 </resources>

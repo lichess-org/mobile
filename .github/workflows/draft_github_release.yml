@@ -9,13 +9,15 @@ on:
         default: "v0.4.0"
         type: string
 
-# Declare default permissions as read only.
-permissions: read-all
+# Creating a release and its tag writes to the repository.
+permissions:
+  contents: write
 
 jobs:
   draft-release:
     name: Draft Github release
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # needs: create-build
     steps:
       - name: Draft release with release notes

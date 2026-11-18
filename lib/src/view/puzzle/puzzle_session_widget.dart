@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
+import 'package:lichess_mobile/src/service/puzzle_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -137,10 +137,10 @@ class const _SessionItem({
   super.key,
 }) extends StatelessWidget {
   Color get good =>
-      brightness == Brightness.light ? LichessColors.good.shade300 : LichessColors.good.shade400;
+      brightness == Brightness.light ? LichessColors.green.shade300 : LichessColors.green.shade400;
 
   Color get error =>
-      brightness == Brightness.light ? LichessColors.error.shade300 : LichessColors.error.shade400;
+      brightness == Brightness.light ? LichessColors.red.shade300 : LichessColors.red.shade400;
 
   Color get next => Colors.grey.withValues(alpha: 0.5);
 

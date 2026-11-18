@@ -6,7 +6,8 @@ import 'package:lichess_mobile/src/model/explorer/tablebase.dart';
 
 /// Converts a [TablebaseEntry] to a [CloudEval].
 ///
-/// Returns null for non-conclusive entries (unknown, maybeWin, maybeLoss).
+/// Returns null for non-conclusive entries (unknown, maybeWin, maybeLoss), and wins or losses
+/// without a distance to mate, which can happen for 7 piece tablebases.
 CloudEval? tablebaseEntryToCloudEval(TablebaseEntry entry, Position position) {
   final turn = position.turn;
   final int? mate;
@@ -14,11 +15,15 @@ CloudEval? tablebaseEntryToCloudEval(TablebaseEntry entry, Position position) {
 
   switch (entry.category) {
     case .win || .syzygyWin:
-      final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
+      final dtm = entry.dtm;
+      if (dtm == null) return null;
+      final mateN = (dtm.abs() + 1) ~/ 2;
       mate = turn == .white ? mateN : -mateN;
       cp = null;
     case .loss || .syzygyLoss:
-      final mateN = entry.dtm != null ? (entry.dtm!.abs() + 1) ~/ 2 : 10;
+      final dtm = entry.dtm;
+      if (dtm == null) return null;
+      final mateN = (dtm.abs() + 1) ~/ 2;
       mate = turn == .white ? -mateN : mateN;
       cp = null;
     case .draw || .cursedWin || .blessedLoss:

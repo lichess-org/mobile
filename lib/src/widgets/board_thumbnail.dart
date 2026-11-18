@@ -84,6 +84,10 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    final borderRadius = widget.showEvaluationGauge
+        ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+        : Styles.boardBorderRadius;
+
     final board = StaticChessboard(
       size: widget.size,
       fen: widget.fen,
@@ -91,15 +95,14 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
       lastMove: widget.lastMove,
       settings: StaticChessboardSettings(
         enableCoordinates: false,
-        borderRadius: (widget.showEvaluationGauge)
-            ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-            : Styles.boardBorderRadius,
+        borderRadius: borderRadius,
         boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
         pieceAssets: boardPrefs.pieceSet.assets,
         colorScheme: boardPrefs.boardTheme.colors,
         animationDuration: widget.animationDuration,
         hue: boardPrefs.hue,
-        brightness: boardPrefs.brightness,
+        contrast: boardPrefs.contrast,
+        brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
       ),
     );
 
@@ -123,7 +126,7 @@ class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
                               topLeft: Radius.zero,
                               bottomLeft: Radius.zero,
                             ),
-                            color: Colors.grey.withValues(alpha: 0.6),
+                            color: ColorScheme.of(context).outlineVariant.withValues(alpha: 0.7),
                           ),
                         ),
                 ),

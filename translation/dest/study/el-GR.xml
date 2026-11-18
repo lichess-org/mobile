@@ -48,7 +48,6 @@
   <string name="annotateWithGlyphs">Σχολιασμός με σύμβολα</string>
   <string name="theChapterIsTooShortToBeAnalysed">Το κεφάλαιο είναι πολύ μικρό για να αναλυθεί.</string>
   <string name="onlyContributorsCanRequestAnalysis">Μόνο όσοι συνεισφέρουν στη μελέτη μπορούν να ζητήσουν ανάλυση από υπολογιστή.</string>
-  <string name="getAFullComputerAnalysis">Πλήρης ανάλυσης της κύριας βαριάντας από μηχανή στον διακομιστή.</string>
   <string name="makeSureTheChapterIsComplete">Βεβαιωθείτε πως το κεφάλαιο είναι ολοκληρωμένο. Μπορείτε να ζητήσετε ανάλυση υπολογιστή μόνο μία φορά.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Όλα τα μέλη SYNC θα μεταφερθούν στην ίδια θέση</string>
   <string name="shareChanges">Κοινοποίηση των αλλαγών στους θεατές και αποθήκευσή τους στον διακομιστή</string>
@@ -65,6 +64,7 @@
   <string name="downloadGame">Λήψη παρτίδας</string>
   <string name="studyUrl">Διεύθυνση URL μελέτης</string>
   <string name="currentChapterUrl">Διεύθυνση URL τρέχοντος κεφαλαίου</string>
+  <string name="pasteToEmbedChapterInForumOrBlog" comment="youCanPasteThisInTheForumToEmbed&#10;&#10;The thing you are pasting is a link to a study. This will make it appear in the correct section as well.&#10;&#10;Please note this used to say &quot;in the forum to embed&quot;. It was then changed to include &quot;or a Lichess Blog&quot;. A further update was made to say &quot;or your Lichess blog&quot;, since you can only create blog posts as an individual.">Επικολλώντας τον σύνδεσμο στο φόρουμ ή σε κάποιο ιστολόγιο, το κεφάλαιο ενσωματώνεται εκεί.</string>
   <string name="startAtInitialPosition">Εκκίνηση από την αρχική θέση του κεφαλαίου</string>
   <string name="startAtX">Έναρξη από την κίνηση %s</string>
   <string name="embedInYourWebsite">Ενσωμάτωση στην ιστοσελίδα σας ή το ιστολόγιό σας</string>
@@ -99,10 +99,6 @@
   <string name="loadAPositionFromFen">Φόρτωση θέσης από FEN</string>
   <string name="loadAGameFromPgn">Φόρτωση μιας παρτίδας από ένα αρχείο PGN</string>
   <string name="automatic">Να οριστεί αυτόματα</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Επικολλήστε το αρχείο PGN εδώ (μέχρι %s παρτίδα επιτρέπεται)</item>
-    <item quantity="other">Επικολλήστε το PGN εδώ. Για κάθε παρτίδα θα δημιουργηθεί νέο κεφάλαιο. Μια μελέτη μπορεί να έχει μέχρι %s κεφάλαια.</item>
-  </plurals>
   <string name="urlOfTheGame">Διεύθύνσεις URL παρτίδων (μία σε κάθε γραμμή)</string>
   <string name="createChapter">Δημιουργία κεφαλαίου</string>
   <string name="createStudy">Δημιουργία μελέτης</string>
@@ -122,16 +118,13 @@
   <string name="noLetPeopleBrowseFreely">Όχι: ελεύθερη επιλογή θέσης</string>
   <string name="pinnedStudyComment">Καρφιτσωμένο σχόλιο μελέτης</string>
   <string name="start">Δημιουργία</string>
-  <string name="save">Αποθήκευση</string>
   <string name="clearChat">Εκκαθάριση συνομιλίας</string>
   <string name="deleteTheStudyChatHistory">Θέλετε σίγουρα να διαγράψετε το ιστορικό συνομιλίας της μελέτης; Η ενέργεια αυτή δεν μπορεί να αναιρεθεί!</string>
   <string name="deleteStudy">Διαγραφή μελέτης</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Θέλετε σίγουρα να διαγραφεί όλη η μελέτη; Η ενέργεια αυτή δεν μπορεί να αναιρεθεί! Πληκτρολογήστε το όνομα της μελέτης για επιβεβαίωση: %s</string>
   <string name="whereDoYouWantToStudyThat">Πού θέλετε να μελετήσετε αυτή τη θέση;</string>
   <string name="goodMove">Καλή κίνηση</string>
-  <string name="mistake">Λάθος</string>
   <string name="brilliantMove">Εξαιρετική κίνηση</string>
-  <string name="blunder">Σοβαρό λάθος</string>
   <string name="interestingMove">Ενδιαφέρουσα κίνηση</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Κίνηση αμφίβολης αξίας</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Μοναδική κίνηση</string>
@@ -198,4 +191,6 @@
   <string name="doubleDefeat">Διπλή ήττα</string>
   <string name="blackDefeatWhiteCanNotWin">Τα μαύρα χάνουν, αλλά τα λευκά δεν μπορούν να κερδίσουν</string>
   <string name="whiteDefeatBlackCanNotWin">Τα λευκά χάνουν, αλλά τα μαύρα δεν μπορούν να κερδίσουν</string>
+  <string name="searchChapters">Αναζήτηση κεφαλαίων</string>
+  <string name="searchGames">Αναζήτηση παρτίδων</string>
 </resources>
