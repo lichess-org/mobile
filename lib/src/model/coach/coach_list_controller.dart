@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
 import 'package:lichess_mobile/src/model/coach/coach_repository.dart';
@@ -12,8 +13,15 @@ class CoachListController(final CoachFilters params) extends AsyncNotifier<Coach
   int? _loadingPage;
 
   @override
-  Future<CoachListPage> build() {
-    return ref.read(coachRepositoryProvider).getCoaches(params);
+  Future<CoachListPage> build() async {
+    final page = await ref.read(coachRepositoryProvider).getCoaches(params);
+    final seen = <String>{};
+    return (
+      coaches: page.coaches.where((coach) => seen.add(coach.user.id.value)).toIList(),
+      nextPage: page.nextPage,
+      languages: page.languages,
+      countries: page.countries,
+    );
   }
 
   Future<void> next() async {
@@ -28,8 +36,11 @@ class CoachListController(final CoachFilters params) extends AsyncNotifier<Coach
       final current = state.value;
       if (current == null || current.nextPage != nextPage) return;
 
+      final seen = current.coaches.map((coach) => coach.user.id.value).toSet();
       state = AsyncData((
-        coaches: current.coaches.addAll(newPage.coaches),
+        coaches: current.coaches.addAll(
+          newPage.coaches.where((coach) => seen.add(coach.user.id.value)),
+        ),
         nextPage: newPage.nextPage,
         languages: newPage.languages,
         countries: newPage.countries,

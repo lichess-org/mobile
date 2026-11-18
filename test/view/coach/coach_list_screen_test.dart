@@ -278,6 +278,42 @@ const _userResponse = '''
 }
 ''';
 
+String _stressPageResponse(int page) {
+  final nextPage = page < 20 ? page + 1 : null;
+  return '''
+{
+  "currentPage": $page,
+  "maxPerPage": 1,
+  "currentPageResults": [
+    {
+      "coach": {
+        "id": "coach$page",
+        "listed": true,
+        "available": true,
+        "profile": {"headline": null, "hourlyRate": null},
+        "picture": null,
+        "nbReviews": 0,
+        "user": {"rating": 2400, "seenAt": 1760000000000},
+        "languages": ["en-US"],
+        "createdAt": 1650000000000,
+        "updatedAt": 1750000000000
+      },
+      "user": {"id": "coach$page", "name": "coach$page"}
+    }
+  ],
+  "previousPage": null,
+  "nextPage": $nextPage,
+  "nbResults": 20,
+  "nbPages": 20,
+  "lang": "all",
+  "order": "login",
+  "country": "all",
+  "languages": [],
+  "countries": []
+}
+''';
+}
+
 Future<void> closeFilterSheet(WidgetTester tester) async {
   Navigator.of(tester.element(find.byType(CoachListScreen)), rootNavigator: true).pop();
   await tester.pumpAndSettle();
@@ -285,6 +321,42 @@ Future<void> closeFilterSheet(WidgetTester tester) async {
 
 void main() {
   group('CoachListScreen', () {
+    testWidgets('rapid pagination never shows a coach twice', (tester) async {
+      final requestedPages = <String?>[];
+      final client = MockClient((request) async {
+        if (request.url.path != '/coach/all/all/login') return http.Response('', 404);
+        final page = request.url.queryParameters['page'];
+        requestedPages.add(page);
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+        return http.Response(_stressPageResponse(int.parse(page ?? '1')), 200);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      for (var i = 0; i < 60; i++) {
+        await tester.pump(const Duration(milliseconds: 16));
+        if (i % 10 == 0 && find.byType(CoachListTile).evaluate().isNotEmpty) {
+          await tester.drag(find.byType(ListView).last, const Offset(0, -400));
+        }
+      }
+      await tester.pumpAndSettle();
+
+      final names = tester
+          .widgetList<CoachListTile>(find.byType(CoachListTile))
+          .map((tile) => tile.coach.user.name)
+          .toList();
+      expect(names.length, names.toSet().length, reason: 'duplicate rows: ${requestedPages.join(',')}');
+    });
+
     testWidgets('shows coaches with a 1:1 picture on the left side', (tester) async {
       final client = MockClient((request) async {
         if (request.url.path == '/coach/all/all/login') {
