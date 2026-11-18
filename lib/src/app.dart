@@ -39,6 +39,9 @@ import 'package:lichess_mobile/src/widgets/platform.dart' show usePinnedNavBar;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
+const List<String> _kAndroidKidModeWidgetProviders = [
+  'org.lichess.mobileV2.widgets.CommunityWidgetProvider',
+];
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [
   'OfficialBlogWidget',
@@ -109,12 +112,16 @@ class _AppState() extends ConsumerState<Application> {
     }
     HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
 
-    if (Platform.isIOS) {
+    if (Platform.isIOS || Platform.isAndroid) {
       ref.listenManual(kidModeProvider, (prev, state) {
         if (state.hasValue && prev?.value != state.value) {
           HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
             Future.wait([
-              for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
+              if (Platform.isIOS)
+                for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
+              if (Platform.isAndroid)
+                for (final name in _kAndroidKidModeWidgetProviders)
+                  HomeWidget.updateWidget(qualifiedAndroidName: name),
             ]);
           });
         }
