@@ -568,6 +568,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(OutlinedButton), findsNWidgets(2));
+      expect(find.byIcon(Icons.person_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.chat_bubble_outline), findsOneWidget);
+      expect(
+        tester.getRect(find.byType(OutlinedButton).first).bottom,
+        lessThan(tester.getRect(find.text('Languages')).top),
+      );
 
       await tester.tap(find.byType(OutlinedButton).first);
       await tester.pumpAndSettle();
