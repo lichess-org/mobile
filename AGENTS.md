@@ -147,9 +147,12 @@ started first in `_AppState.initState()`, listens to them and shows them using t
 navigator context. The bus is deliberately limited to snackbars (`ShowErrorEvent`): navigation,
 dialogs and confirmations belong at the view layer call site, not on the bus.
 
-**Async**: the Stockfish engine runs in an isolate (communication through ports). Never schedule
+**Async**: the Stockfish engine runs on native threads and reports through ports. Never schedule
 recursive microtasks (they starve the event queue and freeze the UI), and always cancel stream
 subscriptions.
+
+**Hot reload and hot restart are safe with an engine running** (multistockfish 0.7+): after a
+change, reload the app even on a screen that runs Stockfish (analysis, computer game, study...).
 
 ## Coding Standards
 
