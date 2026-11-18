@@ -25,8 +25,8 @@ void main() {
     });
   });
 
-  group('App database v8', () {
-    test('an upgrade from v7 adds the practice progress table and keeps learn progress', () async {
+  group('App database v9', () {
+    test('an upgrade from v7 keeps learn progress and scopes it to the anonymous bucket', () async {
       final dir = await Directory.systemTemp.createTemp('db_upgrade');
       addTearDown(() => dir.delete(recursive: true));
       final path = '${dir.path}/app.db';
@@ -62,7 +62,21 @@ void main() {
       addTearDown(db.close);
 
       expect(await db.getVersion(), 9);
-      expect(await db.query('learn_progress'), hasLength(1));
+      // The pre-sync rows cannot be attributed to an account, so they stay under the anonymous
+      // bucket rather than being dropped or handed to whoever signs in next.
+      final learnRows = await db.query('learn_progress');
+      expect(learnRows, hasLength(1));
+      expect(learnRows.single['userId'], kStorageAnonId);
+      expect(learnRows.single['score'], 500);
+      await db.insert('learn_progress', {
+        'userId': 'alice',
+        'stageKey': 'rook',
+        'levelId': 1,
+        'score': 700,
+        'lastModified': DateTime.now().toIso8601String(),
+      });
+      expect(await db.query('learn_progress'), hasLength(2));
+      expect(await db.query('learn_sync_state'), isEmpty);
       await db.insert('practice_progress', {
         'chapterId': 'dW7KIuoY',
         'nbMoves': 3,
@@ -85,6 +99,11 @@ void main() {
           options: OpenDatabaseOptions(
             version: 8,
             onCreate: (db, version) async {
+              await db.execute(
+                'CREATE TABLE learn_progress(stageKey TEXT NOT NULL, levelId INTEGER NOT NULL, '
+                'score INTEGER NOT NULL, lastModified TEXT NOT NULL, syncedAt TEXT, '
+                'PRIMARY KEY (stageKey, levelId))',
+              );
               await db.execute(
                 'CREATE TABLE http_log(id INTEGER PRIMARY KEY AUTOINCREMENT, '
                 'httpLogId TEXT NOT NULL UNIQUE, requestDateTime TEXT NOT NULL, '
