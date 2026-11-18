@@ -80,6 +80,33 @@ void main() {
       expect(combined.nextPage, isNull);
     });
 
+    test('ignores concurrent next() calls', () async {
+      var pageTwoRequests = 0;
+      final mockClient = MockClient((request) {
+        if (request.url.queryParameters['page'] == '2') {
+          pageTwoRequests++;
+          return Future<void>.delayed(
+            const Duration(milliseconds: 50),
+          ).then((_) => mockResponse(_pageResponse('coach2', null), 200));
+        }
+        return Future.value(mockResponse(_pageResponse('coach1', 2), 200));
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final provider = coachListControllerProvider(defaultCoachFilters);
+      final subscription = container.listen(provider, (_, _) {});
+      await container.read(provider.future);
+
+      final notifier = container.read(provider.notifier);
+      await Future.wait([notifier.next(), notifier.next()]);
+      subscription.close();
+
+      expect(pageTwoRequests, 1);
+      final combined = container.read(provider).requireValue;
+      expect(combined.coaches.length, 2);
+      expect(combined.coaches.map((coach) => coach.user.name), ['coach1', 'coach2']);
+    });
+
     test('does nothing when there is no next page', () async {
       var requestCount = 0;
       final mockClient = MockClient((_) {

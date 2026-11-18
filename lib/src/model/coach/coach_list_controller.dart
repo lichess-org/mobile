@@ -9,25 +9,33 @@ final coachListControllerProvider = AsyncNotifierProvider.autoDispose
     );
 
 class CoachListController(final CoachFilters params) extends AsyncNotifier<CoachListPage> {
+  int? _loadingPage;
+
   @override
   Future<CoachListPage> build() {
     return ref.read(coachRepositoryProvider).getCoaches(params);
   }
 
   Future<void> next() async {
-    final list = state.requireValue;
-    final nextPage = list.nextPage;
-    if (nextPage == null) return;
+    final nextPage = state.requireValue.nextPage;
+    if (nextPage == null || _loadingPage != null) return;
+    _loadingPage = nextPage;
 
-    final newPage = await ref.read(coachRepositoryProvider).getCoaches(params, page: nextPage);
+    try {
+      final newPage = await ref.read(coachRepositoryProvider).getCoaches(params, page: nextPage);
 
-    if (!ref.mounted) return;
+      if (!ref.mounted) return;
+      final current = state.value;
+      if (current == null || current.nextPage != nextPage) return;
 
-    state = AsyncData((
-      coaches: list.coaches.addAll(newPage.coaches),
-      nextPage: newPage.nextPage,
-      languages: newPage.languages,
-      countries: newPage.countries,
-    ));
+      state = AsyncData((
+        coaches: current.coaches.addAll(newPage.coaches),
+        nextPage: newPage.nextPage,
+        languages: newPage.languages,
+        countries: newPage.countries,
+      ));
+    } finally {
+      _loadingPage = null;
+    }
   }
 }

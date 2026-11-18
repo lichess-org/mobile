@@ -67,7 +67,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
   }
 
   void _openFilterSheet(CoachListPage? page) {
-    var newLanguage = language;
+    final newLanguage = language;
     var newCountry = country;
     final newOrder = order;
 
@@ -110,7 +110,11 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               groupValue: newLanguage,
               onChanged: (value) {
                 if (value != null) {
-                  setSheetState(() => newLanguage = value);
+                  setState(() {
+                    language = value;
+                    requestedNextPage = false;
+                  });
+                  Navigator.of(context).pop();
                 }
               },
               child: Column(

@@ -974,6 +974,38 @@ void main() {
       expect(requestedOrders, ['login', 'rating']);
     });
 
+    testWidgets('changing the language filter refetches with the new language', (tester) async {
+      final requestedPaths = <String>[];
+      final client = MockClient((request) async {
+        if (request.url.path.startsWith('/coach/')) {
+          requestedPaths.add(request.url.path);
+          return http.Response(_listResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      await tester.tap(findByTooltip('Filters'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('English (US)'));
+      await tester.pumpAndSettle();
+
+      expect(requestedPaths, ['/coach/all/all/login', '/coach/en-US/all/login']);
+    });
+
     testWidgets('country filter asks to sign in when logged out', (tester) async {
       final requestedPaths = <String>[];
       final client = MockClient((request) async {
