@@ -69,7 +69,7 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
   void _openFilterSheet(CoachListPage? page) {
     var newLanguage = language;
     var newCountry = country;
-    var newOrder = order;
+    final newOrder = order;
 
     final languages = [kAllCoachesFilter, ...?page?.languages];
     final countries = [
@@ -96,7 +96,14 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
               choiceLabel: (choice) => Text(choice.l10n(context.l10n)),
               onSelected: (value, selected) {
                 if (selected) {
-                  setSheetState(() => newOrder = value);
+                  setState(() {
+                    order = value;
+                    requestedNextPage = false;
+                  });
+                  if (_scrollController.hasClients) {
+                    _scrollController.jumpTo(0);
+                  }
+                  Navigator.of(context).pop();
                 }
               },
             ),

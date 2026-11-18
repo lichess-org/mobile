@@ -971,9 +971,6 @@ void main() {
       await tester.tap(find.text('Lichess rating'));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Done'));
-      await tester.pumpAndSettle();
-
       expect(requestedOrders, ['login', 'rating']);
     });
 
