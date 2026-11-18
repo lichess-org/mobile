@@ -906,7 +906,7 @@ void main() {
       expect(find.text('Chess sparring'), findsOneWidget);
       expect(find.text('Endgame fundamentals'), findsOneWidget);
       expect(find.textContaining('/@/toniaa/blog'), findsNothing);
-      expect(find.byIcon(LichessIcons.book_lichess), findsNWidgets(2));
+      expect(find.byIcon(Icons.article_outlined), findsNWidgets(2));
     });
 
     testWidgets('profile shows public studies with their names', (tester) async {

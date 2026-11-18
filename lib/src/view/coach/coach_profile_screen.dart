@@ -190,7 +190,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             children: [
               for (final post in profile.posts)
                 ListTile(
-                  leading: const Icon(LichessIcons.book_lichess),
+                  leading: const Icon(Icons.article_outlined),
                   title: Text(post.title, maxLines: 2, overflow: TextOverflow.ellipsis),
                   onTap: () => launchUrl(lichessUri(post.url.toString())),
                 ),
