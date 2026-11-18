@@ -48,7 +48,13 @@ class const CoachProfileScreen({required final String username, super.key}) exte
     final profile = ref.watch(_coachProfileProvider(username));
 
     return PlatformScaffold(
-      appBar: const PlatformAppBar(),
+      appBar: PlatformAppBar(
+        titleSpacing: 0,
+        title: switch (profile) {
+          AsyncData(:final value) => UserFullNameWidget(user: value.user, showFlair: false),
+          _ => Text(username),
+        },
+      ),
       body: switch (profile) {
         AsyncData(:final value) => _Body(profile: value),
         AsyncError() => FullScreenRetryRequest(
@@ -79,14 +85,8 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
           child: Column(
             children: [
               CoachPicture(url: profile.picture, size: 120.0),
-              const SizedBox(height: 8.0),
-              UserFullNameWidget(
-                user: profile.user,
-                showFlair: false,
-                style: const TextStyle(fontSize: 20.0),
-              ),
               if (headline != null && headline.isNotEmpty) ...[
-                const SizedBox(height: 8.0),
+                const SizedBox(height: 12.0),
                 Text(
                   headline,
                   textAlign: TextAlign.center,

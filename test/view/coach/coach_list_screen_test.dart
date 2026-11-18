@@ -566,7 +566,10 @@ void main() {
 
       expect(find.text('WFM'), findsOneWidget);
       expect(find.byType(PatronIcon), findsOneWidget);
-      expect(tester.widget<PlatformAppBar>(find.byType(PlatformAppBar)).title, isNull);
+      expect(
+        tester.widget<PlatformAppBar>(find.byType(PlatformAppBar)).title,
+        isA<UserFullNameWidget>(),
+      );
     });
 
     testWidgets('profile shows the youtube channel tile under the videos section', (tester) async {
