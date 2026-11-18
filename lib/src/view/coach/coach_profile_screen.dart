@@ -48,7 +48,7 @@ class const CoachProfileScreen({required final String username, super.key}) exte
     final profile = ref.watch(_coachProfileProvider(username));
 
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(username)),
+      appBar: const PlatformAppBar(),
       body: switch (profile) {
         AsyncData(:final value) => _Body(profile: value),
         AsyncError() => FullScreenRetryRequest(
@@ -79,30 +79,13 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
             children: [
               CoachPicture(url: profile.picture, size: 120.0),
               const SizedBox(height: 8.0),
-              if (profile.user.isPatron || profile.user.title != null)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (profile.user.isPatron) ...[
-                      PatronIcon(color: profile.user.patronColor, size: 20.0),
-                      const SizedBox(width: 6.0),
-                    ],
-                    if (profile.user.title case final title?)
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: title == 'BOT'
-                              ? context.lichessColors.fancy
-                              : context.lichessColors.brag,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                  ],
-                ),
+              UserFullNameWidget(
+                user: profile.user,
+                showFlair: false,
+                style: const TextStyle(fontSize: 20.0),
+              ),
               if (profile.headline case final headline?) ...[
-                if (profile.user.isPatron || profile.user.title != null)
-                  const SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Text(
                   headline,
                   textAlign: TextAlign.center,
@@ -140,7 +123,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                     ).push(ConversationScreen.buildRoute(user: profile.user));
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
-                  label: Text(context.l10n.coachSendPM, overflow: TextOverflow.ellipsis),
+                  label: Text(context.l10n.composeMessage, overflow: TextOverflow.ellipsis),
                 ),
               ),
             ],

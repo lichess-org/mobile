@@ -495,10 +495,7 @@ void main() {
 
       expect(find.text('WFM'), findsOneWidget);
       expect(find.byType(PatronIcon), findsOneWidget);
-      expect(
-        tester.widget<PlatformAppBar>(find.byType(PlatformAppBar)).title,
-        isA<Text>().having((text) => text.data, 'data', 'toniaa'),
-      );
+      expect(tester.widget<PlatformAppBar>(find.byType(PlatformAppBar)).title, isNull);
     });
 
     testWidgets('profile shows the youtube channel tile under the videos section', (tester) async {
@@ -584,7 +581,8 @@ void main() {
 
       expect(find.byType(OutlinedButton), findsNWidgets(2));
       expect(find.text('Lichess profile'), findsOneWidget);
-      expect(find.text('Send a private message'), findsOneWidget);
+      expect(find.text('Send a private message'), findsNothing);
+      expect(find.text('Message'), findsOneWidget);
       expect(find.byIcon(Icons.person_outlined), findsOneWidget);
       expect(find.byIcon(Icons.chat_bubble_outline), findsOneWidget);
       expect(
