@@ -172,6 +172,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Este código no es válido o ha caducado.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Tamaño de base de datos local';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Selecciona un estudio';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Recibir un código';
@@ -1381,6 +1387,66 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'O invita a un usuario de Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Entrenadores de Lichess';
+
+  @override
+  String get coachLocation => 'Ubicación';
+
+  @override
+  String get coachLanguages => 'Idiomas';
+
+  @override
+  String get coachRating => 'Puntuación';
+
+  @override
+  String get coachHourlyRate => 'Tarifa por hora';
+
+  @override
+  String get coachAvailability => 'Disponibilidad';
+
+  @override
+  String get coachAccepting => 'Acepta estudiantes';
+
+  @override
+  String get coachNotAccepting => 'Actualmente, no acepta estudiantes';
+
+  @override
+  String get coachSendPM => 'Enviar un mensaje privado';
+
+  @override
+  String get coachAboutMe => 'Sobre mí';
+
+  @override
+  String get coachPlayingExperience => 'Experiencia como jugador';
+
+  @override
+  String get coachTeachingExperience => 'Experiencia docente';
+
+  @override
+  String get coachOtherExperiences => 'Otras experiencias';
+
+  @override
+  String get coachBestSkills => 'Mejores habilidades';
+
+  @override
+  String get coachTeachingMethod => 'Metodología de enseñanza';
+
+  @override
+  String get coachPublicStudies => 'Estudios públicos';
+
+  @override
+  String get coachYoutubeVideos => 'Vídeos de Youtube';
+
+  @override
+  String get coachAllCountries => 'Todos los países';
+
+  @override
+  String get coachLastLogin => 'Último inicio de sesión';
+
+  @override
+  String get coachLichessRating => 'Puntuación de Lichess';
 
   @override
   String get contactContact => 'Contacto';
@@ -3335,6 +3401,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get searchSearch => 'Búsqueda';
+
+  @override
+  String get searchSortBy => 'Ordenar por';
 
   @override
   String get settingsSettings => 'Preferencias';
@@ -7757,6 +7826,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blog de $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Últimas entradas de blog';
 
   @override
   String get variantStandard => 'Estándar';

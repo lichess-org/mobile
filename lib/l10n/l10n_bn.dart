@@ -172,6 +172,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Send me a code';
@@ -1381,6 +1387,66 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'অথবা একজন লিচেস ব্যবহারকারীকে আমন্ত্রণ জানান';
+
+  @override
+  String get coachLichessCoaches => 'Lichess coaches';
+
+  @override
+  String get coachLocation => 'Location';
+
+  @override
+  String get coachLanguages => 'Languages';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Hourly rate';
+
+  @override
+  String get coachAvailability => 'Availability';
+
+  @override
+  String get coachAccepting => 'Accepting students';
+
+  @override
+  String get coachNotAccepting => 'Not accepting students at the moment';
+
+  @override
+  String get coachSendPM => 'Send a private message';
+
+  @override
+  String get coachAboutMe => 'About me';
+
+  @override
+  String get coachPlayingExperience => 'Playing experience';
+
+  @override
+  String get coachTeachingExperience => 'Teaching experience';
+
+  @override
+  String get coachOtherExperiences => 'Other experiences';
+
+  @override
+  String get coachBestSkills => 'Best skills';
+
+  @override
+  String get coachTeachingMethod => 'Teaching methodology';
+
+  @override
+  String get coachPublicStudies => 'Public studies';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videos';
+
+  @override
+  String get coachAllCountries => 'All countries';
+
+  @override
+  String get coachLastLogin => 'Last login';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
 
   @override
   String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
@@ -3335,6 +3401,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get searchSearch => 'অনুসন্ধান';
+
+  @override
+  String get searchSortBy => 'Sort by';
 
   @override
   String get settingsSettings => 'সেটিংস';
@@ -7757,6 +7826,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param\'s Blog';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Latest blog posts';
 
   @override
   String get variantStandard => 'Standard';

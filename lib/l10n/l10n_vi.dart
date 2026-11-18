@@ -172,6 +172,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Mã này không hợp lệ hoặc đã hết hạn.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Kích thước CSDL cục bộ';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Chọn một nghiên cứu';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Gửi mã cho tôi';
@@ -1359,6 +1365,66 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Hoặc mời một người dùng Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Huấn luyện viên Lichess';
+
+  @override
+  String get coachLocation => 'Địa điểm';
+
+  @override
+  String get coachLanguages => 'Ngôn ngữ';
+
+  @override
+  String get coachRating => 'Hệ số';
+
+  @override
+  String get coachHourlyRate => 'Mức giá theo giờ';
+
+  @override
+  String get coachAvailability => 'Sẵn sàng';
+
+  @override
+  String get coachAccepting => 'Đang nhận học viên';
+
+  @override
+  String get coachNotAccepting => 'Hiện tại không nhận học viên';
+
+  @override
+  String get coachSendPM => 'Gửi tin nhắn riêng';
+
+  @override
+  String get coachAboutMe => 'Giới thiệu về tôi';
+
+  @override
+  String get coachPlayingExperience => 'Kinh nghiệm chơi cờ';
+
+  @override
+  String get coachTeachingExperience => 'Kinh nghiệm dạy cờ';
+
+  @override
+  String get coachOtherExperiences => 'Kinh nghiệm khác';
+
+  @override
+  String get coachBestSkills => 'Những kỹ năng tốt nhất';
+
+  @override
+  String get coachTeachingMethod => 'Phương pháp giảng dạy';
+
+  @override
+  String get coachPublicStudies => 'Nghiên cứu công khai';
+
+  @override
+  String get coachYoutubeVideos => 'Các thước phim trên YouTube';
+
+  @override
+  String get coachAllCountries => 'Tất cả quốc gia';
+
+  @override
+  String get coachLastLogin => 'Lần đăng nhập cuối';
+
+  @override
+  String get coachLichessRating => 'Hệ số Lichess';
 
   @override
   String get contactContact => 'Liên hệ';
@@ -3307,6 +3373,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get searchSearch => 'Tìm kiếm';
+
+  @override
+  String get searchSortBy => 'Sắp xếp theo';
 
   @override
   String get settingsSettings => 'Cài đặt';
@@ -7666,6 +7735,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Bài viết của $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Các bài blog mới nhất';
 
   @override
   String get variantStandard => 'Tiêu chuẩn';

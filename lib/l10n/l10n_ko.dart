@@ -172,6 +172,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '유효하지 않거나 만료된 코드입니다.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => '로컬 데이터베이스 크기';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => '연구 선택';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => '코드 보내기';
@@ -1359,6 +1365,66 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => '또는 Lichess 사용자를 초대합니다:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess 코치들';
+
+  @override
+  String get coachLocation => '지역';
+
+  @override
+  String get coachLanguages => '언어';
+
+  @override
+  String get coachRating => '레이팅';
+
+  @override
+  String get coachHourlyRate => '시간당 비용';
+
+  @override
+  String get coachAvailability => '신청 가능';
+
+  @override
+  String get coachAccepting => '학생을 받는 중';
+
+  @override
+  String get coachNotAccepting => '지금은 학생을 받고 있지 않음';
+
+  @override
+  String get coachSendPM => '비공개 메시지 보내기';
+
+  @override
+  String get coachAboutMe => '자기소개';
+
+  @override
+  String get coachPlayingExperience => '플레이 경험';
+
+  @override
+  String get coachTeachingExperience => '교습 경험';
+
+  @override
+  String get coachOtherExperiences => '또 다른 경력';
+
+  @override
+  String get coachBestSkills => '최고의 기술';
+
+  @override
+  String get coachTeachingMethod => '교육 방법론';
+
+  @override
+  String get coachPublicStudies => '공개한 연구';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube 동영상';
+
+  @override
+  String get coachAllCountries => '모든 국가';
+
+  @override
+  String get coachLastLogin => '마지막 로그인';
+
+  @override
+  String get coachLichessRating => 'Lichess 레이팅';
 
   @override
   String get contactContact => '문의';
@@ -3307,6 +3373,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get searchSearch => '검색';
+
+  @override
+  String get searchSortBy => '다음으로 정렬:';
 
   @override
   String get settingsSettings => '설정';
@@ -7665,6 +7734,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param의 블로그';
   }
+
+  @override
+  String get ublogLatestBlogPosts => '최근 블로그 글';
 
   @override
   String get variantStandard => '스탠다드';

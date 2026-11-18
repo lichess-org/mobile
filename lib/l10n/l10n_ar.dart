@@ -172,6 +172,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'هذا الرمز غير صالح أو انتهت صلاحيته.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'حجم قاعدة البيانات المحلية';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'اختر دراسة';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'أرسل لي رمزًا';
@@ -1469,6 +1475,66 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'أو قم بدعوة أحد المستخدمين:';
+
+  @override
+  String get coachLichessCoaches => 'مدربوا الموقع';
+
+  @override
+  String get coachLocation => 'الموقع';
+
+  @override
+  String get coachLanguages => 'اللغات';
+
+  @override
+  String get coachRating => 'التصنيف';
+
+  @override
+  String get coachHourlyRate => 'الأجر بالساعة';
+
+  @override
+  String get coachAvailability => 'حالة التوفر';
+
+  @override
+  String get coachAccepting => 'قبول الطلاب';
+
+  @override
+  String get coachNotAccepting => 'عدم قبول الطلاب في الوقت الراهن';
+
+  @override
+  String get coachSendPM => 'أرسل رسالة خاصة';
+
+  @override
+  String get coachAboutMe => 'معلومات عني';
+
+  @override
+  String get coachPlayingExperience => 'تجربة اللعب';
+
+  @override
+  String get coachTeachingExperience => 'خبرة التدريس';
+
+  @override
+  String get coachOtherExperiences => 'تجارب أخرى';
+
+  @override
+  String get coachBestSkills => 'أفضل المهارات';
+
+  @override
+  String get coachTeachingMethod => 'منهجية التدريس';
+
+  @override
+  String get coachPublicStudies => 'دراسات عامة';
+
+  @override
+  String get coachYoutubeVideos => 'فيديوهات اليوتيوب';
+
+  @override
+  String get coachAllCountries => 'كافة الدول';
+
+  @override
+  String get coachLastLogin => 'آخر تواجد';
+
+  @override
+  String get coachLichessRating => 'تقييم Lichess';
 
   @override
   String get contactContact => 'اتصل بنا';
@@ -3447,6 +3513,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchSearch => 'بحث';
+
+  @override
+  String get searchSortBy => 'ترتيب حسب';
 
   @override
   String get settingsSettings => 'الإعدادات';
@@ -8125,6 +8194,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'مدونة $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'أخر منشورات المدونة';
 
   @override
   String get variantStandard => 'الأساسي';

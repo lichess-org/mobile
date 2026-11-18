@@ -172,6 +172,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'コードが無効か期限切れです。';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'ローカルデータベース容量';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => '研究を選択';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'コードを送ってもらう';
@@ -1359,6 +1365,66 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Lichess ユーザーを招待する：';
+
+  @override
+  String get coachLichessCoaches => 'Lichess コーチ';
+
+  @override
+  String get coachLocation => '住所';
+
+  @override
+  String get coachLanguages => '対応言語';
+
+  @override
+  String get coachRating => 'レーティング';
+
+  @override
+  String get coachHourlyRate => '報酬／時';
+
+  @override
+  String get coachAvailability => '生徒募集';
+
+  @override
+  String get coachAccepting => '生徒を募集中です';
+
+  @override
+  String get coachNotAccepting => '現在、生徒を募集していません';
+
+  @override
+  String get coachSendPM => 'プライベートメッセージを送る';
+
+  @override
+  String get coachAboutMe => 'プロフィール';
+
+  @override
+  String get coachPlayingExperience => '競技歴';
+
+  @override
+  String get coachTeachingExperience => '指導歴';
+
+  @override
+  String get coachOtherExperiences => 'その他の経歴';
+
+  @override
+  String get coachBestSkills => '得意分野';
+
+  @override
+  String get coachTeachingMethod => '指導方法';
+
+  @override
+  String get coachPublicStudies => '公開研究';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube 動画';
+
+  @override
+  String get coachAllCountries => 'すべての国';
+
+  @override
+  String get coachLastLogin => '最終ログイン';
+
+  @override
+  String get coachLichessRating => 'Lichess のレーティング';
 
   @override
   String get contactContact => '各種連絡先';
@@ -3307,6 +3373,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get searchSearch => '検索';
+
+  @override
+  String get searchSortBy => '並べ替え基準';
 
   @override
   String get settingsSettings => '設定';
@@ -7666,6 +7735,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param のブログ';
   }
+
+  @override
+  String get ublogLatestBlogPosts => '最新のブログ投稿';
 
   @override
   String get variantStandard => 'スタンダード';

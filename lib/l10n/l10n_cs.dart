@@ -172,6 +172,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Send me a code';
@@ -1425,6 +1431,66 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Nebo pozvěte uživatele Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess trenéři';
+
+  @override
+  String get coachLocation => 'Poloha';
+
+  @override
+  String get coachLanguages => 'Jazyky';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Hodinová sazba';
+
+  @override
+  String get coachAvailability => 'Dostupnost';
+
+  @override
+  String get coachAccepting => 'Přijímá studenty';
+
+  @override
+  String get coachNotAccepting => 'Momentálně nepřijímá studenty';
+
+  @override
+  String get coachSendPM => 'Odeslat soukromou zprávu';
+
+  @override
+  String get coachAboutMe => 'O mně';
+
+  @override
+  String get coachPlayingExperience => 'Hráčské zkušenosti';
+
+  @override
+  String get coachTeachingExperience => 'Zkušenost s výukou';
+
+  @override
+  String get coachOtherExperiences => 'Jiné zkušenosti';
+
+  @override
+  String get coachBestSkills => 'Nejlepší dovednosti';
+
+  @override
+  String get coachTeachingMethod => 'Metodika výuky';
+
+  @override
+  String get coachPublicStudies => 'Veřejné studie';
+
+  @override
+  String get coachYoutubeVideos => 'YouTubová videa';
+
+  @override
+  String get coachAllCountries => 'Všechny země';
+
+  @override
+  String get coachLastLogin => 'Poslední přihlášení';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
 
   @override
   String get contactContact => 'Kontakt';
@@ -3391,6 +3457,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get searchSearch => 'Hledat';
+
+  @override
+  String get searchSortBy => 'Seřadit podle';
 
   @override
   String get settingsSettings => 'Nastavení';
@@ -7939,6 +8008,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blog hráče $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Poslední příspěvky na blogu';
 
   @override
   String get variantStandard => 'Standardní';

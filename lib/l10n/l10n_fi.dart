@@ -172,6 +172,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Koodi ei kelpaa tai on vanhentunut.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Paikallisen tietokannan koko';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Valitse tutkielma';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Lähetä minulle koodi';
@@ -1381,6 +1387,66 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Tai kutsu Lichess-käyttäjä:';
+
+  @override
+  String get coachLichessCoaches => 'Lichess-valmentajat';
+
+  @override
+  String get coachLocation => 'Sijainti';
+
+  @override
+  String get coachLanguages => 'Kielet';
+
+  @override
+  String get coachRating => 'Vahvuusluku';
+
+  @override
+  String get coachHourlyRate => 'Tuntitaksa';
+
+  @override
+  String get coachAvailability => 'Saatavuus';
+
+  @override
+  String get coachAccepting => 'Hyväksyn oppilaita';
+
+  @override
+  String get coachNotAccepting => 'En ota oppilaita tällä hetkellä';
+
+  @override
+  String get coachSendPM => 'Lähetä yksityisviesti';
+
+  @override
+  String get coachAboutMe => 'Tietoa minusta';
+
+  @override
+  String get coachPlayingExperience => 'Pelikokemus';
+
+  @override
+  String get coachTeachingExperience => 'Opetuskokemus';
+
+  @override
+  String get coachOtherExperiences => 'Muu kokemus';
+
+  @override
+  String get coachBestSkills => 'Parhaat kyvyt';
+
+  @override
+  String get coachTeachingMethod => 'Opetusmetodit';
+
+  @override
+  String get coachPublicStudies => 'Julkiset tutkielmat';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube-videot';
+
+  @override
+  String get coachAllCountries => 'Kaikki maat';
+
+  @override
+  String get coachLastLogin => 'Viimeksi täällä';
+
+  @override
+  String get coachLichessRating => 'Lichess-vahvuusluku';
 
   @override
   String get contactContact => 'Ota yhteyttä';
@@ -3335,6 +3401,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get searchSearch => 'Etsi';
+
+  @override
+  String get searchSortBy => 'Lajittelutapa';
 
   @override
   String get settingsSettings => 'Asetukset';
@@ -7757,6 +7826,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Käyttäjän $param blogi';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Uusimmat blogikirjoitukset';
 
   @override
   String get variantStandard => 'Normaali';

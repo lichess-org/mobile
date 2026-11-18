@@ -51,6 +51,7 @@
   <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Network logs</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">If an account matches %1$s, a %2$s character code was sent to it. Check your inbox and enter the code below.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">This code is invalid or has expired.</string>
+  <string name="lichessProfile" comment="Label of the button opening a coach's Lichess profile.">Lichess profile</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Local database size</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Move on release</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.</string>
@@ -99,6 +100,7 @@
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Remove bookmark</string>
   <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Select a study</string>
+  <string name="sendMessage" comment="Label of the button starting a direct message with a coach.">Send message</string>
   <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Send me a code</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Server analysis</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Clock position</string>

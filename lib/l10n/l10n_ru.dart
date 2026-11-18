@@ -172,6 +172,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Этот код недействителен или его срок действия истёк.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Размер локальной базы данных';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Выберите Студию';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Отправить мне код';
@@ -1425,6 +1431,66 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Или пригласите пользователя Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Тренеры Lichess';
+
+  @override
+  String get coachLocation => 'Местоположение';
+
+  @override
+  String get coachLanguages => 'Языки';
+
+  @override
+  String get coachRating => 'Рейтинг';
+
+  @override
+  String get coachHourlyRate => 'Оплата за час';
+
+  @override
+  String get coachAvailability => 'Доступность';
+
+  @override
+  String get coachAccepting => 'Принимаю учеников';
+
+  @override
+  String get coachNotAccepting => 'Временно не принимаю учеников';
+
+  @override
+  String get coachSendPM => 'Отправить личное сообщение';
+
+  @override
+  String get coachAboutMe => 'Обо мне';
+
+  @override
+  String get coachPlayingExperience => 'Игровой стаж';
+
+  @override
+  String get coachTeachingExperience => 'Тренерский стаж';
+
+  @override
+  String get coachOtherExperiences => 'Другие достижения';
+
+  @override
+  String get coachBestSkills => 'Лучшие навыки';
+
+  @override
+  String get coachTeachingMethod => 'Методика преподавания';
+
+  @override
+  String get coachPublicStudies => 'Открытые уроки';
+
+  @override
+  String get coachYoutubeVideos => 'Видео на YouTube';
+
+  @override
+  String get coachAllCountries => 'Все страны';
+
+  @override
+  String get coachLastLogin => 'Последний вход';
+
+  @override
+  String get coachLichessRating => 'Рейтинг Lichess';
 
   @override
   String get contactContact => 'Обратная связь';
@@ -3391,6 +3457,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get searchSearch => 'Поиск';
+
+  @override
+  String get searchSortBy => 'Сортировать по';
 
   @override
   String get settingsSettings => 'Настройки';
@@ -7939,6 +8008,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Блог $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Свежие записи в блоге';
 
   @override
   String get variantStandard => 'Шахматы';

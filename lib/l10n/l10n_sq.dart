@@ -172,6 +172,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Local database size';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Select a study';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Send me a code';
@@ -1381,6 +1387,66 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Ose ftoni një Përdorues Lichess-i:';
+
+  @override
+  String get coachLichessCoaches => 'Trajnerë Lichess-i';
+
+  @override
+  String get coachLocation => 'Vendndodhje';
+
+  @override
+  String get coachLanguages => 'Gjuhë';
+
+  @override
+  String get coachRating => 'Klasifikim';
+
+  @override
+  String get coachHourlyRate => 'Pagesa për orë';
+
+  @override
+  String get coachAvailability => 'Disponueshmeria';
+
+  @override
+  String get coachAccepting => 'Pranon nxënës';
+
+  @override
+  String get coachNotAccepting => 'Hëpërhë nuk pranon nxënës';
+
+  @override
+  String get coachSendPM => 'Dërgojini një mesazh privat';
+
+  @override
+  String get coachAboutMe => 'Rreth meje';
+
+  @override
+  String get coachPlayingExperience => 'Përvojë lojërash';
+
+  @override
+  String get coachTeachingExperience => 'Përvojë në mësimdhënie';
+
+  @override
+  String get coachOtherExperiences => 'Përvoja të tjera';
+
+  @override
+  String get coachBestSkills => 'Aftësitë më të mira';
+
+  @override
+  String get coachTeachingMethod => 'Metodologji mësimdhenieje';
+
+  @override
+  String get coachPublicStudies => 'Studime publike';
+
+  @override
+  String get coachYoutubeVideos => 'Video YouTube';
+
+  @override
+  String get coachAllCountries => 'Krejt vendet';
+
+  @override
+  String get coachLastLogin => 'Hyrja e fundit';
+
+  @override
+  String get coachLichessRating => 'Vlerësim Lichess';
 
   @override
   String get contactContact => 'Kontakt';
@@ -3335,6 +3401,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get searchSearch => 'Kërko';
+
+  @override
+  String get searchSortBy => 'Renditi sipas';
 
   @override
   String get settingsSettings => 'Rregullime';
@@ -7757,6 +7826,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blogu i $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Postimet më të reja në blog';
 
   @override
   String get variantStandard => 'Standard';

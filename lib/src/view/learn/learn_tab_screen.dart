@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
+import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
@@ -150,6 +151,7 @@ class const _Body() extends ConsumerWidget {
               ListSection(
                 header: Text(context.l10n.studyMenu),
                 hasLeading: true,
+                margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                 children: [
                   ListTile(
                     // Grey, unlike the icons of the tappable rows.
@@ -193,7 +195,7 @@ class const _Body() extends ConsumerWidget {
               if (haveIStudies || haveIFavoriteStudies)
                 ListSection(
                   hasLeading: true,
-                  margin: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
+                  margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
                   children: [
                     if (haveIStudies)
                       ListTile(
@@ -223,6 +225,23 @@ class const _Body() extends ConsumerWidget {
                       ),
                   ],
                 ),
+              ListSection(
+                margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
+                hasLeading: true,
+                children: [
+                  ListTile(
+                    leading: const Icon(Symbols.school_rounded),
+                    trailing: Theme.of(context).platform == TargetPlatform.iOS
+                        ? const CupertinoListTileChevron()
+                        : null,
+                    title: Text(context.l10n.coaches, style: Styles.callout),
+                    onTap: () => Navigator.of(
+                      context,
+                      rootNavigator: true,
+                    ).push(CoachListScreen.buildRoute()),
+                  ),
+                ],
+              ),
             ],
           ],
         ),

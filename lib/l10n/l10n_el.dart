@@ -172,6 +172,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Αυτός ο κωδικός δεν είναι έγκυρος ή έχει λήξει.';
 
   @override
+  String get mobileLichessProfile => 'Lichess profile';
+
+  @override
   String get mobileLocalDatabaseSize => 'Μέγεθος τοπικής βάσης δεδομένων';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Επιλογή μελέτης';
+
+  @override
+  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Αποστολή κωδικού';
@@ -1381,6 +1387,66 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Ή προσκαλέστε έναν χρήστη του Lichess:';
+
+  @override
+  String get coachLichessCoaches => 'Προπονητές του Lichess';
+
+  @override
+  String get coachLocation => 'Τοποθεσία';
+
+  @override
+  String get coachLanguages => 'Γλώσσες';
+
+  @override
+  String get coachRating => 'Βαθμολογία';
+
+  @override
+  String get coachHourlyRate => 'Ωριαία αμοιβή';
+
+  @override
+  String get coachAvailability => 'Διαθεσιμότητα';
+
+  @override
+  String get coachAccepting => 'Αποδέχομαι μαθητές';
+
+  @override
+  String get coachNotAccepting => 'Δε δέχομαι μαθητές προς το παρόν';
+
+  @override
+  String get coachSendPM => 'Αποστολή προσωπικού μηνύματος';
+
+  @override
+  String get coachAboutMe => 'Σχετικά με εμένα';
+
+  @override
+  String get coachPlayingExperience => 'Εμπειρία ως παίκτης';
+
+  @override
+  String get coachTeachingExperience => 'Εμπειρία ως προπονητής';
+
+  @override
+  String get coachOtherExperiences => 'Άλλες εμπειρίες';
+
+  @override
+  String get coachBestSkills => 'Καλύτερες ικανότητες';
+
+  @override
+  String get coachTeachingMethod => 'Μέθοδοι διδασκαλίας';
+
+  @override
+  String get coachPublicStudies => 'Δημόσιες μελέτες';
+
+  @override
+  String get coachYoutubeVideos => 'Βίντεο στο YouTube';
+
+  @override
+  String get coachAllCountries => 'Οποιαδήποτε χώρα';
+
+  @override
+  String get coachLastLogin => 'Τελευταία σύνδεση';
+
+  @override
+  String get coachLichessRating => 'Βαθμολογία στο Lichess';
 
   @override
   String get contactContact => 'Επικοινωνία';
@@ -3335,6 +3401,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get searchSearch => 'Αναζήτηση';
+
+  @override
+  String get searchSortBy => 'Ταξινόμηση κατά';
 
   @override
   String get settingsSettings => 'Ρυθμίσεις';
@@ -7757,6 +7826,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Ιστολόγιο του χρήστη $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Πρόσφατες αναρτήσεις';
 
   @override
   String get variantStandard => 'Κανονικό';
