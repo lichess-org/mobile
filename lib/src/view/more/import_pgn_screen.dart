@@ -9,11 +9,13 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/pgn_games_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A provider for picking PGN files. Can be overridden in tests.
@@ -39,7 +41,7 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
         final game = games.first;
         final rule = Rule.fromPgn(game.headers['Variant']);
 
-        Navigator.of(context, rootNavigator: true).push(
+        Navigator.of(context).pushHidingTabBar(
           AnalysisScreen.buildRoute(
             AnalysisOptions.pgn(
               id: const StringId('pgn_import_single_game'),
@@ -52,7 +54,7 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
           ),
         );
       } else {
-        Navigator.of(context, rootNavigator: true).push(PgnGamesListScreen.buildRoute(games.lock));
+        Navigator.of(context).pushHidingTabBar(PgnGamesListScreen.buildRoute(games.lock));
       }
     } catch (_) {
       showSnackBar(context, context.l10n.invalidPgn, type: .error);
@@ -61,8 +63,8 @@ class const ImportPgnScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.importPgn)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.importPgn)),
       body: const _Body(),
     );
   }

@@ -46,6 +46,8 @@ doc/api/
 
 # Cache directory created by scripts
 .cache/
+# Widget Preview related
+.widget_preview/
 
 # Patrol
 **/test_bundle.dart

@@ -5,8 +5,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -14,6 +12,8 @@ import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const OfflineCorrespondenceGameScreen({
@@ -57,8 +58,9 @@ class _OfflineCorrespondenceGameScreenState() extends State<OfflineCorrespondenc
   @override
   Widget build(BuildContext context) {
     final (lastModified, game) = currentGame;
-    return Scaffold(
-      appBar: AppBar(title: _Title(game)),
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(title: _Title(game)),
       body: _Body(game: game, lastModified: lastModified, onGameChanged: goToNextGame),
     );
   }
@@ -212,6 +214,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 // ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
               },
               userActionsBar: BottomBar(
+                cupertinoGlass: true,
                 children: [
                   BottomBarButton(
                     label: context.l10n.flipBoard,
@@ -273,23 +276,27 @@ class _BodyState() extends ConsumerState<_Body> {
                         : null,
                     icon: Icons.save,
                   ),
-                  RepeatButton(
-                    onLongPress: canGoBackward ? () => moveBackward() : null,
-                    child: BottomBarButton(
-                      onTap: canGoBackward ? () => moveBackward() : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
-                  ),
-                  RepeatButton(
-                    onLongPress: canGoForward ? () => moveForward() : null,
-                    child: BottomBarButton(
-                      onTap: canGoForward ? () => moveForward() : null,
-                      label: context.l10n.next,
-                      icon: CupertinoIcons.chevron_forward,
-                      showTooltip: false,
-                    ),
+                  BottomBarGroup(
+                    children: [
+                      RepeatButton(
+                        onLongPress: canGoBackward ? () => moveBackward() : null,
+                        child: BottomBarButton(
+                          onTap: canGoBackward ? () => moveBackward() : null,
+                          label: 'Previous',
+                          icon: CupertinoIcons.chevron_back,
+                          showTooltip: false,
+                        ),
+                      ),
+                      RepeatButton(
+                        onLongPress: canGoForward ? () => moveForward() : null,
+                        child: BottomBarButton(
+                          onTap: canGoForward ? () => moveForward() : null,
+                          label: context.l10n.next,
+                          icon: CupertinoIcons.chevron_forward,
+                          showTooltip: false,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

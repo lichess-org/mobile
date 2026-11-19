@@ -1,8 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -63,6 +68,8 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        // tall enough to build every stat card
+        surfaceSize: Size(kTestSurfaceSize.width, 2000),
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(client, ref);
@@ -74,6 +81,11 @@ void main() {
 
       // wait for auth state and perf stats
       await tester.pump(const Duration(milliseconds: 50));
+
+      // rating details are collapsed
+      expect(find.text('50.24'), findsNothing);
+      await tester.tap(find.text('More'));
+      await tester.pumpAndSettle();
 
       final requiredStatsValues = [
         '50.24', // Deviation
@@ -116,6 +128,50 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.byType(ErrorWidget), findsNothing);
       expect(find.text('0%'), findsWidgets);
+    }, variant: kPlatformVariant);
+
+    testWidgets('dates follow the app language without a restart', (WidgetTester tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+            return LichessClient(client, ref);
+          }),
+        },
+      );
+      addTearDown(() => Intl.defaultLocale = null);
+
+      await tester.pumpWidget(app);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      Navigator.of(tester.element(find.byType(HomeTabScreen)))
+          .push(PerfStatsScreen.buildRoute(user: fakeUser, perf: testPerf));
+      await tester.pumpAndSettle();
+
+      // show the date of the highest rating
+      await tester.tap(
+        find.descendant(of: find.byType(PerfStatsScreen), matching: find.text('More')),
+      );
+      await tester.pumpAndSettle();
+
+      // highest rating, end of the current and of the longest winning streaks
+      final streakEnd = find.text('Jan 20, 2023');
+      await tester.scrollUntilVisible(
+        streakEnd.first,
+        200,
+        scrollable: find
+            .descendant(of: find.byType(PerfStatsScreen), matching: find.byType(Scrollable))
+            .first,
+      );
+      expect(streakEnd, findsWidgets);
+
+      final container = ProviderScope.containerOf(tester.element(find.byType(PerfStatsScreen)));
+      await container.read(generalPreferencesProvider.notifier).setLocale(const Locale('de'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('20. Jan. 2023'), findsWidgets);
+      expect(streakEnd, findsNothing);
     }, variant: kPlatformVariant);
   });
 }

@@ -31,7 +31,7 @@
   <string name="youCanAlsoReachReportPage">همچنین می‌توانید با زدن روی دکمهٔ گزارش %s در یک صفحهٔ رُخ‌نما، به آن صفحه برسید.</string>
   <string name="doNotReportInForum">در تالار گفت و گو کاربرها را گزارش نکنید.</string>
   <string name="doNotSendReportEmails">به ما رایانامه‌های گزارش نفرستید.</string>
-  <string name="doNotMessageModerators">لطفا پیام مستقیم به مدیران سایت نفرستید.</string>
+  <string name="doNotMessageModerators">لطفا پیام مستقیم به ناظران نفرستید.</string>
   <string name="onlyReports">تنها گزارشِ کاربران از راه فرم گزارش می‌تواند موثر باشد.</string>
   <string name="wantReportBug">می‌خواهم یک ایراد فنی را گزارش کنم</string>
   <string name="reportBugInForum">در قسمت بازخوردِ Lichess در تالار گفت و گو</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">مطمئن شوید که یک بازی *رسمی* کرده‌اید. بازی‌های *نارسمی* بر درجه‌بندی بازیکنان اثر نمی‌گذارد.</string>
   <string name="botRatingAbuse">در مواقع مشخص و در بازی مقابل یک حساب کاربری ربات، اگر مشخص شود که بازیکن در حال سوءِ استفاده از ربات برای دریافت امتیاز است ممکن است به بازی امتیازی تعلق نگیرد.</string>
   <string name="errorPage">صفحه خطا</string>
-  <string name="reportErrorPage">اگر با صفحه خطا مواجه شدید، می‌توانید آن را گزارش کنید:</string>
+  <string name="reportTheBug">شما می‌توانید آن را گزارش کنید:</string>
+  <string name="securityVulnerability">آسیب‌پذیری امنیتی</string>
+  <string name="otherBug">اِشکالِ دیگری</string>
   <string name="learnHowToMakeBroadcasts">یادگیری چگونگی انجام پخش‌زندهٔ خودتان در Lichess</string>
   <string name="banAppeal">درخواست بازنگری برای یک ممنوعیت یا محدودیتِ IP</string>
   <string name="engineAppeal">علامتِ موتور یا تقلب</string>

@@ -163,7 +163,9 @@ class ListSection extends StatelessWidget {
     final List<Widget> result = [];
     for (int i = 0; i < tilesList.length; i++) {
       result.add(tilesList.elementAt(i));
-      if (i != tilesList.length - 1) {
+      if (i != tilesList.length - 1 &&
+          tilesList[i] is! ListSectionSeparator &&
+          tilesList[i + 1] is! ListSectionSeparator) {
         result.add(
           PlatformDivider(
             height: 0,
@@ -174,6 +176,40 @@ class ListSection extends StatelessWidget {
       }
     }
     return result;
+  }
+}
+
+/// A separator between two groups of tiles of a [ListSection], which stay in the same card.
+///
+/// It spans the whole width of the card, unlike the dividers between the iOS tiles, which are not
+/// drawn next to it.
+class const ListSectionSeparator({
+  super.key,
+
+  /// A title for the group of tiles below, typically a [Text], smaller than a section header.
+  final Widget? title,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    const divider = PlatformDivider(height: 16.0, indent: 0.0);
+    if (title == null) return divider;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        divider,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 8.0),
+          child: DefaultTextStyle.merge(
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600,
+              color: ColorScheme.of(context).onSurfaceVariant,
+            ),
+            child: title!,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -198,7 +234,10 @@ class const ListSectionHeader({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              child: Semantics(
+                headingLevel: 2,
+                child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              ),
             ),
             if (onTap != null)
               Row(
@@ -213,6 +252,58 @@ class const ListSectionHeader({
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A row of a card that looks like a [ListSection], for a long list built lazily (e.g. with
+/// [ListView.builder]), where a [ListSection] would build all its rows at once.
+///
+/// Consecutive rows form one card: the first row has its top corners rounded and the last row its
+/// bottom corners. On iOS, every row but the last is followed by a divider.
+class const ListSectionRow({
+  required final Widget child,
+
+  /// Whether this row is the first one of its card.
+  required final bool isFirst,
+
+  /// Whether this row is the last one of its card.
+  required final bool isLast,
+
+  /// Whether the iOS tiles have a leading widget.
+  final bool hasLeading = false,
+
+  /// Cupertino leading indent.
+  final double? leadingIndent,
+  super.key,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final showDivider = !isLast && Theme.of(context).platform == TargetPlatform.iOS;
+    return Card(
+      margin: Styles.horizontalBodyPadding,
+      // Each row paints its own shadow, which would show between the rows.
+      elevation: 0,
+      clipBehavior: isFirst || isLast ? Clip.hardEdge : Clip.none,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: isFirst ? Styles.cardBorderRadius.topLeft : Radius.zero,
+          bottom: isLast ? Styles.cardBorderRadius.bottomLeft : Radius.zero,
+        ),
+      ),
+      child: showDivider
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                child,
+                PlatformDivider(
+                  height: 0,
+                  cupertinoHasLeading: hasLeading,
+                  cupertinoLeadingIndent: leadingIndent,
+                ),
+              ],
+            )
+          : child,
     );
   }
 }
@@ -279,48 +370,6 @@ class AnimatedListModel<E>({
   final int itemsOffset = itemsOffset ?? 0;
 
   AnimatedListState? get _animatedList => listKey.currentState;
-
-  void prepend(E item) {
-    _items.insert(0, item);
-    _animatedList!.insertItem(itemsOffset);
-  }
-
-  void insert(int index, E item) {
-    _items.insert(index - itemsOffset, item);
-    _animatedList!.insertItem(index);
-  }
-
-  E removeAt(int index) {
-    final E removedItem = _items.removeAt(index - itemsOffset);
-    if (removedItem != null) {
-      _animatedList!.removeItem(index, (BuildContext context, Animation<double> animation) {
-        return removedItemBuilder(removedItem, context, animation);
-      });
-    }
-    return removedItem;
-  }
-
-  int get length => _items.length + itemsOffset;
-
-  E operator [](int index) => _items[index - itemsOffset];
-
-  int indexOf(E item) => _items.indexOf(item) + itemsOffset;
-}
-
-/// Keeps a Dart [List] in sync with a [SliverAnimatedList].
-///
-/// The [insert] and [removeAt] methods apply to both the internal list and
-/// the animated list that belongs to [listKey].
-class SliverAnimatedListModel<E>({
-  required final GlobalKey<SliverAnimatedListState> listKey,
-  required final RemovedItemBuilder<E> removedItemBuilder,
-  Iterable<E>? initialItems,
-  int? itemsOffset,
-}) {
-  final List<E> _items = List<E>.from(initialItems ?? <E>[]);
-  final int itemsOffset = itemsOffset ?? 0;
-
-  SliverAnimatedListState? get _animatedList => listKey.currentState;
 
   void prepend(E item) {
     _items.insert(0, item);

@@ -3,6 +3,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/learn/learn_assert.dart';
 import 'package:lichess_mobile/src/model/learn/learn_level.dart';
+import 'package:meta/meta.dart';
 
 /// The learn stages, ported from `ui/learn/src/stage/*.ts` on lichess.org.
 ///
@@ -33,6 +34,7 @@ final IList<LearnCategory> learnCategories = IList([
 final IList<LearnStage> learnStages = learnCategories.expand((c) => c.stages).toIList();
 
 /// The stage with the given [key], if any.
+@visibleForTesting
 LearnStage? learnStageByKey(String key) => learnStages.firstWhereOrNull((s) => s.key == key);
 
 ScenarioStep _step(String uci, [List<LearnShape> shapes = const []]) =>

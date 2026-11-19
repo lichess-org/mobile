@@ -216,17 +216,22 @@ Future<ui.Image> imageProviderToScaled(ImageProvider imageProvider) async {
 
       final ui.Picture picture = pictureRecorder.endRecording();
       scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
+      if (!imageCompleter.isCompleted) imageCompleter.complete(info.image);
     },
     onError: (Object exception, StackTrace? stackTrace) {
+      loadFailureTimeout?.cancel();
       stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
+      if (!imageCompleter.isCompleted) {
+        imageCompleter.completeError(Exception('Failed to render image: $exception'), stackTrace);
+      }
     },
   );
 
   loadFailureTimeout = Timer(const Duration(seconds: 5), () {
     stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+    if (!imageCompleter.isCompleted) {
+      imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+    }
   });
 
   stream.addListener(listener);

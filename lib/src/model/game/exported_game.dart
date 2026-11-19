@@ -290,6 +290,7 @@ Player _playerFromUserGamePick(RequiredPick pick) {
     user: pick('user').asLightUserOrNull(),
     name: _removeRatingFromName(originalName),
     rating: pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
+    provisional: pick('provisional').asBoolOrNull(),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
     analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),

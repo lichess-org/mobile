@@ -2,48 +2,10 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:material_ui/material_ui.dart';
 
-/// Returns a localized string with a single placeholder replaced by a widget.
-///
-/// The [textStyle] parameter can be used to style the displayed text parts of the localized string.
-///
-/// For example:
-/// ```dart
-/// String translationFun(String name) {
-///   return 'Hello, ${name}!';
-/// }
-/// // returns a text widget containing MyFancyWidget('Magnus') in place of the placeholder
-/// l10nWithWidget(translationFun, MyFancyWidget('Magnus'));
-/// ```
-Text l10nWithWidget<T extends Widget>(
-  String Function(String) l10nFunction,
-  T widget, {
-  TextStyle? textStyle,
-}) {
-  final localizedStringWithPlaceholder = l10nFunction('%s');
-
-  final parts = localizedStringWithPlaceholder.split('%s');
-
-  // Localized string did not actually contain the placeholder
-  if (parts[0] == localizedStringWithPlaceholder) {
-    return Text(localizedStringWithPlaceholder);
-  }
-
-  return Text.rich(
-    TextSpan(
-      children: <InlineSpan>[
-        if (parts[0].isNotEmpty) TextSpan(text: parts[0], style: textStyle),
-        if (parts[0] != localizedStringWithPlaceholder)
-          WidgetSpan(child: widget, alignment: PlaceholderAlignment.middle, style: textStyle),
-        if (parts.length > 1 && parts[1].isNotEmpty) TextSpan(text: parts[1], style: textStyle),
-      ],
-    ),
-  );
-}
-
-final _dateFormatterWithYear = DateFormat.yMMMMd();
-final _dateFormatterWithYearShort = DateFormat.yMMMd();
-final _monthFormatterWithYear = DateFormat.yMMMM();
-final _monthFormatterWithYearShort = DateFormat.yMMM();
+DateFormat get _dateFormatterWithYear => DateFormat.yMMMMd();
+DateFormat get _dateFormatterWithYearShort => DateFormat.yMMMd();
+DateFormat get _monthFormatterWithYear => DateFormat.yMMMM();
+DateFormat get _monthFormatterWithYearShort => DateFormat.yMMM();
 
 /// Formats a raw PGN date string, as found in the tags of an imported game.
 ///
@@ -67,6 +29,36 @@ String formatPgnDate(String date, {bool shortDate = true}) {
   return dateFormatter.format(parsed);
 }
 
+/// Formats the time of day of [date] in the locale's format (e.g. '3:05 PM' or '15:05'), or always
+/// in 24-hour format if the user set their device to it.
+String formatTimeOfDay(BuildContext context, DateTime date) => MaterialLocalizations.of(context)
+    .formatTimeOfDay(
+      TimeOfDay.fromDateTime(date),
+      alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
+    );
+
+/// Formats the calendar day of [date] as the header of a list grouped by day: 'Today', 'Yesterday',
+/// 'N days ago' within a week, then the date, with its year only if it's not the current one.
+///
+/// Unlike [relativeDate], each day gets its own label.
+String formatDayHeader(AppLocalizations l10n, DateTime date) {
+  final now = DateTime.now();
+  final local = date.toLocal();
+  // Count calendar days in UTC so that a daylight saving time change between the two dates
+  // doesn't shorten a day to 23 hours.
+  final days = DateTime.utc(
+    now.year,
+    now.month,
+    now.day,
+  ).difference(DateTime.utc(local.year, local.month, local.day)).inDays;
+  return switch (days) {
+    0 => l10n.today,
+    1 => l10n.yesterday,
+    <= 7 => l10n.timeagoNbDaysAgo(days),
+    _ => (local.year == now.year ? DateFormat.MMMMd() : DateFormat.yMMMMd()).format(local),
+  };
+}
+
 /// Formats a date as a relative date string from now.
 String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true}) {
   final now = DateTime.now();
@@ -75,20 +67,29 @@ String relativeDate(AppLocalizations l10n, DateTime date, {bool shortDate = true
   final yearFormatter = shortDate ? _dateFormatterWithYearShort : _dateFormatterWithYear;
 
   if (diff.isNegative) {
-    return diff.inDays == 0
-        ? diff.inHours == 0
-              ? diff.inMinutes == 0
-                    ? l10n.timeagoRightNow
-                    : l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
-              : l10n.timeagoNbHoursAgo(diff.inHours.abs())
-        : diff.inDays == 1
+    if (diff.inDays == 0) {
+      return diff.inHours == 0
+          ? diff.inMinutes == 0
+                ? l10n.timeagoRightNow
+                : l10n.timeagoNbMinutesAgo(diff.inMinutes.abs())
+          : l10n.timeagoNbHoursAgo(diff.inHours.abs());
+    }
+    // Past a day, count calendar days rather than 24 hour periods, so that a date matches the day
+    // it falls on (e.g. 2 days ago at 22:00 is "2 days ago" at 08:00, not "Yesterday").
+    final local = date.toLocal();
+    final days = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+    ).difference(DateTime.utc(local.year, local.month, local.day)).inDays;
+    return days == 1
         ? l10n.yesterday
-        : diff.inDays.abs() <= 7
-        ? l10n.timeagoNbDaysAgo(diff.inDays.abs())
-        : diff.inDays.abs() <= 30
-        ? l10n.timeagoNbWeeksAgo((diff.inDays.abs() / 7).round())
-        : diff.inDays.abs() <= 365
-        ? l10n.timeagoNbMonthsAgo((diff.inDays.abs() / 30).round())
+        : days <= 7
+        ? l10n.timeagoNbDaysAgo(days)
+        : days <= 30
+        ? l10n.timeagoNbWeeksAgo((days / 7).round())
+        : days <= 365
+        ? l10n.timeagoNbMonthsAgo((days / 30).round())
         : yearFormatter.format(date);
   }
   return diff.inDays == 0
@@ -207,7 +208,7 @@ String localeToLocalizedName(Locale locale) => switch (locale) {
   Locale(languageCode: 'tr') => 'Türkçe',
   Locale(languageCode: 'uk') => 'українська',
   Locale(languageCode: 'ur') => 'اُردُو',
-  Locale(languageCode: 'uz') => 'oʻzbekcha',
+  Locale(languageCode: 'uz') => 'Özbekça',
   Locale(languageCode: 'vi') => 'Tiếng Việt',
   Locale(languageCode: 'yo') => 'Yorùbá',
   Locale(languageCode: 'zh', countryCode: 'TW') => '繁體中文',

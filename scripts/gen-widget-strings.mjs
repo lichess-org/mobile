@@ -1,15 +1,25 @@
 #!/usr/bin/env node
 /**
- * Generates ios/LichessWidgets/Localizable.xcstrings from the app's ARB translation files.
+ * Generates widget UI strings for both platforms from the app's ARB translation files:
+ *   - ios/LichessWidgets/Localizable.xcstrings (Xcode String Catalog)
+ *   - android/app/src/main/res/values/widget_strings.xml (default/English strings)
+ *   - android/app/src/main/res/values-b+<locale>/widget_strings.xml (per-locale translations)
  *
  * Run from the repo root:
  *   node scripts/gen-widget-strings.mjs
  *
- * The output is a String Catalog (Xcode 15+) containing all widget UI strings.
- * Xcode picks it up automatically via the fileSystemSynchronizedRootGroup.
+ * Xcode picks up Localizable.xcstrings automatically via the fileSystemSynchronizedRootGroup.
+ * The Android widget_strings.xml files are generated: never edit them by hand. Each run deletes
+ * them all before writing the current ones, so a locale or string that goes away leaves no stale
+ * file behind. Other Android strings belong in the hand-written values/strings.xml.
  *
- * To add a new string:
+ * To add a new translatable string:
  *   1. Add the ARB key to WIDGET_KEYS below with its default English value.
+ *      Add `androidName: 'your_resource_name'` too if Android should use it.
+ *   2. Re-run this script.
+ *
+ * To add an Android-only string with no translation yet:
+ *   1. Add it to UNTRANSLATED_ANDROID_STRINGS below with its hardcoded English value.
  *   2. Re-run this script.
  */
 
@@ -25,12 +35,21 @@ const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings
 // Map each widget UI string to its ARB key and English fallback.
 // Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
-  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle' },
-  'Community': { arbKey: 'ublogCommunity', fallback: 'Community' },
+  'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'daily_puzzle_title' },
+  'Community': { arbKey: 'ublogCommunity', fallback: 'Community'},
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
-  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts' },
+  'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'broadcast_title' },
+  'Your turn': { arbKey: 'yourTurn', fallback: 'Your turn' },
+  'Waiting for opponent': { arbKey: 'waitingForOpponent', fallback: 'Waiting for opponent' },
+  'Reconnecting': { arbKey: 'reconnecting', fallback: 'Reconnecting' },
+  'Game Over': { arbKey: 'gameOver', fallback: 'Game Over' },
+  'Victory': { arbKey: 'victory', fallback: 'Victory' },
+  'Defeat': { arbKey: 'defeat', fallback: 'Defeat' },
+  'Draw': { arbKey: 'draw', fallback: 'Draw' },
+  'Game aborted': { arbKey: 'gameAborted', fallback: 'Game aborted' },
 };
+
 
 // ARB locale codes use '_', iOS uses '-' for subtags.
 function arbToIosLocale(arb) {
@@ -43,8 +62,10 @@ const arbFiles = fs
   .filter((f) => f.startsWith('app_') && f.endsWith('.arb') && f !== 'app_en_US.arb')
   .map((f) => ({ file: f, locale: arbToIosLocale(f.replace(/^app_/, '').replace(/\.arb$/, '')) }));
 
-// Build the strings dictionary.
-const strings = {};
+// Start from the existing catalog to keep the strings extracted by Xcode.
+const strings = fs.existsSync(OUT_FILE)
+  ? JSON.parse(fs.readFileSync(OUT_FILE, 'utf8')).strings
+  : {};
 
 for (const [uiString, { arbKey, fallback, param = false }] of Object.entries(WIDGET_KEYS)) {
   const localizations = {};
@@ -75,7 +96,101 @@ const catalog = {
   version: '1.0',
 };
 
-fs.writeFileSync(OUT_FILE, JSON.stringify(catalog, null, 2) + '\n');
+// Xcode sorts keys case-insensitively, writes `"key" : value` and puts a blank line in `{}`.
+function sortKeys(value) {
+  if (Array.isArray(value)) return value.map(sortKeys);
+  if (value === null || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort((a, b) => a.localeCompare(b, 'en', { sensitivity: 'base' }) || (a < b ? -1 : 1))
+      .map((k) => [k, sortKeys(value[k])]),
+  );
+}
+
+const json = JSON.stringify(sortKeys(catalog), null, 2)
+  .replace(/^(\s*"(?:[^"\\]|\\.)*"):/gm, '$1 :')
+  .replace(/^(\s*)(.*)\{\}/gm, '$1$2{\n\n$1}');
+fs.writeFileSync(OUT_FILE, json);
 console.log(`Written: ${path.relative(ROOT, OUT_FILE)}`);
 console.log(`  Strings: ${Object.keys(strings).length}`);
 console.log(`  Locales: ${arbFiles.length}`);
+
+
+const UNTRANSLATED_ANDROID_STRINGS = {
+  broadcast_description: 'Shows ongoing and upcoming chess broadcasts.',
+  live: 'LIVE',
+  no_broadcasts: 'No active broadcasts',
+  daily_puzzle_description: 'Shows daily puzzle',
+  daily_puzzle_error: "Couldn't load puzzle",
+};
+
+const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');
+
+function xmlEscape(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '\\"').replace(/'/g, "\\'");
+}
+
+function arbToAndroidValue(value, param) {
+  return param ? value.replace(/\{param\}/g, '%1$s') : value;
+}
+
+const ANDROID_STRINGS_FILE_NAME = 'widget_strings.xml';
+
+function androidStringsXml(entries) {
+  const body = Object.entries(entries)
+    .map(([name, value]) => `    <string name="${name}">${xmlEscape(value)}</string>`)
+    .join('\n');
+  return '<?xml version="1.0" encoding="utf-8"?>\n' +
+    '<!-- GENERATED FILE. Do not edit by hand — run scripts/gen-widget-strings.mjs instead. -->\n' +
+    `<resources>\n${body}\n</resources>\n`;
+}
+
+// Remove the files of the previous run, and the locale directories left empty.
+for (const dirName of fs.readdirSync(ANDROID_RES_DIR)) {
+  if (!dirName.startsWith('values')) continue;
+  const dir = path.join(ANDROID_RES_DIR, dirName);
+  fs.rmSync(path.join(dir, ANDROID_STRINGS_FILE_NAME), { force: true });
+  if (dirName.startsWith('values-b+') && fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
+}
+
+const androidLocaleGroups = new Map();
+
+for (const { file } of arbFiles) {
+  const arbLocale = file.replace(/^app_/, '').replace(/\.arb$/, '');
+  if (arbLocale === 'en') continue;
+  const qualifier = `b+${arbLocale.replace(/_/g, '+')}`;
+  const arb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, file), 'utf8'));
+
+  for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
+    if (!androidName) continue;
+    const raw = arb[arbKey];
+    if (raw == null || raw === fallback) continue;
+    const value = arbToAndroidValue(raw, param);
+    if (!androidLocaleGroups.has(qualifier)) androidLocaleGroups.set(qualifier, {});
+    androidLocaleGroups.get(qualifier)[androidName] = value;
+  }
+}
+
+for (const [qualifier, entries] of androidLocaleGroups) {
+  const dir = path.join(ANDROID_RES_DIR, `values-${qualifier}`);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, ANDROID_STRINGS_FILE_NAME), androidStringsXml(entries));
+}
+console.log(`  Android locales: ${androidLocaleGroups.size}`);
+
+
+const enArb = JSON.parse(fs.readFileSync(path.join(L10N_DIR, 'app_en.arb'), 'utf8'));
+const defaultEntries = {};
+
+for (const [, { arbKey, fallback, param = false, androidName }] of Object.entries(WIDGET_KEYS)) {
+  if (!androidName) continue;
+  defaultEntries[androidName] = arbToAndroidValue(enArb[arbKey] ?? fallback, param);
+}
+Object.assign(defaultEntries, UNTRANSLATED_ANDROID_STRINGS);
+
+fs.writeFileSync(
+  path.join(ANDROID_RES_DIR, 'values', ANDROID_STRINGS_FILE_NAME),
+  androidStringsXml(defaultEntries),
+);
+console.log(`  Default strings: ${Object.keys(defaultEntries).length}`);

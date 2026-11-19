@@ -14,9 +14,9 @@ import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_list_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassButton;
 import 'package:material_ui/material_ui.dart';
 
 import '../../binding.dart';
@@ -248,7 +248,6 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => mockClient),
@@ -266,6 +265,11 @@ void main() {
 
         expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsOneWidget);
         expect(find.byType(FeaturedTournamentsWidget), findsNothing);
+
+        await tester.tap(find.widgetWithText(TextButton, 'OK'));
+        await tester.pumpAndSettle();
+
+        expect(find.widgetWithText(PlatformAppBar, 'Home widgets'), findsNothing);
       });
 
       testWidgets('featured tournaments checkbox is shown when there are some to show', (
@@ -280,7 +284,6 @@ void main() {
         final app = await makeTestProviderScope(
           tester,
           child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
           overrides: {
             httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
               (ref) => FakeHttpClientFactory(() => mockClient),
@@ -304,7 +307,7 @@ void main() {
   });
 
   group('Home offline', () {
-    testWidgets('shows offline banner', (tester) async {
+    testWidgets('shows offline subtitle', (tester) async {
       final app = await makeOfflineTestProviderScope(tester, child: const Application());
 
       await tester.pumpWidget(app);
@@ -312,34 +315,7 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       await tester.pump();
 
-      expect(find.byType(OfflineBanner), findsOneWidget);
-    });
-
-    testWidgets('shows Play button', (tester) async {
-      final app = await makeOfflineTestProviderScope(tester, child: const Application());
-
-      await tester.pumpWidget(app);
-
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pump();
-
-      expect(find.byType(FloatingActionButton), findsOneWidget);
-    });
-
-    testWidgets('no authUser, no stored game: shows welcome screen ', (tester) async {
-      final app = await makeTestProviderScope(tester, child: const Application());
-      await tester.pumpWidget(app);
-      // wait for connectivity
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      await tester.pumpAndSettle();
-
-      expect(
-        find.textContaining('libre, no-ads, open source chess server.', findRichText: true),
-        findsOneWidget,
-      );
-      expect(find.text('Sign in'), findsOneWidget);
-      expect(find.text('About Lichess...'), findsOneWidget);
+      expect(find.widgetWithText(PlatformAppBar, 'Offline'), findsOneWidget);
     });
 
     testWidgets('no authUser, with stored games: shows list of recent games', (tester) async {
@@ -417,11 +393,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via button', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -438,10 +410,7 @@ void main() {
       testWidgets('Not shown if already dismissed', (tester) async {
         final app = await makeTestProviderScope(tester, child: const Application());
 
-        TestLichessBinding.instance.sharedPreferences.setBool(
-          'app_hide_home_widget_customization_tip',
-          true,
-        );
+        testBinding.sharedPreferences.setBool('app_hide_home_widget_customization_tip', true);
 
         await tester.pumpWidget(app);
 
@@ -453,11 +422,7 @@ void main() {
       });
 
       testWidgets('Can be dismissed via going to settings', (tester) async {
-        final app = await makeTestProviderScope(
-          tester,
-          child: const Application(),
-          defaultPreferences: {kWelcomeMessageShownKey: true},
-        );
+        final app = await makeTestProviderScope(tester, child: const Application());
 
         await tester.pumpWidget(app);
 
@@ -475,7 +440,8 @@ void main() {
         await tester.tap(find.widgetWithText(TextButton, 'OK'));
         await tester.pumpAndSettle(); // wait for home screen to re-appear
 
-        expect(find.byIcon(LichessIcons.logo_lichess), findsOneWidget); // we're back on home
+        // we're back on home
+        expect(find.textContaining(RegExp(r'^\S+ Good (day|evening)$')), findsOneWidget);
 
         expect(find.text(customizeTip), findsNothing);
       });
@@ -485,7 +451,7 @@ void main() {
       ) async {
         final app = await makeTestProviderScope(tester, child: const Application());
 
-        TestLichessBinding.instance.numAppStarts = kColdAppStartsHideCustomizationTipThreshold + 1;
+        testBinding.numAppStarts = kColdAppStartsHideCustomizationTipThreshold + 1;
 
         await tester.pumpWidget(app);
 
@@ -533,24 +499,6 @@ void main() {
       // ...but the locally stored games are still listed below it.
       expect(find.text('Recent games'), findsOneWidget);
       expect(find.byType(GameListTile), findsNWidgets(3));
-    });
-
-    testWidgets('outage page shown and Play button still accessible', (tester) async {
-      final app = await makeTestProviderScope(
-        tester,
-        child: const Application(),
-        overrides: {
-          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
-            return FakeHttpClientFactory(() => serverDownClient());
-          }),
-        },
-      );
-
-      await tester.pumpWidget(app);
-      await tester.pumpAndSettle();
-
-      expect(find.byType(ServerOutageDisplay), findsOneWidget);
-      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
     testWidgets('a 502 shows the outage message', (tester) async {
@@ -655,5 +603,78 @@ void main() {
 
       expect(find.text('Something went wrong.'), findsNothing);
     });
+  });
+
+  group('greeting', () {
+    Future<void> pumpLoggedIn(WidgetTester tester) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        authUser: fakeAuthUser,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/tournament/featured') {
+                  return mockResponse('{"featured":[]}', 200);
+                }
+                return mockResponse('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('logged in, iOS: is the app bar title only, without a glass button', (
+      tester,
+    ) async {
+      await pumpLoggedIn(tester);
+
+      expect(find.textContaining(fakeAuthUser.user.name), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(fakeAuthUser.user.name),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.ancestor(
+          of: find.textContaining(fakeAuthUser.user.name),
+          matching: find.byType(GlassButton),
+        ),
+        findsNothing,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('logged in, Android: is the app bar title only', (tester) async {
+      await pumpLoggedIn(tester);
+
+      expect(find.textContaining(fakeAuthUser.user.name), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(AppBar),
+          matching: find.textContaining(fakeAuthUser.user.name),
+        ),
+        findsOneWidget,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
+    testWidgets('logged out: is shown without a name in the app bar', (tester) async {
+      final app = await makeTestProviderScope(tester, child: const Application());
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(
+        find.descendant(
+          of: find.byType(PlatformAppBar),
+          matching: find.textContaining(RegExp(r'^\S+ Good (day|evening)$')),
+        ),
+        findsOneWidget,
+      );
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS, TargetPlatform.android}));
   });
 }

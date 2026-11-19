@@ -14,15 +14,11 @@ class const StormClockWidget({required final StormClock clock}) extends Stateful
 }
 
 class _ClockState() extends State<StormClockWidget> with SingleTickerProviderStateMixin {
-  // ignore: avoid-late-keyword
   late AnimationController _controller;
-
-  // ignore: avoid-late-keyword
   late final Animation<double> _bonusFadeAnimation = Tween<double>(
     begin: 1.0,
     end: 0.0,
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-  // ignore: avoid-late-keyword
   late final Animation<Offset> _bonusSlideAnimation = Tween<Offset>(
     begin: const Offset(0.7, 0.0),
     end: const Offset(0.7, -1.0),
@@ -122,8 +118,8 @@ class _ClockState() extends State<StormClockWidget> with SingleTickerProviderSta
                       '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
                         color: currentBonusSeconds! < 0
-                            ? context.lichessColors.error
-                            : context.lichessColors.good,
+                            ? context.lichessColors.red
+                            : context.lichessColors.green,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -146,8 +142,8 @@ class _ClockState() extends State<StormClockWidget> with SingleTickerProviderSta
                     '$minutes:$seconds',
                     style: TextStyle(
                       color: currentBonusSeconds! < 0
-                          ? context.lichessColors.error
-                          : context.lichessColors.good,
+                          ? context.lichessColors.red
+                          : context.lichessColors.green,
                       fontSize: _kClockFontSize,
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),

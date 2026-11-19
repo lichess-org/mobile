@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">Ritiro della mossa (su accordo dell\'avversario)</string>
   <string name="inCasualGamesOnly">Solo nelle partite amichevoli</string>
   <string name="promoteToQueenAutomatically">Promuovi a Donna automaticamente</string>
-  <string name="explainPromoteToQueenAutomatically">Tieni premuto il tasto &lt;ctrl&gt; durante la promozione per disabilitare temporaneamente la promozione automatica</string>
   <string name="whenPremoving">Quando preseleziono una mossa</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Reclama patta automaticamente dopo triplice ripetizione</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Quando il tempo rimanente è &lt; 30 secondi</string>
@@ -74,4 +73,5 @@
   <string name="generalSettings">Generale</string>
   <string name="boardSettings">Bacheca</string>
   <string name="analysisSettings">Impostazioni analisi</string>
+  <string name="network">Network</string>
 </resources>

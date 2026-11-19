@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/local_game_clock.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -40,6 +39,7 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_clock
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/move_feedback.dart';
 import 'package:logging/logging.dart';
 
 part 'offline_computer_game_controller.freezed.dart';
@@ -241,6 +241,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     return OfflineComputerGameState.initial(
       opponentSpec: const StockfishOpponentSpec(StockfishLevel.defaultLevel),
       playerSide: Side.white,
+      humanPlayer: Player(onGame: true, user: ref.read(authControllerProvider)?.user),
     );
   }
 
@@ -265,6 +266,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
       variant: variant,
       initialFen: initialFen,
       timeIncrement: effectiveTimeIncrement,
+      humanPlayer: Player(onGame: true, user: ref.read(authControllerProvider)?.user),
     );
     _clock.setupClock(effectiveTimeIncrement);
 
@@ -896,6 +898,7 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
     bool practiceMode = false,
     String? initialFen,
     TimeIncrement timeIncrement = const TimeIncrement.infinite(),
+    Player humanPlayer = const Player(onGame: true),
   }) {
     final Position position;
     final Variant effectiveVariant;
@@ -937,7 +940,7 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
         opponentSpec: opponentSpec,
         casual: casual,
         practiceMode: practiceMode,
-        humanPlayer: const Player(onGame: true),
+        humanPlayer: humanPlayer,
         enginePlayer: enginePlayerFor(opponentSpec),
       ),
     );
