@@ -93,10 +93,10 @@ void main() {
       expect(engineShortLabel('Lc0 v0.32.1'), isNull);
     });
 
-    test('labels an external engine by its full name', () {
+    test('labels an external engine by its short name', () {
       final spec = ExternalEngineSpec(testExternalEngine.copyWith(name: 'Stockfish 17'));
 
-      expect(engineShortLabel('Stockfish 17', spec: spec), 'Stockfish 17');
+      expect(engineShortLabel('Stockfish 17', spec: spec), 'Stockfis…');
     });
   });
 }

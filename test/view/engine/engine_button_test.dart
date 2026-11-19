@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassPopover;
 import 'package:material_ui/material_ui.dart';
@@ -128,7 +127,7 @@ void main() {
     await tester.pump();
 
     expect(find.widgetWithText(EngineButton, 'EXT'), findsOne);
-    expect(find.widgetWithText(EngineButton, 'External Stockfish'), findsOne);
+    expect(find.widgetWithText(EngineButton, 'External…'), findsOne);
 
     await tester.longPress(
       find.descendant(of: find.byType(EngineButton), matching: find.byType(SemanticIconButton)),
@@ -180,7 +179,7 @@ void main() {
     await tester.pumpWidget(app);
     await tester.pumpAndSettle();
 
-    expect(find.widgetWithText(EngineButton, 'External Stockfish'), findsOne);
+    expect(find.widgetWithText(EngineButton, 'External…'), findsOne);
     expect(find.text('EXT'), findsNothing);
 
     await tester.longPress(
@@ -193,51 +192,4 @@ void main() {
       findsOne,
     );
   });
-
-  testWidgets('A long external engine name fits the bottom bar', (tester) async {
-    const name = 'Personal MBP | stockfish 17.1 with 32 threads, 4 GB of hash and a long name';
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
-    final engine = testExternalEngine.copyWith(name: name);
-    const filters = (
-      context: EvaluationContext(
-        id: StringId('test'),
-        variant: Variant.standard,
-        initialPosition: Chess.initial,
-      ),
-      path: null,
-    );
-
-    final app = await makeTestProviderScopeApp(
-      tester,
-      overrides: {
-        engineEvaluationProvider: engineEvaluationProvider.overrideWith(
-          (ref, _) => (
-            engine: const AsyncData(name),
-            engineSpec: ExternalEngineSpec(engine),
-            eval: null,
-            isComputing: false,
-            currentWork: null,
-          ),
-        ),
-      },
-      home: Scaffold(
-        bottomNavigationBar: BottomBar(
-          cupertinoGlass: true,
-          children: [
-            BottomBarButton(onTap: () {}, label: 'Menu', icon: Icons.menu),
-            EngineButton(filters: filters, onTap: () {}),
-            BottomBarButton(onTap: () {}, label: 'Previous', icon: Icons.chevron_left),
-            BottomBarButton(onTap: () {}, label: 'Next', icon: Icons.chevron_right),
-          ],
-        ),
-      ),
-    );
-    await tester.pumpWidget(app);
-    await tester.pump();
-
-    expect(tester.takeException(), isNull);
-    expect(tester.getSize(find.text(name)).width, lessThan(390));
-  }, variant: const TargetPlatformVariant({TargetPlatform.iOS, TargetPlatform.android}));
 }

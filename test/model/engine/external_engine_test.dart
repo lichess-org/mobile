@@ -23,4 +23,28 @@ void main() {
     expect(testExternalEngine.supports(Variant.fromPosition), isTrue);
     expect(testExternalEngine.supports(Variant.atomic), isFalse);
   });
+
+  test('shortName is the whole name when it has up to 9 characters', () {
+    final engine = testExternalEngine.copyWith(name: 'Stockfish');
+
+    expect(engine.shortName, 'Stockfish');
+  });
+
+  test('shortName ends a longer name with an ellipsis after 8 characters', () {
+    final engine = testExternalEngine.copyWith(name: 'Stockfish 17.1');
+
+    expect(engine.shortName, 'Stockfis…');
+  });
+
+  test('shortName leaves no space before the ellipsis', () {
+    final engine = testExternalEngine.copyWith(name: 'Desktop Stockfish');
+
+    expect(engine.shortName, 'Desktop…');
+  });
+
+  test('shortName counts an emoji as one character', () {
+    final engine = testExternalEngine.copyWith(name: 'Rocket 🚀🚀🚀🚀');
+
+    expect(engine.shortName, 'Rocket 🚀…');
+  });
 }

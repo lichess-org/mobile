@@ -113,7 +113,7 @@ class const EngineButton({
 
     final engineLabel =
         engineShortLabel(engine?.value, spec: engineSpec) ??
-        chosenExternalEngine?.name ??
+        chosenExternalEngine?.shortName ??
         prefs.enginePref.shortLabel;
     final engineLabelStyle = TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: textColor);
 
@@ -135,43 +135,25 @@ class const EngineButton({
                 children: [
                   chip,
                   // The net size goes on its own line, to keep the capsule narrow.
-                  Flexible(
-                    child: Text(
-                      engineLabel.replaceFirst(' $lightNetSizeMB', '\n$lightNetSizeMB'),
-                      style: engineLabelStyle.copyWith(height: 1.1),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Text(
+                    engineLabel.replaceFirst(' $lightNetSizeMB', '\n$lightNetSizeMB'),
+                    style: engineLabelStyle.copyWith(height: 1.1),
                   ),
                 ],
               ),
             )
-          : LayoutBuilder(
-              builder: (context, constraints) => Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  SemanticIconButton(
-                    semanticsLabel: context.l10n.toggleLocalEvaluation,
-                    onPressed: onTap,
-                    onLongPress: showPopover,
-                    icon: chip,
-                  ),
-                  Positioned(
-                    bottom: -6,
-                    // No wider than the button's place in the bar.
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: constraints.maxWidth),
-                      child: Text(
-                        engineLabel,
-                        style: engineLabelStyle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          : Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                SemanticIconButton(
+                  semanticsLabel: context.l10n.toggleLocalEvaluation,
+                  onPressed: onTap,
+                  onLongPress: showPopover,
+                  icon: chip,
+                ),
+                Positioned(bottom: -6, child: Text(engineLabel, style: engineLabelStyle)),
+              ],
             ),
     );
   }
