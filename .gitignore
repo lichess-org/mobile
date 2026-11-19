@@ -48,3 +48,9 @@ doc/api/
 .cache/
 # Widget Preview related
 .widget_preview/
+
+# Patrol
+**/test_bundle.dart
+**/patrol_test_bundle.dart
+.patrol.env
+patrol.log
