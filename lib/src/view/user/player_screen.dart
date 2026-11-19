@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
@@ -22,34 +21,24 @@ class const PlayerScreen({super.key}) extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return FocusDetector(
-      onFocusRegained: () {
-        ref.read(onlineFriendsProvider.notifier).startWatchingFriends();
-      },
-      onFocusLost: () {
-        if (context.mounted) {
-          ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
-        }
-      },
-      child: PlatformScaffold(
-        appBar: PlatformAppBar(
-          title: Text(context.l10n.players),
-          largeTitle: true,
-          actions: [
-            SearchHeroButton(
-              heroTag: SearchScreen.heroTag,
-              onPressed: () => Navigator.of(context).push(
-                SearchScreen.buildRoute(
-                  onUserTap: (user) {
-                    Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
-                  },
-                ),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.players),
+        largeTitle: true,
+        actions: [
+          SearchHeroButton(
+            heroTag: SearchScreen.heroTag,
+            onPressed: () => Navigator.of(context).push(
+              SearchScreen.buildRoute(
+                onUserTap: (user) {
+                  Navigator.of(context).push(UserOrProfileScreen.buildRoute(user));
+                },
               ),
             ),
-          ],
-        ),
-        body: const _Body(),
+          ),
+        ],
       ),
+      body: const _Body(),
     );
   }
 }
