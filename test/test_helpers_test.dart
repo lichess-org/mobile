@@ -2,8 +2,8 @@ import 'dart:ui' as ui;
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -52,7 +52,8 @@ void main() {
     await tester.runAsync(() async {
       await WakelockPlus.enable();
       await WakelockPlus.disable();
-      await clearAndroidBoardGesturesExclusion();
+      await const MethodChannel('mobile.lichess.org/gestures_exclusion')
+          .invokeMethod<void>('setSystemGestureExclusionRects', <Object>[]);
     });
     expect(tester.takeException(), isNull);
   }, variant: kPlatformVariant);
