@@ -125,6 +125,75 @@ void main() {
   }
 
   group('AndroidBoardGesturesExclusion', () {
+    testWidgets('refreshes edge protection when only a player table relayouts', (tester) async {
+      await prepareLayoutGolden(tester);
+      final playerHeight = ValueNotifier(30.0);
+      addTearDown(playerHeight.dispose);
+      final app = await makeTestProviderScope(
+        tester,
+        surfaceSize: const Size(360, 456),
+        devicePixelRatio: 1,
+        child: MaterialApp(
+          home: Scaffold(
+            body: GameLayout(
+              orientation: Side.white,
+              boardParams: _interactiveParams,
+              topTable: ValueListenableBuilder(
+                valueListenable: playerHeight,
+                builder: (_, height, _) => SizedBox(height: height),
+              ),
+              bottomTable: const SizedBox(height: 40),
+              userActionsBar: const SizedBox(height: 56),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      final layoutState = tester.state(find.byType(GameLayout));
+      final boardState = tester.state(find.byType(BoardWidget));
+      final controller = tester.widget<Chessboard>(find.byType(Chessboard)).controller;
+      var controllerNotifications = 0;
+      void onControllerChanged() => controllerNotifications++;
+      controller.addListener(onControllerChanged);
+      addTearDown(() => controller.removeListener(onControllerChanged));
+      var previousBoard = tester.getRect(find.byType(Chessboard));
+      expect(previousBoard, const Rect.fromLTWH(42, 62, 276, 276));
+
+      for (final height in [80.0, 30.0]) {
+        final previousRects = lastSentRects(tester);
+        playerHeight.value = height;
+        await tester.pumpAndSettle();
+        final board = tester.getRect(find.byType(Chessboard));
+        expect(board.size, previousBoard.size);
+        expect(board.top, height == 80 ? 80 : 62);
+        expect(tester.state(find.byType(GameLayout)), same(layoutState));
+        expect(tester.state(find.byType(BoardWidget)), same(boardState));
+        expect(tester.widget<Chessboard>(find.byType(Chessboard)).controller, same(controller));
+        expect(controllerNotifications, 0);
+        expect(find.byType(SingleChildScrollView), findsNothing);
+        expect(
+          lastSentRects(tester),
+          isNot(previousRects),
+          reason: 'A position-only table relayout must refresh native rectangles.',
+        );
+        expectRects(lastSentRects(tester), [
+          for (final square in [Square.a1, Square.a2])
+            if (squareRect(tester, square) case final rect)
+              Rect.fromLTRB(0, rect.top, rect.right, rect.bottom),
+          for (final square in [Square.h1, Square.h2])
+            if (squareRect(tester, square) case final rect)
+              Rect.fromLTRB(rect.left, rect.top, 360, rect.bottom),
+        ]);
+        await expectLayoutGolden(
+          find.byType(GameLayout),
+          '../../build/compact-layout/position-only-relayout-$height',
+        );
+        previousBoard = board;
+      }
+      expect(tester.takeException(), isNull);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
     testWidgets('restores edge protection when portrait controls stop overflowing', (tester) async {
       final playerHeight = ValueNotifier(100.0);
       addTearDown(playerHeight.dispose);

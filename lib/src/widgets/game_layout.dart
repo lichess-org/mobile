@@ -202,11 +202,12 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
   final _topTableKey = GlobalKey();
   final _bottomTableKey = GlobalKey();
   final _portraitTableKey = GlobalKey();
-  bool _portraitOverflows = false;
+  _PortraitGeometry? _portraitGeometry;
 
-  void _setPortraitOverflow(bool overflows) {
-    if (!mounted || overflows == _portraitOverflows) return;
-    setState(() => _portraitOverflows = overflows);
+  void _setPortraitGeometry(_PortraitGeometry geometry) {
+    if (!mounted || geometry == _portraitGeometry) return;
+    // Refresh the board wrapper's Android exclusion rects after position-only table relayouts.
+    setState(() => _portraitGeometry = geometry);
   }
 
   /// The controller created and owned by this state, used only in the
@@ -563,7 +564,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
           final table = _PortraitTable(
             key: _portraitTableKey,
             viewportHeight: constraints.maxHeight,
-            onOverflowChanged: _setPortraitOverflow,
+            onGeometryChanged: _setPortraitGeometry,
             layout: _PortraitLayout(
               maxBoardSize: effectiveBoardSize,
               topTableFlex: widget.topTableFlex,
@@ -677,7 +678,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
           );
           // A fitting board must not have a scroll ancestor: Android uses that to protect
           // edge-piece drags from system navigation. Keep the table mounted when overflow changes.
-          return _portraitOverflows
+          return (_portraitGeometry?.overflows ?? false)
               ? SingleChildScrollView(primary: false, child: table)
               : ClipRect(child: table);
         }
@@ -820,45 +821,47 @@ class _PortraitParentData() extends ContainerBoxParentData<RenderBox> {
   _PortraitSlot? id;
 }
 
+typedef _PortraitGeometry = ({bool overflows, Rect boardRect});
+
 class const _PortraitTable({
   required final double viewportHeight,
   required final _PortraitLayout layout,
-  required final ValueChanged<bool> onOverflowChanged,
+  required final ValueChanged<_PortraitGeometry> onGeometryChanged,
   required super.children,
   super.key,
 }) extends MultiChildRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      _RenderPortraitTable(viewportHeight, layout, onOverflowChanged);
+      _RenderPortraitTable(viewportHeight, layout, onGeometryChanged);
 
   @override
   void updateRenderObject(BuildContext context, _RenderPortraitTable renderObject) {
-    renderObject.updateLayout(viewportHeight, layout, onOverflowChanged);
+    renderObject.updateLayout(viewportHeight, layout, onGeometryChanged);
   }
 }
 
 class _RenderPortraitTable(
   double viewportHeight,
   _PortraitLayout layout,
-  ValueChanged<bool> onOverflowChanged,
+  ValueChanged<_PortraitGeometry> onGeometryChanged,
 ) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _PortraitParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _PortraitParentData> {
   double _viewportHeight = viewportHeight;
   _PortraitLayout _layout = layout;
-  ValueChanged<bool> _onOverflowChanged = onOverflowChanged;
-  bool? _reportedOverflow;
+  ValueChanged<_PortraitGeometry> _onGeometryChanged = onGeometryChanged;
+  _PortraitGeometry? _reportedGeometry;
 
   void updateLayout(
     double viewportHeight,
     _PortraitLayout layout,
-    ValueChanged<bool> onOverflowChanged,
+    ValueChanged<_PortraitGeometry> onGeometryChanged,
   ) {
     final changed = viewportHeight != _viewportHeight || layout.shouldRelayout(_layout);
     _viewportHeight = viewportHeight;
     _layout = layout;
-    _onOverflowChanged = onOverflowChanged;
+    _onGeometryChanged = onGeometryChanged;
     if (changed) markNeedsLayout();
   }
 
@@ -878,11 +881,15 @@ class _RenderPortraitTable(
       children,
     );
     size = constraints.constrain(contentSize);
-    final overflows = contentSize.height > _viewportHeight;
-    if (overflows != _reportedOverflow) {
-      _reportedOverflow = overflows;
+    final board = children[_PortraitSlot.board]!;
+    final geometry = (
+      overflows: contentSize.height > _viewportHeight,
+      boardRect: (board.parentData! as _PortraitParentData).offset & board.size,
+    );
+    if (geometry != _reportedGeometry) {
+      _reportedGeometry = geometry;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (attached && _reportedOverflow == overflows) _onOverflowChanged(overflows);
+        if (attached && _reportedGeometry == geometry) _onGeometryChanged(geometry);
       });
     }
   }
