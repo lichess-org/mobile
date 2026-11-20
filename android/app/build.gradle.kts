@@ -84,6 +84,25 @@ flutter {
 }
 
 dependencies {
+    // See https://pub.dev/packages/unifiedpush#the-build-fails-because-of-duplicate-classes
+    //
+    // Applying this change only to the UnifiedPush connector's dependency metadata avoids affecting
+    // the tink-android dependency declared independently by other plugins, such as
+    // flutter_secure_storage.
+    components {
+        withModule("org.unifiedpush.android:connector") {
+            allVariants {
+                withDependencies {
+                    val tink = find { it.group == "com.google.crypto.tink" && it.name == "tink" }
+                    if (tink != null) {
+                        val version = tink.versionConstraint.requiredVersion
+                        remove(tink)
+                        add("com.google.crypto.tink:tink-android:$version")
+                    }
+                }
+            }
+        }
+    }
     // Dependency required by flutter_local_notifications package
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("androidx.core:core-splashscreen:1.0.1")

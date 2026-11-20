@@ -1,0 +1,12 @@
+# Empty stand-in for unifiedpush_linux, used through `dependency_overrides` in the app pubspec.
+#
+# unifiedpush (6.2.0+) depends on unifiedpush_linux without importing it, and unifiedpush_linux
+# brings in webcrypto, a plugin that only builds with CocoaPods on iOS and builds BoringSSL on
+# Android. The app has no Linux build, so this package replaces it with nothing.
+name: unifiedpush_linux
+description: Empty stand-in for unifiedpush_linux, the app has no Linux build.
+version: 1.0.0
+publish_to: "none"
+
+environment:
+  sdk: ^3.0.0

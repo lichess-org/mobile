@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
@@ -12,7 +11,10 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan;
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart' show relativeDate;
+import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
+
+final notificationLogger = Logger('NotificationService');
 
 /// A notification channel, shared by one or more [LocalNotification] types and FCM messages.
 ///
@@ -61,33 +63,45 @@ enum NotificationChannel(final Importance importance) {
       AndroidNotificationChannel(name, label(l10n), importance: importance);
 }
 
-/// FCM Messages
+/// Push Messages
 ///////////////
 
-/// Parsed data from an FCM message.
+/// A push message received from either FCM or UnifiedPush
+class const PushMessage({
+  required final Map<String, dynamic> data,
+  final PushNotification? notification,
+});
+
+/// The notification contained in a [PushMessage]
+class const PushNotification({final String? title, final String? body});
+
+/// Parsed data from a [PushMessage].
 ///
 /// Messages received from Firebase Cloud Messaging (FCM) service support different
 /// kind of use cases, depending on the message content:
 ///
-/// * when no [RemoteMessage.notification] is present, the message is a data message,
+/// * when no [PushMessage.notification] is present, the message is a data message,
 ///   and the application can handle it in the foreground or background; It typically
 ///   serves to update the application state silently.
 ///
-/// * when a [RemoteMessage.notification] is present, the message is a notification message.
+/// * when a [PushMessage.notification] is present, the message is a notification message.
 ///   If the application is in the background, the system displays the notification to the user.
 ///   If the application is in the foreground, the system does not display the notification
 ///   automatically, but we might want to display it ourselves.
-///   A notification message can contain additional data in the [RemoteMessage.data] field,
+///   A notification message can contain additional data in the [PushMessage.data] field,
 ///   which can also be used to update the application state.
+///
+/// Messages received from UnifiedPush mimics the FCM behaviour. Unlike FCM, the system never
+/// displays the notification to the user and has to be displayed by the app.
 @immutable
-sealed class const FcmMessage() {
-  RemoteNotification? get notification;
+sealed class const ParsedPushMessage() {
+  PushNotification? get notification;
 
-  factory fromRemoteMessage(RemoteMessage message) {
+  factory fromPushMessage(PushMessage message) {
     final messageType = message.data['lichess.type'] as String?;
 
     if (messageType == null) {
-      return UnhandledFcmMessage(message.data);
+      return UnhandledPushMessage(message.data);
     } else {
       switch (messageType) {
         case 'corresAlarm':
@@ -102,50 +116,53 @@ sealed class const FcmMessage() {
             final game = round != null
                 ? PlayableGame.fromServerJson(jsonDecode(round) as Map<String, dynamic>)
                 : null;
-            return CorresGameUpdateFcmMessage(
+            return CorresGameUpdatePushMessage(
               fullId,
               game: game,
               notification: message.notification,
             );
           } else {
-            return MalformedFcmMessage(message.data);
+            return MalformedPushMessage(message.data);
           }
         case 'newMessage':
           final conversationId = message.data['lichess.threadId'] as String?;
           if (conversationId != null) {
-            return NewMessageFcmMessage(UserId(conversationId), notification: message.notification);
+            return NewMessagePushMessage(
+              UserId(conversationId),
+              notification: message.notification,
+            );
           } else {
-            return MalformedFcmMessage(message.data);
+            return MalformedPushMessage(message.data);
           }
         case 'challengeCreate':
           final challengeId = message.data['lichess.challengeId'] as String?;
           if (challengeId != null) {
-            return CorresChallengeCreateFcmMessage(
+            return CorresChallengeCreatePushMessage(
               ChallengeId(challengeId),
               notification: message.notification,
             );
           } else {
-            return MalformedFcmMessage(message.data);
+            return MalformedPushMessage(message.data);
           }
         case 'challengeAccept':
           final challengeId = message.data['lichess.challengeId'] as String?;
           final fullId = message.data['lichess.fullId'] as String?;
           if (challengeId != null && fullId != null) {
-            return CorresChallengeAcceptFcmMessage(
+            return CorresChallengeAcceptPushMessage(
               ChallengeId(challengeId),
               GameFullId(fullId),
               notification: message.notification,
             );
           } else {
-            return MalformedFcmMessage(message.data);
+            return MalformedPushMessage(message.data);
           }
         case 'broadcast':
           final rawUrl = message.data['lichess.url'] as String?;
-          if (rawUrl == null) return MalformedFcmMessage(message.data);
+          if (rawUrl == null) return MalformedPushMessage(message.data);
           final url = Uri.tryParse(rawUrl);
           switch (url) {
             case Uri(pathSegments: ['broadcast', _, _, final roundId]):
-              return BroadcastRoundFcmMessage(
+              return BroadcastRoundPushMessage(
                 BroadcastRoundId(roundId),
                 notification: message.notification,
               );
@@ -155,127 +172,149 @@ sealed class const FcmMessage() {
             ):
               final side = Side.values.firstWhereOrNull((s) => s.name == pov);
               if (side == null) {
-                return MalformedFcmMessage(message.data);
+                return MalformedPushMessage(message.data);
               }
 
-              return BroadcastPlayerFollowFcmMessage(
+              return BroadcastPlayerFollowPushMessage(
                 BroadcastRoundId(roundId),
                 BroadcastGameId(gameId),
                 side,
                 notification: message.notification,
               );
             case _:
-              return MalformedFcmMessage(message.data);
+              return MalformedPushMessage(message.data);
           }
         case 'recap':
           final rawYear = message.data['lichess.year'] as String?;
           final year = rawYear == null ? null : int.tryParse(rawYear);
           if (year != null) {
-            return RecapFcmMessage(year, notification: message.notification);
+            return RecapPushMessage(year, notification: message.notification);
           } else {
-            return MalformedFcmMessage(message.data);
+            return MalformedPushMessage(message.data);
           }
         default:
-          return UnhandledFcmMessage(message.data);
+          return UnhandledPushMessage(message.data);
       }
     }
   }
 
+  /// Whether the message contains a notification that can be displayed
+  bool get hasDisplayableNotification {
+    final n = notification;
+    if (n == null) return false;
+    if (n.title == null || n.body == null) {
+      notificationLogger.severe('Received a notification with no title or body ($type).');
+      return false;
+    }
+    return true;
+  }
+
+  /// The type of push message
+  String get type => switch (this) {
+    NewMessagePushMessage() => 'NewMessagePushMessage',
+    CorresGameUpdatePushMessage() => 'CorresGameUpdatePushMessage',
+    CorresChallengeCreatePushMessage() => 'CorresChallengeCreatePushMessage',
+    CorresChallengeAcceptPushMessage() => 'CorresChallengeAcceptPushMessage',
+    BroadcastRoundPushMessage() => 'BroadcastRoundPushMessage',
+    BroadcastPlayerFollowPushMessage() => 'BroadcastPlayerFollowPushMessage',
+    RecapPushMessage() => 'RecapPushMessage',
+    UnhandledPushMessage() => 'UnhandledPushMessage',
+    MalformedPushMessage() => 'MalformedPushMessage',
+  };
+
   /// The local notification corresponding to this message, if it has one.
-  ///
-  /// Returns `null` for [UnhandledFcmMessage] and [MalformedFcmMessage], the only types
-  /// without a local notification representation.
-  ///
-  /// Types that display a server-provided title and body fall back to empty strings when
-  /// the message carries no platform notification, instead of failing.
   LocalNotification? toLocalNotification() => switch (this) {
-    final NewMessageFcmMessage m => NewMessageNotification.fromFcmMessage(m),
-    final CorresGameUpdateFcmMessage m => CorresGameUpdateNotification.fromFcmMessage(m),
-    final CorresChallengeCreateFcmMessage m => CorresChallengeCreatedNotification.fromFcmMessage(m),
-    final CorresChallengeAcceptFcmMessage m => CorresChallengeAcceptedNotification.fromFcmMessage(
+    final NewMessagePushMessage m => NewMessageNotification.fromPushMessage(m),
+    final CorresGameUpdatePushMessage m => CorresGameUpdateNotification.fromPushMessage(m),
+    final CorresChallengeCreatePushMessage m => CorresChallengeCreatedNotification.fromPushMessage(
       m,
     ),
-    final BroadcastRoundFcmMessage m => BroadcastRoundNotification.fromFcmMessage(m),
-    final BroadcastPlayerFollowFcmMessage m => BroadcastPlayerFollowNotification.fromFcmMessage(m),
-    final RecapFcmMessage m => RecapNotification.fromFcmMessage(m),
-    UnhandledFcmMessage() || MalformedFcmMessage() => null,
+    final CorresChallengeAcceptPushMessage m => CorresChallengeAcceptedNotification.fromPushMessage(
+      m,
+    ),
+    final BroadcastRoundPushMessage m => BroadcastRoundNotification.fromPushMessage(m),
+    final BroadcastPlayerFollowPushMessage m => BroadcastPlayerFollowNotification.fromPushMessage(
+      m,
+    ),
+    final RecapPushMessage m => RecapNotification.fromPushMessage(m),
+    UnhandledPushMessage() || MalformedPushMessage() => null,
   };
 }
 
-/// An [FcmMessage] that represents a new message in a private conversation.
+/// A [ParsedPushMessage] that represents a new message in a private conversation.
 @immutable
-class const NewMessageFcmMessage(
+class const NewMessagePushMessage(
   final UserId conversationId, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage {
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage {
   @override
-  String toString() => 'NewMessageFcmMessage(conversationId: $conversationId)';
+  String toString() => 'NewMessagePushMessage(conversationId: $conversationId)';
 }
 
-/// An [FcmMessage] that represents a correspondence game update.
+/// A [ParsedPushMessage] that represents a correspondence game update.
 @immutable
-class const CorresGameUpdateFcmMessage(
+class const CorresGameUpdatePushMessage(
   final GameFullId fullId, {
   required final PlayableGame? game,
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] sent when a correspondence challenge is created.
+/// A [ParsedPushMessage] sent when a correspondence challenge is created.
 ///
 /// The server sends it for any challenge without a clock (correspondence or unlimited), never for
 /// real time challenges.
 @immutable
-class const CorresChallengeCreateFcmMessage(
+class const CorresChallengeCreatePushMessage(
   final ChallengeId id, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] sent when a correspondence challenge is accepted.
+/// A [ParsedPushMessage] sent when a correspondence challenge is accepted.
 ///
 /// The server sends it for any challenge without a clock (correspondence or unlimited), never for
 /// real time challenges, and only when the challenger plays white.
 @immutable
-class const CorresChallengeAcceptFcmMessage(
+class const CorresChallengeAcceptPushMessage(
   final ChallengeId id,
   final GameFullId fullId, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] sent when a broadcast round a user subscribed to starts.
+/// A [ParsedPushMessage] sent when a broadcast round a user subscribed to starts.
 @immutable
-class const BroadcastRoundFcmMessage(
+class const BroadcastRoundPushMessage(
   final BroadcastRoundId roundId, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] sent when a followed player starts a broadcast game.
+/// A [ParsedPushMessage] sent when a followed player starts a broadcast game.
 @immutable
-class const BroadcastPlayerFollowFcmMessage(
+class const BroadcastPlayerFollowPushMessage(
   final BroadcastRoundId roundId,
   final BroadcastGameId gameId,
   final Side pov, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] sent when the year-end recap is ready.
+/// A [ParsedPushMessage] sent when the year-end recap is ready.
 @immutable
-class const RecapFcmMessage(
+class const RecapPushMessage(
   final int year, {
-  @override required final RemoteNotification? notification,
-}) extends FcmMessage;
+  @override required final PushNotification? notification,
+}) extends ParsedPushMessage;
 
-/// An [FcmMessage] that could not be parsed.
+/// A [ParsedPushMessage] that could not be parsed.
 @immutable
-class const MalformedFcmMessage(final Map<String, dynamic> data) extends FcmMessage {
+class const MalformedPushMessage(final Map<String, dynamic> data) extends ParsedPushMessage {
   @override
-  RemoteNotification? get notification => null;
+  PushNotification? get notification => null;
 }
 
-/// An [FcmMessage] that is not handled by the application.
+/// A [ParsedPushMessage] that is not handled by the application.
 @immutable
-class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMessage {
+class const UnhandledPushMessage(final Map<String, dynamic> data) extends ParsedPushMessage {
   @override
-  RemoteNotification? get notification => null;
+  PushNotification? get notification => null;
 }
 
 /// Local Notifications
@@ -413,8 +452,9 @@ class const PlaybanNotification(final TemporaryBan playban) extends LocalNotific
 /// A notification for a new message in a private conversation.
 ///
 /// This notification is shown when a new message is received in a private conversation.
-/// It is created from a [NewMessageFcmMessage] and contains the conversation ID. The title and
-/// message are the same as the title and body of the FCM message's [RemoteNotification].
+/// It is created from a [NewMessagePushMessage] and contains the conversation ID. The title and
+/// message are the same as the title and body of the push message's [PushMessage.notification]
+/// field.
 class const NewMessageNotification(
   final UserId conversationId,
   final String _title,
@@ -427,7 +467,7 @@ class const NewMessageNotification(
     return NewMessageNotification(conversationId, title, message);
   }
 
-  factory fromFcmMessage(NewMessageFcmMessage message) {
+  factory fromPushMessage(NewMessagePushMessage message) {
     return NewMessageNotification(
       message.conversationId,
       message.notification?.title ?? '',
@@ -467,10 +507,10 @@ class const NewMessageNotification(
 /// A notification for a correspondence game update.
 ///
 /// This notification is shown when a correspondence game is updated on the server
-/// and a FCM message is received and contains itself a notification.
+/// and a push message is received and contains itself a notification.
 ///
 /// Fields [title] and [body] are dynamic and part of the payload because they
-/// are generated server side and are included in the FCM message's [RemoteMessage.notification] field.
+/// are generated server side and are included in the push message's [PushMessage.notification] field.
 class const CorresGameUpdateNotification(
   final GameFullId fullId,
   final String _title,
@@ -483,7 +523,7 @@ class const CorresGameUpdateNotification(
     return CorresGameUpdateNotification(gameId, title, body);
   }
 
-  factory fromFcmMessage(CorresGameUpdateFcmMessage message) {
+  factory fromPushMessage(CorresGameUpdatePushMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
     return CorresGameUpdateNotification(message.fullId, title, body);
@@ -535,7 +575,7 @@ class const CorresChallengeAcceptedNotification(
     return CorresChallengeAcceptedNotification(gameId, title, body);
   }
 
-  factory fromFcmMessage(CorresChallengeAcceptFcmMessage message) {
+  factory fromPushMessage(CorresChallengeAcceptPushMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
     return CorresChallengeAcceptedNotification(message.fullId, title, body);
@@ -588,7 +628,7 @@ class const CorresChallengeCreatedNotification(
     return CorresChallengeCreatedNotification(challengeId, title, body);
   }
 
-  factory fromFcmMessage(CorresChallengeCreateFcmMessage message) {
+  factory fromPushMessage(CorresChallengeCreatePushMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
     return CorresChallengeCreatedNotification(message.id, title, body);
@@ -701,7 +741,7 @@ class const AnnounceNotification(
 ///
 /// Shown when a challenge, real time or correspondence, is received from the server through the
 /// socket while the app is in the foreground. It is the only notification for real time
-/// challenges: the server sends no FCM message for them.
+/// challenges: the server sends no push message for them.
 class const ChallengeNotification(final Challenge challenge) extends LocalNotification {
   factory fromJson(Map<String, dynamic> json) {
     final challenge = Challenge.fromJson(json['challenge'] as Map<String, dynamic>);
@@ -812,7 +852,7 @@ class const BroadcastRoundNotification(
     return BroadcastRoundNotification(roundId, title, body);
   }
 
-  factory fromFcmMessage(BroadcastRoundFcmMessage broadcast) {
+  factory fromPushMessage(BroadcastRoundPushMessage broadcast) {
     return BroadcastRoundNotification(
       broadcast.roundId,
       broadcast.notification?.title ?? '',
@@ -868,7 +908,7 @@ class const BroadcastPlayerFollowNotification(
     return BroadcastPlayerFollowNotification(roundId, gameId, pov, title, body);
   }
 
-  factory fromFcmMessage(BroadcastPlayerFollowFcmMessage broadcast) {
+  factory fromPushMessage(BroadcastPlayerFollowPushMessage broadcast) {
     return BroadcastPlayerFollowNotification(
       broadcast.roundId,
       broadcast.gameId,
@@ -918,7 +958,7 @@ class const RecapNotification(final int year) extends LocalNotification {
     return RecapNotification(year);
   }
 
-  factory fromFcmMessage(RecapFcmMessage message) {
+  factory fromPushMessage(RecapPushMessage message) {
     return RecapNotification(message.year);
   }
 

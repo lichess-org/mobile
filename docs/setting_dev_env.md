@@ -262,7 +262,7 @@ If you don't own an iOS device, use it to test every change you submit, especial
 Start the preview entry point (debug builds only):
 
 ```bash
-flutter run -t lib/device_preview_main.dart
+flutter run -t lib/main_device_preview.dart
 ```
 
 A tablet, or an emulator with a large screen, gives the most room for the simulated device.

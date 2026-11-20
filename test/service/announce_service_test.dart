@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/announce_service.dart';
-import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/notification_service/notification_service.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../network/fake_websocket_channel.dart';
@@ -348,7 +348,7 @@ void main() {
 
       // simulate the user tapping the dismiss action button
       const notification = AnnounceNotification('Lichess will restart');
-      NotificationService.onDidReceiveNotificationResponse(
+      onDidReceiveNotificationResponse(
         NotificationResponse(
           notificationResponseType: NotificationResponseType.selectedNotificationAction,
           id: AnnounceNotification.notificationId,
