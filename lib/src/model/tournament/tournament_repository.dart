@@ -78,7 +78,7 @@ class TournamentRepository(final http.Client client, final Aggregator aggregator
     );
   }
 
-  Future<Tournament> reload(Tournament tournament) {
+  Future<Map<String, dynamic>> reload(Tournament tournament) {
     return client.readJson(
       Uri(
         path: tournament.reloadEndpoint ?? '/api/tournament/${tournament.id}',
@@ -88,7 +88,7 @@ class TournamentRepository(final http.Client client, final Aggregator aggregator
         },
       ),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) => tournament.updateFromPartialServerJson(json),
+      mapper: (Map<String, dynamic> json) => json,
     );
   }
 
