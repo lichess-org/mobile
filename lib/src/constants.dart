@@ -28,6 +28,11 @@ const kLichessTablebaseHost = String.fromEnvironment(
   defaultValue: 'tablebase.lichess.org',
 );
 
+const kLichessExternalEngineEndpoint = String.fromEnvironment(
+  'LICHESS_EXTERNAL_ENGINE_ENDPOINT',
+  defaultValue: 'https://engine.lichess.ovh',
+);
+
 const kLichessCustomUriSchemeName = 'org.lichess.mobile';
 
 const kLichessClientId = 'lichess_mobile';

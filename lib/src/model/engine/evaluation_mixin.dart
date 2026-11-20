@@ -104,6 +104,9 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   EngineEvaluationPrefState get evaluationPrefs => ref.read(engineEvaluationPreferencesProvider);
 
+  /// No cloud evals while an external engine is in use: the user chose that engine's analysis.
+  bool get _usesExternalEngine => _evaluator.usesExternalEngine;
+
   EngineBudget get budget => ref.read(engineBudgetProvider);
 
   EngineEvaluationPreferences get _evaluationPreferencesNotifier =>
@@ -234,7 +237,8 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
     final delayLocalEngine =
         state.requireValue.alwaysRequestCloudEval &&
-        evaluationPrefs.engineSearchTime != kMaxEngineSearchTime;
+        evaluationPrefs.engineSearchTime != kMaxEngineSearchTime &&
+        !_usesExternalEngine;
 
     _evalRequestDebounce(() {
       _sendEvalGetEvent();
@@ -260,6 +264,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
   }
 
   void _handleEvalHitEvent(SocketEvent event) {
+    if (_usesExternalEngine) return;
     final path = pick(event.data, 'path').asUciPathOrThrow();
     final nodes = pick(event.data, 'knodes').asIntOrThrow() * 1000;
     final depth = pick(event.data, 'depth').asIntOrThrow();
@@ -318,6 +323,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
 
   void _sendEvalGetEvent() {
     if (!state.requireValue.isEngineAvailable(evaluationPrefs)) return;
+    if (_usesExternalEngine) return;
     if (evaluationPrefs.engineSearchTime == kMaxEngineSearchTime) return;
     if (!_canCloudEval()) return;
     final curPosition = state.requireValue.currentPosition;
@@ -356,7 +362,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       // If we have an already good enough eval in cache, skip the evaluation
       switch (work.evalCache) {
         case final LocalEval localEval when localEval.searchTime >= work.searchTime:
-        case CloudEval _ when goDeeper == false:
+        case CloudEval _ when goDeeper == false && !_usesExternalEngine:
           return;
         case _:
           break;
@@ -375,7 +381,7 @@ mixin EngineEvaluationMixin<T extends EvaluationMixinState<T>> on AnyNotifier<As
       bool isSameEvalString = true;
       positionTree.updateAt(path, (node) {
         final nodeEval = node.eval;
-        if (nodeEval is CloudEval) {
+        if (nodeEval is CloudEval && !_usesExternalEngine) {
           if (nodeEval.depth >= eval.depth &&
               evalWork.isDeeper != true &&
               evalWork.searchTime != kMaxEngineSearchTime) {
