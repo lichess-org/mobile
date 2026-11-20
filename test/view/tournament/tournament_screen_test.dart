@@ -992,6 +992,40 @@ void main() {
     expect(find.text('TestPlayer'), findsNothing);
   });
 
+  testWidgets('Numbers games from the total when fewer pairings are shown', (tester) async {
+    final playerResponse = testTournamentPlayerResponse.replaceFirst('"game": 3', '"game": 62');
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/tournament/82QbxlJb') {
+        return mockResponse(makeTournamentJson(standings: makeTestPlayers(10), nbPlayers: 11), 200);
+      }
+      if (request.url.path == '/tournament/82QbxlJb/player/player0') {
+        return mockResponse(playerResponse, 200);
+      }
+      return mockResponse('', 404);
+    });
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const TournamentScreen(id: TournamentId('82QbxlJb')),
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith((ref) {
+          return LichessClient(mockClient, ref);
+        }),
+      },
+    );
+    await tester.pumpWidget(app);
+    await tester.pump();
+    await tester.tap(find.text('player0'));
+    await tester.pumpAndSettle();
+
+    for (final (index, opponent) in ['Opponent1', 'Opponent2', 'Opponent3'].indexed) {
+      final tile = tester.widget<ListTile>(
+        find.ancestor(of: find.text(opponent), matching: find.byType(ListTile)),
+      );
+      expect((tile.leading! as Text).data, '${62 - index}');
+    }
+  });
+
   group('Team Battle Tournament', () {
     testWidgets('displays team battle info and standings', (WidgetTester tester) async {
       final mockClient = MockClient((request) {
