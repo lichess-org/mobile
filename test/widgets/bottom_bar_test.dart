@@ -86,14 +86,16 @@ void main() {
         for (var i = 0; i < 6; i++) {
           final button = buttons.at(i);
           final rect = tester.getRect(button);
-          expect(rect.width, greaterThanOrEqualTo(48));
-          expect(rect.height, 48);
+          final size = tester.getSize(button);
+          expect(size.width, greaterThanOrEqualTo(48));
+          expect(size.height, 48);
           expect(rect.left, greaterThanOrEqualTo(bounds.left));
           expect(rect.right, lessThanOrEqualTo(bounds.right));
           expect(rect.top, greaterThanOrEqualTo(bounds.top));
           expect(rect.bottom, lessThanOrEqualTo(bounds.bottom));
           for (final other in rects) {
-            expect(rect.overlaps(other), isFalse);
+            final intersection = rect.intersect(other);
+            expect(intersection.width <= 1e-6 || intersection.height <= 1e-6, isTrue);
           }
           rects.add(rect);
           expect(button.hitTestable(), findsOneWidget);

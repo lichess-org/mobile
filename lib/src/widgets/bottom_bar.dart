@@ -11,6 +11,7 @@ import 'package:material_ui/material_ui.dart';
 ///
 /// The height of the bar is [kBottomBarHeight] above the bottom safe area, except for the liquid
 /// glass bar ([heightOf]), and the font size scale factor is clamped to 1.4.
+/// Embedded glass bars can [wrap] to retain full-size buttons when space is limited.
 class BottomBar extends StatelessWidget {
   const new({
     required this.children,
