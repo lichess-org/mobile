@@ -201,13 +201,16 @@ void main() {
         tester,
         child: MaterialApp(
           home: Scaffold(
-            body: ValueListenableBuilder(
-              valueListenable: playerHeight,
-              builder: (_, height, _) => GameLayout(
-                orientation: Side.white,
-                boardParams: _interactiveParams,
-                topTable: SizedBox(height: height),
-                bottomTable: SizedBox(height: height),
+            body: GameLayout(
+              orientation: Side.white,
+              boardParams: _interactiveParams,
+              topTable: ValueListenableBuilder(
+                valueListenable: playerHeight,
+                builder: (_, height, _) => SizedBox(height: height),
+              ),
+              bottomTable: ValueListenableBuilder(
+                valueListenable: playerHeight,
+                builder: (_, height, _) => SizedBox(height: height),
               ),
             ),
           ),
@@ -215,17 +218,32 @@ void main() {
       );
       await tester.pumpWidget(app);
       await tester.pumpAndSettle();
+      final layoutState = tester.state(find.byType(GameLayout));
       final boardState = tester.state(find.byType(BoardWidget));
+      final controller = tester.widget<Chessboard>(find.byType(Chessboard)).controller;
+      var controllerNotifications = 0;
+      void onControllerChanged() => controllerNotifications++;
+      controller.addListener(onControllerChanged);
+      addTearDown(() => controller.removeListener(onControllerChanged));
       expect(lastSentRects(tester), hasLength(4));
+      expect(find.byType(SingleChildScrollView), findsNothing);
 
       playerHeight.value = 500;
       await tester.pumpAndSettle();
+      expect(tester.state(find.byType(GameLayout)), same(layoutState));
       expect(tester.state(find.byType(BoardWidget)), same(boardState));
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).controller, same(controller));
+      expect(find.byType(SingleChildScrollView), findsOneWidget);
+      expect(controllerNotifications, 0);
       expect(lastSentRects(tester), isEmpty);
 
       playerHeight.value = 100;
       await tester.pumpAndSettle();
+      expect(tester.state(find.byType(GameLayout)), same(layoutState));
       expect(tester.state(find.byType(BoardWidget)), same(boardState));
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).controller, same(controller));
+      expect(find.byType(SingleChildScrollView), findsNothing);
+      expect(controllerNotifications, 0);
       expectRects(lastSentRects(tester), [
         for (final square in [Square.a1, Square.a2, Square.h1, Square.h2])
           squareRect(tester, square),

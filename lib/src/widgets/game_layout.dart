@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -557,8 +558,12 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
               pocketsPadding;
 
           // Reserve vertical space for the top and bottom tables and the user actions bar if present.
+          final boardBorderSize = (settings.border?.width ?? 0) * 2;
           final maxAllowedBoardSize = maxHeight - widget.portraitBoardHeightReserve;
-          if (effectiveBoardSize > maxAllowedBoardSize) {
+          // A border needs a positive interior. Let measured content scroll if the cap cannot fit it.
+          if (effectiveBoardSize > maxAllowedBoardSize &&
+              (boardBorderSize == 0 ||
+                  maxAllowedBoardSize > boardBorderSize + precisionErrorTolerance)) {
             effectiveBoardSize = maxAllowedBoardSize;
           }
           final table = _PortraitTable(
@@ -567,6 +572,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
             onGeometryChanged: _setPortraitGeometry,
             layout: _PortraitLayout(
               maxBoardSize: effectiveBoardSize,
+              boardBorderSize: boardBorderSize,
               topTableFlex: widget.topTableFlex,
               bottomTableFlex: widget.bottomTableFlex,
               pocketSquareRatio: pocketSquareSize(boardSize: 1, isTablet: isTablet),
@@ -905,6 +911,7 @@ class _RenderPortraitTable(
 /// Measures the tables first so enlarged text takes space from the board, not other controls.
 class _PortraitLayout({
   required final double maxBoardSize,
+  required final double boardBorderSize,
   required final int topTableFlex,
   required final int bottomTableFlex,
   required final double pocketSquareRatio,
@@ -935,18 +942,15 @@ class _PortraitLayout({
     final hasPockets = hasChild(_PortraitSlot.topPockets);
     // Each pocket row grows with the board, so solve all three heights before laying them out.
     final pocketsPadding = hasPockets ? 2 * PocketsMenu.padding.vertical : 0.0;
-    final exhausted = availableHeight <= topPlayerHeight + bottomPlayerHeight + pocketsPadding;
+    final availableBoardSize =
+        (availableHeight - topPlayerHeight - bottomPlayerHeight - pocketsPadding) /
+        (1 + (hasPockets ? 2 * pocketSquareRatio : 0));
+    final exhausted = availableBoardSize <= boardBorderSize + precisionErrorTolerance;
     final boardSize = math.max(
       0.0,
-      exhausted
-          ? maxBoardSize
-          : math.min(
-              maxBoardSize,
-              (availableHeight - topPlayerHeight - bottomPlayerHeight - pocketsPadding) /
-                  (1 + (hasPockets ? 2 * pocketSquareRatio : 0)),
-            ),
+      exhausted ? maxBoardSize : math.min(maxBoardSize, availableBoardSize),
     );
-    // Once the controls alone exhaust the viewport, keep a board and scroll the content.
+    // Before the playable interior disappears, keep a board and scroll the content.
     if (exhausted) {
       size = Size(
         size.width,
@@ -997,6 +1001,7 @@ class _PortraitLayout({
 
   bool shouldRelayout(_PortraitLayout oldDelegate) =>
       maxBoardSize != oldDelegate.maxBoardSize ||
+      boardBorderSize != oldDelegate.boardBorderSize ||
       topTableFlex != oldDelegate.topTableFlex ||
       bottomTableFlex != oldDelegate.bottomTableFlex ||
       pocketSquareRatio != oldDelegate.pocketSquareRatio;

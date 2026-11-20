@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -95,14 +96,22 @@ void main() {
   }
 
   for (final height in [170.0, 180.0, 190.0]) {
-    for (final playerHeight in [20.0, 80.0]) {
+    for (final (playerHeight, showBorder) in [
+      for (final playerHeight in [20.0, 80.0])
+        for (final showBorder in [false, true]) (playerHeight, showBorder),
+    ]) {
       testWidgets('compact portrait clamps board size at the reserve boundary '
-          'height=$height playerHeight=$playerHeight', (tester) async {
+          'height=$height playerHeight=$playerHeight border=$showBorder', (tester) async {
         final flutterTestOnError = FlutterError.onError!;
         final app = await makeTestProviderScopeApp(
           tester,
           surfaceSize: Size(160, height),
           devicePixelRatio: 1,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: showBorder).toJson(),
+            ),
+          },
           home: Scaffold(
             body: GameLayout(
               orientation: Side.white,
@@ -120,7 +129,11 @@ void main() {
         addTearDown(() => FlutterError.onError = flutterTestOnError);
         await tester.pumpWidget(app);
         await tester.pumpAndSettle();
-        expect(tester.getSize(find.byType(Chessboard)), Size.square(max(0, height - 180)));
+        if (showBorder) {
+          expect(tester.widget<Chessboard>(find.byType(Chessboard)).size, greaterThan(0));
+        } else {
+          expect(tester.getSize(find.byType(Chessboard)), Size.square(max(0, height - 180)));
+        }
         expect(tester.takeException(), isNull);
       }, variant: kPlatformVariant);
     }
@@ -234,10 +247,12 @@ void main() {
     }, variant: kPlatformVariant);
   }
 
-  for (final pockets in [false, true]) {
-    testWidgets('compact portrait exhausted height keeps controls reachable pockets=$pockets', (
-      tester,
-    ) async {
+  for (final (pockets, showBorder) in [
+    for (final pockets in [false, true])
+      for (final showBorder in [false, true]) (pockets, showBorder),
+  ]) {
+    testWidgets('compact portrait exhausted height keeps controls reachable '
+        'pockets=$pockets border=$showBorder', (tester) async {
       await prepareLayoutGolden(tester, loadFonts: true);
       final height = ValueNotifier(150.0);
       addTearDown(height.dispose);
@@ -249,6 +264,11 @@ void main() {
         tester,
         surfaceSize: const Size(360, 560),
         devicePixelRatio: 1,
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: showBorder).toJson(),
+          ),
+        },
         home: Scaffold(
           body: GameLayout(
             orientation: Side.white,
@@ -285,20 +305,31 @@ void main() {
       FlutterError.onError = flutterTestOnError;
       addTearDown(() => FlutterError.onError = flutterTestOnError);
       await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
       final state = tester.state(find.byType(GameLayout));
       final boardState = tester.state(find.byType(BoardWidget));
+      final controller = tester.widget<Chessboard>(find.byType(Chessboard)).controller;
       final pocketPadding = pockets ? 2 * PocketsMenu.padding.vertical : 0.0;
-      for (final remaining in [16.0, 0.5, 0.0, -1.0, -80.0, 150.0]) {
-        height.value = (560 - 56 - pocketPadding - remaining) / 2;
+      final boardHeightRatio =
+          1 + (pockets ? 2 * pocketSquareSize(boardSize: 1, isTablet: false) : 0);
+      for (final remaining in [16.0, 0.5, 32.0, 32.5, 33.0, 64.0, 0.0, -1.0, -80.0, 150.0]) {
+        height.value = (560 - 56 - pocketPadding - remaining * boardHeightRatio) / 2;
         await tester.pumpAndSettle();
         expect(tester.state(find.byType(GameLayout)), same(state));
         expect(tester.state(find.byType(BoardWidget)), same(boardState));
+        final chessboard = tester.widget<Chessboard>(find.byType(Chessboard));
+        expect(chessboard.controller, same(controller));
+        expect(
+          chessboard.size,
+          greaterThan(0),
+          reason: 'The playable grid must have positive size.',
+        );
         expect(
           find.descendant(
             of: find.byType(GameLayout),
             matching: find.byType(SingleChildScrollView),
           ),
-          remaining <= 0 ? findsOneWidget : findsNothing,
+          remaining <= (showBorder ? 32 : 0) ? findsOneWidget : findsNothing,
         );
         final board = tester.getRect(find.byType(Chessboard));
         expect(board.width, greaterThan(0));
@@ -313,10 +344,10 @@ void main() {
           await tester.ensureVisible(find.text(label));
           await tester.pumpAndSettle();
           expectGameControlsVisible(tester, find.text(label));
-          if (remaining == 0) {
+          if (remaining == 0 || (showBorder && remaining == 16)) {
             await expectLayoutGolden(
               find.byType(GameLayout),
-              '../../build/compact-layout/portrait-exhausted-$pockets-$label',
+              '../../build/compact-layout/portrait-exhausted-$pockets-$showBorder-$remaining-$label',
             );
           }
         }
