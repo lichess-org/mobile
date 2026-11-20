@@ -36,6 +36,10 @@ class TournamentController(final TournamentId id)
 
   Timer? _reloadTimer;
 
+  // Reloads are frequent in fast tournaments and can overlap. Only the most recent
+  // one is allowed to update the state, so a slower earlier response can't revert it.
+  int _reloadGeneration = 0;
+
   static Uri socketUri(TournamentId id) => Uri(path: '/tournament/$id/socket/v6');
 
   SocketPool get _socketPool => ref.read(socketPoolProvider);
@@ -157,17 +161,23 @@ class TournamentController(final TournamentId id)
   Future<void> _reload() async {
     _logger.fine('Refreshing tournament data');
 
+    final generation = ++_reloadGeneration;
+
     if (!state.hasValue) {
       return;
     }
 
-    final tournament = await ref
+    final partialJson = await ref
         .read(tournamentRepositoryProvider)
         .reload(state.requireValue.tournament);
 
-    if (!ref.mounted || !state.hasValue) {
+    if (!ref.mounted || !state.hasValue || generation != _reloadGeneration) {
       return;
     }
+
+    // Merge into the current state, not the snapshot captured before the request:
+    // the socket may have delivered a newer FEN in the meantime.
+    final tournament = state.requireValue.tournament.updateFromPartialServerJson(partialJson);
 
     if (tournament.me?.pauseDelay != null) {
       _pauseDelayTimer?.cancel();
