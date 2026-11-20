@@ -833,6 +833,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get arenaNewTeamBattle => 'Новый межклубный турнир';
 
   @override
+  String get arenaStartDate => 'Дата начала';
+
+  @override
+  String get arenaEntryConditions => 'Условия входа';
+
+  @override
   String get arenaCustomStartDate => 'Особая дата начала';
 
   @override
@@ -941,6 +947,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Лиги & Битвы стримеров';
+
+  @override
+  String get arenaAllowBotAccounts => 'Разрешить аккаунты ботов';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Позволить <a href=\'$param\' target=\'_blank\'>ботам</a> присоединиться к турниру и играть с использованием шахматных компьютеров. Это часто отталкивает игроков-людей.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2435,7 +2449,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Пешка превращается в ферзя автоматически';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Удерживайте клавишу <ctrl> во время превращения, чтобы временно отключить автопревращение в ферзя';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Удерживайте клавишу ctrl во время продвижения, чтобы временно отключить автоматическое продвижение';
 
   @override
   String get preferencesWhenPremoving => 'Когда сделан предварительный ход';
@@ -3424,9 +3438,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Я понимаю, что удалённые аккаунты не подлежат восстановлению';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Бросить вызов другу';
@@ -4634,6 +4645,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get resume => 'Возобновить';
+
+  @override
+  String get stop => 'Стоп';
 
   @override
   String get youArePlaying => 'Вы в игре!';
@@ -6104,6 +6118,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get minimumRatedGames => 'Минимум рейтинговых игр';
 
   @override
+  String get minimumAccountAge => 'Минимальный возраст аккаунтов';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Игроки с титулами обходят это ограничение.';
+
+  @override
   String get minimumRating => 'Минимальный рейтинг';
 
   @override
@@ -6274,6 +6294,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get clearSearch => 'Очистить поиск';
+
+  @override
+  String searchInX(String param) {
+    return 'Поиск в \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7106,6 +7131,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyKick => 'Выгнать';
 
   @override
+  String get studyRemove => 'Удалить';
+
+  @override
   String get studyLeaveTheStudy => 'Покинуть студию';
 
   @override
@@ -7377,13 +7405,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyGoodMove => 'Хороший ход';
 
   @override
-  String get studyMistake => 'Ошибка';
-
-  @override
   String get studyBrilliantMove => 'Отличный ход';
-
-  @override
-  String get studyBlunder => 'Зевок';
 
   @override
   String get studyInterestingMove => 'Интересный ход';
@@ -7607,6 +7629,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Анализировать на Вашем устройстве';
 
   @override
+  String get studySearchChapters => 'Поиск глав';
+
+  @override
+  String get studySearchGames => 'Поиск игр';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7650,10 +7678,8 @@ class AppLocalizationsRu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Вставьте текст в формате PGN, не больше $count игр',
-      many: 'Вставьте текст в формате PGN, не больше $count игр',
-      few: 'Вставьте текст в формате PGN, не больше $count игр',
-      one: 'Вставьте текст в формате PGN, не больше $count игры',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7695,6 +7721,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Двухфакторная аутентификация';
+
+  @override
+  String get tfaAuthenticationCode => 'Код аутентификации';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Откройте приложение для двухфакторной аутентификации на вашем устройстве, чтобы просмотреть код аутентификации и подтвердить свою личность.';
 
   @override
   String get timeagoJustNow => 'только что';

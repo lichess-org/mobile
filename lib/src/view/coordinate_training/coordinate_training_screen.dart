@@ -81,8 +81,8 @@ class _BodyState() extends ConsumerState<_Body> {
               details: HighlightDetails(
                 solidColor:
                     (trainingState.lastGuess == Guess.correct
-                            ? context.lichessColors.good
-                            : context.lichessColors.error)
+                            ? context.lichessColors.green
+                            : context.lichessColors.red)
                         .withValues(alpha: 0.5),
               ),
             ),
@@ -90,7 +90,7 @@ class _BodyState() extends ConsumerState<_Body> {
         } else ...{
           trainingState.currentCoord!: SquareHighlight(
             details: HighlightDetails(
-              solidColor: context.lichessColors.good.withValues(alpha: 0.5),
+              solidColor: context.lichessColors.green.withValues(alpha: 0.5),
             ),
           ),
         },
@@ -129,8 +129,8 @@ class _BodyState() extends ConsumerState<_Body> {
                             maxWidth: boardSize,
                             timeFractionElapsed: trainingState.timeFractionElapsed,
                             color: trainingState.lastGuess == Guess.incorrect
-                                ? context.lichessColors.error
-                                : context.lichessColors.good,
+                                ? context.lichessColors.red
+                                : context.lichessColors.green,
                           ),
                           _TrainingBoard(
                             boardSize: boardSize,
@@ -285,8 +285,8 @@ class const _ScoreAndTrainingButton({
             score: score,
             size: scoreSize,
             color: trainingState.lastGuess == Guess.incorrect
-                ? context.lichessColors.error
-                : context.lichessColors.good,
+                ? context.lichessColors.red
+                : context.lichessColors.green,
           ),
           button,
         ],

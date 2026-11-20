@@ -797,6 +797,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Νέα ομαδική μάχη';
 
   @override
+  String get arenaStartDate => 'Ημερομηνία έναρξης';
+
+  @override
+  String get arenaEntryConditions => 'Όροι εισόδου';
+
+  @override
   String get arenaCustomStartDate => 'Ημερομηνία έναρξης';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Να επιτρέπονται οι λογαριασμοί bot';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Αυτόματη προαγωγή σε βασίλισσα';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Κρατήστε πατημένο το πλήκτρο <ctrl> ενώ κάνετε την προαγωγή για να απενεργοποιήσετε προσωρινά την αυτόματη προαγωγή';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Μόνο στις προκινήσεις';
@@ -2406,7 +2420,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Επιβεβαίωση κίνησης';
 
   @override
-  String get preferencesMultipleChoices => 'Πολλαπλές επιλογές. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Μπορεί να απενεργοποιηθεί κατά τη διάρκεια μιας παρτίδας από το μενού της σκακιέρας';
@@ -3368,9 +3382,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Κατανοώ ότι δεν γίνεται να ανακτηθούν λογαριασμοί που έχουν διαγραφεί';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Προκαλέστε φίλο';
@@ -4578,6 +4589,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get resume => 'Συνέχεια';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Παίζετε τώρα!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get minimumRatedGames => 'Ελάχιστος αριθμός βαθμολογημένων παρτίδων';
 
   @override
+  String get minimumAccountAge => 'Ελάχιστη ηλικία λογαριασμού';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Οι παίκτες με τίτλο παρακάμπτουν αυτόν τον περιορισμό.';
+
+  @override
   String get minimumRating => 'Ελάχιστη βαθμολογία';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Εκκαθάριση πεδίου αναζήτησης';
+
+  @override
+  String searchInX(String param) {
+    return 'Αναζήτηση στο \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyKick => 'Αποβολή';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Αποχώρηση από αυτή τη μελέτη';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyGoodMove => 'Καλή κίνηση';
 
   @override
-  String get studyMistake => 'Λάθος';
-
-  @override
   String get studyBrilliantMove => 'Εξαιρετική κίνηση';
-
-  @override
-  String get studyBlunder => 'Σοβαρό λάθος';
 
   @override
   String get studyInterestingMove => 'Ενδιαφέρουσα κίνηση';
@@ -7417,7 +7439,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Φορτώστε παρτίδα από το διαδίκτυο';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Θέση από FEN';
@@ -7465,6 +7487,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Αναζήτηση κεφαλαίων';
+
+  @override
+  String get studySearchGames => 'Αναζήτηση παρτίδων';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsEl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Επικολλήστε το PGN εδώ. Για κάθε παρτίδα θα δημιουργηθεί νέο κεφάλαιο. Μια μελέτη μπορεί να έχει μέχρι $count κεφάλαια.',
-      one: 'Επικολλήστε το αρχείο PGN εδώ (μέχρι $count παρτίδα επιτρέπεται)',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Έλεγχος ταυτότητας δύο παραγόντων';
+
+  @override
+  String get tfaAuthenticationCode => 'Κωδικός ταυτοποίησης';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ανοίξτε την εφαρμογή ελέγχου ταυτότητας δύο παραγόντων στη συσκευή σας για να δείτε τον κωδικό ταυτοποίησης και να επαληθεύσετε την ταυτότητά σας.';
 
   @override
   String get timeagoJustNow => 'μόλις τώρα';

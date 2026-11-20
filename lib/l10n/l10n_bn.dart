@@ -797,6 +797,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get arenaNewTeamBattle => 'নতুন দলীয় প্রতিযোগীতা';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'শুরুর তারিখ';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'সংক্রিয়ভাবে রানীর জন্য প্রচার';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'যখন পূনার‍য়সারান';
@@ -2406,7 +2420,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get preferencesMoveConfirmation => 'অনুমোদন সরান';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3368,9 +3382,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'কোন বন্ধুকে চ্যালেঞ্জ করুন';
@@ -4578,6 +4589,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get resume => 'পুনরায় শুরু';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'আপনি খেলতেছেন!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get minimumRatedGames => 'সর্বনিম্ন রেটেড খেলার সংখ্যা';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'সর্বনিম্ন রেটিং';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get clearSearch => 'অনুসন্ধান মুছে ফেলুন';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyKick => 'লাথি দিয়ে বের করুন';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Leave the study';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyGoodMove => 'ভালো চাল';
 
   @override
-  String get studyMistake => 'ভূল চাল';
-
-  @override
   String get studyBrilliantMove => 'অসাধারণ চাল';
-
-  @override
-  String get studyBlunder => 'ব্লান্ডার';
 
   @override
   String get studyInterestingMove => 'আগ্রহোদ্দীপক চাল';
@@ -7417,7 +7439,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7465,6 +7487,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'PGN টেক্সট এখানে পেস্ট করুন, $count টি খেলা পর্যন্ত',
-      one: 'PGN টেক্সট এখানে পেস্ট করুন, $count টি খেলা পর্যন্ত',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'টু-ফ্যাক্টর অথেন্টিকেশন';
+
+  @override
+  String get tfaAuthenticationCode => 'অথেনটিকেশন কোড';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'অথেন্টিকেশন কোড দেখতে আপনার ডিভাইসে টু-ফ্যাক্টর অথেন্টিকেশন অ্যাপ চালু করুন এবং আপনার পরিচয় নিশ্চিত করুন।';
 
   @override
   String get timeagoJustNow => 'এখনই';

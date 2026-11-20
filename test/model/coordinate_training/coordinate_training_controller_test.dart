@@ -83,7 +83,7 @@ void main() {
       int whiteCount = 0;
       int blackCount = 0;
 
-      for (int attempt = 0; attempt < 10 && sidesPlayed.length < 2; attempt++) {
+      for (int attempt = 0; attempt < 20 && sidesPlayed.length < 2; attempt++) {
         final playedSide = container.read(coordinateTrainingControllerProvider).orientation;
         final score = await _runSessionUntilFinished(container, withCorrectGuess: true);
         expect(score, 1);

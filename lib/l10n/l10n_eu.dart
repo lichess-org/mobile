@@ -797,6 +797,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get arenaNewTeamBattle => 'Taldeen Arteko Txapelketa berria';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Pertsonalizatutako hasiera data';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ligak & Esatarien arteko txapelketak';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Dama automatikoki sustatzea';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Eutsi <ctrl> tekla sakatuta sustapenean sustapen automatikoa aldi baterako desaktibatzeko';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Aldez aurreko jokaldia egiten denean';
@@ -2406,7 +2420,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Jokaldia baieztatzea';
 
   @override
-  String get preferencesMultipleChoices => 'Aukera anitzak. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Partida baten zehar taularen menua erabiliz desaktibatu daiteke';
@@ -3368,9 +3382,6 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Ezabatutako kontuak ezin direla berreskuratu ulertzen dut';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Erronka jo lagun bati';
@@ -4578,6 +4589,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get resume => 'Berrekin';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Jokatzen ari zara!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get minimumRatedGames => 'Gutxieneko partida kopurua';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Puntuazio minimoa';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get clearSearch => 'Garbitu bilaketa';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyKick => 'Kanporatu';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Azterlana utzi';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyGoodMove => 'Jokaldi ona';
 
   @override
-  String get studyMistake => 'Akatsa';
-
-  @override
   String get studyBrilliantMove => 'Jokaldi bikaina';
-
-  @override
-  String get studyBlunder => 'Akats larria';
 
   @override
   String get studyInterestingMove => 'Jokaldi interesgarria';
@@ -7417,7 +7439,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Kargatu partida bat webetik';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'FEN kate batetik';
@@ -7465,6 +7487,12 @@ class AppLocalizationsEu extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsEu extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Itsatsi hemen zure PGNa, gehienez $count partida',
-      one: 'Itsatsi hemen zure PGNa, gehienez partida $count',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Bi faktoreko autentifikazioa';
+
+  @override
+  String get tfaAuthenticationCode => 'Autentikazio kodea';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ireki bi faktoreko autentifikazio aplikazioa zure telefonoan, ikusi zure autentifikazio kodea eta idatzi hemen.';
 
   @override
   String get timeagoJustNow => 'orain';

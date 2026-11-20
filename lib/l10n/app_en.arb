@@ -433,6 +433,8 @@
   "arenaMinimumGameLength": "Minimum game length",
   "arenaHistory": "Arena History",
   "arenaNewTeamBattle": "New Team Battle",
+  "arenaStartDate": "Start date",
+  "arenaEntryConditions": "Entry conditions",
   "arenaCustomStartDate": "Custom start date",
   "arenaCustomStartDateHelp": "In your own local timezone. This overrides the \"Time before tournament starts\" setting",
   "arenaAllowBerserk": "Allow Berserk",
@@ -476,6 +478,15 @@
   "arenaTournamentPairingsAreNowClosed": "The tournament pairings are now closed.",
   "arenaBerserkRate": "Berserk rate",
   "arenaLeaguesAndStreamerBattles": "Leagues & Streamer Battles",
+  "arenaAllowBotAccounts": "Allow bot accounts",
+  "arenaAllowBotAccountsDescription": "Let <a href='{param}' target='_blank'>bots</a> join the tournament and play with their engines. This often repels human players.",
+  "@arenaAllowBotAccountsDescription": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "arenaDrawingWithinNbMoves": "{count, plural, =1{Drawing the game within the first {count} move will earn neither player any points.} other{Drawing the game within the first {count} moves will earn neither player any points.}}",
   "@arenaDrawingWithinNbMoves": {
     "placeholders": {
@@ -1231,12 +1242,12 @@
   "preferencesTakebacksWithOpponentApproval": "Takebacks (with opponent approval)",
   "preferencesInCasualGamesOnly": "In casual games only",
   "preferencesPromoteToQueenAutomatically": "Promote to Queen automatically",
-  "preferencesExplainPromoteToQueenAutomatically": "Hold the <ctrl> key while promoting to temporarily disable auto-promotion",
+  "preferencesExplainPromoteToQueenAutomatically": "Hold the ctrl key while promoting to temporarily disable auto-promotion",
   "preferencesWhenPremoving": "When premoving",
   "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Claim draw on threefold repetition automatically",
   "preferencesWhenTimeRemainingLessThanThirtySeconds": "When time remaining < 30 seconds",
   "preferencesMoveConfirmation": "Move confirmation",
-  "preferencesMultipleChoices": "Multiple choices. ",
+  "preferencesMultipleChoices": "Multiple choices.",
   "preferencesExplainCanThenBeTemporarilyDisabled": "Can be disabled during a game with the board menu",
   "preferencesInCorrespondenceGames": "Correspondence games",
   "preferencesCorrespondenceAndUnlimited": "Correspondence and unlimited",
@@ -1637,7 +1648,6 @@
   },
   "settingsCloseYourAccount": "close your account",
   "settingsDeleteAccountConfirmText": "I understand that deleted accounts aren't recoverable",
-  "gameSetup": "Game setup",
   "challengeAFriend": "Challenge a friend",
   "playAgainstComputer": "Play against computer",
   "gameMode": "Game mode",
@@ -2301,6 +2311,7 @@
   },
   "pause": "Pause",
   "resume": "Resume",
+  "stop": "Stop",
   "youArePlaying": "You are playing!",
   "winRate": "Win rate",
   "performance": "Performance",
@@ -3227,6 +3238,8 @@
   "onlyMembersOfTeam": "Only members of team",
   "noRestriction": "No restriction",
   "minimumRatedGames": "Minimum rated games",
+  "minimumAccountAge": "Minimum account age",
+  "titledPlayersBypassRestriction": "Titled players bypass this restriction.",
   "minimumRating": "Minimum rating",
   "maximumWeeklyRating": "Maximum weekly rating",
   "positionInputHelp": "Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the {param} to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.",
@@ -3316,6 +3329,14 @@
   "offline": "offline",
   "search": "Search",
   "clearSearch": "Clear search",
+  "searchInX": "Search in \"{param}\"",
+  "@searchInX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
   "thereAreNoResultsForX": "No results for \"{param}\"",
   "@thereAreNoResultsForX": {
     "placeholders": {
@@ -3797,6 +3818,7 @@
   "studySpectator": "Spectator",
   "studyContributor": "Contributor",
   "studyKick": "Kick",
+  "studyRemove": "Remove",
   "studyLeaveTheStudy": "Leave the study",
   "studyYouAreNowAContributor": "You are now a contributor",
   "studyYouAreNowASpectator": "You are now a spectator",
@@ -3922,9 +3944,7 @@
   },
   "studyWhereDoYouWantToStudyThat": "Where do you want to study that?",
   "studyGoodMove": "Good move",
-  "studyMistake": "Mistake",
   "studyBrilliantMove": "Brilliant move",
-  "studyBlunder": "Blunder",
   "studyInterestingMove": "Interesting move",
   "studyDubiousMove": "Dubious move",
   "studyOnlyMove": "Only move",
@@ -4011,7 +4031,7 @@
   "studyCustomPositionTitle": "Custom position",
   "studyCustomPositionText": "Set up the board your way.<br>Suited to explore endgames.",
   "studyLoadGameFromTheWebTitle": "Load a game from the web",
-  "studyLoadGameFromTheWebText": "Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.",
+  "studyLoadGameFromTheWebText": "Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.",
   "studyFromFenStringTitle": "From a FEN string",
   "studyFromFenStringText": "Paste a position in FEN format<br><i>4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w</i><br>to start the chapter from a position.",
   "studyFromPgnGameTitle": "From a PGN game",
@@ -4027,6 +4047,8 @@
   "studyClearPublished": "Clear published analysis?",
   "studyRequestAServerAnalysis": "Request a server analysis",
   "studyAnalyzeOnYourDevice": "Analyse on your device",
+  "studySearchChapters": "Search chapters",
+  "studySearchGames": "Search games",
   "studyNbChapters": "{count, plural, =1{{count} Chapter} other{{count} Chapters}}",
   "@studyNbChapters": {
     "placeholders": {
@@ -4051,7 +4073,7 @@
       }
     }
   },
-  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
+  "studyPasteYourPgnTextHereUpToNbGames": "{count, plural, =1{Paste your PGN text here, up to {count} game.} other{Paste games as PGN text here. For each game, a new chapter is created. The study can have up to {count} chapters.}}",
   "@studyPasteYourPgnTextHereUpToNbGames": {
     "placeholders": {
       "count": {
@@ -4079,6 +4101,8 @@
     }
   },
   "tfaTwoFactorAuth": "Two-factor authentication",
+  "tfaAuthenticationCode": "Authentication code",
+  "tfaOpenTwoFactorApp": "Open the two-factor authentication app on your device to view your authentication code and verify your identity.",
   "timeagoJustNow": "just now",
   "timeagoRightNow": "right now",
   "timeagoCompleted": "completed",

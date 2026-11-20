@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/edit_profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/view/settings/account_preferences_screen.dart';
 import 'package:lichess_mobile/src/view/user/perf_cards.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/view/user/user_activity.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
@@ -79,23 +81,39 @@ class _ProfileScreenState() extends ConsumerState<ProfileScreen> {
                     user: user.lightUser,
                     isOnline: online,
                     seenAt: user.seenAt,
+                    avatar: AccountAvatar(user),
                   ),
             loading: () => const SizedBox.shrink(),
             error: (error, _) => const SizedBox.shrink(),
           ),
           actions: [
             SemanticIconButton(
-              icon: const Icon(Icons.edit),
-              semanticsLabel: context.l10n.editProfile,
-              onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
+              icon: const Icon(Icons.settings),
+              semanticsLabel: context.l10n.mobileAccountPreferences,
+              onPressed: () => Navigator.of(context).push(AccountPreferencesScreen.buildRoute()),
             ),
-            if (account.value case final user?)
-              SemanticIconButton(
-                icon: const PlatformShareIcon(),
-                semanticsLabel: 'Share profile',
-                onPressed: () =>
-                    launchShareDialog(context, ShareParams(uri: lichessUri('/@/${user.username}'))),
-              ),
+            ContextMenuIconButton(
+              semanticsLabel: 'Profile menu',
+              icon: const Icon(Icons.more_horiz),
+              actions: [
+                ContextMenuAction(
+                  icon: Icons.edit,
+                  label: context.l10n.editProfile,
+                  onPressed: () => Navigator.of(context).push(EditProfileScreen.buildRoute()),
+                ),
+                if (account.value case final user?)
+                  ContextMenuAction(
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
+                        ? Icons.ios_share
+                        : Icons.share,
+                    label: context.l10n.mobileShare,
+                    onPressed: () => launchShareDialog(
+                      context,
+                      ShareParams(uri: lichessUri('/@/${user.username}')),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
         body: account.when(

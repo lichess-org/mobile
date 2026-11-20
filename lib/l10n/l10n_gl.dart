@@ -797,6 +797,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nova Batalla por Equipos';
 
   @override
+  String get arenaStartDate => 'Data de inicio';
+
+  @override
+  String get arenaEntryConditions => 'Condicións de entrada';
+
+  @override
   String get arenaCustomStartDate => 'Data de comezo personalizada';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ligas e Batallas de Presentadores';
+
+  @override
+  String get arenaAllowBotAccounts => 'Permitir contas de bots';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Permitir que os <a href=\'$param\' target=\'_blank\'>bots</a> participen no torneo e xoguen cos seus motores de análise. Esta opción adoita espantar ós xogadores humanos.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Coroar a Dama automaticamente';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Mantén pulsada a tecla <ctrl> ao coroar para desactivar temporalmente a promoción automática';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Mantén pulsada a tecla CTRL ó coroar para desactivar temporalmente a promoción automática';
 
   @override
   String get preferencesWhenPremoving => 'Con premovemento';
@@ -2406,7 +2420,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Confirmación do movemento';
 
   @override
-  String get preferencesMultipleChoices => 'Pódense escoller varias opcións. ';
+  String get preferencesMultipleChoices => 'Pódense escoller varias opcións.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Pode ser desactivado durante a partida dende o menú do taboleiro';
@@ -2932,7 +2946,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeCapturingDefender => 'Captura ao defensor';
 
   @override
-  String get puzzleThemeCapturingDefenderDescription => 'Eliminar unha peza fundamental para a defensa doutra, permitindo capturar a peza, agora indefensa, no seguinte movemento.';
+  String get puzzleThemeCapturingDefenderDescription => 'Elimínase unha peza fundamental para a defensa doutra, permitindo capturar a peza, agora indefensa, no seguinte movemento.';
 
   @override
   String get puzzleThemeCollinearMove => 'Movemento colineal';
@@ -3004,7 +3018,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeDiscoveredAttack => 'Ataque descuberto';
 
   @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Apartar unha peza (por exemplo un cabalo) que previamente bloqueaba o ataque doutra peza de longo alcance (por exemplo unha torre).';
+  String get puzzleThemeDiscoveredAttackDescription => 'Apártase unha peza (por exemplo un cabalo) que previamente bloqueaba o ataque doutra peza de longo alcance (por exemplo unha torre).';
 
   @override
   String get puzzleThemeDoubleCheck => 'Xaque dobre';
@@ -3058,7 +3072,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemeInterference => 'Interferencia';
 
   @override
-  String get puzzleThemeInterferenceDescription => 'Colocar unha peza entre dúas do opoñente de modo que unha delas ou ambas as dúas fican indefensas, como pode ser un cabalo nunha casa protexida entre dúas torres.';
+  String get puzzleThemeInterferenceDescription => 'Colócase unha peza entre dúas do opoñente de modo que unha delas ou ambas as dúas fican indefensas, como pode ser un cabalo nunha casa protexida entre dúas torres.';
 
   @override
   String get puzzleThemeIntermezzo => 'Xogada intermedia';
@@ -3368,9 +3382,6 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Entendo que as contas borradas non son recuperables';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Desafiar a unha amizade';
@@ -4578,6 +4589,9 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get resume => 'Continuar';
+
+  @override
+  String get stop => 'Parar';
 
   @override
   String get youArePlaying => 'Estás xogando!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsGl extends AppLocalizations {
   String get minimumRatedGames => 'Mínimo de partidas puntuadas';
 
   @override
+  String get minimumAccountAge => 'Idade mínima da conta';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Os xogadores titulados poden eludir esta restrición.';
+
+  @override
   String get minimumRating => 'Puntuación mínima';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Borrar a procura';
+
+  @override
+  String searchInX(String param) {
+    return 'Buscar en \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyKick => 'Expulsar';
 
   @override
+  String get studyRemove => 'Retirar';
+
+  @override
   String get studyLeaveTheStudy => 'Deixar o estudo';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyGoodMove => 'Bo movemento';
 
   @override
-  String get studyMistake => 'Erro';
-
-  @override
   String get studyBrilliantMove => 'Movemento brillante';
-
-  @override
-  String get studyBlunder => 'Metida de zoca';
 
   @override
   String get studyInterestingMove => 'Movemento interesante';
@@ -7459,10 +7481,16 @@ class AppLocalizationsGl extends AppLocalizations {
   String get studyClearPublished => 'Eliminar a análise publicada?';
 
   @override
-  String get studyRequestAServerAnalysis => 'Solicitar unha análise dende o servidor';
+  String get studyRequestAServerAnalysis => 'Analizar dende o servidor';
 
   @override
   String get studyAnalyzeOnYourDevice => 'Analizar no teu dispositivo';
+
+  @override
+  String get studySearchChapters => 'Buscar capítulos';
+
+  @override
+  String get studySearchGames => 'Buscar partidas';
 
   @override
   String studyNbChapters(int count) {
@@ -7502,8 +7530,8 @@ class AppLocalizationsGl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Pega aquí o PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata $count capítulos.',
-      one: 'Pega o teu texto PGN aquí, ata $count partida',
+      other: 'Pega aquí o texto PGN das partidas: por cada unha créase un novo capítulo. O estudo pode conter ata $count capítulos.',
+      one: 'Pega o teu texto PGN aquí, ata $count partida.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticación en dous pasos';
+
+  @override
+  String get tfaAuthenticationCode => 'Código de autenticación';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Abre a aplicación de autenticación en dous pasos no teu dispositivo para ver o código de autenticación e verificar a túa identidade.';
 
   @override
   String get timeagoJustNow => 'axiña';

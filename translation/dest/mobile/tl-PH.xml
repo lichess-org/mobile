@@ -1,68 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Mga kagustuhan sa account</string>
-  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Naka-apply ang mga kagustuhan na ito sa iyong Lichess account at gagamitin ito sa lahat ng device.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Lahat ng mga laro</string>
+  <string name="acceptDraw" comment="Over the board dialog asking whether to accept a draw after threefold repetition.">Tanggapin ang tabla?</string>
+  <string name="account" comment="The account screen title.">Account</string>
+  <string name="accountPreferences" comment="Displayed on settings screen. This is for preferences synced with website on the server.">Mga preference sa account</string>
+  <string name="accountPreferencesHelp" comment="Help displayed on the account preferences screen.">Ang mga preference na ito ay ilalapat sa iyong Lichess account at gagamitin sa lahat ng device.</string>
+  <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Idagdag sa pag-aaral</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Lahat ng laro</string>
+  <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Payagan ang pagbawi ng mga galaw at mga pahiwatig</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Mga log ng app</string>
+  <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Itim na Amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Sigurado ka ba?</string>
-  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Mga setting sa tabla</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Kanselahin ang alok ng takeback</string>
-  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">I-clear</string>
-  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">I-clear ang na-save na tira</string>
+  <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Sigurado ka bang gusto mong i-download ang NNUE file (%s)?</string>
+  <string name="boardPositionLandscape" comment="Board settings entry that controls where the board sits when the device is in landscape mode.">Posisyon ng board sa landscape mode</string>
+  <string name="boardSettings" comment="This is shown in the app main settings screen, which opens a screen dedicated to chess board settings.">Mga setting ng board</string>
+  <string name="bronsteinDelay" comment="Name of the Bronstein delay chess clock time control type.">Antala ng Bronstein</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Bawiin ang pagbawi ng galaw</string>
+  <string name="challengeCreated" comment="Shown as a bottom banner when another player has been challenged.">Nagawa ang hamon: Makakatanggap ka ng abiso kapag nagsimula na ang laro.\nMaa-access mo ito mula sa Home tab.</string>
+  <string name="challengeFromPosition" comment="Menu action in the board editor to challenge a friend from the edited position.">Hamunin mula sa posisyon</string>
+  <string name="chapterName" comment="Label of the text field to name a new study chapter.">Pangalan ng Kabanata</string>
+  <string name="chessEngine" comment="Chess engine settings screen title.">Makina ng chess</string>
+  <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Pumili ng custom background</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Burahin</string>
+  <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">Mag-e-expire ang code pagkatapos ng 5 minuto at isang beses lang itong gamitin.</string>
+  <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Code</string>
+  <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">Ang code ay %s (na) karakter ng haba.</string>
+  <string name="copied" comment="Snackbar shown after copying a challenge URL to the clipboard.">Nakopya.</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Burahin ang naka-save na galaw</string>
+  <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">I-edit</string>
+  <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Tip: Maaari kang magdagdag ng mga widget sa Home Screen o alisin ng mga hindi mo kailangan!</string>
+  <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">I-dismiss</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Gusto mo bang tanggalin ang lahat ng log?</string>
+  <string name="dangerZone" comment="Header of the settings section containing account deletion.">Danger zone</string>
+  <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">I-delete ang iyong account</string>
+  <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compact</string>
+  <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detalyado</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Payag ka bang tanggapin ang hamon?</string>
+  <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">I-download ang aking mga laro</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
+  <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Mga filter</string>
+  <string name="flipClock" comment="Tooltip of the button that flips the chess clock orientation.">I-flip ang orasan</string>
+  <string name="flipPiecesAfterMove" comment="Over the board display setting: rotate the board after each move.">I-flip ang mga piyesa at impormayson ng kalaban pagkatapos ng bawat galaw</string>
+  <string name="getFeedbackOnMoves" comment="Subtitle of the practice mode switch when playing against the offline computer.">Kumuha ng feedback sa iyong mga galaw</string>
   <string name="goodDay" comment="A greeting that is shown on the app's home page, e.g. 'Good day, GM Magnus' (%s is substituted with the user's name). This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang araw, %s</string>
   <string name="goodDayWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'sun' icon and is displayed only between 06:00 and 18:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang araw</string>
   <string name="goodEvening" comment="A greeting that is shown on the app's home page, e.g. 'Good evening, GM Magnus' (%s is substituted with the user's name). This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi, %s</string>
   <string name="goodEveningWithoutName" comment="A greeting that is shown on the app's home page, when the user is not logged in. This is associated with a 'moon' icon and is displayed only between 18:00 and 06:00 local time. If the language you're translating into does not have this time based concept, just use a generic formula (like 'Hello' in english).">Magandang gabi</string>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Simula</string>
-  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Kailangang naka-log-in ka para matingnan ito.</string>
-  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walang mga resulta</string>
+  <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Magandang galaw, pero may mas mahusay pa</string>
+  <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Kumusta</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Home</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Mga network log</string>
+  <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Kung may account na tumutugma sa %1$s, ipinadala rito ang code na may %2$s na karakter. Tingnan ang iyong inbox at ilagay ang code sa ibaba.</string>
+  <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Mali o paso na ang code na ito.</string>
+  <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Laki ng lokal na database</string>
+  <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Gumalaw kapag binitiwan</string>
+  <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Kapag ginagalaw ng piyesa sa pamamagitan ng pag-tap, maaari mong i-slide ang iyong daliri upang baguhin ang parisukat na pupuntahan nito, at isasagawa lamang ang galaw kapag inalis mo na ang iyong daliri.</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Kailangan mong naka-log upang matingan ang pahinang ito.</string>
+  <string name="nbOfflinePuzzles" comment="Label for the puzzle setting that controls how many puzzles are downloaded and kept available for offline play.">Mga offline puzzle</string>
+  <string name="newGame" comment="New game button in OTB and play against offline computer features">Bagong laro</string>
+  <string name="nextMistake" comment="Bottom bar button in the retro (mistake finder) analysis mode.">Susunod na pagkakamali</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Walang resulta</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Wala kang fina-follow na user.</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short." maxLength="10">OK</string>
-  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Sa board</string>
-  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga manlalaro na may \"%s\"</string>
+  <string name="openingExplorerNotAvailableOffline" comment="Shown in the opening explorer when the device is offline.">Hindi magagamit ang Opening Explorer kapag offline.</string>
+  <string name="orImportPgnFile" comment="Button text to import a PGN file from the device">O mag-import ng PGN file.</string>
+  <string name="overTheBoard" comment="Used in the main play menu to launch the Over the board game mode.">Harapang laro (OTB)</string>
+  <string name="pasteFromClipboard" comment="Tooltip of the paste button in study chapter creation.">I-paste mula sa clipboard</string>
+  <string name="perfShortAntichess" comment="Short label for the Antichess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Antichess</string>
+  <string name="perfShortAtomic" comment="Short label for the Atomic performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Atomic</string>
+  <string name="perfShortBlitz" comment="Short label for the Blitz chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Blitz</string>
+  <string name="perfShortBullet" comment="Short label for the Bullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Bullet</string>
+  <string name="perfShortChess960" comment="Short label for the Chess960 performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">960</string>
+  <string name="perfShortClassical" comment="Short label for the Classical chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Klasiko</string>
+  <string name="perfShortCorrespondence" comment="Short label for the Correspondence chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Koresp.</string>
+  <string name="perfShortCrazyhouse" comment="Short label for the Crazyhouse performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Crazy</string>
+  <string name="perfShortFromPosition" comment="Short label for the From Position chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Mula Pos.</string>
+  <string name="perfShortHorde" comment="Short label for the Horde performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Horde</string>
+  <string name="perfShortKingOfTheHill" comment="Short label for the King of the Hill performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">KotH</string>
+  <string name="perfShortPuzzle" comment="Short label for puzzle performance. Used in compact UI such as perf cards, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Puzzle</string>
+  <string name="perfShortRacingKings" comment="Short label for the Racing Kings performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Karera</string>
+  <string name="perfShortRapid" comment="Short label for the Rapid chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Mabilis</string>
+  <string name="perfShortThreeCheck" comment="Short label for the Three-check performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">3check</string>
+  <string name="perfShortUltraBullet" comment="Short label for the UltraBullet chess performance. Used in compact UI such as perf cards and game filters, where visual width is limited. Use a short abbreviation rather than the full name. The max length is only a rough cross-language limit; for CJK languages, prefer 2-4 characters if possible." maxLength="10">Ultra</string>
+  <string name="pgnCopied" comment="Snackbar shown after copying a PGN line to the clipboard.">Nakopya ang PGN.</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Mga manlalarong may \"%s\"</string>
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kaliwa</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Kanan</string>
+  <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Mode ng pagsasanay</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Palakihin ang na-drag na piraso</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Gusto mo ba tapusin ang takbo na ito?</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Walang maipakita, mangyari kang baguhin ang mga filter</string>
+  <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Nakaraan</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Balikan ang mga dati mong pagsubok sa mga puzzle.</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Gusto mo ba tapusin ang run na ito?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Walang maipakita, pakibago ang mga filter</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Walang maipakita. Maglaro ng mga takbo sa Puzzle Storm.</string>
-  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Lutasin ang maraming palaisipan hangga\'t maaari sa loob ng 3 minuto.</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Maglaro ng mga palaisipan mula sa iyong mga paboritong pagbubukas, o pumili ng tema.</string>
-  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Palaisipan</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Mga nakaraang mga searches</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Sagutan ang pinakamaraming puzzle sa loob ng 3 minuto.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Maglaro ng mga puzzle mula sa iyong paborito mong opening, o pumili ng tema.</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Mga Puzzle</string>
+  <string name="rateThisApp" comment="Settings screen entry that opens the app store listing.">I-rate ang app na ito</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Mga kamakailang paghahanap</string>
   <string name="removeBookmark" comment="Label of the action of removing a game bookmark. Used in various places of the app where the space is constrained so this should remain short (eg: don't translate as 'Remove game bookmark', keep the essential).">Alisin ang bookmark</string>
+  <string name="selectAStudy" comment="Screen title when choosing a study to add a PGN to.">Pumili ng pag-aaral</string>
+  <string name="sendMeACode" comment="Button that requests an email login code on the email sign in screen.">Padalhan ako ang code</string>
   <string name="serverAnalysis" comment="Title of a switch in analysis settings, used to toggle the server analysis display.">Pagsusuri ng server</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Posisyon ng orasan</string>
   <string name="settingsCustomBackgroundPresets" comment="Displayed on the custom background theme screen.">Mga preset</string>
-  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Na-drag na piraso ng target</string>
+  <string name="settingsDraggedPieceTarget" comment="Dragged piece target entry in main settings screen.">Target ng piyesang dina-drag</string>
   <string name="settingsDraggedTargetCircle" comment="Dragged target settings circle type. One of the possible values of 'Dragged piece target' settings.">Bilog</string>
   <string name="settingsDraggedTargetSquare" comment="Dragged target settings square type. One of the possible values of 'Dragged piece target' settings.">Parisukat</string>
+  <string name="settingsDrawnShapeColor" comment="This is shown in the theme settings screen. Allow to choose the color of drawn shapes.">Kulay ng iginuhit na hugis</string>
+  <string name="settingsDrawnShapeColorHelp" comment="This is shown in the theme settings screen. Explanation of the drawn shape color settings.">Ginagamit ang kulay na ito para sa mga hugis na iginuguhit nang kamay gamit ang dalawang daliri.</string>
   <string name="settingsHomeWidgets" comment="Settings entry. Allow to enable which widgets are displayed on the home screen.">Mga home widget</string>
   <string name="settingsImmersiveMode" comment="Entry in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersive mode</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Itago ang sistemang UI habang naglalaro. Gamitin ito kung naaabala ka sa mga kumpas ng nabigasyon ng sistema sa mga gilid ng screen. Na-aapply sa mga screen ng laro at palaisipan.</string>
-  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Mga nakaing piyesa</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Itago ang sistemang UI habang naglalaro. Gamitin ito kung naaabala ka ng mga navigation gesture ng sistema sa mga gilid ng screen. Nalalapat sa mga screen ng laro at puzzle.</string>
+  <string name="settingsMaterialDifferenceCapturedPieces" comment="A value of the material difference settings choice (to show all captured pieces instead of material difference).">Mga nakuhang piyesa</string>
   <string name="settingsPickAnImage" comment="Displayed in theme background choice screen, to allow user to pick an image from the image library as app custom background.">Pumili ng larawan</string>
   <string name="settingsPickAnImageBlur" comment="Displayed in theme background choice screen, to blur the chosen image.">I-blur ang larawan</string>
-  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Gumagana lamang ang custom na background sa dark mode. Inirerekomenda and maitim na larawan.</string>
-  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Itago ang tabla</string>
-  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Ipakita ang tabla</string>
-  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">I-swipe upang ipakita ang iba bang mga background</string>
-  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Pindutin o i-drag</string>
-  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">Pindutin ang dalawang parisukat</string>
-  <string name="settingsShapeDrawing" comment="Entry in the settings.">Guhit ng hugis</string>
-  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Gumuhit ng mga hugis gamit ang dawalang daliri: panatilihin ang daliri sa parisukat ng walang laman at i-drag ang isang pang daliri upang iguhit ang hugis.</string>
-  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ipakita ang gilid</string>
-  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Mag-feedback kapag pumindot</string>
-  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kapag naka-enable, magba-vibrate ang device kapag tumira o kumain ng piyesa.</string>
+  <string name="settingsPickAnImageHelp" comment="Displayed in theme background choice screen, to help user pick an image.">Gumagana lamang ang custom na background sa dark mode. Inirerekomendang gumamit ng madilim na larawan.</string>
+  <string name="settingsPickAnImageHideBoard" comment="Displayed in theme background choice screen, to hide the board when viewing chosen image.">Itago ang board</string>
+  <string name="settingsPickAnImageShowBoard" comment="Displayed in theme background choice screen, to show the board when viewing chosen image.">Ipakita ang board</string>
+  <string name="settingsPickAnImageSwipeToDisplay" comment="Displayed in theme background choice screen, when viewing colors presets to display other colors backgrounds.">Mag-swipe para ipakita ang iba pang background</string>
+  <string name="settingsPieceShiftMethodEither" comment="A value of piece shift method settings entry.">Puwedeng i-tap o i-drag</string>
+  <string name="settingsPieceShiftMethodTapTwoSquares" comment="A value of piece shift method settings entry.">I-tap ang dalawang parisukat</string>
+  <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Na-save na ang iyong mga preference sa iyong Lichess account. Isi-synchronize ang mga ito sa lahat ng iyong device.</string>
+  <string name="settingsShapeDrawing" comment="Entry in the settings.">Pagguhit ng mga hugis</string>
+  <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Gumuhit ng mga hugis gamit ang dawalang daliri: panatilihin ang isang daliri sa isang bakanteng parisukat at i-drag ang isa pang daliri upang iguhit ang hugis.</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Ipakita ang border</string>
+  <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Feedback sa pindot</string>
+  <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kapag naka-enable, sandaling magba-vibrate ang device kapag gumalaw o kumuha ka ng piyesa.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Ibahagi</string>
+  <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Ibahagi ang URL ng hamon</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Ibahagi ang PGN</string>
-  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ibahagi ang larong URL</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Ibahagi ang URL ng laro</string>
+  <string name="shareLocalAnalysisPgn" comment="Menu action that shares the local analysis PGN from the analysis screen.">Ibahagi ang PGN ng lokal na pagsusuri</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Ibahagi ang posisyon bilang FEN</string>
-  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ibahagi ang palaisipang ito</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Ibahagi ang puzzle na ito</string>
   <string name="showComments" comment="Shown in the analysis screen.">Ipakita ang mga komento</string>
+  <string name="showEngineLines" comment="Analysis/broadcast/study settings switch that toggles engine lines.">Ipakita ang mga linya ng makina</string>
+  <string name="showEvaluationGauge" comment="Analysis/broadcast settings switch that toggles the evaluation gauge.">Ipakita ang panukat ng pagsusuri</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ipakita ang resulta</string>
+  <string name="signInWithBrowser" comment="Sign in option that starts the OAuth browser flow.">Mag-sign in gamit ang browser</string>
+  <string name="signInWithEmail" comment="Sign in option and screen title for the email login code flow.">Mag-sign in gamit ang email</string>
+  <string name="simpleDelay" comment="Name of the simple delay chess clock time control type.">Simpleng antala</string>
+  <string name="smallBoard" comment="Analysis/broadcast/study settings switch that uses a smaller board.">Maliit na board</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">May maling nangyari.</string>
+  <string name="sortFriends" comment="Accessibility label of the sort button on the friends screen.">Ayusin ang mga kaibigan</string>
+  <string name="stopShowingThreat" comment="This disables the 'Show Treat' mode in analysis.">Itigil ang pagpapakita ng banta</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Mga kulay ng sistema</string>
+  <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Hindi available ang tablebase offline.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
-  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Ang baryanteng %s ay hindi suportado sa bersyong ito.</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Iaanunsyo pa</string>
+  <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Masyado nang maraming pagsubok. Pakisubukan muli mamaya.</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Tapos na</string>
+  <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Pumunta sa aking pahina</string>
+  <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Hindi suportado ang variant %s sa bersyong ito.</string>
+  <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Gamitin ng simetrikong mga piyesa</string>
+  <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Tingnan ang Laro</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Tingnan ang mga lisensya</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Naghihintay na sumali ang kalaban...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Manood</string>
+  <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">Ipinapadala namin sa iyong email ang code na gagamitin mo sa pag-sign in.</string>
+  <string name="youCannotChallengeYourself" comment="Error snackbar when trying to challenge yourself from the board editor.">Hindi mo pwedeng hamunin ang sarili mo.</string>
 </resources>

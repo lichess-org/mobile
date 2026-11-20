@@ -1,6 +1,6 @@
 import 'package:chessground/chessground.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -327,12 +327,12 @@ class _BodyState() extends ConsumerState<_Body> {
                           enabled: hasAjustedColors,
                           leading: Icon(
                             Icons.clear,
-                            color: hasAjustedColors ? lichessCustomColors.error : null,
+                            color: hasAjustedColors ? lichessCustomColors.red : null,
                           ),
                           title: Text(
                             context.l10n.boardReset,
                             style: TextStyle(
-                              color: hasAjustedColors ? lichessCustomColors.error : null,
+                              color: hasAjustedColors ? lichessCustomColors.red : null,
                             ),
                           ),
                           onTap: hasAjustedColors

@@ -156,6 +156,7 @@ class BroadcastCarouselItem extends ConsumerStatefulWidget {
             location: null,
             dates: null,
             standings: null,
+            regulations: null,
           ),
         ),
         round: BroadcastRound(

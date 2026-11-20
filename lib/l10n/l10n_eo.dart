@@ -797,6 +797,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nova teama batalo';
 
   @override
+  String get arenaStartDate => 'Komenca dato';
+
+  @override
+  String get arenaEntryConditions => 'Kondiĉoj de eniro';
+
+  @override
   String get arenaCustomStartDate => 'Agorda komenca dato';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ligoj & bataloj de tujelsendantoj';
+
+  @override
+  String get arenaAllowBotAccounts => 'Permesi aŭtomatajn kontojn';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Permesi al <a href=\'$param\' target=\'_blank\'>robotoj</a> aligi al la turniro kaj ludi per ties ŝakkomputiloj. Ĉi tio ofte estas malplaĉa al homaj ludantoj.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Aŭtomate ŝanĝi peonojn al damoj';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Premu la <ctrl> klavon dum rangaltigo por momente malŝalti memagan rangaltiĝon';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Ĉe antaŭmovoj';
@@ -2406,7 +2420,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Konfirmo de movo';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Povas esti malebligita dum ludo kun la tabulo menuo';
@@ -3368,9 +3382,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Defii geamikon';
@@ -4578,6 +4589,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get resume => 'Daŭrigu';
+
+  @override
+  String get stop => 'Haltigi';
 
   @override
   String get youArePlaying => 'Vi nun ludas!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get minimumRatedGames => 'Minimumo de rangaj ludoj';
 
   @override
+  String get minimumAccountAge => 'Minimuma aĝo de kontoj';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titolitaj ludantoj preterpasas ĉi tiun limon.';
+
+  @override
   String get minimumRating => 'Minimuma rango';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get clearSearch => 'Viŝi serĉon';
+
+  @override
+  String searchInX(String param) {
+    return 'Serĉi en \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyKick => 'Forpuŝi';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Forlasi la studon';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyGoodMove => 'Bona movo';
 
   @override
-  String get studyMistake => 'Eraro';
-
-  @override
   String get studyBrilliantMove => 'Brilianta movo';
-
-  @override
-  String get studyBlunder => 'Erarego';
 
   @override
   String get studyInterestingMove => 'Interesa movo';
@@ -7417,7 +7439,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'El teksto FEN';
@@ -7465,6 +7487,12 @@ class AppLocalizationsEo extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analizi sur via aparato';
 
   @override
+  String get studySearchChapters => 'Serĉi ĉapitrojn';
+
+  @override
+  String get studySearchGames => 'Serĉi ludojn';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsEo extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Algluu ĉi tie vian PGN kodon, ĝis maksimume $count ludoj',
-      one: 'Algluu ĉi tie vian PGN kodon, maksimume ĝis $count ludo',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Dufaza aŭtentigo';
+
+  @override
+  String get tfaAuthenticationCode => 'Aŭtentiga kodo';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Malfermu la dufazan aŭtentigan apon en via aparato por vidi vian aŭtentigan kodon kaj kontrolu vian identecon.';
 
   @override
   String get timeagoJustNow => 'ĵus nun';

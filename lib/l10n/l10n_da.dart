@@ -797,6 +797,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get arenaNewTeamBattle => 'Ny holdkamp';
 
   @override
+  String get arenaStartDate => 'Startdato';
+
+  @override
+  String get arenaEntryConditions => 'Betingelser for deltagelse';
+
+  @override
   String get arenaCustomStartDate => 'Tilpasset startdato';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Kampe';
+
+  @override
+  String get arenaAllowBotAccounts => 'Tillad bot-konti';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Lad <a href=\'$param\' target=\'_blank\'>bots</a> deltage i turneringen og spille med deres motorer. Dette afskrækker ofte mennesker.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Forfrem til dronning automatisk';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold <ctrl>-tasten nede, mens du forfremmer for midlertidigt at deaktivere auto-forfremmelse';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Ved forhåndstræk';
@@ -2406,7 +2420,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Bekræft træk';
 
   @override
-  String get preferencesMultipleChoices => 'Flere valg. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan deaktiveres i løbet af et parti med brætmenuen';
@@ -3368,9 +3382,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Jeg forstår, at slettede konti ikke kan gendannes';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Spil mod en ven';
@@ -4578,6 +4589,9 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get resume => 'Genoptag';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Du spiller!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get minimumRatedGames => 'Minimum ratede partier';
 
   @override
+  String get minimumAccountAge => 'Minimumsalder for konto';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Spillere med titel er undtaget fra denne begrænsning.';
+
+  @override
   String get minimumRating => 'Minimum rating';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Ryd søgning';
+
+  @override
+  String searchInX(String param) {
+    return 'Søg i \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyKick => 'Smid ud';
 
   @override
+  String get studyRemove => 'Fjern';
+
+  @override
   String get studyLeaveTheStudy => 'Forlad dette studie';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyGoodMove => 'Godt træk';
 
   @override
-  String get studyMistake => 'Fejl';
-
-  @override
   String get studyBrilliantMove => 'Fremragende træk';
-
-  @override
-  String get studyBlunder => 'Brøler';
 
   @override
   String get studyInterestingMove => 'Interessant træk';
@@ -7465,6 +7487,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyser på din enhed';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Indsæt din PGN-tekst her, op til $count partier',
-      one: 'Indsæt din PGN-tekst her, op til $count parti',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'To-faktor-godkendelse';
+
+  @override
+  String get tfaAuthenticationCode => 'Bekræftelseskode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Åbn to-faktor-godkendelsesappen på din enhed for at se din godkendelseskode og bekræfte din identitet.';
 
   @override
   String get timeagoJustNow => 'for lidt siden';

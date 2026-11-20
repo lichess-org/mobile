@@ -797,6 +797,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get arenaNewTeamBattle => 'Uus võistkonnalahing';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Kohandatud algusaeg';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automaatselt edenda lipuks';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hoia edendamise ajal <ctrl> klahvi all, et ajutiselt keelata automaatne edendamine';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Eelkäiguga';
@@ -2406,7 +2420,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Käigu kinnitus';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3368,9 +3382,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Kutse mängule';
@@ -4578,6 +4589,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get resume => 'Jätka';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Te mängite!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get minimumRatedGames => 'Minimaalne reitinguga mängude arv';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimaalne reiting';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tühjenda otsing';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyKick => 'Viska välja';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Lahku uuringust';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyGoodMove => 'Hea käik';
 
   @override
-  String get studyMistake => 'Viga';
-
-  @override
   String get studyBrilliantMove => 'Suurepärane käik';
-
-  @override
-  String get studyBlunder => 'Tõsine viga';
 
   @override
   String get studyInterestingMove => 'Huvitav käik';
@@ -7417,7 +7439,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7465,6 +7487,12 @@ class AppLocalizationsEt extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Aseta oma PGN tekst siia, kuni $count mängu',
-      one: 'Aseta oma PGN tekst siia, kuni $count mäng',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Kaheastmeline autentimine';
+
+  @override
+  String get tfaAuthenticationCode => 'Autentimise kood';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Ava kaheastmelise autentimise äpp oma seadmes, et näha autentimiskoodi ja kinnitada oma isikut.';
 
   @override
   String get timeagoJustNow => 'äsja';

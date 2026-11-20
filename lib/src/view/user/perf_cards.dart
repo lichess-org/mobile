@@ -79,7 +79,9 @@ class const PerfCards({
               ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (_, index) {
+                // Uses the build context: theme reads on the item builder context are not updated
+                // when the theme changes.
                 final perf = userPerfs[index];
                 final userPerf = user.perfs[perf]!;
                 final bool isPerfWithoutStats = Perf.streak == perf;
@@ -120,8 +122,8 @@ class const PerfCards({
                                         ? LichessIcons.arrow_full_upperright
                                         : LichessIcons.arrow_full_lowerright,
                                     color: userPerf.progression > 0
-                                        ? context.lichessColors.good
-                                        : context.lichessColors.error,
+                                        ? context.lichessColors.green
+                                        : context.lichessColors.red,
                                     size: 12,
                                   ),
                                   Flexible(
@@ -131,8 +133,8 @@ class const PerfCards({
                                       maxLines: 1,
                                       style: TextStyle(
                                         color: userPerf.progression > 0
-                                            ? context.lichessColors.good
-                                            : context.lichessColors.error,
+                                            ? context.lichessColors.green
+                                            : context.lichessColors.red,
                                         fontSize: 11,
                                       ),
                                     ),

@@ -143,7 +143,7 @@ class const _StudyTile({
         null => null,
       },
       trailing: progress.isStudyComplete(study)
-          ? const Icon(Icons.check_circle, color: LichessColors.good)
+          ? const Icon(Icons.check_circle, color: LichessColors.green)
           : Text('$done / ${study.chapters.length}'),
       // Straight to the chapter to play: the others are a tap away in the chapter screen.
       onTap: () =>

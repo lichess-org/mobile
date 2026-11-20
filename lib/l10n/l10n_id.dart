@@ -734,7 +734,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get arenaHowIsTheWinnerDecidedAnswer => 'Para pemain dengan poin terbanyak di akhir turnamen pada saat selesai sesuai batas waktu yang turnamen yang akan diumumkan sebagai para pemenang.';
 
   @override
-  String get arenaHowArePlayersPaired => 'How are players paired?';
+  String get arenaHowArePlayersPaired => 'Bagaimana para pemain dipasangkan?';
 
   @override
   String get arenaHowDoesPairingWorkAnswer => 'Pada awal turnamen, pemain yang dipasangkan berdasarkan rating mereka. Segera setelah Anda menyelesaikan permainan, kembali ke lobi turnamen: Anda akan kemudian dipasangkan dengan pemain yang dekat dengan peringkat Anda. Hal ini memastikan waktu tunggu minimal, namun Anda tidak mungkin menghadapi semua pemain di turnamen. Bermain cepat dan kembali ke lobi untuk bermain lebih banyak permainan dan menang lebih banyak poin.';
@@ -778,6 +778,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get arenaNewTeamBattle => 'Pertempuran Tim Baru';
+
+  @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
 
   @override
   String get arenaCustomStartDate => 'Tanggal mulai khusus';
@@ -888,6 +894,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1270,7 +1284,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String challengeChallengesX(String param1) {
-    return 'Challenges: $param1';
+    return 'Tantangan: $param1';
   }
 
   @override
@@ -1823,7 +1837,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get learnPieceValueExchange => 'Take the piece with the highest value!\nDo not exchange\na higher valued piece for a less valuable one.';
 
   @override
-  String get learnPieceValueLegal => 'Take the piece\nwith the highest value!\nMake sure your move is legal!';
+  String get learnPieceValueLegal => 'Ambil bagiannya\ndengan nilai tertinggi!\nPastikan langkah Anda legal!';
 
   @override
   String get learnTakeThePieceWithTheHighestValue => 'Ambil bagian\ndengan nilai tertinggi!';
@@ -2372,7 +2386,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Otomatis promosikan Menteri';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Tahan tombol <ctrl> saat promosi untuk sementara membatalkan promosi otomatis';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Ketika pra-langkah';
@@ -2387,7 +2401,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Konfirmasi langkah';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dapat dimatikan selama permainan pada menu papan';
@@ -3346,9 +3360,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
 
   @override
-  String get gameSetup => 'Game setup';
-
-  @override
   String get challengeAFriend => 'Tantang teman';
 
   @override
@@ -3376,7 +3387,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get reusableChallengeUrl => 'Reusable challenge URL';
 
   @override
-  String get permanentLinkForAnyoneToChallengeYou => 'A permanent link for anyone to challenge you with these exact settings.';
+  String get permanentLinkForAnyoneToChallengeYou => 'Tautan permanen bagi siapa saja untuk menantang Anda dengan pengaturan yang tepat ini.';
 
   @override
   String get waiting => 'Menunggu';
@@ -3637,7 +3648,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String maxRatingX(String param) {
-    return 'Maximum rating of $param';
+    return 'Peringkat maksimum $param';
   }
 
   @override
@@ -4554,6 +4565,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get resume => 'Lanjutkan';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Anda bermain!';
@@ -6024,6 +6038,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get minimumRatedGames => 'Permainan di nilai minimum';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Peringkat minimum';
 
   @override
@@ -6194,6 +6214,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get clearSearch => 'Bersihkan pencarian';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6897,6 +6922,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyKick => 'Diusir';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Tinggalkan studi';
 
   @override
@@ -7168,13 +7196,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyGoodMove => 'Langkah bagus';
 
   @override
-  String get studyMistake => 'Kesalahan';
-
-  @override
   String get studyBrilliantMove => 'Langkah Brilian';
-
-  @override
-  String get studyBlunder => 'Blunder';
 
   @override
   String get studyInterestingMove => 'Langkah menarik';
@@ -7350,7 +7372,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7398,6 +7420,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7432,7 +7460,8 @@ class AppLocalizationsId extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Tempelkan PGN kamu disini, lebih dari $count permainan',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7470,6 +7499,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autentikasi dua-langkah';
+
+  @override
+  String get tfaAuthenticationCode => 'Kode otentikasi';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Buka aplikasi otentikasi dua faktor di perangkat anda untuk melihat kode otentikasi dan verifikasi identitas anda.';
 
   @override
   String get timeagoJustNow => 'baru saja';

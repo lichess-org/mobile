@@ -779,6 +779,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get arenaNewTeamBattle => '新しいチームバトル';
 
   @override
+  String get arenaStartDate => '開始日';
+
+  @override
+  String get arenaEntryConditions => '参加条件';
+
+  @override
   String get arenaCustomStartDate => '開始日を指定';
 
   @override
@@ -887,6 +893,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'リーグとストリーマーバトル';
+
+  @override
+  String get arenaAllowBotAccounts => 'ボットアカウントを許可する';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return '<a href=\'$param\' target=\'_blank\'>ボット</a>がトーナメントに参加し、エンジンで対局できるようにします。多くの場合、人間のプレイヤーが参加を避けます。';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2369,7 +2383,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => '自動的にクイーンに昇格する';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => '<ctrl> キーを押しながら昇格させると、Q への自動昇格を一時的に無効にできます';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'プリムーブをした場合';
@@ -2384,7 +2398,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get preferencesMoveConfirmation => '着手をそのつど確認する';
 
   @override
-  String get preferencesMultipleChoices => '複数選択可。 ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ボードのメニューからゲーム中に無効にできます';
@@ -3340,9 +3354,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => '私は削除されたアカウントが回復できないことを理解しています';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => '友達に挑戦';
@@ -4550,6 +4561,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get resume => '再開する';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => '参加中！';
@@ -6020,6 +6034,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get minimumRatedGames => '必要対局数（レート戦）';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'レーティング下限';
 
   @override
@@ -6190,6 +6210,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get clearSearch => '検索をクリア';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6893,6 +6918,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyKick => '追放';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'この研究から出る';
 
   @override
@@ -7164,13 +7192,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyGoodMove => '好手';
 
   @override
-  String get studyMistake => '悪手';
-
-  @override
   String get studyBrilliantMove => '妙手';
-
-  @override
-  String get studyBlunder => '大悪手';
 
   @override
   String get studyInterestingMove => '面白い手';
@@ -7394,6 +7416,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'デバイス内で解析';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7428,7 +7456,8 @@ class AppLocalizationsJa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'ここに PGN をペースト（$count 局まで）',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7464,6 +7493,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => '2 要素認証';
+
+  @override
+  String get tfaAuthenticationCode => '認証コード';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'デバイスで 2 要素認証アプリを開き、認証コードを表示して確認してださい。';
 
   @override
   String get timeagoJustNow => 'たった今';

@@ -797,6 +797,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nieuwe teamwedstrijd';
 
   @override
+  String get arenaStartDate => 'Begindatum';
+
+  @override
+  String get arenaEntryConditions => 'Toelatingsvoorwaarden';
+
+  @override
   String get arenaCustomStartDate => 'Aangepaste startdatum';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Liga\'s & Streamerstrijden';
+
+  @override
+  String get arenaAllowBotAccounts => 'Bot-accounts toestaan';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Laat <a href=\'$param\' target=\'_blank\'>bots</a> deelnemen aan het toernooi en spelen met hun computer. Dit stoot menselijke spelers vaak af.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automatisch promoveren tot dame';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Houd de <Ctrl> toets ingedrukt om auto-promotie tijdelijk uit te zetten';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Houd de Ctrl-toets ingedrukt om auto-promotie tijdelijk uit te zetten';
 
   @override
   String get preferencesWhenPremoving => 'Bij vooraf-zetten';
@@ -2406,7 +2420,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Zetbevestiging';
 
   @override
-  String get preferencesMultipleChoices => 'Meerdere keuzes. ';
+  String get preferencesMultipleChoices => 'Meerdere keuzes.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan tijdens een partij uitgeschakeld worden via het bordmenu';
@@ -3368,9 +3382,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Ik begrijp dat verwijderde accounts niet te herstellen zijn';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Daag een vriend uit';
@@ -4578,6 +4589,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get resume => 'Hervatten';
+
+  @override
+  String get stop => 'Stoppen';
 
   @override
   String get youArePlaying => 'Je bent aan het spelen!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get minimumRatedGames => 'Minimumaantal partijen met rating';
 
   @override
+  String get minimumAccountAge => 'Minimale accountleeftijd';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titelhouders omzeilen deze beperking.';
+
+  @override
   String get minimumRating => 'Minimumrating';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Zoekopdracht wissen';
+
+  @override
+  String searchInX(String param) {
+    return 'Zoeken in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyKick => 'Verwijder';
 
   @override
+  String get studyRemove => 'Verwijderen';
+
+  @override
   String get studyLeaveTheStudy => 'Verlaat de studie';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyGoodMove => 'Goede zet';
 
   @override
-  String get studyMistake => 'Fout';
-
-  @override
   String get studyBrilliantMove => 'Briljante zet';
-
-  @override
-  String get studyBlunder => 'Blunder';
 
   @override
   String get studyInterestingMove => 'Interessante zet';
@@ -7465,6 +7487,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyseer op je apparaat';
 
   @override
+  String get studySearchChapters => 'Zoek hoofdstukken';
+
+  @override
+  String get studySearchGames => 'Zoek partijen';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsNl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Plak hier spellen als PGN-tekst. Voor elk spel wordt een nieuw hoofdstuk gemaakt. De studie kan maximaal $count hoofdstukken hebben.',
-      one: 'Plak je PGN tekst hier, tot $count spel mogelijk',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tweestapsverificatie';
+
+  @override
+  String get tfaAuthenticationCode => 'Verificatiecode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open de tweestapsverificatie-app op uw apparaat om uw authenticatiecode te bekijken en uw identiteit te verifiëren.';
 
   @override
   String get timeagoJustNow => 'zojuist';

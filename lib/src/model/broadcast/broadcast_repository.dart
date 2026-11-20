@@ -183,6 +183,7 @@ BroadcastTournamentData _tournamentDataFromPick(RequiredPick pick) => BroadcastT
     ),
     website: pick('info', 'website').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
     standings: pick('info', 'standings').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
+    regulations: pick('info', 'regulations').letOrNull((p) => Uri.tryParse(p.asStringOrThrow())),
   ),
 );
 

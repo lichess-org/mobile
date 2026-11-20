@@ -275,18 +275,24 @@ final lichessClientProvider = Provider<LichessClient>((Ref ref) {
 
 /// Whether a response should be retried once by [lichessClientProvider].
 ///
-/// Retries on 429 Too Many Requests, except for the puzzle batch endpoints (`/api/puzzle/batch/…`),
-/// which are rate-limited deliberately:
-/// - solve submissions (`POST`) are handled with a back-off by `PuzzleSolveLimiter`, so retrying
-///   here only burns a request and delays arming the back-off;
-/// - batch downloads (`GET`) are issued once per puzzle angle, so a retry doubles an already large
-///   burst against an endpoint that has just said it is receiving too many requests.
+/// Retries on 429 Too Many Requests, except for endpoints which are rate-limited deliberately:
+/// - puzzle solve submissions (`POST /api/puzzle/batch/…`) are handled with a back-off by
+///   `PuzzleSolveLimiter`, so retrying here only burns a request and delays arming the back-off;
+/// - puzzle batch downloads (`GET /api/puzzle/batch/…`) are issued once per puzzle angle, so a
+///   retry doubles an already large burst against an endpoint that has just said it is receiving
+///   too many requests;
+/// - account closing and deletion (`POST /account/close`, `POST /account/delete`) check the
+///   password under the password hasher rate limit, so a retry sends the credentials again and
+///   counts as another attempt.
 @visibleForTesting
 bool shouldRetryOn429(BaseResponse response) {
   if (response.statusCode != 429) return false;
   final request = response.request;
-  final isPuzzleBatch = request != null && request.url.path.startsWith('/api/puzzle/batch/');
-  return !isPuzzleBatch;
+  if (request == null) return true;
+  final path = request.url.path;
+  return !path.startsWith('/api/puzzle/batch/') &&
+      path != '/account/close' &&
+      path != '/account/delete';
 }
 
 Duration _defaultDelay(int retryCount) =>
@@ -543,7 +549,7 @@ class LichessClient(final Client _inner, final Ref _ref) implements Client {
       }
 
       if (response.statusCode == 401 && authUser != null) {
-        _ref.read(authControllerProvider.notifier).checkToken();
+        _ref.read(authControllerProvider.notifier).checkToken(authUser);
       }
 
       return response;
@@ -1034,7 +1040,11 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
+  ///
+  /// The response may be that of the signed in account, so the provider runs [fn] again when the
+  /// user signs in to, out of, or switches to another account.
   Future<U> withClientCacheFor<U>(Future<U> Function(LichessClient) fn, Duration duration) async {
+    _watchSignedInAccount();
     final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     try {
@@ -1053,10 +1063,13 @@ extension ClientRefExtension on Ref {
   ///
   /// If [fn] throws with a [ServerException], the provider is kept alive as we don't want to retry
   /// server errors immediately.
+  ///
+  /// Like [withClientCacheFor], the provider runs [fn] again when the signed in account changes.
   Future<U> withAggregatorCacheFor<U>(
     Future<U> Function(LichessClient, Aggregator) fn,
     Duration duration,
   ) async {
+    _watchSignedInAccount();
     final link = cacheFor(duration);
     final client = read(lichessClientProvider);
     final aggregator = read(aggregatorProvider);
@@ -1068,5 +1081,9 @@ extension ClientRefExtension on Ref {
       link.close();
       rethrow;
     }
+  }
+
+  void _watchSignedInAccount() {
+    watch(authControllerProvider.select((authUser) => authUser?.user.id));
   }
 }

@@ -797,6 +797,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arenaNewTeamBattle => 'New Team Battle';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Custom start date';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promote to Queen automatically';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'When premoving';
@@ -2406,7 +2420,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Move confirmation';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3366,9 +3380,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Challenge a friend';
@@ -4576,6 +4587,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resume => 'Resume';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'You are playing!';
@@ -6046,6 +6060,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get minimumRatedGames => 'Minimum rated games';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimum rating';
 
   @override
@@ -6216,6 +6236,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6962,6 +6987,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyKick => 'Kick';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Leave the study';
 
   @override
@@ -7233,13 +7261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyGoodMove => 'Good move';
 
   @override
-  String get studyMistake => 'Mistake';
-
-  @override
   String get studyBrilliantMove => 'Brilliant move';
-
-  @override
-  String get studyBlunder => 'Blunder';
 
   @override
   String get studyInterestingMove => 'Interesting move';
@@ -7415,7 +7437,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7463,6 +7485,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7501,7 +7529,7 @@ class AppLocalizationsEn extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7539,6 +7567,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get tfaAuthenticationCode => 'Authentication code';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.';
 
   @override
   String get timeagoJustNow => 'just now';
@@ -8576,6 +8610,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get arenaNewTeamBattle => 'New Team Battle';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Custom start date';
 
   @override
@@ -8684,6 +8724,14 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -10170,7 +10218,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesPromoteToQueenAutomatically => 'Promote to Queen automatically';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the Ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'When premoving';
@@ -10185,7 +10233,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get preferencesMoveConfirmation => 'Move confirmation';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -11143,7 +11191,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
-  String get settingsCloseYourAccount => 'delete your account';
+  String get settingsCloseYourAccount => 'close your account';
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
@@ -12354,6 +12402,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get resume => 'Resume';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'You are playing!';
@@ -13824,6 +13875,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get minimumRatedGames => 'Minimum rated games';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimum rating';
 
   @override
@@ -13994,6 +14051,11 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -14740,6 +14802,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get studyKick => 'Kick';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Leave the study';
 
   @override
@@ -15011,13 +15076,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get studyGoodMove => 'Good move';
 
   @override
-  String get studyMistake => 'Mistake';
-
-  @override
   String get studyBrilliantMove => 'Brilliant move';
-
-  @override
-  String get studyBlunder => 'Blunder';
 
   @override
   String get studyInterestingMove => 'Interesting move';
@@ -15241,6 +15300,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get studyAnalyzeOnYourDevice => 'Analyze on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -15278,8 +15343,8 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste your PGN text here, up to $count games',
-      one: 'Paste your PGN text here, up to $count game',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -15317,6 +15382,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get tfaTwoFactorAuth => 'Two-factor authentication';
+
+  @override
+  String get tfaAuthenticationCode => 'Authentication code';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.';
 
   @override
   String get timeagoJustNow => 'just now';

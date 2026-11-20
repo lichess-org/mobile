@@ -833,6 +833,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nowa bitwa klubów';
 
   @override
+  String get arenaStartDate => 'Data rozpoczęcia';
+
+  @override
+  String get arenaEntryConditions => 'Warunki dołączenia';
+
+  @override
   String get arenaCustomStartDate => 'Niestandardowa data rozpoczęcia';
 
   @override
@@ -943,6 +949,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaLeaguesAndStreamerBattles => 'Ligi & Bitwy Streamerów';
 
   @override
+  String get arenaAllowBotAccounts => 'Zezwalaj na konta botów';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Pozwól <a href=\'$param\' target=\'_blank\'>botom</a> dołączyć do turnieju i graj z ich silnikami. To często zniechęca prawdziwych graczy.';
+  }
+
+  @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1008,7 +1022,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastRoundName => 'Nazwa rundy';
 
   @override
-  String get broadcastTournamentName => 'Nazwa turnieju';
+  String get broadcastTournamentName => 'Nazwa wydarzenia';
 
   @override
   String get broadcastTournamentDescription => 'Krótki opis turnieju';
@@ -1177,7 +1191,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastTournamentFormat => 'Format turnieju';
 
   @override
-  String get broadcastTournamentLocation => 'Lokalizacja turnieju';
+  String get broadcastTournamentLocation => 'Lokalizacja wydarzenia';
 
   @override
   String get broadcastTopPlayers => 'Najlepsi gracze';
@@ -2012,7 +2026,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnRetry => 'Spróbuj jeszcze raz';
 
   @override
-  String get patronDonate => 'Przekaż datek';
+  String get patronDonate => 'Dotacja';
 
   @override
   String get patronLichessPatron => 'Patron Lichess';
@@ -2435,7 +2449,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automatyczna promocja na hetmana';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz <ctrl> podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz ctrl podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
 
   @override
   String get preferencesWhenPremoving => 'W czasie ruchu planowanego';
@@ -2450,7 +2464,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
 
   @override
-  String get preferencesMultipleChoices => 'Możesz wybrać kilka. ';
+  String get preferencesMultipleChoices => 'Możesz wybrać kilka.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
@@ -3424,9 +3438,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Rozumiem, że usunięte konta nie są możliwe do odzyskania';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Rzuć wyzwanie znajomemu';
@@ -4634,6 +4645,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get resume => 'Wznów';
+
+  @override
+  String get stop => 'Zatrzymaj';
 
   @override
   String get youArePlaying => 'Grasz!';
@@ -6104,6 +6118,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get minimumRatedGames => 'Minimalna liczba partii rankingowych';
 
   @override
+  String get minimumAccountAge => 'Minimalny staż konta';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Nie dotyczy utytułowanych graczy.';
+
+  @override
   String get minimumRating => 'Minimalny ranking';
 
   @override
@@ -6274,6 +6294,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Wyczyść wyszukiwanie';
+
+  @override
+  String searchInX(String param) {
+    return 'Szukaj w \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7106,6 +7131,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyKick => 'Wyrzuć';
 
   @override
+  String get studyRemove => 'Usuń';
+
+  @override
   String get studyLeaveTheStudy => 'Opuść opracowanie';
 
   @override
@@ -7377,13 +7405,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyGoodMove => 'Dobry ruch';
 
   @override
-  String get studyMistake => 'Pomyłka';
-
-  @override
   String get studyBrilliantMove => 'Świetny ruch';
-
-  @override
-  String get studyBlunder => 'Błąd';
 
   @override
   String get studyInterestingMove => 'Interesujący ruch';
@@ -7607,6 +7629,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analizuj na swoim urządzeniu';
 
   @override
+  String get studySearchChapters => 'Szukaj rozdziałów';
+
+  @override
+  String get studySearchGames => 'Szukaj partii';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7650,10 +7678,8 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Wklej tutaj swój PGN, max $count partii',
-      many: 'Wklej tutaj swój PGN, max $count partii',
-      few: 'Wklej tutaj swój PGN, max $count partie',
-      one: 'Wklej tutaj swój PGN, max $count partię',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7695,6 +7721,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Uwierzytelnianie dwuskładnikowe';
+
+  @override
+  String get tfaAuthenticationCode => 'Kod uwierzytelniający';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Otwórz aplikację do uwierzytelniania dwuskładnikowego na swoim urządzeniu, aby wyświetlić kod uwierzytelniający i zweryfikować swoją tożsamość.';
 
   @override
   String get timeagoJustNow => 'właśnie teraz';

@@ -797,6 +797,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get arenaNewTeamBattle => 'Ny Lagmatch';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Anpassat startdatum';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promovera till drottning automatiskt';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Håll ner <ctrl> -tangenten medan du uppgraderar för att tillfälligt inaktivera automatisk förvandling';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Vid förhandsdrag';
@@ -2406,7 +2420,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Bekräftelse av drag';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan inaktiveras under ett spel med forummenyn';
@@ -3368,9 +3382,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Utmana en vän';
@@ -4578,6 +4589,9 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get resume => 'Fortsätt';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Du spelar!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get minimumRatedGames => 'Minst antal rankade partier';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Lägsta rating';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get clearSearch => 'Rensa sökning';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyKick => 'Sparka';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Lämna studien';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyGoodMove => 'Bra drag';
 
   @override
-  String get studyMistake => 'Misstag';
-
-  @override
   String get studyBrilliantMove => 'Lysande drag';
-
-  @override
-  String get studyBlunder => 'Blunder';
 
   @override
   String get studyInterestingMove => 'Intressant drag';
@@ -7417,7 +7439,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'Från en FEN-sträng';
@@ -7465,6 +7487,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsSv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Klistra in din PGN-kod här, upp till $count partier',
-      one: 'Klistra in din PGN-kod här, upp till $count parti',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tvåfaktorsautentisering';
+
+  @override
+  String get tfaAuthenticationCode => 'Autentiseringskod';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Öppna tvåfaktorsautentiseringsappen på din enhet för att visa din autentiseringskod och verifiera din identitet.';
 
   @override
   String get timeagoJustNow => 'just nu';

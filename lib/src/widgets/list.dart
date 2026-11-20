@@ -163,7 +163,9 @@ class ListSection extends StatelessWidget {
     final List<Widget> result = [];
     for (int i = 0; i < tilesList.length; i++) {
       result.add(tilesList.elementAt(i));
-      if (i != tilesList.length - 1) {
+      if (i != tilesList.length - 1 &&
+          tilesList[i] is! ListSectionSeparator &&
+          tilesList[i + 1] is! ListSectionSeparator) {
         result.add(
           PlatformDivider(
             height: 0,
@@ -174,6 +176,40 @@ class ListSection extends StatelessWidget {
       }
     }
     return result;
+  }
+}
+
+/// A separator between two groups of tiles of a [ListSection], which stay in the same card.
+///
+/// It spans the whole width of the card, unlike the dividers between the iOS tiles, which are not
+/// drawn next to it.
+class const ListSectionSeparator({
+  super.key,
+
+  /// A title for the group of tiles below, typically a [Text], smaller than a section header.
+  final Widget? title,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    const divider = PlatformDivider(height: 16.0, indent: 0.0);
+    if (title == null) return divider;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        divider,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 8.0),
+          child: DefaultTextStyle.merge(
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600,
+              color: ColorScheme.of(context).onSurfaceVariant,
+            ),
+            child: title!,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -198,7 +234,10 @@ class const ListSectionHeader({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              child: Semantics(
+                headingLevel: 2,
+                child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              ),
             ),
             if (onTap != null)
               Row(

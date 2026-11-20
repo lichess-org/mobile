@@ -192,7 +192,7 @@ sealed class SnackBarPresenter {
         Overlay.maybeOf(context, rootOverlay: true) ?? Navigator.of(context).overlay!,
       );
     }
-    return _MaterialSnackBarPresenter(ScaffoldMessenger.of(context), context.lichessColors.error);
+    return _MaterialSnackBarPresenter(ScaffoldMessenger.of(context), ColorScheme.of(context));
   }
 
   /// Whether the presenter can still show a snackbar.
@@ -202,8 +202,10 @@ sealed class SnackBarPresenter {
   void show(String message, {SnackBarType type = SnackBarType.info, Duration? duration});
 }
 
-class _MaterialSnackBarPresenter(final ScaffoldMessengerState _messenger, final Color _errorColor)
-    implements SnackBarPresenter {
+class _MaterialSnackBarPresenter(
+  final ScaffoldMessengerState _messenger,
+  final ColorScheme _colorScheme,
+) implements SnackBarPresenter {
   @override
   bool get mounted => _messenger.mounted;
 
@@ -213,9 +215,9 @@ class _MaterialSnackBarPresenter(final ScaffoldMessengerState _messenger, final 
       SnackBar(
         content: Text(
           message,
-          style: type == SnackBarType.error ? const TextStyle(color: Colors.white) : null,
+          style: type == SnackBarType.error ? TextStyle(color: _colorScheme.onError) : null,
         ),
-        backgroundColor: type == SnackBarType.error ? _errorColor : null,
+        backgroundColor: type == SnackBarType.error ? _colorScheme.error : null,
         duration: duration ?? const Duration(milliseconds: 4000),
       ),
     );

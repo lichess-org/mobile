@@ -814,6 +814,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get arenaNewTeamBattle => 'Jauna Komandas Kauja';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Pielāgots sākuma datums';
 
   @override
@@ -922,6 +928,14 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2410,7 +2424,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automātiski pārvērst par Dāmu';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Turiet nospiestu taustiņu <ctrl>, kad paaugstinat bandinieku, lai īslaicīgi atspējotu automātisko paaugstināšanu';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Tikai priekšgājienos';
@@ -2425,7 +2439,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Gājiena apstiprināšana';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Izslēdzams spēles laikā no galdiņa izvēlnes';
@@ -3392,9 +3406,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Challenge a friend';
@@ -4602,6 +4613,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get resume => 'Atsākt';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Jūs spēlējat!';
@@ -6072,6 +6086,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get minimumRatedGames => 'Minimālais vērtēto spēļu skaits';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimālais reitings';
 
   @override
@@ -6242,6 +6262,11 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get clearSearch => 'Clear search';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7031,6 +7056,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyKick => 'Izmest';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Pamest izpēti';
 
   @override
@@ -7302,13 +7330,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyGoodMove => 'Labs gājiens';
 
   @override
-  String get studyMistake => 'Kļūda';
-
-  @override
   String get studyBrilliantMove => 'Izcils gājiens';
-
-  @override
-  String get studyBlunder => 'Rupja kļūda';
 
   @override
   String get studyInterestingMove => 'Interesants gājiens';
@@ -7484,7 +7506,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7532,6 +7554,12 @@ class AppLocalizationsLv extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyse on your device';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7572,9 +7600,8 @@ class AppLocalizationsLv extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēles',
-      one: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēli',
-      zero: 'Ielīmējiet PGN tekstu šeit, ne vairāk kā $count spēles',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7612,6 +7639,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Divfaktoru autentifikācija';
+
+  @override
+  String get tfaAuthenticationCode => 'Autentifikācijas kods';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Atveriet divu faktoru autentifikācijas aplikāciju savā ierīcē, lai skatītu autentifikācijas kodu un apliecinātu savu identitāti.';
 
   @override
   String get timeagoJustNow => 'tikko';

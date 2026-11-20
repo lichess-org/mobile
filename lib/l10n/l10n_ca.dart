@@ -797,6 +797,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nova batalla d\'equips';
 
   @override
+  String get arenaStartDate => 'Data d\'inici';
+
+  @override
+  String get arenaEntryConditions => 'Condicions d\'entrada';
+
+  @override
   String get arenaCustomStartDate => 'Data d\'inici personalitzada';
 
   @override
@@ -905,6 +911,14 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Lligues & batalles de streamers';
+
+  @override
+  String get arenaAllowBotAccounts => 'Permetre comptes de bots';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Permet que els <a href=\'$param\' target=\'_blank\'>bots</a> entrin al torneig i juguin amb les seves màquines. Això normalment fa que els jugadors humans no vulguin jugar.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2405,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Promocionar a Dama automàticament';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Mantingui premuda la tecla <ctrl> durant la promoció per deshabilitar la promoció automàtica temporalment';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Mantingui premuda la tecla ctrl durant la promoció per deshabilitar la promoció automàtica temporalment';
 
   @override
   String get preferencesWhenPremoving => 'En moviments anticipats';
@@ -2406,7 +2420,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Confirmació del moviment';
 
   @override
-  String get preferencesMultipleChoices => 'Múltiples opcions. ';
+  String get preferencesMultipleChoices => 'Múltiples opcions.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Es pot desactivar durant la partida al menú del taulell';
@@ -3368,9 +3382,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Entenc que els comptes eliminats no es poden recuperar';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Repta un amic';
@@ -4578,6 +4589,9 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get resume => 'Reprèn';
+
+  @override
+  String get stop => 'Aturar';
 
   @override
   String get youArePlaying => 'Estàs jugant!';
@@ -6048,6 +6062,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get minimumRatedGames => 'Mínims partits puntuats';
 
   @override
+  String get minimumAccountAge => 'Edat mínima del compte';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Els jugadors titulats poden evitar aquesta restricció.';
+
+  @override
   String get minimumRating => 'Puntuació mínima';
 
   @override
@@ -6218,6 +6238,11 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get clearSearch => 'Neteja la cerca';
+
+  @override
+  String searchInX(String param) {
+    return 'Cerca a \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6989,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyKick => 'Expulsa';
 
   @override
+  String get studyRemove => 'Suprimeix';
+
+  @override
   String get studyLeaveTheStudy => 'Deixar l’estudi';
 
   @override
@@ -7235,13 +7263,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyGoodMove => 'Bona jugada';
 
   @override
-  String get studyMistake => 'Errada';
-
-  @override
   String get studyBrilliantMove => 'Jugada brillant';
-
-  @override
-  String get studyBlunder => 'Error greu';
 
   @override
   String get studyInterestingMove => 'Jugada interessant';
@@ -7465,6 +7487,12 @@ class AppLocalizationsCa extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analitza al teu dispositiu';
 
   @override
+  String get studySearchChapters => 'Cerca capítols';
+
+  @override
+  String get studySearchGames => 'Cerca partides';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7530,8 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Enganxa el teu PGN aquí, fins a $count partides',
-      one: 'Enganxa el teu PGN aquí, fins a $count partida',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7569,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Autenticació de dos factors';
+
+  @override
+  String get tfaAuthenticationCode => 'Codi d\'autenticació';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Obre al teu dispositiu l\'aplicació d\'autenticació de dos factors per veure el teu codi d\'autenticació verificar la teva identitat.';
 
   @override
   String get timeagoJustNow => 'ara mateix';
