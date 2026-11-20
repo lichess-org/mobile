@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
+import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassScrollEdgeEffect;
 import 'package:material_ui/material_ui.dart';
 
@@ -151,8 +152,20 @@ void expectCompactBoardLayout(
   expect(heightCap < layout.width, heightCapped);
   final maxBoardSize = min(layout.width, heightCap);
   if (allowTableExpansion) {
+    final gameLayout = tester.widget<GameLayout>(find.byType(GameLayout));
+    final controlsHeight =
+        tester.getSize(find.byWidget(gameLayout.topTable)).height +
+        tester.getSize(find.byWidget(gameLayout.bottomTable)).height +
+        (gameLayout.userActionsBar == null
+            ? 0.0
+            : tester.getSize(find.byWidget(gameLayout.userActionsBar!)).height) +
+        tester
+            .renderObjectList<RenderBox>(
+              find.descendant(of: find.byType(GameLayout), matching: find.byType(MoveList)),
+            )
+            .fold(0.0, (height, moves) => height + moves.size.height);
     expect(board.width, greaterThan(0));
-    expect(board.width, lessThanOrEqualTo(maxBoardSize));
+    expect(board.width, moreOrLessEquals(min(maxBoardSize, layout.height - controlsHeight)));
     expect(board.height, board.width);
   } else {
     expect(board.size, Size.square(maxBoardSize));

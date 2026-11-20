@@ -201,6 +201,13 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
   // Portrait and landscape use different ancestors; preserve timers while reparenting the tables.
   final _topTableKey = GlobalKey();
   final _bottomTableKey = GlobalKey();
+  final _portraitTableKey = GlobalKey();
+  bool _portraitOverflows = false;
+
+  void _setPortraitOverflow(bool overflows) {
+    if (!mounted || overflows == _portraitOverflows) return;
+    setState(() => _portraitOverflows = overflows);
+  }
 
   /// The controller created and owned by this state, used only in the
   /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
@@ -453,9 +460,16 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
           final defaultBoardSize =
               constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
           final sideWidth = constraints.biggest.longestSide - defaultBoardSize;
-          final maxBoardSize = sideWidth >= 250
-              ? defaultBoardSize
-              : constraints.biggest.longestSide / kGoldenRatio - (kTabletBoardTableSidePadding * 2);
+          final maxBoardSize = math.max(
+            0.0,
+            sideWidth >= 250
+                ? defaultBoardSize
+                : math.min(
+                    defaultBoardSize,
+                    constraints.biggest.longestSide / kGoldenRatio -
+                        (kTabletBoardTableSidePadding * 2),
+                  ),
+          );
           // The side panel must fit every pocket at the board's piece scale, including its padding.
           final pocketWidthRatio =
               (Role.values.length - 1) * pocketSquareSize(boardSize: 1, isTablet: isTablet);
@@ -546,122 +560,126 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
           if (effectiveBoardSize > maxAllowedBoardSize) {
             effectiveBoardSize = maxAllowedBoardSize;
           }
-          return SingleChildScrollView(
-            primary: false,
-            child: _PortraitTable(
-              viewportHeight: constraints.maxHeight,
-              layout: _PortraitLayout(
-                maxBoardSize: effectiveBoardSize,
-                topTableFlex: widget.topTableFlex,
-                bottomTableFlex: widget.bottomTableFlex,
-                pocketSquareRatio: pocketSquareSize(boardSize: 1, isTablet: isTablet),
+          final table = _PortraitTable(
+            key: _portraitTableKey,
+            viewportHeight: constraints.maxHeight,
+            onOverflowChanged: _setPortraitOverflow,
+            layout: _PortraitLayout(
+              maxBoardSize: effectiveBoardSize,
+              topTableFlex: widget.topTableFlex,
+              bottomTableFlex: widget.bottomTableFlex,
+              pocketSquareRatio: pocketSquareSize(boardSize: 1, isTablet: isTablet),
+            ),
+            children: [
+              if (boardPrefs.moveListDisplay &&
+                  _hasMoveList &&
+                  !isShortScreen &&
+                  !(isTablet && pockets != null))
+                _PortraitChild(
+                  id: _PortraitSlot.moves,
+                  // Keep the move list's space in zen mode.
+                  child: widget.zenMode
+                      ? const MoveList(
+                          type: MoveListType.inline,
+                          slicedMoves: [],
+                          currentMoveIndex: 0,
+                        )
+                      : _moveListContent(MoveListType.inline),
+                ),
+              _PortraitChild(
+                id: _PortraitSlot.top,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                  ),
+                  child: RotatedBox(
+                    quarterTurns: widget.topTableUpsideDown ? 2 : 0,
+                    child: Center(
+                      heightFactor: 1,
+                      child: KeyedSubtree(key: _topTableKey, child: widget.topTable),
+                    ),
+                  ),
+                ),
               ),
-              children: [
-                if (boardPrefs.moveListDisplay &&
-                    _hasMoveList &&
-                    !isShortScreen &&
-                    !(isTablet && pockets != null))
+              _PortraitChild(
+                id: _PortraitSlot.board,
+                child: LayoutBuilder(
+                  builder: (context, boardConstraints) => GestureDetector(
+                    // The board handles raw pointers; keep piece drags out of the page scroll.
+                    excludeFromSemantics: true,
+                    onVerticalDragUpdate: (_) {},
+                    child: BoardWidget(
+                      size: boardConstraints.maxWidth,
+                      orientation: widget.orientation,
+                      controller: _controller!,
+                      onMove: rawOnMove,
+                      shapes: shapes,
+                      settings: settings,
+                      boardKey: widget.boardKey,
+                      boardOverlay: widget.boardOverlay,
+                      error: widget.errorMessage,
+                    ),
+                  ),
+                ),
+              ),
+              _PortraitChild(
+                id: _PortraitSlot.bottom,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                  ),
+                  child: RotatedBox(
+                    quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
+                    child: Center(
+                      heightFactor: 1,
+                      child: KeyedSubtree(key: _bottomTableKey, child: widget.bottomTable),
+                    ),
+                  ),
+                ),
+              ),
+              if (pockets != null)
+                for (final (slot, side, upsideDown) in [
+                  (
+                    _PortraitSlot.topPockets,
+                    widget.orientation.opposite,
+                    widget.topTableUpsideDown,
+                  ),
+                  (_PortraitSlot.bottomPockets, widget.orientation, widget.bottomTableUpsideDown),
+                ])
                   _PortraitChild(
-                    id: _PortraitSlot.moves,
-                    // Keep the move list's space in zen mode.
-                    child: widget.zenMode
-                        ? const MoveList(
-                            type: MoveListType.inline,
-                            slicedMoves: [],
-                            currentMoveIndex: 0,
-                          )
-                        : _moveListContent(MoveListType.inline),
-                  ),
-                _PortraitChild(
-                  id: _PortraitSlot.top,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                    ),
-                    child: RotatedBox(
-                      quarterTurns: widget.topTableUpsideDown ? 2 : 0,
-                      child: Center(
-                        heightFactor: 1,
-                        child: KeyedSubtree(key: _topTableKey, child: widget.topTable),
+                    id: slot,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
-                    ),
-                  ),
-                ),
-                _PortraitChild(
-                  id: _PortraitSlot.board,
-                  child: LayoutBuilder(
-                    builder: (context, boardConstraints) => GestureDetector(
-                      // The board handles raw pointers; keep piece drags out of the page scroll.
-                      excludeFromSemantics: true,
-                      onVerticalDragUpdate: (_) {},
-                      child: BoardWidget(
-                        size: boardConstraints.maxWidth,
-                        orientation: widget.orientation,
-                        controller: _controller!,
-                        onMove: rawOnMove,
-                        shapes: shapes,
-                        settings: settings,
-                        boardKey: widget.boardKey,
-                        boardOverlay: widget.boardOverlay,
-                        error: widget.errorMessage,
-                      ),
-                    ),
-                  ),
-                ),
-                _PortraitChild(
-                  id: _PortraitSlot.bottom,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                    ),
-                    child: RotatedBox(
-                      quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
-                      child: Center(
-                        heightFactor: 1,
-                        child: KeyedSubtree(key: _bottomTableKey, child: widget.bottomTable),
-                      ),
-                    ),
-                  ),
-                ),
-                if (pockets != null)
-                  for (final (slot, side, upsideDown) in [
-                    (
-                      _PortraitSlot.topPockets,
-                      widget.orientation.opposite,
-                      widget.topTableUpsideDown,
-                    ),
-                    (_PortraitSlot.bottomPockets, widget.orientation, widget.bottomTableUpsideDown),
-                  ])
-                    _PortraitChild(
-                      id: slot,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                        ),
-                        child: LayoutBuilder(
-                          builder: (context, pocketConstraints) => Center(
-                            child: RotatedBox(
-                              quarterTurns: upsideDown ? 2 : 0,
-                              child: PocketsMenu(
-                                side: side,
-                                sideToMove: sideToMove,
-                                playerSide: playerSide,
-                                pockets: pockets,
-                                squareSize:
-                                    pocketConstraints.maxHeight - PocketsMenu.padding.vertical,
-                                isUpsideDown: upsideDown,
-                                premoveDropRole: premoveDropRole,
-                              ),
+                      child: LayoutBuilder(
+                        builder: (context, pocketConstraints) => Center(
+                          child: RotatedBox(
+                            quarterTurns: upsideDown ? 2 : 0,
+                            child: PocketsMenu(
+                              side: side,
+                              sideToMove: sideToMove,
+                              playerSide: playerSide,
+                              pockets: pockets,
+                              squareSize:
+                                  pocketConstraints.maxHeight - PocketsMenu.padding.vertical,
+                              isUpsideDown: upsideDown,
+                              premoveDropRole: premoveDropRole,
                             ),
                           ),
                         ),
                       ),
                     ),
-                if (widget.userActionsBar != null)
-                  _PortraitChild(id: _PortraitSlot.actions, child: widget.userActionsBar!),
-              ],
-            ),
+                  ),
+              if (widget.userActionsBar != null)
+                _PortraitChild(id: _PortraitSlot.actions, child: widget.userActionsBar!),
+            ],
           );
+          // A fitting board must not have a scroll ancestor: Android uses that to protect
+          // edge-piece drags from system navigation. Keep the table mounted when overflow changes.
+          return _portraitOverflows
+              ? SingleChildScrollView(primary: false, child: table)
+              : ClipRect(child: table);
         }
       },
     );
@@ -805,30 +823,42 @@ class _PortraitParentData() extends ContainerBoxParentData<RenderBox> {
 class const _PortraitTable({
   required final double viewportHeight,
   required final _PortraitLayout layout,
+  required final ValueChanged<bool> onOverflowChanged,
   required super.children,
+  super.key,
 }) extends MultiChildRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      _RenderPortraitTable(viewportHeight, layout);
+      _RenderPortraitTable(viewportHeight, layout, onOverflowChanged);
 
   @override
   void updateRenderObject(BuildContext context, _RenderPortraitTable renderObject) {
-    renderObject.updateLayout(viewportHeight, layout);
+    renderObject.updateLayout(viewportHeight, layout, onOverflowChanged);
   }
 }
 
-class _RenderPortraitTable(double viewportHeight, _PortraitLayout layout)
-    extends RenderBox
+class _RenderPortraitTable(
+  double viewportHeight,
+  _PortraitLayout layout,
+  ValueChanged<bool> onOverflowChanged,
+) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _PortraitParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _PortraitParentData> {
   double _viewportHeight = viewportHeight;
   _PortraitLayout _layout = layout;
+  ValueChanged<bool> _onOverflowChanged = onOverflowChanged;
+  bool? _reportedOverflow;
 
-  void updateLayout(double viewportHeight, _PortraitLayout layout) {
+  void updateLayout(
+    double viewportHeight,
+    _PortraitLayout layout,
+    ValueChanged<bool> onOverflowChanged,
+  ) {
     final changed = viewportHeight != _viewportHeight || layout.shouldRelayout(_layout);
     _viewportHeight = viewportHeight;
     _layout = layout;
+    _onOverflowChanged = onOverflowChanged;
     if (changed) markNeedsLayout();
   }
 
@@ -843,9 +873,18 @@ class _RenderPortraitTable(double viewportHeight, _PortraitLayout layout)
     for (var child = firstChild; child != null; child = childAfter(child)) {
       children[(child.parentData! as _PortraitParentData).id!] = child;
     }
-    size = constraints.constrain(
-      _layout.performLayout(Size(constraints.maxWidth, _viewportHeight), children),
+    final contentSize = _layout.performLayout(
+      Size(constraints.maxWidth, _viewportHeight),
+      children,
     );
+    size = constraints.constrain(contentSize);
+    final overflows = contentSize.height > _viewportHeight;
+    if (overflows != _reportedOverflow) {
+      _reportedOverflow = overflows;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (attached && _reportedOverflow == overflows) _onOverflowChanged(overflows);
+      });
+    }
   }
 
   @override

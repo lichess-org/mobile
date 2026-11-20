@@ -219,6 +219,7 @@ class _BodyState() extends ConsumerState<_Body> {
               },
               userActionsBar: BottomBar(
                 cupertinoGlass: true,
+                wrap: true,
                 children: [
                   BottomBarButton(
                     label: context.l10n.flipBoard,

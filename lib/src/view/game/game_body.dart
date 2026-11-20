@@ -712,6 +712,7 @@ class const _GameBottomBar({
 
     return BottomBar(
       cupertinoGlass: true,
+      wrap: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

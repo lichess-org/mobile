@@ -191,7 +191,7 @@ void main() {
                 tester,
                 heightCapped: profile.heightCapped,
                 heightReserve: 196.0,
-                allowTableExpansion: textScale > 1.0,
+                allowTableExpansion: true,
               );
             } else {
               final layout = tester.getRect(find.byType(GameLayout));

@@ -17,11 +17,13 @@ class BottomBar extends StatelessWidget {
     this.mainAxisAlignment = MainAxisAlignment.spaceAround,
     this.expandChildren = true,
     this.cupertinoGlass = false,
+    this.wrap = false,
   });
 
   const new empty({this.cupertinoGlass = false})
     : children = const [],
       expandChildren = true,
+      wrap = false,
       mainAxisAlignment = MainAxisAlignment.spaceAround;
 
   /// Children to display in the bottom bar's [Row]. Typically instances of [BottomBarButton], or
@@ -39,6 +41,12 @@ class BottomBar extends StatelessWidget {
   /// their label. Before iOS 26 ([useLiquidGlass]), the bar is translucent instead
   /// ([BlurredBarBackground]), with plain buttons. Defaults to false.
   final bool cupertinoGlass;
+
+  /// Allow glass buttons to occupy multiple rows, retaining their full tap targets.
+  ///
+  /// For embedded bars whose parent measures their height, such as a game table. Do not use
+  /// [heightOf] to reserve space for a wrapping bar.
+  final bool wrap;
 
   /// Whether [context] is in a [BottomBar] with liquid glass buttons, for a custom button that
   /// draws itself as a [BottomBarGlassButton] there.
@@ -69,9 +77,29 @@ class BottomBar extends StatelessWidget {
                   8.0,
                   _glassBarBottomPadding(context),
                 ),
-                child: SizedBox(
-                  height: _kGlassCapsuleHeight,
-                  child: _GlassBottomBarScope(child: _GlassBarRow(children: children)),
+                child: _GlassBottomBarScope(
+                  child: wrap
+                      ? LayoutBuilder(
+                          builder: (context, constraints) => Wrap(
+                            alignment: WrapAlignment.spaceAround,
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final child in children)
+                                // Split a group only if even the group alone cannot fit.
+                                if (child is BottomBarGroup &&
+                                    child.children.length * _kGlassIconButtonWidth + 8 >
+                                        constraints.maxWidth)
+                                  ...child.children
+                                else
+                                  child,
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          height: _kGlassCapsuleHeight,
+                          child: _GlassBarRow(children: children),
+                        ),
                 ),
               ),
             ),

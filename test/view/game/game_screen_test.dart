@@ -933,7 +933,7 @@ void main() {
                   expectCompactBoardLayout(
                     tester,
                     heightCapped: profile.heightCapped,
-                    allowTableExpansion: textScale > 1.0,
+                    allowTableExpansion: true,
                   );
                 } else {
                   final layout = tester.getRect(find.byType(GameLayout));

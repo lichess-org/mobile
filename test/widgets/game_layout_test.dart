@@ -77,6 +77,23 @@ void _expectHorizontalInset(Rect inner, Rect outer, double inset) {
 }
 
 void main() {
+  for (final width in [480.0, 500.0, 520.0]) {
+    testWidgets('compact landscape fallback stays within height at width=$width', (tester) async {
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: Size(width, 295),
+        viewPadding: EdgeInsets.zero,
+      );
+      await tester.pumpAndSettle();
+      final layout = tester.getRect(find.byType(GameLayout));
+      final board = tester.getRect(find.byType(Chessboard));
+      expect(board.size, const Size.square(263));
+      expect(board.top, greaterThanOrEqualTo(layout.top));
+      expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+      expect(tester.takeException(), isNull);
+    }, variant: kPlatformVariant);
+  }
+
   for (final height in [170.0, 180.0, 190.0]) {
     for (final playerHeight in [20.0, 80.0]) {
       testWidgets('compact portrait clamps board size at the reserve boundary '
@@ -269,11 +286,20 @@ void main() {
       addTearDown(() => FlutterError.onError = flutterTestOnError);
       await tester.pumpWidget(app);
       final state = tester.state(find.byType(GameLayout));
+      final boardState = tester.state(find.byType(BoardWidget));
       final pocketPadding = pockets ? 2 * PocketsMenu.padding.vertical : 0.0;
       for (final remaining in [16.0, 0.5, 0.0, -1.0, -80.0, 150.0]) {
         height.value = (560 - 56 - pocketPadding - remaining) / 2;
         await tester.pumpAndSettle();
         expect(tester.state(find.byType(GameLayout)), same(state));
+        expect(tester.state(find.byType(BoardWidget)), same(boardState));
+        expect(
+          find.descendant(
+            of: find.byType(GameLayout),
+            matching: find.byType(SingleChildScrollView),
+          ),
+          remaining <= 0 ? findsOneWidget : findsNothing,
+        );
         final board = tester.getRect(find.byType(Chessboard));
         expect(board.width, greaterThan(0));
         expect(board.width, moreOrLessEquals(board.height));

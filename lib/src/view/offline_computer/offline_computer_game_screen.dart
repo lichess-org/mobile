@@ -359,6 +359,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
 
     return BottomBar(
       cupertinoGlass: true,
+      wrap: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

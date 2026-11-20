@@ -311,7 +311,10 @@ class const ConfirmMove({
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   label,
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: buttons),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(alignment: WrapAlignment.spaceBetween, children: buttons),
+                  ),
                 ],
               )
             : Row(

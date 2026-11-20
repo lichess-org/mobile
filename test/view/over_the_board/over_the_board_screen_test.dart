@@ -70,21 +70,21 @@ void main() {
         surface: _iPhone16ZoomedSurface,
         ratio: _iPhone16ZoomedDevicePixelRatio,
         padding: _iPhone16ZoomedPhysicalViewPadding,
-        capped: false,
+        cappedPlatforms: const <TargetPlatform>{},
       ),
       (
         name: 'compact-360x640',
         surface: const Size(360.0, 640.0),
         ratio: 3.0,
         padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
-        capped: true,
+        cappedPlatforms: const {TargetPlatform.android},
       ),
       (
         name: 'height-capped-360x560',
         surface: const Size(360.0, 560.0),
         ratio: 3.0,
         padding: const EdgeInsets.only(top: 72.0, bottom: 72.0),
-        capped: true,
+        cappedPlatforms: const {TargetPlatform.android, TargetPlatform.iOS},
       ),
     ]) {
       testWidgets('compact portrait ${profile.name} keeps clocks and actions usable', (
@@ -110,7 +110,10 @@ void main() {
 
         final layoutRect = tester.getRect(find.byType(GameLayout));
         final heightCap = layoutRect.height - 180.0;
-        expect(heightCap < layoutRect.width, profile.capped);
+        expect(
+          heightCap < layoutRect.width,
+          profile.cappedPlatforms.contains(debugDefaultTargetPlatformOverride),
+        );
         expect(boardRect.size, Size.square(min(layoutRect.width, heightCap)));
         expect(boardRect.center.dx, moreOrLessEquals(layoutRect.center.dx));
         expect(boardRect.top, greaterThanOrEqualTo(layoutRect.top));
@@ -134,10 +137,10 @@ void main() {
 
         await playMove(tester, 'e2', 'e4');
         expect(boardHasPiece(tester, Square.e4, Piece.whitePawn), isTrue);
-        await tester.tap(findByTooltip('Pause'));
+        await tester.tap(find.bySemanticsLabel('Pause').hitTestable());
         await tester.pump();
         expect(activeClock(tester), isNull);
-        expect(findByTooltip('Resume'), findsOneWidget);
+        expect(find.bySemanticsLabel('Resume').hitTestable(), findsOneWidget);
         expectGameControlsVisible(tester, find.byType(Clock));
         expectGameControlsVisible(tester, find.byType(BottomBarButton));
         expect(tester.takeException(), isNull);
@@ -212,7 +215,7 @@ void main() {
         await playMove(tester, 'g1', 'f3');
         expect(boardHasPiece(tester, Square.f3, Piece.whiteKnight), isTrue);
         expect(activeClock(tester), Side.black);
-        await tester.tap(findByTooltip('Pause'));
+        await tester.tap(find.bySemanticsLabel('Pause').hitTestable());
         await tester.pump();
         expect(activeClock(tester), isNull);
         final pausedTime = findBlackClock(tester).timeLeft;
@@ -227,7 +230,7 @@ void main() {
         expect(activeClock(tester), isNull);
         await tester.pump(const Duration(seconds: 2));
         expect(findBlackClock(tester).timeLeft, pausedTime);
-        await tester.tap(findByTooltip('Resume'));
+        await tester.tap(find.bySemanticsLabel('Resume').hitTestable());
         await tester.pump();
         expect(activeClock(tester), Side.black);
         await tester.pump(const Duration(seconds: 2));

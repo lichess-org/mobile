@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
+import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -124,6 +125,45 @@ void main() {
   }
 
   group('AndroidBoardGesturesExclusion', () {
+    testWidgets('restores edge protection when portrait controls stop overflowing', (tester) async {
+      final playerHeight = ValueNotifier(100.0);
+      addTearDown(playerHeight.dispose);
+      final app = await makeTestProviderScope(
+        tester,
+        child: MaterialApp(
+          home: Scaffold(
+            body: ValueListenableBuilder(
+              valueListenable: playerHeight,
+              builder: (_, height, _) => GameLayout(
+                orientation: Side.white,
+                boardParams: _interactiveParams,
+                topTable: SizedBox(height: height),
+                bottomTable: SizedBox(height: height),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      final boardState = tester.state(find.byType(BoardWidget));
+      expect(lastSentRects(tester), hasLength(4));
+
+      playerHeight.value = 500;
+      await tester.pumpAndSettle();
+      expect(tester.state(find.byType(BoardWidget)), same(boardState));
+      expect(lastSentRects(tester), isEmpty);
+
+      playerHeight.value = 100;
+      await tester.pumpAndSettle();
+      expect(tester.state(find.byType(BoardWidget)), same(boardState));
+      expectRects(lastSentRects(tester), [
+        for (final square in [Square.a1, Square.a2, Square.h1, Square.h2])
+          squareRect(tester, square),
+      ]);
+      expect(tester.takeException(), isNull);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
+
     testWidgets('excludes the edge squares with a piece the player can drag', (tester) async {
       await pumpBoard(tester, boardParams: _interactiveParams);
 
