@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/swipe_actions.dart';
 import 'package:material_ui/material_ui.dart';
 
 class const ChallengeRequestsScreen({super.key}) extends StatelessWidget {
@@ -18,8 +20,8 @@ class const ChallengeRequestsScreen({super.key}) extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.preferencesNotifyChallenge)),
       body: const _Body(),
     );
   }
@@ -42,18 +44,20 @@ class const _Body() extends ConsumerWidget {
           );
         }
 
-        return ListView.separated(
-          itemCount: list.length,
-          separatorBuilder: (context, index) =>
-              const PlatformDivider(height: 1, cupertinoHasLeading: true),
-          itemBuilder: (context, index) {
-            final challenge = list[index];
-            final user = challenge.challenger?.user;
+        return SwipeActionsScope(
+          child: ListView.separated(
+            itemCount: list.length,
+            separatorBuilder: (context, index) =>
+                const PlatformDivider(height: 1, cupertinoHasLeading: true),
+            itemBuilder: (context, index) {
+              final challenge = list[index];
+              final user = challenge.challenger?.user;
 
-            if (user == null) return null;
+              if (user == null) return null;
 
-            return _ChallengeListItem(challenge: challenge, challengerUser: user);
-          },
+              return _ChallengeListItem(challenge: challenge, challengerUser: user);
+            },
+          ),
         );
       case _:
         return const SafeArea(child: Center(child: CircularProgressIndicator.adaptive()));

@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Adaugă la studiu</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Toate jocurile</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Permite datul înapoi și sugestii</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Loguri aplicație</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Negru Amoled</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ești sigur?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Sunteți sigur că doriți să descărcați fișierul NNUE (%s)?</string>
@@ -28,11 +29,12 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Personalizează</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Sfat: Puteți adăuga mai multe widget-uri în ecranul principal sau să le eliminați pe cele de care nu aveți nevoie!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Renunță</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Doriţi să ştergeţi toate logurile?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Zona de pericol</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Ștergeți-vă contul</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Compact</string>
   <string name="displayModeDetailed" comment="Label of the game history display mode menu entry that switches to the detailed game list.">Detaliat</string>
-  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Accepti provocarea?</string>
+  <string name="doYouAcceptChallenge" comment="Title of the challenge confirmation dialog.">Accepți provocarea?</string>
   <string name="downloadMyGames" comment="Tournament menu action that downloads the user's games from that tournament as a PGN.">Descarcă jocurile mele</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="filters" comment="Label of the board editor bottom bar button that opens position filters.">Filtre</string>
@@ -46,9 +48,9 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Mișcare bună, dar există una si mai bună</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Salut</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Acasă</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Loguri rețea</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Dacă un cont corespunde cu %1$s, i s-a trimis un cod de caractere %2$s. Verifică-ți inbox-ul și introdu codul de mai jos.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">Codul este invalid sau a expirat.</string>
-  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Fluxuri live</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Dimensiunea bazei de date locale</string>
   <string name="moveOnRelease" comment="Board settings switch: make the move when the finger is lifted instead of on tap.">Mută la eliberare</string>
   <string name="moveOnReleaseSubtitle" comment="Explanation of the 'Move on release' board setting.">Când mişcaţi o piesă prin apăsare, mutarea se face atunci când ridicaţi degetul, permițând glisarea pentru a selecta pătratul de destinaţie.</string>
@@ -86,6 +88,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Mod antrenament</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Mărește piesa trasă</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Înapoi</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Examinați încercările puzzle din trecut.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Vrei să termini acest run?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nimic de afișat, vă rugăm să schimbați filtrele</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nimic de arătat. Jucați câteva partide de Puzzle Storm.</string>
@@ -123,6 +126,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Arată bordura</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Feedback tactil</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Când este activat, dispozitivul va vibra scurt când mutați sau capturați o piesă.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Distribuie</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Distribuie URL-ul provocării</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Distribuie PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Distribuie URL-ul jocului</string>
@@ -143,6 +147,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Culori sistem</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Tablebase nu este disponibilă offline.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Tema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Urmează să fie anunțat</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Prea multe încercări. Te invităm să revii mai târziu.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Terminate</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Sari la pagina mea</string>

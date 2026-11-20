@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform_choice_chip.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -200,7 +201,7 @@ class const TimeControlModal({
                               ),
                               FilledButton(
                                 onPressed: custom.isInfinite ? null : () => onSelected(custom),
-                                child: Text(context.l10n.mobileOkButton, style: Styles.bold),
+                                child: Text(context.l10n.mobileOkButton),
                               ),
                             ],
                           );
@@ -275,6 +276,22 @@ class const _ChoiceChip({
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      // Fills the width of its column, like the Material chip.
+      return PlatformChoiceChip(
+        label: Center(
+          // The pill's horizontal padding leaves little room in a quarter of a narrow screen:
+          // shrink a long label (30+20) rather than wrapping it.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: DefaultTextStyle.merge(style: Styles.timeControl, child: label),
+          ),
+        ),
+        selected: selected,
+        onSelected: onSelected,
+      );
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: selected

@@ -195,7 +195,11 @@ class const _ExplorerListView({
     return Stack(
       children: [
         if (scrollable)
-          ListView(padding: EdgeInsets.zero, children: children)
+          ListView(
+            // Scrolls under a bar floating over it.
+            padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
+            children: children,
+          )
         else
           ListBody(children: children),
         loadingOverlay,

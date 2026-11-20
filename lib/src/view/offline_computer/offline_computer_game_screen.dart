@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_preferences.dart';
 import 'package:lichess_mobile/src/model/offline_computer/offline_computer_game_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
@@ -31,18 +30,21 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
-import 'package:lichess_mobile/src/view/offline_computer/opponent_picker.dart';
+import 'package:lichess_mobile/src/view/offline_computer/opponent_settings.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/clock.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/material_diff.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/variant_app_bar_title.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -95,15 +97,16 @@ class const OfflineComputerGameScreen({
         ? context.l10n.practiceWithComputer
         : context.l10n.playAgainstComputer;
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      extendBodyBehindAppBar: false,
+      appBar: PlatformAppBar(
         title: AppBarTitleText(title),
         actions: [
-          IconButton(
+          SemanticIconButton(
             icon: const Icon(Icons.settings),
-            tooltip: context.l10n.settingsSettings,
+            semanticsLabel: context.l10n.settingsSettings,
             onPressed: () {
-              showModalBottomSheet<void>(
+              showAdaptiveBottomSheet<void>(
                 context: context,
                 builder: (_) => const _OfflineComputerGameSettingsSheet(),
               );
@@ -183,6 +186,8 @@ class _BodyState() extends ConsumerState<_Body> {
                   Navigator.pop(context);
                   _showNewGameDialog(initialVariant: gameState.game.meta.variant);
                 },
+                onAnalysis: (options) =>
+                    Navigator.of(this.context).push(AnalysisScreen.buildRoute(options)),
               ),
               barrierDismissible: true,
             );
@@ -301,13 +306,18 @@ class _BodyState() extends ConsumerState<_Body> {
   }
 
   void _showNewGameDialog({required Variant? initialVariant}) {
-    final double screenHeight = MediaQuery.heightOf(context);
-    showModalBottomSheet<void>(
+    // Draggable, so that it is dismissed by dragging it down: it is too tall to leave much room to
+    // tap outside of it.
+    showAdaptiveDraggableBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      constraints: BoxConstraints(maxHeight: screenHeight - (screenHeight / 10)),
-      builder: (context) =>
-          _NewGameSheet(initialVariant: initialVariant, initialFen: widget.initialFen),
+      initialChildSize: 0.9,
+      maxChildSize: 0.9,
+      snap: true,
+      builder: (context, scrollController) => _NewGameSheet(
+        initialVariant: initialVariant,
+        initialFen: widget.initialFen,
+        scrollController: scrollController,
+      ),
     );
   }
 
@@ -348,6 +358,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
     final gameState = ref.watch(offlineComputerGameControllerProvider);
 
     return BottomBar(
+      cupertinoGlass: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -397,6 +408,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
+                  initialMoveCursor: gameState.stepCursor,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
                   variant: gameState.game.meta.variant,
@@ -483,6 +495,11 @@ class const _Player({required final Side side, super.key}) extends ConsumerWidge
               children: [
                 Row(
                   children: [
+                    Text(
+                      'BOT',
+                      style: TextStyle(fontWeight: .bold, color: context.lichessColors.fancy),
+                    ),
+                    const SizedBox(width: 5),
                     Flexible(
                       child: Text(
                         game.opponentSpec.displayName,
@@ -737,8 +754,11 @@ class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
   }
 }
 
-class const _NewGameSheet({required final Variant? initialVariant, final String? initialFen})
-    extends ConsumerStatefulWidget {
+class const _NewGameSheet({
+  required final Variant? initialVariant,
+  required final ScrollController scrollController,
+  final String? initialFen,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_NewGameSheet> createState() => _NewGameSheetState();
 }
@@ -754,6 +774,9 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
   late TimeIncrement _prevIncrement;
   String? _fromPositionFen;
   final _fenController = TextEditingController();
+
+  /// Whether the network of the chosen Maia is downloading: the game cannot start without it.
+  bool _downloadingOpponent = false;
 
   String _sideChoiceLabel(BuildContext context, SideChoice choice) => switch (choice) {
     SideChoice.white => context.l10n.white,
@@ -777,9 +800,6 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     _selectedOpponent = prefs.opponentSpec.supportsVariant(_selectedVariant)
         ? prefs.opponentSpec
         : OpponentSpec.defaultSpec;
-    if (_selectedOpponent case MaiaOpponentSpec(:final rating) when !rating.isBundled) {
-      _checkMaiaWeights(rating);
-    }
     _casual = prefs.casual;
     _practiceMode = prefs.practiceMode;
     // Practice mode is played without a clock, so a game that starts in it starts untimed whatever
@@ -792,20 +812,6 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     _fenController.addListener(() {
       setState(() => _fromPositionFen = _fenController.text);
     });
-  }
-
-  /// Falls back to the bundled Maia when the network of the preferred [rating] is no longer on the
-  /// device, e.g. after the downloaded files were cleared from the engine settings.
-  ///
-  /// Playing it anyway would either download it in the middle of the game, or, without a
-  /// connection, have the bundled network play under the preferred rating's name.
-  Future<void> _checkMaiaWeights(MaiaRating rating) async {
-    if (await ref.read(maiaWeightsServiceProvider).isAvailable(rating)) return;
-    // The user may have picked another opponent while we were looking.
-    if (!mounted || _selectedOpponent != MaiaOpponentSpec(rating)) return;
-    const fallback = MaiaOpponentSpec(MaiaRating.defaultRating);
-    setState(() => _selectedOpponent = fallback);
-    await ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(fallback);
   }
 
   @override
@@ -872,6 +878,7 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
     final hasClock = !_practiceMode && _timeControlType == TimeControlType.clock;
 
     return BottomSheetScrollableContainer(
+      scrollController: widget.scrollController,
       children: [
         if (widget.initialFen != null)
           Padding(
@@ -889,7 +896,8 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
                       settings: StaticChessboardSettings(
                         pieceAssets: boardPrefs.pieceSet.assets,
                         colorScheme: boardPrefs.boardTheme.colors,
-                        brightness: boardPrefs.brightness,
+                        brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
+                        contrast: boardPrefs.contrast,
                         hue: boardPrefs.hue,
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.all(Radius.circular(4)),
@@ -907,15 +915,12 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
               ),
             ),
           ),
-        ListSection(
-          materialFilledCard: true,
+        OpponentSettings(
+          selected: _selectedOpponent,
+          variant: _selectedVariant,
+          onChanged: _setOpponent,
+          onDownloadingChanged: (downloading) => setState(() => _downloadingOpponent = downloading),
           children: [
-            SettingsListTile(
-              icon: OpponentIcon(_selectedOpponent, size: 32),
-              settingsLabel: Text(context.l10n.opponent),
-              settingsValue: _selectedOpponent.displayName,
-              onTap: _pickOpponent,
-            ),
             SettingsListTile(
               settingsLabel: Text(context.l10n.timeControl),
               settingsValue: _timeControlType.label(context.l10n),
@@ -1138,28 +1143,23 @@ class _NewGameSheetState() extends ConsumerState<_NewGameSheet> {
                     Navigator.pop(context);
                   }
                 : null,
-            child: Text(context.l10n.play, style: Styles.bold),
+            child: Text(context.l10n.play),
           ),
         ),
       ],
     );
   }
 
-  Future<void> _pickOpponent() async {
-    final opponent = await showOpponentPicker(
-      context,
-      selected: _selectedOpponent,
-      variant: _selectedVariant,
-    );
-    if (opponent == null || !mounted) return;
+  void _setOpponent(OpponentSpec opponent) {
     setState(() => _selectedOpponent = opponent);
-    await ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(opponent);
+    ref.read(offlineComputerGamePreferencesProvider.notifier).setOpponent(opponent);
   }
 
   bool get _isPlayEnabled =>
-      _selectedVariant != Variant.fromPosition ||
-      widget.initialFen != null ||
-      (_fromPositionFen != null && _fromPositionFen!.isNotEmpty);
+      !_downloadingOpponent &&
+      (_selectedVariant != Variant.fromPosition ||
+          widget.initialFen != null ||
+          (_fromPositionFen != null && _fromPositionFen!.isNotEmpty));
 }
 
 class const _OfflineComputerGameSettingsSheet() extends ConsumerWidget {
@@ -1214,6 +1214,12 @@ class const _OfflineComputerGameSettingsSheet() extends ConsumerWidget {
 class const OfflineComputerGameResultDialog({
   required final OfflineComputerGame game,
   required final VoidCallback onNewGame,
+
+  /// Callback to open the analysis of the game, once the dialog is closed.
+  ///
+  /// It pushes with the game screen's context: the dialog is on the root navigator, the game screen
+  /// may be in a tab navigator.
+  required final void Function(AnalysisOptions options) onAnalysis,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -1240,7 +1246,8 @@ class const OfflineComputerGameResultDialog({
       isThreefoldRepetition: game.isThreefoldRepetition,
     );
 
-    return AlertDialog.adaptive(
+    return PlatformAlertDialog(
+      opaque: true,
       title: Text(title),
       content: Text(subtitle),
       actions: [
@@ -1248,15 +1255,13 @@ class const OfflineComputerGameResultDialog({
         TextButton(
           onPressed: () {
             Navigator.pop(context);
-            Navigator.of(context).push(
-              AnalysisScreen.buildRoute(
-                AnalysisOptions.pgn(
-                  id: game.id,
-                  orientation: game.playerSide,
-                  pgn: game.makePgn(),
-                  isComputerAnalysisAllowed: true,
-                  variant: game.meta.variant,
-                ),
+            onAnalysis(
+              AnalysisOptions.pgn(
+                id: game.id,
+                orientation: game.playerSide,
+                pgn: game.makePgn(),
+                isComputerAnalysisAllowed: true,
+                variant: game.meta.variant,
               ),
             );
           },

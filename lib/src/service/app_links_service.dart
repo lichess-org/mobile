@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/challenge_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -33,6 +34,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_scree
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -137,7 +139,8 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     _logger.info('Resolving app link: $appLinkUri');
     switch (appLinkUri.pathSegments[0]) {
       case 'study':
-        final id = appLinkUri.pathSegments[1];
+        final id = appLinkUri.pathSegments.getOrNull(1);
+        if (id == null || id.isEmpty) return null;
         final chapter = appLinkUri.pathSegments.getOrNull(2);
         return [
           StudyScreen.buildRoute((
@@ -146,7 +149,9 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
           )),
         ];
       case 'broadcast':
-        final roundId = BroadcastRoundId(appLinkUri.pathSegments[3]);
+        final id = appLinkUri.pathSegments.getOrNull(3);
+        if (id == null || id.isEmpty) return null;
+        final roundId = BroadcastRoundId(id);
         if (appLinkUri.pathSegments.length > 4) {
           final gameId = BroadcastGameId(appLinkUri.pathSegments[4]);
           return [
@@ -169,13 +174,27 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
           return [BroadcastRoundScreenLoading.buildRoute(roundId, initialTab: tab)];
         }
       case 'tournament':
-        final tournamentId = TournamentId(appLinkUri.pathSegments[1]);
+        final id = appLinkUri.pathSegments.getOrNull(1);
+        if (id == null || id.isEmpty) return null;
+        final tournamentId = TournamentId(id);
         final playerName = appLinkUri.queryParameters['player'];
         final playerId = playerName != null ? UserId.fromUserName(playerName) : null;
         return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
-        final id = appLinkUri.pathSegments[1];
-        return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
+        final id = appLinkUri.pathSegments.getOrNull(1);
+        return [
+          PuzzleScreen.buildRoute(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: id != null ? PuzzleId(id) : null,
+            openCasual: id != null,
+          ),
+        ];
+      case 'practice' when appLinkUri.pathSegments.length == 1:
+        return [PracticeScreen.buildRoute()];
+      case 'analysis' when appLinkUri.pathSegments.length == 1:
+        return [
+          AnalysisScreen.buildRoute(const AnalysisOptions.standalone(variant: Variant.standard)),
+        ];
       case 'editor':
         final orientation = appLinkUri.queryParameters['color'] == 'black'
             ? Side.black
@@ -236,11 +255,19 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
           );
           return [];
         }
-      // This might be a challenge or a game link. There's currently no API endpoint that resolves both games and challenges
-      // at the same time, so check if it's a game link first, and if that fails, we later check if it's a challenge link.
-      case _:
+      // This might be a challenge or a game link. There's currently no API endpoint that resolves
+      // both games and challenges at the same time, so check if it's a game link first, and if
+      // that fails, we later check if it's a challenge link.
+      case 'game':
         final gameRoutes = await _tryResolveGameLink(context, appLinkUri);
         if (gameRoutes != null) return gameRoutes;
+      // Legacy /gameid link, which lila still redirects to /game/gameid. It comes after the other
+      // cases so that a known route such as /training/white is never taken for a game.
+      case _ when _isLegacyGameLink(appLinkUri):
+        return await _tryResolveGameLink(
+          context,
+          appLinkUri.replace(pathSegments: ['game', ...appLinkUri.pathSegments]),
+        );
     }
 
     return null;
@@ -305,8 +332,9 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
   }
 
   Future<bool> _tryResolveChallengeLink(BuildContext context, Uri appLinkUri) async {
+    if (appLinkUri.pathSegments.firstOrNull != 'game') return false;
     try {
-      final challengeId = ChallengeId(appLinkUri.pathSegments[0]);
+      final challengeId = ChallengeId(appLinkUri.pathSegments[1]);
       if (!challengeId.isValid) return false;
       final challenge = await ref.read(challengeRepositoryProvider).show(challengeId);
       if (!context.mounted) return false;
@@ -320,9 +348,16 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     return false;
   }
 
+  /// Whether [appLinkUri] is a legacy `/gameid` or `/gameid/{color}` game link.
+  static bool _isLegacyGameLink(Uri appLinkUri) => switch (appLinkUri.pathSegments) {
+    // The length check comes first because the GameId constructor asserts it.
+    [final id] || [final id, 'black' || 'white'] => id.length == 8 && GameId(id).isValid,
+    _ => false,
+  };
+
   Future<List<Route<dynamic>>?> _tryResolveGameLink(BuildContext context, Uri appLinkUri) async {
     try {
-      final gameId = GameId(appLinkUri.pathSegments[0]);
+      final gameId = GameId(appLinkUri.pathSegments[1]);
       if (!gameId.isValid) return null;
 
       final authUser = ref.read(authControllerProvider);
@@ -352,7 +387,7 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       if (!context.mounted) return null;
 
       final game = await ref.read(gameRepositoryProvider).getGame(gameId);
-      final orientation = appLinkUri.pathSegments.getOrNull(1) == 'black' ? Side.black : Side.white;
+      final orientation = appLinkUri.pathSegments.getOrNull(2) == 'black' ? Side.black : Side.white;
       final int ply = int.tryParse(appLinkUri.fragment) ?? 0;
 
       if (!context.mounted) return null;
@@ -459,12 +494,15 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     return uri.host == expected.host && uri.port == expected.port;
   }
 
-  /// Handles link clicks in RichLinkText widgets throughout the app.
+  /// Handles link clicks in RichLinkText and Markdown widgets throughout the app.
   Future<void> onLinkifyOpen(BuildContext context, LinkableElement link) async {
-    if (link is UrlElement && _isFirstPartyUrl(link.url)) {
-      // Handle Lichess links specifically
-      final appLinkUri = Uri.parse(link.url);
-      await handleAppLink(context, appLinkUri);
+    if (link is UrlElement) {
+      final uri = link.url.startsWith('/') ? lichessUri('').resolve(link.url) : Uri.parse(link.url);
+      if (_isFirstPartyUrl(uri.toString())) {
+        await handleAppLink(context, uri);
+      } else {
+        await launchUrl(uri);
+      }
     } else if (link.originText.startsWith('@')) {
       final username = link.originText.substring(1);
       Navigator.of(context).push(

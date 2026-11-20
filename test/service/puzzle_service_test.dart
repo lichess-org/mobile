@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dartchess/dartchess.dart';
@@ -226,6 +227,52 @@ void main() {
       expect(nbPOSTReq, equals(1), reason: 'the flush is attempted again after expiry');
       final data = await storage.fetch(userId: const UserId('testUserId'));
       expect(data?.solved.length, equals(0), reason: 'the flush succeeded and cleared solved');
+    });
+
+    test('a large solved backlog is sent in chunks the server accepts', () async {
+      final sentBatchSizes = <int>[];
+      final mockClient = MockClient((request) {
+        if (request.method == 'POST' && request.url.path == '/api/puzzle/batch/mix') {
+          final body = jsonDecode(request.body) as Map<String, dynamic>;
+          final nbSolutions = (body['solutions'] as List<dynamic>).length;
+          sentBatchSizes.add(nbSolutions);
+          // lila rejects solve batches of 100 or more solutions
+          if (nbSolutions >= 100) return mockResponse('', 400);
+          return mockResponse(emptyBatch, 200);
+        }
+        return mockResponse('', 404);
+      });
+
+      final container = await makeTestContainer(mockClient);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(queueLength: 1);
+      await storage.save(
+        userId: const UserId('testUserId'),
+        data: _makePuzzleBatch(
+          unsolved: [const PuzzleId('pId3')],
+          solved: [
+            for (int i = 0; i < 150; i++)
+              PuzzleSolution(id: PuzzleId('solved$i'), win: true, rated: true),
+          ],
+        ),
+      );
+
+      await service.nextPuzzle(userId: const UserId('testUserId'));
+
+      expect(sentBatchSizes, equals([kMaxSolvedPerBatch]));
+      var data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(data?.solved.length, equals(150 - kMaxSolvedPerBatch));
+      expect(
+        data?.solved.first.id,
+        equals(const PuzzleId('solved$kMaxSolvedPerBatch')),
+        reason: 'the oldest solves are sent first, the remainder is kept in order',
+      );
+
+      await service.nextPuzzle(userId: const UserId('testUserId'));
+
+      expect(sentBatchSizes, equals([kMaxSolvedPerBatch, 150 - kMaxSolvedPerBatch]));
+      data = await storage.fetch(userId: const UserId('testUserId'));
+      expect(data?.solved.length, equals(0));
     });
 
     test('nextPuzzle will always get the first puzzle of unsolved queue', () async {

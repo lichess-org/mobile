@@ -277,29 +277,20 @@ UserPerfStats _userPerfStatsFromPick(RequiredPick pick) {
     lowestRatingGame: lowest.letOrNull(_userPerfGameFromPick),
     highestRating: highest('int').asIntOrNull(),
     highestRatingGame: highest.letOrNull(_userPerfGameFromPick),
-    curWinStreak: resultStreak('win', 'cur').letOrNull(_userStreakFromPick),
-    maxWinStreak: resultStreak('win', 'max').letOrNull(_userStreakFromPick),
-    curLossStreak: resultStreak('loss', 'cur').letOrNull(_userStreakFromPick),
-    maxLossStreak: resultStreak('loss', 'max').letOrNull(_userStreakFromPick),
-    curPlayStreak: playStreak('nb', 'cur').letOrNull(_userStreakFromPick),
-    maxPlayStreak: playStreak('nb', 'max').letOrNull(_userStreakFromPick),
-    curTimeStreak: playStreak('time', 'cur').letOrNull(_userStreakFromPick),
-    maxTimeStreak: playStreak('time', 'max').letOrNull(_userStreakFromPick),
+    curWinStreak: resultStreak('win', 'cur').letOrNull((p) => _userStreakFromPick(p, 'win')),
+    maxWinStreak: resultStreak('win', 'max').letOrNull((p) => _userStreakFromPick(p, 'win')),
+    curLossStreak: resultStreak('loss', 'cur').letOrNull((p) => _userStreakFromPick(p, 'loss')),
+    maxLossStreak: resultStreak('loss', 'max').letOrNull((p) => _userStreakFromPick(p, 'loss')),
+    curPlayStreak: playStreak('nb', 'cur').letOrNull((p) => _userStreakFromPick(p, 'nb')),
+    maxPlayStreak: playStreak('nb', 'max').letOrNull((p) => _userStreakFromPick(p, 'nb')),
+    curTimeStreak: playStreak('time', 'cur').letOrNull((p) => _userStreakFromPick(p, 'time')),
+    maxTimeStreak: playStreak('time', 'max').letOrNull((p) => _userStreakFromPick(p, 'time')),
     worstLosses: IList(stat('worstLosses', 'results').asListOrNull(_userPerfGameFromPick)),
     bestWins: IList(stat('bestWins', 'results').asListOrNull(_userPerfGameFromPick)),
   );
 }
 
-UserStreak _userStreakFromPick(RequiredPick pick) {
-  final path = pick.path;
-  if (path.length <= 1) {
-    throw PickException("cannot decode $pick as 'UserStreak'");
-  }
-
-  // Since we are passing 'cur' or 'max' as the last pick,
-  // we check the previous value in the path (the parent).
-  final type = path.reversed.elementAt(1);
-
+UserStreak _userStreakFromPick(RequiredPick pick, String type) {
   final value = pick('v');
   final isValueEmpty = value.asIntOrThrow() == 0;
   final startGame = pick('from').letOrNull(_userPerfGameFromPick);
@@ -323,7 +314,7 @@ UserStreak _userStreakFromPick(RequiredPick pick) {
         endGame: endGame,
       );
     default:
-      throw PickException("cannot decode $pick as 'UserStreak'");
+      throw PickException.fromPick(pick, "unknown streak type '$type'");
   }
 }
 

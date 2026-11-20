@@ -162,6 +162,30 @@ flutter run \
 > [!NOTE]
 > If you use the production server, note that you will not be able to log in.
 
+### iOS
+
+#### When building from Xcode
+
+Some plugins require a higher iOS version than Flutter's default. Flutter regenerates
+`ios/Flutter/ephemeral/Packages/FlutterGeneratedPluginSwiftPackage/Package.swift` with its default iOS version on
+every `flutter pub get`, and only raises it to the project's deployment target during `flutter run` or
+`flutter build ios`. This file is generated and ignored by git, so there is nothing to commit.
+
+If you build from Xcode after a `flutter pub get`, the build can fail with an error like:
+
+```
+The package product 'flutter-onnxruntime' requires minimum platform version 16.0 for the iOS platform, but this
+target supports 15.0 (in target 'FlutterGeneratedPluginSwiftPackage')
+```
+
+To fix it, run this command before building from Xcode:
+
+```bash
+flutter build ios --config-only --debug
+```
+
+Using `flutter run` instead of Xcode avoids the problem, since it raises the version on every launch.
+
 ### Android
 
 #### When using lila-docker
@@ -222,3 +246,52 @@ dart devtools
 ```
 
 Then run the app with the `flutter run` command above, and a link to the logging page will be printed in the console.
+
+## Device preview
+
+The app has three designs: Android (Material), iOS 26+ (liquid glass) and iOS before 26. With
+[device_preview](https://github.com/aloisdeniel/flutter_device_preview)
+([pub.dev](https://pub.dev/packages/device_preview)), you can check all of them on any device or
+emulator, without owning an iPhone. It runs the app inside a simulated device: screen size, safe
+areas, orientation, target platform, locale, text scale, dark mode, accessibility settings...
+
+If you don't own an iOS device, use it to test every change you submit, especially UI changes.
+
+### Running the preview
+
+Start the preview entry point (debug builds only):
+
+```bash
+flutter run -t lib/device_preview_main.dart
+```
+
+A tablet, or an emulator with a large screen, gives the most room for the simulated device.
+
+Then open Flutter DevTools (press `v` in the terminal where `flutter run` is running) and select
+the **device_preview** tab. The extension is enabled in `devtools_options.yaml`. From there, pick
+a device to switch designs:
+
+- **Any iPhone or iPad**: the iOS 26+ liquid glass design.
+- **Lichess iOS <26 (iPhone 16)** or **Lichess iPadOS <26 (iPad 10th gen)**: the iOS design before
+  26, with plain controls and opaque bars.
+- **Any Android device**: the Android design.
+- **Real device**: no simulation, the app looks as it does on the device it runs on.
+
+The app's platform follows the selected device. You can also change it with the **Target
+platform** setting of the same panel.
+
+### Limitations
+
+The preview changes how the app looks, not the OS it runs on. It does not replace testing on a
+real device before a release:
+
+- **Native features follow the real OS.** Push notifications, sounds, home screen widgets, Live
+  Activities, quick actions and the app badge behave as on the device running the preview. iOS
+  only features (widgets, Live Activities) can only be tested on an iPhone.
+- **Fonts follow the real OS.** On an Android device, the iOS design is drawn with the Android
+  system font instead of San Francisco, so text sizes and line breaks differ slightly.
+- **Some glass effects render differently.** The app is scaled down to fit the simulated screen,
+  which some liquid glass shaders don't account for: for instance, the blur under the status bar
+  can have a hard bottom edge instead of fading out.
+- **Performance is not representative**: the preview adds work to every frame, and runs in debug
+  mode.

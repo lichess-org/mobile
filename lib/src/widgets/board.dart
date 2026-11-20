@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/gestures.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/widgets/android_gesture_exclusion.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays an interactive chessboard driven by a [ChessboardController].
@@ -30,21 +32,122 @@ class const BoardWidget({
   final Widget? boardOverlay,
   final String? error,
   final GlobalKey? boardKey,
-}) extends StatelessWidget {
+}) extends StatefulWidget {
+  @override
+  State<BoardWidget> createState() => _BoardWidgetState();
+}
+
+/// The width of the strip along the leading edge of the screen where the iOS back swipe starts
+/// (the private `_kBackGestureWidth` of the Cupertino page route), not counting the view padding.
+const _kBackGestureWidth = 20.0;
+
+class _BoardWidgetState() extends State<BoardWidget> {
+  /// Claims the pointers that touch down beside the board, see [_claimSideMarginPointer].
+  final _sideMarginRecognizer = EagerGestureRecognizer();
+
+  bool _isIOS = false;
+  ModalRoute<Object?>? _route;
+  bool _isTickerEnabled = true;
+  TextDirection _textDirection = TextDirection.ltr;
+  Size _screenSize = Size.zero;
+  EdgeInsets _screenPadding = EdgeInsets.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    GestureBinding.instance.pointerRouter.addGlobalRoute(_claimSideMarginPointer);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _isIOS = Theme.of(context).platform == TargetPlatform.iOS;
+    _route = ModalRoute.of(context);
+    _isTickerEnabled = TickerMode.valuesOf(context).enabled;
+    _textDirection = Directionality.of(context);
+    _screenSize = MediaQuery.sizeOf(context);
+    _screenPadding = MediaQuery.paddingOf(context);
+  }
+
+  @override
+  void dispose() {
+    GestureBinding.instance.pointerRouter.removeGlobalRoute(_claimSideMarginPointer);
+    _sideMarginRecognizer.dispose();
+    super.dispose();
+  }
+
+  /// Claims a pointer that touches down between the board and the leading edge of the screen, in
+  /// the strip where the iOS back swipe starts, like a touch on the board itself (see
+  /// [_BoardPointerClaimRecognizer]).
+  ///
+  /// The board is usually inset from the screen edges by a small margin, where an edge swipe meant
+  /// for the board would otherwise pop the screen. These touches miss the board, so they are
+  /// caught by a global pointer route, which is called before the gesture arena of the pointer
+  /// closes.
+  void _claimSideMarginPointer(PointerEvent event) {
+    if (event is! PointerDownEvent ||
+        !_isIOS ||
+        !_isTickerEnabled ||
+        !(_route?.isCurrent ?? true) ||
+        !widget.controller.interactive ||
+        widget.controller.pendingPromotion != null) {
+      return;
+    }
+    final box = context.findRenderObject();
+    if (box is! RenderBox || !box.attached || !box.hasSize) return;
+
+    final boardRect = box.localToGlobal(Offset.zero) & box.size;
+    final position = event.position;
+    if (position.dy < boardRect.top || position.dy > boardRect.bottom) return;
+
+    final isInSideMargin = switch (_textDirection) {
+      TextDirection.ltr =>
+        position.dx < boardRect.left && position.dx < _screenPadding.left + _kBackGestureWidth,
+      TextDirection.rtl =>
+        position.dx > boardRect.right &&
+            position.dx > _screenSize.width - _screenPadding.right - _kBackGestureWidth,
+    };
+    if (isInSideMargin) {
+      _sideMarginRecognizer.addPointer(event);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final board = Chessboard(
-      key: boardKey,
+    final BoardWidget(:controller, :size, :orientation, :boardOverlay, :error) = widget;
+    final chessboard = Chessboard(
+      key: widget.boardKey,
       controller: controller,
       size: size,
       orientation: orientation,
-      onMove: onMove,
-      shapes: shapes,
-      annotations: annotations,
-      settings: settings,
+      onMove: widget.onMove,
+      shapes: widget.shapes,
+      annotations: widget.annotations,
+      settings: widget.settings,
     );
 
-    final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error!) : null);
+    // Chessground handles raw pointer events and doesn't enter the gesture arena.
+    // We use a RawGestureDetector to claim the pointer events for the board, so that they don't
+    // trigger a swipe gesture to pop the screen on iOS.
+    final board = RawGestureDetector(
+      gestures: {
+        _BoardPointerClaimRecognizer:
+            GestureRecognizerFactoryWithHandlers<_BoardPointerClaimRecognizer>(
+              _BoardPointerClaimRecognizer.new,
+              (recognizer) => recognizer.controller = controller,
+            ),
+      },
+      child: Theme.of(context).platform == TargetPlatform.android
+          ? AndroidBoardGesturesExclusion(
+              controller: controller,
+              orientation: orientation,
+              size: size,
+              child: chessboard,
+            )
+          : chessboard,
+    );
+
+    final overlay = boardOverlay ?? (error != null ? _ErrorWidget(errorMessage: error) : null);
 
     if (overlay != null) {
       return Stack(
@@ -66,6 +169,21 @@ class const BoardWidget({
 
     return board;
   }
+}
+
+/// Claims the pointers that touch an interactive board down, unless the promotion selector is
+/// shown: it is drawn inside the board and handles taps with gesture detectors, which must win.
+///
+/// A board that can't be played on doesn't claim its pointers, so that an edge swipe on it pops
+/// the screen.
+class _BoardPointerClaimRecognizer() extends EagerGestureRecognizer {
+  ChessboardController? controller;
+
+  @override
+  bool isPointerAllowed(PointerDownEvent event) =>
+      controller?.interactive == true &&
+      controller?.pendingPromotion == null &&
+      super.isPointerAllowed(event);
 }
 
 class const _ErrorWidget({required final String errorMessage}) extends StatelessWidget {

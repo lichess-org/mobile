@@ -65,7 +65,6 @@
 Перегляньте %3$s і попрактикуйтесь.</string>
   <string name="goodIntroduction">хороше введення</string>
   <string name="lichessTraining">Тренування Lichess</string>
-  <string name="watchIMRosenCheckmate">Перегляньте мат %s міжнародного майстра Еріка Розена.</string>
   <string name="threefoldRepetition">Триразове повторення</string>
   <string name="threefoldRepetitionExplanation">Якщо позиція відбулася тричі, гравці можуть оголосити нічию %1$s. Lichess впроваджує офіційні правила FIDE, як описано в статті 9.2 %2$s.</string>
   <string name="threefoldRepetitionLowerCase">трикратне повторення</string>
@@ -166,6 +165,8 @@
 3. Натисніть на Куки та Дозволи сайту
 4. Прокрутіть донизу та оберіть Авто-Програвання медіа
 5. Додайте lichess.org до Дозволів (Дозволених)</string>
+  <string name="makeBotTitle">Зробити бота на Lichess?</string>
+  <string name="makeBotDescription">Щоб навчитися створити &lt;a href=\'%1$s\'&gt;власного шахового бота&lt;/a&gt; для Lichess, прочитайте &lt;a href=\'%2$s\'&gt;цей допис про створення ботів&lt;/a&gt;.</string>
   <string name="stopMyselfFromPlaying">Як припинити грати надміру?</string>
   <string name="mentalHealthCondition">самостійне психологічне захворювання</string>
   <string name="lichessUserstyles">Користувацькі стилі Lichess</string>

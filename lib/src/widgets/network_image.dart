@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/http_network_image.dart';
 
-/// Like [Image.network], but uses a [HttpNetworkImage] with the globally configured http client.
+/// Like [Image.network], but uses a [HttpNetworkImage] with the [imageClientProvider] http client.
 class const HttpNetworkImageWidget(
   final String url, {
   final double? width,
@@ -20,7 +20,7 @@ class const HttpNetworkImageWidget(
       image: ResizeImage.resizeIfNeeded(
         cacheWidth,
         cacheHeight,
-        HttpNetworkImage(url, ref.read(defaultClientProvider)),
+        HttpNetworkImage(url, ref.read(imageClientProvider)),
       ),
       width: width,
       height: height,
