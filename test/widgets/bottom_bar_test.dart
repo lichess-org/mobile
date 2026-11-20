@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassButton;
 import 'package:material_ui/material_ui.dart';
 
+import '../test_helpers.dart';
 import '../test_provider_scope.dart';
 
 Widget makeScreen({required VoidCallback onPrevious, required VoidCallback onNext}) =>
@@ -36,6 +37,81 @@ Widget makeScreen({required VoidCallback onPrevious, required VoidCallback onNex
     );
 
 void main() {
+  for (final width in [112.0, 180.0, 320.0, 390.0]) {
+    for (final direction in TextDirection.values) {
+      testWidgets('compact iOS embedded bar wraps full-size controls '
+          'width=$width ${direction.name}', (tester) async {
+        await prepareLayoutGolden(tester);
+        var taps = 0;
+        final flutterTestOnError = FlutterError.onError!;
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: Scaffold(
+            body: Center(
+              child: Directionality(
+                textDirection: direction,
+                child: SizedBox(
+                  width: width,
+                  child: BottomBar(
+                    cupertinoGlass: true,
+                    wrap: true,
+                    children: [
+                      BottomBarButton(label: 'Menu', icon: Icons.menu, onTap: () => taps++),
+                      for (final count in [3, 2])
+                        BottomBarGroup(
+                          children: [
+                            for (var i = 0; i < count; i++)
+                              BottomBarButton(
+                                label: 'Action $count/$i',
+                                icon: Icons.chevron_right,
+                                onTap: () => taps++,
+                              ),
+                          ],
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        FlutterError.onError = flutterTestOnError;
+        addTearDown(() => FlutterError.onError = flutterTestOnError);
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+        final bounds = tester.getRect(find.byType(BottomBar));
+        final buttons = find.byType(BottomBarButton);
+        expect(buttons, findsNWidgets(6));
+        final rects = <Rect>[];
+        for (var i = 0; i < 6; i++) {
+          final button = buttons.at(i);
+          final rect = tester.getRect(button);
+          final size = tester.getSize(button);
+          expect(size.width, greaterThanOrEqualTo(48));
+          expect(size.height, 48);
+          expect(rect.left, greaterThanOrEqualTo(bounds.left));
+          expect(rect.right, lessThanOrEqualTo(bounds.right));
+          expect(rect.top, greaterThanOrEqualTo(bounds.top));
+          expect(rect.bottom, lessThanOrEqualTo(bounds.bottom));
+          for (final other in rects) {
+            final intersection = rect.intersect(other);
+            expect(intersection.width <= 1e-6 || intersection.height <= 1e-6, isTrue);
+          }
+          rects.add(rect);
+          expect(button.hitTestable(), findsOneWidget);
+          await tester.tap(button);
+        }
+        expect(taps, 6);
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        await expectLayoutGolden(
+          find.byType(BottomBar),
+          '../../build/compact-layout/glass-bar-$width-${direction.name}',
+        );
+      }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+    }
+  }
+
   testWidgets('iOS: the buttons of a group share one glass capsule, without labels', (
     tester,
   ) async {

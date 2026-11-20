@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/board.dart';
 import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
@@ -18,7 +19,937 @@ import 'package:material_ui/material_ui.dart';
 import '../test_helpers.dart';
 import '../test_provider_scope.dart';
 
+const _safeAreaContentKey = ValueKey('safe-area-content');
+const _iPhone16Surface = Size(393.0, 852.0);
+const _iPhone16ViewPadding = EdgeInsets.only(top: 59.0, bottom: 34.0);
+const _iPhone16ZoomedSurface = Size(320.0, 693.0);
+const _iPhone16ZoomedViewPadding = EdgeInsets.only(top: 47.0, bottom: 34.0);
+
+Future<void> _pumpGameLayoutWithSafeArea(
+  WidgetTester tester, {
+  required Size surface,
+  required EdgeInsets viewPadding,
+  bool showBorder = false,
+  GameBoardParams? boardParams,
+}) async {
+  final flutterTestOnError = FlutterError.onError!;
+  final app = await makeTestProviderScope(
+    tester,
+    child: MaterialApp(
+      home: MediaQuery(
+        data: MediaQueryData(size: surface, padding: viewPadding, viewPadding: viewPadding),
+        child: SafeArea(
+          maintainBottomViewPadding: true,
+          child: SizedBox.expand(
+            key: _safeAreaContentKey,
+            child: GameLayout(
+              orientation: Side.white,
+              boardParams:
+                  boardParams ??
+                  const GameBoardParams.readonly(
+                    variant: Variant.standard,
+                    position: Chess.initial,
+                  ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    defaultPreferences: showBorder
+        ? {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: true).toJson(),
+            ),
+          }
+        : null,
+    surfaceSize: surface,
+    devicePixelRatio: 1.0,
+    physicalViewPadding: viewPadding,
+  );
+  FlutterError.onError = flutterTestOnError;
+  addTearDown(() => FlutterError.onError = flutterTestOnError);
+  await tester.pumpWidget(app);
+}
+
+void _expectHorizontalInset(Rect inner, Rect outer, double inset) {
+  expect(inner.left, moreOrLessEquals(outer.left + inset));
+  expect(inner.right, moreOrLessEquals(outer.right - inset));
+  expect(inner.width, moreOrLessEquals(outer.width - inset * 2));
+}
+
 void main() {
+  for (final width in [480.0, 500.0, 520.0]) {
+    testWidgets('compact landscape fallback stays within height at width=$width', (tester) async {
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: Size(width, 295),
+        viewPadding: EdgeInsets.zero,
+      );
+      await tester.pumpAndSettle();
+      final layout = tester.getRect(find.byType(GameLayout));
+      final board = tester.getRect(find.byType(Chessboard));
+      expect(board.size, const Size.square(263));
+      expect(board.top, greaterThanOrEqualTo(layout.top));
+      expect(board.bottom, lessThanOrEqualTo(layout.bottom));
+      expect(tester.takeException(), isNull);
+    }, variant: kPlatformVariant);
+  }
+
+  for (final height in [170.0, 180.0, 190.0]) {
+    for (final (playerHeight, showBorder) in [
+      for (final playerHeight in [20.0, 80.0])
+        for (final showBorder in [false, true]) (playerHeight, showBorder),
+    ]) {
+      testWidgets('compact portrait clamps board size at the reserve boundary '
+          'height=$height playerHeight=$playerHeight border=$showBorder', (tester) async {
+        final flutterTestOnError = FlutterError.onError!;
+        final app = await makeTestProviderScopeApp(
+          tester,
+          surfaceSize: Size(160, height),
+          devicePixelRatio: 1,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: showBorder).toJson(),
+            ),
+          },
+          home: Scaffold(
+            body: GameLayout(
+              orientation: Side.white,
+              boardParams: const GameBoardParams.readonly(
+                variant: Variant.standard,
+                position: Chess.initial,
+              ),
+              topTable: SizedBox(height: playerHeight),
+              bottomTable: SizedBox(height: playerHeight),
+              userActionsBar: const SizedBox(height: 56),
+            ),
+          ),
+        );
+        FlutterError.onError = flutterTestOnError;
+        addTearDown(() => FlutterError.onError = flutterTestOnError);
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+        if (showBorder) {
+          expect(tester.widget<Chessboard>(find.byType(Chessboard)).size, greaterThan(0));
+        } else {
+          expect(tester.getSize(find.byType(Chessboard)), Size.square(max(0, height - 180)));
+        }
+        expect(tester.takeException(), isNull);
+      }, variant: kPlatformVariant);
+    }
+  }
+
+  testWidgets('compact exhausted portrait keeps piece drags separate from page scrolling', (
+    tester,
+  ) async {
+    final playedMoves = <Move>[];
+    final flutterTestOnError = FlutterError.onError!;
+    final app = await makeTestProviderScopeApp(
+      tester,
+      surfaceSize: const Size(360, 560),
+      devicePixelRatio: 1,
+      home: Scaffold(
+        body: GameLayout(
+          orientation: Side.white,
+          boardParams: GameBoardParams.interactive(
+            variant: Variant.standard,
+            position: Chess.initial,
+            playerSide: PlayerSide.white,
+            onMove: (move, {viaDragAndDrop}) => playedMoves.add(move),
+          ),
+          topTable: const SizedBox(height: 300, child: Text('Black')),
+          bottomTable: const SizedBox(height: 300, child: Text('White')),
+          userActionsBar: const SizedBox(height: 56, child: Text('Actions')),
+        ),
+      ),
+    );
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+    await tester.pumpWidget(app);
+    await tester.pumpAndSettle();
+    final boardFinder = find.byType(Chessboard);
+    await tester.ensureVisible(boardFinder);
+    await tester.pumpAndSettle();
+    final board = tester.getRect(boardFinder);
+    final from = squareOffset(Square.e2, board);
+    final to = squareOffset(Square.e4, board);
+    await tester.dragFrom(from, to - from);
+    await tester.pumpAndSettle();
+    expect(playedMoves, [const NormalMove(from: Square.e2, to: Square.e4)]);
+    expect(tester.getRect(boardFinder), board);
+    await tester.ensureVisible(find.text('Black'));
+    await tester.pumpAndSettle();
+    final beforeScroll = tester.getRect(boardFinder);
+    await tester.dragFrom(const Offset(180, 150), const Offset(0, -60));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(boardFinder).top, lessThan(beforeScroll.top));
+    await tester.ensureVisible(find.text('Actions'));
+    await tester.pumpAndSettle();
+    expectGameControlsVisible(tester, find.text('Actions'));
+    expect(tester.takeException(), isNull);
+  }, variant: kPlatformVariant);
+
+  for (final remainingHeight in [-1.0, 0.0, 0.5, 16.0, 40.0, 96.0]) {
+    testWidgets('compact landscape move-list height boundary $remainingHeight', (tester) async {
+      await prepareLayoutGolden(tester, loadFonts: true);
+      final flutterTestOnError = FlutterError.onError!;
+      var selectedMove = 0;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(700, 320),
+        devicePixelRatio: 1,
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults.copyWith(moveListDisplay: true).toJson(),
+          ),
+        },
+        home: Scaffold(
+          body: GameLayout(
+            orientation: Side.white,
+            boardParams: const GameBoardParams.readonly(
+              variant: Variant.standard,
+              position: Chess.initial,
+            ),
+            topTable: const SizedBox(height: 80, child: Text('Black')),
+            bottomTable: SizedBox(height: 136 - remainingHeight, child: const Text('White')),
+            userActionsBar: const SizedBox(height: 56, child: Text('Actions')),
+            moves: const ['e4', 'e5'],
+            onSelectMove: (index) => selectedMove = index,
+          ),
+        ),
+      );
+      FlutterError.onError = flutterTestOnError;
+      addTearDown(() => FlutterError.onError = flutterTestOnError);
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      final board = tester.getRect(find.byType(Chessboard));
+      final move = find.text('e4');
+      await tester.ensureVisible(move);
+      await tester.pumpAndSettle();
+      final viewport = tester.getRect(find.byType(MoveList));
+      final item = tester.getRect(move);
+      expect(item.top, greaterThanOrEqualTo(viewport.top));
+      expect(item.bottom, lessThanOrEqualTo(viewport.bottom));
+      expect(move.hitTestable(), findsOneWidget);
+      await tester.tap(move);
+      expect(selectedMove, 1);
+      for (final label in ['Black', 'White', 'Actions']) {
+        await tester.ensureVisible(find.text(label));
+        await tester.pumpAndSettle();
+        expectGameControlsVisible(tester, find.text(label));
+      }
+      expect(tester.getRect(find.byType(Chessboard)), board);
+      expect(tester.takeException(), isNull);
+      await expectLayoutGolden(
+        find.byType(GameLayout),
+        '../../build/compact-layout/landscape-boundary-$remainingHeight',
+      );
+    }, variant: kPlatformVariant);
+  }
+
+  for (final (pockets, showBorder) in [
+    for (final pockets in [false, true])
+      for (final showBorder in [false, true]) (pockets, showBorder),
+  ]) {
+    testWidgets('compact portrait exhausted height keeps controls reachable '
+        'pockets=$pockets border=$showBorder', (tester) async {
+      await prepareLayoutGolden(tester, loadFonts: true);
+      final height = ValueNotifier(150.0);
+      addTearDown(height.dispose);
+      const topKey = ValueKey('budget-top');
+      const bottomKey = ValueKey('budget-bottom');
+      const actionsKey = ValueKey('budget-actions');
+      final flutterTestOnError = FlutterError.onError!;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(360, 560),
+        devicePixelRatio: 1,
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults.copyWith(pieceAnimation: false, showBorder: showBorder).toJson(),
+          ),
+        },
+        home: Scaffold(
+          body: GameLayout(
+            orientation: Side.white,
+            boardParams: GameBoardParams.readonly(
+              variant: pockets ? Variant.crazyhouse : Variant.standard,
+              position: pockets
+                  ? Crazyhouse.fromSetup(
+                      Setup.parseFen(
+                        'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3',
+                      ),
+                    )
+                  : Chess.initial,
+            ),
+            topTable: ValueListenableBuilder(
+              valueListenable: height,
+              builder: (_, value, _) => SizedBox(
+                key: topKey,
+                height: value,
+                child: const Center(child: Text('Black')),
+              ),
+            ),
+            bottomTable: ValueListenableBuilder(
+              valueListenable: height,
+              builder: (_, value, _) => SizedBox(
+                key: bottomKey,
+                height: value,
+                child: const Center(child: Text('White')),
+              ),
+            ),
+            userActionsBar: const SizedBox(key: actionsKey, height: 56, child: Text('Actions')),
+          ),
+        ),
+      );
+      FlutterError.onError = flutterTestOnError;
+      addTearDown(() => FlutterError.onError = flutterTestOnError);
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      final state = tester.state(find.byType(GameLayout));
+      final boardState = tester.state(find.byType(BoardWidget));
+      final controller = tester.widget<Chessboard>(find.byType(Chessboard)).controller;
+      final pocketPadding = pockets ? 2 * PocketsMenu.padding.vertical : 0.0;
+      final boardHeightRatio =
+          1 + (pockets ? 2 * pocketSquareSize(boardSize: 1, isTablet: false) : 0);
+      for (final remaining in [16.0, 0.5, 32.0, 32.5, 33.0, 64.0, 0.0, -1.0, -80.0, 150.0]) {
+        height.value = (560 - 56 - pocketPadding - remaining * boardHeightRatio) / 2;
+        await tester.pumpAndSettle();
+        expect(tester.state(find.byType(GameLayout)), same(state));
+        expect(tester.state(find.byType(BoardWidget)), same(boardState));
+        final chessboard = tester.widget<Chessboard>(find.byType(Chessboard));
+        expect(chessboard.controller, same(controller));
+        expect(
+          chessboard.size,
+          greaterThan(0),
+          reason: 'The playable grid must have positive size.',
+        );
+        expect(
+          find.descendant(
+            of: find.byType(GameLayout),
+            matching: find.byType(SingleChildScrollView),
+          ),
+          remaining <= (showBorder ? 32 : 0) ? findsOneWidget : findsNothing,
+        );
+        final board = tester.getRect(find.byType(Chessboard));
+        expect(board.width, greaterThan(0));
+        expect(board.width, moreOrLessEquals(board.height));
+        final top = tester.getRect(find.byKey(topKey));
+        final bottom = tester.getRect(find.byKey(bottomKey));
+        final actions = tester.getRect(find.byKey(actionsKey));
+        expect(top.overlaps(board), isFalse);
+        expect(bottom.overlaps(board), isFalse);
+        expect(bottom.overlaps(actions), isFalse);
+        for (final label in ['Black', 'White', 'Actions']) {
+          await tester.ensureVisible(find.text(label));
+          await tester.pumpAndSettle();
+          expectGameControlsVisible(tester, find.text(label));
+          if (remaining == 0 || (showBorder && remaining == 16)) {
+            await expectLayoutGolden(
+              find.byType(GameLayout),
+              '../../build/compact-layout/portrait-exhausted-$pockets-$showBorder-$remaining-$label',
+            );
+          }
+        }
+        expect(tester.takeException(), isNull);
+      }
+    }, variant: kPlatformVariant);
+  }
+
+  for (final boardPosition in LandscapeBoardPosition.values) {
+    testWidgets('compact nested move scrolling preserves the outer panel ${boardPosition.name}', (
+      tester,
+    ) async {
+      await prepareLayoutGolden(tester, loadFonts: true);
+      final history = ValueNotifier((count: 80, cursor: 40));
+      addTearDown(history.dispose);
+      final flutterTestOnError = FlutterError.onError!;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(700, 320),
+        devicePixelRatio: 1,
+        defaultPreferences: {
+          PrefCategory.board.storageKey: jsonEncode(
+            BoardPrefs.defaults
+                .copyWith(moveListDisplay: true, landscapeBoardPosition: boardPosition)
+                .toJson(),
+          ),
+        },
+        home: Scaffold(
+          body: ValueListenableBuilder(
+            valueListenable: history,
+            builder: (_, value, _) => GameLayout(
+              orientation: Side.white,
+              boardParams: const GameBoardParams.readonly(
+                variant: Variant.standard,
+                position: Chess.initial,
+              ),
+              topTable: const SizedBox(height: 160, child: Text('Black')),
+              bottomTable: const SizedBox(height: 160, child: Text('White')),
+              userActionsBar: const SizedBox(height: 56, child: Text('Actions')),
+              moves: List.generate(value.count, (index) => index.isEven ? 'Nf3' : 'Nf6'),
+              currentMoveIndex: value.cursor,
+            ),
+          ),
+        ),
+      );
+      FlutterError.onError = flutterTestOnError;
+      addTearDown(() => FlutterError.onError = flutterTestOnError);
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      final scrollables = find.descendant(
+        of: find.byType(GameLayout),
+        matching: find.byType(Scrollable),
+      );
+      final outer = tester.state<ScrollableState>(scrollables.first).position;
+      final innerFinder = find.descendant(
+        of: find.byType(MoveList),
+        matching: find.byType(Scrollable),
+      );
+      final inner = tester.state<ScrollableState>(innerFinder).position;
+      final board = tester.getRect(find.byType(Chessboard));
+      expect(outer.pixels, 0);
+      expect(inner.pixels, greaterThan(0), reason: 'The initial nonzero cursor must be revealed.');
+      await tester.ensureVisible(find.text('White'));
+      await tester.pumpAndSettle();
+      final panelOffset = outer.pixels;
+      expect(panelOffset, greaterThan(0));
+      for (final next in [(count: 80, cursor: 70), (count: 120, cursor: 120)]) {
+        final previousInner = inner.pixels;
+        history.value = next;
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 100));
+        await tester.pumpAndSettle();
+        expect(outer.pixels, panelOffset);
+        expect(inner.pixels, greaterThan(previousInner));
+        final current = find.byWidgetPredicate((w) => w is StackedMoveItem && w.current == true);
+        final item = tester.getRect(current);
+        final viewport = tester.getRect(innerFinder);
+        expect(item.top, greaterThanOrEqualTo(viewport.top));
+        expect(item.bottom, lessThanOrEqualTo(viewport.bottom));
+        expectGameControlsVisible(tester, find.text('White'));
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+      }
+    }, variant: kPlatformVariant);
+  }
+
+  for (final showMoves in [false, true]) {
+    for (final boardPosition in LandscapeBoardPosition.values) {
+      testWidgets('compact post-startup landscape controls scroll without moving the board '
+          'moves=$showMoves board=${boardPosition.name}', (tester) async {
+        await prepareLayoutGolden(tester, loadFonts: true);
+        final tableHeights = ValueNotifier<(double, double)>((32, 32));
+        addTearDown(tableHeights.dispose);
+        const topKey = ValueKey('landscape-top-player');
+        const bottomKey = ValueKey('landscape-bottom-player');
+        var taps = 0;
+        final flutterTestOnError = FlutterError.onError!;
+        final app = await makeTestProviderScope(
+          tester,
+          surfaceSize: const Size(700, 320),
+          devicePixelRatio: 1.0,
+          defaultPreferences: {
+            PrefCategory.board.storageKey: jsonEncode(
+              BoardPrefs.defaults
+                  .copyWith(moveListDisplay: showMoves, landscapeBoardPosition: boardPosition)
+                  .toJson(),
+            ),
+          },
+          child: MaterialApp(
+            home: Material(
+              child: GameLayout(
+                orientation: Side.white,
+                boardParams: const GameBoardParams.readonly(
+                  variant: Variant.standard,
+                  position: Chess.initial,
+                ),
+                moves: const ['e4', 'e5'],
+                topTable: ValueListenableBuilder(
+                  valueListenable: tableHeights,
+                  builder: (_, value, _) => SizedBox(
+                    key: topKey,
+                    height: value.$1,
+                    child: TextButton(onPressed: () => taps++, child: const Text('Top player')),
+                  ),
+                ),
+                bottomTable: ValueListenableBuilder(
+                  valueListenable: tableHeights,
+                  builder: (_, value, _) => SizedBox(
+                    key: bottomKey,
+                    height: value.$2,
+                    child: TextButton(onPressed: () => taps++, child: const Text('Bottom player')),
+                  ),
+                ),
+                userActionsBar: const SizedBox(height: 56, child: Center(child: Text('Actions'))),
+              ),
+            ),
+          ),
+        );
+        FlutterError.onError = flutterTestOnError;
+        addTearDown(() => FlutterError.onError = flutterTestOnError);
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+        final panel = find
+            .descendant(of: find.byType(GameLayout), matching: find.byType(SingleChildScrollView))
+            .first;
+        final scrollable = find.descendant(of: panel, matching: find.byType(Scrollable)).first;
+        final scroll = tester.state<ScrollableState>(scrollable).position;
+        final board = tester.getRect(find.byType(Chessboard));
+        final capturePath =
+            '../../build/compact-layout/landscape-panel-$showMoves-${boardPosition.name}';
+        expect(scroll.maxScrollExtent, 0);
+        expect(find.text('Top player').hitTestable(), findsOneWidget);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-fitting');
+
+        tableHeights.value = (80, 80);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, 0);
+        if (showMoves) {
+          await tester.ensureVisible(find.text('e4'));
+          await tester.pumpAndSettle();
+          expect(find.text('e4').hitTestable(), findsOneWidget);
+        }
+        expect(find.text('Top player').hitTestable(), findsOneWidget);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-tight');
+
+        tableHeights.value = (100, 240);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, greaterThan(0));
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-expanded');
+
+        final viewport = tester.getRect(panel);
+        await tester.dragFrom(Offset(viewport.center.dx, viewport.top + 24), const Offset(0, -600));
+        await tester.pumpAndSettle();
+        expect(scroll.pixels, scroll.maxScrollExtent);
+        expect(find.text('Bottom player').hitTestable(), findsOneWidget);
+        await tester.tap(find.text('Bottom player'));
+        expect(taps, 1);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        await expectLayoutGolden(find.byType(GameLayout), '$capturePath-scrolled');
+
+        await tester.dragFrom(
+          Offset(viewport.center.dx, viewport.bottom - 24),
+          const Offset(0, 600),
+        );
+        await tester.pumpAndSettle();
+        expect(scroll.pixels, 0);
+        await tester.tap(find.text('Top player'));
+        expect(taps, 2);
+        if (showMoves) {
+          await tester.ensureVisible(find.byType(MoveList));
+          await tester.pumpAndSettle();
+          expect(tester.getSize(find.byType(MoveList)).height, greaterThan(0));
+          expect(find.text('e4').hitTestable(), findsOneWidget);
+        }
+        tableHeights.value = (32, 32);
+        await tester.pumpAndSettle();
+        expect(scroll.maxScrollExtent, 0);
+        expect(tester.getRect(find.byType(Chessboard)), board);
+        expect(tester.takeException(), isNull);
+      }, variant: kPlatformVariant);
+    }
+  }
+
+  for (final profile in [
+    (
+      name: 'phone',
+      surface: const Size(360, 560),
+      factor: 1.0,
+      expandedHeights: (110.0, 150.0),
+      initialBoardWidth: 290.0,
+      landscapeBoardWidth: 305.2307692307692,
+    ),
+    (
+      name: 'tablet',
+      surface: const Size(720, 960),
+      factor: 0.7,
+      expandedHeights: (210.0, 250.0),
+      initialBoardWidth: 618.0,
+      landscapeBoardWidth: 623.304347826087,
+    ),
+  ]) {
+    for (final upsideDown in [false, true]) {
+      testWidgets(
+        'adaptive crazyhouse pockets follow the resized board ${profile.name} flipped=$upsideDown',
+        (tester) async {
+          await prepareLayoutGolden(tester);
+          final heights = ValueNotifier<(double, double)>((30, 40));
+          addTearDown(heights.dispose);
+          final playedMoves = <Move>[];
+          const topKey = ValueKey('adaptive-pocket-top');
+          const bottomKey = ValueKey('adaptive-pocket-bottom');
+          const actionsKey = ValueKey('adaptive-pocket-actions');
+          final flutterTestOnError = FlutterError.onError!;
+          final app = await makeTestProviderScope(
+            tester,
+            surfaceSize: profile.surface,
+            devicePixelRatio: 1.0,
+            child: MaterialApp(
+              home: Material(
+                child: GameLayout(
+                  orientation: Side.white,
+                  boardParams: GameBoardParams.interactive(
+                    variant: Variant.crazyhouse,
+                    position: Crazyhouse.fromSetup(
+                      Setup.parseFen(
+                        'rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR[Pp] w KQkq - 0 3',
+                      ),
+                    ),
+                    playerSide: PlayerSide.white,
+                    onMove: (move, {viaDragAndDrop}) => playedMoves.add(move),
+                  ),
+                  topTableUpsideDown: upsideDown,
+                  bottomTableUpsideDown: upsideDown,
+                  topTable: ValueListenableBuilder(
+                    valueListenable: heights,
+                    builder: (context, value, _) => SizedBox(
+                      key: topKey,
+                      height: value.$1,
+                      child: const Center(child: Text('Black')),
+                    ),
+                  ),
+                  bottomTable: ValueListenableBuilder(
+                    valueListenable: heights,
+                    builder: (context, value, _) => SizedBox(
+                      key: bottomKey,
+                      height: value.$2,
+                      child: const Center(child: Text('White')),
+                    ),
+                  ),
+                  userActionsBar: const SizedBox(key: actionsKey, height: 56),
+                ),
+              ),
+            ),
+          );
+          FlutterError.onError = flutterTestOnError;
+          addTearDown(() => FlutterError.onError = flutterTestOnError);
+          await tester.pumpWidget(app);
+          final state = tester.state(find.byType(GameLayout));
+          final controller = tester.widget<BoardWidget>(find.byType(BoardWidget)).controller;
+          final capturePath = '../../build/compact-layout/crazyhouse-${profile.name}-$upsideDown';
+
+          void checkLayout({bool portrait = true}) {
+            expect(tester.state(find.byType(GameLayout)), same(state));
+            expect(
+              tester.widget<BoardWidget>(find.byType(BoardWidget)).controller,
+              same(controller),
+            );
+            final board = tester.getRect(find.byType(Chessboard));
+            expect(board.width, greaterThan(0));
+            expect(board.width, moreOrLessEquals(board.height));
+            final menus = find.byType(PocketsMenu);
+            expect(menus, findsNWidgets(2));
+            final squareSize = board.width / 8 * profile.factor;
+            for (final menu in tester.widgetList<PocketsMenu>(menus)) {
+              expect(menu.squareSize, moreOrLessEquals(squareSize));
+              expect(menu.isUpsideDown, upsideDown);
+              expect(
+                tester.getSize(find.byWidget(menu)).width,
+                moreOrLessEquals(5 * squareSize + 16),
+              );
+              if (portrait) {
+                expect(tester.getCenter(find.byWidget(menu)).dx, moreOrLessEquals(board.center.dx));
+              }
+            }
+            final pieces = find.descendant(of: menus, matching: find.byType(PieceWidget));
+            expect(pieces, findsNWidgets(10));
+            for (final element in pieces.evaluate()) {
+              final size = tester.getSize(find.byWidget(element.widget));
+              expect(size.width, moreOrLessEquals(squareSize));
+              expect(size.height, moreOrLessEquals(squareSize));
+              final rect = tester.getRect(find.byWidget(element.widget));
+              final menu = tester.getRect(
+                find.ancestor(of: find.byWidget(element.widget), matching: menus),
+              );
+              expect(rect.left, greaterThanOrEqualTo(menu.left - 0.001));
+              expect(rect.right, lessThanOrEqualTo(menu.right + 0.001));
+            }
+            if (portrait) {
+              final topPockets = tester.getRect(menus.at(0));
+              final bottomPockets = tester.getRect(menus.at(1));
+              final topPlayer = tester.getRect(find.byKey(topKey));
+              final bottomPlayer = tester.getRect(find.byKey(bottomKey));
+              expect(topPockets.bottom, moreOrLessEquals(topPlayer.top));
+              expect(topPlayer.bottom, lessThanOrEqualTo(board.top + 0.001));
+              expect(bottomPlayer.top, greaterThanOrEqualTo(board.bottom - 0.001));
+              expect(bottomPlayer.bottom, moreOrLessEquals(bottomPockets.top));
+              expect(topPockets.top, greaterThanOrEqualTo(0));
+              expect(
+                bottomPockets.bottom,
+                lessThanOrEqualTo(tester.getRect(find.byKey(actionsKey)).top + 0.001),
+              );
+            }
+            expect(tester.takeException(), isNull);
+          }
+
+          checkLayout();
+          expect(tester.getSize(find.byType(Chessboard)).width, profile.initialBoardWidth);
+          await expectLayoutGolden(find.byType(GameLayout), '$capturePath-initial');
+
+          heights.value = profile.expandedHeights;
+          await tester.pump();
+          checkLayout();
+          final boardWidth = tester.getSize(find.byType(Chessboard)).width;
+          expect(boardWidth, lessThan(profile.initialBoardWidth));
+          expect(
+            boardWidth +
+                2 * (boardWidth / 8 * profile.factor + 16) +
+                heights.value.$1 +
+                heights.value.$2 +
+                56,
+            moreOrLessEquals(profile.surface.height),
+          );
+          await expectLayoutGolden(find.byType(GameLayout), '$capturePath-shrunk');
+
+          final gesture = await tester.startGesture(
+            tester.getCenter(find.byKey(const ValueKey('pocket-whitepawn'))),
+          );
+          await gesture.moveBy(const Offset(0, -30));
+          await tester.pump();
+          expect(find.byType(PieceDragFeedback), findsOneWidget);
+          final feedback = tester.widget<PieceDragFeedback>(find.byType(PieceDragFeedback));
+          expect(feedback.squareSize, moreOrLessEquals(boardWidth / 8 * profile.factor));
+          expect(
+            tester.getSize(find.byType(PieceDragFeedback)).width,
+            moreOrLessEquals(feedback.squareSize * feedback.scale),
+          );
+          expect(
+            tester
+                .widget<RotatedBox>(
+                  find
+                      .ancestor(
+                        of: find.byType(PieceDragFeedback),
+                        matching: find.byType(RotatedBox),
+                      )
+                      .first,
+                )
+                .quarterTurns,
+            upsideDown ? 2 : 0,
+          );
+          await expectLayoutGolden(find.byType(Overlay).first, '$capturePath-drag');
+          await gesture.moveTo(squareOffset(Square.a4, tester.getRect(find.byType(Chessboard))));
+          await gesture.up();
+          await tester.pump();
+          expect(playedMoves, [const DropMove(to: Square.a4, role: Role.pawn)]);
+          expect(find.byType(PieceDragFeedback), findsNothing);
+          checkLayout();
+
+          heights.value = (30, 40);
+          await tester.pump();
+          checkLayout();
+          expect(tester.getSize(find.byType(Chessboard)).width, profile.initialBoardWidth);
+
+          await resizeTestSurface(
+            tester,
+            Size(profile.surface.height, profile.surface.width),
+            physicalViewPadding: EdgeInsets.zero,
+          );
+          checkLayout(portrait: false);
+          expect(
+            tester.getSize(find.byType(Chessboard)).width,
+            moreOrLessEquals(profile.landscapeBoardWidth),
+          );
+          await expectLayoutGolden(find.byType(GameLayout), '$capturePath-landscape');
+          await resizeTestSurface(tester, profile.surface, physicalViewPadding: EdgeInsets.zero);
+          checkLayout();
+          expect(tester.getSize(find.byType(Chessboard)).width, profile.initialBoardWidth);
+          await expectLayoutGolden(find.byType(GameLayout), '$capturePath-returned');
+        },
+        variant: kPlatformVariant,
+      );
+    }
+  }
+
+  testWidgets('portrait board yields only the space needed by changing player tables', (
+    tester,
+  ) async {
+    final heights = ValueNotifier<(double, double)>((30, 40));
+    addTearDown(heights.dispose);
+    const topKey = ValueKey('adaptive-top');
+    const bottomKey = ValueKey('adaptive-bottom');
+    const actionsKey = ValueKey('adaptive-actions');
+    final flutterTestOnError = FlutterError.onError!;
+    final app = await makeTestProviderScope(
+      tester,
+      surfaceSize: const Size(360, 456),
+      child: MaterialApp(
+        home: GameLayout(
+          orientation: Side.white,
+          boardParams: const GameBoardParams.readonly(
+            variant: Variant.standard,
+            position: Chess.initial,
+          ),
+          topTable: ValueListenableBuilder(
+            valueListenable: heights,
+            builder: (context, value, _) => SizedBox(key: topKey, width: 96, height: value.$1),
+          ),
+          bottomTable: ValueListenableBuilder(
+            valueListenable: heights,
+            builder: (context, value, _) => SizedBox(key: bottomKey, width: 144, height: value.$2),
+          ),
+          userActionsBar: const SizedBox(key: actionsKey, height: 56),
+        ),
+      ),
+    );
+    FlutterError.onError = flutterTestOnError;
+    addTearDown(() => FlutterError.onError = flutterTestOnError);
+    await tester.pumpWidget(app);
+    final state = tester.state(find.byType(GameLayout));
+    expect(tester.getSize(find.byType(Chessboard)), const Size.square(276));
+    expect(tester.getSize(find.byKey(topKey)).width, 96);
+    expect(tester.getSize(find.byKey(bottomKey)).width, 144);
+    expect(tester.getCenter(find.byKey(topKey)).dx, 180);
+    expect(tester.getCenter(find.byKey(bottomKey)).dx, 180);
+
+    heights.value = (110, 150);
+    await tester.pump();
+    expect(tester.state(find.byType(GameLayout)), same(state));
+    final board = tester.getRect(find.byType(Chessboard));
+    expect(board.size, const Size.square(140));
+    expect(tester.getSize(find.byKey(topKey)).width, 96);
+    expect(tester.getSize(find.byKey(bottomKey)).width, 144);
+    expect(tester.getCenter(find.byKey(topKey)).dx, board.center.dx);
+    expect(tester.getCenter(find.byKey(bottomKey)).dx, board.center.dx);
+    expect(tester.getRect(find.byKey(topKey)).bottom, board.top);
+    expect(tester.getRect(find.byKey(bottomKey)).top, board.bottom);
+    expect(
+      tester.getRect(find.byKey(bottomKey)).bottom,
+      tester.getRect(find.byKey(actionsKey)).top,
+    );
+    expect(tester.takeException(), isNull);
+
+    heights.value = (30, 40);
+    await tester.pump();
+    expect(tester.getSize(find.byType(Chessboard)), const Size.square(276));
+    expect(tester.takeException(), isNull);
+  }, variant: kPlatformVariant);
+
+  testWidgets('portrait iPhone board fills the safe area width when the border is hidden', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16Surface,
+      viewPadding: _iPhone16ViewPadding,
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, safeAreaRect, 0.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  for (final scenario in [
+    (name: 'below', height: 587.0, boardSize: 359.0),
+    (name: 'at', height: 588.0, boardSize: 360.0),
+    (name: 'above', height: 589.0, boardSize: 360.0),
+    (name: 'well below', height: 548.0, boardSize: 320.0),
+  ]) {
+    testWidgets('compact board ${scenario.name} the height-cap boundary', (tester) async {
+      // 360 board + 180 reserved + 24 top and 24 bottom safe-area insets.
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: Size(360.0, scenario.height),
+        viewPadding: const EdgeInsets.symmetric(vertical: 24.0),
+      );
+
+      final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.size, Size.square(scenario.boardSize));
+      expect(boardRect.center.dx, moreOrLessEquals(safeAreaRect.center.dx));
+      expect(boardRect.top, greaterThanOrEqualTo(safeAreaRect.top));
+      expect(boardRect.bottom, lessThanOrEqualTo(safeAreaRect.bottom));
+      expect(tester.getRect(find.byType(SolidColorChessboardBackground)), boardRect);
+      expect(tester.takeException(), isNull);
+    }, variant: kPlatformVariant);
+  }
+
+  testWidgets('portrait board adds no margin beyond horizontal safe area insets', (
+    WidgetTester tester,
+  ) async {
+    const viewPadding = EdgeInsets.fromLTRB(6.0, 59.0, 10.0, 34.0);
+    await _pumpGameLayoutWithSafeArea(tester, surface: _iPhone16Surface, viewPadding: viewPadding);
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    expect(safeAreaRect.left, viewPadding.left);
+    expect(safeAreaRect.right, _iPhone16Surface.width - viewPadding.right);
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, safeAreaRect, 0.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('compact portrait boards fill the safe area width', (WidgetTester tester) async {
+    const compactProfiles = [
+      (surface: _iPhone16ZoomedSurface, viewPadding: _iPhone16ZoomedViewPadding),
+      (surface: Size(375.0, 667.0), viewPadding: EdgeInsets.only(top: 20.0)),
+    ];
+
+    for (final profile in compactProfiles) {
+      await _pumpGameLayoutWithSafeArea(
+        tester,
+        surface: profile.surface,
+        viewPadding: profile.viewPadding,
+      );
+
+      final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+      _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+      expect(playableGridRect, boardRect);
+    }
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('board border insets the playable grid without shrinking the outer board', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16Surface,
+      viewPadding: _iPhone16ViewPadding,
+      showBorder: true,
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+    final playableGridRect = tester.getRect(find.byType(SolidColorChessboardBackground));
+
+    _expectHorizontalInset(boardRect, safeAreaRect, 0.0);
+    _expectHorizontalInset(playableGridRect, boardRect, 16.0);
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets('compact crazyhouse board keeps the pocket spacing exception', (
+    WidgetTester tester,
+  ) async {
+    await _pumpGameLayoutWithSafeArea(
+      tester,
+      surface: _iPhone16ZoomedSurface,
+      viewPadding: _iPhone16ZoomedViewPadding,
+      boardParams: const GameBoardParams.readonly(
+        variant: Variant.crazyhouse,
+        position: Crazyhouse.initial,
+      ),
+    );
+
+    final safeAreaRect = tester.getRect(find.byKey(_safeAreaContentKey));
+    final boardRect = tester.getRect(find.byType(Chessboard));
+
+    expect(find.byType(PocketsMenu), findsNWidgets(2));
+    expect(boardRect.width, lessThan(safeAreaRect.width));
+    expect(boardRect.center.dx, moreOrLessEquals(safeAreaRect.center.dx));
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
   testWidgets('board background size should match board size on all surfaces', (
     WidgetTester tester,
   ) async {
@@ -151,22 +1082,12 @@ void main() {
       final boardSize = tester.getSize(find.byType(Chessboard));
 
       if (isPortrait) {
-        // isShortVerticalScreen uses viewPadding=0 in tests, kToolbarHeight=56, kBottomBarHeight=56
-        final isShortScreen =
-            surface.height - surface.width - kToolbarHeight - kBottomBarHeight <
-            kSmallHeightMinusBoard;
-
         double expectedBoardSize = isTablet ? surface.width - 32.0 : surface.width;
 
         final maxAllowedBoardSize = surface.height - 180.0;
         if (expectedBoardSize > maxAllowedBoardSize) {
           expectedBoardSize = maxAllowedBoardSize;
         }
-
-        if (isShortScreen) {
-          expectedBoardSize -= 16.0;
-        }
-
         expect(
           boardSize,
           Size(expectedBoardSize, expectedBoardSize),
