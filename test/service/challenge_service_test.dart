@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/challenge_service.dart';
@@ -541,6 +542,37 @@ void main() {
         ),
       ).called(1);
     }, variant: kPlatformVariant);
+  });
+
+  test('acceptChallenge emits a settlement even when navigation is unavailable', () async {
+    const challengeId = ChallengeId('H9fIRZUk');
+    final challengeRepo = MockChallengeRepository();
+    when(() => challengeRepo.accept(any())).thenAnswer((_) async {});
+    when(() => challengeRepo.show(any())).thenAnswer(
+      (_) async => const Challenge(
+        id: challengeId,
+        status: ChallengeStatus.created,
+        variant: Variant.standard,
+        rated: true,
+        speed: Speed.rapid,
+        timeControl: ChallengeTimeControlType.clock,
+        clock: (time: Duration(seconds: 600), increment: Duration.zero),
+        sideChoice: SideChoice.random,
+      ),
+    );
+
+    final container = await makeContainer(
+      overrides: {
+        challengeRepositoryProvider: challengeRepositoryProvider.overrideWith((_) => challengeRepo),
+      },
+    );
+    final facts = <NotificationDismissal>[];
+    container.read(notificationDismissalBusProvider).stream.listen(facts.add);
+
+    await container.read(challengeServiceProvider).acceptChallenge(challengeId);
+
+    expect(facts, [isA<ChallengeSettled>()]);
+    expect((facts.single as ChallengeSettled).challengeId, challengeId);
   });
 
   group('acceptChallenge', () {
