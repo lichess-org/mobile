@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 class FakeNotificationDisplay() extends Fake implements FlutterLocalNotificationsPlugin {
   final Map<int, ActiveNotification> _activeNotifications = {};
+  final List<int> cancelCalls = [];
 
   @override
   Future<void> show({
@@ -23,6 +24,7 @@ class FakeNotificationDisplay() extends Fake implements FlutterLocalNotification
 
   @override
   Future<void> cancel({required int id, String? tag}) {
+    cancelCalls.add(id);
     _activeNotifications.remove(id);
     return Future.value();
   }

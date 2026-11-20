@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_key.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/notification_service.dart';
@@ -72,6 +73,6 @@ class AnnounceService(final Ref _ref) {
   void _cancelAnnounce() {
     _dismissTimer?.cancel();
     _dismissTimer = null;
-    _ref.read(notificationServiceProvider).cancel(AnnounceNotification.notificationId);
+    _ref.read(notificationServiceProvider).clear(const AnnounceKey());
   }
 }

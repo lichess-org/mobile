@@ -1,10 +1,18 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fake_async/fake_async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
+import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/service/correspondence_service.dart';
 import 'package:lichess_mobile/src/service/notification_service.dart';
 import 'package:mocktail/mocktail.dart';
@@ -17,6 +25,11 @@ import '../test_container.dart';
 class NotificationDisplayMock() extends Mock implements FlutterLocalNotificationsPlugin;
 
 class CorrespondenceGameStorageMock() extends Mock implements CorrespondenceGameStorage;
+
+class FakeOngoingGamesNotifier(final OngoingGame game) extends OngoingGamesNotifier {
+  @override
+  Future<IList<OngoingGame>> build() async => IList([game]);
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -154,5 +167,46 @@ void main() {
         ),
       );
     });
+  });
+
+  test('emits a dismissal when a game update without round leaves it our turn no longer', () async {
+    final game = OngoingGame(
+      id: const GameId('Fn9UvVKF'),
+      fullId: fullId,
+      orientation: Side.black,
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      perf: Perf.correspondence,
+      speed: Speed.correspondence,
+      variant: Variant.standard,
+      isMyTurn: false,
+    );
+
+    final container = await makeContainer(
+      authUser: fakeAuthUser,
+      overrides: {
+        correspondenceGameStorageProvider: correspondenceGameStorageProvider.overrideWith(
+          (_) => correspondenceGameStorageMock,
+        ),
+        ongoingGamesProvider: ongoingGamesProvider.overrideWith(
+          () => FakeOngoingGamesNotifier(game),
+        ),
+      },
+    );
+    final facts = <NotificationDismissal>[];
+    container.read(notificationDismissalBusProvider).stream.listen(facts.add);
+
+    final notificationService = container.read(notificationServiceProvider);
+    final correspondenceService = container.read(correspondenceServiceProvider);
+    notificationService.start();
+    correspondenceService.start();
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    testBinding.firebaseMessaging.onMessage.add(
+      const RemoteMessage(data: {'lichess.type': 'gameMove', 'lichess.fullId': 'Fn9UvVKFsopx'}),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    expect(facts, [isA<GameNoLongerRelevant>()]);
+    expect((facts.single as GameNoLongerRelevant).fullId, fullId);
   });
 }

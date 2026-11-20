@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/binding/binding.dart' show LichessBinding;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_key.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart'
     show LocalNotification, PlaybanNotification;
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan, User;
@@ -54,9 +55,7 @@ class AccountService(final Ref _ref) {
         });
       } else if (playban == null && lastPlaybanNotificationDate != null) {
         _refreshTimer?.cancel();
-        _ref
-            .read(notificationServiceProvider)
-            .cancel(lastPlaybanNotificationDate.toIso8601String().hashCode);
+        _ref.read(notificationServiceProvider).clear(PlaybanKey(lastPlaybanNotificationDate));
         _clearPlaybanNotificationDate();
       }
     });

@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
@@ -42,9 +43,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
       final (message: fcmMessage, :fromBackground) = data;
       switch (fcmMessage) {
         case CorresGameUpdateFcmMessage(:final fullId, :final game):
-          if (game != null) {
-            _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
-          }
+          _onServerUpdateEvent(fullId, game, fromBackground: fromBackground);
 
         case _:
           break;
@@ -212,10 +211,23 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
   /// Handles a game update event from the server.
   Future<void> _onServerUpdateEvent(
     GameFullId fullId,
-    PlayableGame game, {
+    PlayableGame? game, {
     required bool fromBackground,
   }) async {
-    await updateStoredGame(fullId, game);
+    if (game != null) {
+      await updateStoredGame(fullId, game);
+    }
+
+    try {
+      ref.invalidate(ongoingGamesProvider);
+      final ongoingGames = await ref.read(ongoingGamesProvider.future);
+      final current = ongoingGames.firstWhereOrNull((g) => g.fullId == fullId);
+      if (current == null || !current.isMyTurn) {
+        ref.read(notificationDismissalBusProvider).emit(GameNoLongerRelevant(fullId));
+      }
+    } catch (e, st) {
+      _log.warning('Could not resolve correspondence game relevance:', e, st);
+    }
   }
 
   /// Updates a stored correspondence game.

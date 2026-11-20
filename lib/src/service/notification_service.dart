@@ -11,6 +11,8 @@ import 'package:lichess_mobile/src/binding/binding_play.dart';
 import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_key.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -50,6 +52,8 @@ typedef ParsedLocalNotification = (NotificationResponse response, LocalNotificat
 class NotificationService(final Ref _ref) {
   /// The Firebase Cloud Messaging token refresh subscription.
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
+
+  StreamSubscription<NotificationDismissal>? _dismissalSubscription;
 
   /// The connectivity changes stream subscription.
   ProviderSubscription<AsyncValue<ConnectivityStatus>>? _connectivitySubscription;
@@ -95,6 +99,12 @@ class NotificationService(final Ref _ref) {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    // Subscribe before the first await so emitters started after this call cannot publish
+    // into a bus with no listener.
+    _dismissalSubscription = _ref.read(notificationDismissalBusProvider).stream.listen((fact) {
+      unawaited(clear(fact.key));
+    });
+
     // Firebase auto-init is disabled at build time (`FirebaseMessagingAutoInitEnabled` in
     // Info.plist, `firebase_messaging_auto_init_enabled` in AndroidManifest.xml) so that nothing
     // is registered with Firebase before the app actually starts its notification service.
@@ -203,13 +213,16 @@ class NotificationService(final Ref _ref) {
     return id;
   }
 
-  /// Cancels/removes a notification.
-  Future<void> cancel(int id) {
+  /// Clears the notification identified by [key], if any.
+  Future<void> clear(NotificationKey key) => _cancel(key.id);
+
+  Future<void> _cancel(int id) {
     _logger.info('canceled notification id: [$id]');
     return _notificationDisplay.cancel(id: id);
   }
 
   void _dispose() {
+    _dismissalSubscription?.cancel();
     _fcmTokenRefreshSubscription?.cancel();
     _connectivitySubscription?.close();
     _responseStreamSubscription?.cancel();
