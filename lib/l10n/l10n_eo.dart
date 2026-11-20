@@ -315,6 +315,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Forigi legosignon';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Spekti';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'Ni retpoŝtas kodon al vi, per kiu vi povos saluti.';

@@ -315,6 +315,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Διαγραφή σελιδοδείκτη';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Επιλογή μελέτης';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Δείτε';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'Θα σας στείλουμε ένα email με τον κωδικό σύνδεσης.';

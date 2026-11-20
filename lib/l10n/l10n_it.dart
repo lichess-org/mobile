@@ -315,6 +315,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Rimuovi segnalibro';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Seleziona uno studio';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Guarda';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'Ti invieremo un codice con cui accedere.';

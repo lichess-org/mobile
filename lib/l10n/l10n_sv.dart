@@ -315,6 +315,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileRemoveBookmark => 'Ta bort bokmärke';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Titta';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'We will email you a code to sign in with.';

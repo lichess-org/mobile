@@ -315,6 +315,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRemoveBookmark => 'Buechzeiche entferne';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Wähl e Schtudie';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Luege';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'Mir schicked dir per Mail en Code zum Ilogge.';

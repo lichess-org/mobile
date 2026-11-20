@@ -315,6 +315,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Chọn một nghiên cứu';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileWatchTab => 'Xem';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => 'Chúng tôi sẽ gửi mã đăng nhập cho bạn qua email.';

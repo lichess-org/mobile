@@ -315,6 +315,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => '移除书签';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => '选择研习';
 
   @override
@@ -492,12 +495,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileWatchTab => '观看';
-
-  @override
-  String get mobileWelcomeToLichessApp => 'Welcome to Lichess app!';
-
-  @override
-  String get mobileRenameChapter => 'Rename chapter';
 
   @override
   String get mobileWeWillEmailYouCode => '我们将通过邮件向您发送用于登录的验证码。';

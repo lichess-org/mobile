@@ -784,6 +784,12 @@ abstract class AppLocalizations {
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
 
+  /// No description provided for @mobileRenameChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename chapter'**
+  String get mobileRenameChapter;
+
   /// No description provided for @mobileSelectAStudy.
   ///
   /// In en, this message translates to:
@@ -1137,18 +1143,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Watch'**
   String get mobileWatchTab;
-
-  /// No description provided for @mobileWelcomeToLichessApp.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome to Lichess app!'**
-  String get mobileWelcomeToLichessApp;
-
-  /// No description provided for @mobileRenameChapter.
-  ///
-  /// In en, this message translates to:
-  /// **'Rename chapter'**
-  String get mobileRenameChapter;
 
   /// No description provided for @mobileWeWillEmailYouCode.
   ///
