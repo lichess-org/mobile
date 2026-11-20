@@ -193,18 +193,21 @@ class _StudyChaptersMenuState() extends ConsumerState<_StudyChaptersMenu> {
       builder: (context) {
         return AlertDialog.adaptive(
           title: Text(context.l10n.mobileRenameChapter),
-          content: TextField(
-            controller: textController,
-            autofocus: true,
-            textInputAction: TextInputAction.done,
-            onSubmitted: (value) {
-              if (value.trim().isNotEmpty) {
-                ref
-                    .read(studyControllerProvider(widget.options).notifier)
-                    .editChapter(chapter.id, name: value.trim());
-              }
-              Navigator.of(context).pop();
-            },
+          content: Material(
+            type: MaterialType.transparency,
+            child: TextField(
+              controller: textController,
+              autofocus: true,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (value) {
+                if (value.trim().isNotEmpty) {
+                  ref
+                      .read(studyControllerProvider(widget.options).notifier)
+                      .editChapter(chapter.id, name: value.trim());
+                }
+                Navigator.of(context).pop();
+              },
+            ),
           ),
           actions: [
             PlatformDialogAction(
