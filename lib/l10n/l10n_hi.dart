@@ -315,6 +315,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileRemoveBookmark => 'बुकमार्क हटाएँ';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

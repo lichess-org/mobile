@@ -315,6 +315,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bỏ đánh dấu';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Chọn một nghiên cứu';
 
   @override

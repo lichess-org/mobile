@@ -315,6 +315,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileRemoveBookmark => 'Poista kirjanmerkki';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Valitse tutkielma';
 
   @override

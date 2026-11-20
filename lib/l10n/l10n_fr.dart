@@ -315,6 +315,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Supprimer le favori';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Sélectionner une étude';
 
   @override

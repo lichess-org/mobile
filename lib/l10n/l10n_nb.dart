@@ -315,6 +315,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileRemoveBookmark => 'Fjern bokmerke';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Velg en studie';
 
   @override

@@ -315,6 +315,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Odstrániť záložku';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

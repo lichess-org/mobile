@@ -315,6 +315,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Șterge marcajul';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Selectează un studiu';
 
   @override

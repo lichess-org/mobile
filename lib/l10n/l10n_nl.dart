@@ -315,6 +315,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Bladwijzer verwijderen';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Selecteer een studie';
 
   @override

@@ -315,6 +315,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Odstrani zaznamek';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

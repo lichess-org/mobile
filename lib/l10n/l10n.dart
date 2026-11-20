@@ -784,6 +784,12 @@ abstract class AppLocalizations {
   /// **'Remove bookmark'**
   String get mobileRemoveBookmark;
 
+  /// No description provided for @mobileRenameChapter.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename chapter'**
+  String get mobileRenameChapter;
+
   /// No description provided for @mobileSelectAStudy.
   ///
   /// In en, this message translates to:

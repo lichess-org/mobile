@@ -315,6 +315,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileRemoveBookmark => 'Saqlanganlardan olib taşlaş';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Saboqni tanlaş';
 
   @override

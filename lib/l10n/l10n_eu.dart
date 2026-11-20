@@ -315,6 +315,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Ezabatu laster-marka';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

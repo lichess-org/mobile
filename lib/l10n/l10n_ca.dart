@@ -315,6 +315,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileRemoveBookmark => 'Suprimeix el marcador';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Selecciona un estudi';
 
   @override

@@ -315,6 +315,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileRemoveBookmark => 'Forigi legosignon';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

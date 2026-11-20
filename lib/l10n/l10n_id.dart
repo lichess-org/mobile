@@ -315,6 +315,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileRemoveBookmark => 'Hapus penanda';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Pilih studi';
 
   @override
