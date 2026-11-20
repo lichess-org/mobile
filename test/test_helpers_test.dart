@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +11,42 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'test_helpers.dart';
 
 void main() {
+  testWidgets('layout fonts render distinct Arabic glyphs instead of missing-glyph boxes', (
+    tester,
+  ) async {
+    await prepareLayoutGolden(tester, loadFonts: true);
+    final pixels = await tester.runAsync(() async {
+      final rendered = <List<int>>[];
+      for (final text in ['\u0628\u0628', '\u0633\u0633']) {
+        final painter = TextPainter(
+          text: TextSpan(
+            text: text,
+            style: const TextStyle(
+              fontFamily: 'Roboto',
+              fontFamilyFallback: kLayoutGoldenFontFallback,
+              fontSize: 32,
+              color: Colors.black,
+            ),
+          ),
+          textDirection: TextDirection.rtl,
+        )..layout();
+        final recorder = ui.PictureRecorder();
+        painter.paint(ui.Canvas(recorder), Offset.zero);
+        final picture = recorder.endRecording();
+        final image = await picture.toImage(200, 80);
+        final data = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+        rendered.add(data!.buffer.asUint8List());
+        image.dispose();
+        picture.dispose();
+        painter.dispose();
+      }
+      return rendered;
+    });
+    expect(pixels![0].any((byte) => byte != 0), isTrue);
+    expect(pixels[1].any((byte) => byte != 0), isTrue);
+    expect(pixels[1], isNot(orderedEquals(pixels[0])));
+  });
+
   testWidgets('board platform mocks handle focus loss', (tester) async {
     mockBoardPlatformChannels();
     await tester.runAsync(() async {

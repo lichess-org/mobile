@@ -2,21 +2,94 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
+import 'package:lichess_mobile/src/widgets/game_layout.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../model/game/game_socket_example_data.dart';
+import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
 class MockSoundService() extends Mock implements SoundService;
 
 void main() {
+  for (final clockPosition in ClockPosition.values) {
+    testWidgets('compact full-layout rotation preserves timers: $clockPosition', (tester) async {
+      await prepareLayoutGolden(tester, loadFonts: true);
+      final sound = MockSoundService();
+      when(() => sound.play(Sound.lowTime)).thenAnswer((_) async {});
+      final event = jsonDecode(
+        makeFullEvent(const GameId('abcdefgh'), '', whiteUserName: 'White', blackUserName: 'Black'),
+      ) as Map<String, dynamic>;
+      final game = GameFullEvent.fromJson(event['d'] as Map<String, dynamic>).game;
+      final flutterTestOnError = FlutterError.onError!;
+      final app = await makeTestProviderScopeApp(
+        tester,
+        surfaceSize: const Size(320, 693),
+        devicePixelRatio: 1,
+        home: Scaffold(
+          body: GameLayout(
+            orientation: Side.white,
+            boardParams: const GameBoardParams.readonly(
+              variant: Variant.standard,
+              position: Chess.initial,
+            ),
+            topTable: const Text('Black'),
+            bottomTable: GamePlayer(
+              game: game,
+              side: Side.white,
+              mePlaying: true,
+              timeToMove: const Duration(seconds: 10),
+              clockPosition: clockPosition,
+              clock: const CorrespondenceClock(
+                duration: Duration(minutes: 5),
+                active: true,
+                resetId: 0,
+              ),
+            ),
+            userActionsBar: const SizedBox(height: 56, child: Text('Actions')),
+          ),
+        ),
+        overrides: {soundServiceProvider: soundServiceProvider.overrideWithValue(sound)},
+      );
+      FlutterError.onError = flutterTestOnError;
+      addTearDown(() => FlutterError.onError = flutterTestOnError);
+      await tester.pumpWidget(app);
+      await tester.pump();
+      final layoutState = tester.state(find.byType(GameLayout));
+      final countdownState = tester.state(find.byType(MoveExpiration));
+      final clockState = tester.state(find.byType(CorrespondenceClock));
+      await tester.pump(const Duration(seconds: 3));
+      for (final surface in [const Size(693, 320), const Size(320, 693)]) {
+        await resizeTestSurface(tester, surface, physicalViewPadding: EdgeInsets.zero);
+        expect(tester.state(find.byType(GameLayout)), same(layoutState));
+        expect(tester.state(find.byType(MoveExpiration)), same(countdownState));
+        expect(tester.state(find.byType(CorrespondenceClock)), same(clockState));
+        expect(find.text('7 seconds to play the first move'), findsOneWidget);
+        expect(find.text('00:04:57', findRichText: true), findsOneWidget);
+        expectGameControlsVisible(tester, find.byType(MoveExpiration));
+        expectGameControlsVisible(tester, find.byType(CorrespondenceClock));
+        expect(tester.takeException(), isNull);
+      }
+      await tester.pump(const Duration(seconds: 2));
+      expect(find.text('5 seconds to play the first move'), findsOneWidget);
+      expect(find.text('00:04:55', findRichText: true), findsOneWidget);
+      verify(() => sound.play(Sound.lowTime)).called(1);
+      await resizeTestSurface(tester, const Size(693, 320), physicalViewPadding: EdgeInsets.zero);
+      await tester.pump(const Duration(seconds: 1));
+      expect(find.text('4 seconds to play the first move'), findsOneWidget);
+      verifyNever(() => sound.play(Sound.lowTime));
+    }, variant: kPlatformVariant);
+  }
+
   group('GamePlayer responsive countdown', () {
     for (final clockPosition in ClockPosition.values) {
       for (final resize in [true, false]) {

@@ -198,6 +198,10 @@ class GameLayout extends ConsumerStatefulWidget {
 }
 
 class _GameLayoutState() extends ConsumerState<GameLayout> {
+  // Portrait and landscape use different ancestors; preserve timers while reparenting the tables.
+  final _topTableKey = GlobalKey();
+  final _bottomTableKey = GlobalKey();
+
   /// The controller created and owned by this state, used only in the
   /// [GameBoardParams] path. Null in the [ControllerBoardParams] path.
   ChessboardController? _ownController;
@@ -416,7 +420,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                   isUpsideDown: widget.topTableUpsideDown,
                   premoveDropRole: premoveDropRole,
                 ),
-              widget.topTable,
+              KeyedSubtree(key: _topTableKey, child: widget.topTable),
             ],
           ),
         );
@@ -429,7 +433,7 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                 ? VerticalDirection.up
                 : VerticalDirection.down,
             children: [
-              widget.bottomTable,
+              KeyedSubtree(key: _bottomTableKey, child: widget.bottomTable),
               if (pockets != null)
                 PocketsMenu(
                   side: widget.orientation,
@@ -494,6 +498,9 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
                       primary: false,
                       child: _LandscapeTable(
                         viewportHeight: constraints.maxHeight,
+                        minimumMovesHeight: showMoves
+                            ? kMinInteractiveDimension * MediaQuery.textScalerOf(context).scale(1)
+                            : 0,
                         overflowMovesHeight: showMoves ? kMinInteractiveDimension * 2 : 0,
                         children: [
                           topTable(boardSize: boardSize),
@@ -539,106 +546,121 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
           if (effectiveBoardSize > maxAllowedBoardSize) {
             effectiveBoardSize = maxAllowedBoardSize;
           }
-          return CustomMultiChildLayout(
-            delegate: _PortraitLayoutDelegate(
-              maxBoardSize: effectiveBoardSize,
-              topTableFlex: widget.topTableFlex,
-              bottomTableFlex: widget.bottomTableFlex,
-              pocketSquareRatio: pocketSquareSize(boardSize: 1, isTablet: isTablet),
-            ),
-            children: [
-              if (boardPrefs.moveListDisplay &&
-                  _hasMoveList &&
-                  !isShortScreen &&
-                  !(isTablet && pockets != null))
-                LayoutId(
-                  id: _PortraitSlot.moves,
-                  // Keep the move list's space in zen mode.
-                  child: widget.zenMode
-                      ? const MoveList(
-                          type: MoveListType.inline,
-                          slicedMoves: [],
-                          currentMoveIndex: 0,
-                        )
-                      : _moveListContent(MoveListType.inline),
-                ),
-              LayoutId(
-                id: _PortraitSlot.top,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                  ),
-                  child: RotatedBox(
-                    quarterTurns: widget.topTableUpsideDown ? 2 : 0,
-                    child: Center(heightFactor: 1, child: widget.topTable),
-                  ),
-                ),
+          return SingleChildScrollView(
+            primary: false,
+            child: _PortraitTable(
+              viewportHeight: constraints.maxHeight,
+              layout: _PortraitLayout(
+                maxBoardSize: effectiveBoardSize,
+                topTableFlex: widget.topTableFlex,
+                bottomTableFlex: widget.bottomTableFlex,
+                pocketSquareRatio: pocketSquareSize(boardSize: 1, isTablet: isTablet),
               ),
-              LayoutId(
-                id: _PortraitSlot.board,
-                child: LayoutBuilder(
-                  builder: (context, boardConstraints) => BoardWidget(
-                    size: boardConstraints.maxWidth,
-                    orientation: widget.orientation,
-                    controller: _controller!,
-                    onMove: rawOnMove,
-                    shapes: shapes,
-                    settings: settings,
-                    boardKey: widget.boardKey,
-                    boardOverlay: widget.boardOverlay,
-                    error: widget.errorMessage,
+              children: [
+                if (boardPrefs.moveListDisplay &&
+                    _hasMoveList &&
+                    !isShortScreen &&
+                    !(isTablet && pockets != null))
+                  _PortraitChild(
+                    id: _PortraitSlot.moves,
+                    // Keep the move list's space in zen mode.
+                    child: widget.zenMode
+                        ? const MoveList(
+                            type: MoveListType.inline,
+                            slicedMoves: [],
+                            currentMoveIndex: 0,
+                          )
+                        : _moveListContent(MoveListType.inline),
                   ),
-                ),
-              ),
-              LayoutId(
-                id: _PortraitSlot.bottom,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
-                  ),
-                  child: RotatedBox(
-                    quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
-                    child: Center(heightFactor: 1, child: widget.bottomTable),
-                  ),
-                ),
-              ),
-              if (pockets != null)
-                for (final (slot, side, upsideDown) in [
-                  (
-                    _PortraitSlot.topPockets,
-                    widget.orientation.opposite,
-                    widget.topTableUpsideDown,
-                  ),
-                  (_PortraitSlot.bottomPockets, widget.orientation, widget.bottomTableUpsideDown),
-                ])
-                  LayoutId(
-                    id: slot,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                _PortraitChild(
+                  id: _PortraitSlot.top,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                    ),
+                    child: RotatedBox(
+                      quarterTurns: widget.topTableUpsideDown ? 2 : 0,
+                      child: Center(
+                        heightFactor: 1,
+                        child: KeyedSubtree(key: _topTableKey, child: widget.topTable),
                       ),
-                      child: LayoutBuilder(
-                        builder: (context, pocketConstraints) => Center(
-                          child: RotatedBox(
-                            quarterTurns: upsideDown ? 2 : 0,
-                            child: PocketsMenu(
-                              side: side,
-                              sideToMove: sideToMove,
-                              playerSide: playerSide,
-                              pockets: pockets,
-                              squareSize:
-                                  pocketConstraints.maxHeight - PocketsMenu.padding.vertical,
-                              isUpsideDown: upsideDown,
-                              premoveDropRole: premoveDropRole,
+                    ),
+                  ),
+                ),
+                _PortraitChild(
+                  id: _PortraitSlot.board,
+                  child: LayoutBuilder(
+                    builder: (context, boardConstraints) => GestureDetector(
+                      // The board handles raw pointers; keep piece drags out of the page scroll.
+                      excludeFromSemantics: true,
+                      onVerticalDragUpdate: (_) {},
+                      child: BoardWidget(
+                        size: boardConstraints.maxWidth,
+                        orientation: widget.orientation,
+                        controller: _controller!,
+                        onMove: rawOnMove,
+                        shapes: shapes,
+                        settings: settings,
+                        boardKey: widget.boardKey,
+                        boardOverlay: widget.boardOverlay,
+                        error: widget.errorMessage,
+                      ),
+                    ),
+                  ),
+                ),
+                _PortraitChild(
+                  id: _PortraitSlot.bottom,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                    ),
+                    child: RotatedBox(
+                      quarterTurns: widget.bottomTableUpsideDown ? 2 : 0,
+                      child: Center(
+                        heightFactor: 1,
+                        child: KeyedSubtree(key: _bottomTableKey, child: widget.bottomTable),
+                      ),
+                    ),
+                  ),
+                ),
+                if (pockets != null)
+                  for (final (slot, side, upsideDown) in [
+                    (
+                      _PortraitSlot.topPockets,
+                      widget.orientation.opposite,
+                      widget.topTableUpsideDown,
+                    ),
+                    (_PortraitSlot.bottomPockets, widget.orientation, widget.bottomTableUpsideDown),
+                  ])
+                    _PortraitChild(
+                      id: slot,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isTablet ? kTabletBoardTableSidePadding : 12.0,
+                        ),
+                        child: LayoutBuilder(
+                          builder: (context, pocketConstraints) => Center(
+                            child: RotatedBox(
+                              quarterTurns: upsideDown ? 2 : 0,
+                              child: PocketsMenu(
+                                side: side,
+                                sideToMove: sideToMove,
+                                playerSide: playerSide,
+                                pockets: pockets,
+                                squareSize:
+                                    pocketConstraints.maxHeight - PocketsMenu.padding.vertical,
+                                isUpsideDown: upsideDown,
+                                premoveDropRole: premoveDropRole,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-              if (widget.userActionsBar != null)
-                LayoutId(id: _PortraitSlot.actions, child: widget.userActionsBar!),
-            ],
+                if (widget.userActionsBar != null)
+                  _PortraitChild(id: _PortraitSlot.actions, child: widget.userActionsBar!),
+              ],
+            ),
           );
         }
       },
@@ -650,29 +672,35 @@ class _GameLayoutState() extends ConsumerState<GameLayout> {
 /// Unlike an intrinsic-height column, this can measure tables containing clocks/LayoutBuilders.
 class const _LandscapeTable({
   required final double viewportHeight,
+  required final double minimumMovesHeight,
   required final double overflowMovesHeight,
   required super.children,
 }) extends MultiChildRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) =>
-      _RenderLandscapeTable(viewportHeight, overflowMovesHeight);
+      _RenderLandscapeTable(viewportHeight, minimumMovesHeight, overflowMovesHeight);
 
   @override
   void updateRenderObject(BuildContext context, _RenderLandscapeTable renderObject) {
     renderObject
       ..viewportHeight = viewportHeight
+      ..minimumMovesHeight = minimumMovesHeight
       ..overflowMovesHeight = overflowMovesHeight;
   }
 }
 
 class _LandscapeTableParentData() extends ContainerBoxParentData<RenderBox>;
 
-class _RenderLandscapeTable(double viewportHeight, double overflowMovesHeight)
-    extends RenderBox
+class _RenderLandscapeTable(
+  double viewportHeight,
+  double minimumMovesHeight,
+  double overflowMovesHeight,
+) extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _LandscapeTableParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _LandscapeTableParentData> {
   double _viewportHeight = viewportHeight;
+  double _minimumMovesHeight = minimumMovesHeight;
   double _overflowMovesHeight = overflowMovesHeight;
 
   double get viewportHeight => _viewportHeight;
@@ -684,6 +712,14 @@ class _RenderLandscapeTable(double viewportHeight, double overflowMovesHeight)
   }
 
   double get overflowMovesHeight => _overflowMovesHeight;
+
+  double get minimumMovesHeight => _minimumMovesHeight;
+
+  set minimumMovesHeight(double value) {
+    if (_minimumMovesHeight == value) return;
+    _minimumMovesHeight = value;
+    markNeedsLayout();
+  }
 
   set overflowMovesHeight(double value) {
     if (_overflowMovesHeight == value) return;
@@ -709,9 +745,11 @@ class _RenderLandscapeTable(double viewportHeight, double overflowMovesHeight)
       child.layout(tableConstraints, parentUsesSize: true);
     }
     final tablesHeight = top.size.height + actions.size.height + bottom.size.height;
-    // Preserve fitting controls; reserve move-list space only if the tables already need scrolling.
+    // A positive remainder can still be too short to reveal a move after padding.
     final availableMovesHeight = _viewportHeight - tablesHeight;
-    final movesHeight = availableMovesHeight > 0 ? availableMovesHeight : _overflowMovesHeight;
+    final movesHeight = availableMovesHeight >= _minimumMovesHeight
+        ? availableMovesHeight
+        : math.max(_minimumMovesHeight, _overflowMovesHeight);
     moves.layout(
       BoxConstraints.tightFor(width: constraints.maxWidth, height: movesHeight),
       parentUsesSize: true,
@@ -742,15 +780,102 @@ enum _PortraitSlot() {
   actions,
 }
 
+// Like LayoutId, this derives a ValueKey from the slot and cannot be const.
+// ignore: prefer_const_constructors_in_immutables
+class _PortraitChild({required final _PortraitSlot id, required super.child})
+    extends ParentDataWidget<_PortraitParentData> {
+  this : super(key: ValueKey(id));
+
+  @override
+  void applyParentData(RenderObject renderObject) {
+    final data = renderObject.parentData! as _PortraitParentData;
+    if (data.id == id) return;
+    data.id = id;
+    renderObject.parent?.markNeedsLayout();
+  }
+
+  @override
+  Type get debugTypicalAncestorWidgetClass => _PortraitTable;
+}
+
+class _PortraitParentData() extends ContainerBoxParentData<RenderBox> {
+  _PortraitSlot? id;
+}
+
+class const _PortraitTable({
+  required final double viewportHeight,
+  required final _PortraitLayout layout,
+  required super.children,
+}) extends MultiChildRenderObjectWidget {
+  @override
+  RenderObject createRenderObject(BuildContext context) =>
+      _RenderPortraitTable(viewportHeight, layout);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderPortraitTable renderObject) {
+    renderObject.updateLayout(viewportHeight, layout);
+  }
+}
+
+class _RenderPortraitTable(double viewportHeight, _PortraitLayout layout)
+    extends RenderBox
+    with
+        ContainerRenderObjectMixin<RenderBox, _PortraitParentData>,
+        RenderBoxContainerDefaultsMixin<RenderBox, _PortraitParentData> {
+  double _viewportHeight = viewportHeight;
+  _PortraitLayout _layout = layout;
+
+  void updateLayout(double viewportHeight, _PortraitLayout layout) {
+    final changed = viewportHeight != _viewportHeight || layout.shouldRelayout(_layout);
+    _viewportHeight = viewportHeight;
+    _layout = layout;
+    if (changed) markNeedsLayout();
+  }
+
+  @override
+  void setupParentData(RenderBox child) {
+    if (child.parentData is! _PortraitParentData) child.parentData = _PortraitParentData();
+  }
+
+  @override
+  void performLayout() {
+    final children = <_PortraitSlot, RenderBox>{};
+    for (var child = firstChild; child != null; child = childAfter(child)) {
+      children[(child.parentData! as _PortraitParentData).id!] = child;
+    }
+    size = constraints.constrain(
+      _layout.performLayout(Size(constraints.maxWidth, _viewportHeight), children),
+    );
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) => defaultPaint(context, offset);
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
+      defaultHitTestChildren(result, position: position);
+}
+
 /// Measures the tables first so enlarged text takes space from the board, not other controls.
-class _PortraitLayoutDelegate({
+class _PortraitLayout({
   required final double maxBoardSize,
   required final int topTableFlex,
   required final int bottomTableFlex,
   required final double pocketSquareRatio,
-}) extends MultiChildLayoutDelegate {
-  @override
-  void performLayout(Size size) {
+}) {
+  Size performLayout(Size viewport, Map<_PortraitSlot, RenderBox> children) {
+    var size = viewport;
+    bool hasChild(_PortraitSlot id) => children.containsKey(id);
+    Size layoutChild(_PortraitSlot id, BoxConstraints constraints) {
+      final child = children[id]!;
+      child.layout(constraints, parentUsesSize: true);
+      return child.size;
+    }
+
+    void positionChild(_PortraitSlot id, Offset offset) {
+      (children[id]!.parentData! as _PortraitParentData).offset = offset;
+    }
+
     final tableConstraints = BoxConstraints.tightFor(width: size.width);
     final movesHeight = hasChild(_PortraitSlot.moves)
         ? layoutChild(_PortraitSlot.moves, tableConstraints).height
@@ -764,14 +889,29 @@ class _PortraitLayoutDelegate({
     final hasPockets = hasChild(_PortraitSlot.topPockets);
     // Each pocket row grows with the board, so solve all three heights before laying them out.
     final pocketsPadding = hasPockets ? 2 * PocketsMenu.padding.vertical : 0.0;
+    final exhausted = availableHeight <= topPlayerHeight + bottomPlayerHeight + pocketsPadding;
     final boardSize = math.max(
       0.0,
-      math.min(
-        maxBoardSize,
-        (availableHeight - topPlayerHeight - bottomPlayerHeight - pocketsPadding) /
-            (1 + (hasPockets ? 2 * pocketSquareRatio : 0)),
-      ),
+      exhausted
+          ? maxBoardSize
+          : math.min(
+              maxBoardSize,
+              (availableHeight - topPlayerHeight - bottomPlayerHeight - pocketsPadding) /
+                  (1 + (hasPockets ? 2 * pocketSquareRatio : 0)),
+            ),
     );
+    // Once the controls alone exhaust the viewport, keep a board and scroll the content.
+    if (exhausted) {
+      size = Size(
+        size.width,
+        movesHeight +
+            actionsHeight +
+            topPlayerHeight +
+            bottomPlayerHeight +
+            pocketsPadding +
+            boardSize * (1 + (hasPockets ? 2 * pocketSquareRatio : 0)),
+      );
+    }
     layoutChild(_PortraitSlot.board, BoxConstraints.tight(Size.square(boardSize)));
     final pocketHeight = hasPockets
         ? boardSize * pocketSquareRatio + PocketsMenu.padding.vertical
@@ -784,7 +924,7 @@ class _PortraitLayoutDelegate({
     final topHeight = topPlayerHeight + pocketHeight;
     final bottomHeight = bottomPlayerHeight + pocketHeight;
 
-    final tableSpace = availableHeight - boardSize;
+    final tableSpace = size.height - movesHeight - actionsHeight - boardSize;
     final topSpace = (tableSpace * topTableFlex / (topTableFlex + bottomTableFlex)).clamp(
       topHeight,
       math.max(topHeight, tableSpace - bottomHeight),
@@ -806,10 +946,10 @@ class _PortraitLayoutDelegate({
     if (hasChild(_PortraitSlot.actions)) {
       positionChild(_PortraitSlot.actions, Offset(0, size.height - actionsHeight));
     }
+    return size;
   }
 
-  @override
-  bool shouldRelayout(_PortraitLayoutDelegate oldDelegate) =>
+  bool shouldRelayout(_PortraitLayout oldDelegate) =>
       maxBoardSize != oldDelegate.maxBoardSize ||
       topTableFlex != oldDelegate.topTableFlex ||
       bottomTableFlex != oldDelegate.bottomTableFlex ||

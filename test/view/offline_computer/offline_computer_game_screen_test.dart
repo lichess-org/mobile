@@ -312,6 +312,42 @@ void main() {
               expect(controller.testState.showingSuggestedMove, isNull);
             }
           }
+          // Flip through the real menu while the previous verdict is retained during evaluation.
+          controller.testState = evaluatingState;
+          await tester.pumpAndSettle();
+          final beforeFlip = tester.widget<GameLayout>(find.byType(GameLayout)).orientation;
+          for (final flipped in [true, false]) {
+            await tester.tap(find.byIcon(Icons.menu));
+            await tester.pumpAndSettle();
+            await tester.tap(find.text('Flip board'));
+            await tester.pumpAndSettle();
+            expect(
+              tester.widget<GameLayout>(find.byType(GameLayout)).orientation,
+              flipped ? beforeFlip.opposite : beforeFlip,
+            );
+            expect(controller.testState.isEvaluatingMove, isTrue);
+            await checkLayout(commentVisible: true);
+            final board = tester.getRect(find.byType(Chessboard));
+            final feedback = tester.getRect(find.textContaining('Best was'));
+            expect(flipped ? feedback.bottom <= board.top : feedback.top >= board.bottom, isTrue);
+            expect(suggestedMove.hitTestable(), findsOneWidget);
+            await tester.tap(suggestedMove);
+            await tester.pump();
+            expect(controller.testState.showingSuggestedMove, suggestion);
+            await tester.tap(suggestedMove);
+            await tester.pump();
+            await expectLayoutGolden(
+              find.byType(OfflineComputerGameScreen),
+              '../../../build/compact-layout/practice-flipped-$flipped-${profile.name}-$textScale',
+            );
+          }
+          controller.testState = _stateWithPracticeComment(
+            const PracticeComment(verdict: MoveVerdict.notBest, evalAfter: '-1.2'),
+          );
+          await tester.pumpAndSettle();
+          expect(find.text('-1.2'), findsOneWidget);
+          expect(find.text('+0.3'), findsNothing);
+          expect(find.textContaining('Best was'), findsNothing);
           controller.testState = evaluatingState.copyWith(isEvaluatingMove: false);
           await tester.pumpAndSettle();
           await checkLayout(commentVisible: false);

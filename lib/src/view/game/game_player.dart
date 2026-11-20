@@ -71,123 +71,122 @@ class const GamePlayer({
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (!zenMode)
-          Row(
-            mainAxisAlignment: clockPosition == ClockPosition.right
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.end,
-            children: [
-              if (matchupScore != null) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
-                  decoration: BoxDecoration(
-                    color: ColorScheme.of(context).primaryContainer,
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  child: Text(
-                    _scoreDisplay(matchupScore!),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: ColorScheme.of(context).onPrimaryContainer,
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: clockPosition == ClockPosition.right
+                  ? WrapAlignment.start
+                  : WrapAlignment.end,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 5,
+              runSpacing: 4,
+              children: [
+                if (matchupScore != null) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+                    decoration: BoxDecoration(
+                      color: ColorScheme.of(context).primaryContainer,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    child: Text(
+                      _scoreDisplay(matchupScore!),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: ColorScheme.of(context).onPrimaryContainer,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 5),
-              ],
-              if (tournament?.ranks != null)
-                Text(
-                  '#${side == Side.white ? tournament?.ranks?.white : tournament?.ranks?.black} ',
-                  style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
-                ),
-              if (player.user != null) ...[
-                Consumer(
-                  builder: (context, ref, _) {
-                    bool isPlayerConnected = player.onGame == true;
-                    if (mePlaying && socketUri != null) {
-                      final ping = ref.watch(socketPingProvider(socketUri));
-                      if (ping.rating == 0) {
-                        isPlayerConnected = false;
-                      }
-                    }
-                    return ConnectedIcon(
-                      isConnected: isPlayerConnected,
-                      shouldShowIsOnGameLabels: true,
-                      size: DefaultTextStyle.of(context).style.fontSize,
-                    );
-                  },
-                ),
-              ],
-              const SizedBox(width: 5),
-              if (player.user?.isPatron == true) ...[
-                PatronIcon(size: playerFontSize, color: player.user?.patronColor),
-                const SizedBox(width: 5),
-              ],
-              if (player.user?.title != null) ...[
-                Text(
-                  player.user!.title!,
-                  style: TextStyle(
-                    fontSize: playerFontSize,
-                    fontWeight: player.user?.title == 'BOT' ? null : FontWeight.bold,
-                    color: player.user?.title == 'BOT'
-                        ? context.lichessColors.fancy
-                        : context.lichessColors.brag,
+                ],
+                if (tournament?.ranks != null)
+                  Text(
+                    '#${side == Side.white ? tournament?.ranks?.white : tournament?.ranks?.black}',
+                    style: TextStyle(fontSize: playerFontSize, color: textShade(context, 0.7)),
                   ),
-                ),
-                const SizedBox(width: 5),
-              ],
-              Flexible(
-                child: Tooltip(
+                if (player.user != null) ...[
+                  Consumer(
+                    builder: (context, ref, _) {
+                      bool isPlayerConnected = player.onGame == true;
+                      if (mePlaying && socketUri != null) {
+                        final ping = ref.watch(socketPingProvider(socketUri));
+                        if (ping.rating == 0) {
+                          isPlayerConnected = false;
+                        }
+                      }
+                      return ConnectedIcon(
+                        isConnected: isPlayerConnected,
+                        shouldShowIsOnGameLabels: true,
+                        size: DefaultTextStyle.of(context).style.fontSize,
+                      );
+                    },
+                  ),
+                ],
+                if (player.user?.isPatron == true) ...[
+                  PatronIcon(size: playerFontSize, color: player.user?.patronColor),
+                ],
+                if (player.user?.title != null) ...[
+                  Text(
+                    player.user!.title!,
+                    style: TextStyle(
+                      fontSize: playerFontSize,
+                      fontWeight: player.user?.title == 'BOT' ? null : FontWeight.bold,
+                      color: player.user?.title == 'BOT'
+                          ? context.lichessColors.fancy
+                          : context.lichessColors.brag,
+                    ),
+                  ),
+                ],
+                Tooltip(
                   message: player.displayName(context.l10n),
                   child: Text(
                     player.displayName(context.l10n),
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: playerFontSize, fontWeight: FontWeight.w600),
                   ),
                 ),
-              ),
-              if (player.user?.flair != null) ...[
-                const SizedBox(width: 5),
-                HttpNetworkImageWidget(
-                  lichessFlairSrc(player.user!.flair!),
-                  errorBuilder: (_, _, _) => kEmptyWidget,
-                  width: 16,
-                  height: 16,
-                ),
-              ],
-              if (player.rating != null)
-                RatingPrefAware(
-                  isActiveGameOfCurrentUser: game.me != null && !game.finished && !game.aborted,
-                  child: Text.rich(
-                    TextSpan(
-                      text: ' ${player.rating}${player.provisional == true ? '?' : ''}',
-                      children: [
-                        if (player.ratingDiff != null)
-                          TextSpan(
-                            text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
-                            style: TextStyle(
-                              color: player.ratingDiff! > 0
-                                  ? context.lichessColors.good
-                                  : player.ratingDiff! == 0
-                                  ? context.lichessColors.brag
-                                  : context.lichessColors.error,
-                            ),
-                          ),
-                      ],
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 14, color: textShade(context, 0.7)),
+                if (player.user?.flair != null) ...[
+                  HttpNetworkImageWidget(
+                    lichessFlairSrc(player.user!.flair!),
+                    errorBuilder: (_, _, _) => kEmptyWidget,
+                    width: 16,
+                    height: 16,
                   ),
-                ),
-              if (player.berserk == true) ...[
-                const SizedBox(width: 5),
-                Icon(
-                  LichessIcons.body_cut,
-                  color: LichessColors.brag,
-                  size: playerFontSize,
-                  semanticLabel: context.l10n.arenaBerserk,
-                ),
+                ],
+                if (player.rating != null)
+                  RatingPrefAware(
+                    isActiveGameOfCurrentUser: game.me != null && !game.finished && !game.aborted,
+                    child: Text.rich(
+                      TextSpan(
+                        text: '${player.rating}${player.provisional == true ? '?' : ''}',
+                        children: [
+                          if (player.ratingDiff != null)
+                            TextSpan(
+                              text: ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                              style: TextStyle(
+                                color: player.ratingDiff! > 0
+                                    ? context.lichessColors.good
+                                    : player.ratingDiff! == 0
+                                    ? context.lichessColors.brag
+                                    : context.lichessColors.error,
+                              ),
+                            ),
+                        ],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 14, color: textShade(context, 0.7)),
+                    ),
+                  ),
+                if (player.berserk == true) ...[
+                  Icon(
+                    LichessIcons.body_cut,
+                    color: LichessColors.brag,
+                    size: playerFontSize,
+                    semanticLabel: context.l10n.arenaBerserk,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)

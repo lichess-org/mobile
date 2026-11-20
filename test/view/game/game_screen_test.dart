@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' show ProviderScope;
 import 'package:flutter_riverpod/misc.dart' show Override, ProviderOrFamily;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart' hide Challenge;
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_board_params.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -105,6 +107,151 @@ void main() {
       ),
     );
   });
+
+  for (final locale in [const Locale('de'), const Locale('ar')]) {
+    for (final textScale in [1.0, 2.0]) {
+      testWidgets('compact localized player controls $locale scale=$textScale', (tester) async {
+        await prepareLayoutGolden(tester, loadFonts: true);
+        final event = jsonDecode(
+          makeFullEvent(
+            const GameId('abcdefgh'),
+            'e4 e5',
+            whiteUserName: 'LongWhitePlayerName',
+            blackUserName: 'LongBlackPlayerName',
+          ),
+        ) as Map<String, dynamic>;
+        final data = event['d'] as Map<String, dynamic>;
+        for (final side in ['white', 'black']) {
+          final player = data[side] as Map<String, dynamic>;
+          (player['user'] as Map<String, dynamic>).addAll({
+            'title': 'GM',
+            'flair': 'activity.lichess',
+          });
+          player.addAll({'rating': 2500, 'berserk': true, 'provisional': false});
+        }
+        data['tournament'] = {
+          'id': 'abcdefgh',
+          'name': 'Test arena',
+          'secondsLeft': 300,
+          'berserkable': true,
+          'ranks': {'white': 12, 'black': 34},
+        };
+        final game = GameFullEvent.fromJson(data).game;
+        final confirming = ValueNotifier(false);
+        addTearDown(confirming.dispose);
+        var confirmations = 0;
+        var cancellations = 0;
+        final flutterTestOnError = FlutterError.onError!;
+        final app = await makeTestProviderScope(
+          tester,
+          surfaceSize: const Size(320, 693),
+          devicePixelRatio: 1,
+          child: MaterialApp(
+            locale: locale,
+            theme: ThemeData(fontFamilyFallback: kLayoutGoldenFontFallback),
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              ...GlobalMaterialLocalizations.delegates,
+            ],
+            home: Builder(
+              builder: (context) => MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale)),
+                child: Scaffold(
+                  body: ValueListenableBuilder(
+                    valueListenable: confirming,
+                    builder: (context, pending, _) => GameLayout(
+                      orientation: Side.white,
+                      boardParams: const GameBoardParams.readonly(
+                        variant: Variant.standard,
+                        position: Chess.initial,
+                      ),
+                      topTable: GamePlayer(
+                        game: game,
+                        side: Side.black,
+                        matchupScore: 2.5,
+                        shouldLinkToUserProfile: false,
+                        clock: const Clock(timeLeft: Duration(minutes: 3)),
+                      ),
+                      bottomTable: GamePlayer(
+                        game: game,
+                        side: Side.white,
+                        matchupScore: 1.5,
+                        shouldLinkToUserProfile: false,
+                        mePlaying: true,
+                        confirmMoveCallbacks: pending
+                            ? (confirm: () => confirmations++, cancel: () => cancellations++)
+                            : null,
+                        clock: const Clock(timeLeft: Duration(minutes: 3)),
+                      ),
+                      userActionsBar: SizedBox(
+                        height: 56,
+                        child: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        FlutterError.onError = flutterTestOnError;
+        addTearDown(() => FlutterError.onError = flutterTestOnError);
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+        final layoutState = tester.state(find.byType(GameLayout));
+        final context = tester.element(find.byType(GameLayout));
+        final l10n = AppLocalizations.of(context);
+        expect(
+          Directionality.of(context),
+          locale.languageCode == 'ar' ? TextDirection.rtl : TextDirection.ltr,
+        );
+
+        for (final surface in [const Size(320, 693), const Size(693, 320), const Size(320, 693)]) {
+          await resizeTestSurface(tester, surface, physicalViewPadding: EdgeInsets.zero);
+          expect(tester.state(find.byType(GameLayout)), same(layoutState));
+          for (final clock in [find.byType(Clock).first, find.byType(Clock).last]) {
+            await tester.ensureVisible(clock);
+            await tester.pumpAndSettle();
+            expectGameControlsVisible(tester, clock);
+          }
+          for (final name in ['LongWhitePlayerName', 'LongBlackPlayerName']) {
+            await tester.ensureVisible(find.text(name));
+            await tester.pumpAndSettle();
+            expectGameControlsVisible(tester, find.text(name));
+            expect(tester.getSize(find.text(name)).width, greaterThan(0));
+          }
+          expect(tester.takeException(), isNull);
+        }
+        await expectLayoutGolden(
+          find.byType(GameLayout),
+          '../../../build/compact-layout/player-metadata-$locale-$textScale',
+        );
+
+        confirming.value = true;
+        await tester.pumpAndSettle();
+        for (final surface in [const Size(320, 693), const Size(693, 320), const Size(320, 693)]) {
+          await resizeTestSurface(tester, surface, physicalViewPadding: EdgeInsets.zero);
+          await tester.ensureVisible(find.byType(ConfirmMove));
+          await tester.pumpAndSettle();
+          expectGameControlsVisible(tester, find.text(l10n.confirmMove));
+          for (final label in [l10n.accept, l10n.cancel]) {
+            expectGameControlsVisible(tester, find.byTooltip(label));
+            expect(find.byTooltip(label).hitTestable(), findsOneWidget);
+          }
+          expect(tester.takeException(), isNull);
+        }
+        await tester.tap(find.byTooltip(l10n.accept));
+        await tester.tap(find.byTooltip(l10n.cancel));
+        expect(confirmations, 1);
+        expect(cancellations, 1);
+        await expectLayoutGolden(
+          find.byType(GameLayout),
+          '../../../build/compact-layout/localized-confirmation-$locale-$textScale',
+        );
+      }, variant: kPlatformVariant);
+    }
+  }
 
   group('Loading', () {
     testWidgets('compact portrait board fills width with game controls visible', (tester) async {

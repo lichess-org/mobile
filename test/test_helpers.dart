@@ -135,6 +135,9 @@ void expectCompactBoardLayout(
   expect(tester.getRect(find.byType(SolidColorChessboardBackground)), board);
 }
 
+/// Test-only Arabic fallback; this does not reproduce native iOS typography.
+const kLayoutGoldenFontFallback = ['NotoSansArabic'];
+
 Future<void>? _layoutGoldenFonts;
 
 Future<void> _loadLayoutGoldenFonts() async {
@@ -166,6 +169,12 @@ Future<void> _loadLayoutGoldenFonts() async {
     }
     await loader.load();
   }
+
+  // SIL OFL; see test/fonts/OFL.txt. From google/fonts ofl/notosansarabic at
+  // 8b0a1d0f5983c89bc2b93f1b5fb55f9e252744b5, unchanged variable-font bytes.
+  final arabic = FontLoader(kLayoutGoldenFontFallback.single);
+  arabic.addFont(io.File('test/fonts/NotoSansArabic.ttf').readAsBytes().then(ByteData.sublistView));
+  await arabic.load();
 }
 
 /// Uses real fonts for size-sensitive assertions and preloads pieces for opt-in visual captures.
