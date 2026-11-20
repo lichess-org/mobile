@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/view/home/is_editing_home.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -26,6 +27,8 @@ class const RecentGamesWidget({
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnline = ref.watch(isDeviceOnlineProvider);
+    // In edit mode the row already shows the widget's stable label.
+    final isEditing = IsEditingHome.isEditing(context);
 
     return recentGames.when(
       data: (data) {
@@ -34,19 +37,23 @@ class const RecentGamesWidget({
         }
         final list = data.take(maxGamesToShow);
         return ListSection(
-          header: Text(context.l10n.recentGames),
+          header: isEditing ? null : Text(context.l10n.recentGames),
           hasLeading: true,
-          onHeaderTap: nbOfGames > list.length
-              ? () {
+          onHeaderTap: isEditing || nbOfGames <= list.length
+              ? null
+              : () {
                   Navigator.of(context)
                       .push(GameHistoryScreen.buildRoute(user: user, isOnline: isOnline));
-                }
-              : null,
+                },
           children: [for (final item in list) GameListTile(item: item)],
         );
       },
       error: (error, stackTrace) {
         debugPrint('SEVERE: [RecentGames] could not load recent games: $error\n$stackTrace');
+        // In edit mode the row already shows the widget's stable label.
+        if (isEditing) {
+          return const SizedBox.shrink();
+        }
         return const Padding(
           padding: Styles.bodySectionPadding,
           child: Text('Could not load recent games.'),
@@ -55,7 +62,7 @@ class const RecentGamesWidget({
       loading: () => Shimmer(
         child: ShimmerLoading(
           isLoading: true,
-          child: ListSection.loading(itemsNumber: 10, header: true, hasLeading: true),
+          child: ListSection.loading(itemsNumber: 10, header: !isEditing, hasLeading: true),
         ),
       ),
     );
