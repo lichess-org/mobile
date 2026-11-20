@@ -25,7 +25,7 @@
   <string name="cantChangeMore">No podem canviar més que les majúscules/minúscules. Per motius tècnics, és del tot impossible.</string>
   <string name="orCloseAccount">Tot i això, pots tancar el teu compte actual i crear-ne un de nou.</string>
   <string name="wantClearHistory">Vull esborrar el meu historial o puntuació</string>
-  <string name="cantClearHistory">No és possible esborrar l\'historial de jocs, l\'historial de trencaclosques o les classificacions.</string>
+  <string name="cantClearHistoryOrResetRatings">No és possible esborrar l\'historial de jocs, problemes o restablir les puntuacions.</string>
   <string name="wantReport">Vull denunciar un jugador</string>
   <string name="toReportAPlayerUseForm">Per denunciar un usuari, fes servir el formulari de denúncies</string>
   <string name="youCanAlsoReachReportPage">També podeu arribar a aquesta pàgina si feu clic al botó de denuncies per %s en una pàgina de perfil.</string>
@@ -54,7 +54,9 @@
   <string name="ratedGame">Assegura\'t d\'haver jugat una partida puntuable. Les partides amistoses no afecten les puntuacions dels jugadors.</string>
   <string name="botRatingAbuse">En alguns casos quan es juga contra un compte de bot, una partida amb puntuació pot ser que no doni punts si es determina que el jugador està abusant del bot per tal d\'obtenir punts.</string>
   <string name="errorPage">Pàgina d\'error</string>
-  <string name="reportErrorPage">Si una pàgina et dóna error, la pots reportar:</string>
+  <string name="reportTheBug">Podeu reportar-ho a:</string>
+  <string name="securityVulnerability">Vulnerabilitat de seguretat</string>
+  <string name="otherBug">Un altre error</string>
   <string name="learnHowToMakeBroadcasts">Aprèn com pots afegir les teves pròpies retransmissions a Lichess</string>
   <string name="banAppeal">Apel·lació per prohibició o restricció de IP</string>
   <string name="engineAppeal">Motor o marca de trampa</string>

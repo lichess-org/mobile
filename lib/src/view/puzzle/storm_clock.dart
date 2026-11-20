@@ -8,25 +8,17 @@ import 'package:material_ui/material_ui.dart';
 
 const _kClockFontSize = 26.0;
 
-class StormClockWidget extends StatefulWidget {
-  const StormClockWidget({required this.clock});
-
-  final StormClock clock;
-
+class const StormClockWidget({required final StormClock clock}) extends StatefulWidget {
   @override
   _ClockState createState() => _ClockState();
 }
 
-class _ClockState extends State<StormClockWidget> with SingleTickerProviderStateMixin {
-  // ignore: avoid-late-keyword
+class _ClockState() extends State<StormClockWidget> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
-  // ignore: avoid-late-keyword
   late final Animation<double> _bonusFadeAnimation = Tween<double>(
     begin: 1.0,
     end: 0.0,
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-  // ignore: avoid-late-keyword
   late final Animation<Offset> _bonusSlideAnimation = Tween<Offset>(
     begin: const Offset(0.7, 0.0),
     end: const Offset(0.7, -1.0),
@@ -126,8 +118,8 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
                       '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
                         color: currentBonusSeconds! < 0
-                            ? context.lichessColors.error
-                            : context.lichessColors.good,
+                            ? context.lichessColors.red
+                            : context.lichessColors.green,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],
@@ -150,8 +142,8 @@ class _ClockState extends State<StormClockWidget> with SingleTickerProviderState
                     '$minutes:$seconds',
                     style: TextStyle(
                       color: currentBonusSeconds! < 0
-                          ? context.lichessColors.error
-                          : context.lichessColors.good,
+                          ? context.lichessColors.red
+                          : context.lichessColors.green,
                       fontSize: _kClockFontSize,
                       fontFeatures: const [FontFeature.tabularFigures()],
                     ),

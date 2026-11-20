@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassScrollEdgeEffect;
 import 'package:material_ui/material_ui.dart';
 
 const double _kTestScreenWidth = 390.0;
@@ -37,13 +39,36 @@ const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
 
 const kPlatformVariant = TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
+/// Checks that the bottom bar of a screen with an analysis layout floats over its tab view on iOS,
+/// with thick glass buttons over the blurred bottom edge of the tab view.
+///
+/// Returns the bottom padding that the tab views must apply: the bar height on iOS, else 0.
+double expectBottomBarOverTabView(WidgetTester tester) {
+  final barRect = tester.getRect(find.byType(BottomBar));
+  final tabViewBottom = tester.getBottomLeft(find.byType(TabBarView)).dy;
+  final bottomEdgeEffect = find.byWidgetPredicate(
+    (widget) => widget is GlassScrollEdgeEffect && widget.fadeBottom,
+  );
+  final thickGlassBar = find.ancestor(
+    of: find.byType(BottomBar),
+    matching: find.byType(ThickBottomBarGlass),
+  );
+  if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
+    expect(tabViewBottom, greaterThan(barRect.top));
+    expect(bottomEdgeEffect, findsOneWidget);
+    expect(thickGlassBar, findsOneWidget);
+    return barRect.height;
+  } else {
+    expect(tabViewBottom, barRect.top);
+    expect(bottomEdgeEffect, findsNothing);
+    expect(thickGlassBar, findsNothing);
+    return 0.0;
+  }
+}
+
 /// Mocks a surface with a given size.
-class TestSurface extends StatelessWidget {
-  const TestSurface({required this.child, required this.size, super.key});
-
-  final Size size;
-  final Widget child;
-
+class const TestSurface({required final Widget child, required final Size size, super.key})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MediaQuery(
@@ -107,6 +132,11 @@ bool boardHasPiece(WidgetTester tester, Square square, Piece piece) {
 /// Returns the valid moves set currently highlighted on the interactive chessboard.
 Set<Square> getBoardValidMoves(WidgetTester tester) {
   return findBoardHighlightPainter(tester).interactionNotifier.moveDests;
+}
+
+/// Returns the square of the currently selected piece, or null if no piece is selected.
+Square? getBoardSelectedSquare(WidgetTester tester) {
+  return findBoardHighlightPainter(tester).interactionNotifier.selected;
 }
 
 /// Returns the last move currently highlighted on the chessboard, or null if no last move is highlighted.

@@ -29,12 +29,7 @@ final accountRepositoryProvider = Provider<AccountRepository>((ref) {
   return AccountRepository(client, aggregator);
 }, name: 'AccountRepositoryProvider');
 
-class AccountRepository {
-  AccountRepository(this.client, this.aggregator);
-
-  final LichessClient client;
-  final Aggregator aggregator;
-
+class AccountRepository(final LichessClient client, final Aggregator aggregator) {
   Future<User> getProfile() {
     return aggregator.readJson(
       Uri(path: '/api/account', queryParameters: {'playban': '1'}),
@@ -84,6 +79,33 @@ class AccountRepository {
     final uri = Uri(path: '/bookmark/$id', queryParameters: {'v': bookmark ? '1' : '0'});
     await client.postRead(uri);
   }
+
+  Future<void> closeAccount({
+    required String username,
+    required String password,
+    required String token,
+    required bool forever,
+  }) async {
+    final uri = Uri(path: '/account/close');
+    await client.postRead(
+      uri,
+      body: {
+        'username': username,
+        'passwd': password,
+        'token': token,
+        'forever': forever ? 'true' : 'false',
+      },
+    );
+  }
+
+  /// Schedules the deletion of the account, after the user acknowledged that it is not recoverable.
+  Future<void> deleteAccount({required String username, required String password}) async {
+    final uri = Uri(path: '/account/delete');
+    await client.postRead(
+      uri,
+      body: {'username': username, 'passwd': password, 'understand': 'true'},
+    );
+  }
 }
 
 AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
@@ -103,5 +125,6 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     follow: BooleanPref(pick('follow').asBoolOrThrow()),
     challenge: Challenge.fromInt(pick('challenge').asIntOrThrow()),
     message: Message.fromInt(pick('message').asIntOrThrow()),
+    favoriteFederation: pick('favFed').letOrNull((p) => FederationId.fromCode(p.asStringOrThrow())),
   );
 }

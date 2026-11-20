@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">پەشیمانبونەوە لە جوڵەیەک (بە ڕەزامەندی بەرامبەر)</string>
   <string name="inCasualGamesOnly">تەنها لەو یاریانەی بێ ڕایتینگن</string>
   <string name="promoteToQueenAutomatically">بە شێوەیەکی ئۆتۆماتیکی بەرز دەبێتەوە بۆ شاژن</string>
-  <string name="explainPromoteToQueenAutomatically">اضغط مفتاح&lt;ctrl&gt; اثناء الترقية لتعطيل الترقية التلقائية مؤقتاً</string>
   <string name="whenPremoving">لە کاتی جوڵەی پێشوەختەدا</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">داواکاری لەسەر دووبارەبوونەوەی سێ جار لەسەر یەک بە شێوەیەکی ئۆتۆماتیکی یاریەکە یەکسان دەبێت</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">کاتێک کات دەمێنێتەوە &lt; ٣٠ چرکە</string>
@@ -56,12 +55,8 @@
   <string name="scrollOnTheBoardToReplayMoves">بۆ دووبارەکردنەوەی جوڵەکان، تختەی شەتڕەنجەکە بەرەو سەر و خوار بجوڵێنە</string>
   <string name="correspondenceEmailNotification">ئیمەیڵی ڕۆژانە کە نامە ناردنەکەت لە یاریەکاندا دەخاتە ڕوو</string>
   <string name="notifyStreamStart">کەسێک دەچێتە پەخشی ڕاستەوخۆ</string>
-  <string name="notifyInboxMsg">پەیامی نوێ</string>
-  <string name="notifyForumMention">کۆمێنتێک لە مەکۆکەدا ئاماژە بە تۆ دەکات</string>
-  <string name="notifyInvitedStudy">بانگهێشتنامەی خوێندن</string>
   <string name="notifyGameEvent">نوێکردنەوەی نامەناردن لە یاریدا</string>
   <string name="notifyChallenge">بەرەنگاریەکان</string>
-  <string name="notifyTournamentSoon">بەم زووانە پاڵەوانێتییەکە دەستپێدەکات</string>
   <string name="notifyTimeAlarm">کاتژمێری نامەنارد تەواو بووە</string>
   <string name="notifyBell">زەنگی ئاگادارکردنەوەی لە ناو Lichess</string>
   <string name="notifyPush">ئاگادارکردنەوەی ئامێرەکەت کاتێک لەسەر Lichess نیت</string>

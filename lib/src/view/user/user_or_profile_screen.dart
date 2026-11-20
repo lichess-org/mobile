@@ -6,10 +6,7 @@ import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:material_ui/material_ui.dart';
 
-class UserOrProfileScreen extends ConsumerWidget {
-  const UserOrProfileScreen({required this.user, super.key});
-  final LightUser user;
-
+class const UserOrProfileScreen({required final LightUser user, super.key}) extends ConsumerWidget {
   static Route<dynamic> buildRoute(LightUser user) {
     return buildScreenRoute(screen: UserOrProfileScreen(user: user));
   }

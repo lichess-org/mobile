@@ -4,12 +4,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 
 const _customOpacity = 0.6;
 
-class ProgressionWidget extends StatelessWidget {
-  final int progress;
-  final double fontSize;
-
-  const ProgressionWidget(this.progress, {this.fontSize = 20});
-
+class const ProgressionWidget(final int progress, {final double fontSize = 20})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,12 +16,12 @@ class ProgressionWidget extends StatelessWidget {
           Icon(
             progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
             size: fontSize,
-            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+            color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
           ),
           Text(
             progress.abs().toString(),
             style: TextStyle(
-              color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+              color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
               fontSize: fontSize,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),

@@ -9,31 +9,35 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// The height of the board header or footer in the analysis layout.
 const kAnalysisBoardHeaderOrFooterHeight = 26.0;
 
-/// Scale factor for the small board in portrait orientation.
-const kSmallBoardScale = 0.8;
+/// The margin around a clock in the board header or footer, and between the board and the eval gauge
+/// in portrait orientation.
+const kAnalysisBoardInnerMargin = 3.0;
 
-typedef BoardBuilder =
-    Widget Function(BuildContext context, double boardSize, BorderRadius? boardRadius);
+/// Scale factor for the small board in portrait orientation.
+const kSmallBoardScale = 0.7;
+
+typedef BoardBuilder = Widget Function(
+  BuildContext context,
+  double boardSize,
+  BorderRadius? boardRadius,
+);
 
 typedef EngineGaugeBuilder = Widget Function(BuildContext context);
 
-enum AnalysisTab {
+enum AnalysisTab(final IconData icon) {
   pgn(Icons.sell_outlined),
   explorer(Icons.explore),
   moves(LichessIcons.flow_cascade),
   summary(Icons.area_chart),
   moveTimes(Icons.punch_clock),
   conditionalPremoves(Icons.save);
-
-  const AnalysisTab(this.icon);
-
-  final IconData icon;
 
   String l10n(AppLocalizations l10n) {
     switch (this) {
@@ -62,368 +66,373 @@ enum AnalysisTab {
 ///
 /// The length of the [children] list must match the [tabController]'s
 /// [TabController.length] and the length of the [AppBarAnalysisTabIndicator.tabs]
-class AnalysisLayout extends ConsumerWidget {
-  const AnalysisLayout({
-    this.tabController,
-    this.tabs,
-    required this.boardBuilder,
-    required this.children,
-    required this.pov,
-    required this.sideToMove,
-    this.boardHeader,
-    this.boardFooter,
-    this.engineGaugeBuilder,
-    this.engineLines,
-    this.bottomBar,
-    this.smallBoard = false,
-    this.pockets,
-    super.key,
-  });
-
+class const AnalysisLayout({
   /// The tab controller for the tab view.
-  final TabController? tabController;
+  final TabController? tabController,
 
   /// If non-null, a tab indicator bar will be shown above the tab view.
-  final List<AnalysisTab>? tabs;
+  final List<AnalysisTab>? tabs,
 
   /// The builder for the board widget.
-  final BoardBuilder boardBuilder;
-
-  /// The side the board is displayed from.
-  final Side pov;
-
-  /// The side to move. In crazyhouse, this enables the [PocketsMenu] of this side.
-  final Side? sideToMove;
-
-  /// A widget to show above the board.
-  ///
-  /// The widget will included in a parent container with a height of
-  /// [kAnalysisBoardHeaderOrFooterHeight].
-  final Widget? boardHeader;
-
-  /// A widget to show below the board.
-  ///
-  /// The widget will included in a parent container with a height of
-  /// [kAnalysisBoardHeaderOrFooterHeight].
-  final Widget? boardFooter;
+  required final BoardBuilder boardBuilder,
 
   /// The children of the tab view.
   ///
   /// The length of this list must match the [tabController]'s [TabController.length]
   /// and the length of the [tabs] list.
-  final List<Widget> children;
+  required final List<Widget> children,
+
+  /// The side the board is displayed from.
+  required final Side pov,
+
+  /// The side to move. In crazyhouse, this enables the [PocketsMenu] of this side.
+  required final Side? sideToMove,
+
+  /// A widget to show above the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
+  final Widget? boardHeader,
+
+  /// A widget to show below the board.
+  ///
+  /// The widget will included in a parent container with a height of
+  /// [kAnalysisBoardHeaderOrFooterHeight].
+  final Widget? boardFooter,
 
   /// A builder for the engine gauge widget.
-  final EngineGaugeBuilder? engineGaugeBuilder;
+  final EngineGaugeBuilder? engineGaugeBuilder,
 
   /// A widget to show below the engine gauge, typically the engine lines.
-  final Widget? engineLines;
+  final Widget? engineLines,
 
   /// A widget to show at the bottom of the screen.
-  final Widget? bottomBar;
+  final Widget? bottomBar,
+
+  /// Whether the [bottomBar] floats over the tab view on iOS in portrait, like an iOS toolbar, with
+  /// the tab content scrolling under it. The tab views then get the bar height as bottom
+  /// `MediaQuery` padding, which their scroll views must apply; it is 0 otherwise.
+  final bool bottomBarOverContent = false,
 
   /// If true, the board is displayed in a small size on portrait orientation.
   ///
   /// This is `false` by default.
-  final bool smallBoard;
+  final bool smallBoard = false,
 
   /// Current state of the pockets, in variants like crazyhouse.
   ///
   /// If not null, will render a [PocketsMenu] for each player.
-  final Pockets? pockets;
-
+  final Pockets? pockets,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final orientation = constraints.maxWidth > constraints.maxHeight
-                    ? Orientation.landscape
-                    : Orientation.portrait;
-                final isTablet = isTabletOrLarger(context);
-                const tabletBoardRadius = Styles.boardBorderRadius;
+    final floatingBar =
+        bottomBarOverContent &&
+        bottomBar != null &&
+        Theme.of(context).platform == TargetPlatform.iOS &&
+        MediaQuery.orientationOf(context) == Orientation.portrait;
+    // The bar below the content takes care of the bottom inset itself.
+    final tabViewBottomInset = floatingBar ? BottomBar.heightOf(context) : 0.0;
 
-                final playerSide = switch (sideToMove) {
-                  Side.white => PlayerSide.white,
-                  Side.black => PlayerSide.black,
-                  null => PlayerSide.none,
-                };
+    final colorScheme = ColorScheme.of(context);
+    // In light mode, a pure white tab view stands out too much from the background.
+    final tabViewColor = Theme.of(context).brightness == Brightness.light
+        ? Color.lerp(colorScheme.surface, colorScheme.surfaceContainerLowest, 0.5)!
+        : colorScheme.surfaceContainerLowest;
 
-                if (orientation == Orientation.landscape) {
-                  final headerAndFooterHeight =
-                      (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
-                      (boardFooter != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0);
-                  final sideWidth =
-                      constraints.biggest.longestSide - constraints.biggest.shortestSide;
-                  final defaultBoardSize =
-                      constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
-                  final boardSize =
-                      (sideWidth >= 250
-                          ? defaultBoardSize
-                          : constraints.biggest.longestSide / kGoldenRatio -
-                                (kTabletBoardTableSidePadding * 2)) -
-                      headerAndFooterHeight;
+    final content = SafeArea(
+      bottom: false,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final orientation = constraints.maxWidth > constraints.maxHeight
+              ? Orientation.landscape
+              : Orientation.portrait;
+          final isTablet = isTabletOrLarger(context);
+          const tabletBoardRadius = Styles.boardBorderRadius;
 
-                  final boardPrefs = ref.watch(boardPreferencesProvider);
+          final playerSide = switch (sideToMove) {
+            Side.white => PlayerSide.white,
+            Side.black => PlayerSide.black,
+            null => PlayerSide.none,
+          };
 
-                  return Padding(
-                    padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
-                    child: Row(
-                      textDirection: switch (boardPrefs.landscapeBoardPosition) {
-                        .left => TextDirection.ltr,
-                        .right => TextDirection.rtl,
-                      },
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Column(
-                          children: [
-                            if (boardHeader != null)
-                              Container(
-                                // This key is used to preserve the state of the board header when the pov changes
-                                key: ValueKey(pov.opposite),
-                                decoration: BoxDecoration(
-                                  borderRadius: isTablet
-                                      ? tabletBoardRadius.copyWith(
-                                          bottomLeft: Radius.zero,
-                                          bottomRight: Radius.zero,
-                                        )
-                                      : null,
-                                ),
-                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                child: SizedBox(
-                                  height: kAnalysisBoardHeaderOrFooterHeight,
-                                  width: boardSize,
-                                  child: boardHeader,
-                                ),
-                              ),
-                            boardBuilder(
-                              context,
-                              boardSize,
-                              isTablet && boardHeader == null && boardFooter != null
-                                  ? tabletBoardRadius
-                                  : null,
-                            ),
-                            if (boardFooter != null)
-                              Container(
-                                // This key is used to preserve the state of the board footer when the pov changes
-                                key: ValueKey(pov),
-                                decoration: BoxDecoration(
-                                  borderRadius: isTablet
-                                      ? tabletBoardRadius.copyWith(
-                                          topLeft: Radius.zero,
-                                          topRight: Radius.zero,
-                                        )
-                                      : null,
-                                ),
-                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                height: kAnalysisBoardHeaderOrFooterHeight,
-                                width: boardSize,
-                                child: boardFooter,
-                              ),
-                          ],
-                        ),
-                        if (engineGaugeBuilder != null) ...[
-                          const SizedBox(width: 4.0),
-                          Container(
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
-                            child: engineGaugeBuilder!(context),
-                          ),
-                        ],
-                        const SizedBox(width: 16.0),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (engineLines != null) engineLines!,
-                              if (pockets != null)
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: PocketsMenu(
-                                    side: pov.opposite,
-                                    sideToMove: sideToMove,
-                                    playerSide: playerSide,
-                                    pockets: pockets!,
-                                    squareSize: pocketSquareSize(
-                                      boardSize: boardSize,
-                                      isTablet: isTablet,
-                                    ),
-                                  ),
-                                ),
-                              Expanded(
-                                child: Card(
-                                  clipBehavior: Clip.hardEdge,
-                                  semanticContainer: false,
-                                  child: _AnalysisTabView(
-                                    tabs: tabs,
-                                    controller: tabController,
-                                    children: children,
-                                  ),
-                                ),
-                              ),
-                              if (pockets != null)
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: PocketsMenu(
-                                    side: pov,
-                                    sideToMove: sideToMove,
-                                    playerSide: playerSide,
-                                    pockets: pockets!,
-                                    squareSize: pocketSquareSize(
-                                      boardSize: boardSize,
-                                      isTablet: isTablet,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  final evalGaugeSize = engineGaugeBuilder != null
-                      ? getEvalGaugeWidth(context)
-                      : 0.0;
+          if (orientation == Orientation.landscape) {
+            final headerAndFooterHeight =
+                (boardHeader != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0) +
+                (boardFooter != null ? kAnalysisBoardHeaderOrFooterHeight : 0.0);
+            final sideWidth = constraints.biggest.longestSide - constraints.biggest.shortestSide;
+            final defaultBoardSize =
+                constraints.biggest.shortestSide - (kTabletBoardTableSidePadding * 2);
+            final boardSize =
+                (sideWidth >= 250
+                    ? defaultBoardSize
+                    : constraints.biggest.longestSide / kGoldenRatio -
+                          (kTabletBoardTableSidePadding * 2)) -
+                headerAndFooterHeight;
 
-                  final defaultBoardSize =
-                      (smallBoard ? kSmallBoardScale : 1.0) *
-                      (constraints.biggest.shortestSide - evalGaugeSize);
+            final boardPrefs = ref.watch(boardPreferencesProvider);
 
-                  final remainingHeight = constraints.maxHeight - defaultBoardSize;
-                  final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
-                  final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
-
-                  final boardSize =
-                      defaultBoardSize -
-                      (isTablet ? kTabletBoardTableSidePadding * 2 : 0) -
-                      (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
-
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+            return Padding(
+              padding: const EdgeInsets.all(kTabletBoardTableSidePadding),
+              child: Row(
+                textDirection: switch (boardPrefs.landscapeBoardPosition) {
+                  .left => TextDirection.ltr,
+                  .right => TextDirection.rtl,
+                },
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Column(
                     children: [
-                      if (engineLines != null) engineLines!,
-                      Padding(
-                        padding: isTablet
-                            ? const EdgeInsets.all(kTabletBoardTableSidePadding)
-                            : EdgeInsets.zero,
-                        child: Column(
-                          children: [
-                            if (pockets != null)
-                              PocketsMenu(
-                                side: pov.opposite,
-                                sideToMove: sideToMove,
-                                playerSide: playerSide,
-                                pockets: pockets!,
-                                squareSize: pocketSquareSize(
-                                  boardSize: boardSize,
-                                  isTablet: isTablet,
-                                ),
-                              ),
-                            if (boardHeader != null)
-                              // This key is used to preserve the state of the board header when the pov changes
-                              Container(
-                                key: ValueKey(pov.opposite),
-                                decoration: BoxDecoration(
-                                  borderRadius: isTablet
-                                      ? tabletBoardRadius.copyWith(
-                                          bottomLeft: Radius.zero,
-                                          bottomRight: Radius.zero,
-                                        )
-                                      : null,
-                                ),
-                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                height: kAnalysisBoardHeaderOrFooterHeight,
-                                child: boardHeader,
-                              ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                boardBuilder(
-                                  context,
-                                  boardSize,
-                                  isTablet && boardHeader == null && boardFooter != null
-                                      ? tabletBoardRadius
-                                      : null,
-                                ),
-                                if (engineGaugeBuilder != null)
-                                  SizedBox(height: boardSize, child: engineGaugeBuilder!(context)),
-                              ],
-                            ),
-                            if (boardFooter != null)
-                              Container(
-                                // This key is used to preserve the state of the board footer when the pov changes
-                                key: ValueKey(pov),
-                                decoration: BoxDecoration(
-                                  borderRadius: isTablet
-                                      ? tabletBoardRadius.copyWith(
-                                          topLeft: Radius.zero,
-                                          topRight: Radius.zero,
-                                        )
-                                      : null,
-                                ),
-                                clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
-                                height: kAnalysisBoardHeaderOrFooterHeight,
-                                child: boardFooter,
-                              ),
-                            if (pockets != null)
-                              PocketsMenu(
-                                side: pov,
-                                sideToMove: sideToMove,
-                                playerSide: playerSide,
-                                pockets: pockets!,
-                                squareSize: pocketSquareSize(
-                                  boardSize: boardSize,
-                                  isTablet: isTablet,
-                                ),
-                              ),
-                          ],
+                      if (boardHeader != null)
+                        Container(
+                          // This key is used to preserve the state of the board header when the pov changes
+                          key: ValueKey(pov.opposite),
+                          decoration: BoxDecoration(
+                            borderRadius: isTablet
+                                ? tabletBoardRadius.copyWith(
+                                    bottomLeft: Radius.zero,
+                                    bottomRight: Radius.zero,
+                                  )
+                                : null,
+                          ),
+                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
+                          child: SizedBox(
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            width: boardSize,
+                            child: boardHeader,
+                          ),
                         ),
+                      boardBuilder(
+                        context,
+                        boardSize,
+                        isTablet && boardHeader == null && boardFooter != null
+                            ? tabletBoardRadius
+                            : null,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: isTablet
-                              ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
-                              : EdgeInsets.zero,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ColorScheme.of(context).surfaceContainerLowest,
+                      if (boardFooter != null)
+                        Container(
+                          // This key is used to preserve the state of the board footer when the pov changes
+                          key: ValueKey(pov),
+                          decoration: BoxDecoration(
+                            borderRadius: isTablet
+                                ? tabletBoardRadius.copyWith(
+                                    topLeft: Radius.zero,
+                                    topRight: Radius.zero,
+                                  )
+                                : null,
+                          ),
+                          clipBehavior: isTablet ? Clip.hardEdge : Clip.none,
+                          height: kAnalysisBoardHeaderOrFooterHeight,
+                          width: boardSize,
+                          child: boardFooter,
+                        ),
+                    ],
+                  ),
+                  if (engineGaugeBuilder != null) ...[
+                    const SizedBox(width: 4.0),
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4.0)),
+                      child: engineGaugeBuilder!(context),
+                    ),
+                  ],
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ?engineLines,
+                        if (pockets != null)
+                          Align(
+                            alignment: Alignment.center,
+                            child: PocketsMenu(
+                              side: pov.opposite,
+                              sideToMove: sideToMove,
+                              playerSide: playerSide,
+                              pockets: pockets!,
+                              squareSize: pocketSquareSize(
+                                boardSize: boardSize,
+                                isTablet: isTablet,
+                              ),
                             ),
+                          ),
+                        Expanded(
+                          child: Card(
+                            clipBehavior: Clip.hardEdge,
+                            semanticContainer: false,
                             child: _AnalysisTabView(
+                              bottomInset: 0.0,
                               tabs: tabs,
                               controller: tabController,
                               children: children,
                             ),
                           ),
                         ),
+                        if (pockets != null)
+                          Align(
+                            alignment: Alignment.center,
+                            child: PocketsMenu(
+                              side: pov,
+                              sideToMove: sideToMove,
+                              playerSide: playerSide,
+                              pockets: pockets!,
+                              squareSize: pocketSquareSize(
+                                boardSize: boardSize,
+                                isTablet: isTablet,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            final boardPadding = isTablet
+                ? const EdgeInsets.all(kTabletBoardTableSidePadding)
+                : isShortVerticalScreen(context)
+                ? const EdgeInsets.symmetric(horizontal: kShortScreenBoardSideMargin)
+                : const EdgeInsets.symmetric(horizontal: kPhoneBoardSideMargin);
+
+            // The board, its eval gauge, header and footer are one centered column, as wide as the
+            // board and the gauge, whatever the board size. The board does not span the whole
+            // screen width, so it and the gauge have rounded corners, with a gap between them.
+            final evalGaugeSize = engineGaugeBuilder != null
+                ? getEvalGaugeWidth(context) + kAnalysisBoardInnerMargin
+                : 0.0;
+
+            final defaultBoardSize =
+                (smallBoard ? kSmallBoardScale : 1.0) *
+                (constraints.biggest.shortestSide - boardPadding.horizontal - evalGaugeSize);
+
+            // The height left above a bar floating over the content.
+            final remainingHeight = constraints.maxHeight - tabViewBottomInset - defaultBoardSize;
+            final isSmallScreen = remainingHeight < kSmallHeightMinusBoard;
+            final additionalBoardSidePaddingForPockets = isSmallScreen ? 70.0 : 16.0;
+
+            final boardSize =
+                defaultBoardSize - (pockets != null ? additionalBoardSidePaddingForPockets : 0.0);
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ?engineLines,
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: boardPadding.vertical / 2),
+                  child: SizedBox(
+                    width: boardSize + evalGaugeSize,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov.opposite,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                          ),
+                        if (boardHeader != null)
+                          // This key is used to preserve the state of the board header when the pov changes
+                          SizedBox(
+                            key: ValueKey(pov.opposite),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardHeader,
+                          ),
+                        Row(
+                          children: [
+                            boardBuilder(context, boardSize, tabletBoardRadius),
+                            if (engineGaugeBuilder != null) ...[
+                              const SizedBox(width: kAnalysisBoardInnerMargin),
+                              ClipRRect(
+                                borderRadius: tabletBoardRadius,
+                                child: SizedBox(
+                                  height: boardSize,
+                                  child: engineGaugeBuilder!(context),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (boardFooter != null)
+                          SizedBox(
+                            // This key is used to preserve the state of the board footer when the pov changes
+                            key: ValueKey(pov),
+                            height: kAnalysisBoardHeaderOrFooterHeight,
+                            child: boardFooter,
+                          ),
+                        if (pockets != null)
+                          PocketsMenu(
+                            side: pov,
+                            sideToMove: sideToMove,
+                            playerSide: playerSide,
+                            pockets: pockets!,
+                            squareSize: pocketSquareSize(boardSize: boardSize, isTablet: isTablet),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: isTablet
+                        ? const EdgeInsets.symmetric(horizontal: kTabletBoardTableSidePadding)
+                        : EdgeInsets.zero,
+                    child: Container(
+                      decoration: BoxDecoration(color: tabViewColor),
+                      child: _AnalysisTabView(
+                        bottomInset: tabViewBottomInset,
+                        tabs: tabs,
+                        controller: tabController,
+                        children: children,
                       ),
-                    ],
-                  );
-                }
-              },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
+
+    if (floatingBar) {
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: BottomBarScrollEdgeEffect(
+              enabled: true,
+              barHeight: tabViewBottomInset,
+              color: tabViewColor,
+              child: content,
             ),
           ),
-        ),
-        if (bottomBar != null) bottomBar!,
+          Positioned(left: 0, right: 0, bottom: 0, child: ThickBottomBarGlass(child: bottomBar!)),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        Expanded(child: content),
+        ?bottomBar,
       ],
     );
   }
 }
 
-class _AnalysisTabView extends StatelessWidget {
-  const _AnalysisTabView({required this.tabs, required this.controller, required this.children});
-
-  final List<AnalysisTab>? tabs;
-  final TabController? controller;
-  final List<Widget> children;
-
+class const _AnalysisTabView({
+  /// The bottom `MediaQuery` padding of the tab views: the height of a bar floating over them.
+  required final double bottomInset,
+  required final List<AnalysisTab>? tabs,
+  required final TabController? controller,
+  required final List<Widget> children,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const iconSize = 18.0;
@@ -449,7 +458,11 @@ class _AnalysisTabView extends StatelessWidget {
             ),
           ),
         Expanded(
-          child: TabBarView(controller: controller, children: children),
+          child: MediaQuery(
+            data: MediaQuery.of(context)
+                .copyWith(padding: MediaQuery.paddingOf(context).copyWith(bottom: bottomInset)),
+            child: TabBarView(controller: controller, children: children),
+          ),
         ),
       ],
     );

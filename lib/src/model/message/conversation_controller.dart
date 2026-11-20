@@ -23,10 +23,7 @@ final conversationControllerProvider = AsyncNotifierProvider.autoDispose
       name: 'ConversationControllerProvider',
     );
 
-class ConversationController extends AsyncNotifier<ConversationState> {
-  ConversationController(this.userId);
-  final UserId userId;
-
+class ConversationController(final UserId userId) extends AsyncNotifier<ConversationState> {
   late SocketClient _client;
   StreamSubscription<SocketEvent>? _socketSubscription;
   Timer? _setReadTimer;
@@ -162,7 +159,7 @@ class ConversationController extends AsyncNotifier<ConversationState> {
 
 @freezed
 sealed class ConversationState with _$ConversationState {
-  const factory ConversationState({
+  const factory({
     required LightUser me,
     required bool isBot,
     required Convo convo,

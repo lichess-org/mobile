@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">Ėjimų atšaukimas (su varžovo sutikimu)</string>
   <string name="inCasualGamesOnly">Tik nevertinamose partijose</string>
   <string name="promoteToQueenAutomatically">Automatiškai paaukštinti į valdovę</string>
-  <string name="explainPromoteToQueenAutomatically">Norėdami laikinai sulaikyti automatinį paaukšinimą paaušktindami laikykite &lt;ctrl&gt; klavišą</string>
   <string name="whenPremoving">Per išankstinį ėjimą</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Automatiškai įskaityti lygiąsias pozicijai pasikartojus tris kartus</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Kai lieka mažiau nei 30 sekundžių</string>
@@ -56,12 +55,8 @@
   <string name="scrollOnTheBoardToReplayMoves">Sukite ratuką ant lentos norėdami dar kartą pamatyti ėjimus</string>
   <string name="correspondenceEmailNotification">Kasdieniame laiške pateikti korespondensinių žaidimų išrašus</string>
   <string name="notifyStreamStart">Transliuotojas pradeda transliaciją</string>
-  <string name="notifyInboxMsg">Nauja žinutė</string>
-  <string name="notifyForumMention">Jūs paminėti forumo komentare</string>
-  <string name="notifyInvitedStudy">Studijos pakvietimas</string>
   <string name="notifyGameEvent">Korespondencinių partijų naujienos</string>
   <string name="notifyChallenge">Iššūkiai</string>
-  <string name="notifyTournamentSoon">Greitai prasideda turnyras</string>
   <string name="notifyTimeAlarm">Baigiasi korespondencinės partijos laikmatis</string>
   <string name="notifyBell">Varpelio pranešimai Lichess</string>
   <string name="notifyPush">Pranešimai prietaisuose kai nesate Lichess</string>

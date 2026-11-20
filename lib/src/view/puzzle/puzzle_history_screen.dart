@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -18,21 +18,14 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-final _dateFormatter = DateFormat.yMMMd();
-
 /// Shows a short preview of the puzzle history.
-class PuzzleHistoryPreview extends ConsumerWidget {
-  const PuzzleHistoryPreview(
-    this.history, {
-    this.maxRows,
-    this.shouldOpenCasualPuzzleRun,
-    super.key,
-  });
-
-  final IList<PuzzleHistoryEntry> history;
-  final int? maxRows;
-  final bool? shouldOpenCasualPuzzleRun;
-
+class const PuzzleHistoryPreview(
+  final IList<PuzzleHistoryEntry> history, {
+  final int? maxRows,
+  final bool? shouldOpenCasualPuzzleRun,
+  final bool showRatings = false,
+  super.key,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _PreviewBoardsGrid(
@@ -45,7 +38,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
           return BoardThumbnail(
             size: boardWidth,
             onTap: () {
-              Navigator.of(context, rootNavigator: true).push(
+              Navigator.of(context).pushHidingTabBar(
                 PuzzleScreen.buildRoute(
                   angle: const PuzzleTheme(PuzzleThemeKey.mix),
                   puzzleId: e.id,
@@ -58,7 +51,12 @@ class PuzzleHistoryPreview extends ConsumerWidget {
             lastMove: lastMove,
             footer: Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: Row(children: [_PuzzleResult(e)]),
+              child: Row(
+                children: [
+                  _PuzzleResult(e),
+                  if (showRatings) ...[const SizedBox(width: 8), Text(e.rating.toString())],
+                ],
+              ),
             ),
           );
         }).toList();
@@ -68,9 +66,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 }
 
 /// A screen that displays the full puzzle history.
-class PuzzleHistoryScreen extends StatelessWidget {
-  const PuzzleHistoryScreen();
-
+class const PuzzleHistoryScreen() extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleHistoryScreen());
   }
@@ -78,20 +74,20 @@ class PuzzleHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory)),
-      body: _Body(),
+      appBar: PlatformAppBar(title: Text(context.l10n.puzzleHistory), largeTitle: true),
+      body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerStatefulWidget {
+class const _Body() extends ConsumerStatefulWidget {
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
 
 const _kPuzzlePadding = 10.0;
 
-class _BodyState extends ConsumerState<_Body> {
+class _BodyState() extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -161,16 +157,7 @@ class _BodyState extends ConsumerState<_Body> {
                 ),
               );
             } else if (element is DateTime) {
-              final now = DateTime.now();
-              final today = DateTime(now.year, now.month, now.day);
-              final difference = today.difference(element).inDays;
-              final title = difference == 0
-                  ? context.l10n.today
-                  : difference == 1
-                  ? context.l10n.yesterday
-                  : difference < 15
-                  ? relativeDate(context.l10n, element)
-                  : _dateFormatter.format(element);
+              final title = formatDayHeader(context.l10n, element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(
@@ -193,12 +180,8 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class PuzzleHistoryBoard extends ConsumerWidget {
-  const PuzzleHistoryBoard(this.puzzle, this.boardWidth);
-
-  final PuzzleHistoryEntry puzzle;
-  final double boardWidth;
-
+class const PuzzleHistoryBoard(final PuzzleHistoryEntry puzzle, final double boardWidth)
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.preview;
@@ -211,7 +194,7 @@ class PuzzleHistoryBoard extends ConsumerWidget {
       child: BoardThumbnail(
         size: boardWidth,
         onTap: () {
-          Navigator.of(context, rootNavigator: true).push(
+          Navigator.of(context).pushHidingTabBar(
             PuzzleScreen.buildRoute(
               angle: const PuzzleTheme(PuzzleThemeKey.mix),
               puzzleId: puzzle.id,
@@ -227,17 +210,13 @@ class PuzzleHistoryBoard extends ConsumerWidget {
   }
 }
 
-class _PuzzleResult extends StatelessWidget {
-  const _PuzzleResult(this.entry);
-
-  final PuzzleHistoryEntry entry;
-
+class const _PuzzleResult(final PuzzleHistoryEntry entry) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
       color: entry.win
-          ? context.lichessColors.good.withValues(alpha: 0.7)
-          : context.lichessColors.error.withValues(alpha: 0.7),
+          ? context.lichessColors.green.withValues(alpha: 0.7)
+          : context.lichessColors.red.withValues(alpha: 0.7),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 3),
         child: Row(
@@ -274,12 +253,10 @@ class _PuzzleResult extends StatelessWidget {
   }
 }
 
-class _PreviewBoardsGrid extends StatelessWidget {
-  final List<BoardThumbnail> Function(int, double) builder;
-  final double rowGap;
-
-  const _PreviewBoardsGrid({required this.builder, required this.rowGap});
-
+class const _PreviewBoardsGrid({
+  required final List<BoardThumbnail> Function(int, double) builder,
+  required final double rowGap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

@@ -8,10 +8,8 @@ part 'puzzle_streak.g.dart';
 typedef Streak = IList<PuzzleId>;
 
 @Freezed(fromJson: true, toJson: true)
-sealed class PuzzleStreak with _$PuzzleStreak {
-  const PuzzleStreak._();
-
-  const factory PuzzleStreak({
+sealed class const PuzzleStreak._() with _$PuzzleStreak {
+  const factory({
     required Streak streak,
     required int index,
     required bool hasSkipped,
@@ -21,5 +19,5 @@ sealed class PuzzleStreak with _$PuzzleStreak {
 
   PuzzleId? get nextId => streak.getOrNull(index + 1);
 
-  factory PuzzleStreak.fromJson(Map<String, dynamic> json) => _$PuzzleStreakFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$PuzzleStreakFromJson(json);
 }

@@ -10,11 +10,11 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/chat/chat_message.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 import 'package:sqflite/sqflite.dart';
 
 part 'chat_mixin.freezed.dart';
@@ -23,11 +23,8 @@ const _tableName = 'chat_read_messages';
 String _storeKey(StringId id) => 'chat.$id';
 
 @freezed
-sealed class ChatState with _$ChatState {
-  const ChatState._();
-
-  const factory ChatState({required IList<ChatMessage> messages, required int unreadMessages}) =
-      _ChatState;
+sealed class const ChatState._() with _$ChatState {
+  const factory({required IList<ChatMessage> messages, required int unreadMessages}) = _ChatState;
 }
 
 /// Interface for a Notifier's State that uses [ChatMixin].

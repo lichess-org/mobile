@@ -53,7 +53,7 @@ Also add the new bundle ID to both `app_identifier` arrays in `fastlane/Matchfil
 
 ## Internationalisation
 
-Widget UI strings are translated using a String Catalog at `ios/LichessWidgets/Localizable.xcstrings`. This file is generated from the app's ARB translation files and must not be edited by hand.
+Widget UI strings are translated using a String Catalog at `ios/LichessWidgets/Localizable.xcstrings`. This file is generated from the app's ARB translation files and must not be edited by hand. The Runner target is also a member of the catalog, so the Live Activity alerts and notifications sent by `ios/Runner/LiveActivityPlugin.swift` use the same translations.
 
 ### How it works
 

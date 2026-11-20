@@ -4,10 +4,8 @@ part 'socket.freezed.dart';
 
 /// A socket event.
 @freezed
-sealed class SocketEvent with _$SocketEvent {
-  const SocketEvent._();
-
-  const factory SocketEvent({
+sealed class const SocketEvent._() with _$SocketEvent {
+  const factory({
     required String topic,
     dynamic data,
 
@@ -21,7 +19,7 @@ sealed class SocketEvent with _$SocketEvent {
   /// A special internal pong event that should never be accessible to the subscribers.
   static const pong = SocketEvent(topic: '_pong');
 
-  factory SocketEvent.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     if (json['t'] == null) {
       if (json['v'] != null) {
         return SocketEvent(topic: '_version', version: json['v'] as int);

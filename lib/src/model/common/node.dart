@@ -18,17 +18,15 @@ final _logger = Logger('Node');
 ///
 /// It should not be directly used in a riverpod state, because it is mutable.
 /// It can be converted into an immutable [ViewNode], using the [view] getter.
-abstract class Node {
-  Node({required this.position, this.eval, this.opening});
-
-  final Position position;
+abstract class Node({
+  required final Position position,
 
   /// The local evaluation of the position.
-  ClientEval? eval;
+  var ClientEval? eval,
 
   /// The opening associated with this node.
-  Opening? opening;
-
+  var Opening? opening,
+}) {
   final List<Branch> children = [];
 
   /// Immutable view of this node.
@@ -36,11 +34,28 @@ abstract class Node {
   /// Use sparingly, it is relatively expensive to compute.
   ViewNode get view;
 
-  /// Adds a child to this node.
-  void addChild(Branch node) => children.add(node);
+  /// Adds a child to this node, ensuring its [id] is unique among siblings.
+  void addChild(Branch node) {
+    if (children.any((c) => c.id == node.id)) {
+      final baseId = node.id.basePair;
+      final count = children.where((c) => c.id.basePair == baseId).length;
+      node.id = UciCharPair.disambiguated(baseId, count);
+    }
+    children.add(node);
+  }
 
-  /// Prepends a child to this node.
-  void prependChild(Branch node) => children.insert(0, node);
+  /// Prepends a child to this node, ensuring its [id] is unique among siblings.
+  void prependChild(Branch node) {
+    final baseId = node.id.basePair;
+    final matching = children.where((c) => c.id.basePair == baseId).toList();
+    if (matching.isNotEmpty) {
+      node.id = baseId;
+      for (int i = 0; i < matching.length; i++) {
+        matching[i].id = UciCharPair.disambiguated(baseId, i + 1);
+      }
+    }
+    children.insert(0, node);
+  }
 
   /// Finds the child node with that id.
   Branch? childById(UciCharPair id) {
@@ -169,21 +184,23 @@ abstract class Node {
     bool prepend = false,
     bool replace = false,
   }) {
-    final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
-      final existing = nodeAtOrNull(newPath) != null;
-      if (!existing) {
-        if (replace) {
-          node.children.clear();
-        }
-        if (prepend) {
-          node.prependChild(newNode);
-        } else {
-          node.addChild(newNode);
-        }
+      final existingChild = !prepend && !replace
+          ? node.children.firstWhereOrNull((c) => c.id.basePair == newNode.id.basePair)
+          : null;
+      if (existingChild != null) {
+        return (path + existingChild.id, false);
       }
-      return (newPath, !existing);
+      if (replace) {
+        node.children.clear();
+      }
+      if (prepend) {
+        node.prependChild(newNode);
+      } else {
+        node.addChild(newNode);
+      }
+      return (path + newNode.id, true);
     } else {
       return (null, false);
     }
@@ -353,58 +370,102 @@ abstract class Node {
 
     return pgnGame.makePgn();
   }
+
+  /// Exports the line going through [path] as a PGN string.
+  ///
+  /// Mirrors the website's "Copy main line PGN" and "Copy variation PGN": the moves up to [path]
+  /// are exported as a single line, dropping the sidelines branching off them, then the line
+  /// follows the first child of each node to the end. Sidelines after [path] are kept only when
+  /// [includeVariations] is true.
+  ///
+  /// Comments and annotations are dropped. A `Variant` or `FEN` tag is added when the line does not
+  /// start from the standard initial position. Returns an empty string when the line has no move.
+  String makeLinePgn(UciPath path, {required Variant variant, required bool includeVariations}) {
+    final pgnRoot = PgnNode<PgnNodeData>();
+
+    PgnNode<PgnNodeData> pgnNode = pgnRoot;
+    Node node = this;
+    for (final branch in branchesOn(path)) {
+      final pgnChild = PgnChildNode(PgnNodeData(san: branch.sanMove.san));
+      pgnNode.children.add(pgnChild);
+      pgnNode = pgnChild;
+      node = branch;
+    }
+
+    final List<({Node from, PgnNode<PgnNodeData> to})> stack = [(from: node, to: pgnNode)];
+    while (stack.isNotEmpty) {
+      final frame = stack.removeLast();
+      final children = includeVariations ? frame.from.children : frame.from.children.take(1);
+      for (final childFrom in children) {
+        final childTo = PgnChildNode(PgnNodeData(san: childFrom.sanMove.san));
+        frame.to.children.add(childTo);
+        stack.add((from: childFrom, to: childTo));
+      }
+    }
+
+    // A line without any move has nothing to export: don't return bare headers.
+    if (pgnRoot.children.isEmpty) return '';
+
+    // Compare against the variant's own initial position: the initial FEN of crazyhouse and
+    // three-check carries extra fields and never equals the standard one.
+    final fen = position.fen;
+    return PgnGame(
+      headers: {
+        if (variant != Variant.standard) 'Variant': variant.pgnName,
+        if (fen != Position.initialPosition(variant.rule).fen) 'FEN': fen,
+      },
+      moves: pgnRoot,
+      comments: [],
+    ).makePgn();
+  }
 }
 
 /// A branch node of a game tree
 ///
 /// It has an associated [SanMove] and an id to identify it using an [UciPath].
-class Branch extends Node {
-  Branch({
-    required super.position,
-    super.eval,
-    super.opening,
-    required this.sanMove,
-    this.isComputerVariation = false,
-    this.isCollapsed = false,
-    this.isUserAdded = false,
-    this.lichessAnalysisComments,
-    // below are fields from dartchess [PgnNodeData]
-    this.startingComments,
-    this.comments,
-    this.nags,
-  });
-
-  /// Whether this branch is from a variation generated by lichess computer analysis.
-  final bool isComputerVariation;
-
-  /// Whether this branch was added by the user during analysis (not from the original PGN).
-  final bool isUserAdded;
-
-  /// Whether the branch should be hidden in the tree view.
-  bool isCollapsed;
-
-  /// The id of the branch, using a concise notation of associated move.
-  UciCharPair get id => UciCharPair.fromMove(sanMove.move);
+class Branch({
+  required super.position,
+  super.eval,
+  super.opening,
 
   /// The associated move.
-  final SanMove sanMove;
+  required final SanMove sanMove,
 
-  /// PGN comments before the move.
-  List<PgnComment>? startingComments;
+  UciCharPair? id,
 
-  /// PGN comments after the move.
-  List<PgnComment>? comments;
+  /// Whether this branch is from a variation generated by lichess computer analysis.
+  final bool isComputerVariation = false,
 
-  /// Numeric Annotation Glyphs for the move.
-  List<int>? nags;
+  /// Whether the branch should be hidden in the tree view.
+  var bool isCollapsed = false,
+
+  /// Whether this branch was added by the user during analysis (not from the original PGN).
+  final bool isUserAdded = false,
 
   /// Lichess analysis comments.
   ///
   /// These are standard PGN comments, but get a special treatment.
-  List<PgnComment>? lichessAnalysisComments;
+  var List<PgnComment>? lichessAnalysisComments,
+  // below are fields from dartchess [PgnNodeData]
+  /// PGN comments before the move.
+  var List<PgnComment>? startingComments,
+
+  /// PGN comments after the move.
+  var List<PgnComment>? comments,
+
+  /// Numeric Annotation Glyphs for the move.
+  var List<int>? nags,
+}) extends Node {
+  UciCharPair? _id = id;
+
+  /// The id of the branch, using a concise notation of associated move.
+  UciCharPair get id => _id ?? UciCharPair.fromMove(sanMove.move);
+
+  set id(UciCharPair value) => _id = value;
 
   @override
   ViewBranch get view => ViewBranch(
+    id: id,
     position: position,
     sanMove: sanMove,
     eval: eval,
@@ -486,9 +547,7 @@ class Branch extends Node {
 /// The root node of a game tree.
 ///
 /// Represents the initial position, where no move has been played yet.
-class Root extends Node {
-  Root({required super.position, super.eval});
-
+class Root({required super.position, super.eval}) extends Node {
   @override
   ViewRoot get view => ViewRoot(
     position: position,
@@ -499,7 +558,7 @@ class Root extends Node {
   /// Creates a flat game tree from a PGN string.
   ///
   /// Assumes that the PGN string is valid and that the moves are legal.
-  factory Root.fromPgnMoves(String pgn) {
+  factory fromPgnMoves(String pgn) {
     Position position = Chess.initial;
     final root = Root(position: position);
     Node current = root;
@@ -518,7 +577,7 @@ class Root extends Node {
   ///
   /// Any non legal move will be ignored.
   /// An optional callback can be provided to be called on each visited node.
-  factory Root.fromPgnGame(
+  factory fromPgnGame(
     PgnGame game, {
     bool isLichessAnalysis = false,
     bool hideVariations = false,
@@ -536,7 +595,7 @@ class Root extends Node {
         final childFrom = frame.from.children[childIdx];
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
-          final newPos = frame.to.position.play(move);
+          final newPos = frame.to.position.playUnchecked(move);
           final isMainline = stack.isEmpty;
           final comments = childFrom.data.comments?.map(PgnComment.fromPgn).map((c) {
             if (c.eval == null && isLichessAnalysis && isMainline && newPos.isCheckmate) {
@@ -588,9 +647,7 @@ class Root extends Node {
 }
 
 /// An immutable view of a [Node].
-abstract class ViewNode {
-  const ViewNode();
-
+abstract class const ViewNode() {
   UciCharPair? get id;
   SanMove? get sanMove;
   Position get position;
@@ -641,9 +698,8 @@ abstract class ViewNode {
 
 /// An immutable view of a [Root] node.
 @freezed
-sealed class ViewRoot extends ViewNode with _$ViewRoot {
-  const ViewRoot._();
-  const factory ViewRoot({
+sealed class const ViewRoot._() extends ViewNode with _$ViewRoot {
+  const factory({
     required Position position,
     required IList<ViewBranch> children,
     ClientEval? eval,
@@ -673,14 +729,13 @@ sealed class ViewRoot extends ViewNode with _$ViewRoot {
 
 /// An immutable view of a [Branch] node.
 @freezed
-sealed class ViewBranch extends ViewNode with _$ViewBranch {
-  const ViewBranch._();
-
-  const factory ViewBranch({
+sealed class const ViewBranch._() extends ViewNode with _$ViewBranch {
+  const factory({
     required SanMove sanMove,
     required Position position,
     Opening? opening,
     required IList<ViewBranch> children,
+    required UciCharPair id,
     @Default(false) bool isCollapsed,
     required bool isComputerVariation,
     @Default(false) bool isUserAdded,
@@ -693,6 +748,7 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
 
   /// Converts back to a mutable [Branch].
   Branch get branch => Branch(
+    id: id,
     sanMove: sanMove,
     position: position,
     opening: opening,
@@ -741,7 +797,16 @@ sealed class ViewBranch extends ViewNode with _$ViewBranch {
     final pgnEval = lichessAnalysisComments?.firstWhereOrNull((c) => c.eval != null)?.eval;
     return pgnEval != null ? ExternalEval.fromPgnEval(pgnEval) : null;
   }
+}
 
-  @override
-  UciCharPair get id => UciCharPair.fromMove(sanMove.move);
+/// Callbacks for interaction with `DebouncedPgnTreeView`.
+abstract class PgnTreeNotifier() {
+  void expandVariations(UciPath path);
+  void collapseVariations(UciPath path);
+  void promoteVariation(UciPath path, bool toMainLine);
+  void deleteFromHere(UciPath path);
+  void userJump(UciPath path);
+
+  /// Exports the line going through [path] as a PGN string, see [Node.makeLinePgn].
+  String makeLinePgn(UciPath path, {required bool includeVariations});
 }

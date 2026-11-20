@@ -48,7 +48,6 @@
   <string name="annotateWithGlyphs">Anotar com símbolos</string>
   <string name="theChapterIsTooShortToBeAnalysed">O capítulo é demasiado curto para ser analisado.</string>
   <string name="onlyContributorsCanRequestAnalysis">Apenas os colaboradores de estudo podem solicitar uma análise de computador.</string>
-  <string name="getAFullComputerAnalysis">Obtém uma análise completa da linha principal pelo servidor.</string>
   <string name="makeSureTheChapterIsComplete">Certifica-te que o capítulo está completo. Só podes solicitar a análise uma vez.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Todos os membros do SYNC permanecem na mesma posição</string>
   <string name="shareChanges">Partilha as alterações com espectadores e guarda-as no servidor</string>
@@ -65,7 +64,6 @@
   <string name="downloadGame">Transferir partida</string>
   <string name="studyUrl">URL do estudo</string>
   <string name="currentChapterUrl">URL do capítulo atual</string>
-  <string name="youCanPasteThisInTheForumToEmbed">Podes colocar isto no fórum para o incorporares</string>
   <string name="startAtInitialPosition">Começar na posição inicial</string>
   <string name="startAtX">Começar em %s</string>
   <string name="embedInYourWebsite">Incorporar no teu site ou blog</string>
@@ -100,10 +98,6 @@
   <string name="loadAPositionFromFen">Carregar uma posição por FEN</string>
   <string name="loadAGameFromPgn">Carregar um jogo por PGN</string>
   <string name="automatic">Automática</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Cole seu texto PGN aqui, até %s jogo</item>
-    <item quantity="other">Cole seu texto PGN aqui, até %s jogos</item>
-  </plurals>
   <string name="urlOfTheGame">URL do jogo</string>
   <string name="createChapter">Criar capítulo</string>
   <string name="createStudy">Criar estudo</string>
@@ -123,16 +117,13 @@
   <string name="noLetPeopleBrowseFreely">Não: deixa as pessoas navegarem livremente</string>
   <string name="pinnedStudyComment">Comentário de estudo fixo</string>
   <string name="start">Iniciar</string>
-  <string name="save">Guardar</string>
   <string name="clearChat">Limpar o chat</string>
   <string name="deleteTheStudyChatHistory">Apagar o histórico do chat do estudo? Não há volta atrás!</string>
   <string name="deleteStudy">Eliminar estudo</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Eliminar todo o estudo? Não há volta atrás! Digite o nome do estudo para confirmar: %s</string>
   <string name="whereDoYouWantToStudyThat">Onde queres estudar isso?</string>
   <string name="goodMove">Boa jogada</string>
-  <string name="mistake">Erro</string>
   <string name="brilliantMove">Jogada brilhante</string>
-  <string name="blunder">Erro grave</string>
   <string name="interestingMove">Lance interessante</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Lance duvidoso</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Lance único</string>
@@ -187,8 +178,6 @@
   <string name="fromInitialPositionText">Apenas uma configuração de tabuleiro para um novo jogo.&lt;br&gt; Adequado para explorar aberturas.</string>
   <string name="customPositionTitle">Posição personalizada</string>
   <string name="customPositionText">Configura o tabuleiro à tua maneira.&lt;br&gt; Adequado para explorar finais de jogos.</string>
-  <string name="loadExistingLichessGameTitle">Carregar um jogo lichess existente</string>
-  <string name="loadExistingLichessGameText">Copia um URL de um jogo de lichess&lt;br&gt;(como lichess.org/7fHIU0XI)&lt;br&gt;para carregar os movimentos do jogo no capítulo.</string>
   <string name="fromFenStringTitle">A partir de uma string FEN</string>
   <string name="fromFenStringText">Cola uma posição em formato FEN&lt;br&gt;&lt;i&gt;4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w&lt;/i&gt;&lt;br&gt;para começar o capítulo a partir de uma posição.</string>
   <string name="fromPgnGameTitle">De um jogo em PGN</string>

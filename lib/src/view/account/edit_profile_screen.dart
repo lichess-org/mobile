@@ -11,16 +11,16 @@ import 'package:lichess_mobile/src/view/user/countries.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_item.dart';
 import 'package:lichess_mobile/src/widgets/emoji_picker/emoji_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/glass_modal.dart';
 import 'package:lichess_mobile/src/widgets/network_image.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:result_extensions/result_extensions.dart';
 
 final _countries = countries.values.toList();
 
-class EditProfileScreen extends ConsumerStatefulWidget {
-  const EditProfileScreen({super.key});
-
+class const EditProfileScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const EditProfileScreen());
   }
@@ -29,7 +29,7 @@ class EditProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
+class _EditProfileScreenState() extends ConsumerState<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _formData = <String, dynamic>{
     'flag': null,
@@ -73,8 +73,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final account = ref.watch(accountProvider);
     switch (account) {
       case AsyncData(:final value):
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: PopScope(
             canPop: false,
             onPopInvokedWithResult: (bool didPop, _) async {
@@ -112,13 +112,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         );
 
       case AsyncError(:final error):
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: Center(child: Text(error.toString())),
         );
       case _:
-        return Scaffold(
-          appBar: AppBar(title: Text(context.l10n.editProfile)),
+        return PlatformScaffold(
+          appBar: PlatformAppBar(title: Text(context.l10n.editProfile)),
           body: const Center(child: CircularProgressIndicator.adaptive()),
         );
     }
@@ -139,18 +139,16 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 }
 
-class _EditProfileForm extends ConsumerStatefulWidget {
-  const _EditProfileForm(this.user, this.formKey, this.formData);
-
-  final User user;
-  final Map<String, dynamic> formData;
-  final GlobalKey<FormState> formKey;
-
+class const _EditProfileForm(
+  final User user,
+  final GlobalKey<FormState> formKey,
+  final Map<String, dynamic> formData,
+) extends ConsumerStatefulWidget {
   @override
   _EditProfileFormState createState() => _EditProfileFormState();
 }
 
-class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
+class _EditProfileFormState() extends ConsumerState<_EditProfileForm> {
   Future<void>? _pendingSaveProfile;
 
   @override
@@ -196,72 +194,55 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                 final flairListAsync = ref.watch(flairListProvider);
                                 switch (flairListAsync) {
                                   case AsyncData(:final value):
-                                    return SafeArea(
-                                      child: Dialog(
-                                        child: ConstrainedBox(
-                                          constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.heightOf(context) * 0.5,
-                                            maxWidth: MediaQuery.widthOf(context) * 0.9,
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                    vertical: 12.0,
-                                                    horizontal: 4.0,
-                                                  ),
-                                                  child: EmojiPicker(
-                                                    emojiData: value,
-                                                    itemBuilder:
-                                                        (context, emojiId, emoji, callback) {
-                                                          return EmojiItem(
-                                                            onTap: () {
-                                                              callback(emojiId, emoji);
-                                                            },
-                                                            emoji: emoji,
-                                                          );
-                                                        },
-                                                    onEmojiSelected: (emojiId, emoji) {
-                                                      Navigator.of(context).pop(emojiId);
-                                                    },
-                                                  ),
-                                                ),
+                                    return _FlairDialog(
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                vertical: 12.0,
+                                                horizontal: 4.0,
                                               ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop('__clear__');
+                                              child: EmojiPicker(
+                                                emojiData: value,
+                                                itemBuilder: (context, emojiId, emoji, callback) {
+                                                  return EmojiItem(
+                                                    onTap: () {
+                                                      callback(emojiId, emoji);
                                                     },
-                                                    child: Text(context.l10n.mobileClearButton),
-                                                  ),
-                                                  const SizedBox(width: 8.0),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop();
-                                                    },
-                                                    child: Text(context.l10n.cancel),
-                                                  ),
-                                                ],
+                                                    emoji: emoji,
+                                                  );
+                                                },
+                                                onEmojiSelected: (emojiId, emoji) {
+                                                  Navigator.of(context).pop(emojiId);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop('__clear__');
+                                                },
+                                                child: Text(context.l10n.mobileClearButton),
+                                              ),
+                                              const SizedBox(width: 8.0),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text(context.l10n.cancel),
                                               ),
                                             ],
                                           ),
-                                        ),
+                                        ],
                                       ),
                                     );
                                   case _:
-                                    return Dialog(
-                                      child: ConstrainedBox(
-                                        constraints: BoxConstraints(
-                                          maxHeight: MediaQuery.heightOf(context) * 0.5,
-                                          maxWidth: MediaQuery.widthOf(context) * 0.9,
-                                        ),
-                                        child: const Center(
-                                          child: CircularProgressIndicator.adaptive(),
-                                        ),
-                                      ),
+                                    return const _FlairDialog(
+                                      child: Center(child: CircularProgressIndicator.adaptive()),
                                     );
                                 }
                               },
@@ -509,25 +490,18 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
   }
 }
 
-class _NumericField extends StatefulWidget {
-  final String label;
-  final int? initialValue;
-  final String formKey;
-  final String? Function(int?)? validator;
-  final Map<String, dynamic> formData;
-  const _NumericField({
-    required this.label,
-    required this.initialValue,
-    required this.formKey,
-    required this.validator,
-    required this.formData,
-  });
-
+class const _NumericField({
+  required final String label,
+  required final int? initialValue,
+  required final String formKey,
+  required final String? Function(int?)? validator,
+  required final Map<String, dynamic> formData,
+}) extends StatefulWidget {
   @override
   State<_NumericField> createState() => __NumericFieldState();
 }
 
-class __NumericFieldState extends State<_NumericField> {
+class __NumericFieldState() extends State<_NumericField> {
   final _controller = TextEditingController();
   @override
   void initState() {
@@ -573,32 +547,21 @@ class __NumericFieldState extends State<_NumericField> {
   }
 }
 
-class _TextField extends StatefulWidget {
-  const _TextField({
-    required this.label,
-    required this.initialValue,
-    required this.formKey,
-    required this.formData,
-    this.description,
-    this.maxLength,
-    this.maxLines,
-    this.textInputAction = TextInputAction.next,
-  });
-
-  final String label;
-  final String? initialValue;
-  final String formKey;
-  final String? description;
-  final int? maxLength;
-  final int? maxLines;
-  final Map<String, dynamic> formData;
-  final TextInputAction textInputAction;
-
+class const _TextField({
+  required final String label,
+  required final String? initialValue,
+  required final String formKey,
+  required final Map<String, dynamic> formData,
+  final String? description,
+  final int? maxLength,
+  final int? maxLines,
+  final TextInputAction textInputAction = TextInputAction.next,
+}) extends StatefulWidget {
   @override
   State<_TextField> createState() => __TextFieldState();
 }
 
-class __TextFieldState extends State<_TextField> {
+class __TextFieldState() extends State<_TextField> {
   final _controller = TextEditingController();
   @override
   void initState() {
@@ -645,6 +608,29 @@ class __TextFieldState extends State<_TextField> {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+/// The frame of the flair picker dialog: a wide glass dialog on iOS.
+class const _FlairDialog({required final Widget child}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.heightOf(context) * 0.5;
+    final maxWidth = MediaQuery.widthOf(context) * 0.9;
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return GlassDialogFrame(
+        maxWidth: maxWidth,
+        child: SizedBox(height: height, child: child),
+      );
+    }
+    return SafeArea(
+      child: Dialog(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: height, maxWidth: maxWidth),
+          child: child,
+        ),
       ),
     );
   }

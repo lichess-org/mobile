@@ -9,7 +9,10 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 
 part 'coordinate_training_controller.freezed.dart';
 
-enum Guess { correct, incorrect }
+enum Guess() {
+  correct,
+  incorrect,
+}
 
 final coordinateTrainingControllerProvider =
     NotifierProvider.autoDispose<CoordinateTrainingController, CoordinateTrainingState>(
@@ -17,7 +20,7 @@ final coordinateTrainingControllerProvider =
       name: 'CoordinateTrainingControllerProvider',
     );
 
-class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
+class CoordinateTrainingController() extends Notifier<CoordinateTrainingState> {
   final _random = Random(DateTime.now().millisecondsSinceEpoch);
 
   final _stopwatch = Stopwatch();
@@ -60,7 +63,14 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
   }
 
   void _finishTraining() {
-    // TODO save score in local storage here (and display high score and/or average score in UI)
+    unawaited(
+      ref
+          .read(coordinateTrainingPreferencesProvider.notifier)
+          .addScore(side: state.orientation, score: state.score),
+    );
+    // TODO display high score and/or average score in UI. Scores are already stored per side in
+    // CoordinateScores, and the coordinatesAverageScoreAsWhiteX / coordinatesAverageScoreAsBlackX
+    // strings are translated but unused.
     final orientation = _getOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
     _updateTimer?.cancel();
     _stopwatch.stop();
@@ -113,10 +123,8 @@ class CoordinateTrainingController extends Notifier<CoordinateTrainingState> {
 }
 
 @freezed
-sealed class CoordinateTrainingState with _$CoordinateTrainingState {
-  const CoordinateTrainingState._();
-
-  const factory CoordinateTrainingState({
+sealed class const CoordinateTrainingState._() with _$CoordinateTrainingState {
+  const factory({
     @Default(null) Square? currentCoord,
     @Default(null) Square? nextCoord,
     @Default(0) int score,

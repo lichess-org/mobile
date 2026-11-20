@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/offline_computer_game.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,13 +15,15 @@ part 'offline_computer_game_storage.g.dart';
 final _logger = Logger('OfflineComputerGameStorage');
 
 @Freezed(fromJson: true, toJson: true)
-sealed class SavedOfflineComputerGame with _$SavedOfflineComputerGame {
-  const SavedOfflineComputerGame._();
+sealed class const SavedOfflineComputerGame._() with _$SavedOfflineComputerGame {
+  factory({
+    required OfflineComputerGame game,
+    @Default(TimeIncrement.infinite()) TimeIncrement timeIncrement,
+    Duration? whiteTimeLeft,
+    Duration? blackTimeLeft,
+  }) = _SavedOfflineComputerGame;
 
-  factory SavedOfflineComputerGame({required OfflineComputerGame game}) = _SavedOfflineComputerGame;
-
-  factory SavedOfflineComputerGame.fromJson(Map<String, dynamic> json) =>
-      _$SavedOfflineComputerGameFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$SavedOfflineComputerGameFromJson(json);
 }
 
 /// A provider for [OfflineComputerGameStorage].
@@ -30,10 +33,7 @@ final offlineComputerGameStorageProvider = Provider<OfflineComputerGameStorage>(
 
 const kOfflineComputerGameFileName = 'offline_computer_game.json';
 
-class OfflineComputerGameStorage {
-  const OfflineComputerGameStorage(this.ref);
-  final Ref ref;
-
+class const OfflineComputerGameStorage(final Ref ref) {
   Future<File> _getFile() async {
     final dir = await getApplicationSupportDirectory();
     return File('${dir.path}/$kOfflineComputerGameFileName');

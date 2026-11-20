@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_controller.dart';
 import 'package:lichess_mobile/src/model/clock/clock_tool_preferences.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/service/sound_service.dart';
 
-import '../common/service/fake_sound_service.dart';
+import '../../service/fake_sound_service.dart';
 
-class FakeClockToolPreferences extends ClockToolPreferences {
+class FakeClockToolPreferences() extends ClockToolPreferences {
   @override
   ClockToolPrefs build() => ClockToolPrefs.defaults;
 

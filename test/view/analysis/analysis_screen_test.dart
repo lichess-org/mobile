@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
@@ -5,6 +6,7 @@ import 'package:collection/collection.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -13,26 +15,27 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
-import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:multistockfish/multistockfish.dart';
 
-import '../../binding.dart';
-import '../../model/engine/fake_stockfish.dart';
+import '../../model/engine/fake_engine.dart';
 import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
@@ -74,6 +77,93 @@ void main() {
       );
     });
 
+    testWidgets('the bottom bar floats over the tab view on iOS only', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      expect(
+        tester
+            .widget<SingleChildScrollView>(
+              find.descendant(
+                of: find.byType(TabBarView),
+                matching: find.byType(SingleChildScrollView),
+              ),
+            )
+            .padding,
+        EdgeInsets.only(bottom: bottomInset),
+      );
+    }, variant: kPlatformVariant);
+
+    group('board size toggle', () {
+      AnalysisScreen makeScreen() => AnalysisScreen(
+        options: AnalysisOptions.pgn(
+          id: const StringId('standalone'),
+          orientation: Side.white,
+          pgn: sanMoves,
+          isComputerAnalysisAllowed: false,
+          variant: Variant.standard,
+        ),
+      );
+
+      final toggleButton = find.byType(BoardSizeToggleButton);
+
+      testWidgets('switches between the full size board and the small board', (tester) async {
+        final app = await makeTestProviderScopeApp(tester, home: makeScreen());
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        // A phone opens with the full size board.
+        expect(toggleButton, findsOneWidget);
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isFalse);
+        expect(find.byIcon(CupertinoIcons.chevron_up), findsOneWidget);
+        final fullBoardSize = tester.getSize(find.byType(Chessboard)).width;
+
+        await tester.tap(toggleButton);
+        await tester.pumpAndSettle();
+
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isTrue);
+        expect(find.byIcon(CupertinoIcons.chevron_down), findsOneWidget);
+        expect(
+          tester.getSize(find.byType(Chessboard)).width,
+          moreOrLessEquals(fullBoardSize * kSmallBoardScale),
+        );
+
+        await tester.tap(toggleButton);
+        await tester.pumpAndSettle();
+
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isFalse);
+        expect(tester.getSize(find.byType(Chessboard)).width, moreOrLessEquals(fullBoardSize));
+      }, variant: kPlatformVariant);
+
+      testWidgets('is not shown in landscape', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: makeScreen(),
+          surfaceSize: kTestSurfaceSize.flipped,
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(toggleButton, findsNothing);
+      }, variant: kPlatformVariant);
+    });
+
     testWidgets('move backwards and forward', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
@@ -112,6 +202,111 @@ void main() {
         isTrue,
       );
     });
+    testWidgets('displays the clocks of a game played with a time control', (tester) async {
+      const pgn =
+          '[White "white"]\n'
+          '[Black "black"]\n'
+          '[TimeControl "300+3"]\n\n'
+          '1. e4 { [%clk 0:05:01] } e5 { [%clk 0:05:02] } '
+          '2. Nf3 { [%clk 0:04:55] } Nc6 { [%clk 0:04:50] } *';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('otb_test'),
+            orientation: Side.white,
+            pgn: pgn,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      // The last move is black's, so black shows the clock of that move and white the one it
+      // still had after its own last move.
+      expect(find.text('04:50'), findsOneWidget);
+      expect(find.text('04:55'), findsOneWidget);
+
+      // Stepping back a move moves both clocks back with it.
+      await tester.tap(find.byKey(const Key('goto-previous')));
+      await tester.pumpAndSettle();
+      expect(find.text('04:55'), findsOneWidget);
+      expect(find.text('05:02'), findsOneWidget);
+
+      // At the root neither side has played, so there is nothing to show.
+      for (var i = 0; i < 3; i++) {
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        await tester.pumpAndSettle();
+      }
+      expect(find.text('05:01'), findsNothing);
+      expect(find.text('05:02'), findsNothing);
+    });
+
+    testWidgets('offers a move times chart for a game played with a time control', (tester) async {
+      const pgn =
+          '[White "white"]\n'
+          '[Black "black"]\n'
+          '[TimeControl "300+3"]\n\n'
+          '1. e4 { [%clk 0:05:01] } e5 { [%clk 0:05:02] } '
+          '2. Nf3 { [%clk 0:04:55] } Nc6 { [%clk 0:04:50] } *';
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('otb_test'),
+            orientation: Side.white,
+            pgn: pgn,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byIcon(AnalysisTab.moveTimes.icon), findsOneWidget);
+      await tester.tap(find.byIcon(AnalysisTab.moveTimes.icon));
+      await tester.pumpAndSettle();
+
+      final chart = tester.widget<MoveTimesChart>(find.byType(MoveTimesChart));
+      expect(chart.params.clocks, const [
+        Duration(minutes: 5, seconds: 1),
+        Duration(minutes: 5, seconds: 2),
+        Duration(minutes: 4, seconds: 55),
+        Duration(minutes: 4, seconds: 50),
+      ]);
+      // Each side's first move is free; after that the increment is part of what was spent.
+      expect(chart.params.moveTimes, const [
+        Duration.zero,
+        Duration.zero,
+        Duration(seconds: 9),
+        Duration(seconds: 15),
+      ]);
+    });
+
+    testWidgets('offers no move times chart for a game played without a clock', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+
+      expect(find.byIcon(AnalysisTab.moveTimes.icon), findsNothing);
+    });
+
     testWidgets('Variations bar displays variations and can be tapped', (tester) async {
       // A PGN where black has two responses to 1. e4 : e5 and c5
       const pgn = '1. e4 e5 (1... c5)';
@@ -690,6 +885,89 @@ void main() {
       );
     });
 
+    group('Copy line PGN', () {
+      /// Records every text the app writes to the clipboard.
+      List<String> captureClipboard({Future<void>? response}) {
+        final copied = <String>[];
+        final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+        messenger.setMockMethodCallHandler(SystemChannels.platform, (methodCall) async {
+          if (methodCall.method == 'Clipboard.setData') {
+            final arguments = methodCall.arguments as Map<Object?, Object?>;
+            copied.add(arguments['text']! as String);
+            if (response != null) await response;
+          }
+          return null;
+        });
+        addTearDown(() => messenger.setMockMethodCallHandler(SystemChannels.platform, null));
+        return copied;
+      }
+
+      const pgn = '1. e4 e5 (1... c5 2. Nf3 (2. c3)) 2. Nf3 Nc6 (2... d6) 3. Bb5';
+
+      for (final displayMode in PgnTreeDisplayMode.values) {
+        group(displayMode.name, () {
+          testWidgets('copies the main line without the sidelines branching off it', (
+            tester,
+          ) async {
+            final copied = captureClipboard();
+            await buildTree(tester, pgn, displayMode);
+
+            await tester.longPress(find.text('e5'));
+            await tester.pumpAndSettle();
+
+            expect(find.text('Copy variation PGN'), findsNothing);
+            await tester.tap(find.text('Copy main line PGN'));
+            await tester.pumpAndSettle();
+
+            expect(copied, ['1. e4 e5 2. Nf3 Nc6 3. Bb5']);
+            expect(
+              find.descendant(of: find.byType(SnackBar), matching: find.text('PGN copied.')),
+              findsOneWidget,
+            );
+          });
+
+          testWidgets('copies a variation with the sidelines after the pressed move', (
+            tester,
+          ) async {
+            final copied = captureClipboard();
+            await buildTree(tester, pgn, displayMode);
+
+            await tester.longPress(find.text('1… c5'));
+            await tester.pumpAndSettle();
+
+            expect(find.text('Copy main line PGN'), findsNothing);
+            await tester.tap(find.text('Copy variation PGN'));
+            await tester.pumpAndSettle();
+
+            expect(copied, ['1. e4 c5 2. Nf3 ( 2. c3 )']);
+          });
+
+          testWidgets('confirms copying after the move menu has closed', (tester) async {
+            final response = Completer<void>();
+            final copied = captureClipboard(response: response.future);
+            await buildTree(tester, pgn, displayMode);
+
+            await tester.longPress(find.text('e5'));
+            await tester.pumpAndSettle();
+            await tester.tap(find.text('Copy main line PGN'));
+            await tester.pumpAndSettle();
+
+            expect(find.byType(BottomSheet), findsNothing);
+            expect(copied, ['1. e4 e5 2. Nf3 Nc6 3. Bb5']);
+            expect(find.text('PGN copied.'), findsNothing);
+
+            response.complete();
+            await tester.pumpAndSettle();
+
+            expect(
+              find.descendant(of: find.byType(SnackBar), matching: find.text('PGN copied.')),
+              findsOneWidget,
+            );
+          });
+        });
+      }
+    });
+
     group('PgnTreeDisplayMode.twoColumn', () {
       Row parentRow(WidgetTester tester, String move) {
         return tester.firstWidget<Row>(
@@ -732,7 +1010,7 @@ void main() {
 
     testWidgets('Displays conditional premove lines saved on server', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: 'e4 e5',
@@ -767,7 +1045,7 @@ void main() {
     testWidgets('Regaining focus refreshes correspondence moves', (tester) async {
       var liveGamePgn = 'e4 e5';
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: liveGamePgn,
@@ -799,10 +1077,16 @@ void main() {
 
       expectSameLine(tester, ['1. e4', 'e5', '2. d4', 'exd4']);
 
+      // The full sequence: the app installs [AppLifecycleListener]s, which assert on a transition
+      // the platform cannot make.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
 
       liveGamePgn = 'e4 e5 Nf3 Nc6';
 
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
 
       // Wait for API call to refresh game and tree to be updated
@@ -881,14 +1165,14 @@ void main() {
       });
 
       testWidgets('different positions show different evals in move tree', (tester) async {
-        final stockfish = AnalysisTestStockfish();
+        final stockfish = AnalysisTestEngine();
         await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
 
         await playMove(tester, 'e2', 'e4');
         await tester.pump(kRequestEvalDebounceDelay);
 
         // check engine is started
-        expect(stockfish.state.value, StockfishState.ready);
+        expect(stockfish.isRunning, isTrue);
 
         stockfish.emitNextDepth();
         await tester.pump(kEngineEvalEmissionThrottleDelay);
@@ -921,7 +1205,7 @@ void main() {
 
     group('Engine analysis on move navigation', () {
       testWidgets('evaluation is debounced when jumping quickly between moves', (tester) async {
-        final stockfish = AnalysisTestStockfish();
+        final stockfish = AnalysisTestEngine();
         await makeEngineTestApp(tester, isCloudEvalEnabled: false, stockfish: stockfish);
 
         // Make several moves
@@ -970,8 +1254,8 @@ void main() {
     });
 
     group('Engine lines', () {
-      testWidgets('are displayed', (tester) async {
-        await makeEngineTestApp(tester);
+      testWidgets('are displayed if enabled', (tester) async {
+        await makeEngineTestApp(tester, showEngineLines: true);
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsOne);
@@ -1014,10 +1298,9 @@ void main() {
       });
 
       testWidgets('can be tapped to play a drop move in crazyhouse', (tester) async {
-        final binding = TestLichessBinding.ensureInitialized();
-        final stockfish = FakeCrazyhouseDropMoveStockfish();
-        binding.stockfish = stockfish;
-        addTearDown(() => binding.stockfish = FakeStockfish());
+        final stockfish = CrazyhouseDropMoveEngine();
+        fakeEngine = stockfish;
+        addTearDown(() => fakeEngine = FakeEngine());
 
         final app = await makeTestProviderScopeApp(
           tester,
@@ -1026,6 +1309,9 @@ void main() {
               EngineEvaluationPrefState.defaults
                   .copyWith(numEvalLines: 1, isEnabled: true)
                   .toJson(),
+            ),
+            PrefCategory.analysis.storageKey: jsonEncode(
+              AnalysisPrefs.defaults.copyWith(showEngineLines: true).toJson(),
             ),
           },
           home: const AnalysisScreen(
@@ -1428,9 +1714,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pump();
 
-    //tap Clear moves
-    expect(find.text('Clear moves'), findsOneWidget);
-    await tester.tap(find.text('Clear moves'));
+    await tester.tap(find.text('Clear local data'));
     await tester.pump();
 
     //verify moves are cleared
@@ -1586,7 +1870,7 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           if (request.method == 'POST') {
             lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
                 .map(
@@ -1680,7 +1964,8 @@ void main() {
       Set<List<Map<String, dynamic>>>? lastForecastJsonRequest;
 
       final mockClient = MockClient((request) {
-        if (request.url.path.startsWith('/$kGameFullId/forecasts/') && request.method == 'POST') {
+        if (request.url.path.startsWith('/game/$kGameFullId/forecasts/') &&
+            request.method == 'POST') {
           lastForecastJsonRequest = (jsonDecode(request.body) as List<dynamic>)
               .map(
                 (steps) => (steps as List<dynamic>)
@@ -1690,7 +1975,7 @@ void main() {
               .toSet();
           playedMoveUci = request.url.pathSegments.last;
           return mockResponse('', 200);
-        } else if (request.url.path == '/$kGameFullId/forecasts' && request.method == 'GET') {
+        } else if (request.url.path == '/game/$kGameFullId/forecasts' && request.method == 'GET') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -1832,7 +2117,7 @@ void main() {
 
     testWidgets('Tapping a premove line jumps to its final position', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',
@@ -1883,7 +2168,7 @@ void main() {
 
     testWidgets('New move by opponent updates premove lines', (tester) async {
       final mockClient = MockClient((request) {
-        if (request.url.path == '/$kGameFullId/forecasts') {
+        if (request.url.path == '/game/$kGameFullId/forecasts') {
           return mockResponse(
             makeCorrespondenceGameJsonWithForecast(
               pgn: '',

@@ -3,13 +3,10 @@ import 'package:lichess_mobile/src/model/analysis/retro_controller.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/engine_settings_widget.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class RetroSettingsScreen extends ConsumerWidget {
-  const RetroSettingsScreen(this.options);
-
-  final RetroOptions options;
-
+class const RetroSettingsScreen(final RetroOptions options) extends ConsumerWidget {
   static Route<dynamic> buildRoute({required RetroOptions options}) {
     return buildScreenRoute(screen: RetroSettingsScreen(options));
   }
@@ -18,8 +15,8 @@ class RetroSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = retroControllerProvider(options);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.settingsSettings)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.settingsSettings)),
       body: ListView(
         children: [
           EngineSettingsWidget(

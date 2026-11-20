@@ -5,8 +5,8 @@ extension ClockTimeControlTypeL10n on ClockTimeControlType {
   String label(AppLocalizations l10n) {
     return switch (this) {
       ClockTimeControlType.increment => l10n.increment,
-      ClockTimeControlType.simpleDelay => 'Simple delay',
-      ClockTimeControlType.bronsteinDelay => 'Bronstein delay',
+      ClockTimeControlType.simpleDelay => l10n.mobileSimpleDelay,
+      ClockTimeControlType.bronsteinDelay => l10n.mobileBronsteinDelay,
     };
   }
 

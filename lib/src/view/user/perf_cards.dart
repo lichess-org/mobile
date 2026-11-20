@@ -1,6 +1,7 @@
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -11,15 +12,12 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A widget that displays the performance cards of a user.
-class PerfCards extends StatelessWidget {
-  const PerfCards({required this.user, required this.isMe, this.padding, super.key});
-
-  final User user;
-
-  final bool isMe;
-
-  final EdgeInsetsGeometry? padding;
-
+class const PerfCards({
+  required final User user,
+  required final bool isMe,
+  final EdgeInsetsGeometry? padding,
+  super.key,
+}) extends StatelessWidget {
   static const BorderRadius _kCardBorderRadius = BorderRadius.all(Radius.circular(6.0));
 
   @override
@@ -81,7 +79,9 @@ class PerfCards extends StatelessWidget {
               ),
               scrollDirection: Axis.horizontal,
               itemCount: userPerfs.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (_, index) {
+                // Uses the build context: theme reads on the item builder context are not updated
+                // when the theme changes.
                 final perf = userPerfs[index];
                 final userPerf = user.perfs[perf]!;
                 final bool isPerfWithoutStats = Perf.streak == perf;
@@ -102,9 +102,8 @@ class PerfCards extends StatelessWidget {
                               perf.shortLabel(context.l10n),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: textShade(context, 0.7)),
                             ),
-                            Icon(perf.icon, color: textShade(context, 0.6)),
+                            Icon(perf.icon, color: perfIconColor(context)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -123,8 +122,8 @@ class PerfCards extends StatelessWidget {
                                         ? LichessIcons.arrow_full_upperright
                                         : LichessIcons.arrow_full_lowerright,
                                     color: userPerf.progression > 0
-                                        ? context.lichessColors.good
-                                        : context.lichessColors.error,
+                                        ? context.lichessColors.green
+                                        : context.lichessColors.red,
                                     size: 12,
                                   ),
                                   Flexible(
@@ -134,8 +133,8 @@ class PerfCards extends StatelessWidget {
                                       maxLines: 1,
                                       style: TextStyle(
                                         color: userPerf.progression > 0
-                                            ? context.lichessColors.good
-                                            : context.lichessColors.error,
+                                            ? context.lichessColors.green
+                                            : context.lichessColors.red,
                                         fontSize: 11,
                                       ),
                                     ),

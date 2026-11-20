@@ -23,7 +23,7 @@
   <string name="preventLeavingGameWithoutResigning">Wat geschitt mat Spiller, déi eng Partie verloossen, ouni opzeginn?</string>
   <string name="leavingGameWithoutResigningExplanation">Wann däi Géigner dacks Partien ofbrécht oder erausgeet, da kritt en eng „Spill-Spär“, wat heescht, datt en temporär gespaart ass fir Partien ze spillen. Dat gëtt net ëffentlech op dem Profil ugewisen. Wann dat Verhalen unhält, da gëtt d\'Dauer vun der Spill-Spär ëmmer méi laang – a wann dat Verhalen nach weider geet, kann de Konto zougemaach ginn.</string>
   <string name="howCanIBecomeModerator">Wéi kann ech e Moderator ginn?</string>
-  <string name="youCannotApply">Et ass net méiglech sech als Moderator ze bewerben. Wa mir gesinn, datt een ee gudde Moderator kéint sinn, da kontaktéiere mir déi Persoun.</string>
+  <string name="youCannotApply">Et ass net méiglech, sech als Moderator ze mellen. Wa mir gesinn, datt een ee gudde Moderator kéint sinn, kontaktéiere mir déi Persoun.</string>
   <string name="isCorrespondenceDifferent">Ënnerscheet sech Fernschach vum normale Schach?</string>
   <string name="pleaseReadFairPlayPage">Fir méi Informatiounen, lies wgl. eis %s</string>
   <string name="fairPlayPage">Fair-Play-Säit</string>
@@ -43,7 +43,6 @@
   <string name="discoveringEnPassant">Firwat kann e Bauern een aneren Bauer schloen, wann hien laanscht gezunn huet? (en passant)</string>
   <string name="goodIntroduction">gutt Aféierung</string>
   <string name="lichessTraining">Lichess-Training</string>
-  <string name="watchIMRosenCheckmate">Kuck wéi den Internationale Meeschter Eric Rosen %s schachmatt setzt.</string>
   <string name="threefoldRepetition">Dräifach Stellungswidderhuelung</string>
   <string name="threefoldRepetitionExplanation">Wann eng Stellung dräi Mol virkënnt, kann e Spiller Remis duerch %1$s reklaméieren. Lichess setzt déi offiziell FIDE-Reegelen ëm, wéi se am Artikel 9.2 vum %2$s beschriwwe ginn.</string>
   <string name="threefoldRepetitionLowerCase">dräifach Stellungswidderhuelung</string>

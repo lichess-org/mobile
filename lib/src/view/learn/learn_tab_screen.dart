@@ -12,11 +12,16 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
+import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_list.dart';
 import 'package:lichess_mobile/src/view/study/study_list_screen.dart';
+import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/widgets/haptic_refresh_indicator.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -53,9 +58,7 @@ final _myFavoriteStudiesLengthProvider = FutureProvider.autoDispose<int>((Ref re
   );
 });
 
-class LearnTabScreen extends ConsumerWidget {
-  const LearnTabScreen({super.key});
-
+class const LearnTabScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PopScope(
@@ -69,9 +72,6 @@ class LearnTabScreen extends ConsumerWidget {
         appBar: PlatformAppBar(
           title: Text(context.l10n.learnMenu),
           centerTitle: false,
-          titleTextStyle: Theme.of(context).platform == TargetPlatform.iOS
-              ? Theme.of(context).textTheme.headlineSmall
-              : null,
           actions: const [AccountMenuButton()],
         ),
         body: const _Body(),
@@ -80,9 +80,7 @@ class LearnTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   Future<void> _refreshData(WidgetRef ref) async {
     try {
       await Future.wait([
@@ -108,9 +106,6 @@ class _Body extends ConsumerWidget {
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
       child: HapticRefreshIndicator(
-        edgeOffset: Theme.of(context).platform == TargetPlatform.iOS
-            ? MediaQuery.paddingOf(context).top + kToolbarHeight
-            : 0.0,
         onRefresh: () => _refreshData(ref),
         child: ListView(
           controller: learnScrollController,
@@ -122,38 +117,79 @@ class _Body extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
+                  leading: const Icon(Symbols.chess_pawn),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.chessBasics, style: Styles.callout),
+                  onTap: () => Navigator.of(context).push(LearnScreen.buildRoute()),
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.exercise),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.practice, style: Styles.callout),
+                  onTap: () => Navigator.of(context).push(PracticeScreen.buildRoute()),
+                ),
+                ListTile(
                   leading: const Icon(Symbols.where_to_vote),
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
                   title: Text(context.l10n.coordinatesCoordinateTraining, style: Styles.callout),
-                  onTap: () => Navigator.of(
-                    context,
-                    rootNavigator: true,
-                  ).push(CoordinateTrainingScreen.buildRoute()),
+                  onTap: () =>
+                      Navigator.of(context).pushHidingTabBar(CoordinateTrainingScreen.buildRoute()),
                 ),
               ],
             ),
-            // Coordinate training works offline, so only the studies are
+            // Learn, practice and coordinate training work offline, so only the studies are
             // replaced by the outage message.
             if (connectionStatus.isServerUnavailable) const ServerOutageDisplay(),
-            if (connectionStatus == LichessConnectionStatus.online) ...[
+            if (connectionStatus == LichessConnectionStatus.networkDown)
               ListSection(
                 header: Text(context.l10n.studyMenu),
-                onHeaderTap: () =>
-                    Navigator.of(context, rootNavigator: true).push(StudyListScreen.buildRoute()),
                 hasLeading: true,
                 children: [
-                  ...(switch (ref.watch(_hotStudiesProvider)) {
-                    AsyncData(:final value) =>
-                      value
-                          .take(5)
-                          .map((study) => StudyListItem(study: study, titleMaxLines: 1))
-                          .toList(growable: false),
-                    _ => [],
-                  }),
+                  ListTile(
+                    // Grey, unlike the icons of the tappable rows.
+                    leading: Icon(
+                      Icons.cloud_off_outlined,
+                      color: textShade(context, Styles.subtitleOpacity),
+                    ),
+                    title: const Text('Studies are not available offline.'),
+                  ),
                 ],
               ),
+            if (connectionStatus == LichessConnectionStatus.online) ...[
+              switch (ref.watch(_hotStudiesProvider)) {
+                AsyncData(:final value) => ListSection(
+                  header: Text(context.l10n.studyMenu),
+                  onHeaderTap: () =>
+                      Navigator.of(context).pushHidingTabBar(StudyListScreen.buildRoute()),
+                  hasLeading: true,
+                  children: [
+                    for (final study in value.take(5))
+                      StudyListItem(
+                        study: study,
+                        titleMaxLines: 1,
+                        onTap: (context, study) => Navigator.of(context).pushHidingTabBar(
+                          StudyScreen.buildRoute((id: study.id, initialChapter: null)),
+                        ),
+                      ),
+                  ],
+                ),
+                AsyncError() => const Padding(
+                  padding: Styles.bodySectionPadding,
+                  child: Text('Could not load studies.'),
+                ),
+                _ => Shimmer(
+                  child: ShimmerLoading(
+                    isLoading: true,
+                    child: ListSection.loading(itemsNumber: 5, header: true, hasLeading: true),
+                  ),
+                ),
+              },
               if (haveIStudies || haveIFavoriteStudies)
                 ListSection(
                   hasLeading: true,
@@ -167,7 +203,7 @@ class _Body extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.mine),
                               )
                             : null,
@@ -180,7 +216,7 @@ class _Body extends ConsumerWidget {
                             : null,
                         title: Text(context.l10n.studyMyFavoriteStudies),
                         onTap: connectionStatus == LichessConnectionStatus.online
-                            ? () => Navigator.of(context).push(
+                            ? () => Navigator.of(context).pushHidingTabBar(
                                 StudyListScreen.buildRoute(initialCategory: StudyCategory.likes),
                               )
                             : null,

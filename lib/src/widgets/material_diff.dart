@@ -7,15 +7,11 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:material_ui/material_ui.dart';
 
-class MaterialDifferenceDisplay extends StatelessWidget {
-  const MaterialDifferenceDisplay({
-    required this.materialDiff,
-    this.materialDifferenceFormat = MaterialDifferenceFormat.materialDifference,
-  });
-
-  final MaterialDiffSide? materialDiff;
-  final MaterialDifferenceFormat? materialDifferenceFormat;
-
+class const MaterialDifferenceDisplay({
+  required final MaterialDiffSide? materialDiff,
+  final MaterialDifferenceFormat? materialDifferenceFormat =
+      MaterialDifferenceFormat.materialDifference,
+}) extends StatelessWidget {
   static const _iconByRole = {
     Role.king: LichessIcons.chess_king,
     Role.queen: LichessIcons.chess_queen,

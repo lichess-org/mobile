@@ -1,34 +1,28 @@
 import 'package:material_ui/material_ui.dart';
 
 /// Platform adaptive slider that allows for non-linear values.
-class NonLinearSlider extends StatefulWidget {
-  NonLinearSlider({
-    required this.value,
-    required this.values,
-    this.labelBuilder,
-    this.onChange,
-    this.onChangeEnd,
-    super.key,
-  }) : assert(values.length > 1),
-       assert(values.contains(value));
-
-  final num value;
-  final List<num> values;
+// The asserts below aren't constant-evaluable, so this can't be const.
+// ignore: prefer_const_constructors_in_immutables
+class NonLinearSlider({
+  required final num value,
+  required final List<num> values,
+  final String Function(num)? labelBuilder,
 
   /// Called during a drag when the user is selecting a new value.
-  final void Function(num)? onChange;
+  final void Function(num)? onChange,
 
   /// Called when the user is done selecting a value. If null, the widget will
   /// be disabled.
-  final ValueChanged<num>? onChangeEnd;
-
-  final String Function(num)? labelBuilder;
+  final ValueChanged<num>? onChangeEnd,
+  super.key,
+}) extends StatefulWidget {
+  this : assert(values.length > 1), assert(values.contains(value));
 
   @override
   State<NonLinearSlider> createState() => _NonLinearSliderState();
 }
 
-class _NonLinearSliderState extends State<NonLinearSlider> {
+class _NonLinearSliderState() extends State<NonLinearSlider> {
   int _index = 0;
 
   @override

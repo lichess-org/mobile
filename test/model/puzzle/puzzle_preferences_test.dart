@@ -5,8 +5,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 import '../../binding.dart';
-import '../../model/auth/fake_auth_storage.dart';
 import '../../test_container.dart';
+import '../auth/fake_auth_storage.dart';
 
 void main() {
   group('offlineQueueLengthForAngle', () {

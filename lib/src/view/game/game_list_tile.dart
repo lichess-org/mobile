@@ -2,13 +2,14 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/game/exported_game.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
-import 'package:lichess_mobile/src/model/game/gif_export.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/service/game_share_service.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
+import 'package:lichess_mobile/src/view/game/gif_export.dart';
 import 'package:lichess_mobile/src/view/game/gif_export_dialog.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -29,36 +31,26 @@ import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:share_plus/share_plus.dart';
 
-final _dateFormatter = DateFormat.yMMMd().add_Hm();
+DateFormat get _dateFormatter => DateFormat.yMMMd();
 
 /// A list tile for a game in a game list.
-class GameListTile extends ConsumerWidget {
-  const GameListTile({required this.item, this.padding, this.onPressedBookmark});
+class const GameListTile({
+  required final LightExportedGameWithPov item,
+  final EdgeInsetsGeometry? padding,
+  final Future<void> Function(BuildContext context)? onPressedBookmark,
 
-  final LightExportedGameWithPov item;
-  final EdgeInsetsGeometry? padding;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+  /// Whether to show only the time of day the game started instead of its date, in a list grouped
+  /// by day.
+  final bool timeOnly = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (game: game, pov: youAre) = item;
+    final (:game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
 
-    Widget getResultIcon(LightExportedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted || game.status == GameStatus.noStart) {
-        return const Icon(CupertinoIcons.xmark_square_fill, color: LichessColors.grey);
-      } else {
-        return game.winner == null
-            ? Icon(CupertinoIcons.equal_square_fill, color: context.lichessColors.brag)
-            : game.winner == mySide
-            ? Icon(CupertinoIcons.plus_square_fill, color: context.lichessColors.good)
-            : Icon(CupertinoIcons.minus_square_fill, color: context.lichessColors.error);
-      }
-    }
-
     // An imported game is not tied to a lichess account: the point of view is arbitrary, so show
-    // both players and no result icon.
+    // both players and no result.
     final title = game.isImported
         ? Text(
             context.l10n.resVsX(
@@ -73,13 +65,48 @@ class GameListTile extends ConsumerWidget {
             name: opponent.name,
             aiLevel: opponent.aiLevel,
             rating: opponent.rating,
+            provisional: opponent.provisional,
           );
 
-    final trailing = <Widget>[
-      if (me.analysis != null)
-        Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.5)),
-      if (!game.isImported) getResultIcon(game, youAre),
-    ];
+    // Like the website, show when the game started. For an imported game that's the import date, so
+    // prefer the PGN date if we have it.
+    final date = game.importDate != null
+        ? formatPgnDate(game.importDate!, shortDate: false)
+        : timeOnly
+        ? formatTimeOfDay(context, game.createdAt)
+        : relativeDate(context.l10n, game.createdAt, shortDate: false);
+
+    final showRatings = switch (ref.watch(showRatingsPrefProvider)) {
+      AsyncData(:final value) => value != ShowRatings.no,
+      _ => false,
+    };
+    final ratingDiff = showRatings ? me.ratingDiff : null;
+
+    final isTournament = game.arenaTournamentId != null;
+
+    final isAborted = game.status == GameStatus.aborted || game.status == GameStatus.noStart;
+    final resultColor = isAborted
+        ? LichessColors.grey
+        : game.winner == null
+        ? textShade(context, Styles.subtitleOpacity)
+        : game.winner == youAre
+        ? context.lichessColors.green
+        : context.lichessColors.red;
+
+    // The rating change when there is one, else a symbol of the result.
+    final result = ratingDiff != null && !isAborted
+        ? ratingDiff > 0
+              ? '+$ratingDiff'
+              : ratingDiff == 0
+              ? '±0'
+              : '$ratingDiff'
+        : isAborted
+        ? '✕'
+        : game.winner == null
+        ? '½'
+        : game.winner == youAre
+        ? '▲'
+        : '▼';
 
     return ListTile(
       onTap: () => openGameScreen(
@@ -91,41 +118,66 @@ class GameListTile extends ConsumerWidget {
         lastMoveAt: game.lastMoveAt,
       ),
       onLongPress: () {
-        showModalBottomSheet<void>(
+        showAdaptiveBottomSheet<void>(
           context: context,
           useRootNavigator: true,
-          isDismissible: true,
           isScrollControlled: true,
           builder: (context) =>
               GameContextMenu(game: game, mySide: youAre, onPressedBookmark: onPressedBookmark),
         );
       },
-      leading: Icon(game.isImported ? Icons.cloud_upload_outlined : game.perf.icon),
-      title: title,
-      // For an imported game, `lastMoveAt` is the import date, so prefer the PGN date if we have it.
-      subtitle: Text(
-        game.importDate != null
-            ? formatPgnDate(game.importDate!, shortDate: false)
-            : relativeDate(context.l10n, game.lastMoveAt, shortDate: false),
+      leading: Icon(
+        game.isImported
+            ? Icons.cloud_upload_outlined
+            : isTournament
+            ? LichessIcons.tournament_cup
+            : game.perf.icon,
+        color: perfIconColor(context),
       ),
-      trailing: trailing.isEmpty
+      title: title,
+      subtitle: Text.rich(
+        TextSpan(
+          children: [
+            // The leading icon shows the tournament, so show the speed next to the date.
+            if (isTournament) ...[
+              WidgetSpan(
+                alignment: .middle,
+                child: Icon(
+                  game.perf.icon,
+                  size: 14,
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              ),
+              const TextSpan(text: ' '),
+            ],
+            TextSpan(text: date),
+          ],
+        ),
+      ),
+      trailing: game.isImported && me.analysis == null
           ? null
-          : Row(mainAxisSize: MainAxisSize.min, spacing: 5, children: trailing),
+          : Row(
+              mainAxisSize: .min,
+              spacing: 8.0,
+              children: [
+                if (me.analysis != null)
+                  Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.3)),
+                if (!game.isImported)
+                  Text(
+                    result,
+                    style: TextStyle(color: resultColor, fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+              ],
+            ),
     );
   }
 }
 
-class GameContextMenu extends ConsumerWidget {
-  const GameContextMenu({
-    required this.game,
-    required this.mySide,
-    required this.onPressedBookmark,
-  });
-
-  final LightExportedGame game;
-  final Side mySide;
-  final Future<void> Function(BuildContext context)? onPressedBookmark;
-
+class const GameContextMenu({
+  required final LightExportedGame game,
+  required final Side mySide,
+  required final Future<void> Function(BuildContext context)? onPressedBookmark,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
@@ -135,9 +187,8 @@ class GameContextMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ).add(const EdgeInsets.only(bottom: 4.0)),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0)
+              .add(const EdgeInsets.only(bottom: 4.0)),
           child: Text(
             context.l10n.resVsX(
               game.white.fullName(context.l10n),
@@ -177,7 +228,7 @@ class GameContextMenu extends ConsumerWidget {
                                   style: const TextStyle(fontWeight: FontWeight.w500),
                                 ),
                                 Text(
-                                  _dateFormatter.format(game.lastMoveAt),
+                                  '${_dateFormatter.format(game.createdAt)} ${formatTimeOfDay(context, game.createdAt)}',
                                   style: TextStyle(
                                     color: textShade(context, Styles.subtitleOpacity),
                                     fontSize: 12,
@@ -221,10 +272,10 @@ class GameContextMenu extends ConsumerWidget {
                                 ),
                                 style: TextStyle(
                                   color: game.winner == null
-                                      ? context.lichessColors.brag
+                                      ? textShade(context, Styles.subtitleOpacity)
                                       : game.winner == mySide
-                                      ? context.lichessColors.good
-                                      : context.lichessColors.error,
+                                      ? context.lichessColors.green
+                                      : context.lichessColors.red,
                                 ),
                               ),
                             if (game.opening != null)
@@ -294,7 +345,7 @@ class GameContextMenu extends ConsumerWidget {
                 onPressed: () {
                   launchShareDialog(
                     context,
-                    ShareParams(uri: lichessUri('/${game.id}/${orientation.name}')),
+                    ShareParams(uri: lichessGameUri(game.id, orientation: orientation)),
                   );
                 },
                 icon: Theme.of(context).platform == TargetPlatform.iOS
@@ -306,7 +357,7 @@ class GameContextMenu extends ConsumerWidget {
                 icon: Icons.gif,
                 child: Text(context.l10n.gameAsGIF),
                 onPressed: () {
-                  showModalBottomSheet<GifExportOptions>(
+                  showAdaptiveBottomSheet<GifExportOptions>(
                     context: context,
                     builder: (_) => GifExport(gameId: game.id, orientation: orientation),
                   );

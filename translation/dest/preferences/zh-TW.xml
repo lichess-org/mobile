@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">悔棋（經過對手同意）</string>
   <string name="inCasualGamesOnly">僅限非正式遊戲</string>
   <string name="promoteToQueenAutomatically">兵自動升為后</string>
-  <string name="explainPromoteToQueenAutomatically">升變的同時按住&lt;ctrl&gt;以暫時取消自動升變</string>
   <string name="whenPremoving">預先走棋時</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">在三次重覆局面時自動要求和局</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">當剩餘時間小於30秒</string>
@@ -56,12 +55,8 @@
   <string name="scrollOnTheBoardToReplayMoves">在騎盤上使用滑鼠滾輪以重新顯示過去棋步</string>
   <string name="correspondenceEmailNotification">每日以電郵列出您當前的長期對局</string>
   <string name="notifyStreamStart">追蹤的直播主開始直播</string>
-  <string name="notifyInboxMsg">收件夾有新訊息</string>
-  <string name="notifyForumMention">論壇評論中提到您</string>
-  <string name="notifyInvitedStudy">研究邀請</string>
   <string name="notifyGameEvent">長期對局更新訊息</string>
   <string name="notifyChallenge">挑戰</string>
-  <string name="notifyTournamentSoon">比賽即將開始</string>
   <string name="notifyTimeAlarm">長期對局的時間即將耗盡</string>
   <string name="notifyBell">Lichess 內的鈴聲通知</string>
   <string name="notifyPush">Lichess 外的設備通知</string>

@@ -9,9 +9,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PieceSetScreen extends ConsumerStatefulWidget {
-  const PieceSetScreen({super.key});
-
+class const PieceSetScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PieceSetScreen());
   }
@@ -20,7 +18,7 @@ class PieceSetScreen extends ConsumerStatefulWidget {
   ConsumerState<PieceSetScreen> createState() => _PieceSetScreenState();
 }
 
-class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
+class _PieceSetScreenState() extends ConsumerState<PieceSetScreen> {
   bool isLoading = false;
 
   Future<void> onChanged(PieceSet? value) async {
@@ -55,6 +53,7 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final pieceImageHeight = (44 * MediaQuery.devicePixelRatioOf(context)).round();
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -76,14 +75,15 @@ class _PieceSetScreenState extends ConsumerState<PieceSetScreen> {
                 constraints: const BoxConstraints(maxWidth: 264),
                 child: Stack(
                   children: [
-                    BrightnessHueFilter(
-                      brightness: boardPrefs.brightness,
+                    ColorAdjustFilter(
+                      brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
                       hue: boardPrefs.hue,
                       child: boardPrefs.boardTheme.thumbnail,
                     ),
                     Row(
                       children: [
-                        for (final img in getPieceImages(pieceSet)) Image(image: img, height: 44),
+                        for (final img in getPieceImages(pieceSet))
+                          Image(image: ResizeImage(img, height: pieceImageHeight), height: 44),
                       ],
                     ),
                   ],

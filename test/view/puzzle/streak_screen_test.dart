@@ -12,6 +12,9 @@ import '../../test_provider_scope.dart';
 
 void main() {
   group('StreakScreen', () {
+    // iOS skipped: the liquid glass app bar wraps each `GlassBarItem.custom` in an unlabelled
+    // button (https://github.com/sdegenaar/liquid_glass_widgets/issues/432). Run it on iOS again
+    // once that is fixed.
     testWidgets('meets accessibility guidelines', (tester) async {
       final SemanticsHandle handle = tester.ensureSemantics();
 
@@ -29,7 +32,7 @@ void main() {
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
-    }, variant: kPlatformVariant);
+    }, variant: const TargetPlatformVariant({TargetPlatform.android}));
 
     testWidgets('Score is saved when exiting screen', (tester) async {
       final app = await makeTestProviderScopeApp(
@@ -76,10 +79,8 @@ void main() {
 
       expect(find.textContaining(RegExp('1\$')), findsOneWidget);
 
-      // Exit screen -> score should be saved
+      // Exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // Enter streak screen again -> previous score should be loaded
@@ -118,6 +119,39 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       expect(find.textContaining(RegExp('0\$')), findsOneWidget);
+    });
+
+    testWidgets('plays a premove once the opponent has replied', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StreakScreen(),
+        overrides: {
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+
+      // wait for puzzle to load from api and opponent move to be played
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      await playMove(tester, 'e5', 'e1', orientation: Side.black);
+
+      // premove the next solution move while waiting for the opponent's reply
+      await playMove(tester, 'f6', 'f4', orientation: Side.black);
+      expect(boardHasPremove(tester, const NormalMove(from: Square.f6, to: Square.f4)), isTrue);
+
+      // the opponent replies Kh2 and the premove is played right away
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+
+      expect(boardHasPremove(tester, const NormalMove(from: Square.f6, to: Square.f4)), isFalse);
+      expect(boardHasPiece(tester, Square.h2, Piece.whiteKing), isTrue);
+      expect(boardHasPiece(tester, Square.f4, Piece.blackQueen), isTrue);
+
+      // the line goes on: the opponent replies g3 to the premoved check
+      await tester.pumpAndSettle(const Duration(milliseconds: 500));
+      expect(boardHasPiece(tester, Square.g3, Piece.whitePawn), isTrue);
     });
 
     testWidgets('hasSkipped is persisted when exiting after skip', (tester) async {
@@ -171,8 +205,6 @@ void main() {
 
       // exit screen
       await tester.pageBack();
-      await tester.pump();
-      await tester.tap(find.text('Yes'));
       await tester.pumpAndSettle();
 
       // re-enter streak screen

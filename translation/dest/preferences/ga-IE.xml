@@ -33,7 +33,6 @@
   <string name="takebacksWithOpponentApproval">Aistarraing (le ceadú céile comhraic)</string>
   <string name="inCasualGamesOnly">I gcluichí fánach amháin</string>
   <string name="promoteToQueenAutomatically">Ardú go banríon sa ghnáthchúrsa</string>
-  <string name="explainPromoteToQueenAutomatically">Coinnigh an &lt;ctrl&gt; eochair síos agus ceithearnach á ardú chun uath-ardú a dhíchumasú go sealadach</string>
   <string name="whenPremoving">Réamh-ghluaiseacht</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Máigh cluiche cothrom ar athrshuíomh faoi thrí go huathoibríoch</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Nuair atá am fágtha &lt; 30 soicind</string>
@@ -51,12 +50,8 @@
   <string name="scrollOnTheBoardToReplayMoves">Scrollaigh ar an gclár chun bearta a athimirt</string>
   <string name="correspondenceEmailNotification">Ríomhphost laethúil ag liostú do chluichí comhfhreagrais</string>
   <string name="notifyStreamStart">Sraoilleán ag craoladh beo</string>
-  <string name="notifyInboxMsg">Teachtaireacht nua sa bosca isteach</string>
-  <string name="notifyForumMention">Luann trácht an fhóraim tú</string>
-  <string name="notifyInvitedStudy">Déan staidéar ar an gcuireadh</string>
   <string name="notifyGameEvent">Nuashonruithe cluiche comhfhreagrais</string>
   <string name="notifyChallenge">Dúshláin</string>
-  <string name="notifyTournamentSoon">Comórtas ag tosú go luath</string>
   <string name="notifyTimeAlarm">Clog comhfhreagrais ag rith amach</string>
   <string name="notifyBell">Fógra cloig laistigh de Lichess</string>
   <string name="notifyPush">Fógra gléis nuair nach bhfuil tú ar Lichess</string>

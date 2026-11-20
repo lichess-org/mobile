@@ -7,10 +7,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'featured_player.freezed.dart';
 
 @freezed
-sealed class FeaturedPlayer with _$FeaturedPlayer {
-  const FeaturedPlayer._();
-
-  const factory FeaturedPlayer({
+sealed class const FeaturedPlayer._() with _$FeaturedPlayer {
+  const factory({
     required Side side,
     required String name,
     String? title,

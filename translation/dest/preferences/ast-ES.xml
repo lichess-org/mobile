@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">Desfacer xugada (con consentimientu del oponente)</string>
   <string name="inCasualGamesOnly">Namás en partíes amistoses</string>
   <string name="promoteToQueenAutomatically">Promover a la Reina automáticamente</string>
-  <string name="explainPromoteToQueenAutomatically">Mantén pulsiada la tecla &lt;ctrl&gt; al promocionar pa desactivar temporalmente la promoción automática</string>
   <string name="whenPremoving">Con antemanaes</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Reclamar tables por triple repetición</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">Cuando\'l tiempu restante sía de &lt; 30 segundos</string>
@@ -56,12 +55,8 @@
   <string name="scrollOnTheBoardToReplayMoves">Usa la rueda de desplazamientu sobro\'l tableru pa volver amosar los movimientos</string>
   <string name="correspondenceEmailNotification">Notificación diaria per corréu listando les tos partíes per correspondencia</string>
   <string name="notifyStreamStart">El presentador ta en vivu</string>
-  <string name="notifyInboxMsg">Nuevu mensaxe na bandexa d\'entrada</string>
-  <string name="notifyForumMention">Comentariu del foru que te menta</string>
-  <string name="notifyInvitedStudy">Invitación a un estudiu</string>
   <string name="notifyGameEvent">Actualizaciones de partida per correspondencia</string>
   <string name="notifyChallenge">Desafíos</string>
-  <string name="notifyTournamentSoon">El tornéu entama d\'arréu</string>
   <string name="notifyTimeAlarm">Pocu tiempu restante na partida per correspondencia</string>
   <string name="notifyBell">Notificación de campana dientro de Lichess</string>
   <string name="notifyPush">Notificación de dispositivu cuando nun teas en Lichess</string>

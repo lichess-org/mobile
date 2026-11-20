@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
+import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -13,12 +13,11 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PickPlayerScreen extends ConsumerWidget {
-  const PickPlayerScreen({required this.onUserTap, required this.title, super.key});
-
-  final void Function(LightUser) onUserTap;
-  final Widget title;
-
+class const PickPlayerScreen({
+  required final void Function(LightUser) onUserTap,
+  required final Widget title,
+  super.key,
+}) extends ConsumerWidget {
   static Route<dynamic> buildRoute({
     required void Function(LightUser) onUserTap,
     required Widget title,
@@ -31,17 +30,28 @@ class PickPlayerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
-      appBar: PlatformAppBar(title: title),
+      appBar: PlatformAppBar(
+        title: title,
+        actions: [
+          SearchHeroButton(
+            heroTag: SearchScreen.heroTag,
+            onPressed: () => Navigator.of(context).push(
+              SearchScreen.buildRoute(
+                onUserTap: (user) {
+                  Navigator.of(context).pop();
+                  onUserTap(user);
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
       body: _Body(onUserTap: onUserTap),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body({required this.onUserTap});
-
-  final void Function(LightUser) onUserTap;
-
+class const _Body({required final void Function(LightUser) onUserTap}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final online = ref.watch(onlineFriendsProvider);
@@ -52,8 +62,7 @@ class _Body extends ConsumerWidget {
       return FullScreenRetryRequest(onRetry: () => ref.invalidate(followingProvider));
     }
 
-    return _PlayersList(
-      onUserTap: onUserTap,
+    return ListView(
       children: [
         switch (online) {
           AsyncData(:final value) when value.isNotEmpty => ListSection(
@@ -81,61 +90,10 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _PlayersList extends StatefulWidget {
-  const _PlayersList({required this.onUserTap, required this.children});
-
-  final void Function(LightUser) onUserTap;
-  final List<Widget> children;
-
-  @override
-  State<_PlayersList> createState() => _PlayersListState();
-}
-
-class _PlayersListState extends State<_PlayersList> {
-  final _searchFocusNode = _AlwaysDisabledFocusNode();
-
-  @override
-  void dispose() {
-    _searchFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          child: PlatformSearchBar(
-            hintText: context.l10n.searchSearch,
-            focusNode: _searchFocusNode,
-            onTap: () => Navigator.of(context).push(
-              SearchScreen.buildRoute(
-                onUserTap: (user) {
-                  Navigator.of(context).pop();
-                  widget.onUserTap(user);
-                },
-              ),
-            ),
-          ),
-        ),
-        ...widget.children,
-      ],
-    );
-  }
-}
-
-class _AlwaysDisabledFocusNode extends FocusNode {
-  @override
-  bool get hasFocus => false;
-}
-
-class _FriendTile extends StatelessWidget {
-  const _FriendTile({required this.friend, required this.onUserTap});
-
-  final LightUser friend;
-  final void Function(LightUser) onUserTap;
-
+class const _FriendTile({
+  required final LightUser friend,
+  required final void Function(LightUser) onUserTap,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(

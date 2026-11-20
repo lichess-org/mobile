@@ -21,7 +21,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 const kDefaultBlogImage = AssetImage('assets/images/broadcast_image.webp');
 const kBlogCardItemContentPadding = EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0);
-const kDefaultCardOpacity = 0.9;
 
 const kBlogCarouselItemPadding = EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0);
 const kHandsetCarouselFlexWeights = [6, 2];
@@ -31,9 +30,9 @@ const kDesktopCarouselFlexWeights = [3, 3, 3, 1];
 const _emptyPosts = IListConst<BlogPost>([]);
 
 class BlogCarousel extends StatefulWidget {
-  const BlogCarousel({required this.posts, required this.worker, super.key}) : _isLoading = false;
+  const new({required this.posts, required this.worker, super.key}) : _isLoading = false;
 
-  const BlogCarousel.loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
+  const new loading({required this.worker}) : _isLoading = true, posts = _emptyPosts;
 
   final IList<BlogPost> posts;
   final ImageColorWorker worker;
@@ -54,7 +53,7 @@ class BlogCarousel extends StatefulWidget {
   State<BlogCarousel> createState() => _BlogCarouselState();
 }
 
-class _BlogCarouselState extends State<BlogCarousel> {
+class _BlogCarouselState() extends State<BlogCarousel> {
   final _controller = CarouselController();
 
   @override
@@ -129,7 +128,7 @@ class _BlogCarouselState extends State<BlogCarousel> {
 }
 
 class BlogCarouselItem extends ConsumerStatefulWidget {
-  const BlogCarouselItem({
+  const new({
     required this.carouselWidth,
     required this.post,
     required this.flexWeights,
@@ -137,7 +136,7 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
     super.key,
   });
 
-  BlogCarouselItem.loading({
+  new loading({
     required this.carouselWidth,
     required this.flexWeights,
     required this.worker,
@@ -159,14 +158,14 @@ class BlogCarouselItem extends ConsumerStatefulWidget {
   ConsumerState<BlogCarouselItem> createState() => _BlogCarouselItemState();
 }
 
-class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
+class _BlogCarouselItemState() extends ConsumerState<BlogCarouselItem> {
   _CardColors? _cardColors;
   bool _tapDown = false;
 
   String? get imageUrl => widget.post.imageUrl?.toString();
 
   ImageProvider get imageProvider => imageUrl != null
-      ? HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider))
+      ? HttpNetworkImage(imageUrl!, ref.read(imageClientProvider))
       : kDefaultBlogImage;
 
   @override
@@ -175,7 +174,7 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
     if (_colorsCache.containsKey(imageUrl)) {
       _cardColors = _colorsCache[imageUrl];
     } else if (imageUrl != null) {
-      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(defaultClientProvider)));
+      _getImageColors(HttpNetworkImage(imageUrl!, ref.read(imageClientProvider)));
     }
   }
 
@@ -187,16 +186,22 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
         scheduleMicrotask(() => _getImageColors(provider));
       });
     } else if (widget.worker.closed == false) {
-      await precacheImage(provider, context);
-      final ui.Image scaledImage = await imageProviderToScaled(provider);
-      final imageBytes = await scaledImage.toByteData();
-      final response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
-      if (response != null) {
-        if (mounted) {
-          setState(() {
-            _cardColors = response;
-          });
-        }
+      var failed = false;
+      await precacheImage(provider, context, onError: (_, _) => failed = true);
+      // The card image failed to load (e.g. network timeout): keep the default card colors.
+      if (failed || !mounted) return;
+      final _CardColors? response;
+      try {
+        final ui.Image scaledImage = await imageProviderToScaled(provider);
+        final imageBytes = await scaledImage.toByteData();
+        response = await _computeImageColors(widget.worker, provider.url, imageBytes!);
+      } catch (_) {
+        return;
+      }
+      if (response != null && mounted) {
+        setState(() {
+          _cardColors = response;
+        });
       }
     }
   }
@@ -215,6 +220,17 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
         _cardColors?.primaryContainer ??
         Theme.of(context).cardTheme.color ??
         Theme.of(context).colorScheme.surfaceContainerLow;
+    final isDark = Theme.of(context).brightness == .dark;
+    final imageOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardImageOpacity
+        : kDefaultCardOpacity;
+    final backgroundOpacity = _tapDown
+        ? 1.0
+        : isDark
+        ? kDarkCardBackgroundOpacity
+        : kDefaultCardOpacity;
     final double width = widget.carouselWidth - 16.0;
     final paddingWidth = kBlogCarouselItemPadding.horizontal;
     final flexWeights = widget.flexWeights;
@@ -230,9 +246,7 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: backgroundColor.withValues(alpha: _tapDown ? 1.0 : kDefaultCardOpacity),
-        ),
+        decoration: BoxDecoration(color: backgroundColor.withValues(alpha: backgroundOpacity)),
         child: OverflowBox(
           maxWidth: width * flexWeights[0] / totalFlex - paddingWidth,
           minWidth: width * flexWeights[0] / totalFlex - paddingWidth,
@@ -246,13 +260,7 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
                 frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 500),
-                    opacity: wasSynchronouslyLoaded
-                        ? _tapDown
-                              ? 1.0
-                              : kDefaultCardOpacity
-                        : frame == null
-                        ? 0
-                        : 1,
+                    opacity: wasSynchronouslyLoaded || frame != null ? imageOpacity : 0,
                     child: child,
                   );
                 },
@@ -272,68 +280,63 @@ class _BlogCarouselItemState extends ConsumerState<BlogCarouselItem> {
 typedef _CardColors = ({Color primaryContainer, Color onPrimaryContainer});
 final Map<String, _CardColors?> _colorsCache = {};
 
-final _dateFormat = DateFormat.MMMd();
+DateFormat get _dateFormat => DateFormat.MMMd();
 
-class _BlogCardContent extends StatelessWidget {
-  const _BlogCardContent({required this.post, required this._cardColors});
-
-  final BlogPost post;
-  final _CardColors? _cardColors;
-
+class const _BlogCardContent({
+  required final BlogPost post,
+  required final _CardColors? _cardColors,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final titleColor = _cardColors?.onPrimaryContainer;
     final subTitleColor =
-        _cardColors?.onPrimaryContainer.withValues(alpha: 0.8) ?? textShade(context, 0.8);
+        _cardColors?.onPrimaryContainer.withValues(alpha: 0.9) ?? textShade(context, 0.8);
     return Padding(
       padding: kBlogCardItemContentPadding,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 6.0,
         children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            spacing: 4.0,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  UserFullNameWidget(
-                    user: post.author,
-                    showPatron: false,
-                    showFlair: false,
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
-                  ),
-                  Text(
-                    _dateFormat.format(post.createdAt),
-                    style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
-                    overflow: TextOverflow.clip,
-                    softWrap: false,
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6.0),
-              Text.rich(
-                maxLines: 3,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: post.title,
-                      style: TextStyle(
-                        color: titleColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        height: 1.0,
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: UserFullNameWidget(
+                  user: post.author,
+                  showPatron: false,
+                  showFlair: false,
+                  style: TextStyle(color: subTitleColor, letterSpacing: -0.2),
                 ),
-                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                _dateFormat.format(post.createdAt),
+                style: TextStyle(color: subTitleColor, letterSpacing: -0.2, fontSize: 12.0),
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                maxLines: 1,
               ),
             ],
+          ),
+          Text.rich(
+            maxLines: 3,
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: post.title,
+                  style: TextStyle(
+                    color: titleColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

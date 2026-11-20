@@ -5,35 +5,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/icon_extensions.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
-class LeaderboardScreen extends StatelessWidget {
-  const LeaderboardScreen({super.key});
-
+class const LeaderboardScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const LeaderboardScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.leaderboard)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: Text(context.l10n.leaderboard), largeTitle: true),
       body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leaderboard = ref.watch(leaderboardProvider);
@@ -56,18 +54,18 @@ class _Body extends ConsumerWidget {
           _Leaderboard(data.racingKings, Perf.racingKings),
         ];
 
-        return SafeArea(
-          child: SingleChildScrollView(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final crossAxisCount = math.min(3, (constraints.maxWidth / 300).floor());
-                return LayoutGrid(
-                  columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-                  rowSizes: List.generate((list.length / crossAxisCount).ceil(), (_) => auto),
-                  children: list,
-                );
-              },
-            ),
+        return SingleChildScrollView(
+          // Not in a SafeArea, so that the content scrolls under the app bar.
+          padding: MediaQuery.paddingOf(context),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final crossAxisCount = math.min(3, (constraints.maxWidth / 300).floor());
+              return LayoutGrid(
+                columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+                rowSizes: List.generate((list.length / crossAxisCount).ceil(), (_) => auto),
+                children: list,
+              );
+            },
           ),
         );
       },
@@ -80,11 +78,8 @@ class _Body extends ConsumerWidget {
 /// A List Tile for the Leaderboard
 ///
 /// Optionaly Provide the [perfIcon] for the Variant of the List
-class LeaderboardListTile extends StatelessWidget {
-  const LeaderboardListTile({required this.user, this.perfIcon});
-  final LeaderboardUser user;
-  final IconData? perfIcon;
-
+class const LeaderboardListTile({required final LeaderboardUser user, final IconData? perfIcon})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -105,11 +100,7 @@ class LeaderboardListTile extends StatelessWidget {
   }
 }
 
-class _Progress extends StatelessWidget {
-  const _Progress(this.rating, this.progress);
-  final int progress;
-  final int rating;
-
+class const _Progress(final int rating, final int progress) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (progress == 0) return const SizedBox.shrink();
@@ -122,7 +113,7 @@ class _Progress extends StatelessWidget {
         Icon(
           progress > 0 ? LichessIcons.arrow_full_upperright : LichessIcons.arrow_full_lowerright,
           size: 16,
-          color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+          color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
         ),
         Text(
           progress.abs().toString().padRight(2),
@@ -130,7 +121,7 @@ class _Progress extends StatelessWidget {
           style: TextStyle(
             fontSize: 12,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: progress > 0 ? context.lichessColors.good : context.lichessColors.error,
+            color: progress > 0 ? context.lichessColors.green : context.lichessColors.red,
           ),
         ),
       ],
@@ -138,11 +129,8 @@ class _Progress extends StatelessWidget {
   }
 }
 
-class _Leaderboard extends StatelessWidget {
-  const _Leaderboard(this.userList, this.perf);
-  final List<LeaderboardUser> userList;
-  final Perf perf;
-
+class const _Leaderboard(final List<LeaderboardUser> userList, final Perf perf)
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(

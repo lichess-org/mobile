@@ -15,9 +15,7 @@ final imageWorkerFactoryProvider = Provider<ImageWorkerFactory>((ref) {
 }, name: 'ImageWorkerFactoryProvider');
 
 /// A factory that spawns [ImageColorWorker] instances.
-class ImageWorkerFactory {
-  const ImageWorkerFactory();
-
+class const ImageWorkerFactory() {
   Future<ImageColorWorker> spawn() {
     return ImageColorWorker.spawn();
   }
@@ -31,9 +29,7 @@ class ImageWorkerFactory {
 ///
 /// The worker is created by calling [ImageColorWorker.spawn], and the computation
 /// is run in a separate isolate.
-class ImageColorWorker {
-  final SendPort _commands;
-  final ReceivePort _responses;
+class ImageColorWorker._(final ReceivePort _responses, final SendPort _commands) {
   final Map<int, Completer<ImageColors?>> _activeRequests = {};
   int _idCounter = 0;
   bool _closed = false;
@@ -70,7 +66,7 @@ class ImageColorWorker {
     return ImageColorWorker._(receivePort, sendPort);
   }
 
-  ImageColorWorker._(this._responses, this._commands) {
+  this {
     _responses.listen(_handleResponsesFromIsolate);
   }
 
@@ -220,17 +216,22 @@ Future<ui.Image> imageProviderToScaled(ImageProvider imageProvider) async {
 
       final ui.Picture picture = pictureRecorder.endRecording();
       scaledImage = await picture.toImage(paintWidth.toInt(), paintHeight.toInt());
-      imageCompleter.complete(info.image);
+      if (!imageCompleter.isCompleted) imageCompleter.complete(info.image);
     },
     onError: (Object exception, StackTrace? stackTrace) {
+      loadFailureTimeout?.cancel();
       stream.removeListener(listener);
-      throw Exception('Failed to render image: $exception');
+      if (!imageCompleter.isCompleted) {
+        imageCompleter.completeError(Exception('Failed to render image: $exception'), stackTrace);
+      }
     },
   );
 
   loadFailureTimeout = Timer(const Duration(seconds: 5), () {
     stream.removeListener(listener);
-    imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+    if (!imageCompleter.isCompleted) {
+      imageCompleter.completeError(TimeoutException('Timeout occurred trying to load image'));
+    }
   });
 
   stream.addListener(listener);

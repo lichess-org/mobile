@@ -36,7 +36,6 @@
   <string name="takebacksWithOpponentApproval">ટેકબેક (વિરોધીની મંજૂરી સાથે)</string>
   <string name="inCasualGamesOnly">ફક્ત કેઝ્યુઅલ રમતોમાં</string>
   <string name="promoteToQueenAutomatically">આપમેળે રાણી તરીકે બઢતી</string>
-  <string name="explainPromoteToQueenAutomatically">ઓટો-પ્રમોશનને અસ્થાયી રૂપે અક્ષમ કરવા માટે પ્રમોટ કરતી વખતે &lt;ctrl&gt; કી દબાવી રાખો.</string>
   <string name="whenPremoving">પ્રીમુવિંગ કરતી વખતે</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">ત્રણ ગણા પુનરાવર્તન પર આપમેળે દાવો ડ્રો</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">જ્યારે સમય &lt; બાકી રહે છે; 30 સેકન્ડ</string>
@@ -56,12 +55,8 @@
   <string name="scrollOnTheBoardToReplayMoves">ચાલને ફરીથી ચલાવવા માટે બોર્ડ પર સ્ક્રોલ કરો</string>
   <string name="correspondenceEmailNotification">તમારી પત્રવ્યવહારની રમતોની સૂચિબદ્ધ દૈનિક મેઇલ સૂચના</string>
   <string name="notifyStreamStart">સ્ટ્રીમર લાઇવ થાય છે</string>
-  <string name="notifyInboxMsg">નવો ઇનબોક્સ સંદેશ</string>
-  <string name="notifyForumMention">ફોરમની ટિપ્પણીમાં તમારો ઉલ્લેખ છે</string>
-  <string name="notifyInvitedStudy">સ્ટડી આમંત્રણ</string>
   <string name="notifyGameEvent">પત્રવ્યવહારની રમતનાં અપડેટ્સ</string>
   <string name="notifyChallenge">પડકારો</string>
-  <string name="notifyTournamentSoon">ટુર્નામેન્ટ ટૂંક સમયમાં શરૂ થઈ રહી છે</string>
   <string name="notifyTimeAlarm">પત્રવ્યવહારની ઘડિયાળનો સમય પૂરો થઈ રહ્યો છે</string>
   <string name="notifyBell">Lichess ની અંદર ઘંટડીની સૂચના</string>
   <string name="notifyPush">જ્યારે તમે Lichess પર ન હોવ ત્યારે ડિવાઇસની સૂચના</string>

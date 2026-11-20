@@ -9,7 +9,7 @@ import 'package:material_ui/material_ui.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
-  const BoardThumbnail({
+  const new({
     required this.size,
     required this.orientation,
     required this.fen,
@@ -22,7 +22,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.animationDuration = const Duration(milliseconds: 200),
   });
 
-  const BoardThumbnail.loading({
+  const new loading({
     required this.size,
     this.header,
     this.footer,
@@ -67,7 +67,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   _BoardThumbnailState createState() => _BoardThumbnailState();
 }
 
-class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
+class _BoardThumbnailState() extends ConsumerState<BoardThumbnail> {
   double scale = 1.0;
 
   void _onTapDown() {
@@ -84,6 +84,10 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    final borderRadius = widget.showEvaluationGauge
+        ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
+        : Styles.boardBorderRadius;
+
     final board = StaticChessboard(
       size: widget.size,
       fen: widget.fen,
@@ -91,15 +95,14 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
       lastMove: widget.lastMove,
       settings: StaticChessboardSettings(
         enableCoordinates: false,
-        borderRadius: (widget.showEvaluationGauge)
-            ? Styles.boardBorderRadius.copyWith(topRight: Radius.zero, bottomRight: Radius.zero)
-            : Styles.boardBorderRadius,
+        borderRadius: borderRadius,
         boxShadow: (widget.showEvaluationGauge) ? [] : boardShadows,
         pieceAssets: boardPrefs.pieceSet.assets,
         colorScheme: boardPrefs.boardTheme.colors,
         animationDuration: widget.animationDuration,
         hue: boardPrefs.hue,
-        brightness: boardPrefs.brightness,
+        contrast: boardPrefs.contrast,
+        brightness: boardPrefs.effectiveBrightness(Theme.of(context).brightness),
       ),
     );
 
@@ -113,7 +116,8 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                   child: (widget.whiteWinningChances != null)
                       ? _BoardThumbnailEvalGauge(
                           height: widget.size,
-                          whiteWinnigChances: widget.whiteWinningChances!,
+                          whiteWinningChances: widget.whiteWinningChances!,
+                          orientation: widget.orientation,
                         )
                       : Container(
                           height: widget.size,
@@ -122,7 +126,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                               topLeft: Radius.zero,
                               bottomLeft: Radius.zero,
                             ),
-                            color: Colors.grey.withValues(alpha: 0.6),
+                            color: ColorScheme.of(context).outlineVariant.withValues(alpha: 0.7),
                           ),
                         ),
                 ),
@@ -161,16 +165,19 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
 /// The aspect ratio of the eval gauge for board thumbnails
 const boardThumbnailEvalGaugeAspectRatio = 1 / 20;
 
-class _BoardThumbnailEvalGauge extends StatelessWidget {
-  final double height;
-  final double whiteWinnigChances;
-
-  const _BoardThumbnailEvalGauge({required this.height, required this.whiteWinnigChances});
-
+class const _BoardThumbnailEvalGauge({
+  required final double height,
+  required final double whiteWinningChances,
+  required final Side orientation,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final whiteBarHeight = height * (whiteWinnigChances + 1) / 2;
+    final whiteBarHeight = height * (whiteWinningChances + 1) / 2;
 
+    final children = [
+      Container(height: height - whiteBarHeight, color: EngineGauge.backgroundColor(context)),
+      Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
+    ];
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -180,13 +187,7 @@ class _BoardThumbnailEvalGauge extends StatelessWidget {
             bottomLeft: Radius.zero,
           ),
           child: Column(
-            children: [
-              Container(
-                height: height - whiteBarHeight,
-                color: EngineGauge.backgroundColor(context),
-              ),
-              Container(height: whiteBarHeight, color: EngineGauge.valueColor(context)),
-            ],
+            children: orientation == Side.white ? children : children.reversed.toList(),
           ),
         ),
         Container(height: height / 100, color: darken(Colors.red)),

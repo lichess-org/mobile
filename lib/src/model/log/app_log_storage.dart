@@ -18,10 +18,7 @@ final appLogStorageProvider = FutureProvider<AppLogStorage>((Ref ref) async {
 const kAppLogStorageTable = 'app_log';
 
 /// Manages the storage of app logs in a SQLite database.
-class AppLogStorage {
-  const AppLogStorage(this._db);
-  final Database _db;
-
+class const AppLogStorage(final Database _db) {
   /// Retrieves a paginated list of [AppLogEntry] entries from the database.
   ///
   /// [minLevelValue] filters entries at or above the given log level.
@@ -78,10 +75,8 @@ class AppLogStorage {
 
 /// Represents a persisted app log entry.
 @Freezed(fromJson: true, toJson: true)
-sealed class AppLogEntry with _$AppLogEntry {
-  const AppLogEntry._();
-
-  const factory AppLogEntry({
+sealed class const AppLogEntry._() with _$AppLogEntry {
+  const factory({
     required DateTime logTime,
     required String loggerName,
     required int levelValue,
@@ -91,7 +86,7 @@ sealed class AppLogEntry with _$AppLogEntry {
     String? stackTrace,
   }) = _AppLogEntry;
 
-  factory AppLogEntry.fromLogRecord(LogRecord record) => AppLogEntry(
+  factory fromLogRecord(LogRecord record) => AppLogEntry(
     logTime: record.time,
     loggerName: record.loggerName,
     levelValue: record.level.value,
@@ -101,11 +96,11 @@ sealed class AppLogEntry with _$AppLogEntry {
     stackTrace: record.stackTrace?.toString(),
   );
 
-  factory AppLogEntry.fromJson(Map<String, dynamic> json) => _$AppLogEntryFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$AppLogEntryFromJson(json);
 }
 
 /// A paginated collection of app log entries.
 @freezed
 sealed class AppLogPage with _$AppLogPage {
-  const factory AppLogPage({required IList<AppLogEntry> items, required int? next}) = _AppLogPage;
+  const factory({required IList<AppLogEntry> items, required int? next}) = _AppLogPage;
 }

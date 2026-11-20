@@ -12,14 +12,18 @@ part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
 const kBoardDefaultBrightnessFilter = 1.0;
+const kBoardDefaultContrastFilter = 1.0;
 const kBoardDefaultHueFilter = 0.0;
+
+/// The brightness filter of the boards when they are dimmed in dark mode.
+const kBoardDimmedBrightnessFilter = 0.85;
 
 final boardPreferencesProvider = NotifierProvider<BoardPreferences, BoardPrefs>(
   BoardPreferences.new,
   name: 'BoardPreferencesProvider',
 );
 
-class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
+class BoardPreferences() extends Notifier<BoardPrefs> with PreferencesStorage<BoardPrefs> {
   @override
   @protected
   PrefCategory get prefCategory => PrefCategory.board;
@@ -90,6 +94,10 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(showBorder: !state.showBorder));
   }
 
+  Future<void> toggleDimInDarkMode() {
+    return save(state.copyWith(dimInDarkMode: !state.dimInDarkMode));
+  }
+
   Future<void> togglePieceAnimation() {
     return save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
@@ -126,17 +134,23 @@ class BoardPreferences extends Notifier<BoardPrefs> with PreferencesStorage<Boar
     return save(state.copyWith(shapeColor: shapeColor));
   }
 
-  Future<void> adjustColors({double? brightness, double? hue}) {
-    return save(state.copyWith(brightness: brightness ?? state.brightness, hue: hue ?? state.hue));
+  Future<void> adjustColors({double? brightness, double? contrast, double? hue}) {
+    return save(
+      state.copyWith(
+        brightness: brightness ?? state.brightness,
+        contrast: contrast ?? state.contrast,
+        hue: hue ?? state.hue,
+      ),
+    );
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-sealed class BoardPrefs with _$BoardPrefs implements Serializable {
-  const BoardPrefs._();
-
-  @Assert('brightness >= 0.2 && brightness <= 1.4, hue >= 0.0 && hue <= 360.0')
-  const factory BoardPrefs({
+sealed class const BoardPrefs._() with _$BoardPrefs implements Serializable {
+  @Assert(
+    'brightness >= 0.2 && brightness <= 1.4, contrast >= 0.4 && contrast <= 2.0 && hue >= 0.0 && hue <= 360.0',
+  )
+  const factory({
     @JsonKey(defaultValue: PieceSet.cburnett, unknownEnumValue: PieceSet.cburnett)
     required PieceSet pieceSet,
     @JsonKey(defaultValue: BoardTheme.brown, unknownEnumValue: BoardTheme.brown)
@@ -179,7 +193,13 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     @JsonKey(defaultValue: ShapeColor.green, unknownEnumValue: ShapeColor.green)
     required ShapeColor shapeColor,
     @JsonKey(defaultValue: false) required bool showBorder,
+
+    /// Whether to dim the boards in dark mode, overriding the [brightness] filter.
+    ///
+    /// On for new installs ([defaults]), off for stored preferences that predate the setting.
+    @JsonKey(defaultValue: false) required bool dimInDarkMode,
     @JsonKey(defaultValue: kBoardDefaultBrightnessFilter) required double brightness,
+    @JsonKey(defaultValue: kBoardDefaultContrastFilter) required double contrast,
     @JsonKey(defaultValue: kBoardDefaultHueFilter) required double hue,
   }) = _BoardPrefs;
 
@@ -206,18 +226,31 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     dragTargetKind: DragTargetKind.circle,
     shapeColor: ShapeColor.green,
     showBorder: false,
+    dimInDarkMode: true,
     brightness: kBoardDefaultBrightnessFilter,
+    contrast: kBoardDefaultContrastFilter,
     hue: kBoardDefaultHueFilter,
   );
 
   bool get hasColorAdjustments =>
-      brightness != kBoardDefaultBrightnessFilter || hue != kBoardDefaultHueFilter;
+      brightness != kBoardDefaultBrightnessFilter ||
+      contrast != kBoardDefaultContrastFilter ||
+      hue != kBoardDefaultHueFilter;
 
-  ChessboardSettings toBoardSettings(Variant variant) {
+  /// Whether the boards are dimmed when the app has the [appBrightness], overriding the
+  /// [brightness] filter.
+  bool isDimmed(Brightness appBrightness) => dimInDarkMode && appBrightness == .dark;
+
+  /// The brightness filter to apply to the boards when the app has the [appBrightness].
+  double effectiveBrightness(Brightness appBrightness) =>
+      isDimmed(appBrightness) ? kBoardDimmedBrightnessFilter : brightness;
+
+  ChessboardSettings toBoardSettings(Variant variant, {required Brightness appBrightness}) {
     return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
-      brightness: brightness,
+      brightness: effectiveBrightness(appBrightness),
+      contrast: contrast,
       hue: hue,
       border: showBorder
           ? BoardBorder(color: darken(boardTheme.colors.darkSquare, 0.2), width: 16.0)
@@ -237,7 +270,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
     );
   }
 
-  factory BoardPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$BoardPrefsFromJson(json);
   }
 
@@ -246,7 +279,7 @@ sealed class BoardPrefs with _$BoardPrefs implements Serializable {
 }
 
 /// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
-enum ShapeColor {
+enum ShapeColor() {
   green,
   red,
   blue,
@@ -261,7 +294,7 @@ enum ShapeColor {
 }
 
 /// The chessboard theme.
-enum BoardTheme {
+enum BoardTheme(final String label, final String gifApiName) {
   system('System', 'system'),
   brown('Brown', 'brown'),
   wood('Wood', 'wood'),
@@ -288,11 +321,6 @@ enum BoardTheme {
   purpleDiag('Purple-Diag', 'purple-diag'),
   pinkPyramid('Pink', 'pink'),
   horsey('Horsey', 'horsey');
-
-  final String label;
-  final String gifApiName;
-
-  const BoardTheme(this.label, this.gifApiName);
 
   ChessboardColorScheme get colors {
     switch (this) {
@@ -388,7 +416,7 @@ enum BoardTheme {
   };
 }
 
-enum MaterialDifferenceFormat {
+enum MaterialDifferenceFormat() {
   materialDifference,
   capturedPieces,
   hidden;
@@ -402,7 +430,7 @@ enum MaterialDifferenceFormat {
   };
 }
 
-enum ClockPosition {
+enum ClockPosition() {
   left,
   right;
 
@@ -412,7 +440,7 @@ enum ClockPosition {
   };
 }
 
-enum LandscapeBoardPosition {
+enum LandscapeBoardPosition() {
   left,
   right;
 
@@ -422,7 +450,7 @@ enum LandscapeBoardPosition {
   };
 }
 
-enum CastlingMethod {
+enum CastlingMethod() {
   /// Allow castling by moving either the king over the rook or two squares (to match lichess website).
   kingOverRook,
 

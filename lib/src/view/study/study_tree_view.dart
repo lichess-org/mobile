@@ -8,13 +8,8 @@ import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-class StudyTreeView extends ConsumerWidget {
-  const StudyTreeView(this.options, {required this.showTopDivider});
-
-  final StudyOptions options;
-
-  final bool showTopDivider;
-
+class const StudyTreeView(final StudyOptions options, {required final bool showTopDivider})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final studyState = ref.watch(studyControllerProvider(options)).requireValue;
@@ -27,42 +22,37 @@ class StudyTreeView extends ConsumerWidget {
     final studyPrefs = ref.watch(studyPreferencesProvider);
 
     final currentNode = root.branchesOn(studyState.currentPath).lastOrNull ?? root;
-
-    return Column(
-      crossAxisAlignment: .stretch,
-      children: [
-        Expanded(
-          child: CustomScrollView(
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  crossAxisAlignment: .start,
-                  children: [
-                    Expanded(
-                      child: DebouncedPgnTreeView(
-                        root: root,
-                        currentPath: studyState.currentPath,
-                        pgnRootComments: studyState.pgnRootComments,
-                        notifier: ref.read(studyControllerProvider(options).notifier),
-                        showTopDivider: showTopDivider,
-                        shouldShowAnnotations: studyPrefs.showAnnotations,
-                        displayMode: studyPrefs.inlineNotation ? .inlineNotation : .twoColumn,
-                      ),
+    return MovesWithVariationsBar(
+      currentNode: currentNode,
+      currentPath: studyState.currentPath,
+      showAnnotations: studyPrefs.showAnnotations,
+      onJump: (path) => ref.read(studyControllerProvider(options).notifier).userJump(path),
+      movesBuilder: (context, bottomPadding) => CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: EdgeInsets.only(bottom: bottomPadding),
+            sliver: SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  Expanded(
+                    child: DebouncedPgnTreeView(
+                      root: root,
+                      currentPath: studyState.currentPath,
+                      pgnRootComments: studyState.pgnRootComments,
+                      notifier: ref.read(studyControllerProvider(options).notifier),
+                      showTopDivider: showTopDivider,
+                      shouldShowAnnotations: studyPrefs.showAnnotations,
+                      displayMode: studyPrefs.inlineNotation ? .inlineNotation : .twoColumn,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-        VariationsBar(
-          currentNode: currentNode,
-          currentPath: studyState.currentPath,
-          showAnnotations: studyPrefs.showAnnotations,
-          onJump: (path) => ref.read(studyControllerProvider(options).notifier).userJump(path),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

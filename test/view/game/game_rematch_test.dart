@@ -67,7 +67,7 @@ void main() {
             ? http.Response('{"ok":true}', 200)
             : http.Response('{"error":"Sorry, couldn\'t create the rematch."}', rematchStatus);
       }
-      return mockResponse('', 404);
+      return await mockResponse('', 404);
     });
     return (client: client, requestedPaths: requestedPaths);
   }

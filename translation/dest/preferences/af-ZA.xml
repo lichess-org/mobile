@@ -34,7 +34,6 @@
   <string name="takebacksWithOpponentApproval">Terug-vat (met goedkeuring van opponent)</string>
   <string name="inCasualGamesOnly">Slegs in vriendskaplike spelle</string>
   <string name="promoteToQueenAutomatically">Promoveer outomaties tot Dame</string>
-  <string name="explainPromoteToQueenAutomatically">Druk die &lt;ctrl&gt;-sleutel terwyl jy promoveer om outo-promovering tydelik te deaktiveer</string>
   <string name="whenPremoving">Tydens vooraf-skuiwe</string>
   <string name="claimDrawOnThreefoldRepetitionAutomatically">Eis gelykop met drievoudige repetisie outomaties</string>
   <string name="whenTimeRemainingLessThanThirtySeconds">&lt; 30 sekondes voor tyd uitloop</string>
@@ -53,12 +52,8 @@
   <string name="scrollOnTheBoardToReplayMoves">Roll die muis op die bord om skuiwe te herspeel</string>
   <string name="correspondenceEmailNotification">Daaglikse e-pos met \'n lys van jou korrespondensiespelle</string>
   <string name="notifyStreamStart">Uitsending het begin</string>
-  <string name="notifyInboxMsg">Nuwe inboks boodskap</string>
-  <string name="notifyForumMention">Jy is genoem in \'n forumboodskap</string>
-  <string name="notifyInvitedStudy">Studie-uitnodiging</string>
   <string name="notifyGameEvent">Korrespondensiespelopdaterings</string>
   <string name="notifyChallenge">Uitdagings</string>
-  <string name="notifyTournamentSoon">Toernooi begin binnekort</string>
   <string name="notifyTimeAlarm">Korrespondensietyd raak min</string>
   <string name="notifyBell">Klokkie kennisgewing binne Lichess</string>
   <string name="notifyPush">Toetstel kennisgewing wanneer jy nie op Lichess is nie</string>

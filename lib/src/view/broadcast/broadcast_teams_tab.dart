@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,9 +15,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_player_widget.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_team_standings_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -31,19 +34,12 @@ const _kEvalBarWidth = 32.0;
 const _kEvalBarHeight = 14.0;
 const _kEvalBarDividerWidth = _kEvalBarWidth / 50;
 
-class BroadcastTeamsTab extends ConsumerWidget {
-  const BroadcastTeamsTab({
-    required this.roundId,
-    required this.tournamentId,
-    required this.tournamentSlug,
-    this.showTeamScores = false,
-  });
-
-  final BroadcastRoundId roundId;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final bool showTeamScores;
-
+class const BroadcastTeamsTab({
+  required final BroadcastRoundId roundId,
+  required final BroadcastTournamentId tournamentId,
+  required final String tournamentSlug,
+  final bool showTeamScores = false,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final teams = ref.watch(broadcastTeamMatchesProvider(roundId));
@@ -56,27 +52,21 @@ class BroadcastTeamsTab extends ConsumerWidget {
         tournamentSlug,
         showTeamScores,
       ),
-      AsyncError(:final error) => Center(child: Text('Cannot load teams data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load teams data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
 
-class BroadcastTeamsList extends ConsumerWidget {
-  const BroadcastTeamsList(
-    this.teamMatches,
-    this.roundId,
-    this.tournamentId,
-    this.tournamentSlug,
-    this.showTeamScores,
-  );
-
-  final IList<BroadcastTeamMatch> teamMatches;
-  final BroadcastRoundId roundId;
-  final BroadcastTournamentId tournamentId;
-  final String tournamentSlug;
-  final bool showTeamScores;
-
+class const BroadcastTeamsList(
+  final IList<BroadcastTeamMatch> teamMatches,
+  final BroadcastRoundId roundId,
+  final BroadcastTournamentId tournamentId,
+  final String tournamentSlug,
+  final bool showTeamScores,
+) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final round = ref.watch(broadcastRoundControllerProvider(roundId));
@@ -85,7 +75,7 @@ class BroadcastTeamsList extends ConsumerWidget {
     );
 
     return switch (round) {
-      AsyncData(:final value) => CustomScrollView(
+      AsyncData(:final value) => SliverMainAxisGroup(
         slivers: [
           if (showTeamScores)
             SliverSafeArea(
@@ -114,78 +104,49 @@ class BroadcastTeamsList extends ConsumerWidget {
           ),
         ],
       ),
-      AsyncError(:final error) => Center(child: Text('Cannot load games data: $error')),
-      _ => const Center(child: CircularProgressIndicator.adaptive()),
+      AsyncError(:final error) => BroadcastRoundTabPlaceholder(
+        Text('Cannot load games data: $error'),
+      ),
+      _ => const BroadcastRoundTabPlaceholder(CircularProgressIndicator.adaptive()),
     };
   }
 }
 
-class _TeamStandingsButton extends StatelessWidget {
-  const _TeamStandingsButton({required this.tournamentId});
-
-  final BroadcastTournamentId tournamentId;
-
+class const _TeamStandingsButton({required final BroadcastTournamentId tournamentId})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Padding(
-      padding: Styles.horizontalBodyPadding.copyWith(top: 12.0, bottom: 8.0),
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.all(16.0),
-          shape: RoundedRectangleBorder(borderRadius: .circular(8.0)),
-          side: BorderSide(color: colorScheme.primary, width: 0.8),
+    return ListSection(
+      margin: Styles.bodySectionPadding.copyWith(top: 12.0),
+      hasLeading: true,
+      children: [
+        ListTile(
+          leading: const Icon(Icons.leaderboard),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          title: Text(context.l10n.broadcastTeamResults),
+          onTap: () {
+            Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
+          },
         ),
-        onPressed: () {
-          Navigator.of(context).push(BroadcastTeamStandingsScreen.buildRoute(tournamentId));
-        },
-        child: Row(
-          mainAxisAlignment: .spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.leaderboard, color: colorScheme.secondary),
-                const SizedBox(width: 12),
-                Text(
-                  context.l10n.broadcastTeamResults,
-                  style: TextStyle(fontWeight: .bold, color: colorScheme.secondary, fontSize: 16),
-                ),
-              ],
-            ),
-            Icon(Icons.chevron_right, color: colorScheme.secondary),
-          ],
-        ),
-      ),
+      ],
     );
   }
 }
 
-class _TeamMatchCard extends StatelessWidget {
-  const _TeamMatchCard({
-    required this.match,
-    required this.games,
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.title,
-    required this.showEvaluationGauge,
-    required this.customScoring,
-    required this.showTeamScores,
-  });
-
-  final BroadcastTeamMatch match;
-  final BroadcastRoundGames games;
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final String title;
-  final bool showEvaluationGauge;
-  final BroadcastCustomScoring? customScoring;
-  final bool showTeamScores;
-
+class const _TeamMatchCard({
+  required final BroadcastTeamMatch match,
+  required final BroadcastRoundGames games,
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final String title,
+  required final bool showEvaluationGauge,
+  required final BroadcastCustomScoring? customScoring,
+  required final bool showTeamScores,
+}) extends StatelessWidget {
   bool get matchFinished => games.everyEntry((e) => e.value.isOver);
   BroadcastResult? get matchStatus => matchFinished
       ? match.team1.points > match.team2.points
@@ -198,9 +159,8 @@ class _TeamMatchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      margin: const EdgeInsets.all(4.0),
       clipBehavior: .hardEdge,
-      elevation: 2,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -214,9 +174,8 @@ class _TeamMatchCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         if (showTeamScores) {
-                          Navigator.of(
-                            context,
-                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team1.name));
+                          Navigator.of(context)
+                              .push(BroadcastTeamScreen.buildRoute(tournamentId, match.team1.name));
                         }
                       },
                       child: Text(
@@ -255,9 +214,8 @@ class _TeamMatchCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         if (showTeamScores) {
-                          Navigator.of(
-                            context,
-                          ).push(BroadcastTeamScreen.buildRoute(tournamentId, match.team2.name));
+                          Navigator.of(context)
+                              .push(BroadcastTeamScreen.buildRoute(tournamentId, match.team2.name));
                         }
                       },
                       child: Text(
@@ -298,35 +256,23 @@ class _TeamMatchCard extends StatelessWidget {
   }
 }
 
-class _GameRow extends ConsumerStatefulWidget {
-  const _GameRow({
-    required this.game,
-    required this.teamGame,
-    required this.index,
-    required this.tournamentId,
-    required this.roundId,
-    required this.tournamentSlug,
-    required this.roundSlug,
-    required this.title,
-    required this.showEvaluationGauge,
-    required this.customScoring,
-  });
-
-  final BroadcastGame game;
-  final BroadcastTeamGame teamGame;
-  final int index;
-  final BroadcastTournamentId tournamentId;
-  final BroadcastRoundId roundId;
-  final String tournamentSlug;
-  final String roundSlug;
-  final String title;
-  final bool showEvaluationGauge;
-  final BroadcastCustomScoring? customScoring;
+class const _GameRow({
+  required final BroadcastGame game,
+  required final BroadcastTeamGame teamGame,
+  required final int index,
+  required final BroadcastTournamentId tournamentId,
+  required final BroadcastRoundId roundId,
+  required final String tournamentSlug,
+  required final String roundSlug,
+  required final String title,
+  required final bool showEvaluationGauge,
+  required final BroadcastCustomScoring? customScoring,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<_GameRow> createState() => _GameRowState();
 }
 
-class _GameRowState extends ConsumerState<_GameRow> {
+class _GameRowState() extends ConsumerState<_GameRow> {
   bool isGameVisible = false;
 
   @override
@@ -354,9 +300,7 @@ class _GameRowState extends ConsumerState<_GameRow> {
       onVisibilityChanged: (visibilityInfo) {
         if (visibilityInfo.visibleFraction > 0.1) {
           if (!isGameVisible && context.mounted) {
-            ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .addObservedGame(widget.game.id);
+            ref.read(observedGamesControllerProvider(widget.roundId).notifier).add(widget.game.id);
             setState(() {
               isGameVisible = true;
             });
@@ -364,8 +308,8 @@ class _GameRowState extends ConsumerState<_GameRow> {
         } else {
           if (isGameVisible && context.mounted) {
             ref
-                .read(broadcastRoundControllerProvider(widget.roundId).notifier)
-                .removeObservedGame(widget.game.id);
+                .read(observedGamesControllerProvider(widget.roundId).notifier)
+                .remove(widget.game.id);
             setState(() {
               isGameVisible = false;
             });
@@ -449,12 +393,8 @@ class _GameRowState extends ConsumerState<_GameRow> {
   }
 }
 
-class _MiniEvalBar extends StatelessWidget {
-  const _MiniEvalBar({required this.whiteWinningChances, required this.pov});
-
-  final double whiteWinningChances;
-  final Side pov;
-
+class const _MiniEvalBar({required final double whiteWinningChances, required final Side pov})
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final whiteBarWidth = _kEvalBarWidth * (whiteWinningChances + 1) / 2;

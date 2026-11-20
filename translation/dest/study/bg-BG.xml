@@ -48,7 +48,6 @@
   <string name="annotateWithGlyphs">Анотация със специални символи</string>
   <string name="theChapterIsTooShortToBeAnalysed">Тази глава е твърде къса и не може да бъде анализирана.</string>
   <string name="onlyContributorsCanRequestAnalysis">Само сътрудниците в студията могат да поискат компютърен анализ.</string>
-  <string name="getAFullComputerAnalysis">Вземи пълен сървърен анализ на основна линия.</string>
   <string name="makeSureTheChapterIsComplete">Уверете се, че главата е завършена. Можете да пуснете анализ само веднъж.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Всички синхронизирани членове остават на същата позиция</string>
   <string name="shareChanges">Споделете промените със зрителите и ги запазете на сървъра</string>
@@ -65,7 +64,6 @@
   <string name="downloadGame">Изтегли партия</string>
   <string name="studyUrl">URL на студията</string>
   <string name="currentChapterUrl">URL на настоящата глава</string>
-  <string name="youCanPasteThisInTheForumToEmbed">Можете да поставите това във форум и ще бъде вградено</string>
   <string name="startAtInitialPosition">Започни от начална позиция</string>
   <string name="startAtX">Започни от %s</string>
   <string name="embedInYourWebsite">Вгради в твоя сайт или блог</string>
@@ -100,10 +98,6 @@
   <string name="loadAPositionFromFen">Зареди позиция от FEN</string>
   <string name="loadAGameFromPgn">Зареди партии от PGN</string>
   <string name="automatic">Автоматичен</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Постави твоя PGN текст тук, до %s партия</item>
-    <item quantity="other">Постави твоя PGN текст тук, до %s партии</item>
-  </plurals>
   <string name="urlOfTheGame">URL на партиите, по една на линия</string>
   <string name="createChapter">Създай</string>
   <string name="createStudy">Създай казус</string>
@@ -123,16 +117,13 @@
   <string name="noLetPeopleBrowseFreely">Не: позволи свободно разглеждане</string>
   <string name="pinnedStudyComment">Коментар на казуса</string>
   <string name="start">Начало</string>
-  <string name="save">Запази</string>
   <string name="clearChat">Изтрий чат съобщенията</string>
   <string name="deleteTheStudyChatHistory">Изтриване на чат историята? Това е необратимо!</string>
   <string name="deleteStudy">Изтрий казуса</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Изтриване на целия казус? Това е необратимо! Въведете името на казуса за да потвърдите: %s</string>
   <string name="whereDoYouWantToStudyThat">Къде да бъде проучено това?</string>
   <string name="goodMove">Добър ход</string>
-  <string name="mistake">Грешка</string>
   <string name="brilliantMove">Отличен ход</string>
-  <string name="blunder">Груба грешка</string>
   <string name="interestingMove">Интересен ход</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Съмнителен ход</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Единствен ход</string>
@@ -187,8 +178,6 @@
   <string name="fromInitialPositionText">Просто начална подредба на дъската за нова партия.&lt;br&gt;Подходящо за изследване на дебюти.</string>
   <string name="customPositionTitle">От позиция</string>
   <string name="customPositionText">Подреди дъската по свой начин.&lt;br&gt;Подходящо за изследване на ендшпили.</string>
-  <string name="loadExistingLichessGameTitle">Зареди съществуваща партия от Lichess</string>
-  <string name="loadExistingLichessGameText">Постави URL адрес на партия от Lichess&lt;br&gt;(например lichess.org/7fHIU0XI)&lt;br&gt;за да заредиш ходовете на партията в главата.</string>
   <string name="fromFenStringTitle">От FEN нотация</string>
   <string name="fromFenStringText">Постави позиция във FEN формат&lt;br&gt;&lt;i&gt;4k3/4rb2/8/7p/8/5Q2/1PP5/1K6 w&lt;/i&gt;&lt;br&gt;за да започнеш главата от конкретна позиция.</string>
   <string name="fromPgnGameTitle">От PGN нотация</string>

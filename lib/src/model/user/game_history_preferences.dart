@@ -11,7 +11,8 @@ final gameHistoryPreferencesProvider =
       name: 'GameHistoryPreferencesProvider',
     );
 
-class GameHistoryPreferencesNotifier extends Notifier<GameHistoryPrefs>
+class GameHistoryPreferencesNotifier()
+    extends Notifier<GameHistoryPrefs>
     with PreferencesStorage<GameHistoryPrefs> {
   @override
   @protected
@@ -36,20 +37,21 @@ class GameHistoryPreferencesNotifier extends Notifier<GameHistoryPrefs>
   }
 }
 
-enum GameHistoryDisplayMode { compact, detail }
+enum GameHistoryDisplayMode() {
+  compact,
+  detail,
+}
 
 @Freezed(fromJson: true, toJson: true)
-sealed class GameHistoryPrefs with _$GameHistoryPrefs implements Serializable {
-  const GameHistoryPrefs._();
-
-  const factory GameHistoryPrefs({
+sealed class const GameHistoryPrefs._() with _$GameHistoryPrefs implements Serializable {
+  const factory({
     @JsonKey(defaultValue: GameHistoryDisplayMode.detail)
     required GameHistoryDisplayMode displayMode,
   }) = _GameHistoryPrefs;
 
   static const defaults = GameHistoryPrefs(displayMode: GameHistoryDisplayMode.detail);
 
-  factory GameHistoryPrefs.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     return _$GameHistoryPrefsFromJson(json);
   }
 }

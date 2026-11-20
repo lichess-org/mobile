@@ -12,7 +12,8 @@ final broadcastPreferencesProvider = NotifierProvider<BroadcastPreferences, Broa
   name: 'BroadcastPreferencesProvider',
 );
 
-class BroadcastPreferences extends Notifier<BroadcastPrefs>
+class BroadcastPreferences()
+    extends Notifier<BroadcastPrefs>
     with PreferencesStorage<BroadcastPrefs> {
   @override
   @protected
@@ -61,37 +62,31 @@ class BroadcastPreferences extends Notifier<BroadcastPrefs>
   Future<void> toggleInlineNotation() {
     return save(state.copyWith(inlineNotation: !state.inlineNotation));
   }
-
-  Future<void> toggleSmallBoard() {
-    return save(state.copyWith(smallBoard: !state.smallBoard));
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 sealed class BroadcastPrefs with _$BroadcastPrefs implements Serializable, CommonAnalysisPrefs {
-  const factory BroadcastPrefs({
+  const factory({
     @JsonKey(defaultValue: true) required bool showRoundEvaluationGauges,
     @JsonKey(defaultValue: true) required bool enableServerAnalysis,
     @JsonKey(defaultValue: true) required bool showEvaluationGauge,
-    @JsonKey(defaultValue: true) required bool showEngineLines,
+    @JsonKey(defaultValue: false) required bool showEngineLines,
     @JsonKey(defaultValue: true) required bool showBestMoveArrow,
     @JsonKey(defaultValue: true) required bool showAnnotations,
     @JsonKey(defaultValue: true) required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
-    @JsonKey(defaultValue: false) required bool smallBoard,
   }) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(
     showRoundEvaluationGauges: true,
     enableServerAnalysis: true,
     showEvaluationGauge: true,
-    showEngineLines: true,
+    showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,
     inlineNotation: false,
-    smallBoard: false,
   );
 
-  factory BroadcastPrefs.fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$BroadcastPrefsFromJson(json);
 }

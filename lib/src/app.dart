@@ -1,38 +1,42 @@
 import 'dart:async';
 import 'dart:io';
 
+// ignore: deprecated_member_use
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoUiCompatibilityBridge;
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:l10n_esperanto/l10n_esperanto.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_links_service.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/account/account_service.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
-import 'package:lichess_mobile/src/model/announce/announce_service.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_service.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
-import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/log/app_log_service.dart';
-import 'package:lichess_mobile/src/model/message/message_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/game/game_live_activity.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/study/study_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/quick_actions.dart';
-import 'package:lichess_mobile/src/shared_pgn_service.dart';
+import 'package:lichess_mobile/src/service/account_service.dart';
+import 'package:lichess_mobile/src/service/announce_service.dart';
+import 'package:lichess_mobile/src/service/app_links_service.dart';
+import 'package:lichess_mobile/src/service/app_log_service.dart';
+import 'package:lichess_mobile/src/service/broadcast_service.dart';
+import 'package:lichess_mobile/src/service/challenge_service.dart';
+import 'package:lichess_mobile/src/service/correspondence_service.dart';
+import 'package:lichess_mobile/src/service/message_service.dart';
+import 'package:lichess_mobile/src/service/notification_service.dart';
+import 'package:lichess_mobile/src/service/quick_actions.dart';
+import 'package:lichess_mobile/src/service/recap_service.dart';
+import 'package:lichess_mobile/src/service/shared_pgn_service.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/tab_scaffold.dart';
 import 'package:lichess_mobile/src/theme.dart';
+import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart' show usePinnedNavBar;
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
 import 'package:material_ui/material_ui.dart';
 
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
@@ -43,9 +47,7 @@ const List<String> _kIosBlogWidgetKinds = [
 ];
 
 /// Application initialization and main entry point.
-class AppInitializationScreen extends ConsumerWidget {
-  const AppInitializationScreen({super.key});
-
+class const AppInitializationScreen({super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<AsyncValue<PreloadedData>>(preloadedDataProvider, (_, state) {
@@ -71,72 +73,21 @@ class AppInitializationScreen extends ConsumerWidget {
 ///
 /// This widget is the root of the application and is responsible for setting up
 /// the theme, locale, and other global settings.
-class Application extends ConsumerStatefulWidget {
-  const Application({super.key});
-
+class const Application({super.key}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<Application> createState() => _AppState();
 }
 
-class _AppState extends ConsumerState<Application> {
+class _AppState() extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  // Adjusts some settings for small screens based on the MediaQuery data.
-  Future<void> _screenSizeBasedInitialization(WidgetRef ref) async {
-    // Bump version here in case we adjust the thresholds for screen size based initialization
-    // and want it to run again for users who already launched the app with a previous version.
-    const kDoneScreenSizeInitKey = 'done_screen_size_init_v1';
-
-    final prefs = LichessBinding.instance.sharedPreferences;
-    if (prefs.getBool(kDoneScreenSizeInitKey) == true) {
-      return;
-    }
-
-    final mediaQueryData = MediaQueryData.fromView(
-      WidgetsBinding.instance.platformDispatcher.views.first,
-    );
-    final isTablet = mediaQueryData.size.shortestSide > FormFactor.tablet;
-    final isSmallScreen = estimateHeightMinusBoard(mediaQueryData) < kSmallHeightMinusBoard;
-    final showEngineLines =
-        isTablet || estimateHeightMinusBoard(mediaQueryData) > kSmallHeightMinusBoard - 30;
-
-    // For tablets in portrait mode using the full board size makes the bottom analysis tabs tiny,
-    // see https://github.com/lichess-org/mobile/issues/3150,
-    // so use a small board there by default as well.
-    final smallBoard = isTablet || isSmallScreen;
-
-    await ref
-        .read(analysisPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(analysisPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-    await ref
-        .read(studyPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(studyPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-    await ref
-        .read(broadcastPreferencesProvider.notifier)
-        .save(
-          ref
-              .read(broadcastPreferencesProvider)
-              .copyWith(smallBoard: smallBoard, showEngineLines: showEngineLines),
-        );
-
-    await prefs.setBool(kDoneScreenSizeInitKey, true);
-  }
-
   @override
   void initState() {
-    _screenSizeBasedInitialization(ref);
-
-    // Start services
+    // Start services. The UI event coordinator comes first: it must be listening on the event bus
+    // before any service has a chance to emit.
+    ref.read(uiEventCoordinatorProvider).start();
     ref.read(appLogServiceProvider).start();
     ref.read(notificationServiceProvider).start();
     ref.read(messageServiceProvider).start();
@@ -148,9 +99,13 @@ class _AppState extends ConsumerState<Application> {
     ref.read(appLinksServiceProvider).start();
     ref.read(sharedPgnServiceProvider).start();
     ref.read(broadcastServiceProvider).start();
+    ref.read(recapServiceProvider).start();
 
     if (Platform.isIOS) {
       HomeWidget.setAppGroupId(_kIosAppGroupId);
+      // No game screen is open at launch, so any game Live Activity is a leftover from a previous
+      // run (e.g. the app was killed during a game).
+      ref.read(gameLiveActivityChannelProvider).endAll();
     }
     HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
 
@@ -178,9 +133,18 @@ class _AppState extends ConsumerState<Application> {
       }, fireImmediately: true);
     }
 
-    // Listen for connectivity changes and perform actions accordingly.
+    // [setupIntl] sets [Intl.defaultLocale] on startup: follow the app language from then on.
+    ref.listenManual(generalPreferencesProvider.select((prefs) => prefs.locale), (_, locale) {
+      Intl.defaultLocale = (locale ?? getSystemLocale(WidgetsBinding.instance)).toLanguageTag();
+    });
+
+    // Listening to the settled status rather than to [isDeviceOnlineProvider]: both actions are
+    // network calls, which must not be made on the optimistic assumption that a device whose
+    // status is not known yet is online.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
-      final prevWasOffline = prev?.value?.isOnline == false;
+      // The previous state is read with [isDeviceOnlineIn], so that coming back from a check that
+      // failed — offline as far as the app is concerned — is an edge like any other.
+      final prevWasOffline = prev != null && !isDeviceOnlineIn(prev);
       final currentIsOnline = current.value?.isOnline == true;
 
       // Play registered moves whenever the app comes back online.
@@ -192,18 +156,9 @@ class _AppState extends ConsumerState<Application> {
       }
 
       // Perform actions once when the app comes online.
-      if (current.value?.isOnline == true && !_firstTimeOnlineCheck) {
+      if (currentIsOnline && !_firstTimeOnlineCheck) {
         _firstTimeOnlineCheck = true;
         ref.read(correspondenceServiceProvider).syncGames();
-      }
-
-      final socketClient = ref.read(socketPoolProvider).currentClient;
-      if (current.value?.isOnline == true &&
-          current.value?.appState == AppLifecycleState.resumed &&
-          !socketClient.isActive) {
-        socketClient.connect();
-      } else if (current.value?.isOnline == false) {
-        socketClient.close();
       }
     });
 
@@ -212,9 +167,26 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   Widget build(BuildContext context) {
-    final generalPrefs = ref.watch(generalPreferencesProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final theme = makeAppTheme(context, generalPrefs, boardPrefs);
+    final themeConfig = ref.watch(
+      generalPreferencesProvider.select(
+        (prefs) => (
+          prefs.themeMode,
+          prefs.backgroundColor,
+          prefs.backgroundImage,
+          prefs.systemColors,
+          prefs.locale,
+        ),
+      ),
+    );
+    final boardTheme = ref.watch(boardPreferencesProvider.select((prefs) => prefs.boardTheme));
+    final theme = makeAppTheme(
+      context,
+      themeMode: themeConfig.$1,
+      backgroundColor: themeConfig.$2,
+      backgroundImage: themeConfig.$3,
+      systemColors: themeConfig.$4,
+      boardTheme: boardTheme,
+    );
 
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
@@ -231,14 +203,33 @@ class _AppState extends ConsumerState<Application> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       title: 'lichess.org',
-      locale: generalPrefs.locale,
+      locale: themeConfig.$5,
       theme: theme.copyWith(
         navigationBarTheme: isIOS
             ? null
-            : NavigationBarTheme.of(
-                context,
-              ).copyWith(height: isShortVerticalScreen(context) ? 60 : null),
+            : NavigationBarTheme.of(context)
+                  .copyWith(height: isShortVerticalScreen(context) ? 60 : null),
       ),
+      // Packages not yet migrated to `material_ui` and `cupertino_ui` (e.g. liquid_glass_widgets,
+      // fl_chart) read the Flutter SDK themes and localizations, which the bridges derive from the
+      // app ones.
+      builder: (context, child) {
+        final iconTheme = IconTheme.of(context);
+        // ignore: deprecated_member_use
+        return MaterialUiCompatibilityBridge(
+          // ignore: deprecated_member_use
+          child: CupertinoUiCompatibilityBridge(
+            // The SDK themes of the bridges set their own icon theme (the Cupertino one with the
+            // primary color): restore the app icon theme.
+            // Pins the app bar buttons of the root navigator's routes and morphs them between
+            // routes on iOS 26.
+            child: GlassNavigationShell(
+              enabled: usePinnedNavBar(context),
+              child: IconTheme(data: iconTheme, child: child!),
+            ),
+          ),
+        );
+      },
       home: const MainTabScaffold(),
       navigatorObservers: [rootNavPageRouteObserver, rootNavRouteStackObserver],
     );

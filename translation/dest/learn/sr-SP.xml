@@ -38,12 +38,12 @@
   <string name="kingComplete">Сада можеш командовати командиру!</string>
   <string name="theKnight">Скакач</string>
   <string name="itMovesInAnLShape">Креће се у облику слова Г</string>
-  <string name="knightIntro">Ево изазова за тебе. Скакач је... зезнута фигура.</string>
+  <string name="knightIntro">Ево изазова за тебе. Скакач је... препредена фигура.</string>
   <string name="knightsHaveAFancyWay">Скакачи имају елегантан начин
 скакања уоколо!</string>
   <string name="knightsCanJumpOverObstacles">Скакачи могу прескакати препреке!
 Побегни и савладај звезде!</string>
-  <string name="knightComplete">Честитке! Савладао/ла си скакача.</string>
+  <string name="knightComplete">Čestitamo! Savladao si skakača.</string>
   <string name="thePawn">Пешак</string>
   <string name="itMovesForwardOnly">Креће се само напред</string>
   <string name="pawnIntro">Пешаци су слаби, али имају много потенцијала.</string>
@@ -132,6 +132,7 @@
 Направи било који потез да наставиш.</string>
   <string name="boardSetupComplete">Честитке! Знаш како да поставиш шаховску таблу.</string>
   <string name="castling">Рокадирање</string>
+  <string name="enPassant">Ан пасан</string>
   <string name="theSpecialKingMove">Посебан потез краља</string>
   <string name="castlingIntro">Доведи свог краља на сигурно и развиј свог топа за напад!</string>
   <string name="castleKingSide">Помери свог краља два поља
@@ -187,6 +188,12 @@
   <string name="queenOverBishop">Узми фигуру
 са највишом вредношћу!
 Дама &gt; Ловац</string>
+  <string name="pieceValueExchange">Узми фигуру са највећом вредношћу!
+Немој разменити
+фигуру веће вредности за мање вредну.</string>
+  <string name="pieceValueLegal">Узми фигуру
+са највишом вредношћу!
+Побрини се да је твој потез правилан!</string>
   <string name="takeThePieceWithTheHighestValue">Узми фигуру
 са највишом вредношћу!</string>
   <string name="pieceValueComplete">Честитке! Знаш вредност материјала!

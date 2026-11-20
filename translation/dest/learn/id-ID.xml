@@ -114,6 +114,7 @@ Mereka ada disebelah kuda.</string>
   <string name="pawnsFormTheFrontLine">Pion membentuk garis depan. Buat langkah apa saja untuk melanjutkan.</string>
   <string name="boardSetupComplete">Selamat! Anda tahu cara memasang papan catur.</string>
   <string name="castling">Castling</string>
+  <string name="enPassant">En passant</string>
   <string name="theSpecialKingMove">Raja khusus bergerak</string>
   <string name="castlingIntro">Bawa raja anda ke tempat aman, dan siapkan benteng anda untuk menyerang!</string>
   <string name="castleKingSide">Gerakkan raja anda dua kotak untuk rokade ke sisi raja!</string>
@@ -154,6 +155,9 @@ Kuda = 3
 Pion = 1
 Raja tak ternilai harganya! Kehilangan raja berarti kekalahan.</string>
   <string name="queenOverBishop">Ambil bidak dengan nilai tertinggi! Menteri &gt; Gajah</string>
+  <string name="pieceValueLegal">Ambil bagiannya
+dengan nilai tertinggi!
+Pastikan langkah Anda legal!</string>
   <string name="takeThePieceWithTheHighestValue">Ambil bagian
 dengan nilai tertinggi!</string>
   <string name="pieceValueComplete">Selamat! Anda sudah tahu nilai bidak!

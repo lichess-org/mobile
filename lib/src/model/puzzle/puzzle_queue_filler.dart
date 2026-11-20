@@ -26,7 +26,7 @@ final puzzleQueueFillerProvider = NotifierProvider<PuzzleQueueFiller, bool>(
   name: 'PuzzleQueueFillerProvider',
 );
 
-class PuzzleQueueFiller extends Notifier<bool> {
+class PuzzleQueueFiller() extends Notifier<bool> {
   final Logger _log = Logger('PuzzleQueueFiller');
 
   @override
@@ -78,7 +78,7 @@ class PuzzleQueueFiller extends Notifier<bool> {
 
         // Don't grow the unsolved queue while there are solves we still owe the
         // server: fetching more only enlarges a backlog we can't flush yet.
-        // Solving is the binding constraint (lila caps solves at 400/h, far
+        // Solving is the binding constraint (lila caps solves at 500/h, far
         // tighter than puzzle fetching), so nothing else throttles this refill.
         if (current != null && current.solved.isNotEmpty) break;
 
@@ -97,9 +97,9 @@ class PuzzleQueueFiller extends Notifier<bool> {
         final PuzzleBatchResponse response;
         try {
           response = await ref.withClient(
-            (client) => PuzzleRepository(
-              client,
-            ).selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
+            (client) =>
+                PuzzleRepository(client)
+                    .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
           );
         } catch (e, st) {
           // Offline or server error: stop the fill, keep what we have.

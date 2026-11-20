@@ -10,7 +10,6 @@
   <plurals name="xIsPatronForNbMonths">
     <item quantity="one">%1$s תומך/ת לִיצֶ\'ס חודש %2$s</item>
     <item quantity="two">%1$s תומך/ת לִיצֶ\'ס %2$s חודשים</item>
-    <item quantity="many">%1$s תומך/ת לִיצֶ\'ס %2$s חודשים</item>
     <item quantity="other">%1$s תומך/ת לִיצֶ\'ס %2$s חודשים</item>
   </plurals>
   <string name="newPatrons">תומכים חדשים</string>
@@ -36,8 +35,6 @@
   <string name="weAreSmallTeam">אנחנו צוות קטן, לכן התמיכה שלך תהיה משמעותית מאוד!</string>
   <string name="celebratedPatrons">התומכים המהוללים שהופכים את לִיצֶ\'ס לאפשרי</string>
   <string name="whereMoneyGoes">לאן הכסף הולך?</string>
-  <string name="serversAndDeveloper">בראש ובראשונה, לשרתים חזקים.
-לאחר מכן אנחנו משלמים למפתח במשרה מלאה: %s, המייסד של Lichess.</string>
   <string name="costBreakdown">צפו במפרט ההוצאות הכלכליות</string>
   <string name="officialNonProfit">האם לִיצֶ\'ס הוא ארגון ללא מטרות רווח באופן רשמי?</string>
   <string name="actOfCreation">כן, הנה מסמך היצירה (בצרפתית)</string>
@@ -54,7 +51,6 @@
   <plurals name="patronForMonths">
     <item quantity="one">תומך ליצ\'ס לחודש אחד</item>
     <item quantity="two">תומך ליצ\'ס ל%s חודשים</item>
-    <item quantity="many">תומך ליצ\'ס ל%s חודשים</item>
     <item quantity="other">תומך ליצ\'ס ל%s חודשים</item>
   </plurals>
   <string name="youSupportWith">את/ה תומכ/ת ב־lichess.org עם תרומה של %s בחודש.</string>

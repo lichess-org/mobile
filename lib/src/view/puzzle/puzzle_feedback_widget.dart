@@ -10,13 +10,11 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:material_ui/material_ui.dart';
 
-class PuzzleFeedbackWidget extends ConsumerWidget {
-  const PuzzleFeedbackWidget({required this.puzzle, required this.state, required this.onStreak});
-
-  final Puzzle puzzle;
-  final PuzzleState state;
-  final bool onStreak;
-
+class const PuzzleFeedbackWidget({
+  required final Puzzle puzzle,
+  required final PuzzleState state,
+  required final bool onStreak,
+}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     switch (state.mode) {
@@ -25,7 +23,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         final playedXTimes = context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays).localizeNumbers();
         return FeedbackTile(
           leading: state.result == PuzzleResult.win
-              ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
+              ? Icon(Icons.check, size: 36, color: context.lichessColors.green)
               : null,
           title: onStreak && state.result == PuzzleResult.lose
               ? const Text(
@@ -55,7 +53,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return FeedbackTile(
-            leading: Icon(Icons.close, size: 36, color: context.lichessColors.error),
+            leading: Icon(Icons.close, size: 36, color: context.lichessColors.red),
             title: Text(context.l10n.puzzleNotTheMove, overflow: TextOverflow.ellipsis),
             subtitle: Text(
               context.l10n.puzzleTrySomethingElse,
@@ -65,7 +63,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
           );
         } else if (state.feedback == PuzzleFeedback.good) {
           return FeedbackTile(
-            leading: Icon(Icons.check, size: 36, color: context.lichessColors.good),
+            leading: Icon(Icons.check, size: 36, color: context.lichessColors.green),
             title: Text(context.l10n.puzzleBestMove),
             subtitle: Text(context.l10n.puzzleKeepGoing),
           );
@@ -87,11 +85,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
 }
 
 /// Displays the side to move's king pience on a square matching the board's theme.
-class SideToPlayPiece extends ConsumerWidget {
-  const SideToPlayPiece({required this.side});
-
-  final Side side;
-
+class const SideToPlayPiece({required final Side side}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceSet = ref.watch(boardPreferencesProvider.select((value) => value.pieceSet));
@@ -105,8 +99,8 @@ class SideToPlayPiece extends ConsumerWidget {
       alignment: Alignment.center,
       clipBehavior: Clip.none,
       children: [
-        BrightnessHueFilter(
-          brightness: boardPrefs.brightness,
+        ColorAdjustFilter(
+          brightness: boardPrefs.effectiveBrightness(brightness),
           hue: boardPrefs.hue,
           child: Container(
             width: 50,
@@ -131,13 +125,11 @@ class SideToPlayPiece extends ConsumerWidget {
   }
 }
 
-class FeedbackTile extends StatelessWidget {
-  const FeedbackTile({this.leading, required this.title, this.subtitle});
-
-  final Widget? leading;
-  final Widget title;
-  final Widget? subtitle;
-
+class const FeedbackTile({
+  final Widget? leading,
+  required final Widget title,
+  final Widget? subtitle,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultFontSize = DefaultTextStyle.of(context).style.fontSize;
@@ -158,7 +150,7 @@ class FeedbackTile extends StatelessWidget {
                 ),
                 child: title,
               ),
-              if (subtitle != null) subtitle!,
+              ?subtitle,
             ],
           ),
         ),

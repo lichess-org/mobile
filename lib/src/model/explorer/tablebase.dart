@@ -19,7 +19,7 @@ bool isTablebaseRelevant(Position pos) {
   return pieceCount <= _tablebasePieces(Variant.fromRule(pos.rule));
 }
 
-enum TablebaseCategory {
+enum TablebaseCategory() {
   win,
   unknown,
   syzygyWin,
@@ -33,10 +33,8 @@ enum TablebaseCategory {
 }
 
 @freezed
-sealed class TablebaseEntry with _$TablebaseEntry {
-  const TablebaseEntry._();
-
-  const factory TablebaseEntry({
+sealed class const TablebaseEntry._() with _$TablebaseEntry {
+  const factory({
     required int? dtz,
     required int? dtc,
     required int? dtm,
@@ -47,10 +45,9 @@ sealed class TablebaseEntry with _$TablebaseEntry {
     required IList<TablebaseMove> moves,
   }) = _TablebaseEntry;
 
-  factory TablebaseEntry.fromJson(Map<String, Object?> json) =>
-      TablebaseEntry.fromPick(pick(json).required());
+  factory fromJson(Map<String, Object?> json) => TablebaseEntry.fromPick(pick(json).required());
 
-  factory TablebaseEntry.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return TablebaseEntry(
       dtz: pick('dtz').asIntOrNull(),
       dtc: pick('dtc').asIntOrNull(),
@@ -65,10 +62,8 @@ sealed class TablebaseEntry with _$TablebaseEntry {
 }
 
 @freezed
-sealed class TablebaseMove with _$TablebaseMove {
-  const TablebaseMove._();
-
-  const factory TablebaseMove({
+sealed class const TablebaseMove._() with _$TablebaseMove {
+  const factory({
     required String uci,
     required String san,
     required int? dtz,
@@ -82,10 +77,9 @@ sealed class TablebaseMove with _$TablebaseMove {
     required TablebaseCategory category,
   }) = _TablebaseMove;
 
-  factory TablebaseMove.fromJson(Map<String, Object?> json) =>
-      TablebaseMove.fromPick(pick(json).required());
+  factory fromJson(Map<String, Object?> json) => TablebaseMove.fromPick(pick(json).required());
 
-  factory TablebaseMove.fromPick(RequiredPick pick) {
+  factory fromPick(RequiredPick pick) {
     return TablebaseMove(
       uci: pick('uci').asStringOrThrow(),
       san: pick('san').asStringOrThrow(),

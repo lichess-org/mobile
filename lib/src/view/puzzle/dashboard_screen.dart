@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -18,46 +19,61 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_context_menu_button.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:material_ui/material_ui.dart';
 
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
-class PuzzleDashboardScreen extends StatelessWidget {
-  const PuzzleDashboardScreen({super.key});
-
+class const PuzzleDashboardScreen({super.key}) extends StatelessWidget {
   static Route<dynamic> buildRoute() {
     return buildScreenRoute(screen: const PuzzleDashboardScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const SizedBox.shrink(), actions: const [DaysSelector()]),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        actionsBuilder: (context, ref) {
+          if (ref.watch(authControllerProvider) == null) return const [];
+          final selectedDays = ref.watch(daysProvider);
+          return [
+            ContextMenuIconButton(
+              icon: const Icon(Icons.date_range),
+              // TODO: translate
+              semanticsLabel: 'Period',
+              actions: [
+                for (final days in Days.values)
+                  ContextMenuAction(
+                    label: _daysL10n(context, days),
+                    selected: days == selectedDays,
+                    onPressed: () => ref.read(daysProvider.notifier).state = days,
+                  ),
+              ],
+            ),
+          ];
+        },
+      ),
       body: const _Body(),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
+class const _Body() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(children: const [PuzzleDashboardWidget()]);
   }
 }
 
-class PuzzleDashboardWidget extends ConsumerWidget {
-  final bool showDaysSelector;
-  const PuzzleDashboardWidget({this.showDaysSelector = false});
-
+class const PuzzleDashboardWidget({final bool showDaysSelector = false}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
-    final days = ref.watch(daysProvider).days;
+    final days = ref.watch(daysProvider);
 
     return puzzleDashboard.when(
       data: (dashboard) {
@@ -96,7 +112,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               padding: Styles.bodySectionBottomPadding,
               child: Column(
                 children: [
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -108,7 +123,6 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // ignore: avoid-wrapping-in-padding
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -130,17 +144,11 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   }
 }
 
-class _ChartSection extends StatelessWidget {
-  const _ChartSection({
-    required this.dashboard,
-    required this.showDaysSelector,
-    required this.days,
-  });
-
-  final PuzzleDashboard dashboard;
-  final bool showDaysSelector;
-  final int days;
-
+class const _ChartSection({
+  required final PuzzleDashboard dashboard,
+  required final bool showDaysSelector,
+  required final Days days,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chartData = dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
@@ -167,7 +175,16 @@ class _ChartSection extends StatelessWidget {
                   ],
                 ),
               ),
-              if (showDaysSelector) const DaysSelector(),
+              // Chosen in the app bar menu of the dashboard screen.
+              if (showDaysSelector)
+                const DaysSelector()
+              else
+                Text(
+                  _daysL10n(context, days),
+                  style: Styles.subtitle.copyWith(
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
+                ),
             ],
           ),
         ],
@@ -193,10 +210,10 @@ class _ChartSection extends StatelessWidget {
           Center(
             child: TextButton.icon(
               onPressed: () {
-                Navigator.of(context, rootNavigator: true).push(
+                Navigator.of(context).pushHidingTabBar(
                   PuzzleScreen.buildRoute(
                     angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    replayDays: days,
+                    replayDays: days.days,
                   ),
                 );
               },
@@ -209,12 +226,10 @@ class _ChartSection extends StatelessWidget {
   }
 }
 
-class _PerformanceSection extends StatelessWidget {
-  const _PerformanceSection({required this.dashboard, required this.metric});
-
-  final PuzzleDashboard dashboard;
-  final Metric metric;
-
+class const _PerformanceSection({
+  required final PuzzleDashboard dashboard,
+  required final Metric metric,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themes = metric.sort(dashboard.themes, dashboard);
@@ -249,10 +264,7 @@ class _PerformanceSection extends StatelessWidget {
   }
 }
 
-class PuzzleChart extends StatelessWidget {
-  const PuzzleChart(this.puzzleData);
-  final List<PuzzleDashboardData> puzzleData;
-
+class const PuzzleChart(final List<PuzzleDashboardData> puzzleData) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radarColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
@@ -289,9 +301,8 @@ class PuzzleChart extends StatelessWidget {
   }
 }
 
-class DaysSelector extends ConsumerWidget {
-  const DaysSelector();
-
+/// A button showing the days of the puzzle dashboard, which opens a picker to choose them.
+class const DaysSelector() extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authUser = ref.watch(authControllerProvider);
@@ -313,7 +324,7 @@ class DaysSelector extends ConsumerWidget {
   }
 }
 
-enum Metric {
+enum Metric() {
   strength,
   improvementArea;
 
@@ -360,17 +371,14 @@ enum Metric {
   };
 }
 
-enum Days {
+enum Days(final int days) {
   oneday(1),
   twodays(2),
   week(7),
   twoweeks(14),
   month(30),
   twomonths(60),
-  threemonths(90);
-
-  const Days(this.days);
-  final int days;
+  threemonths(90),
 }
 
 String _daysL10n(BuildContext context, Days day) {
@@ -392,10 +400,8 @@ String _daysL10n(BuildContext context, Days day) {
   }
 }
 
-class PuzzleThemeRow extends ConsumerWidget {
-  final PuzzleDashboardData data;
-  const PuzzleThemeRow({super.key, required this.data});
-
+class const PuzzleThemeRow({super.key, required final PuzzleDashboardData data})
+    extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeInfo = data.theme.l10n(context.l10n);
@@ -403,10 +409,8 @@ class PuzzleThemeRow extends ConsumerWidget {
 
     return InkWell(
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(angle: PuzzleTheme(data.theme)));
+        Navigator.of(context)
+            .pushHidingTabBar(PuzzleScreen.buildRoute(angle: PuzzleTheme(data.theme)));
         ref.invalidate(puzzleDashboardProvider);
       },
       child: Container(

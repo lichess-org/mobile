@@ -12,7 +12,7 @@ final broadcastsPaginatorProvider =
       name: 'BroadcastsPaginatorProvider',
     );
 
-class BroadcastsPaginator extends AsyncNotifier<BroadcastList> {
+class BroadcastsPaginator() extends AsyncNotifier<BroadcastList> {
   @override
   Future<BroadcastList> build() {
     return ref.read(broadcastRepositoryProvider).getBroadcasts();
@@ -44,11 +44,8 @@ final broadcastsSearchPaginatorProvider = AsyncNotifierProvider.autoDispose
       name: 'BroadcastsSearchPaginatorProvider',
     );
 
-class BroadcastsSearchPaginator extends AsyncNotifier<BroadcastSearchList> {
-  BroadcastsSearchPaginator(this.searchTerm);
-
-  final String searchTerm;
-
+class BroadcastsSearchPaginator(final String searchTerm)
+    extends AsyncNotifier<BroadcastSearchList> {
   @override
   Future<BroadcastSearchList> build() {
     return ref.read(broadcastRepositoryProvider).searchBroadcasts(searchTerm: searchTerm);
@@ -116,3 +113,37 @@ final broadcastTeamStandingsProvider = FutureProvider.autoDispose
         const Duration(seconds: 30),
       );
     }, name: 'BroadcastTeamStandingsProvider');
+
+typedef BroadcastCalendarDay = ({DateTime? date, IList<Broadcast> broadcasts});
+
+IList<BroadcastCalendarDay> groupBroadcastsByDate(IList<Broadcast> broadcasts) {
+  final byDay = <DateTime, List<Broadcast>>{};
+  final undated = <Broadcast>[];
+  for (final broadcast in broadcasts) {
+    final startsAt = broadcast.round.startsAt?.toUtc();
+    if (startsAt == null) {
+      undated.add(broadcast);
+      continue;
+    }
+    final day = DateTime.utc(startsAt.year, startsAt.month, startsAt.day);
+    (byDay[day] ??= []).add(broadcast);
+  }
+  return <BroadcastCalendarDay>[
+    for (final entry in byDay.entries) (date: entry.key, broadcasts: entry.value.toIList()),
+    if (undated.isNotEmpty) (date: null, broadcasts: undated.toIList()),
+  ].toIList();
+}
+
+final broadcastCalendarProvider = FutureProvider.autoDispose
+    .family<IList<BroadcastCalendarDay>, ({int year, int month})>((
+      Ref ref,
+      ({int year, int month}) params,
+    ) async {
+      final broadcasts = await ref.withClientCacheFor(
+        (client) => ref
+            .read(broadcastRepositoryProvider)
+            .getCalendar(year: params.year, month: params.month),
+        const Duration(hours: 1),
+      );
+      return groupBroadcastsByDate(broadcasts);
+    }, name: 'BroadcastCalendarProvider');

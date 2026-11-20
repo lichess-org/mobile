@@ -10,7 +10,6 @@
   <string name="positionLeft" comment="Appears in the board settings screen to indicate clock position.">Kushoto</string>
   <string name="positionRight" comment="Appears in the board settings screen to indicate clock position.">Kulia</string>
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Nafasi ya saa</string>
-  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Mipangilio</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Shiriki PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Shiriki URL ya mchezo</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Lahaja %s haitumiki katika toleo hili.</string>

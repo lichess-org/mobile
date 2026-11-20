@@ -5,29 +5,17 @@ const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
 
-class StatCard extends StatelessWidget {
-  const StatCard(
-    this.stat, {
-    this.child,
-    this.value,
-    this.contentPadding,
-    this.opacity,
-    this.statFontSize,
-    this.valueFontSize,
-    this.backgroundColor,
-    this.elevation = 0,
-  });
-
-  final String stat;
-  final Widget? child;
-  final String? value;
-  final EdgeInsets? contentPadding;
-  final double? opacity;
-  final double? statFontSize;
-  final double? valueFontSize;
-  final Color? backgroundColor;
-  final double elevation;
-
+class const StatCard(
+  final String stat, {
+  final Widget? child,
+  final String? value,
+  final EdgeInsets? contentPadding,
+  final double? opacity,
+  final double? statFontSize,
+  final double? valueFontSize,
+  final Color? backgroundColor,
+  final double elevation = 0,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final defaultStatStyle = TextStyle(
@@ -64,11 +52,7 @@ class StatCard extends StatelessWidget {
   }
 }
 
-class StatCardRow extends StatelessWidget {
-  final List<StatCard> cards;
-
-  const StatCardRow(this.cards);
-
+class const StatCardRow(final List<StatCard> cards) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(

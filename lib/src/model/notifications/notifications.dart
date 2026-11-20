@@ -14,6 +14,53 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart' show relativeDate;
 import 'package:meta/meta.dart';
 
+/// A notification channel, shared by one or more [LocalNotification] types and FCM messages.
+///
+/// On Android, all channels are created when the app starts, so that the FCM notifications
+/// displayed by the system don't fall back to the "Miscellaneous" channel.
+///
+/// The channel id is the enum value [name]. It is shared with the server, which sets it in the FCM
+/// messages, so the enum values must never be renamed.
+enum NotificationChannel(final Importance importance) {
+  playban(.defaultImportance),
+  newMessage(.defaultImportance),
+  corresGameUpdate(.defaultImportance),
+  challenge(.high), // only real time challenges get high importance
+  corresChallengeAccept(.defaultImportance),
+  corresChallengeCreate(.defaultImportance),
+  announce(.defaultImportance),
+  broadcast(.defaultImportance),
+  recap(.defaultImportance);
+
+  /// The localized name of the channel, shown in the system notification settings.
+  String label(AppLocalizations l10n) => switch (this) {
+    playban => 'Playban',
+    newMessage => l10n.preferencesNotifyDirectMessage,
+    corresGameUpdate ||
+    corresChallengeAccept ||
+    corresChallengeCreate => l10n.preferencesNotifyGameEvent,
+    announce => 'Lichess Announcements',
+    challenge => l10n.preferencesNotifyChallenge,
+    broadcast => l10n.broadcastBroadcasts,
+    recap => 'Annual recap',
+  };
+
+  /// The notification priority matching the channel [importance].
+  ///
+  /// Android 8+ only uses the channel importance, the priority is set for consistency.
+  Priority get priority => switch (importance) {
+    .unspecified || .defaultImportance => .defaultPriority,
+    .none || .min => .min,
+    .low => .low,
+    .high => .high,
+    .max => .max,
+  };
+
+  /// The Android channel to create on the device.
+  AndroidNotificationChannel androidChannel(AppLocalizations l10n) =>
+      AndroidNotificationChannel(name, label(l10n), importance: importance);
+}
+
 /// FCM Messages
 ///////////////
 
@@ -33,12 +80,10 @@ import 'package:meta/meta.dart';
 ///   A notification message can contain additional data in the [RemoteMessage.data] field,
 ///   which can also be used to update the application state.
 @immutable
-sealed class FcmMessage {
-  const FcmMessage();
-
+sealed class const FcmMessage() {
   RemoteNotification? get notification;
 
-  factory FcmMessage.fromRemoteMessage(RemoteMessage message) {
+  factory fromRemoteMessage(RemoteMessage message) {
     final messageType = message.data['lichess.type'] as String?;
 
     if (messageType == null) {
@@ -75,7 +120,7 @@ sealed class FcmMessage {
         case 'challengeCreate':
           final challengeId = message.data['lichess.challengeId'] as String?;
           if (challengeId != null) {
-            return ChallengeCreateFcmMessage(
+            return CorresChallengeCreateFcmMessage(
               ChallengeId(challengeId),
               notification: message.notification,
             );
@@ -86,7 +131,7 @@ sealed class FcmMessage {
           final challengeId = message.data['lichess.challengeId'] as String?;
           final fullId = message.data['lichess.fullId'] as String?;
           if (challengeId != null && fullId != null) {
-            return ChallengeAcceptFcmMessage(
+            return CorresChallengeAcceptFcmMessage(
               ChallengeId(challengeId),
               GameFullId(fullId),
               notification: message.notification,
@@ -122,109 +167,113 @@ sealed class FcmMessage {
             case _:
               return MalformedFcmMessage(message.data);
           }
+        case 'recap':
+          final rawYear = message.data['lichess.year'] as String?;
+          final year = rawYear == null ? null : int.tryParse(rawYear);
+          if (year != null) {
+            return RecapFcmMessage(year, notification: message.notification);
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
         default:
           return UnhandledFcmMessage(message.data);
       }
     }
   }
+
+  /// The local notification corresponding to this message, if it has one.
+  ///
+  /// Returns `null` for [UnhandledFcmMessage] and [MalformedFcmMessage], the only types
+  /// without a local notification representation.
+  ///
+  /// Types that display a server-provided title and body fall back to empty strings when
+  /// the message carries no platform notification, instead of failing.
+  LocalNotification? toLocalNotification() => switch (this) {
+    final NewMessageFcmMessage m => NewMessageNotification.fromFcmMessage(m),
+    final CorresGameUpdateFcmMessage m => CorresGameUpdateNotification.fromFcmMessage(m),
+    final CorresChallengeCreateFcmMessage m => CorresChallengeCreatedNotification.fromFcmMessage(m),
+    final CorresChallengeAcceptFcmMessage m => CorresChallengeAcceptedNotification.fromFcmMessage(
+      m,
+    ),
+    final BroadcastRoundFcmMessage m => BroadcastRoundNotification.fromFcmMessage(m),
+    final BroadcastPlayerFollowFcmMessage m => BroadcastPlayerFollowNotification.fromFcmMessage(m),
+    final RecapFcmMessage m => RecapNotification.fromFcmMessage(m),
+    UnhandledFcmMessage() || MalformedFcmMessage() => null,
+  };
 }
 
 /// An [FcmMessage] that represents a new message in a private conversation.
 @immutable
-class NewMessageFcmMessage extends FcmMessage {
-  const NewMessageFcmMessage(this.conversationId, {required this.notification});
-
-  final UserId conversationId;
-
-  @override
-  final RemoteNotification? notification;
-
+class const NewMessageFcmMessage(
+  final UserId conversationId, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage {
   @override
   String toString() => 'NewMessageFcmMessage(conversationId: $conversationId)';
 }
 
 /// An [FcmMessage] that represents a correspondence game update.
 @immutable
-class CorresGameUpdateFcmMessage extends FcmMessage {
-  const CorresGameUpdateFcmMessage(this.fullId, {required this.game, required this.notification});
+class const CorresGameUpdateFcmMessage(
+  final GameFullId fullId, {
+  required final PlayableGame? game,
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
-  final GameFullId fullId;
-  final PlayableGame? game;
-
-  @override
-  final RemoteNotification? notification;
-}
-
-/// An [FcmMessage] sent when a challenge is created.
+/// An [FcmMessage] sent when a correspondence challenge is created.
+///
+/// The server sends it for any challenge without a clock (correspondence or unlimited), never for
+/// real time challenges.
 @immutable
-class ChallengeCreateFcmMessage extends FcmMessage {
-  const ChallengeCreateFcmMessage(this.id, {required this.notification});
+class const CorresChallengeCreateFcmMessage(
+  final ChallengeId id, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
-  final ChallengeId id;
-
-  @override
-  final RemoteNotification? notification;
-}
-
-/// An [FcmMessage] sent when a challenge is accepted.
+/// An [FcmMessage] sent when a correspondence challenge is accepted.
+///
+/// The server sends it for any challenge without a clock (correspondence or unlimited), never for
+/// real time challenges, and only when the challenger plays white.
 @immutable
-class ChallengeAcceptFcmMessage extends FcmMessage {
-  const ChallengeAcceptFcmMessage(this.id, this.fullId, {required this.notification});
-
-  final ChallengeId id;
-  final GameFullId fullId;
-
-  @override
-  final RemoteNotification? notification;
-}
+class const CorresChallengeAcceptFcmMessage(
+  final ChallengeId id,
+  final GameFullId fullId, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
 /// An [FcmMessage] sent when a broadcast round a user subscribed to starts.
 @immutable
-class BroadcastRoundFcmMessage extends FcmMessage {
-  const BroadcastRoundFcmMessage(this.roundId, {required this.notification});
-
-  final BroadcastRoundId roundId;
-
-  @override
-  final RemoteNotification? notification;
-}
+class const BroadcastRoundFcmMessage(
+  final BroadcastRoundId roundId, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
 /// An [FcmMessage] sent when a followed player starts a broadcast game.
 @immutable
-class BroadcastPlayerFollowFcmMessage extends FcmMessage {
-  const BroadcastPlayerFollowFcmMessage(
-    this.roundId,
-    this.gameId,
-    this.pov, {
-    required this.notification,
-  });
+class const BroadcastPlayerFollowFcmMessage(
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final Side pov, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final Side pov;
-
-  @override
-  final RemoteNotification? notification;
-}
+/// An [FcmMessage] sent when the year-end recap is ready.
+@immutable
+class const RecapFcmMessage(
+  final int year, {
+  @override required final RemoteNotification? notification,
+}) extends FcmMessage;
 
 /// An [FcmMessage] that could not be parsed.
 @immutable
-class MalformedFcmMessage extends FcmMessage {
-  const MalformedFcmMessage(this.data);
-
-  final Map<String, dynamic> data;
-
+class const MalformedFcmMessage(final Map<String, dynamic> data) extends FcmMessage {
   @override
   RemoteNotification? get notification => null;
 }
 
 /// An [FcmMessage] that is not handled by the application.
 @immutable
-class UnhandledFcmMessage extends FcmMessage {
-  const UnhandledFcmMessage(this.data);
-
-  final Map<String, dynamic> data;
-
+class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMessage {
   @override
   RemoteNotification? get notification => null;
 }
@@ -234,27 +283,39 @@ class UnhandledFcmMessage extends FcmMessage {
 
 /// A notification shown to the user from the platform's notification system.
 @immutable
-sealed class LocalNotification {
-  const LocalNotification();
-
+sealed class const LocalNotification() {
   /// The unique identifier of the notification.
   int get id;
+
+  /// The channel of the notification.
+  NotificationChannel get channel;
 
   /// The channel identifier of the notification.
   ///
   /// Corresponds to [AndroidNotificationDetails.channelId] for android and
   /// [DarwinNotificationDetails.threadIdentifier] for iOS.
-  ///
-  /// It must match the channel identifier of the notification details.
-  String get channelId;
+  String get channelId => channel.name;
+
+  /// The Android details of the notification on its [channel].
+  AndroidNotificationDetails _androidDetails(
+    AppLocalizations l10n, {
+    bool autoCancel = true,
+    List<AndroidNotificationAction>? actions,
+  }) => AndroidNotificationDetails(
+    channel.name,
+    channel.label(l10n),
+    importance: channel.importance,
+    priority: channel.priority,
+    autoCancel: autoCancel,
+    actions: actions,
+  );
 
   /// The discriminator used to reconstruct the concrete notification type from its payload.
   ///
-  /// Defaults to [channelId], which is enough as long as a channel carries a single notification
-  /// type. Types sharing a channel with another type must override this with a unique value.
+  /// It is unique to each type, unlike [channel], which can be shared or set by the server.
   ///
   /// See [LocalNotification.fromJson].
-  String get payloadType => channelId;
+  String get payloadType;
 
   /// The localized title of the notification.
   String title(AppLocalizations l10n);
@@ -281,7 +342,7 @@ sealed class LocalNotification {
   NotificationDetails details(AppLocalizations l10n);
 
   /// Retrives a local notification from a JSON payload.
-  factory LocalNotification.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     final type = json['channel'] as String;
     switch (type) {
       case 'corresGameUpdate':
@@ -293,15 +354,17 @@ sealed class LocalNotification {
       case 'newMessage':
         return NewMessageNotification.fromJson(json);
       case 'challengeAccept':
-        return ChallengeAcceptedNotification.fromJson(json);
+        return CorresChallengeAcceptedNotification.fromJson(json);
       case 'challengeCreate':
-        return ChallengeCreatedNotification.fromJson(json);
+        return CorresChallengeCreatedNotification.fromJson(json);
       case 'announce':
         return AnnounceNotification.fromJson(json);
       case 'broadcastRound':
         return BroadcastRoundNotification.fromJson(json);
       case 'broadcastPlayerFollow':
         return BroadcastPlayerFollowNotification.fromJson(json);
+      case 'recap':
+        return RecapNotification.fromJson(json);
       default:
         throw ArgumentError('Unknown notification payload type: $type');
     }
@@ -309,12 +372,8 @@ sealed class LocalNotification {
 }
 
 /// A notification show to the user when they are banned temporarily from playing.
-class PlaybanNotification extends LocalNotification {
-  const PlaybanNotification(this.playban);
-
-  final TemporaryBan playban;
-
-  factory PlaybanNotification.fromJson(Map<String, dynamic> json) {
+class const PlaybanNotification(final TemporaryBan playban) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final p = pick(json).required();
     final playban = TemporaryBan(
       date: p('date').asDateTimeFromMillisecondsOrThrow(),
@@ -324,7 +383,10 @@ class PlaybanNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => 'playban';
+  NotificationChannel get channel => .playban;
+
+  @override
+  String get payloadType => 'playban';
 
   @override
   int get id => playban.date.toIso8601String().hashCode;
@@ -343,13 +405,7 @@ class PlaybanNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      'playban',
-      importance: Importance.max,
-      priority: Priority.max,
-      autoCancel: false,
-    ),
+    android: _androidDetails(l10n, autoCancel: false),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -359,23 +415,19 @@ class PlaybanNotification extends LocalNotification {
 /// This notification is shown when a new message is received in a private conversation.
 /// It is created from a [NewMessageFcmMessage] and contains the conversation ID. The title and
 /// message are the same as the title and body of the FCM message's [RemoteNotification].
-class NewMessageNotification extends LocalNotification {
-  const NewMessageNotification(this.conversationId, String title, String message)
-    : _title = title,
-      _message = message;
-
-  final UserId conversationId;
-  final String _title;
-  final String _message;
-
-  factory NewMessageNotification.fromJson(Map<String, dynamic> json) {
+class const NewMessageNotification(
+  final UserId conversationId,
+  final String _title,
+  final String _message,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final conversationId = UserId.fromJson(json['conversationId'] as String);
     final title = json['title'] as String;
     final message = json['message'] as String;
     return NewMessageNotification(conversationId, title, message);
   }
 
-  factory NewMessageNotification.fromFcmMessage(NewMessageFcmMessage message) {
+  factory fromFcmMessage(NewMessageFcmMessage message) {
     return NewMessageNotification(
       message.conversationId,
       message.notification?.title ?? '',
@@ -384,7 +436,10 @@ class NewMessageNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => 'newMessage';
+  NotificationChannel get channel => .newMessage;
+
+  @override
+  String get payloadType => 'newMessage';
 
   @override
   int get id => conversationId.hashCode;
@@ -404,13 +459,7 @@ class NewMessageNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyInboxMsg,
-      importance: Importance.max,
-      priority: Priority.high,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -422,31 +471,29 @@ class NewMessageNotification extends LocalNotification {
 ///
 /// Fields [title] and [body] are dynamic and part of the payload because they
 /// are generated server side and are included in the FCM message's [RemoteMessage.notification] field.
-class CorresGameUpdateNotification extends LocalNotification {
-  const CorresGameUpdateNotification(this.fullId, String title, String body)
-    : _title = title,
-      _body = body;
-
-  final GameFullId fullId;
-
-  final String _title;
-  final String _body;
-
-  factory CorresGameUpdateNotification.fromJson(Map<String, dynamic> json) {
+class const CorresGameUpdateNotification(
+  final GameFullId fullId,
+  final String _title,
+  final String _body,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final gameId = GameFullId.fromJson(json['fullId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
     return CorresGameUpdateNotification(gameId, title, body);
   }
 
-  factory CorresGameUpdateNotification.fromFcmMessage(CorresGameUpdateFcmMessage message) {
+  factory fromFcmMessage(CorresGameUpdateFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
     return CorresGameUpdateNotification(message.fullId, title, body);
   }
 
   @override
-  String get channelId => 'corresGameUpdate';
+  NotificationChannel get channel => .corresGameUpdate;
+
+  @override
+  String get payloadType => 'corresGameUpdate';
 
   @override
   int get id => fullId.hashCode;
@@ -466,45 +513,39 @@ class CorresGameUpdateNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
 
-/// A notification for a challenge acceptance.
+/// A notification for the acceptance of a correspondence challenge.
 ///
-/// This notification is shown when a challenge is accepted on the server.
-class ChallengeAcceptedNotification extends LocalNotification {
-  const ChallengeAcceptedNotification(this.fullId, String title, String body)
-    : _title = title,
-      _body = body;
-
-  final GameFullId fullId;
-
-  final String _title;
-  final String _body;
-
-  factory ChallengeAcceptedNotification.fromJson(Map<String, dynamic> json) {
+/// Shown from a [CorresChallengeAcceptFcmMessage]. The server only sends it for challenges without
+/// a clock (correspondence or unlimited), and only when the challenger plays white: otherwise the
+/// opponent moves first and the challenger gets a [CorresGameUpdateNotification] instead.
+class const CorresChallengeAcceptedNotification(
+  final GameFullId fullId,
+  final String _title,
+  final String _body,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final gameId = GameFullId.fromJson(json['fullId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
-    return ChallengeAcceptedNotification(gameId, title, body);
+    return CorresChallengeAcceptedNotification(gameId, title, body);
   }
 
-  factory ChallengeAcceptedNotification.fromFcmMessage(ChallengeAcceptFcmMessage message) {
+  factory fromFcmMessage(CorresChallengeAcceptFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeAcceptedNotification(message.fullId, title, body);
+    return CorresChallengeAcceptedNotification(message.fullId, title, body);
   }
 
   @override
-  String get channelId => 'challengeAccept';
+  NotificationChannel get channel => .corresChallengeAccept;
+
+  @override
+  String get payloadType => 'challengeAccept';
 
   @override
   int get id => fullId.hashCode;
@@ -524,46 +565,40 @@ class ChallengeAcceptedNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
 
-/// A notification for a challenge creation.
+/// A notification for the creation of a correspondence challenge.
 ///
-/// This notification is shown when a challenge is created on the server while the app is in the background.
-/// If the app is in the foreground, challenges are handled by WebSocket and a [ChallengeNotification] is shown instead.
-class ChallengeCreatedNotification extends LocalNotification {
-  const ChallengeCreatedNotification(this.challengeId, String title, String body)
-    : _title = title,
-      _body = body;
-
-  final ChallengeId challengeId;
-
-  final String _title;
-  final String _body;
-
-  factory ChallengeCreatedNotification.fromJson(Map<String, dynamic> json) {
+/// Shown from a [CorresChallengeCreateFcmMessage] received while the app is in the background. The
+/// server only sends it for challenges without a clock (correspondence or unlimited). In the
+/// foreground, incoming challenges of any kind come through the socket and a
+/// [ChallengeNotification] is shown instead.
+class const CorresChallengeCreatedNotification(
+  final ChallengeId challengeId,
+  final String _title,
+  final String _body,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final challengeId = ChallengeId.fromJson(json['challengeId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
-    return ChallengeCreatedNotification(challengeId, title, body);
+    return CorresChallengeCreatedNotification(challengeId, title, body);
   }
 
-  factory ChallengeCreatedNotification.fromFcmMessage(ChallengeCreateFcmMessage message) {
+  factory fromFcmMessage(CorresChallengeCreateFcmMessage message) {
     final title = message.notification?.title ?? '';
     final body = message.notification?.body ?? '';
-    return ChallengeCreatedNotification(message.id, title, body);
+    return CorresChallengeCreatedNotification(message.id, title, body);
   }
 
   @override
-  String get channelId => 'challengeCreate';
+  NotificationChannel get channel => .corresChallengeCreate;
+
+  @override
+  String get payloadType => 'challengeCreate';
 
   @override
   int get id => challengeId.hashCode;
@@ -583,13 +618,7 @@ class ChallengeCreatedNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyGameEvent,
-      importance: Importance.high,
-      priority: Priority.defaultPriority,
-      autoCancel: true,
-    ),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -599,23 +628,19 @@ class ChallengeCreatedNotification extends LocalNotification {
 /// There can only be one announce notification at a time. It is shown when the server
 /// sends an announce message through the WebSocket, and cancelled when the server
 /// clears it or the optional countdown date is reached.
-class AnnounceNotification extends LocalNotification {
-  const AnnounceNotification(this.message, {this.date});
-
-  final String message;
+class const AnnounceNotification(
+  final String message, {
 
   /// Optional date shown as a relative time in the notification body.
-  final DateTime? date;
-
+  final DateTime? date,
+}) extends LocalNotification {
   static final int notificationId = 'announce'.hashCode;
-
-  static const _channelId = 'announce';
 
   static const dismissActionId = 'dismiss';
 
   static const darwinCategoryId = 'announce-notification';
 
-  factory AnnounceNotification.fromJson(Map<String, dynamic> json) {
+  factory fromJson(Map<String, dynamic> json) {
     final dateStr = json['date'] as String?;
     return AnnounceNotification(
       json['message'] as String,
@@ -635,7 +660,10 @@ class AnnounceNotification extends LocalNotification {
   int get id => notificationId;
 
   @override
-  String get channelId => _channelId;
+  NotificationChannel get channel => .announce;
+
+  @override
+  String get payloadType => 'announce';
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -651,11 +679,8 @@ class AnnounceNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      _channelId,
-      'Lichess Announcements',
-      importance: Importance.high,
-      priority: Priority.high,
+    android: _androidDetails(
+      l10n,
       autoCancel: false,
       actions: [
         AndroidNotificationAction(
@@ -665,8 +690,8 @@ class AnnounceNotification extends LocalNotification {
         ),
       ],
     ),
-    iOS: const DarwinNotificationDetails(
-      threadIdentifier: _channelId,
+    iOS: DarwinNotificationDetails(
+      threadIdentifier: channelId,
       categoryIdentifier: darwinCategoryId,
     ),
   );
@@ -674,20 +699,20 @@ class AnnounceNotification extends LocalNotification {
 
 /// A notification for a received challenge.
 ///
-/// This notification is shown when a challenge is received from the server through
-/// the web socket.
-class ChallengeNotification extends LocalNotification {
-  const ChallengeNotification(this.challenge);
-
-  final Challenge challenge;
-
-  factory ChallengeNotification.fromJson(Map<String, dynamic> json) {
+/// Shown when a challenge, real time or correspondence, is received from the server through the
+/// socket while the app is in the foreground. It is the only notification for real time
+/// challenges: the server sends no FCM message for them.
+class const ChallengeNotification(final Challenge challenge) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final challenge = Challenge.fromJson(json['challenge'] as Map<String, dynamic>);
     return ChallengeNotification(challenge);
   }
 
   @override
-  String get channelId => 'challenge';
+  NotificationChannel get channel => .challenge;
+
+  @override
+  String get payloadType => 'challenge';
 
   @override
   int get id => challenge.id.value.hashCode;
@@ -703,11 +728,8 @@ class ChallengeNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(
-      channelId,
-      l10n.preferencesNotifyChallenge,
-      importance: Importance.max,
-      priority: Priority.high,
+    android: _androidDetails(
+      l10n,
       autoCancel: false,
       actions: <AndroidNotificationAction>[
         if (challenge.variant.isPlaySupported)
@@ -775,30 +797,22 @@ class ChallengeNotification extends LocalNotification {
       );
 }
 
-/// The Android notification channel shared by all broadcast notifications.
-const _kBroadcastChannelId = 'broadcast';
-
 /// A notification for when a broadcast round starts.
 ///
 /// This notification is shown when a broadcast round the user subscribed to starts.
-class BroadcastRoundNotification extends LocalNotification {
-  const BroadcastRoundNotification(this.roundId, String title, String body)
-    : _title = title,
-      _body = body;
-
-  final BroadcastRoundId roundId;
-
-  final String _title;
-  final String _body;
-
-  factory BroadcastRoundNotification.fromJson(Map<String, dynamic> json) {
+class const BroadcastRoundNotification(
+  final BroadcastRoundId roundId,
+  final String _title,
+  final String _body,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
     final title = json['title'] as String;
     final body = json['body'] as String;
     return BroadcastRoundNotification(roundId, title, body);
   }
 
-  factory BroadcastRoundNotification.fromFcmMessage(BroadcastRoundFcmMessage broadcast) {
+  factory fromFcmMessage(BroadcastRoundFcmMessage broadcast) {
     return BroadcastRoundNotification(
       broadcast.roundId,
       broadcast.notification?.title ?? '',
@@ -807,7 +821,7 @@ class BroadcastRoundNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => _kBroadcastChannelId;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastRound';
@@ -830,7 +844,7 @@ class BroadcastRoundNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
 }
@@ -838,24 +852,14 @@ class BroadcastRoundNotification extends LocalNotification {
 /// A notification for when a followed player starts a broadcast game.
 ///
 /// This notification is shown when a FIDE player followed by the user begins a game in a broadcast.
-class BroadcastPlayerFollowNotification extends LocalNotification {
-  const BroadcastPlayerFollowNotification(
-    this.roundId,
-    this.gameId,
-    this.pov,
-    String title,
-    String body,
-  ) : _title = title,
-      _body = body;
-
-  final BroadcastRoundId roundId;
-  final BroadcastGameId gameId;
-  final Side pov;
-
-  final String _title;
-  final String _body;
-
-  factory BroadcastPlayerFollowNotification.fromJson(Map<String, dynamic> json) {
+class const BroadcastPlayerFollowNotification(
+  final BroadcastRoundId roundId,
+  final BroadcastGameId gameId,
+  final Side pov,
+  final String _title,
+  final String _body,
+) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
     final roundId = BroadcastRoundId(json['roundId'] as String);
     final gameId = BroadcastGameId(json['gameId'] as String);
     final pov = Side.values.byName(json['pov'] as String);
@@ -864,9 +868,7 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
     return BroadcastPlayerFollowNotification(roundId, gameId, pov, title, body);
   }
 
-  factory BroadcastPlayerFollowNotification.fromFcmMessage(
-    BroadcastPlayerFollowFcmMessage broadcast,
-  ) {
+  factory fromFcmMessage(BroadcastPlayerFollowFcmMessage broadcast) {
     return BroadcastPlayerFollowNotification(
       broadcast.roundId,
       broadcast.gameId,
@@ -877,7 +879,7 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
   }
 
   @override
-  String get channelId => _kBroadcastChannelId;
+  NotificationChannel get channel => .broadcast;
 
   @override
   String get payloadType => 'broadcastPlayerFollow';
@@ -902,7 +904,43 @@ class BroadcastPlayerFollowNotification extends LocalNotification {
 
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
-    android: AndroidNotificationDetails(channelId, l10n.broadcastBroadcasts),
+    android: _androidDetails(l10n),
     iOS: DarwinNotificationDetails(threadIdentifier: channelId),
   );
+}
+
+/// A notification for the year-end recap
+///
+/// This notification is shown when the year-end recap is received from the server
+class const RecapNotification(final int year) extends LocalNotification {
+  factory fromJson(Map<String, dynamic> json) {
+    final year = json['year'] as int;
+    return RecapNotification(year);
+  }
+
+  factory fromFcmMessage(RecapFcmMessage message) {
+    return RecapNotification(message.year);
+  }
+
+  @override
+  NotificationChannel get channel => .recap;
+
+  @override
+  String get payloadType => 'recap';
+
+  @override
+  int get id => year.hashCode;
+
+  @override
+  Map<String, dynamic> get _concretePayload => {'year': year};
+
+  @override
+  String title(AppLocalizations l10n) => l10n.recapRecapReady(year.toString());
+
+  @override
+  String body(AppLocalizations l10n) => l10n.recapAwaitQuestion;
+
+  @override
+  NotificationDetails details(AppLocalizations l10n) =>
+      NotificationDetails(android: _androidDetails(l10n));
 }

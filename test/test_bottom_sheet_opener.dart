@@ -2,11 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// A simple wrapper widget that shows a button to open a bottom sheet via the given [builder].
-class TestBottomSheetOpener extends StatelessWidget {
-  const TestBottomSheetOpener({required this.builder});
-
-  final WidgetBuilder builder;
-
+class const TestBottomSheetOpener({required final WidgetBuilder builder}) extends StatelessWidget {
   static Future<void> openBottomSheet(WidgetTester tester) async {
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
