@@ -56,6 +56,7 @@ void main() {
       await tester.tap(accept);
       expect(cancelled, 1);
       expect(accepted, 1);
+      await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
       await expectLayoutGolden(
         find.byType(ConfirmMove),

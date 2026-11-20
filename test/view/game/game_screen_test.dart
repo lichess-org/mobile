@@ -246,6 +246,7 @@ void main() {
         await tester.tap(find.byTooltip(l10n.cancel));
         expect(confirmations, 1);
         expect(cancellations, 1);
+        await tester.pumpAndSettle();
         await expectLayoutGolden(
           find.byType(GameLayout),
           '../../../build/compact-layout/localized-confirmation-$locale-$textScale',

@@ -102,6 +102,7 @@ void main() {
           await tester.tap(button);
         }
         expect(taps, 6);
+        await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         await expectLayoutGolden(
           find.byType(BottomBar),
