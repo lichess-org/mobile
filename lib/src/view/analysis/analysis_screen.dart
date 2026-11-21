@@ -22,6 +22,8 @@ import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/analysis/conditional_premoves.dart';
 import 'package:lichess_mobile/src/view/analysis/game_analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_analysis.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_division.dart';
 import 'package:lichess_mobile/src/view/analysis/retro_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/server_analysis.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -240,7 +242,8 @@ class _TabbedBodyState() extends State<_TabbedBody> with SingleTickerProviderSta
     tabs = [
       AnalysisTab.explorer,
       AnalysisTab.moves,
-      if (widget.options case ArchivedGame()) AnalysisTab.summary,
+      if (widget.options case ArchivedGame() || Pgn(isComputerAnalysisAllowed: true))
+        AnalysisTab.summary,
       if (widget.showMoveTimes) AnalysisTab.moveTimes,
       if (widget.options case ActiveCorrespondenceGame()) AnalysisTab.conditionalPremoves,
     ];
@@ -291,6 +294,7 @@ class const _Body({
     final isEngineAvailable = analysisState.isEngineAvailable(enginePrefs);
     final currentNode = analysisState.currentNode;
     final pov = analysisState.pov;
+    final gameDivision = analysisState.division ?? inferLocalGameDivision(analysisState.root);
 
     Widget? boardFooter;
     Widget? boardHeader;
@@ -410,7 +414,7 @@ class const _Body({
               acplChartParams: analysisState.acplChartData != null
                   ? (
                       acplChartData: analysisState.acplChartData!,
-                      division: analysisState.division,
+                      division: gameDivision,
                       rootPly: analysisState.root.position.ply,
                       currentNodePly: analysisState.currentPosition.ply,
                       isOnMainline: analysisState.isOnMainline,
@@ -421,6 +425,8 @@ class const _Body({
                   : null,
               onRequestServerAnalysis: ref.read(ctrlProvider.notifier).requestServerAnalysis,
             ),
+          if (options case Pgn(isComputerAnalysisAllowed: true))
+            LocalGameAnalysis(options: options, root: analysisState.root),
           if (tabs.contains(AnalysisTab.moveTimes))
             ListView(
               children: [
@@ -432,7 +438,7 @@ class const _Body({
                   params: (
                     moveTimes: analysisState.chartMoveTimes,
                     clocks: analysisState.chartClocks,
-                    division: analysisState.division,
+                    division: gameDivision,
                     rootPly: analysisState.root.position.ply,
                     currentNodePly: analysisState.currentPosition.ply,
                     isOnMainline: analysisState.isOnMainline,

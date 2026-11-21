@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 class const GameAnalysisBoard({
   required final AnalysisOptions options,
@@ -49,6 +52,32 @@ class _GameAnalysisBoardState()
       analysisState.isComputerAnalysisAllowed &&
       analysisState.isServerAnalysisEnabled &&
       analysisPrefs.showAnnotations;
+
+  @override
+  Annotation? get localMoveAnnotation {
+    final prefs = ref.watch(analysisPreferencesProvider);
+    if (!prefs.showLocalMoveVerdicts || !analysisState.isOnMainline) return null;
+
+    final path = analysisState.currentPath;
+    if (path.isEmpty) return null;
+    final currentPly = path.size - 1;
+    final evaluations = ref.watch(
+      localGameAnalysisSessionProvider(
+        localGameAnalysisSessionKey(widget.options.contextId, analysisState.root),
+      ),
+    );
+    if (evaluations == null || currentPly + 1 >= evaluations.length) return null;
+
+    final branch = analysisState.root.branchesOn(path).lastOrNull;
+    if (branch == null) return null;
+    final verdict = localMoveVerdictFor(
+      before: evaluations[currentPly],
+      after: evaluations[currentPly + 1],
+      branch: branch,
+    );
+    final nag = localMoveVerdictNagFor(verdict);
+    return nag == null ? null : makeAnnotation([nag]);
+  }
 
   @override
   void onUserMove(Move move) => ref

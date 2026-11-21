@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -147,6 +148,12 @@ class const DebouncedPgnTreeView({
   /// Whether to show NAG annotations like '!' and '??'.
   final bool shouldShowAnnotations = true,
 
+  /// Local move-quality annotations keyed by their mainline path.
+  final IMap<UciPath, int>? localMoveAnnotations,
+
+  /// Local evaluations after each move, keyed by their mainline path.
+  final IMap<UciPath, ExternalEval>? localMoveEvaluations,
+
   /// Whether to show comments associated with the moves.
   final bool shouldShowComments = true,
 
@@ -247,6 +254,8 @@ class _DebouncedPgnTreeViewState() extends ConsumerState<DebouncedPgnTreeView> {
       params: (
         shouldShowComputerAnalysis: widget.shouldShowComputerAnalysis,
         shouldShowAnnotations: widget.shouldShowAnnotations,
+        localMoveAnnotations: widget.localMoveAnnotations,
+        localMoveEvaluations: widget.localMoveEvaluations,
         shouldShowComments: widget.shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
@@ -282,6 +291,12 @@ typedef _PgnTreeViewParams = ({
 
   /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
+
+  /// Local move-quality annotations keyed by their mainline path.
+  IMap<UciPath, int>? localMoveAnnotations,
+
+  /// Local evaluations after each move, keyed by their mainline path.
+  IMap<UciPath, ExternalEval>? localMoveEvaluations,
 
   /// Whether to show comments associated with the moves.
   bool shouldShowComments,
@@ -466,6 +481,8 @@ class _PgnTreeViewState() extends State<_PgnTreeView> {
           oldWidget.params.shouldShowComputerAnalysis != widget.params.shouldShowComputerAnalysis ||
           oldWidget.params.shouldShowComments != widget.params.shouldShowComments ||
           oldWidget.params.shouldShowAnnotations != widget.params.shouldShowAnnotations ||
+          oldWidget.params.localMoveAnnotations != widget.params.localMoveAnnotations ||
+          oldWidget.params.localMoveEvaluations != widget.params.localMoveEvaluations ||
           oldWidget.params.displayMode != widget.params.displayMode,
     );
   }
@@ -1175,17 +1192,19 @@ class const InlineMove({
     final san = branch.sanMove.san.startsWith('P')
         ? branch.sanMove.san.substring(1)
         : branch.sanMove.san;
-    final moveWithNag =
-        san +
-        (branch.nags != null && params.shouldShowAnnotations
-            ? moveAnnotationChar(branch.nags!)
-            : '');
+    final visibleNags = params.shouldShowAnnotations && branch.nags?.isNotEmpty == true
+        ? branch.nags
+        : switch (params.localMoveAnnotations?[path]) {
+            final localNag? => [localNag],
+            null => null,
+          };
+    final moveWithNag = san + (visibleNags != null ? moveAnnotationChar(visibleNags) : '');
 
-    final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
+    final nag = visibleNags?.firstOrNull;
     final ply = branch.position.ply;
 
     final eval = params.shouldShowComputerAnalysis && canShowEval
-        ? branch.eval ?? branch.serverEval
+        ? (params.localMoveEvaluations?[path] ?? branch.eval ?? branch.serverEval)
         : null;
 
     final isPremove =
