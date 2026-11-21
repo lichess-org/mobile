@@ -241,6 +241,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
     return OfflineComputerGameState.initial(
       opponentSpec: const StockfishOpponentSpec(StockfishLevel.defaultLevel),
       playerSide: Side.white,
+      humanPlayer: Player(onGame: true, user: ref.read(authControllerProvider)?.user),
     );
   }
 
@@ -265,6 +266,7 @@ class OfflineComputerGameController() extends Notifier<OfflineComputerGameState>
       variant: variant,
       initialFen: initialFen,
       timeIncrement: effectiveTimeIncrement,
+      humanPlayer: Player(onGame: true, user: ref.read(authControllerProvider)?.user),
     );
     _clock.setupClock(effectiveTimeIncrement);
 
@@ -896,6 +898,7 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
     bool practiceMode = false,
     String? initialFen,
     TimeIncrement timeIncrement = const TimeIncrement.infinite(),
+    Player humanPlayer = const Player(onGame: true),
   }) {
     final Position position;
     final Variant effectiveVariant;
@@ -937,7 +940,7 @@ sealed class const OfflineComputerGameState._() with _$OfflineComputerGameState 
         opponentSpec: opponentSpec,
         casual: casual,
         practiceMode: practiceMode,
-        humanPlayer: const Player(onGame: true),
+        humanPlayer: humanPlayer,
         enginePlayer: enginePlayerFor(opponentSpec),
       ),
     );
