@@ -28,12 +28,15 @@
   <string name="swissTournamentOverview">Një turne Zviceran në të cilin mund të marrin pjesë vetëm lojtarët e ekipit tuaj</string>
   <string name="teamUpdates">Përditësime për ekipin</string>
   <string name="subToTeamUpdates">Pajtohuni për përdtësime për ekipin</string>
+  <string name="teamEvents">Vperimtari ekipi</string>
+  <string name="upcomingTeamEvents">Veprimtari ekipi së afërmi</string>
   <string name="teamsIlead">Ekipet e drejtuara nga unë</string>
   <string name="leadersChat">Bisedë drejtuesish</string>
   <string name="introduction">Hyrje</string>
   <string name="entryCode">Kod hyrjeje i ekipit</string>
   <string name="entryCodeDescriptionForLeader">(Opsionale) Një kod hyrjeje që anëtarët e rinj duhet ta dinë për të marrë pjesë në këtë ekip.</string>
   <string name="incorrectEntryCode">Kod hyrjeje i pasaktë.</string>
+  <string name="forumLabel">Forum ekipi</string>
   <string name="teamAlreadyExists">Ky ekip ekziston tashmë.</string>
   <string name="upcomingTournaments">Turne s’afërmi</string>
   <string name="completedTourns">Turne të plotësuar</string>
