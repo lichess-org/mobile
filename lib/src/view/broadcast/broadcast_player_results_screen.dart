@@ -140,7 +140,9 @@ class const BroadcastPlayerResultsScreen({
                 override.state = newValue;
                 try {
                   await ref.read(broadcastRepositoryProvider).setFollowingPlayer(fideId, newValue);
-                } catch (_) {
+                } catch (e, st) {
+                  // TODO: remove, temporary logging to debug FIDE player follow errors.
+                  debugPrint('Could not update the follow status of $fideId: $e\n$st');
                   if (!context.mounted) return;
                   override.state = !newValue;
                   showSnackBar(

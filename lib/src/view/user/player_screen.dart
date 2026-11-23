@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/relation/online_friends.dart';
@@ -6,11 +7,13 @@ import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/fide/fide_players_screen.dart';
 import 'package:lichess_mobile/src/view/relation/friend_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/online_bots_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_or_profile_screen.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_search_bar.dart';
 import 'package:material_ui/material_ui.dart';
@@ -67,6 +70,19 @@ class const _Body() extends ConsumerWidget {
         if (authUser != null) OnlineFriendsWidget(onlineFriends: onlineFriends),
         OnlineBotsWidget(onlineBots: onlineBots),
         RatingPrefAware(child: LeaderboardWidget(top1: top1)),
+        ListSection(
+          hasLeading: true,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.public),
+              title: Text(context.l10n.broadcastFidePlayers),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () => Navigator.of(context).push(FidePlayersScreen.buildRoute()),
+            ),
+          ],
+        ),
       ],
     );
   }
