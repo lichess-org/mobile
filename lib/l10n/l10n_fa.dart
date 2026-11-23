@@ -74,6 +74,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileClearButton => 'پاکسازی';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'این رمز پس از ۵ دقیقه منقضی می‌شود و فقط یک بار می‌تواند استفاده شود.';
 
   @override

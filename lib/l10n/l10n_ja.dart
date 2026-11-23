@@ -74,6 +74,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileClearButton => 'クリア';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'コードは 5 分後に期限切れになり、使えるのは一度だけです。';
 
   @override

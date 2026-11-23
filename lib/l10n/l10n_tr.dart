@@ -74,6 +74,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileClearButton => 'Temizle';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kodun geçerlilik süresi 5 dakikadır ve yalnızca bir kez kullanılabilir.';
 
   @override

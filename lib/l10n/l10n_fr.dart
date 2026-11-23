@@ -74,6 +74,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileClearButton => 'Effacer';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Le code expire après 5 minutes et ne peut être utilisé qu\'une seule fois.';
 
   @override

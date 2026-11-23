@@ -74,6 +74,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileClearButton => 'Ачысціць';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Тэрмін дзеяння кода — 5 хвілін. Код можна выкарыстаць толькі адзін раз.';
 
   @override

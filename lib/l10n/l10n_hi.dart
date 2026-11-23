@@ -74,6 +74,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileClearButton => 'सब हटाएं';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'कोड 5 मिनट बाद अमान्य हो जायेगा, और केवल एक बार इस्तेमाल हो सकता है।';
 
   @override

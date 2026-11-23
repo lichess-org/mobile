@@ -74,6 +74,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileClearButton => 'Очистити';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Код діє протягом 5 хвилин і може бути використаний лише один раз.';
 
   @override

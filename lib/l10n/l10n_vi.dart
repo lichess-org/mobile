@@ -74,6 +74,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileClearButton => 'Xóa';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Mã sẽ hết hạn sau 5 phút và chỉ có thể được sử dụng một lần.';
 
   @override

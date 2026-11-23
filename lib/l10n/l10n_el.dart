@@ -74,6 +74,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileClearButton => 'Εκκαθάριση';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Ο κωδικός λήγει μετά από 5 λεπτά και μπορεί να χρησιμοποιηθεί μόνο μία φορά.';
 
   @override
