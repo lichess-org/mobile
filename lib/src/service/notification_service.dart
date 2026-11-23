@@ -47,6 +47,7 @@ typedef ParsedLocalNotification = (NotificationResponse response, LocalNotificat
 /// It broadcasts the parsed incoming FCM messages to the [fcmMessageStream].
 ///
 /// It also listens for notification interaction responses and dispatches them to the [responseStream].
+@pragma('vm:entry-point')
 class NotificationService(final Ref _ref) {
   /// The Firebase Cloud Messaging token refresh subscription.
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
