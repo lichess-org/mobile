@@ -74,6 +74,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileClearButton => 'Очистить';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Код истекает через 5 минут и может быть использован только один раз.';
 
   @override

@@ -74,6 +74,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileClearButton => 'Hapus';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kode berlaku selama 5 menit dan hanya bisa dipakai satu kali.';
 
   @override
