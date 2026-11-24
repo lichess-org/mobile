@@ -242,6 +242,7 @@ class const _TvGameBody({
               : null,
           userActionsBar: BottomBar(
             cupertinoGlass: true,
+            wrap: true,
             children: [
               BottomBarButton(
                 label: context.l10n.flipBoard,

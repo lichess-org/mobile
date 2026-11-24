@@ -127,6 +127,8 @@ class const _Body({required final Variant? initialVariant, final String? initial
 
 class _BodyState() extends ConsumerState<_Body> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnOfflineComputerScreen');
+  // Retain the previous practice comment when rotation or board flipping reparents the player.
+  final _playerKey = GlobalKey(debugLabel: 'offlineComputerPlayer');
 
   @override
   void initState() {
@@ -246,10 +248,18 @@ class _BodyState() extends ConsumerState<_Body> {
                 child: SafeArea(
                   child: GameLayout(
                     key: _boardKey,
-                    topTable: _Player(side: isBoardFlipped ? orientation : orientation.opposite),
-                    bottomTable: _Player(side: isBoardFlipped ? orientation.opposite : orientation),
+                    topTable: _Player(
+                      key: isBoardFlipped ? _playerKey : null,
+                      side: isBoardFlipped ? orientation : orientation.opposite,
+                    ),
+                    bottomTable: _Player(
+                      key: isBoardFlipped ? null : _playerKey,
+                      side: isBoardFlipped ? orientation.opposite : orientation,
+                    ),
                     topTableFlex: 1,
                     bottomTableFlex: gameState.game.practiceMode ? 2 : 1,
+                    // Practice feedback needs the extra table space on height-capped displays.
+                    portraitBoardHeightReserve: gameState.game.practiceMode ? 196.0 : 180.0,
                     orientation: variantBoardOrientation(
                       variant: gameState.game.meta.variant,
                       youAre: orientation,
@@ -349,6 +359,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
 
     return BottomBar(
       cupertinoGlass: true,
+      wrap: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,
@@ -460,7 +471,7 @@ class IsBoardFlippedNotifier() extends Notifier<bool> {
   }
 }
 
-class const _Player({required final Side side}) extends ConsumerWidget {
+class const _Player({required final Side side, super.key}) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(offlineComputerGameControllerProvider);
@@ -490,10 +501,12 @@ class const _Player({required final Side side}) extends ConsumerWidget {
                       style: TextStyle(fontWeight: .bold, color: context.lichessColors.fancy),
                     ),
                     const SizedBox(width: 5),
-                    Text(
-                      game.opponentSpec.displayName,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                      overflow: TextOverflow.ellipsis,
+                    Flexible(
+                      child: Text(
+                        game.opponentSpec.displayName,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     if (gameState.isEngineThinking) ...const [
                       SizedBox(width: 8),
@@ -695,9 +708,14 @@ class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  verdictText,
-                  style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                Tooltip(
+                  message: verdictText,
+                  child: Text(
+                    verdictText,
+                    maxLines: isShortScreen ? 1 : null,
+                    overflow: isShortScreen ? TextOverflow.ellipsis : null,
+                    style: TextStyle(fontWeight: FontWeight.w600, color: iconColor),
+                  ),
                 ),
                 ?suggestedMoveWidget,
               ],
@@ -724,9 +742,9 @@ class _PracticeCommentCardState() extends ConsumerState<_PracticeCommentCard> {
       opacity: isEvaluatingMove && gameState.practiceComment == null ? 0.5 : 1.0,
       duration: const Duration(milliseconds: 300),
       child: Container(
-        height: cardHeight,
+        constraints: BoxConstraints(minHeight: cardHeight),
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
           color: backgroundColor ?? Theme.of(context).colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(8),

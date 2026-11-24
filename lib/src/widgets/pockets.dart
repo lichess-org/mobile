@@ -34,12 +34,15 @@ class const PocketsMenu({
   /// If null, the piece assets from the current board preferences are used.
   final PieceAssets? pieceAssets,
 }) extends ConsumerWidget {
+  /// Insets around the pocket row, also used by layouts that size pockets with the board.
+  static const padding = EdgeInsets.all(8.0);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: padding,
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: const BoxDecoration(borderRadius: Styles.boardBorderRadius),

@@ -278,6 +278,7 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
 
     return BottomBar(
       cupertinoGlass: true,
+      wrap: true,
       children: [
         BottomBarButton(
           label: context.l10n.menu,

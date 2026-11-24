@@ -35,9 +35,7 @@ class _MoveListState() extends ConsumerState<MoveList> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(currentMoveKey.currentContext!, alignment: 0.5);
-      }
+      _scrollToCurrentMove(Duration.zero);
     });
   }
 
@@ -51,15 +49,20 @@ class _MoveListState() extends ConsumerState<MoveList> {
   void didUpdateWidget(covariant MoveList oldWidget) {
     super.didUpdateWidget(oldWidget);
     _debounce(() {
-      if (currentMoveKey.currentContext != null) {
-        Scrollable.ensureVisible(
-          currentMoveKey.currentContext!,
-          alignment: 0.5,
-          duration: _scrollAnimationDuration,
-          curve: Curves.easeIn,
-        );
-      }
+      _scrollToCurrentMove(_scrollAnimationDuration);
     });
+  }
+
+  void _scrollToCurrentMove(Duration duration) {
+    final moveContext = currentMoveKey.currentContext;
+    if (moveContext == null) return;
+    // Keep automatic move scrolling inside the list, not its surrounding player panel.
+    Scrollable.of(moveContext).position.ensureVisible(
+      moveContext.findRenderObject()!,
+      alignment: 0.5,
+      duration: duration,
+      curve: Curves.easeIn,
+    );
   }
 
   @override
