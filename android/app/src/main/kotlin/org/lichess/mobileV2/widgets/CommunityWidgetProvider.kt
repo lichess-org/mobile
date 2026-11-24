@@ -105,6 +105,7 @@ class CommunityWidgetProvider : AppWidgetProvider() {
     var id = ""
     var title = ""
     var link = ""
+    var fallbackLink = ""
     var imageUrl = ""
 
     var eventType = parser.eventType
@@ -113,13 +114,21 @@ class CommunityWidgetProvider : AppWidgetProvider() {
         XmlPullParser.START_TAG -> when (parser.name) {
           "entry" -> {
             inEntry = true
-            id = ""; title = ""; link = ""; imageUrl = ""
+            id = ""; title = ""; link = ""; fallbackLink = ""; imageUrl = ""
           }
 
           "id" -> if (inEntry) id = parser.nextText()
           "title" -> if (inEntry) title = parser.nextText()
-          "link" -> if (inEntry && parser.getAttributeValue(null, "rel") == "alternate") {
-            link = parser.getAttributeValue(null, "href") ?: link
+          // In Atom, a link without a rel attribute is an alternate link. Other links are kept
+          // as a fallback, like the iOS widget which uses the first link of the entry.
+          "link" -> if (inEntry) {
+            val rel = parser.getAttributeValue(null, "rel")
+            val href = parser.getAttributeValue(null, "href").orEmpty()
+            if (rel == null || rel == "alternate") {
+              if (href.isNotBlank()) link = href
+            } else if (fallbackLink.isBlank()) {
+              fallbackLink = href
+            }
           }
 
           "media:thumbnail" -> if (inEntry) {
@@ -130,7 +139,14 @@ class CommunityWidgetProvider : AppWidgetProvider() {
         XmlPullParser.END_TAG -> if (parser.name == "entry") {
           inEntry = false
           if (id.isNotBlank() && title.isNotBlank()) {
-            items.add(CommunityEntryItem(id = id, title = title, imageUrl = imageUrl, link = link))
+            items.add(
+              CommunityEntryItem(
+                id = id,
+                title = title,
+                imageUrl = imageUrl,
+                link = link.ifBlank { fallbackLink },
+              )
+            )
           }
         }
       }
@@ -162,7 +178,11 @@ class CommunityWidgetProvider : AppWidgetProvider() {
 
       remoteViews.removeAllViews(R.id.community_list)
 
-      if (items.isEmpty()) {
+      if (isKidMode) {
+        // The feed is not fetched in kid mode: show nothing rather than the "no news" message.
+        remoteViews.setViewVisibility(R.id.empty_view, View.GONE)
+        remoteViews.setViewVisibility(R.id.community_list, View.GONE)
+      } else if (items.isEmpty()) {
         remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE)
         remoteViews.setViewVisibility(R.id.community_list, View.GONE)
       } else {
@@ -225,13 +245,18 @@ class CommunityWidgetProvider : AppWidgetProvider() {
             itemViews.setViewVisibility(R.id.item_thumbnail_container, View.GONE)
           }
 
-          val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          // Without a link, tapping the entry opens the app instead of doing nothing.
+          val pendingIntent = if (item.link.isBlank()) {
+            homePendingIntent
+          } else {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link)).apply {
+              addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            PendingIntent.getActivity(
+              context, appWidgetId * 10 + index, intent,
+              PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
           }
-          val pendingIntent = PendingIntent.getActivity(
-            context, appWidgetId * 10 + index, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-          )
           itemViews.setOnClickPendingIntent(R.id.community_item_container, pendingIntent)
 
           remoteViews.addView(R.id.community_list, itemViews)
