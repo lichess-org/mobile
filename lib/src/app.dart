@@ -37,7 +37,10 @@ import 'package:lichess_mobile/src/ui_event_coordinator.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart' show usePinnedNavBar;
 import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' show GlassNavigationShell;
+import 'package:logging/logging.dart';
 import 'package:material_ui/material_ui.dart';
+
+final _logger = Logger('App');
 
 const List<String> _kAndroidKidModeWidgetProviders = [
   'org.lichess.mobileV2.widgets.CommunityWidgetProvider',
@@ -113,17 +116,20 @@ class _AppState() extends ConsumerState<Application> {
     HomeWidget.saveWidgetData<String>('lichessHost', kLichessHost);
 
     if (Platform.isIOS || Platform.isAndroid) {
-      ref.listenManual(kidModeProvider, (prev, state) {
+      ref.listenManual(kidModeProvider, (prev, state) async {
         if (state.hasValue && prev?.value != state.value) {
-          HomeWidget.saveWidgetData<bool>('isKidMode', state.value).then((_) {
-            Future.wait([
+          try {
+            await HomeWidget.saveWidgetData<bool>('isKidMode', state.value);
+            await Future.wait([
               if (Platform.isIOS)
                 for (final kind in _kIosBlogWidgetKinds) HomeWidget.updateWidget(iOSName: kind),
               if (Platform.isAndroid)
                 for (final name in _kAndroidKidModeWidgetProviders)
                   HomeWidget.updateWidget(qualifiedAndroidName: name),
             ]);
-          });
+          } catch (e, st) {
+            _logger.warning('Could not update home widgets after a kid mode change', e, st);
+          }
         }
       }, fireImmediately: true);
       ref.listenManual(boardPreferencesProvider, (prev, state) {

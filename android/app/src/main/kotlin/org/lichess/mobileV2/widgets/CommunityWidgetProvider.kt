@@ -76,9 +76,10 @@ class CommunityWidgetProvider : AppWidgetProvider() {
     updateWidget(context, appWidgetManager, appWidgetId)
   }
 
-  private fun fetchCommunity(): List<CommunityEntryItem> {
+  private fun fetchCommunity(lichessHost: String): List<CommunityEntryItem> {
     try {
-      val url = URL("https://lichess.org/blog/community.atom")
+      val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
+      val url = URL("$scheme://$lichessHost/blog/community.atom")
       val connection = url.openConnection() as HttpURLConnection
       connection.connectTimeout = 10000
       connection.readTimeout = 10000
@@ -174,7 +175,8 @@ class CommunityWidgetProvider : AppWidgetProvider() {
     try {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val isKidMode = prefs.getBoolean("isKidMode", false)
-      val items = if (isKidMode) emptyList() else fetchCommunity()
+      val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
+      val items = if (isKidMode) emptyList() else fetchCommunity(lichessHost)
 
       remoteViews.removeAllViews(R.id.community_list)
 
@@ -300,7 +302,7 @@ class CommunityWidgetProvider : AppWidgetProvider() {
         connection.disconnect()
       }
     } catch (e: Exception) {
-      Log.e("BroadcastWidget", "Failed to fetch thumbnail: $urlStr", e)
+      Log.e("CommunityWidget", "Failed to fetch thumbnail: $urlStr", e)
       null
     }
   }
