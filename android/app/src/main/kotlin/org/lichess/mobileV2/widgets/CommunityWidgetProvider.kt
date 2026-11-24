@@ -30,9 +30,10 @@ import java.net.URL
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
-class CommunityWidgetProvider: AppWidgetProvider() {
+class CommunityWidgetProvider : AppWidgetProvider() {
 
   data class CommunityEntryItem(
     val id: String,
@@ -40,6 +41,10 @@ class CommunityWidgetProvider: AppWidgetProvider() {
     val link: String,
     val imageUrl: String
   )
+
+  companion object {
+    private val THUMBNAIL_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(12)
+  }
 
   override fun onReceive(context: Context, intent: Intent) {
     val pendingResult = goAsync()
@@ -52,7 +57,11 @@ class CommunityWidgetProvider: AppWidgetProvider() {
     }
   }
 
-  override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+  override fun onUpdate(
+    context: Context,
+    appWidgetManager: AppWidgetManager,
+    appWidgetIds: IntArray
+  ) {
     super.onUpdate(context, appWidgetManager, appWidgetIds)
     appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
   }
@@ -76,17 +85,17 @@ class CommunityWidgetProvider: AppWidgetProvider() {
       connection.setRequestProperty("Accept", "application/atom+xml")
 
       try {
-        return connection.inputStream.use { stream -> parseCommunityFeed(stream)}
+        return connection.inputStream.use { stream -> parseCommunityFeed(stream) }
       } finally {
         connection.disconnect()
       }
-    } catch (e: Exception){
+    } catch (e: Exception) {
       Log.e("CommunityWidget", "Error fetching community blog feed", e)
       return emptyList()
     }
   }
 
-  private fun parseCommunityFeed(stream: InputStream): List<CommunityEntryItem>{
+  private fun parseCommunityFeed(stream: InputStream): List<CommunityEntryItem> {
     val parser = Xml.newPullParser()
     parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
     parser.setInput(stream, null)
@@ -99,26 +108,28 @@ class CommunityWidgetProvider: AppWidgetProvider() {
     var imageUrl = ""
 
     var eventType = parser.eventType
-    while( eventType != XmlPullParser.END_DOCUMENT){
-      when(eventType){
-        XmlPullParser.START_TAG -> when (parser.name){
-        "entry" -> {
+    while (eventType != XmlPullParser.END_DOCUMENT) {
+      when (eventType) {
+        XmlPullParser.START_TAG -> when (parser.name) {
+          "entry" -> {
             inEntry = true
             id = ""; title = ""; link = ""; imageUrl = ""
           }
-          "id" -> if(inEntry) id = parser.nextText()
-          "title" -> if(inEntry) title = parser.nextText()
-          "link" -> if(inEntry && parser.getAttributeValue(null, "rel") == "alternate"){
+
+          "id" -> if (inEntry) id = parser.nextText()
+          "title" -> if (inEntry) title = parser.nextText()
+          "link" -> if (inEntry && parser.getAttributeValue(null, "rel") == "alternate") {
             link = parser.getAttributeValue(null, "href") ?: link
           }
-          "media:thumbnail" -> if(inEntry){
+
+          "media:thumbnail" -> if (inEntry) {
             imageUrl = parser.getAttributeValue(null, "url") ?: imageUrl
           }
         }
 
-        XmlPullParser.END_TAG -> if(parser.name == "entry"){
+        XmlPullParser.END_TAG -> if (parser.name == "entry") {
           inEntry = false
-          if (id.isNotBlank() && title.isNotBlank()){
+          if (id.isNotBlank() && title.isNotBlank()) {
             items.add(CommunityEntryItem(id = id, title = title, imageUrl = imageUrl, link = link))
           }
         }
@@ -128,7 +139,7 @@ class CommunityWidgetProvider: AppWidgetProvider() {
     return items
   }
 
-  private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int){
+  private fun updateWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_community)
 
     val homeIntent = Intent(context, MainActivity::class.java).apply {
@@ -151,10 +162,10 @@ class CommunityWidgetProvider: AppWidgetProvider() {
 
       remoteViews.removeAllViews(R.id.community_list)
 
-      if(items.isEmpty()) {
+      if (items.isEmpty()) {
         remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE)
         remoteViews.setViewVisibility(R.id.community_list, View.GONE)
-      } else{
+      } else {
         remoteViews.setViewVisibility(R.id.empty_view, View.GONE)
         remoteViews.setViewVisibility(R.id.community_list, View.VISIBLE)
 
@@ -162,52 +173,55 @@ class CommunityWidgetProvider: AppWidgetProvider() {
         val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
         val minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
         val maxHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
-        val isPortrait = context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        val isPortrait =
+          context.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
         val availableHeight = if (isPortrait && maxHeight > 0) maxHeight else minHeight
-        val numRows = if(availableHeight == 0) 3 else ((availableHeight - 44) / 60).coerceIn(1, 4)
+        val numRows = if (availableHeight == 0) 3 else ((availableHeight - 44) / 60).coerceIn(1, 4)
         val showThumbnail = minWidth == 0 || minWidth >= 200
 
         val displayItems = items.take(numRows)
         val sizePx = (48 * context.resources.displayMetrics.density).toInt()
 
-        val bitmaps: List<Bitmap?> = if(showThumbnail) {
+        val bitmaps: List<Bitmap?> = if (showThumbnail) {
           val executor = Executors.newFixedThreadPool(displayItems.size.coerceAtLeast(1))
           try {
-              val futures = displayItems.map { item ->
-                executor.submit(Callable<Bitmap?> {
-                  item.imageUrl.takeIf { it.isNotBlank() }?.let { fetchRoundBitmap(it, sizePx) }
-                })
-              }
+            val futures = displayItems.map { item ->
+              executor.submit(Callable<Bitmap?> {
+                item.imageUrl.takeIf { it.isNotBlank() }?.let { fetchRoundBitmap(it, sizePx) }
+              })
+            }
+            val deadline = System.nanoTime() + THUMBNAIL_TIMEOUT_NANOS
             futures.map { future ->
               try {
-                future.get(12, TimeUnit.SECONDS)
+                val remaining = deadline - System.nanoTime()
+                if (remaining <= 0) throw TimeoutException("Thumbnail deadline exceeded")
+                future.get(remaining, TimeUnit.NANOSECONDS)
               } catch (e: Exception) {
                 Log.e("CommunityWidget", "Error fetching thumbnail", e)
                 future.cancel(true)
                 null
               }
             }
-          }
-          finally {
-              executor.shutdownNow()
+          } finally {
+            executor.shutdownNow()
           }
         } else {
-          List(displayItems.size) {null}
+          List(displayItems.size) { null }
         }
 
         displayItems.forEachIndexed { index, item ->
           val itemViews = RemoteViews(context.packageName, R.layout.widget_community_item)
           itemViews.setTextViewText(R.id.item_title, item.title)
 
-          if(showThumbnail){
+          if (showThumbnail) {
             itemViews.setViewVisibility(R.id.item_thumbnail_container, View.VISIBLE)
             val bitmap = bitmaps[index]
-            if(bitmap != null){
+            if (bitmap != null) {
               itemViews.setImageViewBitmap(R.id.item_thumbnail, bitmap)
             } else {
               setFallbackThumbnail(context, itemViews)
             }
-          } else{
+          } else {
             itemViews.setViewVisibility(R.id.item_thumbnail_container, View.GONE)
           }
 
@@ -223,7 +237,7 @@ class CommunityWidgetProvider: AppWidgetProvider() {
           remoteViews.addView(R.id.community_list, itemViews)
         }
       }
-    } catch (e: Exception){
+    } catch (e: Exception) {
       Log.e("CommunityWidget", "Error updating widget $appWidgetId", e)
     }
     appWidgetManager.updateAppWidget(appWidgetId, remoteViews)
@@ -235,7 +249,9 @@ class CommunityWidgetProvider: AppWidgetProvider() {
     itemViews.setViewPadding(R.id.item_thumbnail, pad, pad, pad, pad)
     itemViews.setInt(
       R.id.item_thumbnail, "setColorFilter", context.getColor(
-        R.color.widget_text_secondary))
+        R.color.widget_text_secondary
+      )
+    )
   }
 
 
