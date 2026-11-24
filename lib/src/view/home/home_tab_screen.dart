@@ -391,6 +391,7 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
             }
 
             final content = ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               controller: homeScrollController,
               children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
             );

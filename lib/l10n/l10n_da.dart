@@ -74,6 +74,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get mobileClearButton => 'Ryd';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koden udløber efter 5 minutter og kan kun bruges én gang.';
 
   @override

@@ -561,7 +561,7 @@ class const _BottomBar({
         ),
         if (options case Standalone()) ...[
           BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.clearLocalData),
+            makeLabel: (context) => Text(context.l10n.mobileClearMoves),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),

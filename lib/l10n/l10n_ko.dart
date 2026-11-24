@@ -74,6 +74,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileClearButton => '지우기';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => '코드는 5분 뒤 만료되고 한 번만 사용할 수 있습니다.';
 
   @override

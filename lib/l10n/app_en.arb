@@ -27,6 +27,7 @@
   "mobileChessEngine": "Chess engine",
   "mobileChooseCustomBackground": "Choose a custom background",
   "mobileClearButton": "Clear",
+  "mobileClearMoves": "Clear moves",
   "mobileCodeExpiresMessage": "The code expires after 5 minutes and can only be used once.",
   "mobileCodeFieldLabel": "Code",
   "mobileCodeLengthMessage": "The code is {param} characters long.",

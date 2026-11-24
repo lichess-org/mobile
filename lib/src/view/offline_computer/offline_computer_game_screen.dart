@@ -398,6 +398,7 @@ class const _BottomBar({required final VoidCallback onNewGame}) extends Consumer
                 AnalysisOptions.pgn(
                   id: gameState.game.id,
                   orientation: gameState.game.playerSide,
+                  initialMoveCursor: gameState.stepCursor,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
                   variant: gameState.game.meta.variant,
@@ -484,6 +485,11 @@ class const _Player({required final Side side}) extends ConsumerWidget {
               children: [
                 Row(
                   children: [
+                    Text(
+                      'BOT',
+                      style: TextStyle(fontWeight: .bold, color: context.lichessColors.fancy),
+                    ),
+                    const SizedBox(width: 5),
                     Text(
                       game.opponentSpec.displayName,
                       style: const TextStyle(fontWeight: FontWeight.w600),

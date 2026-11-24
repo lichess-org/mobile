@@ -322,6 +322,12 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get mobileClearButton;
 
+  /// No description provided for @mobileClearMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear moves'**
+  String get mobileClearMoves;
+
   /// No description provided for @mobileCodeExpiresMessage.
   ///
   /// In en, this message translates to:

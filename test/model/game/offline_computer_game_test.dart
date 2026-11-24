@@ -49,9 +49,9 @@ void main() {
     test('names the engine player after the engine it is', () {
       expect(
         enginePlayerFor(const StockfishOpponentSpec(StockfishLevel.level1)).user?.name,
-        'Stockfish',
+        'Stockfish level 1',
       );
-      expect(enginePlayerFor(const MaiaOpponentSpec(MaiaRating.maia1100)).user?.name, 'Maia');
+      expect(enginePlayerFor(const MaiaOpponentSpec(MaiaRating.maia1100)).user?.name, 'Maia 1100');
     });
   });
 }
