@@ -11,4 +11,7 @@
     <string name="daily_puzzle_error">Couldn\'t load puzzle</string>
     <string name="community_description">Shows news from the Community</string>
     <string name="no_community_news">No community news available</string>
+    <string name="blog_title">Lichess\'s Blog</string>
+    <string name="blog_description">Shows blog news</string>
+    <string name="no_blog_news">No blog news</string>
 </resources>

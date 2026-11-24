@@ -30,16 +30,18 @@ import java.net.URL
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
-class BlogWidgetProvider: AppWidgetProvider() {
+class BlogWidgetProvider : AppWidgetProvider() {
 
   private data class BlogItem(
-    val id: String,
-    val title: String,
-    val link: String,
-    val imageUrl: String
+    val id: String, val title: String, val link: String, val imageUrl: String
   )
+
+  companion object {
+    private val THUMBNAIL_TIMEOUT_NANOS = TimeUnit.SECONDS.toNanos(12)
+  }
 
   override fun onReceive(context: Context, intent: Intent) {
     val pendingResult = goAsync()
@@ -53,27 +55,23 @@ class BlogWidgetProvider: AppWidgetProvider() {
   }
 
   override fun onUpdate(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetIds: IntArray
+    context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
   ) {
     super.onUpdate(context, appWidgetManager, appWidgetIds)
     appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
   }
 
   override fun onAppWidgetOptionsChanged(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int,
-    newOptions: Bundle
+    context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle
   ) {
     super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
     updateWidget(context, appWidgetManager, appWidgetId)
   }
 
-  private fun fetchBlog(): List<BlogItem> {
+  private fun fetchBlog(lichessHost: String): List<BlogItem> {
     try {
-      val url = URL("https://lichess.org/@/Lichess/blog.atom")
+      val scheme = if (lichessHost.startsWith("localhost")) "http" else "https"
+      val url = URL("$scheme://$lichessHost/@/Lichess/blog.atom")
       val connection = url.openConnection() as HttpURLConnection
       connection.connectTimeout = 10000
       connection.readTimeout = 10000
@@ -100,6 +98,7 @@ class BlogWidgetProvider: AppWidgetProvider() {
     var id = ""
     var title = ""
     var link = ""
+    var fallbackLink = ""
     var imageUrl = ""
 
     var eventType = parser.eventType
@@ -108,13 +107,19 @@ class BlogWidgetProvider: AppWidgetProvider() {
         XmlPullParser.START_TAG -> when (parser.name) {
           "entry" -> {
             inEntry = true
-            id = ""; title = ""; link = ""; imageUrl = ""
+            id = ""; title = ""; link = ""; fallbackLink = ""; imageUrl = ""
           }
 
           "id" -> if (inEntry) id = parser.nextText()
           "title" -> if (inEntry) title = parser.nextText()
-          "link" -> if (inEntry && parser.getAttributeValue(null, "rel") == "alternate") {
-            link = parser.getAttributeValue(null, "href") ?: link
+          "link" -> if (inEntry) {
+            val rel = parser.getAttributeValue(null, "rel")
+            val href = parser.getAttributeValue(null, "href").orEmpty()
+            if (rel == null || rel == "alternative") {
+              if (href.isNotBlank()) link = href
+            } else if (fallbackLink.isBlank()) {
+              fallbackLink = href
+            }
           }
 
           "media:thumbnail" -> if (inEntry) {
@@ -125,7 +130,14 @@ class BlogWidgetProvider: AppWidgetProvider() {
         XmlPullParser.END_TAG -> if (parser.name == "entry") {
           inEntry = false
           if (id.isNotBlank() && title.isNotBlank()) {
-            items.add(BlogItem(id = id, title = title, imageUrl = imageUrl, link = link))
+            items.add(
+              BlogItem(
+                id = id,
+                title = title,
+                imageUrl = imageUrl,
+                link = link.ifBlank { fallbackLink },
+              )
+            )
           }
         }
       }
@@ -153,7 +165,8 @@ class BlogWidgetProvider: AppWidgetProvider() {
     try {
       val prefs = context.getSharedPreferences("HomeWidgetPreferences", Context.MODE_PRIVATE)
       val isKidMode = prefs.getBoolean("isKidMode", false)
-      val items = if (isKidMode) emptyList() else fetchBlog()
+      val lichessHost = prefs.getString("lichessHost", "lichess.org") ?: "lichess.org"
+      val items = if (isKidMode) emptyList() else fetchBlog(lichessHost)
 
       remoteViews.removeAllViews(R.id.blog_list)
 
@@ -185,9 +198,12 @@ class BlogWidgetProvider: AppWidgetProvider() {
                 item.imageUrl.takeIf { it.isNotBlank() }?.let { fetchRoundBitmap(it, sizePx) }
               })
             }
+            val deadline = System.nanoTime() + THUMBNAIL_TIMEOUT_NANOS
             futures.map { future ->
               try {
-                future.get(12, TimeUnit.SECONDS)
+                val remaining = deadline - System.nanoTime()
+                if (remaining <= 0) throw TimeoutException("Thumbnail deadline exceeded")
+                future.get(remaining, TimeUnit.NANOSECONDS)
               } catch (e: Exception) {
                 Log.e("BlogWidget", "Error fetching thumbnail", e)
                 future.cancel(true)
@@ -220,10 +236,19 @@ class BlogWidgetProvider: AppWidgetProvider() {
           val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link)).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
           }
-          val pendingIntent = PendingIntent.getActivity(
-            context, appWidgetId * 10 + index, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-          )
+          val pendingIntent = if (item.link.isBlank()) {
+            homePendingIntent
+          } else {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link)).apply {
+              addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            PendingIntent.getActivity(
+              context,
+              appWidgetId * 10 + index,
+              intent,
+              PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+          }
           itemViews.setOnClickPendingIntent(R.id.blog_item_container, pendingIntent)
 
           remoteViews.addView(R.id.blog_list, itemViews)
