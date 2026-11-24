@@ -31,6 +31,10 @@ class const PlatformAlertDialog({
 
   /// Passed to [AlertDialog.scrollable] on Android. The iOS content always scrolls when too tall.
   final bool scrollable = false,
+
+  /// Whether the iOS dialog is fully opaque, for a dialog shown over a board. See
+  /// [GlassModalCard.opaque].
+  final bool opaque = false,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,7 @@ class const PlatformAlertDialog({
     final labelColor = CupertinoColors.label.resolveFrom(context);
     final iosActions = actions ?? const <Widget>[];
     return GlassDialogFrame(
+      opaque: opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,

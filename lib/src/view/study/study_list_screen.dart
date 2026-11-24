@@ -73,6 +73,7 @@ class _StudyListScreenState() extends ConsumerState<StudyListScreen> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(authUser != null ? context.l10n.studyMenu : context.l10n.studyAllStudies),
         largeTitle: true,

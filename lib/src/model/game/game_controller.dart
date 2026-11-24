@@ -250,11 +250,6 @@ class GameController(final GameFullId gameFullId)
   void userMove(Move move, {bool? viaDragAndDrop, bool? isPremove}) {
     final curState = state.requireValue;
 
-    if (curState.shouldConfirmMove && isPremove != true) {
-      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
-      return;
-    }
-
     final (Position, String) sanResult;
     try {
       sanResult = curState.game.lastPosition.makeSan(move);
@@ -270,6 +265,13 @@ class GameController(final GameFullId gameFullId)
     }
     final (newPos, newSan) = sanResult;
     final sanMove = SanMove(newSan, move);
+
+    if (curState.shouldConfirmMove && isPremove != true) {
+      state = AsyncValue.data(curState.copyWith(moveToConfirm: move));
+      _playMoveFeedback(sanMove, skipAnimationDelay: viaDragAndDrop ?? false);
+      return;
+    }
+
     final newStep = GameStep(
       position: newPos,
       sanMove: sanMove,
@@ -350,6 +352,9 @@ class GameController(final GameFullId gameFullId)
         moveToConfirm: null,
       ),
     );
+
+    ref.read(soundServiceProvider).play(.confirmation);
+
     _sendMoveToSocket(
       moveToConfirm,
       isPremove: false,

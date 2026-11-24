@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -12,10 +14,9 @@ import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/http_network_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/parental_pin_dialog.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_error.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_options.dart';
@@ -27,6 +28,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,18 +38,20 @@ import 'package:url_launcher/url_launcher.dart';
 /// On iOS it is the first page of a navigation sheet ([showAdaptiveNavigationSheet]) covering the
 /// tab bar, in which the screens it opens are pushed. On Android it is pushed as a full-screen page
 /// sliding from the right.
-Future<void> showAccountMenu(BuildContext context) {
+///
+/// With [expandAccount], the account tile is expanded, showing the account switching.
+Future<void> showAccountMenu(BuildContext context, {bool expandAccount = false}) {
   if (Theme.of(context).platform == TargetPlatform.iOS) {
     return showAdaptiveNavigationSheet<void>(
       context: context,
       useRootNavigator: true,
-      builder: (_) => const AccountMenuScreen(),
+      builder: (_) => AccountMenuScreen(expandAccount: expandAccount),
     );
   }
 
   return Navigator.of(context).push(
     PageRouteBuilder<void>(
-      pageBuilder: (_, a, b) => const AccountMenuScreen(),
+      pageBuilder: (_, a, b) => AccountMenuScreen(expandAccount: expandAccount),
       transitionsBuilder: (_, animation, b, child) {
         final tween = Tween(
           begin: const Offset(1.0, 0.0),
@@ -60,7 +64,12 @@ Future<void> showAccountMenu(BuildContext context) {
 }
 
 /// Account menu screen, opened by [AccountMenuButton] with [showAccountMenu].
-class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
+class const AccountMenuScreen({
+  super.key,
+
+  /// Whether the account tile is expanded at first.
+  final bool expandAccount = false,
+}) extends ConsumerStatefulWidget {
   @override
   ConsumerState<AccountMenuScreen> createState() => _AccountMenuScreenState();
 }
@@ -68,8 +77,10 @@ class const AccountMenuScreen({super.key}) extends ConsumerStatefulWidget {
 class _AccountMenuScreenState()
     extends ConsumerState<AccountMenuScreen>
     with WidgetsBindingObserver {
-  bool _errorLoadingFlair = false;
   bool _pendingKidModeRefresh = false;
+
+  /// Whether the account tile is expanded, showing the account switching and sign out.
+  late bool _isAccountExpanded = widget.expandAccount;
 
   @override
   void initState() {
@@ -93,14 +104,26 @@ class _AccountMenuScreenState()
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.read(imageClientProvider);
     final isOnline = ref.watch(isDeviceOnlineProvider);
     final signInState = ref.watch(signInMutation);
     final signOutState = ref.watch(signOutMutation);
+    final switchAccountState = ref.watch(switchAccountMutation);
 
     ref.listen(signInMutation, (_, next) => showSignInErrorSnackBar(context, next));
+    ref.listen(switchAccountMutation, (_, next) {
+      if (next case MutationError(:final error)) {
+        showSnackBar(
+          context,
+          error is AccountSessionExpiredException
+              ? 'Your session has expired, please sign in again.'
+              : context.l10n.mobileSomethingWentWrong,
+          type: SnackBarType.error,
+        );
+      }
+    });
     final account = ref.watch(accountProvider);
     final authUser = ref.watch(authControllerProvider);
+    final otherAccounts = ref.watch(otherAccountsProvider).value ?? const IListConst([]);
     final kidMode = account.value?.kid ?? false;
     final LightUser? user = account.value?.lightUser ?? authUser?.user;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
@@ -119,66 +142,93 @@ class _AccountMenuScreenState()
       body: ListView(
         children: [
           if (user != null)
-            ListSection(
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  leading: switch (account) {
-                    AsyncData(:final value) =>
-                      value == null
-                          ? const Icon(Icons.account_circle_outlined, size: 30)
-                          : CircleAvatar(
-                              radius: 20,
-                              foregroundImage: value.flair != null && !_errorLoadingFlair
-                                  ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                                  : null,
-                              onForegroundImageError: value.flair != null
-                                  ? (error, _) => setState(() => _errorLoadingFlair = true)
-                                  : null,
-                              backgroundColor: value.flair == null || _errorLoadingFlair
-                                  ? null
-                                  : ColorScheme.of(context).surfaceContainer,
-                              child: value.flair == null || _errorLoadingFlair
-                                  ? Text(value.initials)
-                                  : null,
-                            ),
-                    _ => const Icon(Icons.account_circle_outlined, size: 30),
-                  },
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-                  title: AutoSizeText(
-                    user.name,
-                    style: Styles.callout,
-                    maxLines: 1,
-                    minFontSize: 14,
-                    maxFontSize: 18,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  enabled: isOnline,
-                  onTap: () {
-                    _navigate(context, ProfileScreen.buildRoute());
-                  },
-                ),
-                if (kidMode)
+            // Animates the height of the section when the account tile expands or collapses.
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.fastOutSlowIn,
+              alignment: Alignment.topCenter,
+              child: ListSection(
+                hasLeading: true,
+                children: [
                   ListTile(
-                    textColor: Theme.of(context).colorScheme.primary,
-                    iconColor: Theme.of(context).colorScheme.primary,
-                    leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
-                    title: Text(
-                      context.l10n.kidModeIsEnabled,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    onTap: () {
-                      _pendingKidModeRefresh = true;
-                      launchUrl(lichessUri('/account/kid'));
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    leading: switch (account) {
+                      AsyncData(:final value) =>
+                        value == null
+                            ? const Icon(Icons.account_circle_outlined, size: 30)
+                            : AccountAvatar(value),
+                      _ => const Icon(Icons.account_circle_outlined, size: 30),
                     },
+                    trailing: AnimatedRotation(
+                      turns: _isAccountExpanded ? 0.5 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const Icon(Icons.expand_more),
+                    ),
+                    title: AutoSizeText(
+                      user.name,
+                      style: Styles.callout,
+                      maxLines: 1,
+                      minFontSize: 14,
+                      maxFontSize: 18,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () => setState(() => _isAccountExpanded = !_isAccountExpanded),
                   ),
-              ],
+                  if (_isAccountExpanded) ...[
+                    ListTile(
+                      leading: const Icon(Icons.person_add_outlined),
+                      title: const Text('Add account'),
+                      enabled: isOnline && signInState is! MutationPending,
+                      onTap: () => showSignInOptions(context, ref),
+                    ),
+                    switch (signOutState) {
+                      MutationPending() => const ListTile(
+                        leading: Icon(Icons.logout_outlined),
+                        enabled: false,
+                        title: Center(child: ButtonLoadingIndicator()),
+                      ),
+                      _ => ListTile(
+                        leading: const Icon(Icons.logout_outlined),
+                        title: Text(context.l10n.logOut),
+                        enabled: isOnline,
+                        onTap: () async {
+                          if (!await confirmLeavingAccount(context, ref) || !context.mounted) {
+                            return;
+                          }
+                          _showSignOutConfirmDialog(context, ref);
+                        },
+                      ),
+                    },
+                    if (otherAccounts.isNotEmpty) ...[
+                      const ListSectionSeparator(title: Text('Switch account')),
+                      for (final other in otherAccounts)
+                        _SwitchAccountTile(
+                          account: other,
+                          enabled: isOnline && switchAccountState is! MutationPending,
+                          onTap: () => _switchTo(context, other),
+                        ),
+                    ],
+                  ],
+                  if (kidMode)
+                    ListTile(
+                      textColor: Theme.of(context).colorScheme.primary,
+                      iconColor: Theme.of(context).colorScheme.primary,
+                      leading: const Icon(Symbols.sentiment_satisfied, weight: 600),
+                      title: Text(
+                        context.l10n.kidModeIsEnabled,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      onTap: () {
+                        _pendingKidModeRefresh = true;
+                        launchUrl(lichessUri('/account/kid'));
+                      },
+                    ),
+                ],
+              ),
             )
           else ...[
             Center(
-              child: FilledButton(
+              child: FilledButton.tonal(
                 onPressed: isOnline
                     ? switch (signInState) {
                         MutationPending() => null,
@@ -188,9 +238,37 @@ class _AccountMenuScreenState()
                 child: Text(context.l10n.signIn),
               ),
             ),
+            // Signed out while still signed in to other accounts, after closing or deleting the
+            // active account.
+            if (otherAccounts.isNotEmpty)
+              ListSection(
+                hasLeading: true,
+                header: const Text('Switch account'),
+                children: [
+                  for (final other in otherAccounts)
+                    _SwitchAccountTile(
+                      account: other,
+                      enabled: isOnline && switchAccountState is! MutationPending,
+                      onTap: () => _switchTo(context, other),
+                    ),
+                ],
+              ),
           ],
           ListSection(
+            hasLeading: true,
             children: [
+              if (user != null)
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  title: Text(context.l10n.profile),
+                  enabled: isOnline,
+                  onTap: () {
+                    _navigate(context, ProfileScreen.buildRoute());
+                  },
+                ),
               if (user != null && account.hasValue && !kidMode) ...[
                 ListTile(
                   leading: Badge.count(
@@ -233,23 +311,10 @@ class _AccountMenuScreenState()
                   _navigate(context, SettingsScreen.buildRoute());
                 },
               ),
-              if (user != null)
-                switch (signOutState) {
-                  MutationPending() => const ListTile(
-                    leading: Icon(Icons.logout_outlined),
-                    enabled: false,
-                    title: Center(child: ButtonLoadingIndicator()),
-                  ),
-                  _ => ListTile(
-                    leading: const Icon(Icons.logout_outlined),
-                    title: Text(context.l10n.logOut),
-                    enabled: isOnline,
-                    onTap: () => _showSignOutConfirmDialog(context, ref),
-                  ),
-                },
             ],
           ),
           ListSection(
+            hasLeading: true,
             children: [
               if (Theme.of(context).platform == TargetPlatform.android)
                 ListTile(
@@ -277,6 +342,15 @@ class _AccountMenuScreenState()
         ],
       ),
     );
+  }
+
+  Future<void> _switchTo(BuildContext context, AuthUser account) async {
+    if (!await confirmLeavingAccount(context, ref) || !context.mounted) return;
+    // The error is surfaced by the [ref.listen] on [switchAccountMutation] in [build]; ignore the
+    // rethrown future so it does not become an unhandled exception.
+    switchAccountMutation.run(ref, (tsx) async {
+      await tsx.get(authControllerProvider.notifier).switchAccount(account);
+    }).ignore();
   }
 
   void _navigate(BuildContext context, Route<dynamic> route) {
@@ -328,14 +402,10 @@ class _AccountMenuScreenState()
 }
 
 /// Avatar button that opens the account menu ([showAccountMenu]).
-class const AccountMenuButton({super.key}) extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<AccountMenuButton> createState() => _AccountMenuButtonState();
-}
-
-class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
-  bool _errorLoadingFlair = false;
-
+///
+/// When signed in, a long press opens it with the account tile expanded, as a shortcut to switch
+/// accounts.
+class const AccountMenuButton({super.key}) extends ConsumerWidget {
   static const _materialAnonIconSize = 30.0;
   static const _cupertinoAnonIconSize = 32.0;
 
@@ -344,11 +414,10 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
   static const _cupertinoAvatarRadius = 20.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
     final kidMode = account.value?.kid ?? false;
     final unreadMessages = ref.watch(unreadMessagesProvider).value?.unread ?? 0;
-    final client = ref.watch(imageClientProvider);
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     void openMenu() => showAccountMenu(context);
@@ -366,26 +435,28 @@ class _AccountMenuButtonState() extends ConsumerState<AccountMenuButton> {
                   height: _cupertinoButtonSize,
                 )
               : null,
-          tooltip: value == null ? context.l10n.signIn : value.username,
+          // No tooltip when signed in: it would take the long press, which opens the menu. The
+          // username is the semantics label instead.
+          tooltip: value == null ? context.l10n.signIn : null,
           icon: value == null
               ? Icon(
                   Icons.account_circle_outlined,
                   size: isIOS ? _cupertinoAnonIconSize : _materialAnonIconSize,
                 )
-              : CircleAvatar(
-                  radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
-                  foregroundImage: value.flair != null && !_errorLoadingFlair
-                      ? HttpNetworkImage(lichessFlairSrc(value.flair!), client)
-                      : null,
-                  onForegroundImageError: value.flair != null
-                      ? (error, _) => setState(() => _errorLoadingFlair = true)
-                      : null,
-                  backgroundColor: value.flair == null || _errorLoadingFlair
-                      ? null
-                      : ColorScheme.of(context).surfaceContainer,
-                  child: value.flair == null || _errorLoadingFlair ? Text(value.initials) : null,
+              : Semantics(
+                  label: value.username,
+                  child: AccountAvatar(
+                    value,
+                    radius: isIOS ? _cupertinoAvatarRadius : _materialAnonIconSize / 2 + 1,
+                  ),
                 ),
           onPressed: openMenu,
+          onLongPress: value == null
+              ? null
+              : () {
+                  HapticFeedback.mediumImpact();
+                  showAccountMenu(context, expandAccount: true);
+                },
         ),
       ),
       _ => IconButton(
@@ -546,6 +617,24 @@ class const AboutScreen({super.key}) extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A tile of the account menu that switches to the other [account] the user is signed in to.
+class const _SwitchAccountTile({
+  required final AuthUser account,
+  required final bool enabled,
+  required final VoidCallback onTap,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      // Icon sized, to line up with the icons of the other menu entries.
+      leading: UserAvatar(account.user, radius: 12),
+      title: UserFullNameWidget(user: account.user, showFlair: false),
+      enabled: enabled,
+      onTap: onTap,
     );
   }
 }

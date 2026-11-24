@@ -278,7 +278,7 @@ class _ChallengeBodyState() extends ConsumerState<_ChallengeBody> {
                       );
                     }
                   : null,
-              child: Text(context.l10n.challengeChallengeToPlay, style: Styles.bold),
+              child: Text(context.l10n.challengeChallengeToPlay),
             ),
           ),
         ],

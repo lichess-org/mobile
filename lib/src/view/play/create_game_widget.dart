@@ -1,3 +1,4 @@
+import 'package:cupertino_ui/cupertino_ui.dart' show CupertinoIcons;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -37,11 +38,11 @@ class const CreateGameWidget({
         ?.copyWith(color: textShade(context, 0.5), height: 1.0);
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: .min,
+      crossAxisAlignment: .stretch,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: .spaceBetween,
           children: [
             Expanded(
               child: Semantics(
@@ -50,15 +51,12 @@ class const CreateGameWidget({
                 label: '${context.l10n.timeControl}: ${playPrefs.timeIncrement.display}',
                 excludeSemantics: true,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: .stretch,
+                  mainAxisSize: .min,
                   children: [
                     Text(context.l10n.timeControl, style: labelStyle),
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Theme.of(context).dividerColor),
-                      ),
-                      icon: Icon(playPrefs.timeIncrement.speed.icon),
+                    _PickerButton(
+                      icon: playPrefs.timeIncrement.speed.icon,
                       label: Text(
                         playPrefs.timeIncrement.display,
                         style: const TextStyle(letterSpacing: 2.0),
@@ -100,12 +98,9 @@ class const CreateGameWidget({
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(context.l10n.variant, style: labelStyle),
-                    OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Theme.of(context).dividerColor),
-                      ),
+                    _PickerButton(
                       icon: playPrefs.customVariant != Variant.standard
-                          ? Icon(playPrefs.customVariant.icon)
+                          ? playPrefs.customVariant.icon
                           : null,
                       label: Text(playPrefs.customVariant.label(context.l10n)),
                       onPressed: () {
@@ -147,10 +142,7 @@ class const CreateGameWidget({
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(context.l10n.gameMode, style: labelStyle),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Theme.of(context).dividerColor),
-                        ),
+                      _PickerButton(
                         onPressed: () {
                           showChoicePicker(
                             context,
@@ -167,7 +159,7 @@ class const CreateGameWidget({
                             },
                           );
                         },
-                        child: Text(
+                        label: Text(
                           playPrefs.customRated ? context.l10n.rated : context.l10n.casual,
                         ),
                       ),
@@ -207,13 +199,8 @@ class const CreateGameWidget({
                           ],
                         ),
                       ),
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(color: Theme.of(context).dividerColor),
-                          foregroundColor: canUseRatingRange
-                              ? null
-                              : Theme.of(context).disabledColor,
-                        ),
+                      _PickerButton(
+                        enabled: canUseRatingRange,
                         onPressed: canUseRatingRange
                             ? () {
                                 showAdaptiveBottomSheet<void>(
@@ -240,7 +227,7 @@ class const CreateGameWidget({
                                 );
                               }
                             : () => _showDisabledRatingRangeExplanation(context),
-                        child: canUseRatingRange
+                        label: canUseRatingRange
                             ? Text(
                                 '${playPrefs.customRatingDelta.$1 == 0 ? '-' : ''}${playPrefs.customRatingDelta.$1} / +${playPrefs.customRatingDelta.$2}',
                               )
@@ -253,8 +240,7 @@ class const CreateGameWidget({
             ],
           ),
         ],
-        FilledButton.icon(
-          icon: const Icon(Icons.groups),
+        FilledButton(
           onPressed: connectionStatus == LichessConnectionStatus.online
               ? () {
                   // Pops the play bottom sheet
@@ -271,7 +257,7 @@ class const CreateGameWidget({
                   );
                 }
               : null,
-          label: Text(context.l10n.createAGame),
+          child: Text(context.l10n.createAGame),
         ),
       ],
     );
@@ -286,6 +272,46 @@ class const CreateGameWidget({
           PlatformDialogAction(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A button that shows the value of a setting and opens a picker to change it.
+///
+/// Like the iOS pop-up buttons, the value is content rather than an action, so it is in the text
+/// color instead of the accent one, with a chevron telling that it opens a picker.
+class const _PickerButton({
+  required final Widget label,
+  required final VoidCallback onPressed,
+  final IconData? icon,
+
+  /// Whether the setting can be changed: when it cannot, the button is still tappable (e.g. to
+  /// explain why) but looks disabled.
+  final bool enabled = true,
+}) extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final foregroundColor = enabled ? theme.colorScheme.onSurface : theme.disabledColor;
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: theme.dividerColor),
+        foregroundColor: foregroundColor,
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: .min,
+        spacing: 8.0,
+        children: [
+          if (icon != null) Icon(icon),
+          Flexible(child: label),
+          Icon(
+            theme.platform == .iOS ? CupertinoIcons.chevron_up_chevron_down : Icons.unfold_more,
+            size: 14.0,
+            color: foregroundColor.withValues(alpha: 0.5),
           ),
         ],
       ),

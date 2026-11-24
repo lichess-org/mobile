@@ -1,5 +1,5 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 typedef LinkCallback = void Function(LinkableElement link);
 
@@ -87,7 +87,10 @@ class _RichLinkTextState() extends State<RichLinkText> {
             text: element.text,
             style:
                 widget.linkStyle ??
-                defaultStyle.copyWith(color: Colors.blueAccent, decoration: TextDecoration.none),
+                defaultStyle.copyWith(
+                  color: ColorScheme.of(context).primary,
+                  decoration: TextDecoration.none,
+                ),
             recognizer: widget.onOpen != null ? _recognizers[recognizerIndex++] : null,
           ),
         );

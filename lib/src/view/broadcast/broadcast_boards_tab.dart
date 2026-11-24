@@ -472,7 +472,7 @@ class const _PinnedCommentCard({required final String text}) extends ConsumerWid
         title: RichLinkText(
           text: text,
           style: TextStyle(fontSize: _kPlayerWidgetTextStyle.fontSize),
-          linkStyle: Styles.linkStyle.copyWith(fontSize: _kPlayerWidgetTextStyle.fontSize),
+          linkStyle: Styles.linkStyle(context).copyWith(fontSize: _kPlayerWidgetTextStyle.fontSize),
           linkifiers: AppLinksService.kLichessLinkifiers,
           onOpen: (link) => ref.read(appLinksServiceProvider).onLinkifyOpen(context, link),
         ),

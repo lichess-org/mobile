@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -795,6 +796,7 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
   @override
   Widget build(BuildContext context) {
     final puzzleList = widget.stats.historyFilter(filter);
+    final showRatings = ref.watch(showRatingsPrefProvider).value;
     final highScoreWidgets = widget.stats.newHigh != null
         ? [
             const SizedBox(height: 16),
@@ -892,7 +894,11 @@ class _RunStatsPopupState() extends ConsumerState<_RunStatsPopup> {
               ),
               const SizedBox(height: 3.0),
               if (puzzleList.isNotEmpty)
-                PuzzleHistoryPreview(puzzleList, shouldOpenCasualPuzzleRun: true)
+                PuzzleHistoryPreview(
+                  puzzleList,
+                  shouldOpenCasualPuzzleRun: true,
+                  showRatings: showRatings != null && showRatings != .no,
+                )
               else
                 Center(child: Text(context.l10n.mobilePuzzleStormFilterNothingToShow)),
             ],

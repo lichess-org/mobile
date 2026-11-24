@@ -78,6 +78,7 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
     );
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
         actions: [sortButton],
@@ -91,6 +92,11 @@ class _FriendScreenState() extends ConsumerState<FriendScreen> with TickerProvid
       ),
       body: TabBarView(
         controller: _tabController,
+        // On iOS, a horizontal swipe on a friend reveals its swipe actions, so the tabs only
+        // change with the segmented control.
+        physics: Theme.of(context).platform == TargetPlatform.iOS
+            ? const NeverScrollableScrollPhysics()
+            : null,
         children: [
           _Online(searchTerm, _searchController, _onSearchChanged),
           _Following(searchTerm, _searchController, _onSearchChanged),
@@ -323,7 +329,7 @@ class const _Following(
                             });
                           }
                         },
-                        backgroundColor: context.lichessColors.error,
+                        backgroundColor: context.lichessColors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.person_remove,
                         label: context.l10n.unfollow,

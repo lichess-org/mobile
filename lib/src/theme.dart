@@ -4,12 +4,55 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:material_color_utilities/material_color_utilities.dart';
 import 'package:material_ui/material_ui.dart';
 
 const kSliderTheme = SliderThemeData(
   // ignore: deprecated_member_use
   year2023: false,
 );
+
+/// Generates a [ColorScheme] from [seedColor] whose primary color looks like an iOS accent color.
+///
+/// The scheme is the Material tonal spot one, as on Android, except for the primary color, which is
+/// more saturated, like an iOS accent color, and the error color, which is a vibrant red like the
+/// iOS system red rather than the pastel one of the Material dark scheme.
+ColorScheme makeIOSAccentColorScheme({required Color seedColor, required Brightness brightness}) {
+  final isDark = brightness == .dark;
+  final sourceHct = Hct.fromInt(seedColor.toARGB32());
+  final scheme = ColorScheme.fromSeed(seedColor: seedColor, brightness: brightness);
+  final palette = TonalPalette.of(sourceHct.hue, _kIOSPrimaryChroma);
+  final accentTone = isDark ? _kIOSAccentDarkTone : _kIOSAccentLightTone;
+  // On the inverse surface, which has the opposite brightness.
+  final inverseAccentTone = isDark ? _kIOSAccentLightTone : _kIOSAccentDarkTone;
+  Color tone(int t) => Color(palette.get(t));
+  return scheme.copyWith(
+    primary: tone(accentTone),
+    onPrimary: tone(100),
+    inversePrimary: tone(inverseAccentTone),
+    surfaceTint: tone(accentTone),
+    error: Color(materialErrorPalette.get(isDark ? _kIOSErrorDarkTone : _kIOSAccentLightTone)),
+    onError: Color(materialErrorPalette.get(100)),
+  );
+}
+
+/// Chroma of the iOS accent primary palette: tonal spot uses 36, vibrant goes up to the gamut limit.
+const _kIOSPrimaryChroma = 48.0;
+
+/// Tone of the iOS accent primary color in light mode: the iOS system colors are around tone 50
+/// (e.g. systemBlue is 53), dark enough for white content on top.
+const _kIOSAccentLightTone = 50;
+
+/// Tone of the iOS accent primary color in dark mode: the iOS system colors are 3 to 5 tones
+/// brighter in dark mode (e.g. systemBlue is 56). A few tones more here, because the dark surfaces
+/// are lighter than the iOS ones and the primary color less saturated, which both lower its
+/// contrast.
+const _kIOSAccentDarkTone = 64;
+
+/// Tone of the iOS error color in dark mode, the one of the iOS dark system red (chroma 90): the
+/// Material error palette keeps its full chroma 84 there, while it is clipped to 67 at the accent
+/// tone 64, which looks pastel.
+const _kIOSErrorDarkTone = 58;
 
 ThemeData makeAppTheme(
   BuildContext context, {
@@ -29,33 +72,55 @@ ThemeData makeAppTheme(
           BackgroundThemeMode.system => MediaQuery.platformBrightnessOf(context),
         };
 
-  if (backgroundColor == null && backgroundImage == null) {
-    return _makeDefaultTheme(
-      brightness,
-      themeMode: themeMode,
-      systemColors: systemColors,
-      boardTheme: boardTheme,
-      isIOS: isIOS,
-    );
-  } else {
-    return _makeBackgroundImageTheme(
-      baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
-      seedColor:
-          backgroundImage?.seedColor ??
-          (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
-      isIOS: isIOS,
-      isBackgroundImage: backgroundImage != null,
-    );
-  }
+  final theme = backgroundColor == null && backgroundImage == null
+      ? _makeDefaultTheme(
+          brightness,
+          themeMode: themeMode,
+          systemColors: systemColors,
+          boardTheme: boardTheme,
+          isIOS: isIOS,
+        )
+      : _makeBackgroundImageTheme(
+          baseTheme: backgroundImage?.baseTheme ?? backgroundColor!.$1.baseTheme,
+          seedColor:
+              backgroundImage?.seedColor ??
+              (backgroundColor!.$2 ? backgroundColor.$1.darker : backgroundColor.$1.color),
+          isIOS: isIOS,
+          isBackgroundImage: backgroundImage != null,
+        );
+
+  // The elements next to the board don't follow the app color scheme (system colors, background,
+  // iOS accent colors): the fidelity variant keeps their colors close to the board ones.
+  final boardColorScheme = ColorScheme.fromSeed(
+    seedColor: boardTheme.colors.darkSquare,
+    brightness: brightness,
+    dynamicSchemeVariant: .fidelity,
+  );
+  return theme.copyWith(
+    extensions: [...theme.extensions.values, BoardColorScheme(boardColorScheme)],
+  );
 }
 
 /// A custom theme extension that adds lichess custom properties to the theme.
 @immutable
-class const CustomTheme({required final Color rowEven, required final Color rowOdd})
-    extends ThemeExtension<CustomTheme> {
+class const CustomTheme({
+  required final Color rowEven,
+  required final Color rowOdd,
+
+  /// Background of the screens made of a plain list, whose rows are directly on the background
+  /// rather than in cards, when it differs from the scaffold background.
+  ///
+  /// On iOS light mode, the scaffold background is darker so that cards stand out, like the iOS
+  /// grouped lists, while plain lists have a lighter background, like the iOS plain lists.
+  final Color? plainListBackground,
+}) extends ThemeExtension<CustomTheme> {
   @override
-  CustomTheme copyWith({Color? rowEven, Color? rowOdd}) {
-    return CustomTheme(rowEven: rowEven ?? this.rowEven, rowOdd: rowOdd ?? this.rowOdd);
+  CustomTheme copyWith({Color? rowEven, Color? rowOdd, Color? plainListBackground}) {
+    return CustomTheme(
+      rowEven: rowEven ?? this.rowEven,
+      rowOdd: rowOdd ?? this.rowOdd,
+      plainListBackground: plainListBackground ?? this.plainListBackground,
+    );
   }
 
   @override
@@ -66,6 +131,7 @@ class const CustomTheme({required final Color rowEven, required final Color rowO
     return CustomTheme(
       rowEven: Color.lerp(rowEven, other.rowEven, t) ?? rowEven,
       rowOdd: Color.lerp(rowOdd, other.rowOdd, t) ?? rowOdd,
+      plainListBackground: Color.lerp(plainListBackground, other.plainListBackground, t),
     );
   }
 }
@@ -91,20 +157,19 @@ ThemeData _makeDefaultTheme(
 }) {
   final dynamicColorSchemes = getDynamicColorSchemes();
   final systemScheme = switch (brightness) {
-    Brightness.light => dynamicColorSchemes?.light,
-    Brightness.dark => dynamicColorSchemes?.dark,
+    .light => dynamicColorSchemes?.light,
+    .dark => dynamicColorSchemes?.dark,
   };
   final hasSystemColors = systemScheme != null && systemColors;
 
   final neutralScheme = ColorScheme.fromSeed(
     seedColor: boardTheme.colors.darkSquare,
     brightness: brightness,
-    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
+    dynamicSchemeVariant: isIOS ? .monochrome : .neutral,
   );
-  final defaultScheme = ColorScheme.fromSeed(
-    seedColor: boardTheme.colors.darkSquare,
-    brightness: brightness,
-  );
+  final defaultScheme = isIOS
+      ? makeIOSAccentColorScheme(seedColor: boardTheme.colors.darkSquare, brightness: brightness)
+      : ColorScheme.fromSeed(seedColor: boardTheme.colors.darkSquare, brightness: brightness);
   // makes a theme with neutral surfaces and default colors
   final boardScheme = defaultScheme.copyWith(
     surface: neutralScheme.surface,
@@ -129,7 +194,7 @@ ThemeData _makeDefaultTheme(
   final baseScheme = hasSystemColors ? systemScheme : boardScheme;
 
   // On iOS light mode, like the iOS grouped lists, cards stand out brighter on a darker background.
-  final isIOSLight = isIOS && brightness == Brightness.light;
+  final isIOSLight = isIOS && brightness == .light;
   final theme = ThemeData.from(
     colorScheme: isIOSLight
         ? baseScheme.copyWith(surface: baseScheme.surfaceContainer)
@@ -140,7 +205,7 @@ ThemeData _makeDefaultTheme(
       ? Color.lerp(baseScheme.surface, baseScheme.surfaceContainerLowest, 0.75)
       : theme.colorScheme.surfaceContainerHigh;
 
-  final isAmoled = themeMode == BackgroundThemeMode.amoled;
+  final isAmoled = themeMode == .amoled;
 
   final finalTheme = theme.copyWith(
     cupertinoOverrideTheme: _makeCupertinoThemeData(theme.colorScheme, brightness),
@@ -187,7 +252,11 @@ ThemeData _makeDefaultTheme(
       // The rows are brighter than the background, like the cards, so that a card of rows still
       // stands out from it.
       if (isIOSLight)
-        CustomTheme(rowEven: cupertinoCardColor!, rowOdd: baseScheme.surfaceContainerLow),
+        CustomTheme(
+          rowEven: cupertinoCardColor!,
+          rowOdd: baseScheme.surfaceContainerLow,
+          plainListBackground: baseScheme.surfaceContainerLowest,
+        ),
     ],
   );
 
@@ -304,9 +373,16 @@ ThemeData _makeBackgroundImageTheme({
   );
 }
 
-/// Capsule buttons, like the iOS 26 buttons.
+/// Capsule buttons with a semibold 15pt label, like the UIKit buttons of the default (medium) size.
 const _kCupertinoFilledButtonTheme = FilledButtonThemeData(
-  style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
+  style: ButtonStyle(
+    shape: WidgetStatePropertyAll(StadiumBorder()),
+    textStyle: WidgetStatePropertyAll(
+      TextStyle(fontSize: 15, fontWeight: FontWeight.w600, letterSpacing: -0.23),
+    ),
+    minimumSize: WidgetStatePropertyAll(Size(64, 44)),
+    padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 20)),
+  ),
 );
 
 const _kCupertinoOutlinedButtonTheme = OutlinedButtonThemeData(

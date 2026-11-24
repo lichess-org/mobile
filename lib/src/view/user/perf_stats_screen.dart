@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
@@ -21,10 +20,11 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
+import 'package:lichess_mobile/src/view/user/rating_history_chart.dart';
+import 'package:lichess_mobile/src/view/user/user_stat_cards.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
@@ -42,6 +42,7 @@ const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
 const _defaultValueFontSize = 18.0;
 const _mainValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 30);
+const _secondaryValueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 22);
 
 class const PerfStatsScreen({required final User user, required final Perf perf, super.key})
     extends StatelessWidget {
@@ -110,7 +111,9 @@ class const _Body({required final User user, required final Perf perf}) extends 
     final ratingHistory = ref.watch(userRatingHistoryProvider(user.id));
     final loggedInUser = ref.watch(authControllerProvider);
     const statGroupSpace = SizedBox(height: 16.0);
-    const subStatSpace = SizedBox(height: 10);
+    const cardSpacing = 12.0;
+    const cardSpace = SizedBox(height: cardSpacing);
+    final labelStyle = TextStyle(color: textShade(context, _customOpacity));
 
     // For puzzle perfs, only show the rating history chart
     if (perf == Perf.puzzle) {
@@ -129,7 +132,15 @@ class const _Body({required final User user, required final Perf perf}) extends 
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: _EloChart(ratingHistoryPerfData),
+                  child: RatingHistoryChart(
+                    IList([
+                      RatingHistorySeries(
+                        perf: perf,
+                        points: ratingHistoryPerfData.points,
+                        color: Styles.chartColor(context),
+                      ),
+                    ]),
+                  ),
                 ),
               );
             },
@@ -158,257 +169,232 @@ class const _Body({required final User user, required final Perf perf}) extends 
           padding: Styles.bodyPadding.add(MediaQuery.paddingOf(context)),
           scrollDirection: Axis.vertical,
           children: [
-            ratingHistory.when(
-              data: (ratingHistoryData) {
-                final ratingHistoryPerfData = ratingHistoryData.firstWhereOrNull(
-                  (element) => element.perf == perf,
-                );
-
-                if (ratingHistoryPerfData == null || ratingHistoryPerfData.points.length <= 1) {
-                  return const SizedBox.shrink();
-                }
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: _EloChart(ratingHistoryPerfData),
-                  ),
-                );
-              },
-              error: (error, stackTrace) {
-                debugPrint(
-                  'SEVERE: [PerfStatsScreen] could not load rating history data; $error\n$stackTrace',
-                );
-                return const Text('Could not show chart elo chart');
-              },
-              loading: () {
-                return const SizedBox.shrink();
-              },
-            ),
-            if (perf != Perf.puzzle) ...[
-              statGroupSpace,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
+            _ExpandableCard(
+              header: Column(
+                crossAxisAlignment: .start,
                 children: [
-                  Text('${context.l10n.rating} ', style: Styles.sectionTitle),
+                  Text(context.l10n.rating, style: labelStyle),
                   RatingWidget(
                     rating: data.rating,
                     deviation: data.deviation,
                     provisional: data.provisional,
                     style: _mainValueStyle,
                   ),
-                ],
-              ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      if (data.percentile != null && data.percentile! > 0.0)
-                        Text(
-                          (loggedInUser != null && loggedInUser.user.id == user.id)
-                              ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                                  '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.label(context.l10n),
-                                )
-                              : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                                  user.username,
-                                  '${data.percentile!.toStringAsFixed(2)}%',
-                                  perf.label(context.l10n),
-                                ),
-                          style: TextStyle(color: textShade(context, 0.7)),
-                        ),
-                      subStatSpace,
-                      // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-                      StatCard(
-                        context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
-                        child: ProgressionWidget(data.progress),
-                      ),
-                      StatCardRow([
-                        if (data.rank != null)
-                          StatCard(
-                            context.l10n.rank,
-                            value: data.rank == null
-                                ? '?'
-                                : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                                      .format(data.rank),
-                          ),
-                        StatCard(
-                          context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
-                          value: data.deviation.toStringAsFixed(2),
-                        ),
-                      ]),
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.perfStatHighestRating('').replaceAll(':', ''),
-                          child: _RatingWidget(
-                            data.highestRating,
-                            data.highestRatingGame,
-                            context.lichessColors.good,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatLowestRating('').replaceAll(':', ''),
-                          child: _RatingWidget(
-                            data.lowestRating,
-                            data.lowestRatingGame,
-                            context.lichessColors.error,
-                          ),
-                        ),
-                      ]),
-                    ],
-                  ),
-                ),
-              ),
-              statGroupSpace,
-              Semantics(
-                container: true,
-                enabled: true,
-                button: true,
-                label: context.l10n.perfStatViewTheGames,
-                child: Tooltip(
-                  excludeFromSemantics: true,
-                  message: context.l10n.perfStatViewTheGames,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        GameHistoryScreen.buildRoute(
-                          user: user.lightUser,
-                          isOnline: true,
-                          gameFilter: GameFilterState(perfs: ISet({perf})),
+                  if (data.percentile != null && data.percentile! > 0.0)
+                    Text(
+                      (loggedInUser != null && loggedInUser.user.id == user.id)
+                          ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                              '${data.percentile!.toStringAsFixed(2)}%',
+                              perf.label(context.l10n),
+                            )
+                          : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                              user.username,
+                              '${data.percentile!.toStringAsFixed(2)}%',
+                              perf.label(context.l10n),
+                            ),
+                      style: labelStyle,
+                    ),
+                  ratingHistory.when(
+                    data: (ratingHistoryData) {
+                      final ratingHistoryPerfData = ratingHistoryData.firstWhereOrNull(
+                        (element) => element.perf == perf,
+                      );
+
+                      if (ratingHistoryPerfData == null ||
+                          ratingHistoryPerfData.points.length <= 1) {
+                        return const SizedBox.shrink();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: RatingHistoryChart(
+                          IList([
+                            RatingHistorySeries(
+                              perf: perf,
+                              points: ratingHistoryPerfData.points,
+                              color: Styles.chartColor(context),
+                            ),
+                          ]),
                         ),
                       );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.baseline,
-                        textBaseline: TextBaseline.alphabetic,
-                        children: [
-                          Text(
-                            '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                            style: Styles.sectionTitle,
-                          ),
-                          Text(
-                            data.totalGames.toString().localizeNumbers(),
-                            style: _mainValueStyle,
-                          ),
-                          Text(
-                            String.fromCharCode(Icons.arrow_forward_ios.codePoint),
-                            style: Styles.sectionTitle.copyWith(fontFamily: 'MaterialIcons'),
-                          ),
-                        ],
+                    error: (error, stackTrace) {
+                      debugPrint(
+                        'SEVERE: [PerfStatsScreen] could not load rating history data; $error\n$stackTrace',
+                      );
+                      return const Text('Could not show chart elo chart');
+                    },
+                    loading: () {
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
+              ),
+              details: Column(
+                children: [
+                  // The API returns the progression over the last 12 games.
+                  StatCard(
+                    context.l10n.perfStatProgressOverLastXGames('12').replaceAll(':', ''),
+                    child: ProgressionWidget(data.progress),
+                  ),
+                  StatCardRow([
+                    if (data.rank != null)
+                      StatCard(context.l10n.rank, value: _formatNumber(data.rank!)),
+                    StatCard(
+                      context.l10n.perfStatRatingDeviation('').replaceAll(': .', ''),
+                      value: data.deviation.toStringAsFixed(2),
+                    ),
+                  ]),
+                  StatCardRow([
+                    StatCard(
+                      context.l10n.perfStatHighestRating('').replaceAll(':', ''),
+                      child: _RatingWidget(
+                        data.highestRating,
+                        data.highestRatingGame,
+                        context.lichessColors.green,
                       ),
                     ),
+                    StatCard(
+                      context.l10n.perfStatLowestRating('').replaceAll(':', ''),
+                      child: _RatingWidget(
+                        data.lowestRating,
+                        data.lowestRatingGame,
+                        context.lichessColors.red,
+                      ),
+                    ),
+                  ]),
+                ],
+              ),
+            ),
+            statGroupSpace,
+            GameResultsCard(
+              total: data.totalGames,
+              won: data.wonGames,
+              drawn: data.drawnGames,
+              lost: data.lostGames,
+              onTap: () {
+                Navigator.of(context).push(
+                  GameHistoryScreen.buildRoute(
+                    user: user.lightUser,
+                    isOnline: true,
+                    gameFilter: GameFilterState(perfs: ISet({perf})),
                   ),
+                );
+              },
+            ),
+            cardSpace,
+            IconStatCard(
+              icon: Icons.people_outline,
+              label: context.l10n.averageOpponent,
+              value: data.avgOpponent == null ? '?' : _formatNumber(data.avgOpponent!.round()),
+            ),
+            cardSpace,
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: .stretch,
+                spacing: cardSpacing,
+                children: [
+                  Expanded(
+                    child: IconStatCard(
+                      icon: Icons.leaderboard_outlined,
+                      label: context.l10n.rated,
+                      value: _formatNumber(data.ratedGames),
+                      caption: _formatPercentage(data.ratedGames, data.totalGames),
+                    ),
+                  ),
+                  Expanded(
+                    child: IconStatCard(
+                      icon: Icons.emoji_events_outlined,
+                      label: context.l10n.tournament,
+                      value: _formatNumber(data.tournamentGames),
+                      caption: _formatPercentage(data.tournamentGames, data.totalGames),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            cardSpace,
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: .stretch,
+                spacing: cardSpacing,
+                children: [
+                  Expanded(
+                    child: IconStatCard(
+                      icon: Icons.bolt_outlined,
+                      label: context.l10n.perfStatBerserkedGames.replaceAll(
+                        ' ${context.l10n.games.toLowerCase()}',
+                        '',
+                      ),
+                      value: _formatNumber(data.berserkGames),
+                      caption: _formatPercentage(data.berserkGames, data.totalGames),
+                    ),
+                  ),
+                  Expanded(
+                    child: IconStatCard(
+                      icon: Icons.wifi_off_outlined,
+                      label: context.l10n.perfStatDisconnections,
+                      value: _formatNumber(data.disconnections),
+                      caption: _formatPercentage(data.disconnections, data.totalGames),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            cardSpace,
+            _ResultStreakCard(
+              title: context.l10n.perfStatWinningStreak,
+              icon: Icons.trending_up,
+              current: data.curWinStreak,
+              longest: data.maxWinStreak,
+              color: context.lichessColors.green,
+            ),
+            cardSpace,
+            _ResultStreakCard(
+              title: context.l10n.perfStatLosingStreak,
+              icon: Icons.trending_down,
+              current: data.curLossStreak,
+              longest: data.maxLossStreak,
+              color: context.lichessColors.red,
+            ),
+            cardSpace,
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                child: Column(
+                  children: [
+                    IconStatRow(
+                      icon: Icons.schedule,
+                      label: context.l10n.perfStatTimeSpentPlaying,
+                      value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+                    ),
+                    const Divider(height: 1.0),
+                    IconStatRow(
+                      icon: Icons.calendar_month_outlined,
+                      label: context.l10n.perfStatGamesInARow,
+                      value: _streakValue(context, data.maxPlayStreak),
+                      subtitle: _StreakDates(data.maxPlayStreak),
+                      valueCaption: _currentStreakCaption(context, data.curPlayStreak),
+                    ),
+                    const Divider(height: 1.0),
+                    IconStatRow(
+                      icon: Icons.timer_outlined,
+                      label: context.l10n.perfStatMaxTimePlaying,
+                      value: _streakValue(context, data.maxTimeStreak),
+                      subtitle: _StreakDates(data.maxTimeStreak),
+                      valueCaption: _currentStreakCaption(context, data.curTimeStreak),
+                    ),
+                  ],
                 ),
               ),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.wins,
-                          child: _PercentageValueWidget(
-                            data.wonGames,
-                            data.totalGames,
-                            color: context.lichessColors.good,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.draws,
-                          child: _PercentageValueWidget(
-                            data.drawnGames,
-                            data.totalGames,
-                            color: textShade(context, _customOpacity),
-                            isShaded: true,
-                          ),
-                        ),
-                        StatCard(
-                          context.l10n.losses,
-                          child: _PercentageValueWidget(
-                            data.lostGames,
-                            data.totalGames,
-                            color: context.lichessColors.error,
-                          ),
-                        ),
-                      ]),
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.rated,
-                          child: _PercentageValueWidget(data.ratedGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.tournament,
-                          child: _PercentageValueWidget(data.tournamentGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatBerserkedGames.replaceAll(
-                            ' ${context.l10n.games.toLowerCase()}',
-                            '',
-                          ),
-                          child: _PercentageValueWidget(data.berserkGames, data.totalGames),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatDisconnections,
-                          child: _PercentageValueWidget(data.disconnections, data.totalGames),
-                        ),
-                      ]),
-                      StatCardRow([
-                        StatCard(
-                          context.l10n.averageOpponent,
-                          value: data.avgOpponent == null
-                              ? '?'
-                              : data.avgOpponent!.round().toString(),
-                        ),
-                        StatCard(
-                          context.l10n.perfStatTimeSpentPlaying,
-                          value: data.timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-                        ),
-                      ]),
-                      _StatGroup(
-                        title: context.l10n.perfStatWinningStreak,
-                        children: [
-                          _StreakWidget(
-                            data.maxWinStreak,
-                            data.curWinStreak,
-                            color: context.lichessColors.good,
-                          ),
-                        ],
-                      ),
-                      _StatGroup(
-                        title: context.l10n.perfStatLosingStreak,
-                        children: [
-                          _StreakWidget(
-                            data.maxLossStreak,
-                            data.curLossStreak,
-                            color: context.lichessColors.error,
-                          ),
-                        ],
-                      ),
-                      _StatGroup(
-                        title: context.l10n.perfStatGamesInARow,
-                        children: [_StreakWidget(data.maxPlayStreak, data.curPlayStreak)],
-                      ),
-                      _StatGroup(
-                        title: context.l10n.perfStatMaxTimePlaying,
-                        children: [_StreakWidget(data.maxTimeStreak, data.curTimeStreak)],
-                      ),
-                    ],
-                  ),
-                ),
+            ),
+            if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
+              statGroupSpace,
+              _GameListWidget(
+                games: data.bestWins!,
+                perf: perf,
+                user: user,
+                header: Text(context.l10n.perfStatBestRated, style: Styles.sectionTitle),
               ),
-              if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
-                statGroupSpace,
-                _GameListWidget(
-                  games: data.bestWins!,
-                  perf: perf,
-                  user: user,
-                  header: Text(context.l10n.perfStatBestRated, style: Styles.sectionTitle),
-                ),
-              ],
             ],
           ],
         );
@@ -418,24 +404,6 @@ class const _Body({required final User user, required final Perf perf}) extends 
         return const Center(child: Text('Could not load user stats.'));
       },
       loading: () => const CenterLoadingIndicator(),
-    );
-  }
-}
-
-class const _StatGroup({required final String title, required final List<Widget> children})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title),
-          const SizedBox(height: 5),
-          for (final child in children) ...[child, const SizedBox(height: 10)],
-        ],
-      ),
     );
   }
 }
@@ -473,125 +441,202 @@ class const _RatingWidget(final int? rating, final UserPerfGame? game, final Col
   }
 }
 
-class const _PercentageValueWidget(
-  final int value,
-  final int denominator, {
-  final Color? color,
-  final bool isShaded = false,
-}) extends StatelessWidget {
-  String _getPercentageString(num numerator, num denominator) {
-    final fraction = denominator == 0 ? 0 : numerator / denominator;
-    return NumberFormat.percentPattern().format(fraction);
-  }
+String _formatNumber(int value) =>
+    NumberFormat.decimalPattern(Intl.getCurrentLocale()).format(value);
+
+String _formatPercentage(int value, int total) =>
+    NumberFormat.percentPattern().format(total == 0 ? 0 : value / total);
+
+/// The value of a streak, or '-' when there is none.
+String _streakValue(BuildContext context, UserStreak? streak) => switch (streak) {
+  null => '-',
+  _ when streak.isValueEmpty => '-',
+  UserTimeStreak(:final timePlayed) => timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
+  UserGameStreak(:final gamesPlayed) => context.l10n.nbGames(gamesPlayed),
+};
+
+/// The current streak, below the longest one, or null when there is none.
+String? _currentStreakCaption(BuildContext context, UserStreak? current) =>
+    current == null || current.isValueEmpty
+    ? null
+    : context.l10n.perfStatCurrentStreak(_streakValue(context, current));
+
+/// A card showing [header], with a button to show or hide [details] below it.
+class const _ExpandableCard({required final Widget header, required final Widget details})
+    extends StatefulWidget {
+  @override
+  State<_ExpandableCard> createState() => _ExpandableCardState();
+}
+
+class _ExpandableCardState() extends State<_ExpandableCard> {
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
+        child: Column(
+          crossAxisAlignment: .stretch,
+          children: [
+            widget.header,
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              alignment: .topCenter,
+              child: _expanded
+                  ? Padding(padding: const EdgeInsets.only(top: 10.0), child: widget.details)
+                  : const SizedBox(width: double.infinity),
+            ),
+            Center(
+              child: TextButton.icon(
+                onPressed: () => setState(() => _expanded = !_expanded),
+                iconAlignment: .end,
+                icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+                label: Text(_expanded ? context.l10n.less : context.l10n.more),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The start and end dates of a streak, if any.
+class const _StreakDates(final UserStreak? streak, {final WrapAlignment alignment = .start})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    if (streak == null || streak!.isValueEmpty) return const SizedBox.shrink();
+    if (streak!.startGame == null || streak!.endGame == null) return const SizedBox.shrink();
+    final style = TextStyle(fontSize: _defaultStatFontSize, color: textShade(context, 0.5));
+    return Wrap(
+      alignment: alignment,
+      spacing: 4.0,
       children: [
-        Text(
-          value.toString().localizeNumbers(),
-          style: TextStyle(fontSize: _defaultValueFontSize, color: color),
-        ),
-        Text(
-          _getPercentageString(value, denominator),
-          style: TextStyle(
-            fontSize: _defaultValueFontSize,
-            color: color == null
-                ? isShaded
-                      ? textShade(context, _customOpacity / 2)
-                      : textShade(context, _customOpacity)
-                : isShaded
-                ? color!.withValues(alpha: _customOpacity / 2)
-                : color!.withValues(alpha: _customOpacity),
-          ),
-        ),
+        Text(_dateFormatter.format(streak!.startGame!.finishedAt), style: style),
+        Text('–', style: style),
+        Text(_dateFormatter.format(streak!.endGame!.finishedAt), style: style),
       ],
     );
   }
 }
 
-class const _StreakWidget(
-  final UserStreak? maxStreak,
-  final UserStreak? curStreak, {
-  final Color? color,
+class const _ResultStreakCard({
+  required final String title,
+  required final IconData icon,
+  required final UserStreak? current,
+  required final UserStreak? longest,
+  required final Color color,
 }) extends StatelessWidget {
+  /// Longest streak up to which the progress bar has one segment per game; above it, the bar is
+  /// continuous.
+  static const _maxSegments = 15;
+
+  int _gamesOf(UserStreak? streak) => switch (streak) {
+    UserGameStreak(:final gamesPlayed, isValueEmpty: false) => gamesPlayed,
+    _ => 0,
+  };
+
   @override
   Widget build(BuildContext context) {
-    final valueStyle = TextStyle(fontSize: _defaultValueFontSize, color: color);
+    final shadedStyle = TextStyle(color: textShade(context, _customOpacity));
+    final currentGames = _gamesOf(current);
+    final longestGames = _gamesOf(longest);
+    final emptyColor = textShade(context, 0.15);
 
-    final streakTitleStyle = TextStyle(
-      fontSize: _defaultStatFontSize,
-      color: textShade(context, _customOpacity),
-    );
-
-    final longestStreakStr = context.l10n.perfStatLongestStreak('').replaceAll(':', '');
-    final currentStreakStr = context.l10n.perfStatCurrentStreak('').replaceAll(':', '');
-
-    final List<Widget> streakWidgets = [maxStreak, curStreak]
-        .mapIndexed((index, streak) {
-          final streakTitle = Text(
-            index == 0 ? longestStreakStr : currentStreakStr,
-            style: streakTitleStyle,
-          );
-
-          if (streak == null || streak.isValueEmpty) {
-            return Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  streakTitle,
-                  Text(
-                    '-',
-                    style: const TextStyle(fontSize: _defaultValueFontSize),
-                    semanticsLabel: context.l10n.none,
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final valueText = switch (streak) {
-            UserTimeStreak(:final timePlayed) => Text(
-              timePlayed.toDaysHoursMinutes(AppLocalizations.of(context)),
-              style: valueStyle,
-              textAlign: TextAlign.center,
-            ),
-            UserGameStreak(:final gamesPlayed) => Text(
-              context.l10n.nbGames(gamesPlayed),
-              style: valueStyle,
-              textAlign: TextAlign.center,
-            ),
-          };
-
-          return Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Row(
+              crossAxisAlignment: .start,
+              spacing: 12.0,
               children: [
-                streakTitle,
-                valueText,
-                if (streak.startGame != null && streak.endGame != null)
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.15),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(icon, color: color),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: .start,
                     children: [
-                      const SizedBox(height: 5.0),
-                      _UserGameWidget(streak.startGame),
-                      Icon(Icons.arrow_downward_rounded, color: textShade(context, _customOpacity)),
-                      _UserGameWidget(streak.endGame),
+                      Text(title, style: Styles.bold),
+                      Text(_streakValue(context, current), style: _secondaryValueStyle),
+                      Text(
+                        context.l10n.perfStatCurrentStreak('').replaceAll(':', '').trim(),
+                        style: shadedStyle,
+                      ),
+                      _StreakDates(current),
                     ],
                   ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: .end,
+                    children: [
+                      Text(
+                        context.l10n.perfStatLongestStreak('').replaceAll(':', '').trim(),
+                        style: shadedStyle,
+                        textAlign: .end,
+                      ),
+                      Text(
+                        _streakValue(context, longest),
+                        style: _secondaryValueStyle.copyWith(color: color),
+                        textAlign: .end,
+                      ),
+                      _StreakDates(longest, alignment: .end),
+                    ],
+                  ),
+                ),
               ],
             ),
-          );
-        })
-        .toList(growable: false);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(height: 5.0),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: streakWidgets),
-      ],
+            if (longestGames > 0) ...[
+              const SizedBox(height: 16.0),
+              ExcludeSemantics(
+                child: SizedBox(
+                  height: 6.0,
+                  child: Row(
+                    crossAxisAlignment: .stretch,
+                    spacing: 4.0,
+                    children: longestGames <= _maxSegments
+                        ? [
+                            for (int i = 0; i < longestGames; i++)
+                              Expanded(
+                                child: StatBarSegment(i < currentGames ? color : emptyColor),
+                              ),
+                          ]
+                        : [
+                            Expanded(
+                              child: Stack(
+                                fit: .expand,
+                                children: [
+                                  StatBarSegment(emptyColor),
+                                  FractionallySizedBox(
+                                    alignment: .centerLeft,
+                                    widthFactor: min(currentGames / longestGames, 1.0),
+                                    child: StatBarSegment(color),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
@@ -655,282 +700,4 @@ class const _GameListTile({
           : null,
     );
   }
-}
-
-class const _EloChart(final UserRatingHistoryPerf value) extends StatefulWidget {
-  @override
-  State<_EloChart> createState() => _EloChartState();
-}
-
-class _EloChartState() extends State<_EloChart> {
-  late DateRange _selectedRange;
-
-  late List<FlSpot> _allFlSpot;
-
-  List<FlSpot> get _flSpot =>
-      _allFlSpot.where((element) => element.x >= _minX && element.x <= _maxX).toList();
-
-  IList<UserRatingHistoryPoint> get _points => widget.value.points;
-
-  DateTime get _firstDate => _points.first.date;
-
-  DateTime get _lastDate => _points.last.date;
-
-  double get _minY => (_flSpot.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
-
-  double get _maxY => (_flSpot.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
-
-  double get _minX => _startDate(_selectedRange).difference(_firstDate).inDays.toDouble();
-
-  double get _maxX => _allFlSpot.last.x;
-
-  DateTime _startDate(DateRange dateRange) => switch (dateRange) {
-    DateRange.oneWeek => _lastDate.subtract(const Duration(days: 7)),
-    DateRange.oneMonth => _lastDate.copyWith(month: _lastDate.month - 1),
-    DateRange.threeMonths => _lastDate.copyWith(month: _lastDate.month - 3),
-    DateRange.oneYear => _lastDate.copyWith(year: _lastDate.year - 1),
-    DateRange.allTime => _firstDate,
-  };
-
-  bool _dateIsInRange(DateRange dateRange) =>
-      _firstDate.isBefore(_startDate(dateRange)) ||
-      _firstDate.isAtSameMomentAs(_startDate(dateRange));
-
-  @override
-  void initState() {
-    super.initState();
-
-    // We need to fill in the missing days in the rating history because rating should be constant for days where no games were played
-
-    final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
-    final numberOfDays = _lastDate.difference(_firstDate).inDays + 1;
-
-    int j = 0;
-    for (int i = 0; i < numberOfDays; i++) {
-      final currentDate = _firstDate.add(Duration(days: i));
-      if (_points[j].date == currentDate) {
-        pointsHistoryRatingCompleted.add(_points[j]);
-        j += 1;
-      } else {
-        pointsHistoryRatingCompleted.add(
-          UserRatingHistoryPoint(date: currentDate, elo: _points[j - 1].elo),
-        );
-      }
-    }
-
-    _allFlSpot = pointsHistoryRatingCompleted
-        .map(
-          (element) =>
-              FlSpot(element.date.difference(_firstDate).inDays.toDouble(), element.elo.toDouble()),
-        )
-        .toList();
-
-    if (_dateIsInRange(DateRange.threeMonths)) {
-      _selectedRange = DateRange.threeMonths;
-    } else if (_dateIsInRange(DateRange.oneMonth)) {
-      _selectedRange = DateRange.oneMonth;
-    } else if (_dateIsInRange(DateRange.oneWeek)) {
-      _selectedRange = DateRange.oneWeek;
-    } else {
-      _selectedRange = DateRange.allTime;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final borderColor = ColorScheme.of(context).onSurface.withValues(alpha: 0.5);
-    final chartColor = Styles.chartColor(context);
-    final chartDateFormatter = switch (_selectedRange) {
-      DateRange.oneWeek => DateFormat.MMMd(),
-      DateRange.oneMonth => DateFormat.MMMd(),
-      DateRange.threeMonths => DateFormat.yMMM(),
-      DateRange.oneYear => DateFormat.yMMM(),
-      DateRange.allTime => DateFormat.yMMM(),
-    };
-
-    String formatDateFromTimestamp(double nbDays) =>
-        chartDateFormatter.format(_firstDate.add(Duration(days: nbDays.toInt())));
-
-    String formatDateFromTimestampForTooltip(double nbDays) =>
-        DateFormat.yMMMd().format(_firstDate.add(Duration(days: nbDays.toInt())));
-
-    Widget leftTitlesWidget(double value, TitleMeta meta) {
-      return SideTitleWidget(
-        meta: meta,
-        child: Text(
-          value.toInt().toString(),
-          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
-        ),
-      );
-    }
-
-    Widget bottomTitlesWidget(double value, TitleMeta meta) {
-      if (value == _minX || value == _maxX) return const SizedBox.shrink();
-
-      return SideTitleWidget(
-        meta: meta,
-        child: Text(
-          formatDateFromTimestamp(value),
-          style: TextStyle(color: textShade(context, 0.6), fontSize: 10),
-        ),
-      );
-    }
-
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const SizedBox(width: 25),
-            ...DateRange.values
-                .where((dateRange) => _dateIsInRange(dateRange))
-                .map(
-                  (dateRange) => _RangeButton(
-                    text: dateRange.label(context.l10n),
-                    onPressed: () {
-                      setState(() {
-                        _selectedRange = dateRange;
-                      });
-                    },
-                    selected: _selectedRange == dateRange,
-                  ),
-                ),
-          ],
-        ),
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: LineChart(
-            LineChartData(
-              minX: _minX,
-              maxX: _maxX,
-              minY: _minY,
-              maxY: _maxY,
-              lineBarsData: [
-                LineChartBarData(
-                  spots: _flSpot,
-                  dotData: const FlDotData(show: false),
-                  color: chartColor,
-                  belowBarData: BarAreaData(color: chartColor.withValues(alpha: 0.3), show: true),
-                  barWidth: 1.5,
-                ),
-              ],
-              borderData: FlBorderData(
-                show: true,
-                border: Border(
-                  bottom: BorderSide(color: borderColor),
-                  left: BorderSide(color: borderColor),
-                ),
-              ),
-              gridData: FlGridData(
-                show: true,
-                drawVerticalLine: false,
-                getDrawingHorizontalLine: (value) => FlLine(color: borderColor, strokeWidth: 0.5),
-              ),
-              lineTouchData: LineTouchData(
-                touchSpotThreshold: double.infinity,
-                touchTooltipData: LineTouchTooltipData(
-                  getTooltipColor: (_) => chartColor.withValues(alpha: 0.5),
-                  fitInsideHorizontally: true,
-                  fitInsideVertically: true,
-                  getTooltipItems: (touchedSpots) {
-                    return touchedSpots
-                        .map(
-                          (LineBarSpot touchedSpot) => LineTooltipItem(
-                            '${touchedSpot.y.toInt()}\n',
-                            Styles.bold,
-                            children: [
-                              TextSpan(
-                                text: formatDateFromTimestampForTooltip(touchedSpot.x),
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList();
-                  },
-                ),
-                getTouchedSpotIndicator: (barData, spotIndexes) {
-                  return spotIndexes.map((spotIndex) {
-                    return TouchedSpotIndicatorData(
-                      FlLine(color: chartColor, strokeWidth: 2),
-                      FlDotData(
-                        show: true,
-                        getDotPainter: (spot, percent, barData, index) {
-                          return FlDotCirclePainter(radius: 5, color: chartColor);
-                        },
-                      ),
-                    );
-                  }).toList();
-                },
-              ),
-              titlesData: FlTitlesData(
-                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 25,
-                    getTitlesWidget: bottomTitlesWidget,
-                    interval: (_maxX - _minX) / 3,
-                    // The placement of the bottom titles is not perfect
-                    // See the issue https://github.com/imaNNeo/fl_chart/issues/1605
-                  ),
-                ),
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 35,
-                    getTitlesWidget: leftTitlesWidget,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    );
-  }
-}
-
-class const _RangeButton({
-  required final String text,
-  required final VoidCallback onPressed,
-  final bool selected = false,
-}) extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final chartColor = Styles.chartColor(context);
-
-    return Card(
-      color: selected ? chartColor.withValues(alpha: 0.2) : null,
-      shadowColor: selected ? Colors.transparent : null,
-      child: InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        onTap: onPressed,
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-            child: Text(text),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-enum DateRange() {
-  oneWeek,
-  oneMonth,
-  threeMonths,
-  oneYear,
-  allTime;
-
-  String label(AppLocalizations _) => switch (this) {
-    DateRange.oneWeek => '1W',
-    DateRange.oneMonth => '1M',
-    DateRange.threeMonths => '3M',
-    DateRange.oneYear => '1Y',
-    DateRange.allTime => 'ALL',
-  };
 }

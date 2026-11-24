@@ -81,8 +81,8 @@ class _BodyState() extends ConsumerState<_Body> {
               details: HighlightDetails(
                 solidColor:
                     (trainingState.lastGuess == Guess.correct
-                            ? context.lichessColors.good
-                            : context.lichessColors.error)
+                            ? context.lichessColors.green
+                            : context.lichessColors.red)
                         .withValues(alpha: 0.5),
               ),
             ),
@@ -90,7 +90,7 @@ class _BodyState() extends ConsumerState<_Body> {
         } else ...{
           trainingState.currentCoord!: SquareHighlight(
             details: HighlightDetails(
-              solidColor: context.lichessColors.good.withValues(alpha: 0.5),
+              solidColor: context.lichessColors.green.withValues(alpha: 0.5),
             ),
           ),
         },
@@ -129,8 +129,8 @@ class _BodyState() extends ConsumerState<_Body> {
                             maxWidth: boardSize,
                             timeFractionElapsed: trainingState.timeFractionElapsed,
                             color: trainingState.lastGuess == Guess.incorrect
-                                ? context.lichessColors.error
-                                : context.lichessColors.good,
+                                ? context.lichessColors.red
+                                : context.lichessColors.green,
                           ),
                           _TrainingBoard(
                             boardSize: boardSize,
@@ -145,32 +145,36 @@ class _BodyState() extends ConsumerState<_Body> {
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.score,
-                        onPressed: ref
-                            .read(coordinateTrainingControllerProvider.notifier)
-                            .abortTraining,
-                        label: 'Abort Training',
+                        button: FilledButton.tonal(
+                          onPressed: ref
+                              .read(coordinateTrainingControllerProvider.notifier)
+                              .abortTraining,
+                          child: const Text('Abort Training'),
+                        ),
                       )
                     else if (trainingState.lastScore != null)
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.lastScore!,
-                        onPressed: () {
-                          ref
-                              .read(coordinateTrainingControllerProvider.notifier)
-                              .startTraining(trainingPrefs.timeChoice.duration);
-                        },
-                        label: context.l10n.coordinatesStartTraining,
+                        button: FilledButton(
+                          onPressed: () {
+                            ref
+                                .read(coordinateTrainingControllerProvider.notifier)
+                                .startTraining(trainingPrefs.timeChoice.duration);
+                          },
+                          child: Text(context.l10n.coordinatesStartTraining),
+                        ),
                       )
                     else
                       Expanded(
                         child: Center(
-                          child: _Button(
+                          child: FilledButton(
                             onPressed: () {
                               ref
                                   .read(coordinateTrainingControllerProvider.notifier)
                                   .startTraining(trainingPrefs.timeChoice.duration);
                             },
-                            label: context.l10n.coordinatesStartTraining,
+                            child: Text(context.l10n.coordinatesStartTraining),
                           ),
                         ),
                       ),
@@ -267,8 +271,7 @@ class const _CoordinateTrainingMenu() extends ConsumerWidget {
 class const _ScoreAndTrainingButton({
   required final double scoreSize,
   required final int score,
-  required final VoidCallback onPressed,
-  required final String label,
+  required final Widget button,
 }) extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -282,10 +285,10 @@ class const _ScoreAndTrainingButton({
             score: score,
             size: scoreSize,
             color: trainingState.lastGuess == Guess.incorrect
-                ? context.lichessColors.error
-                : context.lichessColors.good,
+                ? context.lichessColors.red
+                : context.lichessColors.green,
           ),
-          _Button(label: label, onPressed: onPressed),
+          button,
         ],
       ),
     );
@@ -315,17 +318,6 @@ class const _Score({
           ),
         ),
       ),
-    );
-  }
-}
-
-class const _Button({required final VoidCallback onPressed, required final String label})
-    extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-      onPressed: onPressed,
-      child: Text(label, style: Styles.bold),
     );
   }
 }

@@ -43,6 +43,10 @@ class const SwipeActions({
   ///
   /// Defaults to 0.5.
   final double extentRatio = 0.5,
+
+  /// Whether to show the label of the actions under their icon (only on iOS 26 and later). Hidden
+  /// labels stay available to screen readers.
+  final bool showLabels = true,
   super.key,
 }) extends StatelessWidget {
   @override
@@ -83,7 +87,8 @@ class const SwipeActions({
 
     GlassSwipeAction glassAction(SwipeAction action) => GlassSwipeAction(
       icon: Icon(action.icon),
-      label: Text(action.label),
+      label: showLabels ? Text(action.label) : null,
+      semanticLabel: action.label,
       onTap: action.onPressed,
       backgroundColor: action.backgroundColor,
       foregroundColor: action.foregroundColor ?? Colors.white,

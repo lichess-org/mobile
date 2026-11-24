@@ -71,6 +71,7 @@ class _BroadcastListScreenState() extends State<BroadcastListScreen> {
         // under the bar anyway, since a pinned header always covers that edge, so the bar is never
         // tinted.
         extendBodyBehindAppBar: false,
+        plainList: true,
         appBar: PlatformAppBar(title: title, actions: [searchButton, filterButton]),
         body: _Body(filter),
       );

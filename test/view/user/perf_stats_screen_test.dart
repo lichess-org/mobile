@@ -68,6 +68,8 @@ void main() {
       final app = await makeTestProviderScopeApp(
         tester,
         home: PerfStatsScreen(user: fakeUser, perf: testPerf),
+        // tall enough to build every stat card
+        surfaceSize: Size(kTestSurfaceSize.width, 2000),
         overrides: {
           lichessClientProvider: lichessClientProvider.overrideWith((ref) {
             return LichessClient(client, ref);
@@ -79,6 +81,11 @@ void main() {
 
       // wait for auth state and perf stats
       await tester.pump(const Duration(milliseconds: 50));
+
+      // rating details are collapsed
+      expect(find.text('50.24'), findsNothing);
+      await tester.tap(find.text('More'));
+      await tester.pumpAndSettle();
 
       final requiredStatsValues = [
         '50.24', // Deviation
@@ -142,7 +149,13 @@ void main() {
           .push(PerfStatsScreen.buildRoute(user: fakeUser, perf: testPerf));
       await tester.pumpAndSettle();
 
-      // end of the current and of the longest winning streaks
+      // show the date of the highest rating
+      await tester.tap(
+        find.descendant(of: find.byType(PerfStatsScreen), matching: find.text('More')),
+      );
+      await tester.pumpAndSettle();
+
+      // highest rating, end of the current and of the longest winning streaks
       final streakEnd = find.text('Jan 20, 2023');
       await tester.scrollUntilVisible(
         streakEnd.first,

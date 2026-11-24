@@ -37,7 +37,11 @@ class const VariantLabel(final Variant variant, {super.key}) extends StatelessWi
             ],
           ),
         ),
-        Text(variant.description(context.l10n), style: descriptionStyle),
+        DefaultTextStyle(
+          style: style,
+          textAlign: DefaultTextStyle.of(context).textAlign,
+          child: Text(variant.description(context.l10n), style: descriptionStyle),
+        ),
       ],
     );
   }

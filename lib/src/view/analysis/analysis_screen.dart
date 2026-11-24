@@ -129,6 +129,7 @@ class _AnalysisScreenState() extends ConsumerState<_AnalysisScreen> {
               lastMoveAt: archivedGame.data.lastMoveAt,
               isImport: archivedGame.source.isImport,
               importDate: archivedGame.data.importDate,
+              isTournament: archivedGame.data.arenaTournamentId != null,
             ),
             null when value != null => VariantAppBarTitle(
               variant: value.variant,
@@ -560,7 +561,7 @@ class const _BottomBar({
         ),
         if (options case Standalone()) ...[
           BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.clearLocalData),
+            makeLabel: (context) => Text(context.l10n.mobileClearMoves),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),

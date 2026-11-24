@@ -883,6 +883,7 @@ final _finishedBroadcast = Broadcast(
       website: Uri.parse('https://worldrapidandblitz2024.fide.com/'),
       standings: Uri.parse('https://worldrapidandbli…e.com/blitz-finals-open/'),
       timeControl: '3 min + 2 sec / move',
+      regulations: null,
     ),
   ),
   round: BroadcastRound(
@@ -1315,6 +1316,7 @@ final _upcomingBroadcast = Broadcast(
       website: Uri.parse('https://sevillaopenajedrez.com/'),
       standings: Uri.parse('https://chess-results.com/tnr1001542.aspx?lan=1'),
       timeControl: '90 min + 30 sec / move',
+      regulations: null,
     ),
   ),
   round: BroadcastRound(
@@ -1490,6 +1492,7 @@ final _liveBroadcast = Broadcast(
       website: null,
       standings: null,
       timeControl: null,
+      regulations: null,
     ),
   ),
   round: const BroadcastRound(
@@ -2578,6 +2581,7 @@ final _liveTeamBroadcast = Broadcast(
       website: null,
       standings: null,
       timeControl: null,
+      regulations: null,
     ),
   ),
   round: const BroadcastRound(

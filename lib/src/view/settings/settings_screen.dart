@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/experimental/mutation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -29,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -44,6 +47,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final packageInfo = ref.read(preloadedDataProvider).requireValue.packageInfo;
     final authUser = ref.watch(authControllerProvider);
+    final account = ref.watch(accountProvider);
     final signOutState = ref.watch(signOutMutation);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
@@ -56,7 +60,11 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
               hasLeading: true,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.manage_accounts_outlined),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  leading: switch (account) {
+                    AsyncData(:final User value) => AccountAvatar(value),
+                    _ => const Icon(Icons.manage_accounts_outlined),
+                  },
                   trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,

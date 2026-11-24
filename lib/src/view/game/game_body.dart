@@ -607,7 +607,7 @@ class const _GamePlayerTable({
                     key: ValueKey('${side.name}-clock'),
                     timeLeft: value,
                     active: data.activeClockSide == side,
-                    emergencyThreshold: youAre == side ? game.meta.clock?.emergency : null,
+                    emergencyThreshold: game.meta.clock?.emergency,
                     clockTenths: clockTenths,
                   );
                 },

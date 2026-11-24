@@ -377,6 +377,7 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
                 AnalysisOptions.pgn(
                   id: const StringId('otb_finished_game_analysis'),
                   orientation: Side.white,
+                  initialMoveCursor: gameState.stepCursor,
                   pgn: gameState.game.makePgn(),
                   isComputerAnalysisAllowed: true,
                   variant: gameState.game.meta.variant,

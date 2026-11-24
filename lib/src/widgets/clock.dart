@@ -18,14 +18,14 @@ class const Clock({
   /// The time left to be displayed on the clock.
   required final Duration timeLeft,
 
-  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  /// If `true`, the active colors are used unless the clock is in emergency.
   final bool active = false,
 
   /// Clock style to use.
   final ClockStyle? clockStyle,
 
-  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
-  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  /// If [timeLeft] is at or below [emergencyThreshold], the emergency background is used, dimmed
+  /// when the clock is inactive and still has time remaining.
   final Duration? emergencyThreshold,
   final ClockTenths? clockTenths,
 
@@ -56,14 +56,17 @@ class const Clock({
     final colorScheme = ColorScheme.of(context);
     final effectiveClockStyle =
         clockStyle ?? ClockStyle.defaultStyle(brightness, colorScheme, context.lichessColors);
+    final emergencyBackgroundColor = effectiveClockStyle.emergencyBackgroundColor.withValues(
+      alpha: effectiveClockStyle.emergencyBackgroundColor.a * (active ? 1.0 : 0.5),
+    );
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         color: timeLeft > Duration.zero
-            ? active
+            ? active || isEmergency
                   ? isEmergency
-                        ? effectiveClockStyle.emergencyBackgroundColor
+                        ? emergencyBackgroundColor
                         : effectiveClockStyle.activeBackgroundColor
                   : effectiveClockStyle.backgroundColor
             : effectiveClockStyle.emergencyBackgroundColor,
@@ -135,11 +138,11 @@ class const ClockStyle({
     textColor: colorScheme.outline,
     activeBackgroundColor: brightness == Brightness.dark
         ? colorScheme.inverseSurface
-        : colorScheme.tertiaryContainer,
+        : colorScheme.secondary.withValues(alpha: 0.85),
     activeTextColor: brightness == Brightness.dark
         ? colorScheme.onInverseSurface
-        : colorScheme.onTertiaryContainer,
-    emergencyBackgroundColor: lichessColors.error.withValues(
+        : colorScheme.onSecondary,
+    emergencyBackgroundColor: lichessColors.red.withValues(
       alpha: brightness == Brightness.dark ? 0.6 : 0.4,
     ),
     emergencyTextColor: brightness == Brightness.dark ? Colors.white60 : Colors.black87,

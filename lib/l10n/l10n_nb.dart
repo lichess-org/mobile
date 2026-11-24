@@ -74,6 +74,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileClearButton => 'Tøm';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koden utløper etter 5 minutter og kan bare brukes én gang.';
 
   @override
@@ -797,6 +800,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get arenaNewTeamBattle => 'Ny lagkamp';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'Egendefinert startdato';
 
   @override
@@ -905,6 +914,14 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Ligaer og strømmerkamper';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -2391,7 +2408,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Forvandle til dronning automatisk';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold <ctrl>-tasten nede under bondeforvandlingen for å unngå auto-dronning';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'Ved bruk av førtrekk';
@@ -2406,7 +2423,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Trekkbekreftelse';
 
   @override
-  String get preferencesMultipleChoices => 'Flere valg. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan skrus av under partiene med menyen på brettet';
@@ -3368,9 +3385,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Jeg forstår at slettede kontoer ikke kan gjenopprettes';
-
-  @override
-  String get gameSetup => 'Game setup';
 
   @override
   String get challengeAFriend => 'Utfordre en venn';
@@ -4578,6 +4592,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get resume => 'Fortsett';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'Du spiller!';
@@ -6048,6 +6065,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get minimumRatedGames => 'Minimum ratede partier';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'Minimum rating';
 
   @override
@@ -6218,6 +6241,11 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get clearSearch => 'Tøm søk';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6964,6 +6992,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyKick => 'Kast ut';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'Forlat studien';
 
   @override
@@ -7235,13 +7266,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyGoodMove => 'Godt trekk';
 
   @override
-  String get studyMistake => 'Feil';
-
-  @override
   String get studyBrilliantMove => 'Strålende trekk';
-
-  @override
-  String get studyBlunder => 'Bukk';
 
   @override
   String get studyInterestingMove => 'Interessant trekk';
@@ -7465,6 +7490,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyser på enheten din';
 
   @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
+
+  @override
   String studyNbChapters(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -7502,8 +7533,8 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Sett inn PGN-teksten din her, maksimum $count partier',
-      one: 'Sett inn PGN-teksten din her, maksimum $count parti',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }
@@ -7541,6 +7572,12 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get tfaTwoFactorAuth => 'Tofaktorautentisering';
+
+  @override
+  String get tfaAuthenticationCode => 'Autentiseringskode';
+
+  @override
+  String get tfaOpenTwoFactorApp => 'Åpne tofaktorautentiseringsappen på enheten din for å vise autentiseringskoden og bekrefte identiteten din.';
 
   @override
   String get timeagoJustNow => 'om litt';

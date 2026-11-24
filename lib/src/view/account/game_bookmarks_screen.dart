@@ -23,6 +23,7 @@ class const GameBookmarksScreen({required final int nbBookmarks, super.key})
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(title: Text(context.l10n.nbBookmarks(nbBookmarks))),
       body: const _Body(),
     );
@@ -124,6 +125,8 @@ class _BodyState() extends ConsumerState<_Body> {
                     );
 
                     return SwipeActions(
+                      // The compact rows are too short for the labels.
+                      showLabels: false,
                       startActions: [
                         SwipeAction(
                           backgroundColor: ColorScheme.of(context).tertiaryContainer,
@@ -152,7 +155,7 @@ class _BodyState() extends ConsumerState<_Body> {
                       ],
                       endActions: [
                         SwipeAction(
-                          backgroundColor: context.lichessColors.error,
+                          backgroundColor: context.lichessColors.red,
                           onPressed: () => onRemoveBookmark(context),
                           icon: Icons.bookmark_remove_outlined,
                           label: context.l10n.mobileRemoveBookmark,

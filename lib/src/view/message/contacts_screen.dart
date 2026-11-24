@@ -72,6 +72,7 @@ class _ContactsScreenState() extends ConsumerState<ContactsScreen> {
     final isIOS = Theme.of(context).platform == TargetPlatform.iOS;
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
         title: Text(context.l10n.inbox),
         // On iOS, the search field is below the large title, and sticks below the bar buttons once

@@ -327,7 +327,7 @@ class const _ResultDialog({required final Widget child}) extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return GlassDialogFrame(child: child);
+      return GlassDialogFrame(opaque: true, child: child);
     }
     final screenWidth = MediaQuery.widthOf(context);
     final paddedContent = Padding(padding: const EdgeInsets.all(16.0), child: child);

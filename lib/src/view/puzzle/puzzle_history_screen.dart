@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -19,13 +18,12 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:material_ui/material_ui.dart';
 
-DateFormat get _dateFormatter => DateFormat.yMMMd();
-
 /// Shows a short preview of the puzzle history.
 class const PuzzleHistoryPreview(
   final IList<PuzzleHistoryEntry> history, {
   final int? maxRows,
   final bool? shouldOpenCasualPuzzleRun,
+  final bool showRatings = false,
   super.key,
 }) extends ConsumerWidget {
   @override
@@ -53,7 +51,12 @@ class const PuzzleHistoryPreview(
             lastMove: lastMove,
             footer: Padding(
               padding: const EdgeInsets.only(top: 2.0),
-              child: Row(children: [_PuzzleResult(e)]),
+              child: Row(
+                children: [
+                  _PuzzleResult(e),
+                  if (showRatings) ...[const SizedBox(width: 8), Text(e.rating.toString())],
+                ],
+              ),
             ),
           );
         }).toList();
@@ -154,16 +157,7 @@ class _BodyState() extends ConsumerState<_Body> {
                 ),
               );
             } else if (element is DateTime) {
-              final now = DateTime.now();
-              final today = DateTime(now.year, now.month, now.day);
-              final difference = today.difference(element).inDays;
-              final title = difference == 0
-                  ? context.l10n.today
-                  : difference == 1
-                  ? context.l10n.yesterday
-                  : difference < 15
-                  ? relativeDate(context.l10n, element)
-                  : _dateFormatter.format(element);
+              final title = formatDayHeader(context.l10n, element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding).add(Styles.sectionTopPadding),
                 child: Text(
@@ -221,8 +215,8 @@ class const _PuzzleResult(final PuzzleHistoryEntry entry) extends StatelessWidge
   Widget build(BuildContext context) {
     return ColoredBox(
       color: entry.win
-          ? context.lichessColors.good.withValues(alpha: 0.7)
-          : context.lichessColors.error.withValues(alpha: 0.7),
+          ? context.lichessColors.green.withValues(alpha: 0.7)
+          : context.lichessColors.red.withValues(alpha: 0.7),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 3),
         child: Row(

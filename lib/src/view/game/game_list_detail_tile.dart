@@ -22,6 +22,10 @@ import 'package:material_ui/material_ui.dart';
 class const GameListDetailTile({
   required final LightExportedGameWithPov item,
   final Future<void> Function(BuildContext context)? onPressedBookmark,
+
+  /// Whether to show only the time of day the game started instead of its date, in a list grouped
+  /// by day.
+  final bool timeOnly = false,
 }) extends ConsumerWidget {
   Side get mySide => item.pov;
 
@@ -80,12 +84,14 @@ class const GameListDetailTile({
                     lastMove: game.lastMove,
                   ),
                 Expanded(
-                  child: SizedBox(
-                    height: boardSize,
+                  // As high as the board, or higher if the text needs it (e.g. in a narrow card).
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: boardSize),
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Column(
-                        mainAxisSize: MainAxisSize.max,
+                        // With the min height, spreads the text over the board height.
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -97,11 +103,14 @@ class const GameListDetailTile({
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    // For an imported game, `lastMoveAt` is the import date, so
-                                    // prefer the PGN date if we have it.
+                                    // Like the website, show when the game started. For an imported
+                                    // game that's the import date, so prefer the PGN date if we
+                                    // have it.
                                     (game.importDate != null
                                             ? formatPgnDate(game.importDate!)
-                                            : relativeDate(context.l10n, game.lastMoveAt))
+                                            : timeOnly
+                                            ? formatTimeOfDay(context, game.createdAt)
+                                            : relativeDate(context.l10n, game.createdAt))
                                         .toUpperCase(),
                                     style: dateStyle,
                                   ),
@@ -112,7 +121,7 @@ class const GameListDetailTile({
                                         Icon(
                                           CupertinoIcons.chart_bar_alt_fill,
                                           size: subtitleFontSize + 3,
-                                          color: textShade(context, 0.7),
+                                          color: textShade(context, 0.4),
                                         ),
                                         const SizedBox(width: 2),
                                       ],
@@ -149,6 +158,7 @@ class const GameListDetailTile({
                                   name: opponent.name,
                                   aiLevel: opponent.aiLevel,
                                   rating: opponent.rating,
+                                  provisional: opponent.provisional,
                                   style: TextStyle(
                                     fontSize: titleFontSize,
                                     fontWeight: FontWeight.w600,
@@ -200,22 +210,25 @@ class const GameListDetailTile({
                                     style: TextStyle(
                                       fontSize: subtitleFontSize,
                                       color: game.winner == null
-                                          ? context.lichessColors.brag
+                                          ? textShade(context, Styles.subtitleOpacity)
                                           : game.winner == mySide
-                                          ? context.lichessColors.good
-                                          : context.lichessColors.error,
+                                          ? context.lichessColors.green
+                                          : context.lichessColors.red,
                                     ),
                                     children: [
                                       if (me.ratingDiff != null)
                                         switch (showRatingAsync) {
-                                          AsyncData(value: ShowRatings.yes) => TextSpan(
-                                            text:
-                                                ' (${me.ratingDiff == 0
-                                                    ? '±'
-                                                    : me.ratingDiff! > 0
-                                                    ? '+'
-                                                    : ''}${me.ratingDiff})',
-                                          ),
+                                          AsyncData(
+                                            value: ShowRatings.yes || ShowRatings.exceptInGame,
+                                          ) =>
+                                            TextSpan(
+                                              text:
+                                                  ' (${me.ratingDiff == 0
+                                                      ? '±'
+                                                      : me.ratingDiff! > 0
+                                                      ? '+'
+                                                      : ''}${me.ratingDiff})',
+                                            ),
 
                                           _ => const TextSpan(),
                                         },

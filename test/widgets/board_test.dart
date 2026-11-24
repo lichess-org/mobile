@@ -11,7 +11,11 @@ import '../test_provider_scope.dart';
 
 void main() {
   group('iOS back swipe', () {
-    Future<void> pushBoardScreen(WidgetTester tester, GameBoardParams boardParams) async {
+    Future<void> pushBoardScreen(
+      WidgetTester tester,
+      GameBoardParams boardParams, {
+      double sideMargin = 0,
+    }) async {
       final app = await makeTestProviderScope(
         tester,
         child: MaterialApp(
@@ -20,11 +24,14 @@ void main() {
               onPressed: () => Navigator.of(context).push(
                 buildScreenRoute<void>(
                   screen: Scaffold(
-                    body: GameLayout(
-                      orientation: Side.white,
-                      boardParams: boardParams,
-                      topTable: const SizedBox(height: 100, child: Text('Top table')),
-                      bottomTable: const SizedBox(height: 100, child: Text('Bottom table')),
+                    body: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: sideMargin),
+                      child: GameLayout(
+                        orientation: Side.white,
+                        boardParams: boardParams,
+                        topTable: const SizedBox(height: 100, child: Text('Top table')),
+                        bottomTable: const SizedBox(height: 100, child: Text('Bottom table')),
+                      ),
                     ),
                   ),
                 ),
@@ -75,6 +82,43 @@ void main() {
 
     testWidgets('pops the screen when the drag starts outside of the board', (tester) async {
       await pushBoardScreen(tester, interactiveParams);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.dragFrom(Offset(5, boardRect.top - 20), const Offset(300, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Chessboard), findsNothing);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('does not pop the screen when the drag starts beside an interactive board', (
+      tester,
+    ) async {
+      await pushBoardScreen(tester, interactiveParams, sideMargin: 12);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      expect(boardRect.left, greaterThanOrEqualTo(12));
+      await tester.dragFrom(Offset(5, boardRect.center.dy), const Offset(300, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Chessboard), findsOneWidget);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('pops the screen when the drag starts beside a non-interactive board', (
+      tester,
+    ) async {
+      await pushBoardScreen(tester, readonlyParams, sideMargin: 12);
+
+      final boardRect = tester.getRect(find.byType(Chessboard));
+      await tester.dragFrom(Offset(5, boardRect.center.dy), const Offset(300, 0));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Chessboard), findsNothing);
+    }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+    testWidgets('pops the screen when the drag starts beside an inset board, above it', (
+      tester,
+    ) async {
+      await pushBoardScreen(tester, interactiveParams, sideMargin: 12);
 
       final boardRect = tester.getRect(find.byType(Chessboard));
       await tester.dragFrom(Offset(5, boardRect.top - 20), const Offset(300, 0));

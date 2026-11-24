@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/view/account/game_bookmarks_screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../mock_server_responses.dart';
@@ -46,5 +49,53 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Paris'), findsOneWidget);
+  });
+
+  testWidgets('shows the first bookmarks, with a link to all of them', (tester) async {
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/account') {
+        return mockResponse(
+          mockApiAccountResponse(fakeAuthUser.user.name).replaceFirst(
+            '"perfs": {',
+            '"count": {"all": 20, "win": 10, "draw": 2, "loss": 8, "bookmark": 13}, "perfs": {',
+          ),
+          200,
+        );
+      }
+      if (request.url.path == '/api/games/export/bookmarks') {
+        return mockResponse(mockUserRecentGameResponse(fakeAuthUser.user.name), 200);
+      }
+      return mockResponse('', 404);
+    });
+
+    final app = await makeTestProviderScopeApp(
+      tester,
+      home: const ProfileScreen(),
+      authUser: fakeAuthUser,
+      overrides: {
+        lichessClientProvider: lichessClientProvider.overrideWith(
+          (ref) => LichessClient(mockClient, ref),
+        ),
+      },
+    );
+    await tester.pumpWidget(app);
+    await tester.pump();
+    await tester.pump();
+
+    final header = find.widgetWithText(ListSectionHeader, '13 bookmarks');
+    await tester.scrollUntilVisible(
+      header.hitTestable(),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    final bookmarksSection = find.ancestor(of: header, matching: find.byType(ListSection));
+    expect(
+      find.descendant(of: bookmarksSection, matching: find.byType(GameListTile)),
+      findsNWidgets(3),
+    );
+
+    await tester.tap(header);
+    await tester.pumpAndSettle();
+    expect(find.byType(GameBookmarksScreen), findsOneWidget);
   });
 }

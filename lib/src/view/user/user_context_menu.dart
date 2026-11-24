@@ -49,10 +49,7 @@ class const UserContextMenu({final User? user, final UserId? userId, super.key})
                       text: value.profile!.bio!,
                       maxLines: 20,
                       overflow: TextOverflow.ellipsis,
-                      linkStyle: const TextStyle(
-                        color: Colors.blueAccent,
-                        decoration: TextDecoration.none,
-                      ),
+                      linkStyle: Styles.linkStyle(context),
                     ),
                 ],
               ),

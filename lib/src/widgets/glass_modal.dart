@@ -18,17 +18,22 @@ Color opaqueModalColor(BuildContext context) =>
 /// too warm, and the glass only keeps a light color bright when it is neutral (a color with a hue
 /// takes the brightness of the dimmed content behind the modal).
 ///
-/// Before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of the same shape.
+/// With [opaque], or before iOS 26 ([useLiquidGlass]), it is an opaque card ([opaqueModalColor]) of
+/// the same shape.
 class const GlassModalCard({
   required final Widget child,
   final double borderRadius = 26.0,
   final EdgeInsetsGeometry? padding,
   final bool tinted = false,
+
+  /// Whether the card is fully opaque, for a modal whose content must not mix with the content
+  /// behind it at all (e.g. a game result over the board).
+  final bool opaque = false,
   super.key,
 }) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!useLiquidGlass(context)) {
+    if (!useLiquidGlass(context) || opaque) {
       return Material(
         color: opaqueModalColor(context),
         shape: RoundedSuperellipseBorder(
@@ -67,12 +72,16 @@ class const GlassModalCard({
 /// With liquid glass, the card is painted through an [OverlayPortal], outside the dialog route's
 /// transition: the iOS dialog route ([showAdaptiveDialog]) fades its page in, which would show the
 /// glass more transparent until the end of the fade. The card scales in at full opacity instead,
-/// and fades out when the dialog closes.
+/// and fades out when the dialog closes. An [opaque] card has no glass, and keeps the route's
+/// transition.
 class const GlassDialogFrame({
   required final Widget child,
 
   /// The width of an alert dialog by default.
   final double maxWidth = 300.0,
+
+  /// See [GlassModalCard.opaque].
+  final bool opaque = false,
   super.key,
 }) extends StatefulWidget {
   @override
@@ -101,6 +110,7 @@ class _GlassDialogFrameState() extends State<GlassDialogFrame> {
             constraints: BoxConstraints(maxWidth: widget.maxWidth),
             child: GlassModalCard(
               tinted: true,
+              opaque: widget.opaque,
               borderRadius: 34.0,
               padding: const EdgeInsets.all(20.0),
               // The content may hold Material widgets (list tiles, checkboxes, buttons...).
@@ -112,7 +122,7 @@ class _GlassDialogFrameState() extends State<GlassDialogFrame> {
     );
 
     final animation = ModalRoute.of(context)?.animation;
-    if (!useLiquidGlass(context) || animation == null) {
+    if (!useLiquidGlass(context) || widget.opaque || animation == null) {
       return frame;
     }
 

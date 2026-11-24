@@ -48,6 +48,12 @@ void main() {
       // wait for recent games and activity
       await tester.pump(const Duration(milliseconds: 50));
 
+      // below the profile, stats and perf cards
+      await tester.scrollUntilVisible(
+        find.text('Activity').hitTestable(),
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(find.text('Activity'), findsOneWidget);
     }, variant: kPlatformVariant);
 
@@ -89,6 +95,11 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
 
         // Button stays visible (web parity) so the reason can be explained.
+        await tester.scrollUntilVisible(
+          find.text('Challenge').hitTestable(),
+          300,
+          scrollable: find.byType(Scrollable).first,
+        );
         expect(find.text('Challenge'), findsOneWidget);
 
         await tester.tap(find.text('Challenge'));

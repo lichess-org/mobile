@@ -156,14 +156,14 @@ sealed class const User._() with _$User {
 sealed class UserGameCount with _$UserGameCount {
   const factory({
     required int all,
+    required int win,
+    required int draw,
+    required int loss,
     // TODO(#454): enable rest of fields when needed for filtering
     // required int rated,
     // required int ai,
-    // required int draw,
     // required int drawH,
-    // required int win,
     // required int winH,
-    // required int loss,
     // required int lossH,
     required int bookmark,
     // required int playing,
@@ -175,14 +175,14 @@ sealed class UserGameCount with _$UserGameCount {
 
   factory fromPick(RequiredPick pick) => UserGameCount(
     all: pick('all').asIntOrThrow(),
+    win: pick('win').asIntOrThrow(),
+    draw: pick('draw').asIntOrThrow(),
+    loss: pick('loss').asIntOrThrow(),
     // TODO(#454): enable rest of fields when needed for filtering
     // rated: pick('rated').asIntOrThrow(),
     // ai: pick('ai').asIntOrThrow(),
-    // draw: pick('draw').asIntOrThrow(),
     // drawH: pick('drawH').asIntOrThrow(),
-    // win: pick('win').asIntOrThrow(),
     // winH: pick('winH').asIntOrThrow(),
-    // loss: pick('loss').asIntOrThrow(),
     // lossH: pick('lossH').asIntOrThrow(),
     bookmark: pick('bookmark').asIntOrThrow(),
     // playing: pick('playing').asIntOrThrow(),

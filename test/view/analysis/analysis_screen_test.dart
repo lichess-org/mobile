@@ -1714,7 +1714,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pump();
 
-    await tester.tap(find.text('Clear local data'));
+    await tester.tap(find.text('Clear moves'));
     await tester.pump();
 
     //verify moves are cleared
