@@ -316,4 +316,38 @@ void main() {
       variant: kPlatformVariant,
     );
   });
+
+  group('Incoming rematch offer in bottom bar', () {
+    testWidgets(
+      'highlights Show result on incoming offer, clears on cancel, and opens Accept/Decline dialog',
+      (tester) async {
+        final (:sentSocket, requestedPaths: _) = await pumpDismissedFinishedGame(tester);
+
+        final showResultFinder = find.widgetWithIcon(BottomBarButton, Icons.info_outline);
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isFalse);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black', version: 1)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isTrue);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent(null, version: 2)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isFalse);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black', version: 3)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isTrue);
+
+        await tester.tap(showResultFinder);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Your opponent wants to play a new game with you'), findsOneWidget);
+        await tester.tap(find.byTooltip('Accept'));
+        await tester.pump();
+
+        expect(sentSocket.any((m) => m.contains('rematch-yes')), isTrue);
+      },
+      variant: kPlatformVariant,
+    );
+  });
 }

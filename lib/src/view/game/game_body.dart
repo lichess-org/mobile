@@ -685,6 +685,7 @@ class const _GameBottomBar({
           finished: game.finished,
           resignable: game.resignable,
           offeringDraw: game.opponent?.offeringDraw == true,
+          offeringRematch: gameState.canOfferRematch && game.opponent?.offeringRematch == true,
           isThreefoldRepetition: game.isThreefoldRepetition == true,
           proposingTakeback: game.opponent?.proposingTakeback == true,
           isCorrespondence: game.meta.speed == Speed.correspondence,
@@ -801,6 +802,7 @@ class const _GameBottomBar({
             else if (data.finished)
               BottomBarButton(
                 label: context.l10n.mobileShowResult,
+                highlighted: data.offeringRematch,
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
