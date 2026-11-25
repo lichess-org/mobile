@@ -710,11 +710,10 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    test('recap season runs from mid-November to mid-January', () {
-      expect(yearRecapBannerYear(DateTime(2026, 10, 31)), isNull);
-      expect(yearRecapBannerYear(DateTime(2026, 11, kYearRecapBannerFirstNovemberDay - 1)), isNull);
-      expect(yearRecapBannerYear(DateTime(2026, 11, kYearRecapBannerFirstNovemberDay)), 2026);
-      expect(yearRecapBannerYear(DateTime(2026, 12, 1)), 2026);
+    test('recap season runs from December 10 to January 5', () {
+      expect(yearRecapBannerYear(DateTime(2026, 11, 30)), isNull);
+      expect(yearRecapBannerYear(DateTime(2026, 12, kYearRecapBannerFirstDecemberDay - 1)), isNull);
+      expect(yearRecapBannerYear(DateTime(2026, 12, kYearRecapBannerFirstDecemberDay)), 2026);
       expect(yearRecapBannerYear(DateTime(2026, 12, 31)), 2026);
       expect(yearRecapBannerYear(DateTime(2027, 1, kYearRecapBannerLastJanuaryDay)), 2026);
       expect(yearRecapBannerYear(DateTime(2027, 1, kYearRecapBannerLastJanuaryDay + 1)), isNull);
@@ -728,14 +727,14 @@ void main() {
     });
 
     testWidgets('promotes the previous year in January', (tester) async {
-      await withClock(Clock.fixed(DateTime(2027, 1, 5)), () async {
+      await withClock(Clock.fixed(DateTime(2027, 1, 3)), () async {
         await pumpHome(tester, authUser: fakeAuthUser);
         expect(find.text(recapTitle), findsOneWidget);
       });
     });
 
     testWidgets('not shown outside the recap season', (tester) async {
-      await withClock(Clock.fixed(DateTime(2026, 11, 5)), () async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 9)), () async {
         await pumpHome(tester, authUser: fakeAuthUser);
         expect(find.textContaining('recap is ready'), findsNothing);
       });

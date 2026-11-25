@@ -517,16 +517,14 @@ class const _LichessMessageBanner() extends ConsumerWidget {
 }
 
 const String kHideYearRecapBannerPrefix = 'app_hide_year_recap_banner_';
-const kYearRecapBannerFirstNovemberDay = 10;
-const kYearRecapBannerLastJanuaryDay = 15;
+const kYearRecapBannerFirstDecemberDay = 10;
+const kYearRecapBannerLastJanuaryDay = 5;
 
-/// The year whose recap is promoted on [date], or null outside the recap season (November from
-/// [kYearRecapBannerFirstNovemberDay], December, and January until
-/// [kYearRecapBannerLastJanuaryDay]).
+/// The year whose recap is promoted on [date], or null outside the recap season (December from
+/// [kYearRecapBannerFirstDecemberDay], and January until [kYearRecapBannerLastJanuaryDay]).
 @visibleForTesting
 int? yearRecapBannerYear(DateTime date) => switch (date.month) {
-  11 when date.day >= kYearRecapBannerFirstNovemberDay => date.year,
-  12 => date.year,
+  12 when date.day >= kYearRecapBannerFirstDecemberDay => date.year,
   1 when date.day <= kYearRecapBannerLastJanuaryDay => date.year - 1,
   _ => null,
 };
