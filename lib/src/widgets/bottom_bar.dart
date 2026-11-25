@@ -89,11 +89,17 @@ class BottomBar extends StatelessWidget {
             ),
           );
 
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.4,
-      child: isIOS && cupertinoGlass && !glass
-          ? BlurredBarBackground(atBottom: true, child: bar)
-          : bar,
+    // The bar is at the bottom of the screen: the top padding of a body that extends behind the app
+    // bar (status bar and app bar) must not inset it.
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: MediaQuery.withClampedTextScaling(
+        maxScaleFactor: 1.4,
+        child: isIOS && cupertinoGlass && !glass
+            ? BlurredBarBackground(atBottom: true, child: bar)
+            : bar,
+      ),
     );
   }
 }
