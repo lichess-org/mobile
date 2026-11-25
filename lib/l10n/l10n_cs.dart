@@ -318,6 +318,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileRemoveBookmark => 'Odebrat záložku';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

@@ -318,6 +318,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileRemoveBookmark => 'ブックマークから削除';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => '研究を選択';
 
   @override

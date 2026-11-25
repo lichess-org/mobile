@@ -318,6 +318,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Eemalda järjehoidja';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Vali uuring';
 
   @override

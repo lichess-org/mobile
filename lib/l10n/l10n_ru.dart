@@ -318,6 +318,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Удалить из избранного';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Выберите Студию';
 
   @override

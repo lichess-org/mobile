@@ -318,6 +318,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Бетбелгіні алып тастау';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

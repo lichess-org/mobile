@@ -318,6 +318,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Διαγραφή σελιδοδείκτη';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Επιλογή μελέτης';
 
   @override

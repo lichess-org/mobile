@@ -318,6 +318,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileRemoveBookmark => 'Rimuovi segnalibro';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Seleziona uno studio';
 
   @override

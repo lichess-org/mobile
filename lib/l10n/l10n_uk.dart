@@ -318,6 +318,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileRemoveBookmark => 'Видалити закладку';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Вибір дослідження';
 
   @override

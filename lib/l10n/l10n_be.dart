@@ -318,6 +318,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileRemoveBookmark => 'Выдаліць закладку';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

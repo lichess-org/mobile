@@ -318,6 +318,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get mobileRemoveBookmark => 'Könyvjelző eltávolítása';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Select a study';
 
   @override

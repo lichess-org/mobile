@@ -318,6 +318,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileRemoveBookmark => '移除书签';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => '选择研习';
 
   @override

@@ -318,6 +318,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileRemoveBookmark => 'إزالة الإشارة المرجعية';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'اختر دراسة';
 
   @override

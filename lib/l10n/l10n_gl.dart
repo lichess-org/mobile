@@ -318,6 +318,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileRemoveBookmark => 'Eliminar marcador';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Selecciona un estudo';
 
   @override

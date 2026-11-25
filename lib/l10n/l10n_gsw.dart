@@ -318,6 +318,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileRemoveBookmark => 'Buechzeiche entferne';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Wähl e Schtudie';
 
   @override

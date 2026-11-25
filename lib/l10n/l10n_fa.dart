@@ -318,6 +318,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileRemoveBookmark => 'برچیدنِ نشانک';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'انتخاب یک مطالعه';
 
   @override

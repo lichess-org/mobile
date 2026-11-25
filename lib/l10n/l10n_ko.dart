@@ -318,6 +318,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileRemoveBookmark => '북마크 제거';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => '연구 선택';
 
   @override

@@ -318,6 +318,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileRemoveBookmark => 'Yer işaretini kaldır';
 
   @override
+  String get mobileRenameChapter => 'Rename chapter';
+
+  @override
   String get mobileSelectAStudy => 'Bir çalışma seçin';
 
   @override
