@@ -277,6 +277,7 @@ class const _BottomBar(final RetroOptions options) extends ConsumerWidget {
               onTap: ref.read(retroControllerProvider(options).notifier).restart,
             ),
           BottomBarGroup(
+            navigation: true,
             children: [
               RepeatButton(
                 onLongPress: onGoBack,
