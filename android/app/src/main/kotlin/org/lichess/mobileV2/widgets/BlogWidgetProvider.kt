@@ -170,7 +170,10 @@ class BlogWidgetProvider : AppWidgetProvider() {
 
       remoteViews.removeAllViews(R.id.blog_list)
 
-      if (items.isEmpty()) {
+      if (isKidMode) {
+        remoteViews.setViewVisibility(R.id.empty_view, View.GONE)
+        remoteViews.setViewVisibility(R.id.blog_list, View.GONE)
+      } else if (items.isEmpty()) {
         remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE)
         remoteViews.setViewVisibility(R.id.blog_list, View.GONE)
       } else {
