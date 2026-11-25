@@ -63,6 +63,7 @@ class _PracticeLessonChapterBodyState() extends ConsumerState<PracticeLessonChap
         cupertinoGlass: true,
         children: [
           BottomBarGroup(
+            navigation: true,
             children: [
               BottomBarButton(
                 label: context.l10n.studyBack,

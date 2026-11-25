@@ -86,6 +86,7 @@ class const _AnalysisBottomBar({
           blink: state.isAtEndOfChapter && state.hasNextChapter,
         ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               onLongPress: state.canGoBack

@@ -308,6 +308,7 @@ class const _BottomBar({required final AnalysisOptions options}) extends Consume
           icon: CupertinoIcons.arrow_2_squarepath,
         ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               onLongPress: canGoBack ? () => _moveBackward(ref) : null,

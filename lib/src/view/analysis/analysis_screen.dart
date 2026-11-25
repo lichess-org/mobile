@@ -504,6 +504,7 @@ class const _BottomBar({
             onGoDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
           ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               onLongPress: analysisState.canGoBack
