@@ -253,10 +253,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "7f8976ce1531399e42b4c5ad0937bd57bd93fbcff564f7d51c695be19850e977"
+      sha256: "9af7a54ce87cdcdf801cefac73e159862d355a256ea6c21a4f9597a16dd0ff86"
       url: "https://pub.dev"
     source: hosted
-    version: "1.10.1"
+    version: "1.10.2"
   cross_file:
     dependency: transitive
     description:
@@ -1034,10 +1034,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: ce7e1a23731a5e697acc5ce82b3badf4bedcd7c298972d2856946a701e0245bd
+      sha256: "639a658ef65fc976d81eab6a19106a6b226876c6d5f4b0ef1a19d067bb831e7a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.20.0"
+    version: "1.21.0"
   listen:
     dependency: transitive
     description:
