@@ -987,7 +987,23 @@ class const _GameBottomBar({
               }
             },
           )
-        else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
+        else if (gameState.canOfferRematch && gameState.game.opponent?.offeringRematch == true) ...[
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Accept rematch'),
+            dismissOnPress: true,
+            onPressed: () {
+              ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
+            },
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Decline rematch'),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () {
+              ref.read(gameControllerProvider(id).notifier).declineRematch();
+            },
+          ),
+        ] else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
