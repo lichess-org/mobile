@@ -301,6 +301,7 @@ class const _BottomBar({required final VoidCallback onFlipBoard}) extends Consum
             icon: clock.active ? CupertinoIcons.pause : CupertinoIcons.play,
           ),
         BottomBarGroup(
+          navigation: true,
           children: [
             BottomBarButton(
               label: 'Previous',
