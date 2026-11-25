@@ -41,6 +41,7 @@ Future<void> initializeApp() async {
 
     if (isFirstRun) {
       // Clear secure storage on first run because it is not deleted on app uninstall
+      _logger.info('First run, clearing secure storage.');
       await SecureStorage.instance.deleteAll();
 
       // Generate a socket random identifier and store it for the app lifetime
