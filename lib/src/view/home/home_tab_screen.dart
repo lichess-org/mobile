@@ -517,14 +517,16 @@ class const _LichessMessageBanner() extends ConsumerWidget {
 }
 
 const String kHideYearRecapBannerPrefix = 'app_hide_year_recap_banner_';
-const kYearRecapBannerFirstDecemberDay = 10;
+const kYearRecapBannerFirstNovemberDay = 10;
 const kYearRecapBannerLastJanuaryDay = 15;
 
-/// The year whose recap is promoted on [date], or null outside the recap season (December from
-/// [kYearRecapBannerFirstDecemberDay], and January until [kYearRecapBannerLastJanuaryDay]).
+/// The year whose recap is promoted on [date], or null outside the recap season (November from
+/// [kYearRecapBannerFirstNovemberDay], December, and January until
+/// [kYearRecapBannerLastJanuaryDay]).
 @visibleForTesting
 int? yearRecapBannerYear(DateTime date) => switch (date.month) {
-  12 when date.day >= kYearRecapBannerFirstDecemberDay => date.year,
+  11 when date.day >= kYearRecapBannerFirstNovemberDay => date.year,
+  12 => date.year,
   1 when date.day <= kYearRecapBannerLastJanuaryDay => date.year - 1,
   _ => null,
 };
@@ -561,14 +563,11 @@ class _YearRecapBannerState() extends State<_YearRecapBanner> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Your $year Lichess recap is ready!',
+                      context.l10n.recapRecapReady('$year'),
                       style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4.0),
-                    Text(
-                      'See your year in chess on lichess.org.',
-                      style: TextStyle(color: textColor),
-                    ),
+                    Text(context.l10n.recapAwaitQuestion, style: TextStyle(color: textColor)),
                   ],
                 ),
               ),
