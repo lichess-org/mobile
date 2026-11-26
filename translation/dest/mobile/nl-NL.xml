@@ -123,7 +123,7 @@
   <string name="settingsPreferencesSaved" comment="Snackbar shown after saving board preferences to the Lichess account.">Je voorkeuren zijn opgeslagen in je Lichess account. Deze worden op al je apparaten gesynchroniseerd.</string>
   <string name="settingsShapeDrawing" comment="Entry in the settings.">Vormen tekenen</string>
   <string name="settingsShapeDrawingSubtitle" comment="Help message for the 'Shape drawing' settings entry.">Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.</string>
-  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Rand tonen</string>
+  <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Rand weergeven</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Trillen bij aanraking</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Wanneer ingeschakeld, zal het apparaat kort trillen wanneer je een stuk verplaatst of slaat.</string>
   <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Delen</string>
@@ -154,7 +154,7 @@
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Variant %s wordt niet ondersteund in deze versie.</string>
   <string name="useSymmetricPieces" comment="Over the board display setting: use the same piece shape for both sides.">Symmetrische stukken</string>
   <string name="viewGame" comment="Button text in puzzle settings to view the originating game.">Partij bekijken</string>
-  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Licenties bekijken</string>
+  <string name="viewLicenses" comment="Account menu entry that opens the open source licenses page.">Licenties</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Wachten op een tegenstander...</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kijken</string>
   <string name="weWillEmailYouCode" comment="Shown on the email sign in screen before requesting a login code.">We sturen je een e-mail met een code om in te loggen.</string>
