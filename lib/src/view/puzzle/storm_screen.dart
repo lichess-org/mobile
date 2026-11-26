@@ -739,7 +739,10 @@ class const _BottomBar(final PuzzleStormResponse data) extends ConsumerWidget {
           icon: Icons.delete,
           label: context.l10n.stormNewRun.split('(').first.trimRight(),
           showLabel: true,
-          onTap: () => ref.invalidate(stormProvider),
+          onTap: () {
+            stormState.clock.reset();
+            ref.invalidate(stormProvider);
+          },
         ),
         if (stormState.mode == StormMode.running)
           BottomBarButton(
