@@ -393,6 +393,7 @@ void main() {
 
       final tileRect = tester.getRect(find.byType(CoachListTile).first);
       final pictureRect = tester.getRect(find.byType(CoachPicture).first);
+      expect(tileRect.height, 100.0);
       expect(pictureRect.left, tileRect.left + 16.0);
       expect(pictureRect.width, 84.0);
       expect(pictureRect.height, 84.0);
@@ -429,8 +430,9 @@ void main() {
       expect(find.descendant(of: tile, matching: find.text('Bruxelles')), findsOneWidget);
       expect(find.descendant(of: tile, matching: find.text('Greece')), findsOneWidget);
       expect(find.descendant(of: tile, matching: find.text('el-GR, en-US')), findsOneWidget);
-      expect(find.descendant(of: tile, matching: find.text('2434')), findsNWidgets(2));
+      expect(find.descendant(of: tile, matching: find.text('2434')), findsOneWidget);
       expect(find.textContaining('FIDE:'), findsNothing);
+      expect(find.text('Rating: '), findsNothing);
       expect(find.descendant(of: tile, matching: find.text('25 EUR')), findsOneWidget);
 
       final locationTop = tester
@@ -439,15 +441,11 @@ void main() {
       final languagesTop = tester
           .getTopLeft(find.descendant(of: tile, matching: find.text('Languages: ')))
           .dy;
-      final ratingsTop = tester
-          .getTopLeft(find.descendant(of: tile, matching: find.text('Rating: ')))
-          .dy;
       final rateTop = tester
           .getTopLeft(find.descendant(of: tile, matching: find.text('Hourly rate: ')))
           .dy;
       expect(locationTop, lessThan(languagesTop));
-      expect(languagesTop, lessThan(ratingsTop));
-      expect(ratingsTop, lessThan(rateTop));
+      expect(languagesTop, lessThan(rateTop));
     });
 
     testWidgets('coach list trims empty headline and hourly rate', (tester) async {

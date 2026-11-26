@@ -59,64 +59,67 @@ class const CoachListTile({
     final hourlyRate = coach.hourlyRate?.trim();
     final countryName = userInfo?.country != null ? countries[userInfo!.country] : null;
 
-    return InkWell(
-      onTap: openProfile,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Row(
-          crossAxisAlignment: .center,
-          children: [
-            CoachPicture(url: coach.picture, size: 84.0),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
-                  const SizedBox(height: 4.0),
-                  if (userInfo case final info? when info.location != null || info.country != null)
-                    _DetailRow(
-                      label: context.l10n.coachLocation,
-                      child: Row(
-                        children: [
-                          if (info.location?.trim() case final location? when location.isNotEmpty)
-                            Flexible(child: Text(location, maxLines: 1, overflow: .ellipsis)),
-                          if (info.country case final country?)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: HttpNetworkImageWidget(
-                                lichessFlagSrc(country),
-                                width: 18.0,
-                                height: 12.0,
-                                fit: .cover,
-                                errorBuilder: (_, _, _) => const SizedBox.shrink(),
-                              ),
-                            ),
-                          if (countryName case final name?)
-                            Flexible(child: Text(name, maxLines: 1, overflow: .ellipsis)),
-                        ],
-                      ),
-                    ),
-                  if (coach.languages.isNotEmpty)
-                    _DetailRow(
-                      label: context.l10n.coachLanguages,
-                      child: Text(coach.languages.join(', '), maxLines: 1, overflow: .ellipsis),
-                    ),
-                  if (coach.rating case final rating?)
-                    _DetailRow(
-                      label: context.l10n.coachRating,
-                      child: Text('$rating', maxLines: 1, overflow: .ellipsis),
-                    ),
-                  if (hourlyRate != null && hourlyRate.isNotEmpty)
-                    _DetailRow(
-                      label: context.l10n.coachHourlyRate,
-                      child: Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
-                    ),
-                ],
-              ),
+    return SizedBox(
+      height: 100.0,
+      child: ClipRect(
+        child: InkWell(
+          onTap: openProfile,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Row(
+              crossAxisAlignment: .center,
+              children: [
+                CoachPicture(url: coach.picture, size: 84.0),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
+                      const SizedBox(height: 4.0),
+                      if (userInfo case final info?
+                          when info.location != null || info.country != null)
+                        _DetailRow(
+                          label: context.l10n.coachLocation,
+                          child: Row(
+                            children: [
+                              if (info.location?.trim() case final location?
+                                  when location.isNotEmpty)
+                                Flexible(child: Text(location, maxLines: 1, overflow: .ellipsis)),
+                              if (info.country case final country?)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: HttpNetworkImageWidget(
+                                    lichessFlagSrc(country),
+                                    width: 18.0,
+                                    height: 12.0,
+                                    fit: .cover,
+                                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                                  ),
+                                ),
+                              if (countryName case final name?)
+                                Flexible(child: Text(name, maxLines: 1, overflow: .ellipsis)),
+                            ],
+                          ),
+                        ),
+                      if (coach.languages.isNotEmpty)
+                        _DetailRow(
+                          label: context.l10n.coachLanguages,
+                          child: Text(coach.languages.join(', '), maxLines: 1, overflow: .ellipsis),
+                        ),
+                      if (hourlyRate != null && hourlyRate.isNotEmpty)
+                        _DetailRow(
+                          label: context.l10n.coachHourlyRate,
+                          child: Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
+                        ),
+                    ],
+                  ),
+                ),
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  const CupertinoListTileChevron(),
+              ],
             ),
-            if (Theme.of(context).platform == TargetPlatform.iOS) const CupertinoListTileChevron(),
-          ],
+          ),
         ),
       ),
     );
