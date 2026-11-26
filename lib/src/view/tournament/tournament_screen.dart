@@ -1560,7 +1560,7 @@ class const _TournamentPlayerDetails({
                     tournamentId: tournamentId,
                     player: player.user,
                     index: entry.key,
-                    nbGames: player.pairings.length,
+                    nbGames: max(player.stats.game, player.pairings.length),
                   ),
                 ),
               ],
