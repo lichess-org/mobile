@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/server_outage_display.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../network/fake_http_client_factory.dart';
 import '../../network/server_down_client.dart';
@@ -92,6 +93,10 @@ void main() {
         matching: find.byType(ListSectionHeader),
       );
       await tester.ensureVisible(coachesHeader);
+      expect(
+        find.descendant(of: coachesHeader, matching: find.byIcon(Icons.chevron_right)),
+        findsOneWidget,
+      );
       await tester.tap(find.descendant(of: coachesHeader, matching: find.text('More')));
       await tester.pumpAndSettle();
 

@@ -235,10 +235,7 @@ class const _Body() extends ConsumerWidget {
               switch (ref.watch(coachListControllerProvider(defaultCoachFilters))) {
                 AsyncData(:final value) => ListSection(
                   header: Text(context.l10n.coaches),
-                  headerTrailing: TextButton(
-                    onPressed: openCoachList,
-                    child: Text(context.l10n.more),
-                  ),
+                  onHeaderTap: openCoachList,
                   hasLeading: true,
                   margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
                   children: [
@@ -247,10 +244,7 @@ class const _Body() extends ConsumerWidget {
                 ),
                 AsyncError() => ListSection(
                   header: Text(context.l10n.coaches),
-                  headerTrailing: TextButton(
-                    onPressed: openCoachList,
-                    child: Text(context.l10n.more),
-                  ),
+                  onHeaderTap: openCoachList,
                   hasLeading: true,
                   margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
                   children: const [ListTile(title: Text('Could not load coaches.'))],
