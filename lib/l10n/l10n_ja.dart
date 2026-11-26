@@ -1263,6 +1263,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'この局面をチャットでメンション';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2399,9 +2402,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => '着手をそのつど確認する';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ボードのメニューからゲーム中に無効にできます';
@@ -4392,6 +4392,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get orUploadPgnFile => 'または PGN ファイルをアップロード';
 
   @override
+  String get selectImage => '画像を選択';
+
+  @override
   String get continueFromHere => 'この局面から対局';
 
   @override
@@ -5135,7 +5138,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get really => '本当に';
 
   @override
-  String get lichessUpdates => 'Lichess 更新情報';
+  String get lichessUpdates => 'Lichess フィード';
+
+  @override
+  String get allUpdates => 'すべてのアップデート';
 
   @override
   String get contribute => '力を貸す';

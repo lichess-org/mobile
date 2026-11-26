@@ -1283,6 +1283,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Move confirmation';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -4418,6 +4418,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orUploadPgnFile => 'Or upload a PGN file';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Continue from here';
 
   @override
@@ -5161,7 +5164,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get really => 'really';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Contribute';
@@ -9096,6 +9102,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -10234,9 +10243,6 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get preferencesMoveConfirmation => 'Move confirmation';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -12233,6 +12239,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get orUploadPgnFile => 'Or upload a PGN file';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Continue from here';
 
   @override
@@ -12565,7 +12574,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get featuredBots => 'Featured bots';
 
   @override
-  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favourites.';
+  String get tryPlayingTheseInnovativeChessEngines => 'Try playing these innovative chess engines! They are our favorites.';
 
   @override
   String get communityBots => 'Community bots';
@@ -12976,7 +12985,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get really => 'really';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Contribute';

@@ -465,7 +465,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get mobileTheme => 'Тема';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Бути проголошеним';
 
   @override
   String get mobileTooManyLoginAttempts => '• \nЗабагато спроб. Будь ласка, спробуйте пізніше.\n';
@@ -1321,6 +1321,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'До$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2465,9 +2468,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Підтвердження ходу';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можна вимкнути під час гри в меню дошки';
@@ -4476,6 +4476,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get orUploadPgnFile => 'Або завантажте файл PGN';
 
   @override
+  String get selectImage => 'Вибрати зображення';
+
+  @override
   String get continueFromHere => 'Продовжити звідси';
 
   @override
@@ -5219,7 +5222,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get really => 'дійсно';
 
   @override
-  String get lichessUpdates => 'Оновлення Lichess';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'Усі оновлення';
 
   @override
   String get contribute => 'Сприяти розвитку';

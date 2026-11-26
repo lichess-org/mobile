@@ -1323,6 +1323,9 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2465,9 +2468,6 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Potvrdenie ťahu';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dá sa zrušiť počas partie cez \"hamburgerové menu\" pri šachovnici';
@@ -4476,6 +4476,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get orUploadPgnFile => 'Alebo nahrajte súbor PGN';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Pokračujte odtiaľto';
 
   @override
@@ -5219,7 +5222,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get really => 'naozaj';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Prispieť';

@@ -1283,6 +1283,9 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Жүрісті растау';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Ойын кезінде тақта баптаулары арқылы өшіруге болады';
@@ -4420,6 +4420,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get orUploadPgnFile => 'Не PGN файлын жүктеп салыңыз';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Осы жерден жалғастыру';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsKk extends AppLocalizations {
   String get really => 'шынымен';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Үлес қосу';

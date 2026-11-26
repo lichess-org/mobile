@@ -1363,6 +1363,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'أدرِج هذه الوضعية في المحادثة';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2409,7 +2412,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get preferencesBoardHighlights => 'تميز معالم الرقعة (آخر نقلة و كش)';
 
   @override
-  String get preferencesPieceDestinations => 'إظهار النقلات القانونية (النقلات المتاحة والنقلات الاستباقية)';
+  String get preferencesPieceDestinations => 'المربعات التي يمكن نقل القطعة إليها (النقلات القانونية والنقلات المسبقة)';
 
   @override
   String get preferencesBoardCoordinates => 'إحداثيات الرقعة (A-H, 1-8)';
@@ -2509,9 +2512,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'تأكيد النقلة';
-
-  @override
-  String get preferencesMultipleChoices => 'خيارات متعددة.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة من قائمة اللوحة';
@@ -4532,6 +4532,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get orUploadPgnFile => 'أو حمل مِلف PGN';
 
   @override
+  String get selectImage => 'اختيار صورة';
+
+  @override
   String get continueFromHere => 'تابع من هنا';
 
   @override
@@ -4541,10 +4544,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get importGame => 'استورد مباراة';
 
   @override
-  String get importGameExplanation => 'عند لصق مباراة PGN تحصل على إمكانية كرار استعراضها وتحليل حاسوبي ودردشة للمباراة ورابط قابل للمشاركة.';
+  String get importGameExplanation => 'ألصق تدوين المباراة بصيغة PGN للحصول على إعادة عرض تفاعلية يمكنك تصفّح نقلاتها، وتحليلها باستخدام الحاسوب، ومناقشتها عبر دردشة المباراة، ومشاركة رابطها.';
 
   @override
-  String get importGameDataPrivacyWarning => 'يمكن لأي أحد الوصول إلى PGN، إذا أردت إنشاء تحليل خاص، استخدم قسم دراسة.';
+  String get importGameDataPrivacyWarning => 'يمكن للجميع الاطّلاع على مِلَفّ PGN هذا. لاستيراد مباراة بشكل خاص، استخدم دراسة.';
 
   @override
   String get thisIsAChessCaptcha => 'هذا اختبار شطرنجي  للتمييز بين الحاسب والإنسان';
@@ -5275,7 +5278,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get really => 'حقاً';
 
   @override
-  String get lichessUpdates => 'تحديثات Lichess';
+  String get lichessUpdates => 'Lichess تحديثات';
+
+  @override
+  String get allUpdates => 'جميع التحديثات';
 
   @override
   String get contribute => 'ساهم';

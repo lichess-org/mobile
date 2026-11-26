@@ -1283,6 +1283,9 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Lépés jóváhagyatása';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Játék közben a tábla melletti menüvel kikapcsolható';
@@ -4420,6 +4420,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get orUploadPgnFile => 'Vagy tölts fel egy PGN fájlt';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Folytatás innen';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsHu extends AppLocalizations {
   String get really => 'tényleg';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Hozzájárul';

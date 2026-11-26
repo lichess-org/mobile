@@ -9,25 +9,25 @@ class AppLocalizationsLt extends AppLocalizations {
   AppLocalizationsLt([String locale = 'lt']) : super(locale);
 
   @override
-  String get mobileAcceptDraw => 'Accept draw?';
+  String get mobileAcceptDraw => 'Priimti lygiąsias?';
 
   @override
-  String get mobileAccount => 'Account';
+  String get mobileAccount => 'Paskyra';
 
   @override
-  String get mobileAccountPreferences => 'Account preferences';
+  String get mobileAccountPreferences => 'Paskyros nuostatos';
 
   @override
-  String get mobileAccountPreferencesHelp => 'These preferences are applied to your Lichess account and will be used across all devices.';
+  String get mobileAccountPreferencesHelp => 'Šie nustatymai taikomi jūsų „Lichess“ paskyrai ir bus naudojami visuose įrenginiuose.';
 
   @override
-  String get mobileAddToStudy => 'Add to study';
+  String get mobileAddToStudy => 'Pridėti prie studijų';
 
   @override
   String get mobileAllGames => 'All games';
 
   @override
-  String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
+  String get mobileAllowTakebacksAndHints => 'Leisti atšaukti ėjimus ir rodyti patarimus';
 
   @override
   String get mobileAppLogs => 'App logs';
@@ -1323,6 +1323,9 @@ class AppLocalizationsLt extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2465,9 +2468,6 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Ėjimo patvirtinimas';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Gali būti išjungta partijos metu per lentos meniu';
@@ -4474,6 +4474,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String get orUploadPgnFile => 'Arba įkelkite PGN failą';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Tęsti nuo čia';
 
   @override
@@ -5217,7 +5220,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get really => 'tikrai';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Prisidėkite';

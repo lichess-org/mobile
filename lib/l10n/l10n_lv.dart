@@ -1302,6 +1302,9 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2440,9 +2443,6 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Gājiena apstiprināšana';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Izslēdzams spēles laikā no galdiņa izvēlnes';
@@ -4444,6 +4444,9 @@ class AppLocalizationsLv extends AppLocalizations {
   String get orUploadPgnFile => 'Augšuplādēt PGN datni';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Turpināt no šejienes';
 
   @override
@@ -5187,7 +5190,10 @@ class AppLocalizationsLv extends AppLocalizations {
   String get really => 'patiešām';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Dot ieguldījumu';

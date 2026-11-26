@@ -812,7 +812,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String arenaShareUrl(String param) {
-    return 'Udostępnij ten URL innym aby dołączyli do: $param';
+    return 'Udostępnij ten URL, aby umożliwić innym dołączenie: $param';
   }
 
   @override
@@ -1042,7 +1042,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastSourceSingleUrl => 'Adres URL zapisu PGN';
 
   @override
-  String get broadcastSourceUrlHelp => 'Adres URL, który Lichess będzie udostępniał, aby można było uzyskać aktualizacje PGN. Musi być publicznie dostępny z internetu.';
+  String get broadcastSourceUrlHelp => 'Adres URL, z którego Lichess będzie pobierać aktualizacje PGN. Musi być publicznie dostępny z internetu.';
 
   @override
   String get broadcastSourceGameIds => 'Do 64 identyfikatorów partii, oddzielonych spacjami.';
@@ -1166,7 +1166,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String broadcastIframeHelp(String param) {
-    return 'Więcej opcji na $param';
+    return 'Więcej opcji na $param.';
   }
 
   @override
@@ -1321,6 +1321,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'U$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Wspomnij o tej pozycji na czacie';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1537,19 +1540,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnRookIntro => 'Wieża to silna figura. Czy jesteś gotów aby nauczyć się nią poruszać?';
 
   @override
-  String get learnRookGoal => 'Kliknij na wieży i przenieś ją na gwiazdkę!';
+  String get learnRookGoal => 'Kliknij wieżę i przenieś ją na gwiazdkę!';
 
   @override
   String get learnGrabAllTheStars => 'Zbierz wszystkie gwiazdki!';
 
   @override
-  String get learnTheFewerMoves => 'Czym mniej ruchów zrobisz tym więcej punktów zdobędziesz!';
+  String get learnTheFewerMoves => 'Im mniej ruchów zrobisz, tym więcej punktów zdobędziesz!';
 
   @override
   String get learnUseTwoRooks => 'Użyj dwóch wież aby zrobić to szybciej!';
 
   @override
-  String get learnRookComplete => 'Gratulacje! Właśnie nauczyłeś się jak poruszać się wieżą.';
+  String get learnRookComplete => 'Gratulacje! Udało Ci się opanować wieżę.';
 
   @override
   String get learnTheBishop => 'Goniec';
@@ -1594,7 +1597,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnLastOne => 'Ostatnie zadanie!';
 
   @override
-  String get learnKingComplete => 'Możesz teraz rządzić królem!';
+  String get learnKingComplete => 'Możesz teraz dowodzić dowódcą!';
 
   @override
   String get learnTheKnight => 'Skoczek';
@@ -1624,7 +1627,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnPawnIntro => 'Piony są słabe, ale mają w sobie duży potencjał.';
 
   @override
-  String get learnPawnsMoveOneSquareOnly => 'Piony poruszają się tylko o jedno pole. \nAle jeśli dojdą do ostatniej linii mogą zamienić się w silniejszą figurę!';
+  String get learnPawnsMoveOneSquareOnly => 'Piony poruszają się tylko o jedno pole. \nAle jeśli dojdą do ostatniej linii, stają się silniejszą figurą!';
 
   @override
   String get learnMostOfTheTimePromotingToAQueenIsBest => 'W większości przypadków najlepiej promować piona na hetmana. \nJednak czasem bardziej przydatny może być skoczek!';
@@ -1687,7 +1690,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnKeepYourPiecesSafe => 'Zabezpiecz swoje figury';
 
   @override
-  String get learnProtectionIntro => 'Znajdź figury które przeciwnik atakuje i obroń je!';
+  String get learnProtectionIntro => 'Znajdź figury, które przeciwnik atakuje i obroń je!';
 
   @override
   String get learnProtectionComplete => 'Gratulacje! Figura niestracona to figura wygrana!';
@@ -1696,7 +1699,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnEscape => 'Jesteś atakowany! Uciekaj przed zagrożeniem!';
 
   @override
-  String get learnNoEscape => 'Nie ma możliwości ucieczki ale można się obronić!';
+  String get learnNoEscape => 'Nie ma możliwości ucieczki,\nale można się obronić!';
 
   @override
   String get learnDontLetThemTakeAnyUndefendedPiece => 'Nie pozwól, aby zbito niebronione figury!';
@@ -1744,7 +1747,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnTheKingCannotEscapeButBlock => 'Król nie może uciec, ale możesz zablokować atak!';
 
   @override
-  String get learnYouCanGetOutOfCheckByTaking => 'Możesz obronić się przed szachem zbijając bierkę atakującą króla.';
+  String get learnYouCanGetOutOfCheckByTaking => 'Możesz obronić się przed szachem,\nzbijając bierkę atakującą króla.';
 
   @override
   String get learnThisKnightIsCheckingThroughYourDefenses => 'Ten skoczek szachuje króla poprzez Twoją obronę!';
@@ -1762,10 +1765,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnDefeatTheOpponentsKing => 'Pokonaj króla przeciwnika';
 
   @override
-  String get learnMateInOneIntro => 'Wygrasz kiedy Twój przeciwnik nie może obronić się przed szachem.';
+  String get learnMateInOneIntro => 'Wygrasz, kiedy Twój przeciwnik nie może obronić się przed szachem.';
 
   @override
-  String get learnAttackYourOpponentsKing => 'Zaatakuj króla przeciwnika w taki sposób aby nie mógł się obronić!';
+  String get learnAttackYourOpponentsKing => 'Zaatakuj króla przeciwnika w taki sposób, aby nie mógł się obronić!';
 
   @override
   String get learnMateInOneComplete => 'Gratulacje! Tak wygrywa się w szachy!';
@@ -1819,10 +1822,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnCastlingIntro => 'Zabezpiecz swojego króla i wprowadź do gry wieżę!';
 
   @override
-  String get learnCastleKingSide => 'Przesuń króla o dwa pola aby wykonać krótką roszadę!';
+  String get learnCastleKingSide => 'Przesuń króla o dwa pola, aby wykonać krótką roszadę!';
 
   @override
-  String get learnCastleQueenSide => 'Przesuń króla o dwa pola aby wykonać długą roszadę!';
+  String get learnCastleQueenSide => 'Przesuń króla o dwa pola, aby wykonać długą roszadę!';
 
   @override
   String get learnTheKnightIsInTheWay => 'Skoczek przeszkadza w roszadzie! Rusz się nim, a następnie zrób roszadę.';
@@ -1834,16 +1837,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnCastleQueenSideMovePiecesFirst => 'Wykonaj długą roszadę. Musisz najpierw wyjść figurami.';
 
   @override
-  String get learnYouCannotCastleIfMoved => 'Nie możesz roszować jeśli król lub wieża ruszyła się wcześniej.';
+  String get learnYouCannotCastleIfMoved => 'Nie możesz roszować, jeśli król lub wieża ruszyła się wcześniej.';
 
   @override
-  String get learnYouCannotCastleIfAttacked => 'Nie możesz roszować jeśli król jest szachowany. Najpierw zasłoń króla i wtedy zrób roszadę!';
+  String get learnYouCannotCastleIfAttacked => 'Nie możesz roszować, jeśli król jest szachowany. Najpierw zasłoń króla i wtedy zrób roszadę!';
 
   @override
-  String get learnFindAWayToCastleKingSide => 'Znajdź sposób aby wykonać krótką roszadę!';
+  String get learnFindAWayToCastleKingSide => 'Znajdź sposób, aby wykonać krótką roszadę!';
 
   @override
-  String get learnFindAWayToCastleQueenSide => 'Znajdź sposób aby wykonać długą roszadę!';
+  String get learnFindAWayToCastleQueenSide => 'Znajdź sposób, aby wykonać długą roszadę!';
 
   @override
   String get learnCastlingComplete => 'Gratulacje! Roszada powinna być wykonana w prawie każdej partii.';
@@ -1876,7 +1879,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnTheGameIsADraw => 'Partia zakończona remisem';
 
   @override
-  String get learnStalemateIntro => 'Kiedy gracz nie jest szachowany i nie może zrobić żadnego prawidłowego ruchu to jest to pat. Partia jest zakończona remisem: nikt nie wygrywa, nikt nie przegrywa.';
+  String get learnStalemateIntro => 'Kiedy gracz nie jest szachowany i nie może zrobić żadnego prawidłowego ruchu, to jest to pat. Partia jest zakończona remisem: nikt nie wygrywa, nikt nie przegrywa.';
 
   @override
   String get learnStalemateGoal => 'Czarne zostały zapatowane, gdy:\n– nie będą mogły się ruszyć,\n– nie będą szachowane.';
@@ -2465,9 +2468,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
-
-  @override
-  String get preferencesMultipleChoices => 'Możesz wybrać kilka.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
@@ -4106,7 +4106,7 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get emailCanTakeSomeTime => 'Dostarczenie email\'a może zająć trochę czasu.';
+  String get emailCanTakeSomeTime => 'Dostarczenie e-maila może zająć trochę czasu.';
 
   @override
   String get refreshInboxAfterFiveMinutes => 'Poczekaj 5 minut i odśwież swoją skrzynkę pocztową.';
@@ -4474,6 +4474,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'lub wgraj plik PGN';
+
+  @override
+  String get selectImage => 'Wybierz obraz';
 
   @override
   String get continueFromHere => 'Kontynuuj z tej pozycji';
@@ -5219,7 +5222,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get really => 'naprawdę';
 
   @override
-  String get lichessUpdates => 'Aktualizacje Lichess';
+  String get lichessUpdates => 'Aktualności Lichess';
+
+  @override
+  String get allUpdates => 'Wszystkie aktualności';
 
   @override
   String get contribute => 'Wsparcie';
@@ -5269,7 +5275,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noSimulExplanation => 'Taka symultana nie istnieje';
 
   @override
-  String get returnToSimulHomepage => 'Wróć do do strony głównej symultan';
+  String get returnToSimulHomepage => 'Wróć do strony głównej symultan';
 
   @override
   String get aboutSimul => 'Symultana to równoczesna gra z wieloma przeciwnikami.';
@@ -5440,7 +5446,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get checkYourEmail => 'Sprawdź swoją skrzynkę e-mail';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'Wysłaliśmy do Ciebie wiadomość e-mail. Kliknij w link znajdujący się w e-mailu aby aktywować swoje konto.';
+  String get weHaveSentYouAnEmailClickTheLink => 'Wysłaliśmy do Ciebie wiadomość e-mail. Kliknij w link znajdujący się w e-mailu, aby aktywować swoje konto.';
 
   @override
   String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Jeśli nie widzisz wiadomości e-mail, sprawdź inne możliwe miejsca, takie jak kosz, spam lub inne foldery.';
@@ -5505,7 +5511,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get scrollOverComputerVariationsToPreviewThem => 'Przewiń po wariantach komputera, aby je podglądać.';
 
   @override
-  String get analysisShapesHowTo => 'Kliknij podczas trzymania Shift lub przytrzymaj prawy przycisk myszy aby rysować okręgi i strzałki na szachownicy.';
+  String get analysisShapesHowTo => 'Kliknij prawy przycisk myszy (lub Shift + lewy przycisk myszy), aby rysować okręgi i strzałki na szachownicy. Aby uzyskać inne kolory, użyj tych opcji z prawym przyciskiem myszy:';
 
   @override
   String get primaryColorArrowsHowTo => 'Ctrl lub shift = kolor czerwony; command, alt lub meta = kolor niebieski; Ctrl lub shift + command, alt lub meta = kolor żółty.';
@@ -6033,7 +6039,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get subscribe => 'Subskrybuj';
 
   @override
-  String get unsubscribe => 'Zakończ subskrybcję';
+  String get unsubscribe => 'Zrezygnuj z subskrypcji';
 
   @override
   String mentionedYouInX(String param1) {
@@ -6379,10 +6385,10 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count pomyłek',
-      many: '$count pomyłek',
-      few: '$count pomyłki',
-      one: '$count pomyłka',
+      other: '$count Pomyłek',
+      many: '$count Pomyłek',
+      few: '$count Pomyłki',
+      one: '$count Pomyłka',
     );
     return '$_temp0';
   }
@@ -6392,10 +6398,10 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count niedokładności',
-      many: '$count niedokładności',
-      few: '$count niedokładności',
-      one: '$count niedokładność',
+      other: '$count Niedokładności',
+      many: '$count Niedokładności',
+      few: '$count Niedokładności',
+      one: '$count Niedokładność',
     );
     return '$_temp0';
   }
@@ -7681,8 +7687,10 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game.',
+      other: 'Wklej tutaj gry w formacie PGN. Dla każdej gry zostanie stworzony nowy rozdział. Opracowanie może mieć do $count rozdziałów.',
+      many: 'Wklej tutaj gry w formacie PGN. Dla każdej gry zostanie stworzony nowy rozdział. Opracowanie może mieć do $count rozdziałów.',
+      few: 'Wklej tutaj gry w formacie PGN. Dla każdej gry zostanie stworzony nowy rozdział. Opracowanie może mieć do $count rozdziałów.',
+      one: 'Wklej tutaj swój PGN, max $count partię.',
     );
     return '$_temp0';
   }

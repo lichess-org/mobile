@@ -1283,6 +1283,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Menciona aquesta posició al xat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2144,10 +2147,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStNamThePin => 'La clavada';
 
   @override
-  String get practiceStNamTheSkewer => 'The Skewer';
+  String get practiceStNamTheSkewer => 'L\'enfilada';
 
   @override
-  String get practiceStNamTheFork => 'The Fork';
+  String get practiceStNamTheFork => 'La forquilla';
 
   @override
   String get practiceStNamDiscoveredAttacks => 'Atacs a la descoberta';
@@ -2159,7 +2162,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStNamOverloadedPieces => 'Peces sobrecarregades';
 
   @override
-  String get practiceStNamZwischenzug => 'Jjugada intermèdia';
+  String get practiceStNamZwischenzug => 'Jugada intermèdia';
 
   @override
   String get practiceStNamXRay => 'Raig-X';
@@ -2186,10 +2189,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStNamDesperado => 'Desperado (peça boja)';
 
   @override
-  String get practiceStNamCounterCheck => 'Counter Check';
+  String get practiceStNamCounterCheck => 'Contra-escac';
 
   @override
-  String get practiceStNamUndermining => 'Undermining';
+  String get practiceStNamUndermining => 'Elimina el defensor';
 
   @override
   String get practiceStNamClearance => 'Alliberament';
@@ -2201,16 +2204,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStNamOpposition => 'Oposició';
 
   @override
-  String get practiceStNam7thRankRookPawn => '7th-Rank Rook Pawn';
+  String get practiceStNam7thRankRookPawn => 'Peó de torre a la 7ena fila';
 
   @override
-  String get practiceStNamBasicRookEndgames => 'Basic Rook Endgames';
+  String get practiceStNamBasicRookEndgames => 'Finals de torre bàsics';
 
   @override
-  String get practiceStNamIntermediateRookEndings => 'Intermediate Rook Endings';
+  String get practiceStNamIntermediateRookEndings => 'Finals de torre intermedis';
 
   @override
-  String get practiceStNamPracticalRookEndings => 'Practical Rook Endings';
+  String get practiceStNamPracticalRookEndings => 'Finals de torre pràctics';
 
   @override
   String get practiceStDesBasicCheckmates => 'Mats bàsics';
@@ -2219,7 +2222,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStDesRecognizeThePatterns => 'Reconeix els patrons';
 
   @override
-  String get practiceStDesChallengingCheckmates => 'Challenging checkmates';
+  String get practiceStDesChallengingCheckmates => 'Mats complicats';
 
   @override
   String get practiceStDesInteractiveLesson => 'Lliçó interactiva';
@@ -2228,67 +2231,67 @@ class AppLocalizationsCa extends AppLocalizations {
   String get practiceStDesPinItToWinIt => 'Clava per guanyar';
 
   @override
-  String get practiceStDesYumSkewers => 'Yum - skewers!';
+  String get practiceStDesYumSkewers => 'Mmmm, pinxos!';
 
   @override
-  String get practiceStDesUseTheForkLuke => 'Use the fork, Luke';
+  String get practiceStDesUseTheForkLuke => 'Utilitza la força, Luke';
 
   @override
-  String get practiceStDesIncludingDiscoveredChecks => 'Including discovered checks';
+  String get practiceStDesIncludingDiscoveredChecks => 'Incloent atacs a la descoberta';
 
   @override
-  String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
+  String get practiceStDesAVeryPowerfulTactic => 'Una tàctica molt poderosa';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => 'Tenen massa feina';
 
   @override
-  String get practiceStDesInBetweenMoves => 'In-between moves';
+  String get practiceStDesInBetweenMoves => 'Jugades intermèdies';
 
   @override
-  String get practiceStDesAttackingThroughAnEnemyPiece => 'Attacking through an enemy piece';
+  String get practiceStDesAttackingThroughAnEnemyPiece => 'Atacant a través d\'una peça enemiga';
 
   @override
-  String get practiceStDesBeingForcedToMove => 'Being forced to move';
+  String get practiceStDesBeingForcedToMove => 'Estar forçat a fer un moviment';
 
   @override
-  String get practiceStDesInterposeAPieceToGreatEffect => 'Interpose a piece to great effect';
+  String get practiceStDesInterposeAPieceToGreatEffect => 'Interposar una peça amb un gran efecte';
 
   @override
-  String get practiceStDesStudyTheGreekGiftSacrifice => 'Study the greek gift sacrifice';
+  String get practiceStDesStudyTheGreekGiftSacrifice => 'Estudia el sacrifici grec';
 
   @override
-  String get practiceStDesDistractingADefender => 'Distracting a defender';
+  String get practiceStDesDistractingADefender => 'Distraient el defensor';
 
   @override
-  String get practiceStDesLureAPieceToABadSquare => 'Lure a piece to a bad square';
+  String get practiceStDesLureAPieceToABadSquare => 'Envia una peça a una casella dolenta';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promote - but not to a queen!';
+  String get practiceStDesPromoteButNotToAQueen => 'Promociona, però no a una dama!';
 
   @override
-  String get practiceStDesAPieceIsLostButItCanStillHelp => 'A piece is lost, but it can still help';
+  String get practiceStDesAPieceIsLostButItCanStillHelp => 'Es perd una peça, però encara pot ajudar';
 
   @override
-  String get practiceStDesRespondToACheckWithACheck => 'Respond to a check with a check';
+  String get practiceStDesRespondToACheckWithACheck => 'Contesta un escac amb un altre escac';
 
   @override
-  String get practiceStDesRemoveTheDefendingPiece => 'Remove the defending piece';
+  String get practiceStDesRemoveTheDefendingPiece => 'Captura la peça defensora';
 
   @override
-  String get practiceStDesGetOutOfTheWay => 'Get out of the way!';
+  String get practiceStDesGetOutOfTheWay => 'Apartat del camí!';
 
   @override
-  String get practiceStDesReachAKeySquare => 'Reach a key square';
+  String get practiceStDesReachAKeySquare => 'Arriba a una casella clau';
 
   @override
-  String get practiceStDesTakeTheOpposition => 'Take the opposition';
+  String get practiceStDesTakeTheOpposition => 'Obté l\'oposició';
 
   @override
-  String get practiceStDesVersusAQueen => 'Versus a Queen';
+  String get practiceStDesVersusAQueen => 'Contra una Dama';
 
   @override
-  String get practiceStDesAndPassiveRookVsRook => 'And Passive Rook vs Rook';
+  String get practiceStDesAndPassiveRookVsRook => 'I una torre passiva vs una torre';
 
   @override
   String get practiceStDesLucenaAndPhilidor => 'Lucena i Philidor';
@@ -2421,9 +2424,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Confirmació del moviment';
-
-  @override
-  String get preferencesMultipleChoices => 'Múltiples opcions.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Es pot desactivar durant la partida al menú del taulell';
@@ -4420,6 +4420,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get orUploadPgnFile => 'O penja un arxiu PGN';
 
   @override
+  String get selectImage => 'Selecciona una imatge';
+
+  @override
   String get continueFromHere => 'Continua des d\'aquí';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get really => 'realment';
 
   @override
-  String get lichessUpdates => 'Actualitzacions de Lichess';
+  String get lichessUpdates => 'Flux de Lichess';
+
+  @override
+  String get allUpdates => 'Totes les actualitzacions';
 
   @override
   String get contribute => 'Contribuïu-hi';

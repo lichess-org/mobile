@@ -288,7 +288,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobilePreviousPage => 'Trước đó';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Xem lại những lần giải đố trước đây của bạn.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
@@ -1261,6 +1261,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'U$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Hãy đề cập đến thế cờ này trong cuộc trò chuyện';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2386,7 +2389,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Tự động phong cấp thành quân Hậu';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Giữ phím Ctrl trong khi phong cấp để tạm thời vô hiệu hóa tính năng tự động phong hậu';
 
   @override
   String get preferencesWhenPremoving => 'Khi đi trước';
@@ -2399,9 +2402,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Xác nhận nước đi';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Có thể bị vô hiệu hóa trong ván cờ với mục lục bàn cờ';
@@ -4392,6 +4392,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get orUploadPgnFile => 'Hoặc tải lên tệp PGN';
 
   @override
+  String get selectImage => 'Chọn ảnh';
+
+  @override
   String get continueFromHere => 'Tiếp tục từ đây';
 
   @override
@@ -5135,7 +5138,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get really => 'thật sự';
 
   @override
-  String get lichessUpdates => 'Cập nhật từ Lichess';
+  String get lichessUpdates => 'Bản tin Lichess';
+
+  @override
+  String get allUpdates => 'Tất cả tin cập nhật';
 
   @override
   String get contribute => 'Đóng góp';
@@ -6921,7 +6927,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get studyKick => 'Đuổi';
 
   @override
-  String get studyRemove => 'Remove';
+  String get studyRemove => 'Loại bỏ';
 
   @override
   String get studyLeaveTheStudy => 'Rời khỏi nghiên cứu';
@@ -7459,8 +7465,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game.',
+      other: 'Dán các ván đấu dưới dạng văn bản PGN vào đây. Mỗi ván cờ sẽ tạo thành một chương mới. Bài học có thể có tối đa $count chương.',
     );
     return '$_temp0';
   }
@@ -7469,7 +7474,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get teamTeam => 'Đội';
 
   @override
-  String get teamTeamUpdates => 'Cập nhật của đội';
+  String get teamTeamUpdates => 'Tin cập nhật của đội';
 
   @override
   String get teamIncorrectEntryCode => 'Mã không chính xác.';

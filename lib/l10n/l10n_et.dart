@@ -30,7 +30,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Luba tagasivõtmised ja vihjed';
 
   @override
-  String get mobileAppLogs => 'App logs';
+  String get mobileAppLogs => 'Rakenduse logid';
 
   @override
   String get mobileAmoledBlack => 'Amoled-must';
@@ -103,7 +103,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Taganda';
 
   @override
-  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+  String get mobileDeleteAllLogsConfirmation => 'Kas soovid kõik logid kustutada?';
 
   @override
   String get mobileDangerZone => 'Ohutsoon';
@@ -164,7 +164,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileHomeTab => 'Kodu';
 
   @override
-  String get mobileHttpLogs => 'Network logs';
+  String get mobileHttpLogs => 'Võrgulogid';
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
@@ -288,7 +288,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePreviousPage => 'Eelmine';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Vaata üle oma varasemad puslede katsed.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Kas soovid partii lõpetada?';
@@ -402,7 +402,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.';
 
   @override
-  String get mobileShare => 'Share';
+  String get mobileShare => 'Jaga';
 
   @override
   String get mobileShareChallengeUrl => 'Jaga väljakutse URL-i';
@@ -465,7 +465,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileTheme => 'Teema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Teavitamisel';
 
   @override
   String get mobileTooManyLoginAttempts => 'Liiga palju katseid. Palun proovi hiljem uuesti.';
@@ -609,8 +609,8 @@ class AppLocalizationsEt extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Completed $count $param2 correspondence games',
-      one: 'Completed $count $param2 correspondence game',
+      other: 'Lõpetatud $count $param2 kaugmale mängu',
+      one: 'Lõpetatud $count $param2 kaugmale mäng',
     );
     return '$_temp0';
   }
@@ -1283,6 +1283,9 @@ class AppLocalizationsEt extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1306,7 +1309,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String challengeChallengesX(String param1) {
-    return 'Challenges: $param1';
+    return 'Väljakutsed: $param1';
   }
 
   @override
@@ -2240,7 +2243,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get practiceStDesAVeryPowerfulTactic => 'A very powerful tactic';
 
   @override
-  String get practiceStDesTheyHaveTooMuchWork => 'They have too much work';
+  String get practiceStDesTheyHaveTooMuchWork => 'Neil on nii palju tööd';
 
   @override
   String get practiceStDesInBetweenMoves => 'In-between moves';
@@ -2421,9 +2424,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Käigu kinnitus';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3361,30 +3361,30 @@ class AppLocalizationsEt extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'See konto on suletud.';
 
   @override
-  String get settingsWereSorryToSeeYouGo => 'We\'re sorry to see you go.';
+  String get settingsWereSorryToSeeYouGo => 'Meil on kahju, et sa lahkud.';
 
   @override
-  String get settingsCloseAccountForeverLabel => 'Close forever: make it impossible to reopen';
+  String get settingsCloseAccountForeverLabel => 'Sulge igaveseks: tee taasavamine võimatuks';
 
   @override
-  String get settingsCloseAccountForeverWarning => 'Prevent reopening the account later. If you tick this box, even administrators will be unable to reopen your account at your request.';
+  String get settingsCloseAccountForeverWarning => 'Väldi konto hilisemat taasavamist. Kui märgid selle kasti, ei saa isegi administraatorid sinu kontot sinu soovil uuesti avada.';
 
   @override
-  String get settingsDeleteYourAccount => 'Delete your account';
+  String get settingsDeleteYourAccount => 'Kustuta oma konto';
 
   @override
-  String get settingsDeleteAccountWarning => 'Once you delete your account, it\'s removed from Lichess and our administrators won\'t be able to bring it back for you.';
+  String get settingsDeleteAccountWarning => 'Kui oled oma konto kustutanud, eemaldatakse see Lichessist ja meie administraatorid ei saa seda sinu jaoks taastada.';
 
   @override
   String settingsWouldYouLikeToXInstead(String param) {
-    return 'Would you like to $param instead?';
+    return 'Kas soovid selle asemel $param?';
   }
 
   @override
-  String get settingsCloseYourAccount => 'close your account';
+  String get settingsCloseYourAccount => 'sulge oma konto';
 
   @override
-  String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
+  String get settingsDeleteAccountConfirmText => 'Mõistan, et kustutatud kontod pole taastatavad';
 
   @override
   String get challengeAFriend => 'Kutse mängule';
@@ -4420,6 +4420,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get orUploadPgnFile => 'Või lae üles PGN-fail';
 
   @override
+  String get selectImage => 'Vali pilt';
+
+  @override
   String get continueFromHere => 'Jätka siit';
 
   @override
@@ -4594,7 +4597,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get resume => 'Jätka';
 
   @override
-  String get stop => 'Stop';
+  String get stop => 'Peata';
 
   @override
   String get youArePlaying => 'Te mängite!';
@@ -5163,7 +5166,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get really => 'päriselt';
 
   @override
-  String get lichessUpdates => 'Lichessi uuendused';
+  String get lichessUpdates => 'Lichessi infovoog';
+
+  @override
+  String get allUpdates => 'Kõik uuendused';
 
   @override
   String get contribute => 'Panusta';
@@ -6065,10 +6071,10 @@ class AppLocalizationsEt extends AppLocalizations {
   String get minimumRatedGames => 'Minimaalne reitinguga mängude arv';
 
   @override
-  String get minimumAccountAge => 'Minimum account age';
+  String get minimumAccountAge => 'Konto minimaalne vanus';
 
   @override
-  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+  String get titledPlayersBypassRestriction => 'Tiitliga mängijad on sellest piirangust vabastatud.';
 
   @override
   String get minimumRating => 'Minimaalne reiting';
@@ -6210,7 +6216,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get showMeEverything => 'Näita mulle kõike';
 
   @override
-  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
+  String get lichessPatronInfo => 'Lichess on heategevusorganisatsioon ja täiesti tasuta ning vaba avatud lähtekoodiga tarkvara. Meie tegevuskulude, arendustöö ja sisu toetamiseks sõltume kasutajate annetustest. Ilma meie suuremeelse kogukonna abita ei suudaks me veebisaiti töös hoida. Täname, et liitusid meiega!';
 
   @override
   String get nothingToSeeHere => 'Siin pole hetkel midagi näha.';
@@ -6244,7 +6250,7 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String searchInX(String param) {
-    return 'Search in \"$param\"';
+    return 'Otsi \"$param\" seest';
   }
 
   @override

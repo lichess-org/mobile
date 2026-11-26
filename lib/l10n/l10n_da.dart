@@ -1283,6 +1283,9 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Omtal denne position i chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2408,7 +2411,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Forfrem til dronning automatisk';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold ctrl-tasten nede, mens du forfremmer for midlertidigt at deaktivere auto-forfremmelse';
 
   @override
   String get preferencesWhenPremoving => 'Ved forhåndstræk';
@@ -2421,9 +2424,6 @@ class AppLocalizationsDa extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Bekræft træk';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan deaktiveres i løbet af et parti med brætmenuen';
@@ -4420,6 +4420,9 @@ class AppLocalizationsDa extends AppLocalizations {
   String get orUploadPgnFile => 'Eller upload en PGN-fil';
 
   @override
+  String get selectImage => 'Vælg billede';
+
+  @override
   String get continueFromHere => 'Fortsæt herfra';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get really => 'det er sandt';
 
   @override
-  String get lichessUpdates => 'Lichess-opdateringer';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'Alle opdateringer';
 
   @override
   String get contribute => 'Bidrag';
@@ -7490,10 +7496,10 @@ class AppLocalizationsDa extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Analyser på din enhed';
 
   @override
-  String get studySearchChapters => 'Search chapters';
+  String get studySearchChapters => 'Søg kapitler';
 
   @override
-  String get studySearchGames => 'Search games';
+  String get studySearchGames => 'Søg partier';
 
   @override
   String studyNbChapters(int count) {
@@ -7533,8 +7539,8 @@ class AppLocalizationsDa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game.',
+      other: 'Indsæt partier som PGN-tekst her. Der oprettes et nyt kapitel for hvert parti. Undersøgelsen kan indeholde op til $count kapitler.',
+      one: 'Indsæt din PGN-tekst her, op til $count parti.',
     );
     return '$_temp0';
   }
