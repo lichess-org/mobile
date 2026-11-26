@@ -277,6 +277,7 @@ class _BodyState() extends ConsumerState<_Body> {
                     icon: Icons.save,
                   ),
                   BottomBarGroup(
+                    navigation: true,
                     children: [
                       RepeatButton(
                         onLongPress: canGoBackward ? () => moveBackward() : null,

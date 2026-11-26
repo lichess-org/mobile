@@ -149,7 +149,6 @@ abstract class NotificationService(final Ref ref) {
   @protected
   bool shouldShow(ParsedPushMessage message, {required bool fromBackground});
 
-  @protected
   Future<void> processPushMessage(PushMessage message, {required bool fromBackground}) async {
     notificationLogger.fine(
       'Processing a push message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',

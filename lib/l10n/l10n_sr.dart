@@ -74,6 +74,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobileClearButton => 'Очисти';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
@@ -1299,6 +1302,9 @@ class AppLocalizationsSr extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2438,9 +2444,6 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Потврда потеза';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -3960,7 +3963,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get realTime => 'Игра на време';
 
   @override
-  String get correspondence => 'Дописнa';
+  String get correspondence => 'Дописна';
 
   @override
   String get daysPerTurn => 'Дана по потезу';
@@ -4017,7 +4020,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get passwordReset => 'Мењање лозинке';
 
   @override
-  String get forgotPassword => 'Заборавили сте лозинку?';
+  String get forgotPassword => 'Заборавио/ла лозинку?';
 
   @override
   String get error_weakPassword => 'Ова лозинка је изузетно честа и сувише лака да се погоди.';
@@ -4128,10 +4131,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get blackRanOutOfTime => 'Black ran out of time';
 
   @override
-  String get drawOfferSent => 'Захтев за реми је послат';
+  String get drawOfferSent => 'Понуда ремија послата';
 
   @override
-  String get drawOfferAccepted => 'Предлог за реми је прихваћен';
+  String get drawOfferAccepted => 'Понуда ремија прихваћена';
 
   @override
   String get whiteOffersDraw => 'Бели нуди реми';
@@ -4170,7 +4173,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get gameAborted => 'Партија прекинута';
 
   @override
-  String get standard => 'Стандардно';
+  String get standard => 'Стандардна';
 
   @override
   String get customPosition => 'Произвољна позиција';
@@ -4197,7 +4200,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get ratedTournament => 'Рангирани';
 
   @override
-  String get thisGameIsRated => 'Ова партија се рангира';
+  String get thisGameIsRated => 'Ова партија је рангирана';
 
   @override
   String get rematch => 'Реванш';
@@ -4218,7 +4221,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get cancelRematchOffer => 'Откажи понуду за реванш';
 
   @override
-  String get viewRematch => 'Погледајте реванш';
+  String get viewRematch => 'Погледај реванш';
 
   @override
   String get confirmMove => 'Потврди потез';
@@ -4314,7 +4317,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get tournaments => 'Турнири';
 
   @override
-  String get tournamentPoints => 'Бодови са турнира';
+  String get tournamentPoints => 'Турнирски бодови';
 
   @override
   String get viewTournament => 'Погледај турнир';
@@ -4436,6 +4439,9 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Или учитај PGN фајл';
+
+  @override
+  String get selectImage => 'Select image';
 
   @override
   String get continueFromHere => 'Настави одавде';
@@ -4990,7 +4996,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get always => 'Увек';
 
   @override
-  String get never => 'Никада';
+  String get never => 'Никад';
 
   @override
   String get defeatOnly => 'Defeat only';
@@ -5181,7 +5187,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get really => 'стварно';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Допринеси';
@@ -5234,10 +5243,10 @@ class AppLocalizationsSr extends AppLocalizations {
   String get returnToSimulHomepage => 'Врати се на почетну страну симултанке';
 
   @override
-  String get aboutSimul => 'Симултанке обухватају суочавање једонг играча против неколико играча одједном.';
+  String get aboutSimul => 'Симултанке обухватају суочавање једног играча против неколико играча одједном.';
 
   @override
-  String get aboutSimulImage => 'Од 50 противника, Фишер је победио 47 партија, ремизирао 2, и изгубио 1.';
+  String get aboutSimulImage => 'Од 50 противника, Фишер је победио 47 партија, ремизирао 2 и изгубио 1.';
 
   @override
   String get aboutSimulRealLife => 'Концепт је преузет из догађаја у стварном свету. У стварном животу, то обухвата кретање домаћина симултанке од стола до стола како би одиграо један потез.';
@@ -5282,7 +5291,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get timeBeforeTournamentStarts => 'Време пре него што турнир започне';
 
   @override
-  String get averageCentipawnLoss => 'Просечан центипијунски губитак';
+  String get averageCentipawnLoss => 'Просечан центипешачки губитак';
 
   @override
   String get accuracy => 'Прецизност';
@@ -5291,7 +5300,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get keyboardShortcuts => 'Пречице на тастатури';
 
   @override
-  String get keyMoveBackwardOrForward => 'иди назад/напред';
+  String get keyMoveBackwardOrForward => 'крећи се назад/напред';
 
   @override
   String get keyGoToStartOrEnd => 'иди на почетак/крај';
@@ -5399,13 +5408,13 @@ class AppLocalizationsSr extends AppLocalizations {
   String get glicko2Rating => 'Glicko-2 рејтинг';
 
   @override
-  String get checkYourEmail => 'Проверите Ваш Имејл';
+  String get checkYourEmail => 'Провери свој Имејл';
 
   @override
-  String get weHaveSentYouAnEmailClickTheLink => 'Послали смо Вам имејл. Кликните линк у имејлу да активирате свој налог.';
+  String get weHaveSentYouAnEmailClickTheLink => 'Послали смо ти имејл. Кликни линк у имејлу да активираш свој налог.';
 
   @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ако не видите имејл, проверите друга места на којима може бити, као Ваш отпад, нежељена пошта, друштвене мреже или друге датотеке.';
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'Ако не видиш имејл, провери друга места на којима може бити, као твој отпад, нежељена пошта, друштвене мреже или друге датотеке.';
 
   @override
   String get ifYouDoNotGetTheEmail => 'Ако не добијеш имејл у року од 5 минута:';
@@ -5420,7 +5429,7 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String weHaveSentYouAnEmailTo(String param) {
-    return 'Послали смо имејл на $param. Кликните линк у имејлу да промените своју лозинку.';
+    return 'Послали смо имејл на $param. Кликни линк у имејлу да промениш своју лозинку.';
   }
 
   @override
@@ -5440,7 +5449,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get timeToProcessAMoveOnLichessServer => 'Време обраде потеза на Lichess-овом серверу';
 
   @override
-  String get downloadAnnotated => 'Преузими са белешкама';
+  String get downloadAnnotated => 'Преузми са белешкама';
 
   @override
   String get downloadRaw => 'Преузми без белешки';

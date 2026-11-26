@@ -705,6 +705,7 @@ class _BottomBarState() extends ConsumerState<_BottomBar> {
             ],
           ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               triggerDelays: _BottomBar._repeatTriggerDelays,

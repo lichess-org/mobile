@@ -9,6 +9,7 @@
   <string name="settingsClockPosition" comment="Clock position entry in main settings screen.">Місто годинкы</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Подїлити ся PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Подїлити ся одкликованьом бавкы</string>
+  <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Довершені</string>
   <string name="unsupportedVariant" comment="Shown when trying to access/play a variant not yet supported in the app.">Варіант %s не поддержує ся у сюв верзії.</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Позирати</string>
 </resources>

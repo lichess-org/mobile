@@ -84,6 +84,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Chế độ luyện tập</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Phóng to quân cờ được kéo</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Trước đó</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Xem lại những lần giải đố trước đây của bạn.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Bạn có muốn kết thúc lượt chạy này không?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Không có gì để hiển thị, vui lòng thay đổi bộ lọc</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Không có gì để xem. Chơi một vài ván Puzzle Storm.</string>

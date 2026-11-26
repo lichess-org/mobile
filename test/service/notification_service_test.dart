@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:fake_async/fake_async.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -34,6 +35,15 @@ void main() {
     registerDeviceCalls = 0;
     reset(notificationDisplayMock);
     reset(correspondenceServiceMock);
+  });
+
+  // PluginUtilities.getCallbackHandle resolves callbacks by class name in AOT, so the class
+  // holding the static background handler must be an entry point alongside the handler itself.
+  test('background handler class is an AOT entry point', () {
+    final source = File('lib/src/service/notification_service.dart').readAsStringSync();
+    final isEntryPoint = RegExp(r"@pragma\('vm:entry-point'\)\s*class\s+NotificationService\b")
+        .hasMatch(source);
+    expect(isEntryPoint, isTrue);
   });
 
   final registerMockClient = MockClient((request) {

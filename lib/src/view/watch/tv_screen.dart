@@ -259,6 +259,7 @@ class const _TvGameBody({
                 ),
               if (canShowChat) ChatBottomBarButton(options: chatOptions),
               BottomBarGroup(
+                navigation: true,
                 children: [
                   RepeatButton(
                     onLongPress: ref.read(gameCtrl.notifier).canGoBack()

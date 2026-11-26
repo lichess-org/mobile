@@ -7,7 +7,7 @@ version: 0.31.8+003108 # See README.md for details about versioning
 environment:
   sdk: ^3.14.0
   # this should be updated with every new flutter stable release
-  flutter: 3.50.0
+  flutter: 3.50.1
 
 dependencies:
   app_links: ^7.2.2
@@ -39,7 +39,7 @@ dependencies:
   flutter_appauth: ^13.0.0
   flutter_displaymode: ^0.7.0
   flutter_layout_grid: ^2.0.8
-  flutter_local_notifications: ^22.3.3
+  flutter_local_notifications: ^23.0.3
   flutter_localizations:
     sdk: flutter
   flutter_markdown_plus: 
@@ -66,7 +66,7 @@ dependencies:
   material_symbols_icons: ^4.2960.0
   material_ui: ^1.10.0
   meta: ^1.19.0
-  multistockfish: ^0.6.1
+  multistockfish: ^0.7.0
   package_info_plus: ^10.2.2
   path: ^1.9.1
   path_provider: ^2.1.6

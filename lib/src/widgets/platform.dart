@@ -601,7 +601,7 @@ class const _LargeTitle({required final double top, required final Widget title}
                 child: Align(
                   alignment: .bottomLeft,
                   child: Semantics(
-                    header: true,
+                    headingLevel: 1,
                     child: DefaultTextStyle.merge(
                       style: CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle
                           .copyWith(color: ColorScheme.of(context).onSurface),

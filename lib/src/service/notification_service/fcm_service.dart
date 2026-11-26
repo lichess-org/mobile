@@ -190,27 +190,27 @@ class FcmService(super.ref) extends NotificationService {
       return false;
     }
   }
+}
 
-  @pragma('vm:entry-point')
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    // create a new provider scope for the background isolate
-    final ref = ProviderContainer(
-      overrides: [notificationServiceFactoryProvider.overrideWithValue(FcmService.new)],
-    );
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // create a new provider scope for the background isolate
+  final ref = ProviderContainer(
+    overrides: [notificationServiceFactoryProvider.overrideWithValue(FcmService.new)],
+  );
 
-    final lichessBinding = PlayLichessBinding.ensureInitialized();
-    await lichessBinding.preloadSharedPreferences();
-    await ref.read(preloadedDataProvider.future);
+  final lichessBinding = PlayLichessBinding.ensureInitialized();
+  await lichessBinding.preloadSharedPreferences();
+  await ref.read(preloadedDataProvider.future);
 
-    try {
-      await ref
-          .read(notificationServiceProvider)
-          .processPushMessage(message.toPushMessage(), fromBackground: true);
-      ref.dispose();
-    } catch (e, st) {
-      notificationLogger.severe('Error when processing an FCM background message:', e, st);
-      ref.dispose();
-    }
+  try {
+    await ref
+        .read(notificationServiceProvider)
+        .processPushMessage(message.toPushMessage(), fromBackground: true);
+    ref.dispose();
+  } catch (e, st) {
+    notificationLogger.severe('Error when processing an FCM background message:', e, st);
+    ref.dispose();
   }
 }
 

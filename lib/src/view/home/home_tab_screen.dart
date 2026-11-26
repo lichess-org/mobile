@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/experimental/mutation.dart';
@@ -24,6 +25,7 @@ import 'package:lichess_mobile/src/model/tournament/tournament.dart';
 import 'package:lichess_mobile/src/model/tournament/tournament_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/tab_navigation.dart';
@@ -391,8 +393,14 @@ class _HomeScreenState() extends ConsumerState<HomeTabScreen> {
             }
 
             final content = ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               controller: homeScrollController,
-              children: [if (unreadLichessMessage) const _LichessMessageBanner(), ...widgets],
+              children: [
+                if (unreadLichessMessage) const _LichessMessageBanner(),
+                if (authUser != null && hasServerContent && !widget.editModeEnabled)
+                  const _YearRecapBanner(),
+                ...widgets,
+              ],
             );
 
             return FocusDetector(
@@ -499,6 +507,75 @@ class const _LichessMessageBanner() extends ConsumerWidget {
               Text(
                 context.l10n.readTheMessage,
                 style: TextStyle(color: theme.colorScheme.onTertiaryContainer),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+const String kHideYearRecapBannerPrefix = 'app_hide_year_recap_banner_';
+const kYearRecapBannerFirstDecemberDay = 10;
+const kYearRecapBannerLastJanuaryDay = 5;
+
+/// The year whose recap is promoted on [date], or null outside the recap season (December from
+/// [kYearRecapBannerFirstDecemberDay], and January until [kYearRecapBannerLastJanuaryDay]).
+@visibleForTesting
+int? yearRecapBannerYear(DateTime date) => switch (date.month) {
+  12 when date.day >= kYearRecapBannerFirstDecemberDay => date.year,
+  1 when date.day <= kYearRecapBannerLastJanuaryDay => date.year - 1,
+  _ => null,
+};
+
+/// Promotes the year end recap on lichess.org during the recap season, until dismissed.
+class const _YearRecapBanner() extends StatefulWidget {
+  @override
+  State<_YearRecapBanner> createState() => _YearRecapBannerState();
+}
+
+class _YearRecapBannerState() extends State<_YearRecapBanner> {
+  @override
+  Widget build(BuildContext context) {
+    final year = yearRecapBannerYear(clock.now());
+    final prefs = LichessBinding.instance.sharedPreferences;
+    if (year == null || prefs.getBool('$kHideYearRecapBannerPrefix$year') == true) {
+      return const SizedBox.shrink();
+    }
+
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onTertiaryContainer;
+    return Material(
+      color: theme.colorScheme.tertiaryContainer,
+      child: InkWell(
+        onTap: () => launchUrl(lichessUri('/recap')),
+        child: Padding(
+          padding: Styles.bodyPadding.copyWith(right: 0.0),
+          child: Row(
+            children: [
+              Icon(Icons.celebration_outlined, color: textColor),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.recapRecapReady('$year'),
+                      style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(context.l10n.recapAwaitQuestion, style: TextStyle(color: textColor)),
+                  ],
+                ),
+              ),
+              SemanticIconButton(
+                icon: Icon(Icons.close, color: textColor),
+                semanticsLabel: context.l10n.close,
+                onPressed: () {
+                  prefs.setBool('$kHideYearRecapBannerPrefix$year', true);
+                  setState(() {});
+                },
               ),
             ],
           ),

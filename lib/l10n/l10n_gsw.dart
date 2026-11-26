@@ -74,6 +74,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileClearButton => 'Lösche';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'De Code funzt nu 5 Minute und cha nu eimal benutzt werde.';
 
   @override
@@ -152,7 +155,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileGoodEveningWithoutName => 'Guete Abig';
 
   @override
-  String get mobileGoodMoveButThereIsBetter => 'Gueter Zug, aber es git no en bessere';
+  String get mobileGoodMoveButThereIsBetter => 'Guete Zug - aber es git no en bessere';
 
   @override
   String get mobileHello => 'Hoi';
@@ -165,7 +168,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
-    return 'Falls es Konto mit $param1, überein stimmt, isch en $param2-stellige Code a das Konto g\'schickt worde. Bitte überprüef din Poschtigang und Tipp de Code une ine.';
+    return 'Falls es Konto mit $param1, überein stimmt, isch en $param2-schtellige Code a das Konto g\'schickt worde. Bitte überprüef din Poschtigang und Tipp de Code une ine.';
   }
 
   @override
@@ -196,7 +199,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileNoSearchResults => 'Nüt g\'funde';
 
   @override
-  String get mobileNotFollowingAnyUser => 'Du folgsch keim Schpiler.';
+  String get mobileNotFollowingAnyUser => 'Du folgsch keim/nere Schpiler*i.';
 
   @override
   String get mobileOkButton => 'OK';
@@ -266,7 +269,7 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Schpiler mit \"$param%';
+    return 'Schpiler*ine mit \"$param%';
   }
 
   @override
@@ -324,7 +327,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileServerAnalysis => 'Server Analyse';
 
   @override
-  String get mobileSettingsClockPosition => 'Stellig vu de Uhr';
+  String get mobileSettingsClockPosition => 'Schtellig vu de Uhr';
 
   @override
   String get mobileSettingsCustomBackgroundPresets => 'Vor Ischtellige';
@@ -351,7 +354,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileSettingsImmersiveMode => 'Ibettete Modus';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'UI System während em Schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte am Bildschirmrand störed. Das gilt für de Schpil- und au für de Puzzle-Storm-Bildschirm.';
+  String get mobileSettingsImmersiveModeSubtitle => 'UI Syschtem bim Schpille usblände. Benutz die Opzion, wänn d\'Navigationsgeschte am Rand stört. Das gilt für\'s Schpille und au für Puzzle Storm.';
 
   @override
   String get mobileSettingsMaterialDifferenceCapturedPieces => 'g\'schlageni Figure';
@@ -617,8 +620,8 @@ class AppLocalizationsGsw extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Folgt jetzt $count Schpiler',
-      one: 'Folgt jetzt $count Schpiler',
+      other: 'Folgt jetzt $count Schpiler*ine',
+      one: 'Folgt jetzt $count Schpiler*i',
     );
     return '$_temp0';
   }
@@ -629,7 +632,7 @@ class AppLocalizationsGsw extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Hät $count neui Folgendi erworbe',
-      one: 'Hät $count neue Folgende erworbe',
+      one: 'Hät $count neue Folgende/neui Folgendi erworbe',
     );
     return '$_temp0';
   }
@@ -742,19 +745,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaBerserk => 'Berserk';
 
   @override
-  String get arenaBerserkAnswer => 'Klickt en Schpiler vor Schpilbeginn uf Berserk, dänn halbiert er sini Bedänkzit. \nWänn er s\'Schpil trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\n\nIm Zitmodus mit Inkrement entfernt Berserk s\'Inkrement. \n(1+2 isch e Usnahm, es wird zu 1+0.)\n\nBi Schpil ohni Grundbedänkzit (0+1, 0+2) isch Berserk nöd möglich.\n\nDe zuesätzlich Berserk Punkt gits nur, wänn im Schpil \nmeh als 6 Züg g\'schpillt worde sind.';
+  String get arenaBerserkAnswer => 'Klickt en/e Schpiler*i vor Schpilbeginn uf Berserk, dänn halbiert er/sie sini/ihri Bedänkzit. \nWänn er/sie s\'Schpil trotzdem günnt, gits 1 zuesätzliche Turnier Punkt.\n\nIm Zitmodus mit Inkrement entfernt Berserk das Inkrement. \n(1+2 isch e Usnahm, es wird zu 1+0.)\n\nBi Schpil ohni Grundbedänkzit (0+1, 0+2) isch Berserk nöd möglich.\n\nDe zuesätzlich Berserk Punkt git\'s nur, wänn im Schpil \nmeh als 6 Züg g\'schpillt worde sind.';
 
   @override
   String get arenaHowIsTheWinnerDecided => 'Wie wird de Sieger ermittlet?';
 
   @override
-  String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiler wo bi Turnierändi die meischte Pünkt händ werded als Sieger bekanntgeh. \nWänn 2 oder meh Schpiler glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
+  String get arenaHowIsTheWinnerDecidedAnswer => 'De/die Schpiler*ine wo bi Turnierändi die meischte Pünkt händ werded als Sieger*ine bekanntgeh. \nWänn 2 oder meh Schpiler*ine glich vill Pünkt händ, entscheidet d\'Turnierleischtig d\'Reihefolg.';
 
   @override
-  String get arenaHowArePlayersPaired => 'Wie werded d\'Schpiler paaret?';
+  String get arenaHowArePlayersPaired => 'Wie werded d\'Schpiler*ine paaret?';
 
   @override
-  String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpil fertig isch, gahts zrugg id Turnierübersicht und es werded Schpiler \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge alli Schpiler. \nWänn me sofort z\'rugg id Übersicht gaht, chan me meh schpille d.h. meh Pünkt mache!';
+  String get arenaHowDoesPairingWorkAnswer => 'Am Afang werded d\'Paarige gemäss de Wertigszahl g\'macht. \nSobald es Schpil fertig isch, gahts z\'rugg id Turnierübersicht und es werded Schpiler*ine \nmit ähnlichem Rang paaret. Mer schpillt, im Turnier, nie gäge alli Schpiler*ine. \nWänn me sofort z\'rugg id Übersicht gaht, chan me meh schpille d.h. meh Pünkt mache!';
 
   @override
   String get arenaHowDoesItEnd => 'Wie ändet s\'Turnier?';
@@ -812,10 +815,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaAllowBerserk => 'Berserk erlaube';
 
   @override
-  String get arenaAllowBerserkHelp => 'Erlaubt de Schpiler d\'Bedänkzit z\'halbiere, zum Zuesatzpünkt z\'günne';
+  String get arenaAllowBerserkHelp => 'Erlaubt de Schpiler*ine d\'Bedänkzit z\'halbiere, zum Zuesatzpünkt z\'günne';
 
   @override
-  String get arenaAllowChatHelp => 'Lass d\'Schpiler ime Chatrum diskutiere';
+  String get arenaAllowChatHelp => 'Lass d\'Schpiler*ine ime Chatrum diskutiere';
 
   @override
   String get arenaArenaStreaks => 'Arena Sieges Serie';
@@ -892,7 +895,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get arenaRankAvg => 'Rang - Durchschnitt';
 
   @override
-  String get arenaTournamentWinners => 'Turnier - Sieger';
+  String get arenaTournamentWinners => 'Turnier - Sieger*ine';
 
   @override
   String get arenaTournamentShields => 'Turnier - Schilder';
@@ -1040,10 +1043,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastPermanentlyDeleteTournament => 'Das Turnier, mit allne Runde und Schpil, für immer lösche?';
 
   @override
-  String get broadcastShowScores => 'Zeigt d\'Erfolg vu de Schpiler, anhand vu Schpil Resultate';
+  String get broadcastShowScores => 'Zeigt d\'Erfolg vu de Schpiler*ine, anhand vu Schpil Resultate';
 
   @override
-  String get broadcastReplacePlayerTags => 'Optional: Schpilernäme, Wertige und Titel weg lah';
+  String get broadcastReplacePlayerTags => 'Optional: Schpiler*ine näme, Wertige und Titel weg lah';
 
   @override
   String get broadcastFideFederations => 'FIDE Wältschachverband';
@@ -1052,10 +1055,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastTop10Rating => 'Top 10 Ratings';
 
   @override
-  String get broadcastFidePlayers => 'FIDE Schpiler';
+  String get broadcastFidePlayers => 'FIDE Schpiler*ine';
 
   @override
-  String get broadcastFidePlayerNotFound => 'FIDE Schpiler nöd g\'funde';
+  String get broadcastFidePlayerNotFound => 'FIDE Schpiler*i nöd g\'funde';
 
   @override
   String get broadcastFideProfile => 'FIDE Profil';
@@ -1094,7 +1097,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastNoBoardsYet => 'No kei Brätter. Die erschined sobald Schpil ufeglade sind.';
 
   @override
-  String get broadcastNoPlayersYet => 'No kei Schpiler. Sie erschined sobald Schpil ufeglade sind.';
+  String get broadcastNoPlayersYet => 'No kei Schpiler*ine. Sie erschined sobald Schpil ufeglade sind.';
 
   @override
   String broadcastBoardsCanBeLoaded(String param) {
@@ -1154,7 +1157,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastTournamentLocation => 'Turnier Lokal';
 
   @override
-  String get broadcastTopPlayers => 'Top Schpiler*inne';
+  String get broadcastTopPlayers => 'Top Schpiler*ine';
 
   @override
   String get broadcastTimezone => 'Zit Zone';
@@ -1267,7 +1270,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get broadcastKnockouts => 'Usscheidigskämpf';
 
   @override
-  String get broadcastPinPlayer => 'Pin Schpiler';
+  String get broadcastPinPlayer => 'Pin Schpiler*ine';
 
   @override
   String broadcastUnderXAgeTournament(String param) {
@@ -1278,6 +1281,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'U$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Schtellig im Chat erwähne';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -1577,7 +1583,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get learnPawnIntro => 'Pure sind schwach, aber sie händ vill Möglichkeite.';
 
   @override
-  String get learnPawnsMoveOneSquareOnly => 'En Pur bewegt sich nur eis Fäld vorwärts. Aber wänn er die ander Site vom Brätt erreicht, dänn chann er sich in e stärcheri Figur umwandle!';
+  String get learnPawnsMoveOneSquareOnly => 'En Pur bewegt sich nur eis Fäld vorwärts. Aber wänn er die ander Site vom Brätt erreicht, dänn chann er sich in e schtärcheri Figur umwandle!';
 
   @override
   String get learnMostOfTheTimePromotingToAQueenIsBest => 'Meischtens isch es s\'Bescht, e Dame z\'mache. \nAber mängisch isch au en Schpringer nützlich!';
@@ -1607,7 +1613,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get learnYourPawnReachedTheEndOfTheBoard => 'Din Pur hät s\'Ändi vom Brätt erreicht!';
 
   @override
-  String get learnItNowPromotesToAStrongerPiece => 'Er verwandlet sich jetzt in e stärcheri Figur.';
+  String get learnItNowPromotesToAStrongerPiece => 'Er verwandlet sich jetzt in e schtärcheri Figur.';
 
   @override
   String get learnSelectThePieceYouWant => 'Wähl die Figur wo du wettsch!';
@@ -1883,7 +1889,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get learnWhatNext => 'Wie gahts witer?';
 
   @override
-  String get learnYouKnowHowToPlayChess => 'Gratuliere, du weisch jetzt wie mer Schach schpillt! Wettsch en stärchere Schpiler werde?';
+  String get learnYouKnowHowToPlayChess => 'Gratuliere, du weisch jetzt wie mer Schach schpillt! Möchtsch gern schtärcher werde?';
 
   @override
   String get learnRegister => 'Regischtriere';
@@ -1965,7 +1971,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   }
 
   @override
-  String get learnNext => 'Witer mit';
+  String get learnNext => 'Mach witer';
 
   @override
   String learnNextX(String param) {
@@ -2339,7 +2345,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesZenMode => 'Zen Modus';
 
   @override
-  String get preferencesShowPlayerRatings => 'Zeig Schpiler Wertige';
+  String get preferencesShowPlayerRatings => 'Zeig Schpiler*ine Wertige';
 
   @override
   String get preferencesShowFlairs => 'Benutzer Emojis azeige';
@@ -2411,16 +2417,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get preferencesWhenPremoving => 'Bim Voruszieh';
 
   @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatischs Remis bi 3 Mal glicher Stellig';
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatischs Remis bi 3 Mal glicher Schtellig';
 
   @override
   String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Bi Reschtzit vu < 30 Sekunde';
 
   @override
   String get preferencesMoveConfirmation => 'Zugs Beschtätigung';
-
-  @override
-  String get preferencesMultipleChoices => 'Mehrfachi Uswahle.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Chan während em Schpil im Brättmenü deaktiviert werde';
@@ -2633,7 +2636,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleDownVote => 'Die Ufgab negativ bewerte';
 
   @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Dini Wertig für Ufgabe veränderet sich nöd. Eusi Ufgabe sind kein Wettbewerb. Dini Wertig hilft nur dir Ufgabe z\'geh, wo zu dinere aktuelle Schpilstärchi passed.';
+  String get puzzleYourPuzzleRatingWillNotChange => 'Eusi Ufgabe sind kein Wettbewerb. Die Wertig für Ufgabe veränderet sich nöd. Sie macht nur, dass dir Ufgabe zueteilt werded, wo zu dinere aktuelle Schpilschtärchi passed.';
 
   @override
   String get puzzleFindTheBestMoveForWhite => 'Find de bescht Zug für Wiss.';
@@ -2747,7 +2750,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleImprovementAreas => 'Verbesserigs Bereich';
 
   @override
-  String get puzzleStrengths => 'Stärche';
+  String get puzzleStrengths => 'Schtärchene';
 
   @override
   String get puzzleHistory => 'Ufgabe Verlauf';
@@ -2779,7 +2782,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleFromMyGames => 'Us mine Schpil';
 
   @override
-  String get puzzleLookupOfPlayer => 'Suech Ufgabe us Schpil vu beschtimmte Schpiler';
+  String get puzzleLookupOfPlayer => 'Suech Ufgabe us Schpil vu beschtimmte Schpiler*ine';
 
   @override
   String get puzzleSearchPuzzles => 'Suech Ufgabe';
@@ -3132,13 +3135,13 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeMaster => 'Meischter Schpil';
 
   @override
-  String get puzzleThemeMasterDescription => 'Ufgabe us Schpil vu Schpiler mit Titel.';
+  String get puzzleThemeMasterDescription => 'Ufgabe us Schpil vu Schpiler*ine mit Titel.';
 
   @override
   String get puzzleThemeMasterVsMaster => 'Meischter gäge Meischter Schpil';
 
   @override
-  String get puzzleThemeMasterVsMasterDescription => 'Ufgabe us Schpil vu 2 Schpiler mit Titel.';
+  String get puzzleThemeMasterVsMasterDescription => 'Ufgabe us Schpil vu 2 Schpiler*ine mit Titel.';
 
   @override
   String get puzzleThemeMate => 'Schachmatt';
@@ -3210,7 +3213,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemePin => 'Fesslig';
 
   @override
-  String get puzzleThemePinDescription => 'Taktik mit Fesslig, wo sich e Figur nöd bewege cha, ohni de Angriff uf e stärcheri Figur z\'verrate.';
+  String get puzzleThemePinDescription => 'Taktik mit Fesslig, wo sich e Figur nöd bewege cha, ohni de Angriff uf e schtärcheri Figur z\'verrate.';
 
   @override
   String get puzzleThemePromotion => 'Umwandlig';
@@ -3276,7 +3279,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeSuperGM => 'Super Grossmeischter Schpil';
 
   @override
-  String get puzzleThemeSuperGMDescription => 'Ufgabe us Schpil, vu de beschte Schpiler*ine uf de Wält.';
+  String get puzzleThemeSuperGMDescription => 'Ufgabe us Schpil, vu de beschte Schpiler*ine vu de Wält.';
 
   @override
   String get puzzleThemeTrappedPiece => 'G\'fangeni Figur';
@@ -3315,7 +3318,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get puzzleThemeMixDescription => 'Es bitzli vu allem, me weiss nöd was eim erwartet, drum isch mer uf alles g\'fasst - genau wie bi richtige Schachschpil.';
 
   @override
-  String get puzzleThemePlayerGames => 'Schpiler Schpil';
+  String get puzzleThemePlayerGames => 'Schpiler*ine Schpil';
 
   @override
   String get puzzleThemePlayerGamesDescription => 'Suech nach Ufgabe us dine Schpil oder Ufgabe us Schpil vu Andere';
@@ -3384,19 +3387,19 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get settingsDeleteAccountConfirmText => 'Ich han verstande, dass g\'löschti Konti nüme reaktiviert werde chönd';
 
   @override
-  String get challengeAFriend => 'En Fründ usefordere';
+  String get challengeAFriend => 'Fründ usefordere';
 
   @override
-  String get playAgainstComputer => 'Schpill gäge de Computer';
+  String get playAgainstComputer => 'Gäge de Computer';
 
   @override
   String get gameMode => 'Schpilart';
 
   @override
-  String get createLobbyGame => 'Es Lobby Schpil erschtelle';
+  String get createLobbyGame => 'Lobby Schpil erschtelle';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'Zum Öpper zum Schpille ilade - die URL schicke';
+  String get toInviteSomeoneToPlayGiveThisUrl => 'URL als Schpililadig schicke';
 
   @override
   String get gameOver => 'Schpil verbi';
@@ -3782,7 +3785,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get searchTime => 'Suech Zit';
 
   @override
-  String get searchTimeDescription => 'De Zitpunkt für d\'Bewertig vu neue Positione bestimme';
+  String get searchTimeDescription => 'De Zitpunkt für d\'Bewertig vu neue Schtellige beschtimme';
 
   @override
   String get threads => 'Tüfi vum Rächne';
@@ -4134,10 +4137,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get decline => 'Ablehne';
 
   @override
-  String get playingRightNow => 'Schpillt genau jetzt';
+  String get playingRightNow => 'Schpilled grad jetzt';
 
   @override
-  String get eventInProgress => 'Schpillt jetzt';
+  String get eventInProgress => 'Schpilled jetzt';
 
   @override
   String get finished => 'Beändet';
@@ -4396,7 +4399,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get leaderboard => 'Ranglischte';
 
   @override
-  String get positionAsImage => 'Schtellig als Bild';
+  String get positionAsImage => 'Schtellig ab Bild';
 
   @override
   String get gameAsGIF => 'Schpil als GIF';
@@ -4415,6 +4418,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Oder e PGN Datei ufelade';
+
+  @override
+  String get selectImage => 'Wähl es Bild';
 
   @override
   String get continueFromHere => 'Vu da us witer schpille';
@@ -5098,7 +5104,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get ifRegistered => 'Wänn regischtriert';
 
   @override
-  String get onlyExistingConversations => 'Nur bestehendi Underhaltige';
+  String get onlyExistingConversations => 'Nur beschtehendi Underhaltige';
 
   @override
   String get onlyFriends => 'Nur Fründe';
@@ -5160,7 +5166,10 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get really => 'würkli';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess Feed';
+
+  @override
+  String get allUpdates => 'Alli Aktualisierige';
 
   @override
   String get contribute => 'Mitmache';
@@ -5611,7 +5620,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get hue => 'Farbton';
 
   @override
-  String get boardReset => 'Farbe uf Grundistellig';
+  String get boardReset => 'Farbe uf Grundischtellig';
 
   @override
   String get pieceSet => 'Figureart';
@@ -6047,7 +6056,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get tournDescription => 'Turnier Beschribig';
 
   @override
-  String get tournDescriptionHelp => 'Wottsch de Teilnehmer öppis Speziells mitteile? Probier dich churz z\'fasse. Url mit Name sind möglich: [name](https://url)';
+  String get tournDescriptionHelp => 'Wetsch de Teilnehmer*ine öppis Speziells mitteile? Probier dich churz z\'fasse. Url mit Name sind möglich: [name](https://url)';
 
   @override
   String get ratedFormHelp => 'Alli Schpil sind g\'wertet\nund beiflussed dini Wertig';
@@ -6101,7 +6110,7 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get simulDescription => 'Simultanschach Beschribig';
 
   @override
-  String get simulDescriptionHelp => 'Wottsch de Teilnehmer öppis mitteile?';
+  String get simulDescriptionHelp => 'Wetsch de Teilnehmer*ine öppis mitteile?';
 
   @override
   String youCanFormatTextUsing(String param) {
@@ -6623,7 +6632,7 @@ class AppLocalizationsGsw extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count Folgendi',
-      one: '$count Folgende',
+      one: '$count Folgende/Folgendi',
     );
     return '$_temp0';
   }

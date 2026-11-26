@@ -12,12 +12,15 @@ import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart'
     show
         getApplicationCacheDirectory,
         getApplicationDocumentsDirectory,
         getApplicationSupportDirectory;
+
+final _logger = Logger('PreloadedData');
 
 typedef PreloadedData = ({
   PackageInfo packageInfo,
@@ -47,7 +50,7 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
     PackageInfo.fromPlatform(),
     DeviceInfoPlugin().deviceInfo,
     _readOrCreateSri(),
-    authStorage.read(),
+    _readAuthUser(authStorage),
     System.instance.getTotalRam(),
     _getDirectoryOrNull(getApplicationDocumentsDirectory),
     _getDirectoryOrNull(getApplicationSupportDirectory),
@@ -64,11 +67,13 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
         .then((data) {
           final isValid = data[token] != null;
           if (!isValid) {
+            _logger.info('The stored token of ${authUser!.user.id} is invalid, deleting it');
             authStorage.delete();
           }
         })
-        .catchError((_) {
+        .catchError((Object e) {
           // in case of network error, assume the authUser is still valid
+          _logger.fine('Could not test the stored token:', e);
         })
         .whenComplete(() {
           client.close();
@@ -87,9 +92,24 @@ final preloadedDataProvider = FutureProvider<PreloadedData>((Ref ref) async {
   );
 }, name: 'PreloadedDataProvider');
 
-/// Reads the stored socket random identifier, generating and persisting a
-/// new one if none exists yet or if secure storage turns out to be
-/// unreadable.
+/// Reads the stored session, or returns `null` if secure storage can't be read.
+///
+/// The stored session is kept on a read error: the error may be temporary (e.g. the iOS keychain
+/// can't be read while the device is locked), and the next launch then reads it.
+Future<AuthUser?> _readAuthUser(AuthStorage authStorage) async {
+  try {
+    return await authStorage.read();
+  } catch (e, st) {
+    _logger.severe('Could not read the stored session:', e, st);
+    return null;
+  }
+}
+
+/// Reads the stored socket random identifier, generating and persisting a new one if none exists
+/// yet.
+///
+/// If secure storage can't be read, a temporary identifier is used and nothing is written: the
+/// error may be temporary, and deleting the storage would also delete the stored sessions.
 Future<String> _readOrCreateSri() async {
   try {
     final storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
@@ -97,10 +117,8 @@ Future<String> _readOrCreateSri() async {
     final newSri = genRandomString(12);
     await SecureStorage.instance.write(key: kSRIStorageKey, value: newSri);
     return newSri;
-  } on PlatformException catch (_) {
-    // Clear all secure storage if an error occurs because it probably means
-    // the key has been lost.
-    await SecureStorage.instance.deleteAll();
+  } on PlatformException catch (e, st) {
+    _logger.severe('Could not read or write the SRI, using a temporary one:', e, st);
     return genRandomString(12);
   }
 }
