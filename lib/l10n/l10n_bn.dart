@@ -1283,6 +1283,9 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'অনুমোদন সরান';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -4420,6 +4420,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get orUploadPgnFile => 'অথবা PGN আপলোড করুন';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'এখান থেকে আবার শুরু করুন';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get really => 'সত্যিকার অর্থেই';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'অবদান';

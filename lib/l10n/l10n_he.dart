@@ -1303,6 +1303,9 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2442,9 +2445,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'אישור המהלכים';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ניתן לביטול במהלך המשחק באמצעות תפריט הלוח';
@@ -4446,6 +4446,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get orUploadPgnFile => 'או העלו קובץ PGN';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'המשיכו מכאן';
 
   @override
@@ -5189,7 +5192,10 @@ class AppLocalizationsHe extends AppLocalizations {
   String get really => 'באמת';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'תרומה ומעורבות';

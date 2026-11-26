@@ -1283,6 +1283,9 @@ class AppLocalizationsAf extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Skuif bevestiging';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -4420,6 +4420,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String get orUploadPgnFile => 'Of laai ‘n PGN-lêer op';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Gaan voort van hier af';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsAf extends AppLocalizations {
   String get really => 'regtig';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Dra by';

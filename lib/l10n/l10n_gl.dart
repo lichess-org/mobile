@@ -1283,6 +1283,9 @@ class AppLocalizationsGl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Cita esta posición na sala de conversa';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2423,9 +2426,6 @@ class AppLocalizationsGl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Confirmación do movemento';
 
   @override
-  String get preferencesMultipleChoices => 'Pódense escoller varias opcións.';
-
-  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Pode ser desactivado durante a partida dende o menú do taboleiro';
 
   @override
@@ -3321,7 +3321,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get puzzleThemePlayerGames => 'Partidas de xogadores';
 
   @override
-  String get puzzleThemePlayerGamesDescription => 'Exercicios xerados a partir das túas partidas ou dende partidas doutros xogadores.';
+  String get puzzleThemePlayerGamesDescription => 'Crebacabezas xerados a partir das túas partidas ou das doutros xogadores';
 
   @override
   String puzzleThemePuzzleDownloadInformation(String param) {
@@ -4420,6 +4420,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get orUploadPgnFile => 'Ou sube un ficheiro PGN';
 
   @override
+  String get selectImage => 'Selecciona unha imaxe';
+
+  @override
   String get continueFromHere => 'Continuar dende aquí';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsGl extends AppLocalizations {
   String get really => 'de verdade';
 
   @override
-  String get lichessUpdates => 'Actualizacións de Lichess';
+  String get lichessUpdates => 'Canle de Lichess';
+
+  @override
+  String get allUpdates => 'Todas as actualizacións';
 
   @override
   String get contribute => 'Contribuír';
@@ -6035,7 +6041,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get clickToRevealEmailAddress => '[Pincha para ver o correo electrónico]';
 
   @override
-  String get download => 'Descarga';
+  String get download => 'Descargar';
 
   @override
   String get coachManager => 'Adestrador';

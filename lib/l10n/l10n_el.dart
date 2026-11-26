@@ -1283,6 +1283,9 @@ class AppLocalizationsEl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2421,9 +2424,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Επιβεβαίωση κίνησης';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Μπορεί να απενεργοποιηθεί κατά τη διάρκεια μιας παρτίδας από το μενού της σκακιέρας';
@@ -4420,6 +4420,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get orUploadPgnFile => 'Ή μεταφορτώστε ένα αρχείο PGN';
 
   @override
+  String get selectImage => 'Επιλέξτε εικόνα';
+
+  @override
   String get continueFromHere => 'Συνέχεια από εδώ';
 
   @override
@@ -5163,7 +5166,10 @@ class AppLocalizationsEl extends AppLocalizations {
   String get really => 'πραγματικά';
 
   @override
-  String get lichessUpdates => 'Ενημερώσεις Lichess';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'Όλες οι ενημερώσεις';
 
   @override
   String get contribute => 'Συνεισφέρετε';

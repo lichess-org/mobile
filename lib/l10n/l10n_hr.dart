@@ -1303,6 +1303,9 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2442,9 +2445,6 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Potvrda poteza';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Može biti isključeno tijekom partije u izborniku ploče';
@@ -4446,6 +4446,9 @@ class AppLocalizationsHr extends AppLocalizations {
   String get orUploadPgnFile => 'Ili učitaj PGN datoteku';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Nastavi odavde';
 
   @override
@@ -5189,7 +5192,10 @@ class AppLocalizationsHr extends AppLocalizations {
   String get really => 'više';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Doprinesi';

@@ -1263,6 +1263,9 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2399,9 +2402,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => '수 확인';
-
-  @override
-  String get preferencesMultipleChoices => '복수 선택.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => '경기 도중 보드 메뉴에서 비활성화할 수 있습니다.';
@@ -4392,6 +4392,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get orUploadPgnFile => '또는 PGN 파일을 업로드하세요';
 
   @override
+  String get selectImage => '이미지 선택';
+
+  @override
   String get continueFromHere => '여기서부터 시작';
 
   @override
@@ -5135,7 +5138,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get really => '정말입니다!';
 
   @override
-  String get lichessUpdates => 'Lichess 업데이트';
+  String get lichessUpdates => 'Lichess 피드';
+
+  @override
+  String get allUpdates => '모든 업데이트';
 
   @override
   String get contribute => '기여하기';

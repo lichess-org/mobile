@@ -288,7 +288,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobilePreviousPage => 'Oldingi';
 
   @override
-  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
+  String get mobilePuzzleHistoryDescription => 'Oldingi masalalardagi urinişlaringizni körib çiqing.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Urinişni yakunlamoqçimisiz?';
@@ -465,7 +465,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileTheme => 'Tema';
 
   @override
-  String get mobileToBeAnnounced => 'To be announced';
+  String get mobileToBeAnnounced => 'Eʼlon qilinadi';
 
   @override
   String get mobileTooManyLoginAttempts => 'Urinişlar soni juda köp. Iltimos, keyinroq urinib köring.';
@@ -803,7 +803,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaStartDate => 'Start date';
 
   @override
-  String get arenaEntryConditions => 'Entry conditions';
+  String get arenaEntryConditions => 'Kiriş şartlari';
 
   @override
   String get arenaCustomStartDate => 'Boşlaniş sanasini tanlaş';
@@ -916,7 +916,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get arenaLeaguesAndStreamerBattles => 'Ligalar va strimerlar janglari';
 
   @override
-  String get arenaAllowBotAccounts => 'Allow bot accounts';
+  String get arenaAllowBotAccounts => 'Bot akkauntlarga ruxsat beriş';
 
   @override
   String arenaAllowBotAccountsDescription(String param) {
@@ -1281,6 +1281,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'U$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2421,9 +2424,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Yurişni tasdiqlaş';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Öyin vaqtida taxta menyusi orqali vaqtinçalik öçirib turiş mumkin';
@@ -4420,6 +4420,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get orUploadPgnFile => 'Yoki PGN fayl yuklang';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Şu pozitsiyadan davom etiş';
 
   @override
@@ -5164,6 +5167,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get lichessUpdates => 'Lichess yangiliklari';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Hissa qöşiş';
@@ -6065,7 +6071,7 @@ class AppLocalizationsUz extends AppLocalizations {
   String get minimumRatedGames => 'Reytingli öyinlar minimal soni';
 
   @override
-  String get minimumAccountAge => 'Minimum account age';
+  String get minimumAccountAge => 'Akkaunlarning minimal yoşi';
 
   @override
   String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
@@ -6244,7 +6250,7 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String searchInX(String param) {
-    return 'Search in \"$param\"';
+    return '“$param”da qidiriş';
   }
 
   @override
@@ -7490,10 +7496,10 @@ class AppLocalizationsUz extends AppLocalizations {
   String get studyAnalyzeOnYourDevice => 'Qurilmangizda tahlil qiliş';
 
   @override
-  String get studySearchChapters => 'Search chapters';
+  String get studySearchChapters => 'Boblarni qidiriş';
 
   @override
-  String get studySearchGames => 'Search games';
+  String get studySearchGames => 'Öyinlarni qidiriş';
 
   @override
   String studyNbChapters(int count) {
