@@ -398,6 +398,14 @@ void main() {
       expect(pictureRect.width, 84.0);
       expect(pictureRect.height, 84.0);
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
+      expect(
+        tester.getRect(find.byType(UserFullNameWidget).first).top,
+        closeTo(pictureRect.top, 1.0),
+      );
+      expect(
+        tester.getRect(find.text('Hourly rate: ').first).bottom,
+        closeTo(pictureRect.bottom, 1.0),
+      );
     });
 
     testWidgets('full list shows location, languages, ratings and rate on separate lines', (

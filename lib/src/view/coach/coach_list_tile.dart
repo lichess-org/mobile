@@ -72,47 +72,58 @@ class const CoachListTile({
                 CoachPicture(url: coach.picture, size: 84.0),
                 const SizedBox(width: 16.0),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    children: [
-                      UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
-                      const SizedBox(height: 4.0),
-                      if (userInfo case final info?
-                          when info.location != null || info.country != null)
-                        _DetailRow(
-                          label: context.l10n.coachLocation,
-                          child: Row(
-                            children: [
-                              if (info.location?.trim() case final location?
-                                  when location.isNotEmpty)
-                                Flexible(child: Text(location, maxLines: 1, overflow: .ellipsis)),
-                              if (info.country case final country?)
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                                  child: HttpNetworkImageWidget(
-                                    lichessFlagSrc(country),
-                                    width: 18.0,
-                                    height: 12.0,
-                                    fit: .cover,
-                                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                  child: SizedBox(
+                    height: 84.0,
+                    child: Column(
+                      crossAxisAlignment: .start,
+                      mainAxisAlignment: .spaceBetween,
+                      children: [
+                        UserFullNameWidget(
+                          user: coach.user,
+                          rating: coach.rating,
+                          showFlair: false,
+                        ),
+                        if (userInfo case final info?
+                            when info.location != null || info.country != null)
+                          _DetailRow(
+                            label: context.l10n.coachLocation,
+                            child: Row(
+                              children: [
+                                if (info.location?.trim() case final location?
+                                    when location.isNotEmpty)
+                                  Flexible(child: Text(location, maxLines: 1, overflow: .ellipsis)),
+                                if (info.country case final country?)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                    child: HttpNetworkImageWidget(
+                                      lichessFlagSrc(country),
+                                      width: 18.0,
+                                      height: 12.0,
+                                      fit: .cover,
+                                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                                    ),
                                   ),
-                                ),
-                              if (countryName case final name?)
-                                Flexible(child: Text(name, maxLines: 1, overflow: .ellipsis)),
-                            ],
+                                if (countryName case final name?)
+                                  Flexible(child: Text(name, maxLines: 1, overflow: .ellipsis)),
+                              ],
+                            ),
                           ),
-                        ),
-                      if (coach.languages.isNotEmpty)
-                        _DetailRow(
-                          label: context.l10n.coachLanguages,
-                          child: Text(coach.languages.join(', '), maxLines: 1, overflow: .ellipsis),
-                        ),
-                      if (hourlyRate != null && hourlyRate.isNotEmpty)
-                        _DetailRow(
-                          label: context.l10n.coachHourlyRate,
-                          child: Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
-                        ),
-                    ],
+                        if (coach.languages.isNotEmpty)
+                          _DetailRow(
+                            label: context.l10n.coachLanguages,
+                            child: Text(
+                              coach.languages.join(', '),
+                              maxLines: 1,
+                              overflow: .ellipsis,
+                            ),
+                          ),
+                        if (hourlyRate != null && hourlyRate.isNotEmpty)
+                          _DetailRow(
+                            label: context.l10n.coachHourlyRate,
+                            child: Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 if (Theme.of(context).platform == TargetPlatform.iOS)
