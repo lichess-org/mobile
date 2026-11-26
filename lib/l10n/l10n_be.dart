@@ -172,9 +172,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Гэты код няправільны або тэрмін яго дзеяння скончыўся.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Памер лакальнай базы даных';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Select a study';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Send me a code';

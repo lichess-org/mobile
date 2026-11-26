@@ -172,9 +172,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Αυτός ο κωδικός δεν είναι έγκυρος ή έχει λήξει.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Μέγεθος τοπικής βάσης δεδομένων';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Επιλογή μελέτης';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Αποστολή κωδικού';

@@ -88,7 +88,6 @@
     }
   },
   "mobileInvalidOrExpiredLoginCode": "This code is invalid or has expired.",
-  "mobileLichessProfile": "Lichess profile",
   "mobileLocalDatabaseSize": "Local database size",
   "mobileMoveOnRelease": "Move on release",
   "mobileMoveOnReleaseSubtitle": "When moving a piece by tapping, the move is made when you lift your finger, letting you slide to change the destination square.",
@@ -144,7 +143,6 @@
   "mobileRecentSearches": "Recent searches",
   "mobileRemoveBookmark": "Remove bookmark",
   "mobileSelectAStudy": "Select a study",
-  "mobileSendMessage": "Send message",
   "mobileSendMeACode": "Send me a code",
   "mobileServerAnalysis": "Server analysis",
   "mobileSettingsClockPosition": "Clock position",

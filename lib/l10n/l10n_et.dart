@@ -172,9 +172,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'See kood on vigane või aegunud.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Kohaliku andmebaasi suurus';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Vali uuring';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Saada mulle kood';

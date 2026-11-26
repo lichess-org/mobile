@@ -172,9 +172,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Bu kod geçersiz veya süresi dolmuş.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Yerel veritabanı boyutu';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Bir çalışma seçin';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Bana bir kod gönder';

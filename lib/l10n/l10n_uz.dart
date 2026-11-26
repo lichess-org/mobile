@@ -172,9 +172,6 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Kod yaroqsiz yoki muddati tugagan.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Lokal maʼlumotlar bazasining hajmi';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Saboqni tanlaş';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Menga kod yubor';

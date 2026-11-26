@@ -172,9 +172,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Kode ini tidak valid atau sudah kedaluwarsa.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Ukuran basis data lokal';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Pilih studi';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Kirimkan saya kode';

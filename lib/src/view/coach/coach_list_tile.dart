@@ -13,15 +13,25 @@ class const CoachListTile({required final CoachPreview coach, super.key}) extend
     final details = [
       if (headline != null && headline.isNotEmpty) headline,
       if (coach.languages.isNotEmpty) coach.languages.join(', '),
-      if (hourlyRate != null && hourlyRate.isNotEmpty) hourlyRate,
     ].join(' • ');
 
     return ListTile(
+      isThreeLine: true,
       leading: CoachPicture(url: coach.picture, size: 56.0),
       title: UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
-      subtitle: details.isEmpty
-          ? null
-          : Text(details, maxLines: 2, overflow: TextOverflow.ellipsis),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (details.isNotEmpty)
+            Text(
+              details,
+              maxLines: hourlyRate != null && hourlyRate.isNotEmpty ? 1 : 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          if (hourlyRate != null && hourlyRate.isNotEmpty)
+            Text(hourlyRate, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ],
+      ),
       trailing: Theme.of(context).platform == TargetPlatform.iOS
           ? const CupertinoListTileChevron()
           : null,

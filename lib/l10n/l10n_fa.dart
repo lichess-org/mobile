@@ -172,9 +172,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'این رمز نامعتبر است یا منقضی شده است.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'اندازه پادای محلی';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'انتخاب یک مطالعه';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'رمز را به من بفرست';

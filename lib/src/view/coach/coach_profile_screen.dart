@@ -85,9 +85,9 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
           padding: Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding),
           child: Column(
             children: [
-              CoachPicture(url: profile.picture, size: 120.0),
+              CoachPicture(url: profile.picture, size: 96.0),
               if (headline != null && headline.isNotEmpty) ...[
-                const SizedBox(height: 12.0),
+                const SizedBox(height: 8.0),
                 Text(
                   headline,
                   textAlign: TextAlign.center,
@@ -108,7 +108,7 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                     rootNavigator: true,
                   ).push(UserOrProfileScreen.buildRoute(profile.user)),
                   icon: const Icon(Icons.person_outlined),
-                  label: Text(context.l10n.mobileLichessProfile, overflow: TextOverflow.ellipsis),
+                  label: const Text('Lichess profile', overflow: TextOverflow.ellipsis),
                 ),
               ),
               const SizedBox(width: 8.0),
@@ -125,51 +125,54 @@ class const _Body({required final CoachProfile profile}) extends ConsumerWidget 
                     ).push(ConversationScreen.buildRoute(user: profile.user));
                   },
                   icon: const Icon(Icons.chat_bubble_outline),
-                  label: Text(context.l10n.mobileSendMessage, overflow: TextOverflow.ellipsis),
+                  label: Text(context.l10n.message, overflow: TextOverflow.ellipsis),
                 ),
               ),
             ],
           ),
         ),
-        ListSection(
-          hasLeading: true,
-          children: [
-            if (userInfo case final info? when info.location != null || info.country != null)
+        ListTileTheme.merge(
+          dense: true,
+          child: ListSection(
+            hasLeading: true,
+            children: [
+              if (userInfo case final info? when info.location != null || info.country != null)
+                _InfoRow(
+                  label: context.l10n.coachLocation,
+                  value: Location(profile: info),
+                ),
+              if (profile.languages.isNotEmpty)
+                _InfoRow(
+                  label: context.l10n.coachLanguages,
+                  value: Text(profile.languages.map(languageName).join(', ')),
+                ),
+              if (userInfo?.fideRating != null || perfRatings.isNotEmpty)
+                _InfoRow(
+                  label: context.l10n.coachRating,
+                  value: Wrap(
+                    spacing: 12.0,
+                    runSpacing: 4.0,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      if (userInfo?.fideRating case final fideRating?) Text('FIDE: $fideRating'),
+                      for (final perfRating in perfRatings) Text(perfRating),
+                    ],
+                  ),
+                ),
+              if (profile.hourlyRate case final rate?)
+                _InfoRow(label: context.l10n.coachHourlyRate, value: Text(rate)),
               _InfoRow(
-                label: context.l10n.coachLocation,
-                value: Location(profile: info),
-              ),
-            if (profile.languages.isNotEmpty)
-              _InfoRow(
-                label: context.l10n.coachLanguages,
-                value: Text(profile.languages.map(languageName).join(', ')),
-              ),
-            if (userInfo?.fideRating != null || perfRatings.isNotEmpty)
-              _InfoRow(
-                label: context.l10n.coachRating,
-                value: Wrap(
-                  spacing: 12.0,
-                  runSpacing: 4.0,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    if (userInfo?.fideRating case final fideRating?) Text('FIDE: $fideRating'),
-                    for (final perfRating in perfRatings) Text(perfRating),
-                  ],
+                label: context.l10n.coachAvailability,
+                value: Text(
+                  profile.available ? context.l10n.coachAccepting : context.l10n.coachNotAccepting,
                 ),
               ),
-            if (profile.hourlyRate case final rate?)
-              _InfoRow(label: context.l10n.coachHourlyRate, value: Text(rate)),
-            _InfoRow(
-              label: context.l10n.coachAvailability,
-              value: Text(
-                profile.available ? context.l10n.coachAccepting : context.l10n.coachNotAccepting,
-              ),
-            ),
-            if (user.value?.seenAt case final seenAt?)
-              _InfoRow(
-                value: Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt))),
-              ),
-          ],
+              if (user.value?.seenAt case final seenAt?)
+                _InfoRow(
+                  value: Text(context.l10n.lastSeenActive(relativeDate(context.l10n, seenAt))),
+                ),
+            ],
+          ),
         ),
         if (profile.description case final description?)
           _TextSection(title: context.l10n.coachAboutMe, body: description),

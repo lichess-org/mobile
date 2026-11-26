@@ -172,9 +172,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Denne koden er ugyldig eller har utløpt.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Størrelse på lokal database';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Velg en studie';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Send meg en kode';

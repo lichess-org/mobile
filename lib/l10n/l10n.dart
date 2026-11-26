@@ -502,12 +502,6 @@ abstract class AppLocalizations {
   /// **'This code is invalid or has expired.'**
   String get mobileInvalidOrExpiredLoginCode;
 
-  /// No description provided for @mobileLichessProfile.
-  ///
-  /// In en, this message translates to:
-  /// **'Lichess profile'**
-  String get mobileLichessProfile;
-
   /// No description provided for @mobileLocalDatabaseSize.
   ///
   /// In en, this message translates to:
@@ -795,12 +789,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select a study'**
   String get mobileSelectAStudy;
-
-  /// No description provided for @mobileSendMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Send message'**
-  String get mobileSendMessage;
 
   /// No description provided for @mobileSendMeACode.
   ///

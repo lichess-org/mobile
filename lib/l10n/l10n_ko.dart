@@ -172,9 +172,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '유효하지 않거나 만료된 코드입니다.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => '로컬 데이터베이스 크기';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => '연구 선택';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => '코드 보내기';

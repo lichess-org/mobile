@@ -733,7 +733,7 @@ void main() {
       expect(find.byType(OutlinedButton), findsNWidgets(2));
       expect(find.text('Lichess profile'), findsOneWidget);
       expect(find.text('Send a private message'), findsNothing);
-      expect(find.text('Send message'), findsOneWidget);
+      expect(find.text('Message'), findsOneWidget);
       expect(find.byIcon(Icons.person_outlined), findsOneWidget);
       expect(find.byIcon(Icons.chat_bubble_outline), findsOneWidget);
       expect(

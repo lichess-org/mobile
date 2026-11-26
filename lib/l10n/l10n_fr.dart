@@ -172,9 +172,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Ce code est invalide ou a expiré.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Taille de la base de parties locale';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Sélectionner une étude';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'M\'envoyer un code';

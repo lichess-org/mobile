@@ -172,9 +172,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'هذا الرمز غير صالح أو انتهت صلاحيته.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'حجم قاعدة البيانات المحلية';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'اختر دراسة';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'أرسل لي رمزًا';

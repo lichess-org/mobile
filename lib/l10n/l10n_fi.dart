@@ -172,9 +172,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Koodi ei kelpaa tai on vanhentunut.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Paikallisen tietokannan koko';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Valitse tutkielma';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Lähetä minulle koodi';

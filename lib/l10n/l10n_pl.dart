@@ -172,9 +172,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Ten kod jest nieprawidłowy lub wygasł.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Rozmiar lokalnej bazy danych';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Wybierz opracowanie';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Wyślij mi kod';

@@ -172,9 +172,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'Mã này không hợp lệ hoặc đã hết hạn.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Kích thước CSDL cục bộ';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Chọn một nghiên cứu';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Gửi mã cho tôi';

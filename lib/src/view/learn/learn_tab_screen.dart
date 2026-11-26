@@ -2,6 +2,8 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
+import 'package:lichess_mobile/src/model/coach/coach_filter.dart';
+import 'package:lichess_mobile/src/model/coach/coach_list_controller.dart';
 import 'package:lichess_mobile/src/model/study/study.dart';
 import 'package:lichess_mobile/src/model/study/study_filter.dart';
 import 'package:lichess_mobile/src/model/study/study_repository.dart';
@@ -12,6 +14,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/account_menu.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
+import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/learn/learn_screen.dart';
 import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
@@ -88,6 +91,7 @@ class const _Body() extends ConsumerWidget {
         ref.refresh(_hotStudiesProvider.future),
         ref.refresh(_myStudiesLengthProvider.future),
         ref.refresh(_myFavoriteStudiesLengthProvider.future),
+        ref.refresh(coachListControllerProvider(defaultCoachFilters).future),
       ]);
     } catch (_) {
       // Refreshing while the server is unavailable is expected to fail. The
@@ -103,6 +107,9 @@ class const _Body() extends ConsumerWidget {
     final haveIStudies = authUser != null && (ref.watch(_myStudiesLengthProvider).value ?? 0) > 0;
     final haveIFavoriteStudies =
         authUser != null && (ref.watch(_myFavoriteStudiesLengthProvider).value ?? 0) > 0;
+    void openCoachList() {
+      Navigator.of(context, rootNavigator: true).push(CoachListScreen.buildRoute());
+    }
 
     return ListTileTheme.merge(
       iconColor: Theme.of(context).colorScheme.primary,
@@ -225,23 +232,41 @@ class const _Body() extends ConsumerWidget {
                       ),
                   ],
                 ),
-              ListSection(
-                margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
-                hasLeading: true,
-                children: [
-                  ListTile(
-                    leading: const Icon(Symbols.school_rounded),
-                    trailing: Theme.of(context).platform == TargetPlatform.iOS
-                        ? const CupertinoListTileChevron()
-                        : null,
-                    title: Text(context.l10n.coaches, style: Styles.callout),
-                    onTap: () => Navigator.of(
-                      context,
-                      rootNavigator: true,
-                    ).push(CoachListScreen.buildRoute()),
+              switch (ref.watch(coachListControllerProvider(defaultCoachFilters))) {
+                AsyncData(:final value) => ListSection(
+                  header: Text(context.l10n.coaches),
+                  headerTrailing: TextButton(
+                    onPressed: openCoachList,
+                    child: Text(context.l10n.more),
                   ),
-                ],
-              ),
+                  hasLeading: true,
+                  margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
+                  children: [
+                    for (final coach in value.coaches.take(5)) CoachListTile(coach: coach),
+                  ],
+                ),
+                AsyncError() => ListSection(
+                  header: Text(context.l10n.coaches),
+                  headerTrailing: TextButton(
+                    onPressed: openCoachList,
+                    child: Text(context.l10n.more),
+                  ),
+                  hasLeading: true,
+                  margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
+                  children: const [ListTile(title: Text('Could not load coaches.'))],
+                ),
+                _ => Shimmer(
+                  child: ShimmerLoading(
+                    isLoading: true,
+                    child: ListSection.loading(
+                      itemsNumber: 5,
+                      header: true,
+                      hasLeading: true,
+                      margin: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
+                    ),
+                  ),
+                ),
+              },
             ],
           ],
         ),

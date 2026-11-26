@@ -172,9 +172,6 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'De Code isch ungültig oder abgloffe.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Lokali Datäbank Grössi';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Wähl e Schtudie';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Schick mer en Code';

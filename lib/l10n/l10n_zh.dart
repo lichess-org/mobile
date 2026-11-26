@@ -172,9 +172,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => '验证码无效或已过期！';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => '本地数据库大小';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => '选择研习';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => '向我发送验证码';

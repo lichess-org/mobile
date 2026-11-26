@@ -172,9 +172,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileInvalidOrExpiredLoginCode => 'El codi és invàlid o ha caducat.';
 
   @override
-  String get mobileLichessProfile => 'Lichess profile';
-
-  @override
   String get mobileLocalDatabaseSize => 'Mida de la base de dades local';
 
   @override
@@ -319,9 +316,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileSelectAStudy => 'Selecciona un estudi';
-
-  @override
-  String get mobileSendMessage => 'Send message';
 
   @override
   String get mobileSendMeACode => 'Envia\'m un codi';
