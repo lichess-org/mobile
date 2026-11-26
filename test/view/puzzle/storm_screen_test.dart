@@ -213,6 +213,33 @@ void main() {
       expect(boardHasPiece(tester, Square.h6, Piece.blackKing), isTrue);
     });
 
+    testWidgets('new run resets the clock', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const StormScreen(),
+        overrides: {
+          stormProvider: stormProvider.overrideWith((ref) => mockStromRun),
+          lichessClientProvider: lichessClientProvider.overrideWith(
+            (ref) => LichessClient(client, ref),
+          ),
+        },
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait 1 second for first move to be played
+      await tester.pump(const Duration(seconds: 1));
+
+      await playMove(tester, 'h5', 'h7', orientation: Side.white);
+      await tester.pump(const Duration(seconds: 3));
+      expect(find.text('02:57'), findsOneWidget);
+
+      await tester.tap(find.text('New run'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('03:00'), findsOneWidget);
+    }, variant: kPlatformVariant);
+
     testWidgets('play again starts new run', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
