@@ -1,8 +1,10 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_user.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -676,5 +678,97 @@ void main() {
         findsOneWidget,
       );
     }, variant: const TargetPlatformVariant({TargetPlatform.iOS, TargetPlatform.android}));
+  });
+
+  group('Year recap banner', () {
+    const recapTitle = 'Your 2026 recap is ready!';
+
+    Future<void> pumpHome(
+      WidgetTester tester, {
+      AuthUser? authUser,
+      Map<String, Object>? defaultPreferences,
+    }) async {
+      final app = await makeTestProviderScope(
+        tester,
+        child: const Application(),
+        authUser: authUser,
+        defaultPreferences: defaultPreferences,
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith(
+            (ref) => FakeHttpClientFactory(
+              () => MockClient((request) {
+                if (request.url.path == '/tournament/featured') {
+                  return mockResponse('{"featured":[]}', 200);
+                }
+                return mockResponse('', 200);
+              }),
+            ),
+          ),
+        },
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+    }
+
+    test('recap season runs from December 10 to January 5', () {
+      expect(yearRecapBannerYear(DateTime(2026, 11, 30)), isNull);
+      expect(yearRecapBannerYear(DateTime(2026, 12, kYearRecapBannerFirstDecemberDay - 1)), isNull);
+      expect(yearRecapBannerYear(DateTime(2026, 12, kYearRecapBannerFirstDecemberDay)), 2026);
+      expect(yearRecapBannerYear(DateTime(2026, 12, 31)), 2026);
+      expect(yearRecapBannerYear(DateTime(2027, 1, kYearRecapBannerLastJanuaryDay)), 2026);
+      expect(yearRecapBannerYear(DateTime(2027, 1, kYearRecapBannerLastJanuaryDay + 1)), isNull);
+    });
+
+    testWidgets('shown to a signed in user during the recap season', (tester) async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 10)), () async {
+        await pumpHome(tester, authUser: fakeAuthUser);
+        expect(find.text(recapTitle), findsOneWidget);
+      });
+    });
+
+    testWidgets('promotes the previous year in January', (tester) async {
+      await withClock(Clock.fixed(DateTime(2027, 1, 3)), () async {
+        await pumpHome(tester, authUser: fakeAuthUser);
+        expect(find.text(recapTitle), findsOneWidget);
+      });
+    });
+
+    testWidgets('not shown outside the recap season', (tester) async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 9)), () async {
+        await pumpHome(tester, authUser: fakeAuthUser);
+        expect(find.textContaining('recap is ready'), findsNothing);
+      });
+    });
+
+    testWidgets('not shown when signed out', (tester) async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 10)), () async {
+        await pumpHome(tester);
+        expect(find.text(recapTitle), findsNothing);
+      });
+    });
+
+    testWidgets('hidden once dismissed', (tester) async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 10)), () async {
+        await pumpHome(tester, authUser: fakeAuthUser);
+        expect(find.text(recapTitle), findsOneWidget);
+
+        await tester.tap(find.byTooltip('Close'));
+        await tester.pumpAndSettle();
+
+        expect(find.text(recapTitle), findsNothing);
+        expect(testBinding.sharedPreferences.getBool('${kHideYearRecapBannerPrefix}2026'), isTrue);
+      });
+    });
+
+    testWidgets('dismissing one year does not hide the next one', (tester) async {
+      await withClock(Clock.fixed(DateTime(2026, 12, 10)), () async {
+        await pumpHome(
+          tester,
+          authUser: fakeAuthUser,
+          defaultPreferences: {'${kHideYearRecapBannerPrefix}2025': true},
+        );
+        expect(find.text(recapTitle), findsOneWidget);
+      });
+    });
   });
 }

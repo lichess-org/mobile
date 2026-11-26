@@ -510,6 +510,7 @@ class const _BottomBar({
             onGoDeeper: () => ref.read(ctrlProvider.notifier).requestEval(goDeeper: true),
           ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               onLongPress: analysisState.canGoBack
@@ -567,7 +568,7 @@ class const _BottomBar({
         ),
         if (options case Standalone()) ...[
           BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.clearLocalData),
+            makeLabel: (context) => Text(context.l10n.mobileClearMoves),
             onPressed: () => ref
                 .read(analysisControllerProvider(options).notifier)
                 .clearSavedStandaloneAnalysis(),

@@ -74,6 +74,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileClearButton => 'پاکسازی';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'این رمز پس از ۵ دقیقه منقضی می‌شود و فقط یک بار می‌تواند استفاده شود.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'ذکرِ این وضعیت در گپ';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2420,9 +2426,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get preferencesMoveConfirmation => 'تایید حرکت';
 
   @override
-  String get preferencesMultipleChoices => 'چندانتخابه.';
-
-  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'می‌تواند هنگام بازی با «گزینگانِ تخته» خاموش شود';
 
   @override
@@ -3387,7 +3390,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get challengeAFriend => 'دعوت به بازی';
 
   @override
-  String get playAgainstComputer => 'بازی با رایانه';
+  String get playAgainstComputer => 'بازی مقابلِ رایانه';
 
   @override
   String get gameMode => 'حالتِ بازی';
@@ -4417,6 +4420,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get orUploadPgnFile => 'یا یک فایل PGN بارگذاری کنید';
 
   @override
+  String get selectImage => 'انتخاب تصویر';
+
+  @override
   String get continueFromHere => 'از اینجا ادامه دهید';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get really => 'واقعاً';
 
   @override
-  String get lichessUpdates => 'روزامدهای Lichess';
+  String get lichessUpdates => 'خوراکِ Lichess';
+
+  @override
+  String get allUpdates => 'همهٔ روزامدها';
 
   @override
   String get contribute => 'مشارکت';

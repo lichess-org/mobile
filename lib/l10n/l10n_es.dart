@@ -74,6 +74,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mobileClearButton => 'Limpiar';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'El código caduca después de 5 minutos y solo se puede utilizar una vez.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mencionar esta posición en el chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Confirmación de movimiento';
-
-  @override
-  String get preferencesMultipleChoices => 'Múltiples opciones.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Se puede desactivar durante una partida con el menú del tablero';
@@ -4417,6 +4420,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get orUploadPgnFile => 'o sube un archivo PGN';
 
   @override
+  String get selectImage => 'Seleccionar imagen';
+
+  @override
   String get continueFromHere => 'Continuar desde aquí';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get really => 'realmente';
 
   @override
-  String get lichessUpdates => 'Actualizaciones de Lichess';
+  String get lichessUpdates => 'Canal de Lichess';
+
+  @override
+  String get allUpdates => 'Todas las actualizaciones';
 
   @override
   String get contribute => 'Contribuir';
@@ -7530,8 +7539,8 @@ class AppLocalizationsEs extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game.',
+      other: 'Pega aquí las partidas en formato PGN. Se creará un capítulo nuevo para cada partida. El estudio puede tener hasta $count capítulos.',
+      one: 'Pega aquí partidas como texto PGN. Se creará un capítulo por cada una. El estudio puede tener hasta $count capítulos.',
     );
     return '$_temp0';
   }
