@@ -61,7 +61,7 @@ class const CoachListTile({
     final countryName = userInfo?.country != null ? countries[userInfo!.country] : null;
 
     return SizedBox(
-      height: 100.0,
+      height: 121.0,
       child: ClipRect(
         child: InkWell(
           onTap: openProfile,
@@ -70,11 +70,11 @@ class const CoachListTile({
             child: Row(
               crossAxisAlignment: .center,
               children: [
-                CoachPicture(url: coach.picture, size: 84.0),
+                CoachPicture(url: coach.picture, size: 105.0),
                 const SizedBox(width: 16.0),
                 Expanded(
                   child: SizedBox(
-                    height: 84.0,
+                    height: 105.0,
                     child: Column(
                       crossAxisAlignment: .start,
                       mainAxisAlignment: .spaceBetween,

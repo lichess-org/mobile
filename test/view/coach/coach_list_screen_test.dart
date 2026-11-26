@@ -394,10 +394,10 @@ void main() {
 
       final tileRect = tester.getRect(find.byType(CoachListTile).first);
       final pictureRect = tester.getRect(find.byType(CoachPicture).first);
-      expect(tileRect.height, 100.0);
+      expect(tileRect.height, 121.0);
       expect(pictureRect.left, tileRect.left + 16.0);
-      expect(pictureRect.width, 84.0);
-      expect(pictureRect.height, 84.0);
+      expect(pictureRect.width, 105.0);
+      expect(pictureRect.height, 105.0);
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
       expect(
         tester.getRect(find.byType(UserFullNameWidget).first).top,
