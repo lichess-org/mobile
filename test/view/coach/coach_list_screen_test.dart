@@ -394,8 +394,59 @@ void main() {
       final tileRect = tester.getRect(find.byType(CoachListTile).first);
       final pictureRect = tester.getRect(find.byType(CoachPicture).first);
       expect(pictureRect.left, tileRect.left + 16.0);
-      expect(pictureRect.width, pictureRect.height);
+      expect(pictureRect.width, 112.0);
+      expect(pictureRect.height, 112.0);
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
+    });
+
+    testWidgets('full list shows location, languages, ratings and rate on separate lines', (
+      tester,
+    ) async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/coach/all/all/login') {
+          return http.Response(_listResponse, 200);
+        }
+        if (request.url.path == '/api/user/toniaa') {
+          return http.Response(_userResponse, 200);
+        }
+        return http.Response('', 404);
+      });
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const CoachListScreen(),
+        overrides: {
+          httpClientFactoryProvider: httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => client);
+          }),
+        },
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final tile = find.byType(CoachListTile).first;
+      expect(find.descendant(of: tile, matching: find.text('Bruxelles')), findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text('Greece')), findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text('el-GR, en-US')), findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text('FIDE: 2281 • 2434')), findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text('25 EUR')), findsOneWidget);
+
+      final locationTop = tester
+          .getTopLeft(find.descendant(of: tile, matching: find.text('Location: ')))
+          .dy;
+      final languagesTop = tester
+          .getTopLeft(find.descendant(of: tile, matching: find.text('Languages: ')))
+          .dy;
+      final ratingsTop = tester
+          .getTopLeft(find.descendant(of: tile, matching: find.text('Rating: ')))
+          .dy;
+      final rateTop = tester
+          .getTopLeft(find.descendant(of: tile, matching: find.text('Hourly rate: ')))
+          .dy;
+      expect(locationTop, lessThan(languagesTop));
+      expect(languagesTop, lessThan(ratingsTop));
+      expect(ratingsTop, lessThan(rateTop));
     });
 
     testWidgets('coach list trims empty headline and hourly rate', (tester) async {

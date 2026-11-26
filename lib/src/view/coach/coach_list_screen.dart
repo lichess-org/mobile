@@ -203,7 +203,8 @@ class _CoachListScreenState() extends ConsumerState<CoachListScreen> {
                   child: ListView.builder(
                     controller: _scrollController,
                     itemCount: value.coaches.length,
-                    itemBuilder: (context, index) => CoachListTile(coach: value.coaches[index]),
+                    itemBuilder: (context, index) =>
+                        CoachListTile(coach: value.coaches[index], detailed: true),
                   ),
                 ),
         AsyncError() => _CoachErrorView(

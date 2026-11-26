@@ -1,44 +1,115 @@
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/coach/coach_profile_screen.dart';
+import 'package:lichess_mobile/src/view/user/user_profile.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
-class const CoachListTile({required final CoachPreview coach, super.key}) extends StatelessWidget {
+class const CoachListTile({
+  required final CoachPreview coach,
+  final bool detailed = false,
+  super.key,
+}) extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    final headline = coach.headline?.trim();
+  Widget build(BuildContext context, WidgetRef ref) {
+    void openProfile() => Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(CoachProfileScreen.buildRoute(coach.user.name));
+
+    if (!detailed) {
+      final headline = coach.headline?.trim();
+      final hourlyRate = coach.hourlyRate?.trim();
+      final details = [
+        if (headline != null && headline.isNotEmpty) headline,
+        if (coach.languages.isNotEmpty) coach.languages.join(', '),
+      ].join(' • ');
+
+      return ListTile(
+        isThreeLine: true,
+        leading: CoachPicture(url: coach.picture, size: 56.0),
+        title: UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
+        subtitle: Column(
+          crossAxisAlignment: .start,
+          children: [
+            if (details.isNotEmpty)
+              Text(
+                details,
+                maxLines: hourlyRate != null && hourlyRate.isNotEmpty ? 1 : 2,
+                overflow: .ellipsis,
+              ),
+            if (hourlyRate != null && hourlyRate.isNotEmpty)
+              Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
+          ],
+        ),
+        trailing: Theme.of(context).platform == TargetPlatform.iOS
+            ? const CupertinoListTileChevron()
+            : null,
+        onTap: openProfile,
+      );
+    }
+
+    final userInfo = ref.watch(userProvider(coach.user.id)).value?.profile;
     final hourlyRate = coach.hourlyRate?.trim();
-    final details = [
-      if (headline != null && headline.isNotEmpty) headline,
-      if (coach.languages.isNotEmpty) coach.languages.join(', '),
+    final ratings = [
+      if (userInfo?.fideRating case final fideRating?) 'FIDE: $fideRating',
+      if (coach.rating case final rating?) '$rating',
     ].join(' • ');
 
-    return ListTile(
-      isThreeLine: true,
-      leading: CoachPicture(url: coach.picture, size: 56.0),
-      title: UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (details.isNotEmpty)
-            Text(
-              details,
-              maxLines: hourlyRate != null && hourlyRate.isNotEmpty ? 1 : 2,
-              overflow: TextOverflow.ellipsis,
+    return InkWell(
+      onTap: openProfile,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Row(
+          crossAxisAlignment: .center,
+          children: [
+            CoachPicture(url: coach.picture, size: 112.0),
+            const SizedBox(width: 16.0),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: .start,
+                children: [
+                  UserFullNameWidget(user: coach.user, rating: coach.rating, showFlair: false),
+                  const SizedBox(height: 4.0),
+                  if (userInfo case final info? when info.location != null || info.country != null)
+                    _DetailRow(
+                      label: context.l10n.coachLocation,
+                      child: Location(profile: info),
+                    ),
+                  if (coach.languages.isNotEmpty)
+                    _DetailRow(
+                      label: context.l10n.coachLanguages,
+                      child: Text(coach.languages.join(', ')),
+                    ),
+                  if (ratings.isNotEmpty)
+                    _DetailRow(label: context.l10n.coachRating, child: Text(ratings)),
+                  if (hourlyRate != null && hourlyRate.isNotEmpty)
+                    _DetailRow(label: context.l10n.coachHourlyRate, child: Text(hourlyRate)),
+                ],
+              ),
             ),
-          if (hourlyRate != null && hourlyRate.isNotEmpty)
-            Text(hourlyRate, maxLines: 1, overflow: TextOverflow.ellipsis),
-        ],
+            if (Theme.of(context).platform == TargetPlatform.iOS) const CupertinoListTileChevron(),
+          ],
+        ),
       ),
-      trailing: Theme.of(context).platform == TargetPlatform.iOS
-          ? const CupertinoListTileChevron()
-          : null,
-      onTap: () => Navigator.of(
-        context,
-        rootNavigator: true,
-      ).push(CoachProfileScreen.buildRoute(coach.user.name)),
+    );
+  }
+}
+
+class const _DetailRow({required final String label, required final Widget child})
+    extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: .center,
+      children: [
+        Text('$label: ', style: const TextStyle(fontWeight: FontWeight.w500)),
+        Expanded(child: child),
+      ],
     );
   }
 }
