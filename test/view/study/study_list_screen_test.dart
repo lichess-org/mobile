@@ -121,6 +121,7 @@ void main() {
         "name": "Magnus Carlsen Games",
         "liked": false,
         "likes": 1,
+        "createdAt": 1723731143350,
         "updatedAt": 1723817543350,
         "owner": {
           "name": "tom-anders",
@@ -201,6 +202,7 @@ const kStudyAllHotPage1Response = '''
         "name": "First Study Page 1",
         "liked": false,
         "likes": 1,
+        "createdAt": 1723731143350,
         "updatedAt": 1723817543350,
         "owner": {
           "name": "HeySerginho",
@@ -237,6 +239,7 @@ const kStudyAllHotPage1Response = '''
         "name": "test",
         "liked": false,
         "likes": 1,
+        "createdAt": 1722098954120,
         "updatedAt": 1722185354120,
         "owner": {
           "name": "HeySerginho",
@@ -265,6 +268,7 @@ const kStudyAllHotPage1Response = '''
         "name": "test",
         "liked": false,
         "likes": 1,
+        "createdAt": 1722098842763,
         "updatedAt": 1722185242763,
         "owner": {
           "name": "HeySerginho",
@@ -303,6 +307,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 9",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930533485,
         "updatedAt": 1722016933485,
         "owner": {
           "name": "AAArmstark",
@@ -335,6 +340,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 8",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930533188,
         "updatedAt": 1722016933188,
         "owner": {
           "name": "AAArmstark",
@@ -367,6 +373,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 7",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930533000,
         "updatedAt": 1722016933000,
         "owner": {
           "name": "AAArmstark",
@@ -399,6 +406,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 6",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930532803,
         "updatedAt": 1722016932803,
         "owner": {
           "name": "AAArmstark",
@@ -431,6 +439,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 5",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930532628,
         "updatedAt": 1722016932628,
         "owner": {
           "name": "AAArmstark",
@@ -463,6 +472,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 4",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930532385,
         "updatedAt": 1722016932385,
         "owner": {
           "name": "AAArmstark",
@@ -495,6 +505,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 3",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930532195,
         "updatedAt": 1722016932195,
         "owner": {
           "name": "AAArmstark",
@@ -527,6 +538,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 2",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930532070,
         "updatedAt": 1722016932070,
         "owner": {
           "name": "AAArmstark",
@@ -559,6 +571,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 1",
         "liked": false,
         "likes": 1,
+        "createdAt": 1721930531939,
         "updatedAt": 1722016931939,
         "owner": {
           "name": "AAArmstark",
@@ -591,6 +604,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 8",
         "liked": false,
         "likes": 1,
+        "createdAt": 1718541862858,
         "updatedAt": 1718628262858,
         "owner": {
           "name": "AAArmstark",
@@ -620,6 +634,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 7",
         "liked": false,
         "likes": 1,
+        "createdAt": 1718541862852,
         "updatedAt": 1718628262852,
         "owner": {
           "name": "AAArmstark",
@@ -649,6 +664,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Round 6",
         "liked": false,
         "likes": 1,
+        "createdAt": 1718541862846,
         "updatedAt": 1718628262846,
         "owner": {
           "name": "AAArmstark",
@@ -678,6 +694,7 @@ const kStudyAllHotPage1Response = '''
         "name": "Last Study Page 1",
         "liked": false,
         "likes": 1,
+        "createdAt": 1718541862840,
         "updatedAt": 1718628262840,
         "owner": {
           "name": "AAArmstark",
@@ -722,6 +739,7 @@ const kStudyAllHotPage2Response = '''
         "name": "First Study Page 2",
         "liked": false,
         "likes": 1,
+        "createdAt": 1723731143350,
         "updatedAt": 1723817543350,
         "owner": {
           "name": "HeySerginho",
