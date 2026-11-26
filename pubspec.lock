@@ -578,18 +578,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: "6482ea76a8c617782574c33991bee0317fa1e699ddc833ce4fc3df88a672c7cb"
+      sha256: "0508c98ac15392bf572060d042ea0f52f3a92c42ebdd909867110e667c810e24"
       url: "https://pub.dev"
     source: hosted
-    version: "13.0.0"
+    version: "13.1.0"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
       name: flutter_appauth_platform_interface
-      sha256: c79452f9886a915569bc2e9df3f43af24ebb921cddf3c1f4d647b27db28bfb3e
+      sha256: "69dd2ab937a995e17428173bcbf97a11ca5be568f6e2518c3fcf28afb5a7148c"
       url: "https://pub.dev"
     source: hosted
-    version: "13.0.0"
+    version: "13.1.0"
   flutter_displaymode:
     dependency: "direct main"
     description:
@@ -1122,34 +1122,34 @@ packages:
     dependency: "direct main"
     description:
       name: multistockfish
-      sha256: "4c3ec47cb32368f19cc3e997d9cffcfbbec1a12bc9cc523cafd809922a7d513b"
+      sha256: eed43c758358f21ef01a141ae3ffd7fa1dabdbb6e4170116278b0c610df6ad80
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   multistockfish_chess:
     dependency: transitive
     description:
       name: multistockfish_chess
-      sha256: fada4413a8c9d211886ba5a9b9ed710f9c0773a9409e9aced3944bd0a62a32f5
+      sha256: "25b1aeaca88abeb9318e2e774b1c76015f5dc45f6e036298f13d04081108f5b1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   multistockfish_light:
     dependency: transitive
     description:
       name: multistockfish_light
-      sha256: f21a1c686254421731362bf40214f374370373dcfa8f909781fa70278a2abd33
+      sha256: "40c23c2b38f6ab3f6acdc7c585df1c19766857bb4ed9d349065196e75f0b68de"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   multistockfish_variant:
     dependency: transitive
     description:
       name: multistockfish_variant
-      sha256: be519b8da20451a984d3b2adc814ee97bdef72e9eb3e608ec9c5e4e7ea44e56c
+      sha256: cfb8dc4c2a88a44c854612951aa3bb526cf869c9454a4d4ab4ccd19ca54a24f5
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   native_toolchain_c:
     dependency: transitive
     description:
