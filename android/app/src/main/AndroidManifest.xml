@@ -67,6 +67,7 @@
                 <data android:mimeType="application/x-chess-pgn" />
                 <data android:mimeType="application/vnd.chess-pgn" />
                 <data android:mimeType="text/x-chess-pgn" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
 
             <!-- App Links verified against https://lichess.org/.well-known/assetlinks.json -->
