@@ -68,6 +68,7 @@ class _StudyScreenState() extends ConsumerState<StudyScreen> {
     }
     final isLoggedIn = ref.watch(authControllerProvider.select((user) => user != null));
 
+    // Keep the scaffold stable while loading so iOS 26 pinned route-bar buttons are preserved.
     return PlatformScaffold(
       extendBodyBehindAppBar: false,
       appBar: PlatformAppBar(

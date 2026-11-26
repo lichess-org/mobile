@@ -1,6 +1,10 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/view/analysis/local_game_analysis_session.dart';
 import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/variations_bar.dart';
@@ -17,6 +21,23 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
     final enableServerAnalysis = !options.isLichessGameAnalysis || prefs.enableServerAnalysis;
     final currentNode =
         analysisState.root.branchesOn(analysisState.currentPath).lastOrNull ?? analysisState.root;
+    IMap<UciPath, int>? localMoveAnnotations;
+    IMap<UciPath, ExternalEval>? localMoveEvaluations;
+    if (options case Pgn(isComputerAnalysisAllowed: true)) {
+      final evaluations = ref.watch(
+        localGameAnalysisSessionProvider(
+          localGameAnalysisSessionKey(options.contextId, analysisState.root),
+        ),
+      );
+      if (evaluations != null) {
+        final summary = localGameAnalysisSummary(analysisState.root, evaluations);
+        localMoveEvaluations = summary.moveEvaluations;
+        if (prefs.showLocalMoveVerdicts) {
+          localMoveAnnotations = summary.moveAnnotations;
+        }
+      }
+    }
+
     return MovesWithVariationsBar(
       currentNode: currentNode,
       currentPath: analysisState.currentPath,
@@ -37,6 +58,8 @@ class const AnalysisTreeView(final AnalysisOptions options) extends ConsumerWidg
               shouldShowComputerAnalysis: enableServerAnalysis,
               shouldShowComments: enableServerAnalysis && prefs.showPgnComments,
               shouldShowAnnotations: enableServerAnalysis && prefs.showAnnotations,
+              localMoveAnnotations: localMoveAnnotations,
+              localMoveEvaluations: localMoveEvaluations,
               premovePaths: analysisState.forecast?.lines,
               displayMode: prefs.inlineNotation ? .inlineNotation : .twoColumn,
             ),

@@ -141,7 +141,9 @@ class const AcplChart({required final AcplChartParams params, super.key}) extend
     if (division?.middlegame != null) {
       if (division!.middlegame! > 0) {
         divisionLines.add(phaseVerticalBar(0, context.l10n.opening));
-        divisionLines.add(phaseVerticalBar(division.middlegame! - 1, context.l10n.middlegame));
+        divisionLines.add(
+          phaseVerticalBar(division.middlegame! - 1 - params.rootPly, context.l10n.middlegame),
+        );
       } else {
         divisionLines.add(phaseVerticalBar(0, context.l10n.middlegame));
       }
@@ -149,7 +151,9 @@ class const AcplChart({required final AcplChartParams params, super.key}) extend
 
     if (division?.endgame != null) {
       if (division!.endgame! > 0) {
-        divisionLines.add(phaseVerticalBar(division.endgame! - 1, context.l10n.endgame));
+        divisionLines.add(
+          phaseVerticalBar(division.endgame! - 1 - params.rootPly, context.l10n.endgame),
+        );
       } else {
         divisionLines.add(phaseVerticalBar(0, context.l10n.endgame));
       }

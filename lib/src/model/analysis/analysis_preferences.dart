@@ -44,6 +44,10 @@ class AnalysisPreferences() extends Notifier<AnalysisPrefs> with PreferencesStor
     return save(state.copyWith(showAnnotations: !state.showAnnotations));
   }
 
+  Future<void> toggleLocalMoveVerdicts() {
+    return save(state.copyWith(showLocalMoveVerdicts: !state.showLocalMoveVerdicts));
+  }
+
   Future<void> togglePgnComments() {
     return save(state.copyWith(showPgnComments: !state.showPgnComments));
   }
@@ -67,6 +71,7 @@ sealed class const AnalysisPrefs._()
     @JsonKey(defaultValue: false) required bool showEngineLines,
     required bool showBestMoveArrow,
     required bool showAnnotations,
+    @JsonKey(defaultValue: true) required bool showLocalMoveVerdicts,
     required bool showPgnComments,
     @JsonKey(defaultValue: false) required bool inlineNotation,
   }) = _AnalysisPrefs;
@@ -77,6 +82,7 @@ sealed class const AnalysisPrefs._()
     showEngineLines: false,
     showBestMoveArrow: true,
     showAnnotations: true,
+    showLocalMoveVerdicts: true,
     showPgnComments: true,
     inlineNotation: false,
   );

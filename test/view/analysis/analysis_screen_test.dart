@@ -7,12 +7,14 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_mixin.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/position_evaluator.dart';
@@ -23,12 +25,15 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_settings_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/more/more_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/acpl_chart.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
+import 'package:lichess_mobile/src/widgets/game_summary_table.dart';
 import 'package:lichess_mobile/src/widgets/move_times_chart.dart';
 import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:lichess_mobile/src/widgets/pockets.dart';
@@ -50,6 +55,181 @@ void main() {
   });
 
   group('Analysis Screen', () {
+    testWidgets('can toggle local move quality annotations in analysis settings', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisSettingsScreen(
+          AnalysisOptions.pgn(
+            id: StringId('local_game_review_settings'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      const title = 'Show local move quality';
+      final tile = find.ancestor(of: find.text(title), matching: find.byType(ListTile));
+      final switchFinder = find.descendant(of: tile, matching: find.byType(Switch));
+      expect(tester.widget<Switch>(switchFinder).value, isTrue);
+
+      await tester.tap(switchFinder);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<Switch>(switchFinder).value, isFalse);
+    });
+
+    testWidgets('offers local computer analysis for a PGN when engine analysis is allowed', (
+      tester,
+    ) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('local_game_review'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      expect(find.byTooltip('Computer analysis'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Local review speed settings'), findsOneWidget);
+      expect(find.text('Rapid · 1s'), findsOneWidget);
+      expect(find.textContaining('Stockfish will review every position'), findsOneWidget);
+
+      await tester.tap(find.text('Rapid · 1s'));
+      await tester.pumpAndSettle();
+      expect(find.text('Ultra bullet (experimental) · 0.10s'), findsOneWidget);
+      expect(find.text('Bullet · 0.25s'), findsOneWidget);
+      expect(find.text('Blitz · 0.50s'), findsOneWidget);
+      expect(find.text('Thorough · 3s'), findsOneWidget);
+
+      await tester.tap(find.text('Manual'));
+      await tester.pumpAndSettle();
+      expect(find.text('Time per position'), findsOneWidget);
+
+      if (maxEngineCores > 1) {
+        await tester.scrollUntilVisible(
+          find.text('Threads (experimental)'),
+          250,
+          scrollable: find.byType(Scrollable).last,
+        );
+        expect(find.text('Threads (experimental)'), findsOneWidget);
+      }
+
+      await tester.scrollUntilVisible(
+        find.text('Analyze game'),
+        250,
+        scrollable: find.byType(Scrollable).last,
+      );
+      expect(find.text('Analyze game'), findsOneWidget);
+    });
+
+    testWidgets('does not offer server analysis in local computer analysis', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: StringId('local_server_review'),
+            orientation: Side.white,
+            pgn: '1. e4 e5 2. Nf3 Nc6 *',
+            isComputerAnalysisAllowed: true,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+
+      final panelScrollable = find.byType(Scrollable).last;
+      await tester.scrollUntilVisible(find.text('Analyze game'), 300, scrollable: panelScrollable);
+      expect(find.text('Analyze game'), findsOneWidget);
+      expect(find.text('Request a computer analysis'), findsNothing);
+      expect(find.textContaining('private Lichess study'), findsNothing);
+    });
+
+    testWidgets('reviews every PGN move with the local engine', (tester) async {
+      const wakelockChannel =
+          'dev.flutter.pigeon.wakelock_plus_platform_interface.WakelockPlusApi.toggle';
+      final messenger = TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMessageHandler(wakelockChannel, (data) async => data);
+      addTearDown(() => messenger.setMockMessageHandler(wakelockChannel, null));
+
+      final engine = LegalMoveEngine();
+      await makeEngineTestApp(
+        tester,
+        pgn: '1. e4 e5 *',
+        isCloudEvalEnabled: false,
+        stockfish: engine,
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Computer analysis'));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Analyze game'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tester.tap(find.text('Analyze game'));
+      final progressValues = <double>[];
+      for (var i = 0; i < 600 && find.byType(AcplChart).evaluate().isEmpty; i++) {
+        await tester.pump(const Duration(milliseconds: 32));
+        await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+        if (find.byType(LinearProgressIndicator).evaluate().isNotEmpty) {
+          final progress = tester
+              .widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator))
+              .value;
+          if (progress != null) progressValues.add(progress);
+        }
+      }
+      await tester.pumpAndSettle();
+
+      expect(progressValues, isNotEmpty);
+      for (var index = 1; index < progressValues.length; index++) {
+        expect(progressValues[index], greaterThanOrEqualTo(progressValues[index - 1]));
+      }
+      expect(
+        progressValues.any(
+          (progress) =>
+              progress > 0 && progress < 1 && (progress * 3 - (progress * 3).round()).abs() > 0.02,
+        ),
+        isTrue,
+        reason: 'Progress should animate between completed-position steps.',
+      );
+      expect(find.byType(AcplChart), findsOneWidget);
+      expect(find.byType(GameSummaryTable), findsOneWidget);
+      final boardAnnotations = tester.widget<Chessboard>(find.byType(Chessboard)).annotations;
+      expect(boardAnnotations, isEmpty);
+      expect(find.text('Winning chances'), findsOneWidget);
+      expect(find.text('good moves'), findsNothing);
+      expect(find.text('Request a computer analysis'), findsNothing);
+      final container = ProviderScope.containerOf(tester.element(find.byType(AnalysisScreen)));
+      await container.read(analysisPreferencesProvider.notifier).toggleLocalMoveVerdicts();
+      await tester.pumpAndSettle();
+      expect(tester.widget<Chessboard>(find.byType(Chessboard)).annotations, isEmpty);
+      expect(find.text('Winning chances'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Moves played'));
+      await tester.pumpAndSettle();
+      expect(find.text('+0.2'), findsWidgets);
+    });
+
     testWidgets('displays correct move and position', (tester) async {
       final app = await makeTestProviderScopeApp(
         tester,
