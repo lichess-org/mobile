@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/app.dart';
 import 'package:lichess_mobile/src/model/coach/youtube_channel.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_screen.dart';
 import 'package:lichess_mobile/src/view/coach/coach_list_tile.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
@@ -405,6 +406,10 @@ void main() {
       expect(
         tester.getRect(find.text('Hourly rate: ').first).bottom,
         closeTo(pictureRect.bottom, 1.0),
+      );
+      expect(
+        tester.widget<UserFullNameWidget>(find.byType(UserFullNameWidget).first).style,
+        Styles.sectionTitle,
       );
     });
 

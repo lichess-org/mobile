@@ -2,6 +2,7 @@ import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
@@ -82,6 +83,7 @@ class const CoachListTile({
                           user: coach.user,
                           rating: coach.rating,
                           showFlair: false,
+                          style: Styles.sectionTitle,
                         ),
                         if (userInfo case final info?
                             when info.location != null || info.country != null)
