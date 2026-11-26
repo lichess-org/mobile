@@ -443,6 +443,7 @@ class const _BottomBar({
           ),
         if (streak.finished)
           BottomBarGroup(
+            navigation: true,
             children: [
               BottomBarButton(
                 onTap: puzzleState.canGoBack

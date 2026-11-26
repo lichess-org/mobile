@@ -74,6 +74,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileClearButton => 'Wyczyść';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kod wygasa po 5 minutach i może być użyty tylko raz.';
 
   @override

@@ -21,6 +21,7 @@
   <string name="chessEngine" comment="Chess engine settings screen title.">Chess engine</string>
   <string name="chooseCustomBackground" comment="Theme settings entry that opens the custom background picker.">Choose a custom background</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short." maxLength="10">Clear</string>
+  <string name="clearMoves" comment="Menu action that removes all moves and variations from the standalone analysis board.">Clear moves</string>
   <string name="codeExpiresMessage" comment="Shown below the login code field in the email sign in flow.">The code expires after 5 minutes and can only be used once.</string>
   <string name="codeFieldLabel" comment="Label of the text field where the user enters their email login code.">Code</string>
   <string name="codeLengthMessage" comment="Validation error when the entered login code has the wrong length. %s is the expected length, e.g. 6.">The code is %s characters long.</string>

@@ -74,6 +74,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileClearButton => 'Tøm';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koden utløper etter 5 minutter og kan bare brukes én gang.';
 
   @override

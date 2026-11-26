@@ -74,6 +74,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobileClearButton => 'Tühjenda';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kood aegub 5 minuti pärast ja seda saab kasutada vaid ühe korra.';
 
   @override

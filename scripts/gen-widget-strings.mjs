@@ -36,7 +36,7 @@ const OUT_FILE = path.join(ROOT, 'ios', 'LichessWidgets', 'Localizable.xcstrings
 // Set `param: true` for strings with a single %@ placeholder (ARB uses {param}).
 const WIDGET_KEYS = {
   'Daily Puzzle': { arbKey: 'puzzleDailyPuzzle', fallback: 'Daily Puzzle', androidName: 'daily_puzzle_title' },
-  'Community': { arbKey: 'ublogCommunity', fallback: 'Community'},
+  'Community': { arbKey: 'ublogCommunity', fallback: 'Community', androidName: 'community_title'},
   // SwiftUI Text("xBlog \(name)") looks up the key "xBlog %@" at runtime.
   'xBlog %@': { arbKey: 'ublogXBlog', fallback: "%@'s Blog", param: true },
   'Broadcasts': { arbKey: 'broadcastBroadcasts', fallback: 'Broadcasts', androidName: 'broadcast_title' },
@@ -122,6 +122,8 @@ const UNTRANSLATED_ANDROID_STRINGS = {
   no_broadcasts: 'No active broadcasts',
   daily_puzzle_description: 'Shows daily puzzle',
   daily_puzzle_error: "Couldn't load puzzle",
+  community_description: 'Shows news from the Community',
+  no_community_news: 'No community news available',
 };
 
 const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');

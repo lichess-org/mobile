@@ -74,6 +74,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileClearButton => 'Resetare';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Codul expiră după 5 minute și poate fi folosit o singură dată.';
 
   @override

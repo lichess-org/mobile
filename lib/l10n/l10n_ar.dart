@@ -74,6 +74,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobileClearButton => 'محو';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'تنتهي صَلاحِيَة الرمز بعد 5 دقائق، ولا يمكن استخدامه إلا مرة واحدة.';
 
   @override

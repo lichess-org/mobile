@@ -74,6 +74,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileClearButton => 'Lösche';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'De Code funzt nu 5 Minute und cha nu eimal benutzt werde.';
 
   @override

@@ -62,16 +62,15 @@ class BottomBar extends StatelessWidget {
             type: MaterialType.transparency,
             child: SafeArea(
               bottom: false,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(
-                  8.0,
-                  _kGlassBarTopPadding,
-                  8.0,
-                  _glassBarBottomPadding(context),
-                ),
-                child: SizedBox(
-                  height: _kGlassCapsuleHeight,
-                  child: _GlassBottomBarScope(child: _GlassBarRow(children: children)),
+              child: _GlassBottomBarScope(
+                child: _GlassBarRow(
+                  padding: EdgeInsets.fromLTRB(
+                    8.0,
+                    _kGlassBarTopPadding,
+                    8.0,
+                    _glassBarBottomPadding(context),
+                  ),
+                  children: children,
                 ),
               ),
             ),
@@ -89,11 +88,17 @@ class BottomBar extends StatelessWidget {
             ),
           );
 
-    return MediaQuery.withClampedTextScaling(
-      maxScaleFactor: 1.4,
-      child: isIOS && cupertinoGlass && !glass
-          ? BlurredBarBackground(atBottom: true, child: bar)
-          : bar,
+    // The bar is at the bottom of the screen: the top padding of a body that extends behind the app
+    // bar (status bar and app bar) must not inset it.
+    return MediaQuery.removePadding(
+      context: context,
+      removeTop: true,
+      child: MediaQuery.withClampedTextScaling(
+        maxScaleFactor: 1.4,
+        child: isIOS && cupertinoGlass && !glass
+            ? BlurredBarBackground(atBottom: true, child: bar)
+            : bar,
+      ),
     );
   }
 }
@@ -191,21 +196,40 @@ class const BottomBarScrollEdgeEffect({
 double _smoothstep(double t) => t * t * (3 - 2 * t);
 
 /// The buttons of a [BottomBar] with liquid glass buttons, evenly spaced and as wide as their
-/// content. When they don't fit, the widest ones shrink first, to the same width: a label is
-/// ellipsized, and icon buttons keep their width.
-class const _GlassBarRow({required super.children}) extends MultiChildRenderObjectWidget {
+/// content, inside [padding]. When they don't fit, the widest ones shrink first, to the same width:
+/// a label is ellipsized, and icon buttons keep their width.
+///
+/// The bar floats over content: the whole row, [padding] included, takes the taps, so that a tap
+/// that misses a button never reaches the content below, and does nothing.
+class const _GlassBarRow({required final EdgeInsets padding, required super.children})
+    extends MultiChildRenderObjectWidget {
   @override
-  RenderObject createRenderObject(BuildContext context) => _RenderGlassBarRow();
+  RenderObject createRenderObject(BuildContext context) => _RenderGlassBarRow(padding);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderGlassBarRow renderObject) {
+    renderObject.padding = padding;
+  }
 }
 
 class _GlassBarRowParentData() extends ContainerBoxParentData<RenderBox>;
 
-class _RenderGlassBarRow()
+class _RenderGlassBarRow(EdgeInsets padding)
     extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _GlassBarRowParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _GlassBarRowParentData> {
   static const double _minSpacing = 8.0;
+
+  EdgeInsets _padding = padding;
+
+  EdgeInsets get padding => _padding;
+
+  set padding(EdgeInsets value) {
+    if (value == _padding) return;
+    _padding = value;
+    markNeedsLayout();
+  }
 
   @override
   void setupParentData(RenderBox child) {
@@ -238,34 +262,38 @@ class _RenderGlassBarRow()
 
   @override
   void performLayout() {
-    final widths = _widths(constraints.maxWidth, constraints.maxHeight);
+    size = computeDryLayout(constraints);
+    final available = math.max(size.width - _padding.horizontal, 0.0);
+    final widths = _widths(available, _kGlassCapsuleHeight);
     var i = 0;
     for (var child = firstChild; child != null; child = childAfter(child)) {
       child.layout(
-        BoxConstraints(maxWidth: widths[i++], maxHeight: constraints.maxHeight),
+        BoxConstraints(maxWidth: widths[i++], maxHeight: _kGlassCapsuleHeight),
         parentUsesSize: true,
       );
     }
-    size = computeDryLayout(constraints);
 
     // Evenly spaced, with at least the minimum spacing between them.
     final childrenWidth = widths.fold(0.0, (a, b) => a + b);
-    final gap = ((size.width - childrenWidth - _minSpacing * (childCount - 1)) / (childCount + 1))
+    final gap = ((available - childrenWidth - _minSpacing * (childCount - 1)) / (childCount + 1))
         .clamp(0.0, double.infinity);
-    var x = gap;
+    var x = _padding.left + gap;
     for (var child = firstChild; child != null; child = childAfter(child)) {
       final parentData = child.parentData! as _GlassBarRowParentData;
-      parentData.offset = Offset(x, (size.height - child.size.height) / 2);
+      parentData.offset = Offset(x, _padding.top + (_kGlassCapsuleHeight - child.size.height) / 2);
       x += child.size.width + _minSpacing + gap;
     }
   }
 
   @override
   Size computeDryLayout(BoxConstraints constraints) =>
-      constraints.constrain(Size(constraints.maxWidth, constraints.maxHeight));
+      constraints.constrain(Size(constraints.maxWidth, _padding.vertical + _kGlassCapsuleHeight));
 
   @override
   void paint(PaintingContext context, Offset offset) => defaultPaint(context, offset);
+
+  @override
+  bool hitTestSelf(Offset position) => true;
 
   @override
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
@@ -299,8 +327,15 @@ class const BottomBarTextButton({
 /// group of iOS toolbar items, and its [BottomBarButton]s are icons in it, without a capsule or a
 /// label. A single button is shown as if it were not in a group. Elsewhere, its [children] are laid
 /// out like the other buttons of the bar.
-class const BottomBarGroup({required final List<Widget> children, super.key})
-    extends StatelessWidget {
+class const BottomBarGroup({
+  required final List<Widget> children,
+
+  /// Whether the group holds the board navigation buttons (previous / next), the most used buttons
+  /// of a board screen: in a bar with [BottomBar.cupertinoGlass] on iOS, they are wider, with
+  /// larger icons, than the buttons of other groups. Defaults to false.
+  final bool navigation = false,
+  super.key,
+}) extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (children.length == 1) return children.single;
@@ -314,6 +349,7 @@ class const BottomBarGroup({required final List<Widget> children, super.key})
       group: true,
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: _GlassBottomBarGroupScope(
+        navigation: navigation,
         child: SizedBox(
           height: _kGlassCapsuleHeight,
           child: Row(
@@ -375,12 +411,14 @@ class const _GlassBottomBarScope({required super.child}) extends InheritedWidget
 }
 
 /// Marks the buttons of a [BottomBarGroup] in a [BottomBar] with [BottomBar.cupertinoGlass] on iOS.
-class const _GlassBottomBarGroupScope({required super.child}) extends InheritedWidget {
-  static bool isIn(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<_GlassBottomBarGroupScope>() != null;
+class const _GlassBottomBarGroupScope({required final bool navigation, required super.child})
+    extends InheritedWidget {
+  static _GlassBottomBarGroupScope? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_GlassBottomBarGroupScope>();
 
   @override
-  bool updateShouldNotify(_GlassBottomBarGroupScope oldWidget) => false;
+  bool updateShouldNotify(_GlassBottomBarGroupScope oldWidget) =>
+      navigation != oldWidget.navigation;
 }
 
 const double _kGlassCapsuleHeight = 48.0;
@@ -405,6 +443,12 @@ double _glassBarBottomPadding(BuildContext context) => math.max(
 /// Width of an icon button in a liquid glass [BottomBar]: a circle on its own, and a slot of the
 /// same width in a [BottomBarGroup].
 const double _kGlassIconButtonWidth = _kGlassCapsuleHeight;
+
+/// Width of a slot of a navigation [BottomBarGroup] in a liquid glass [BottomBar].
+const double _kGlassNavigationSlotWidth = 60.0;
+
+/// Size of the icons of a navigation [BottomBarGroup] in a liquid glass [BottomBar].
+const double _kGlassNavigationIconSize = 28.0;
 
 /// A liquid glass capsule button of a [BottomBar] with [BottomBar.cupertinoGlass], as wide as its
 /// content.
@@ -518,13 +562,20 @@ class const BottomBarButton({
       );
       // An icon alone is a circle.
       final iconOnly = !showLabel && badgeLabel == null;
+      final group = _GlassBottomBarGroupScope.maybeOf(context);
+      final navigation = group?.navigation ?? false;
+      final slotWidth = navigation ? _kGlassNavigationSlotWidth : _kGlassIconButtonWidth;
+      final slotIconSize = navigation ? _kGlassNavigationIconSize : _kGlassIconSize;
       // In a group, a button is an icon without its label, like an iOS toolbar group item, in a
-      // slot as wide as the icon alone.
-      final groupSlot = Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: badgeLabel == null ? (_kGlassIconButtonWidth - _kGlassIconSize) / 2 : 12.0,
+      // slot as wide as the icon alone, or wider in a navigation group.
+      final groupSlot = IconTheme.merge(
+        data: IconThemeData(size: slotIconSize),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: badgeLabel == null ? (slotWidth - slotIconSize) / 2 : 12.0,
+          ),
+          child: Center(widthFactor: 1.0, child: badge),
         ),
-        child: Center(widthFactor: 1.0, child: badge),
       );
 
       return Semantics(
@@ -533,7 +584,7 @@ class const BottomBarButton({
         button: true,
         label: label,
         excludeSemantics: true,
-        child: _GlassBottomBarGroupScope.isIn(context)
+        child: group != null
             // The group's capsule is the button's background.
             ? GestureDetector(
                 behavior: HitTestBehavior.opaque,

@@ -74,6 +74,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String get mobileClearButton => 'Tozalaş';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kodning amal qiliş muddati 5 daqiqadan söng tugaydi va undan faqat bir marta foydalaniş mumkin.';
 
   @override

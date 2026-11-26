@@ -99,6 +99,51 @@ void main() {
     expect(size.width, size.height);
   }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
 
+  testWidgets('iOS: a navigation group has wider buttons, with larger icons', (tester) async {
+    Widget group({required bool navigation, required String prefix}) => BottomBarGroup(
+      navigation: navigation,
+      children: [
+        for (final i in [1, 2])
+          BottomBarButton(
+            key: ValueKey('$prefix$i'),
+            label: '$prefix$i',
+            icon: Icons.menu,
+            onTap: () {},
+          ),
+      ],
+    );
+    await tester.pumpWidget(
+      await makeTestProviderScopeApp(
+        tester,
+        home: PlatformScaffold(
+          body: const SizedBox.expand(),
+          bottomNavigationBar: BottomBar(
+            cupertinoGlass: true,
+            children: [
+              group(navigation: false, prefix: 'other'),
+              group(navigation: true, prefix: 'nav'),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    double iconSize(String key) => tester
+        .getSize(find.descendant(of: find.byKey(ValueKey(key)), matching: find.byType(Icon)))
+        .width;
+    expect(tester.getSize(find.byKey(const ValueKey('other1'))).width, 48.0);
+    expect(iconSize('other1'), 24.0);
+    expect(tester.getSize(find.byKey(const ValueKey('nav1'))).width, 60.0);
+    expect(iconSize('nav1'), 28.0);
+    // Both capsules keep the same height.
+    expect(find.byType(GlassButton), findsNWidgets(2));
+    expect(
+      tester.getSize(find.byType(GlassButton).last).height,
+      tester.getSize(find.byType(GlassButton).first).height,
+    );
+  }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
   testWidgets('iOS: when the buttons do not fit, only the widest ones shrink', (tester) async {
     final longLabel = List.filled(20, 'label').join(' ');
     await tester.pumpWidget(
@@ -138,6 +183,94 @@ void main() {
     expect(long1.width, long2.width);
     expect(long2.right, lessThanOrEqualTo(tester.getSize(find.byType(BottomBar)).width));
   }, variant: const TargetPlatformVariant({TargetPlatform.iOS}));
+
+  testWidgets(
+    'iOS: a tap in the bar that misses the buttons does nothing, and never reaches the content',
+    (tester) async {
+      var content = 0;
+      var menu = 0;
+      var previous = 0;
+      var next = 0;
+      await tester.pumpWidget(
+        await makeTestProviderScopeApp(
+          tester,
+          home: Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => content++,
+                  child: const SizedBox.expand(),
+                ),
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: BottomBar(
+                  cupertinoGlass: true,
+                  children: [
+                    BottomBarButton(
+                      key: const ValueKey('menu'),
+                      label: 'Menu',
+                      icon: Icons.menu,
+                      onTap: () => menu++,
+                    ),
+                    BottomBarGroup(
+                      children: [
+                        BottomBarButton(
+                          key: const ValueKey('previous'),
+                          label: 'Previous',
+                          icon: Icons.chevron_left,
+                          onTap: () => previous++,
+                        ),
+                        BottomBarButton(
+                          key: const ValueKey('next'),
+                          label: 'Next',
+                          icon: Icons.chevron_right,
+                          onTap: () => next++,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final bar = tester.getRect(find.byType(BottomBar));
+      final menuRect = tester.getRect(find.byKey(const ValueKey('menu')));
+      final previousRect = tester.getRect(find.byKey(const ValueKey('previous')));
+      final nextRect = tester.getRect(find.byKey(const ValueKey('next')));
+      final group = tester.getRect(
+        find.ancestor(of: find.byKey(const ValueKey('next')), matching: find.byType(GlassButton)),
+      );
+
+      // Above the bar, the content takes the tap.
+      await tester.tapAt(Offset(nextRect.center.dx, bar.top - 4.0));
+      expect(content, 1);
+
+      // On the buttons.
+      await tester.tapAt(menuRect.center);
+      await tester.tapAt(previousRect.center);
+      await tester.tapAt(nextRect.center);
+      expect((menu, previous, next), (1, 1, 1));
+
+      // Off the buttons, in the bar: above a button, below it, between buttons, beside them.
+      await tester.tapAt(Offset(nextRect.center.dx, nextRect.top - 2.0));
+      await tester.tapAt(Offset(menuRect.center.dx, bar.bottom - 2.0));
+      await tester.tapAt(Offset(group.left - 2.0, group.center.dy));
+      await tester.tapAt(Offset(group.right + 2.0, group.center.dy));
+      await tester.tapAt(Offset(menuRect.left - 2.0, menuRect.center.dy));
+      expect((menu, previous, next), (1, 1, 1));
+
+      expect(content, 1);
+    },
+    variant: const TargetPlatformVariant({TargetPlatform.iOS}),
+  );
 
   testWidgets('Android: the buttons of a group are laid out like the other buttons', (
     tester,

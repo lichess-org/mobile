@@ -74,6 +74,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileClearButton => 'Vymazat';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override

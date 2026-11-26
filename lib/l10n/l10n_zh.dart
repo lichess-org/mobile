@@ -74,6 +74,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileClearButton => '清空';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => '验证码 5 分钟后过期，且只能使用一次。';
 
   @override

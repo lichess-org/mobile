@@ -74,6 +74,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileClearButton => 'Tyhjennä';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koodi vanhenee 5 minuutissa ja on kertakäyttöinen.';
 
   @override

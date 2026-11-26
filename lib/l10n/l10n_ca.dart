@@ -74,6 +74,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobileClearButton => 'Neteja';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'El codi caduca al cap de 5 minuts i només es pot utilitzar una vegada.';
 
   @override
