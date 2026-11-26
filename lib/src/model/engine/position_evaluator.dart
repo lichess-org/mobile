@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleListener, AppLifecycleState, WidgetsBinding;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -32,6 +33,14 @@ const minDepth = 6;
 
 /// How long a paused evaluator keeps the engine it is not using.
 const kEnginePauseDelay = Duration(seconds: 3);
+
+/// How long the app can stay in the background before an evaluator lets go of its engine.
+///
+/// Longer than any finite search time the user can choose ([kAvailableEngineSearchTimes]), so that
+/// a search started just before switching apps still runs to the end. What it stops is the
+/// unlimited search, which would otherwise keep a core busy for up to an hour with nobody watching,
+/// and an engine holding its table for a screen nobody is looking at.
+const kEngineBackgroundReleaseDelay = Duration(minutes: 1);
 
 /// The minimum delay between two engine failure messages shown to the user.
 const _kUserNotificationThrottle = Duration(seconds: 10);
@@ -106,7 +115,14 @@ class PositionEvaluator(
 
   @override
   EngineEvaluationState build() {
-    ref.onDispose(_dispose);
+    final lifecycleListener = AppLifecycleListener(
+      onPause: _onAppPaused,
+      onRestart: _onAppRestarted,
+    );
+    ref.onDispose(() {
+      lifecycleListener.dispose();
+      _dispose();
+    });
     return defaultState;
   }
 
@@ -144,6 +160,14 @@ class PositionEvaluator(
 
   /// What lets go of a paused engine nobody turned back on, after [kEnginePauseDelay].
   Timer? _pauseTimer;
+
+  /// What lets go of the engine once the app has been in the background for
+  /// [kEngineBackgroundReleaseDelay].
+  Timer? _backgroundTimer;
+
+  /// The work that was still running when the engine was let go of in the background, to be
+  /// started again when the app comes back.
+  EvalWork? _interruptedWork;
 
   /// Distinguishes the engine the service is currently interested in from one a [quit] or a
   /// failure has already let go of, so that a resolution still in flight cannot resurrect it.
@@ -256,6 +280,45 @@ class PositionEvaluator(
   }
 
   // ---------------------------------------------------------------------------
+  // App lifecycle
+  // ---------------------------------------------------------------------------
+
+  /// Lets go of the engine if the app is still in the background after
+  /// [kEngineBackgroundReleaseDelay].
+  void _onAppPaused() {
+    // Nothing held, or a paused engine already on its way out: see [release].
+    if ((_spec == null && !_resolvingSpec) || _paused) return;
+    _backgroundTimer?.cancel();
+    _backgroundTimer = Timer(kEngineBackgroundReleaseDelay, _releaseInBackground);
+  }
+
+  void _releaseInBackground() {
+    _backgroundTimer = null;
+    if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.paused) return;
+
+    final engine = _engine;
+    final interrupted = engine == null || engine.isSearching.value ? state.currentWork : null;
+
+    _logger.info('Releasing the engine left in the background');
+    _generation++;
+    _releaseEngine();
+    _interruptedWork = interrupted;
+    _setState();
+  }
+
+  /// Starts again the work that letting go of the engine in the background interrupted.
+  void _onAppRestarted() {
+    _backgroundTimer?.cancel();
+    _backgroundTimer = null;
+    final work = _interruptedWork;
+    _interruptedWork = null;
+    if (work != null && work == state.currentWork) {
+      _logger.info('Restarting the evaluation interrupted in the background');
+      _startWork(work);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // Engine lifecycle
   // ---------------------------------------------------------------------------
 
@@ -265,6 +328,7 @@ class PositionEvaluator(
     _paused = false;
     _pauseTimer?.cancel();
     _pauseTimer = null;
+    _interruptedWork = null;
 
     if (_unrecoverableFailure case final failure?) {
       _logger.severe('Refusing engine work: the engine is unusable. $failure');
@@ -380,6 +444,8 @@ class PositionEvaluator(
   void _releaseEngine({bool invalidate = false}) {
     _pauseTimer?.cancel();
     _pauseTimer = null;
+    _backgroundTimer?.cancel();
+    _backgroundTimer = null;
 
     // The engine outlives this release, so it must not be left evaluating for a screen that is
     // gone — but it is shared, so only this evaluator's own search is stopped.

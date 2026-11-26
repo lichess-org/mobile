@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fake_async/fake_async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleState;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -107,6 +108,31 @@ EvalWork makeWork({
     threatMode: false,
   );
 }
+
+/// Takes the app through the states it passes when the user switches away from it.
+void sendAppToBackground() {
+  for (final state in const [
+    AppLifecycleState.inactive,
+    AppLifecycleState.hidden,
+    AppLifecycleState.paused,
+  ]) {
+    TestWidgetsFlutterBinding.instance.handleAppLifecycleStateChanged(state);
+  }
+}
+
+/// Takes the app through the states it passes when the user comes back to it.
+void bringAppToForeground() {
+  for (final state in const [
+    AppLifecycleState.hidden,
+    AppLifecycleState.inactive,
+    AppLifecycleState.resumed,
+  ]) {
+    TestWidgetsFlutterBinding.instance.handleAppLifecycleStateChanged(state);
+  }
+}
+
+/// How many searches [engine] has been asked for, across all its sessions.
+int goCount(FakeEngine engine) => engine.commands.where((c) => c.startsWith('go')).length;
 
 void main() {
   TestLichessBinding.ensureInitialized();
@@ -1932,6 +1958,110 @@ void main() {
         expect(filtered.currentWork, isNull);
         expect(filtered.eval, isNull);
         expect(filtered.lifecycle, EngineLifecycle.initial);
+      });
+    });
+  });
+
+  group('PositionEvaluator in the background', () {
+    tearDown(() {
+      if (TestWidgetsFlutterBinding.instance.lifecycleState == AppLifecycleState.paused) {
+        bringAppToForeground();
+      }
+    });
+
+    test('an unlimited search is let go of, and started again on return', () async {
+      final stockfish = ThrottleTestEngine();
+      fakeEngine = stockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = readEvaluator(container);
+        final work = makeWork(searchTime: kMaxEngineSearchTime);
+
+        service.evaluate(work);
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 1);
+        expect(goCount(stockfish), 1);
+
+        sendAppToBackground();
+        async.elapse(kEngineBackgroundReleaseDelay - const Duration(seconds: 1));
+        expect(stockfish.quitCount, 0, reason: 'still inside the background window');
+
+        async.elapse(const Duration(seconds: 1) + kEngineDisposeDelay + const Duration(seconds: 1));
+        expect(stockfish.quitCount, 1);
+        expect(service.state.isComputing, isFalse);
+
+        bringAppToForeground();
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 2);
+        expect(goCount(stockfish), 2);
+        expect(service.state.currentWork, work);
+        expect(service.state.lifecycle, EngineLifecycle.computing);
+      });
+    });
+
+    test('a search finished in the background is not started again', () async {
+      final stockfish = FakeEngine();
+      fakeEngine = stockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = readEvaluator(container);
+
+        service.evaluate(makeWork(searchTime: const Duration(seconds: 4)));
+        async.elapse(const Duration(seconds: 1));
+        expect(goCount(stockfish), 1);
+
+        sendAppToBackground();
+        async.elapse(
+          kEngineBackgroundReleaseDelay + kEngineDisposeDelay + const Duration(seconds: 1),
+        );
+        expect(stockfish.quitCount, 1, reason: 'an idle engine is let go of too');
+
+        bringAppToForeground();
+        async.elapse(const Duration(seconds: 1));
+        expect(stockfish.startCount, 1);
+        expect(goCount(stockfish), 1);
+      });
+    });
+
+    test('coming back inside the window keeps the search running', () async {
+      final stockfish = ThrottleTestEngine();
+      fakeEngine = stockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        final service = readEvaluator(container);
+
+        service.evaluate(makeWork(searchTime: kMaxEngineSearchTime));
+        async.elapse(const Duration(seconds: 1));
+
+        sendAppToBackground();
+        async.elapse(kEngineBackgroundReleaseDelay - const Duration(seconds: 1));
+        bringAppToForeground();
+        async.elapse(kEngineBackgroundReleaseDelay + kEngineDisposeDelay);
+
+        expect(stockfish.quitCount, 0);
+        expect(stockfish.startCount, 1);
+        expect(goCount(stockfish), 1);
+        expect(service.state.lifecycle, EngineLifecycle.computing);
+      });
+    });
+
+    test('an evaluator with no engine does nothing', () async {
+      final stockfish = FakeEngine();
+      fakeEngine = stockfish;
+      final container = await makeContainer();
+
+      fakeAsync((async) {
+        readEvaluator(container);
+
+        sendAppToBackground();
+        async.elapse(kEngineBackgroundReleaseDelay + kEngineDisposeDelay);
+        bringAppToForeground();
+        async.elapse(const Duration(seconds: 1));
+
+        expect(stockfish.startCount, 0);
       });
     });
   });
