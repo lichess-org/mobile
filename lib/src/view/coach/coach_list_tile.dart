@@ -3,9 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/coach/coach.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/view/coach/coach_picture.dart';
 import 'package:lichess_mobile/src/view/coach/coach_profile_screen.dart';
-import 'package:lichess_mobile/src/view/user/user_profile.dart';
+import 'package:lichess_mobile/src/view/user/countries.dart';
+import 'package:lichess_mobile/src/widgets/network_image.dart';
 import 'package:lichess_mobile/src/widgets/user.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -55,10 +57,7 @@ class const CoachListTile({
 
     final userInfo = ref.watch(userProvider(coach.user.id)).value?.profile;
     final hourlyRate = coach.hourlyRate?.trim();
-    final ratings = [
-      if (userInfo?.fideRating case final fideRating?) 'FIDE: $fideRating',
-      if (coach.rating case final rating?) '$rating',
-    ].join(' • ');
+    final countryName = userInfo?.country != null ? countries[userInfo!.country] : null;
 
     return InkWell(
       onTap: openProfile,
@@ -67,7 +66,7 @@ class const CoachListTile({
         child: Row(
           crossAxisAlignment: .center,
           children: [
-            CoachPicture(url: coach.picture, size: 112.0),
+            CoachPicture(url: coach.picture, size: 84.0),
             const SizedBox(width: 16.0),
             Expanded(
               child: Column(
@@ -78,17 +77,41 @@ class const CoachListTile({
                   if (userInfo case final info? when info.location != null || info.country != null)
                     _DetailRow(
                       label: context.l10n.coachLocation,
-                      child: Location(profile: info),
+                      child: Row(
+                        children: [
+                          if (info.location?.trim() case final location? when location.isNotEmpty)
+                            Flexible(child: Text(location, maxLines: 1, overflow: .ellipsis)),
+                          if (info.country case final country?)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                              child: HttpNetworkImageWidget(
+                                lichessFlagSrc(country),
+                                width: 18.0,
+                                height: 12.0,
+                                fit: .cover,
+                                errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                              ),
+                            ),
+                          if (countryName case final name?)
+                            Flexible(child: Text(name, maxLines: 1, overflow: .ellipsis)),
+                        ],
+                      ),
                     ),
                   if (coach.languages.isNotEmpty)
                     _DetailRow(
                       label: context.l10n.coachLanguages,
-                      child: Text(coach.languages.join(', ')),
+                      child: Text(coach.languages.join(', '), maxLines: 1, overflow: .ellipsis),
                     ),
-                  if (ratings.isNotEmpty)
-                    _DetailRow(label: context.l10n.coachRating, child: Text(ratings)),
+                  if (coach.rating case final rating?)
+                    _DetailRow(
+                      label: context.l10n.coachRating,
+                      child: Text('$rating', maxLines: 1, overflow: .ellipsis),
+                    ),
                   if (hourlyRate != null && hourlyRate.isNotEmpty)
-                    _DetailRow(label: context.l10n.coachHourlyRate, child: Text(hourlyRate)),
+                    _DetailRow(
+                      label: context.l10n.coachHourlyRate,
+                      child: Text(hourlyRate, maxLines: 1, overflow: .ellipsis),
+                    ),
                 ],
               ),
             ),

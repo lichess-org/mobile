@@ -394,8 +394,8 @@ void main() {
       final tileRect = tester.getRect(find.byType(CoachListTile).first);
       final pictureRect = tester.getRect(find.byType(CoachPicture).first);
       expect(pictureRect.left, tileRect.left + 16.0);
-      expect(pictureRect.width, 112.0);
-      expect(pictureRect.height, 112.0);
+      expect(pictureRect.width, 84.0);
+      expect(pictureRect.height, 84.0);
       expect(pictureRect.center.dx, lessThan(tileRect.center.dx));
     });
 
@@ -429,7 +429,8 @@ void main() {
       expect(find.descendant(of: tile, matching: find.text('Bruxelles')), findsOneWidget);
       expect(find.descendant(of: tile, matching: find.text('Greece')), findsOneWidget);
       expect(find.descendant(of: tile, matching: find.text('el-GR, en-US')), findsOneWidget);
-      expect(find.descendant(of: tile, matching: find.text('FIDE: 2281 • 2434')), findsOneWidget);
+      expect(find.descendant(of: tile, matching: find.text('2434')), findsNWidgets(2));
+      expect(find.textContaining('FIDE:'), findsNothing);
       expect(find.descendant(of: tile, matching: find.text('25 EUR')), findsOneWidget);
 
       final locationTop = tester
