@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_summary.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -129,9 +130,24 @@ class BroadcastRepository(final LichessClient client, final Aggregator aggregato
   ///
   /// Followers get a notification when the player starts a game in an official broadcast.
   Future<void> setFollowingPlayer(FideId fideId, bool following) async {
-    await client.postRead(
-      Uri(path: '/fide/$fideId/follow', queryParameters: {'follow': following.toString()}),
+    final url = Uri(
+      path: '/fide/$fideId/follow',
+      queryParameters: {'follow': following.toString()},
     );
+    // TODO: remove, temporary logging to debug FIDE player follow errors.
+    final response = await client.post(url);
+    final body = response.body;
+    debugPrint(
+      'POST $url -> ${response.statusCode}, '
+      'server: ${response.headers['server']}, '
+      'cf-mitigated: ${response.headers['cf-mitigated']}, '
+      'cf-ray: ${response.headers['cf-ray']}, '
+      'content-type: ${response.headers['content-type']}, '
+      'body: ${body.length > 500 ? '${body.substring(0, 500)}…' : body}',
+    );
+    if (response.statusCode >= 400) {
+      throw ServerException(response.statusCode, 'Request to $url failed', url, null);
+    }
   }
 }
 
