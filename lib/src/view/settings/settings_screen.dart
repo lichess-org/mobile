@@ -227,7 +227,7 @@ class const SettingsScreen({super.key}) extends ConsumerWidget {
             ),
           Padding(
             padding: Styles.bodySectionPadding,
-            child: Text('v${packageInfo.version}.fdroid', style: TextTheme.of(context).bodySmall),
+            child: Text('v${packageInfo.version}', style: TextTheme.of(context).bodySmall),
           ),
         ],
       ),
