@@ -2,13 +2,8 @@
 
 import 'package:flutter/foundation.dart';
 
-class RemoteMessage {
-  final Map<String, dynamic> data;
-  final RemoteNotification? notification;
-
-  RemoteMessage(this.data, this.notification);
-
-  factory RemoteMessage.fromJson(Map<String, dynamic> json) {
+class RemoteMessage(final Map<String, dynamic> data, final RemoteNotification? notification) {
+  factory fromJson(Map<String, dynamic> json) {
     final data = json['data'] as Map<String, dynamic>;
     final notification = json['notification'] as Map<String, dynamic>?;
     final remoteNotification = notification != null
@@ -18,14 +13,9 @@ class RemoteMessage {
   }
 }
 
-class RemoteNotification {
-  final String? title;
-  final String? body;
+class RemoteNotification(final String? title, final String? body);
 
-  RemoteNotification(this.title, this.body);
-}
-
-class Firebase {
+class Firebase() {
   static Firebase instance = Firebase();
 
   static Future<void> initializeApp({DefaultFirebaseOptions? options}) {
@@ -33,33 +23,23 @@ class Firebase {
   }
 }
 
-class FirebaseOptions {
-  const FirebaseOptions({
-    required this.apiKey,
-    required this.appId,
-    required this.messagingSenderId,
-    required this.projectId,
-    this.storageBucket,
-    this.iosClientId,
-    this.iosBundleId,
-  });
+class const FirebaseOptions({
+  required final String apiKey,
+  required final String appId,
+  required final String messagingSenderId,
+  required final String projectId,
+  final String? storageBucket,
+  final String? iosClientId,
+  final String? iosBundleId,
+});
 
-  final String apiKey;
-  final String appId;
-  final String messagingSenderId;
-  final String projectId;
-  final String? storageBucket;
-  final String? iosClientId;
-  final String? iosBundleId;
-}
-
-class DefaultFirebaseOptions {
+class DefaultFirebaseOptions() {
   static DefaultFirebaseOptions? get currentPlatform => null;
 }
 
 typedef BackgroundMessageHandler = Future<void> Function(RemoteMessage message);
 
-class FirebaseMessaging {
+class FirebaseMessaging() {
   static FirebaseMessaging instance = FirebaseMessaging();
 
   static Stream<RemoteMessage> get onMessage => const Stream.empty();
@@ -73,7 +53,7 @@ class FirebaseMessaging {
   }
 }
 
-class FirebaseCrashlytics {
+class FirebaseCrashlytics() {
   static FirebaseCrashlytics instance = FirebaseCrashlytics();
 
   Future<void> recordError(
