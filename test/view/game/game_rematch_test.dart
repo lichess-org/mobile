@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
@@ -14,9 +17,9 @@ import '../../network/fake_websocket_channel.dart';
 import '../../test_helpers.dart';
 import '../../test_provider_scope.dart';
 
-/// A finished, clockless (correspondence) game viewed as white, with a
-/// configurable opponent `onGame` flag.
-String finishedCorrespondenceFullEvent({required bool opponentOnGame}) =>
+/// A finished game viewed as white, with configurable correspondence/real-time mode
+/// and opponent `onGame` flag.
+String finishedGameFullEvent({required bool opponentOnGame, bool isCorrespondence = true}) =>
     '''
 {
   "t": "full",
@@ -24,8 +27,8 @@ String finishedCorrespondenceFullEvent({required bool opponentOnGame}) =>
     "game": {
       "id": "qVChCOTc",
       "variant": {"key": "standard", "name": "Standard", "short": "Std"},
-      "speed": "correspondence",
-      "perf": "correspondence",
+      "speed": "${isCorrespondence ? 'correspondence' : 'blitz'}",
+      "perf": "${isCorrespondence ? 'correspondence' : 'blitz'}",
       "rated": false,
       "source": "lobby",
       "status": {"id": 31, "name": "resign"},
@@ -33,6 +36,7 @@ String finishedCorrespondenceFullEvent({required bool opponentOnGame}) =>
       "createdAt": 1685698678928,
       "pgn": "e4 e5"
     },
+    ${isCorrespondence ? '' : '"clock": {"running": false, "initial": 180, "increment": 2, "white": 150, "black": 140},'}
     "white": {
       "user": {"name": "Homer", "id": "homer"},
       "rating": 1500,
@@ -48,6 +52,12 @@ String finishedCorrespondenceFullEvent({required bool opponentOnGame}) =>
   }
 }
 ''';
+
+String rematchOfferEvent(String? side, {int version = 1}) => jsonEncode({
+  'v': version,
+  't': 'reload',
+  'd': {'t': 'rematchOffer', 'd': side},
+});
 
 void main() {
   const testGameFullId = GameFullId('qVChCOTcHSeW');
@@ -72,13 +82,14 @@ void main() {
     return (client: client, requestedPaths: requestedPaths);
   }
 
-  /// Loads the finished correspondence game into a [GameScreen] and returns the
-  /// recorded request paths list.
+  /// Loads a finished game into a [GameScreen] and returns the recorded request paths list.
   Future<List<String>> pumpFinishedGame(
     WidgetTester tester, {
     required MockClient client,
     required List<String> requestedPaths,
     required bool opponentOnGame,
+    bool isCorrespondence = true,
+    WebSocketChannelFactory? webSocketChannelFactory,
   }) async {
     final app = await makeTestProviderScopeApp(
       tester,
@@ -87,16 +98,52 @@ void main() {
         lichessClientProvider: lichessClientProvider.overrideWith(
           (ref) => LichessClient(client, ref),
         ),
+        if (webSocketChannelFactory != null)
+          webSocketChannelFactoryProvider: webSocketChannelFactoryProvider.overrideWithValue(
+            webSocketChannelFactory,
+          ),
       },
     );
     await tester.pumpWidget(app);
     await tester.pump(kFakeWebSocketConnectionLag);
 
     sendServerSocketMessages(testGameSocketUri, [
-      finishedCorrespondenceFullEvent(opponentOnGame: opponentOnGame),
+      finishedGameFullEvent(opponentOnGame: opponentOnGame, isCorrespondence: isCorrespondence),
     ]);
     await tester.pump();
     return requestedPaths;
+  }
+
+  /// Loads a finished game with socket recording and dismisses the auto-opened result dialog.
+  Future<({List<String> sentSocket, List<String> requestedPaths})> pumpDismissedFinishedGame(
+    WidgetTester tester, {
+    bool isCorrespondence = false,
+  }) async {
+    final (:client, :requestedPaths) = makeRecordingClient();
+    final sentSocket = <String>[];
+    final factory = ListenableFakeWebSocketChannelFactory(createDefaultFakeWebSocketChannel);
+    final sub = factory.outgoingMessages(testGameSocketUri).listen((msg) {
+      sentSocket.add(msg.toString());
+    });
+    addTearDown(() {
+      sub.cancel();
+      factory.dispose();
+    });
+
+    await pumpFinishedGame(
+      tester,
+      client: client,
+      requestedPaths: requestedPaths,
+      opponentOnGame: true,
+      isCorrespondence: isCorrespondence,
+      webSocketChannelFactory: factory,
+    );
+
+    await tester.pump(kGameEndDialogDelay);
+    tester.state<NavigatorState>(find.byType(Navigator).first).pop();
+    await tester.pumpAndSettle();
+
+    return (sentSocket: sentSocket, requestedPaths: requestedPaths);
   }
 
   group('Correspondence rematch (offline opponent)', () {
@@ -202,5 +249,105 @@ void main() {
       // The online-opponent path goes over the websocket, never the HTTP endpoint.
       expect(requestedPaths, isNot(contains('POST $rematchPath')));
     });
+  });
+
+  group('Incoming rematch offer in game menu', () {
+    testWidgets('shows Accept and Decline rematch and sends rematch-yes on accept', (tester) async {
+      final (:sentSocket, requestedPaths: _) = await pumpDismissedFinishedGame(tester);
+
+      sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black')]);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithIcon(BottomBarButton, Icons.menu));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Accept rematch'), findsOneWidget);
+      expect(find.text('Decline rematch'), findsOneWidget);
+      expect(find.text('Rematch'), findsNothing);
+
+      await tester.tap(find.text('Accept rematch'));
+      await tester.pumpAndSettle();
+
+      expect(sentSocket.any((m) => m.contains('rematch-yes')), isTrue);
+    }, variant: kPlatformVariant);
+
+    testWidgets('sends rematch-no on decline', (tester) async {
+      final (:sentSocket, requestedPaths: _) = await pumpDismissedFinishedGame(tester);
+
+      sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black')]);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.widgetWithIcon(BottomBarButton, Icons.menu));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Decline rematch'));
+      await tester.pumpAndSettle();
+
+      expect(sentSocket.any((m) => m.contains('rematch-no')), isTrue);
+    }, variant: kPlatformVariant);
+
+    testWidgets(
+      'correspondence game accepts pending rematch via socket even after opponent leaves',
+      (tester) async {
+        final (:sentSocket, :requestedPaths) = await pumpDismissedFinishedGame(
+          tester,
+          isCorrespondence: true,
+        );
+
+        sendServerSocketMessages(testGameSocketUri, [
+          rematchOfferEvent('black'),
+          jsonEncode({
+            't': 'crowd',
+            'd': {'white': true, 'black': false},
+          }),
+        ]);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.widgetWithIcon(BottomBarButton, Icons.menu));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Accept rematch'), findsOneWidget);
+        await tester.tap(find.text('Accept rematch'));
+        await tester.pumpAndSettle();
+
+        expect(sentSocket.any((m) => m.contains('rematch-yes')), isTrue);
+        expect(requestedPaths, isNot(contains('POST $rematchPath')));
+      },
+      variant: kPlatformVariant,
+    );
+  });
+
+  group('Incoming rematch offer in bottom bar', () {
+    testWidgets(
+      'highlights Show result on incoming offer, clears on cancel, and opens Accept/Decline dialog',
+      (tester) async {
+        final (:sentSocket, requestedPaths: _) = await pumpDismissedFinishedGame(tester);
+
+        final showResultFinder = find.widgetWithIcon(BottomBarButton, Icons.info_outline);
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isFalse);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black', version: 1)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isTrue);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent(null, version: 2)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isFalse);
+
+        sendServerSocketMessages(testGameSocketUri, [rematchOfferEvent('black', version: 3)]);
+        await tester.pumpAndSettle();
+        expect(tester.widget<BottomBarButton>(showResultFinder).highlighted, isTrue);
+
+        await tester.tap(showResultFinder);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Your opponent wants to play a new game with you'), findsOneWidget);
+        await tester.tap(find.byTooltip('Accept'));
+        await tester.pump();
+
+        expect(sentSocket.any((m) => m.contains('rematch-yes')), isTrue);
+      },
+      variant: kPlatformVariant,
+    );
   });
 }

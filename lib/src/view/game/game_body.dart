@@ -685,6 +685,7 @@ class const _GameBottomBar({
           finished: game.finished,
           resignable: game.resignable,
           offeringDraw: game.opponent?.offeringDraw == true,
+          offeringRematch: gameState.canOfferRematch && game.opponent?.offeringRematch == true,
           isThreefoldRepetition: game.isThreefoldRepetition == true,
           proposingTakeback: game.opponent?.proposingTakeback == true,
           isCorrespondence: game.meta.speed == Speed.correspondence,
@@ -801,6 +802,7 @@ class const _GameBottomBar({
             else if (data.finished)
               BottomBarButton(
                 label: context.l10n.mobileShowResult,
+                highlighted: data.offeringRematch,
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,
@@ -988,7 +990,23 @@ class const _GameBottomBar({
               }
             },
           )
-        else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
+        else if (gameState.canOfferRematch && gameState.game.opponent?.offeringRematch == true) ...[
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Accept rematch'),
+            dismissOnPress: true,
+            onPressed: () {
+              ref.read(gameControllerProvider(id).notifier).proposeOrAcceptRematch();
+            },
+          ),
+          BottomSheetAction(
+            makeLabel: (context) => const Text('Decline rematch'),
+            dismissOnPress: true,
+            isDestructiveAction: true,
+            onPressed: () {
+              ref.read(gameControllerProvider(id).notifier).declineRematch();
+            },
+          ),
+        ] else if (gameState.canOfferRematch && gameState.game.opponent?.onGame == true)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
