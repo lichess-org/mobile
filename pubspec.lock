@@ -361,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  dispose_scope:
+    dependency: transitive
+    description:
+      name: dispose_scope
+      sha256: "48ec38ca2631c53c4f8fa96b294c801e55c335db5e3fb9f82cede150cfe5a2af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   dynamic_system_colors:
     dependency: "direct main"
     description:
@@ -1254,6 +1262,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  patrol:
+    dependency: "direct dev"
+    description:
+      name: patrol
+      sha256: "6449bf2d2107f1f56a7134857c88e4bb0dd7c732e4368ad37bb3e18fbcfb3bd7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.11.0"
+  patrol_finders:
+    dependency: transitive
+    description:
+      name: patrol_finders
+      sha256: "3d451a1cede00d1b4223f88bf616fd4fab9d21af09c21bef859541788307a88a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.0"
+  patrol_log:
+    dependency: transitive
+    description:
+      name: patrol_log
+      sha256: eb7dbb4c7e679410bd9f4b349bbf0da4a56e5a2efe718613e268fa26f4b7bf41
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.2"
   petitparser:
     dependency: transitive
     description:
