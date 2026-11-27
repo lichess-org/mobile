@@ -503,6 +503,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileYouCannotChallengeYourself => 'Non puoi sfidare te stesso';
 
   @override
+  String get mobileTeamUpdatesEmptyDescription => 'Updates from your teams will appear here.';
+
+  @override
+  String get mobileBrowseTeams => 'Browse teams';
+
+  @override
   String get activityActivity => 'Attività';
 
   @override
