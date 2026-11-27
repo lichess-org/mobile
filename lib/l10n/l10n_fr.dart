@@ -1389,6 +1389,66 @@ class AppLocalizationsFr extends AppLocalizations {
   String get challengeInviteLichessUser => 'Ou inviter un utilisateur de Lichess :';
 
   @override
+  String get coachLichessCoaches => 'Coaches sur Lichess';
+
+  @override
+  String get coachLocation => 'Localisation';
+
+  @override
+  String get coachLanguages => 'Langues';
+
+  @override
+  String get coachRating => 'Classement';
+
+  @override
+  String get coachHourlyRate => 'Tarif horaire';
+
+  @override
+  String get coachAvailability => 'Disponibilité';
+
+  @override
+  String get coachAccepting => 'Accepte des élèves';
+
+  @override
+  String get coachNotAccepting => 'N\'accepte plus d\'élèves pour le moment';
+
+  @override
+  String get coachSendPM => 'Envoyer un message privé';
+
+  @override
+  String get coachAboutMe => 'À propos de moi';
+
+  @override
+  String get coachPlayingExperience => 'Expérience de jeu';
+
+  @override
+  String get coachTeachingExperience => 'Expérience d\'enseignement';
+
+  @override
+  String get coachOtherExperiences => 'Autres expériences';
+
+  @override
+  String get coachBestSkills => 'Meilleures compétences';
+
+  @override
+  String get coachTeachingMethod => 'Méthode d\'enseignement';
+
+  @override
+  String get coachPublicStudies => 'Études publiques';
+
+  @override
+  String get coachYoutubeVideos => 'Vidéos YouTube';
+
+  @override
+  String get coachAllCountries => 'Tous les pays';
+
+  @override
+  String get coachLastLogin => 'Dernière connexion';
+
+  @override
+  String get coachLichessRating => 'Classement Lichess';
+
+  @override
   String get contactContact => 'Contact';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get searchSearch => 'Recherche';
+
+  @override
+  String get searchSortBy => 'Trier par';
 
   @override
   String get settingsSettings => 'Paramètres';
@@ -7766,6 +7829,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blogue de $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Dernières publications du blogue';
 
   @override
   String get variantStandard => 'Standard';

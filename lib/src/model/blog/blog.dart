@@ -21,6 +21,8 @@ sealed class BlogPost with _$BlogPost {
   factory fromServerJson(Map<String, dynamic> json) {
     return _blogPostFromPick(pick(json).required());
   }
+
+  factory fromPick(RequiredPick pick) => _blogPostFromPick(pick);
 }
 
 BlogPost _blogPostFromPick(RequiredPick pick) {

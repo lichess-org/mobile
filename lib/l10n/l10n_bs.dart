@@ -1411,6 +1411,66 @@ class AppLocalizationsBs extends AppLocalizations {
   String get challengeInviteLichessUser => 'Ili pozovite korisnika Lichessa:';
 
   @override
+  String get coachLichessCoaches => 'Lichess treneri';
+
+  @override
+  String get coachLocation => 'Lokacija';
+
+  @override
+  String get coachLanguages => 'Jezici';
+
+  @override
+  String get coachRating => 'Rejting';
+
+  @override
+  String get coachHourlyRate => 'Satnica';
+
+  @override
+  String get coachAvailability => 'Dostupnost';
+
+  @override
+  String get coachAccepting => 'Prihvatam učenike';
+
+  @override
+  String get coachNotAccepting => 'Trenutno ne prihvatam učenike';
+
+  @override
+  String get coachSendPM => 'Pošaljite privatnu poruku';
+
+  @override
+  String get coachAboutMe => 'O meni';
+
+  @override
+  String get coachPlayingExperience => 'Igračko iskustvo';
+
+  @override
+  String get coachTeachingExperience => 'Predavačko iskustvo';
+
+  @override
+  String get coachOtherExperiences => 'Dodatna iskustva';
+
+  @override
+  String get coachBestSkills => 'Najbolje sposobnosti';
+
+  @override
+  String get coachTeachingMethod => 'Metodologija predavanja';
+
+  @override
+  String get coachPublicStudies => 'Javne studije';
+
+  @override
+  String get coachYoutubeVideos => 'Youtube videozapisi';
+
+  @override
+  String get coachAllCountries => 'Sve zemlje';
+
+  @override
+  String get coachLastLogin => 'Posljednja prijava';
+
+  @override
+  String get coachLichessRating => 'Lichess ocjena';
+
+  @override
   String get contactContact => 'Kontakti';
 
   @override
@@ -3366,6 +3426,9 @@ class AppLocalizationsBs extends AppLocalizations {
 
   @override
   String get searchSearch => 'Traži';
+
+  @override
+  String get searchSortBy => 'Sortiraj po';
 
   @override
   String get settingsSettings => 'Postavke';
@@ -7857,6 +7920,9 @@ class AppLocalizationsBs extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blog korisnika $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Najnoviji blog članci';
 
   @override
   String get variantStandard => 'Standardna';

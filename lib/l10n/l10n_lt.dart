@@ -1433,6 +1433,66 @@ class AppLocalizationsLt extends AppLocalizations {
   String get challengeInviteLichessUser => 'Arba pakvieskite Lichess vartotoją:';
 
   @override
+  String get coachLichessCoaches => 'Lichess treneriai';
+
+  @override
+  String get coachLocation => 'Vieta';
+
+  @override
+  String get coachLanguages => 'Kalbos';
+
+  @override
+  String get coachRating => 'Reitingas';
+
+  @override
+  String get coachHourlyRate => 'Valandinis mokestis';
+
+  @override
+  String get coachAvailability => 'Prieinamumas';
+
+  @override
+  String get coachAccepting => 'Priimami mokiniai';
+
+  @override
+  String get coachNotAccepting => 'Kol kas mokiniai nepriimami';
+
+  @override
+  String get coachSendPM => 'Siųsti asmeninę žinutę';
+
+  @override
+  String get coachAboutMe => 'Apie mane';
+
+  @override
+  String get coachPlayingExperience => 'Žaidimo patirtis';
+
+  @override
+  String get coachTeachingExperience => 'Mokymo patirtis';
+
+  @override
+  String get coachOtherExperiences => 'Kitos patirtys';
+
+  @override
+  String get coachBestSkills => 'Geriausi įgūdžiai';
+
+  @override
+  String get coachTeachingMethod => 'Mokymo metodologija';
+
+  @override
+  String get coachPublicStudies => 'Viešos studijos';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube vaizdo įrašai';
+
+  @override
+  String get coachAllCountries => 'Visos šalys';
+
+  @override
+  String get coachLastLogin => 'Paskutinis prisijungimas';
+
+  @override
+  String get coachLichessRating => 'Lichess reitingas';
+
+  @override
   String get contactContact => 'Susisiekite';
 
   @override
@@ -3392,6 +3452,9 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get searchSearch => 'Ieškoti';
+
+  @override
+  String get searchSortBy => 'Rūšiuoti pagal';
 
   @override
   String get settingsSettings => 'Nuostatos';
@@ -7946,6 +8009,9 @@ class AppLocalizationsLt extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param Tinklaraštis';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Vėliausi tinklaraščio įrašai';
 
   @override
   String get variantStandard => 'Standard';

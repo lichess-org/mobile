@@ -1389,6 +1389,66 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get challengeInviteLichessUser => 'Oder lad en Lichess User i:';
 
   @override
+  String get coachLichessCoaches => 'Lichess Trainer';
+
+  @override
+  String get coachLocation => 'Wohnort';
+
+  @override
+  String get coachLanguages => 'Schprache';
+
+  @override
+  String get coachRating => 'Wertigs Zahl';
+
+  @override
+  String get coachHourlyRate => 'Schtundesatz';
+
+  @override
+  String get coachAvailability => 'Verfüegbarkeit';
+
+  @override
+  String get coachAccepting => 'Akzeptiert neui Schüeler*ine';
+
+  @override
+  String get coachNotAccepting => 'Akzeptiert momentan kei neui Schüeler*ine';
+
+  @override
+  String get coachSendPM => 'Schick e privati Nachricht';
+
+  @override
+  String get coachAboutMe => 'Über mich';
+
+  @override
+  String get coachPlayingExperience => 'Schpill Erfahrig';
+
+  @override
+  String get coachTeachingExperience => 'Erfahrig als Lehrer*i';
+
+  @override
+  String get coachOtherExperiences => 'Anderi Erfahrige';
+
+  @override
+  String get coachBestSkills => 'Beschti Fähigkeite';
+
+  @override
+  String get coachTeachingMethod => 'Lehr Methode';
+
+  @override
+  String get coachPublicStudies => 'Öffentlichi Schtudie';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube Videos';
+
+  @override
+  String get coachAllCountries => 'Alli Länder';
+
+  @override
+  String get coachLastLogin => 'Letschte Login';
+
+  @override
+  String get coachLichessRating => 'Lichess Wertig';
+
+  @override
   String get contactContact => 'Kontakt';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsGsw extends AppLocalizations {
 
   @override
   String get searchSearch => 'Suechi';
+
+  @override
+  String get searchSortBy => 'Sortiert nach';
 
   @override
   String get settingsSettings => 'Ischtellige';
@@ -7766,6 +7829,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param\'s Blog';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Neuschti Blog Biträg';
 
   @override
   String get variantStandard => 'Schtandard';

@@ -2476,6 +2476,126 @@ abstract class AppLocalizations {
   /// **'Or invite a Lichess user:'**
   String get challengeInviteLichessUser;
 
+  /// No description provided for @coachLichessCoaches.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess coaches'**
+  String get coachLichessCoaches;
+
+  /// No description provided for @coachLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get coachLocation;
+
+  /// No description provided for @coachLanguages.
+  ///
+  /// In en, this message translates to:
+  /// **'Languages'**
+  String get coachLanguages;
+
+  /// No description provided for @coachRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get coachRating;
+
+  /// No description provided for @coachHourlyRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hourly rate'**
+  String get coachHourlyRate;
+
+  /// No description provided for @coachAvailability.
+  ///
+  /// In en, this message translates to:
+  /// **'Availability'**
+  String get coachAvailability;
+
+  /// No description provided for @coachAccepting.
+  ///
+  /// In en, this message translates to:
+  /// **'Accepting students'**
+  String get coachAccepting;
+
+  /// No description provided for @coachNotAccepting.
+  ///
+  /// In en, this message translates to:
+  /// **'Not accepting students at the moment'**
+  String get coachNotAccepting;
+
+  /// No description provided for @coachSendPM.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a private message'**
+  String get coachSendPM;
+
+  /// No description provided for @coachAboutMe.
+  ///
+  /// In en, this message translates to:
+  /// **'About me'**
+  String get coachAboutMe;
+
+  /// No description provided for @coachPlayingExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing experience'**
+  String get coachPlayingExperience;
+
+  /// No description provided for @coachTeachingExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Teaching experience'**
+  String get coachTeachingExperience;
+
+  /// No description provided for @coachOtherExperiences.
+  ///
+  /// In en, this message translates to:
+  /// **'Other experiences'**
+  String get coachOtherExperiences;
+
+  /// No description provided for @coachBestSkills.
+  ///
+  /// In en, this message translates to:
+  /// **'Best skills'**
+  String get coachBestSkills;
+
+  /// No description provided for @coachTeachingMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Teaching methodology'**
+  String get coachTeachingMethod;
+
+  /// No description provided for @coachPublicStudies.
+  ///
+  /// In en, this message translates to:
+  /// **'Public studies'**
+  String get coachPublicStudies;
+
+  /// No description provided for @coachYoutubeVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'YouTube videos'**
+  String get coachYoutubeVideos;
+
+  /// No description provided for @coachAllCountries.
+  ///
+  /// In en, this message translates to:
+  /// **'All countries'**
+  String get coachAllCountries;
+
+  /// No description provided for @coachLastLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Last login'**
+  String get coachLastLogin;
+
+  /// No description provided for @coachLichessRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess rating'**
+  String get coachLichessRating;
+
   /// No description provided for @contactContact.
   ///
   /// In en, this message translates to:
@@ -6189,6 +6309,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search'**
   String get searchSearch;
+
+  /// No description provided for @searchSortBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get searchSortBy;
 
   /// No description provided for @settingsSettings.
   ///
@@ -13557,6 +13683,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{param}\'s Blog'**
   String ublogXBlog(String param);
+
+  /// No description provided for @ublogLatestBlogPosts.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest blog posts'**
+  String get ublogLatestBlogPosts;
 
   /// No description provided for @variantStandard.
   ///

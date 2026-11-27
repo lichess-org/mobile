@@ -1389,6 +1389,66 @@ class AppLocalizationsUz extends AppLocalizations {
   String get challengeInviteLichessUser => 'Yoki Lichess foydalanuvçisini taklif eting:';
 
   @override
+  String get coachLichessCoaches => 'Lichess murabbiylari';
+
+  @override
+  String get coachLocation => 'Manzil';
+
+  @override
+  String get coachLanguages => 'Tillar';
+
+  @override
+  String get coachRating => 'Reyting';
+
+  @override
+  String get coachHourlyRate => 'Soatbay tölov';
+
+  @override
+  String get coachAvailability => 'Bandlik holati';
+
+  @override
+  String get coachAccepting => 'Öquvçilarni qabul qilmoqda';
+
+  @override
+  String get coachNotAccepting => 'Hozirgi vaqtda öquvçi qabul qilmayapti';
+
+  @override
+  String get coachSendPM => 'Şaxsiy xabar jönatiş';
+
+  @override
+  String get coachAboutMe => 'Men haqimda';
+
+  @override
+  String get coachPlayingExperience => 'Öyin tajribam';
+
+  @override
+  String get coachTeachingExperience => 'Dars beriş tajribam';
+
+  @override
+  String get coachOtherExperiences => 'Boşqa tajribalarim';
+
+  @override
+  String get coachBestSkills => 'Asosiy mahoratlarim';
+
+  @override
+  String get coachTeachingMethod => 'Öqitiş metodikam';
+
+  @override
+  String get coachPublicStudies => 'Ommaga oçiq saboqlarim';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videolarim';
+
+  @override
+  String get coachAllCountries => 'Barça davlatlar';
+
+  @override
+  String get coachLastLogin => 'Oxirgi faollik';
+
+  @override
+  String get coachLichessRating => 'Lichess reyting';
+
+  @override
   String get contactContact => 'Aloqa';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsUz extends AppLocalizations {
 
   @override
   String get searchSearch => 'Qidiriş';
+
+  @override
+  String get searchSortBy => 'Saralaş';
 
   @override
   String get settingsSettings => 'Sozlamalar';
@@ -7766,6 +7829,9 @@ class AppLocalizationsUz extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param\'ning blogi';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Sönggi blog postlar';
 
   @override
   String get variantStandard => 'Standart';

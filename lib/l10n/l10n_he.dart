@@ -1410,6 +1410,66 @@ class AppLocalizationsHe extends AppLocalizations {
   String get challengeInviteLichessUser => 'ניתן גם לשלוח הזמנה למשתמש/ת Lichess:';
 
   @override
+  String get coachLichessCoaches => 'מאמנים ב־lichess';
+
+  @override
+  String get coachLocation => 'מיקום';
+
+  @override
+  String get coachLanguages => 'שפות';
+
+  @override
+  String get coachRating => 'דירוג';
+
+  @override
+  String get coachHourlyRate => 'מחיר לשעה';
+
+  @override
+  String get coachAvailability => 'זמינות';
+
+  @override
+  String get coachAccepting => 'מקבל/ת תלמידים';
+
+  @override
+  String get coachNotAccepting => 'לא מקבל/ת תלמידים בזמן זה';
+
+  @override
+  String get coachSendPM => 'שליחת הודעה פרטית';
+
+  @override
+  String get coachAboutMe => 'אודות';
+
+  @override
+  String get coachPlayingExperience => 'ניסיון משחק';
+
+  @override
+  String get coachTeachingExperience => 'ניסיון לימוד';
+
+  @override
+  String get coachOtherExperiences => 'ניסיון אחר';
+
+  @override
+  String get coachBestSkills => 'כישורים';
+
+  @override
+  String get coachTeachingMethod => 'שיטת לימוד';
+
+  @override
+  String get coachPublicStudies => 'לוחות הלמידה הפומביים שלי';
+
+  @override
+  String get coachYoutubeVideos => 'סרטוני YouTube';
+
+  @override
+  String get coachAllCountries => 'כל המדינות';
+
+  @override
+  String get coachLastLogin => 'התחברות אחרונה';
+
+  @override
+  String get coachLichessRating => 'דירוג ב־lichess';
+
+  @override
   String get contactContact => 'יצירת קשר';
 
   @override
@@ -3364,6 +3424,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get searchSearch => 'חיפוש';
+
+  @override
+  String get searchSortBy => 'מיין לפי';
 
   @override
   String get settingsSettings => 'הגדרות';
@@ -7855,6 +7918,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'הבלוג של $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'פוסטים אחרונים';
 
   @override
   String get variantStandard => 'רגיל';

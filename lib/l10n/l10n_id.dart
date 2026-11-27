@@ -1370,6 +1370,66 @@ class AppLocalizationsId extends AppLocalizations {
   String get challengeInviteLichessUser => 'Atau undang pengguna Lichess lain:';
 
   @override
+  String get coachLichessCoaches => 'Pelatih Lichess';
+
+  @override
+  String get coachLocation => 'Lokasi';
+
+  @override
+  String get coachLanguages => 'Bahasa';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Rata-rata perjam';
+
+  @override
+  String get coachAvailability => 'Ketersediaan';
+
+  @override
+  String get coachAccepting => 'Penerimaan murid';
+
+  @override
+  String get coachNotAccepting => 'Tidak menerima murid saat ini';
+
+  @override
+  String get coachSendPM => 'Kirim pesan pribadi';
+
+  @override
+  String get coachAboutMe => 'Tentang saya';
+
+  @override
+  String get coachPlayingExperience => 'Pengalaman bermain';
+
+  @override
+  String get coachTeachingExperience => 'Pengalaman mengajar';
+
+  @override
+  String get coachOtherExperiences => 'Pengalaman lainnya';
+
+  @override
+  String get coachBestSkills => 'Keterampilan terbaik';
+
+  @override
+  String get coachTeachingMethod => 'Metodologi pengajaran';
+
+  @override
+  String get coachPublicStudies => 'Siswa publik';
+
+  @override
+  String get coachYoutubeVideos => 'Video Youtube';
+
+  @override
+  String get coachAllCountries => 'All countries';
+
+  @override
+  String get coachLastLogin => 'Last login';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
+
+  @override
   String get contactContact => 'Kontak';
 
   @override
@@ -3314,6 +3374,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get searchSearch => 'Cari';
+
+  @override
+  String get searchSortBy => 'Urut berdasarkan';
 
   @override
   String get settingsSettings => 'Pengaturan';
@@ -7681,6 +7744,9 @@ class AppLocalizationsId extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blog dari $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Postingan blog terbaru';
 
   @override
   String get variantStandard => 'Standar';

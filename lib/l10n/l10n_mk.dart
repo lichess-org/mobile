@@ -1389,6 +1389,66 @@ class AppLocalizationsMk extends AppLocalizations {
   String get challengeInviteLichessUser => 'Or invite a Lichess user:';
 
   @override
+  String get coachLichessCoaches => 'lichessТренери';
+
+  @override
+  String get coachLocation => 'локација';
+
+  @override
+  String get coachLanguages => 'јазици';
+
+  @override
+  String get coachRating => 'рејтинг';
+
+  @override
+  String get coachHourlyRate => 'Цена за еден час';
+
+  @override
+  String get coachAvailability => 'Достапност';
+
+  @override
+  String get coachAccepting => 'прифаќа студенти';
+
+  @override
+  String get coachNotAccepting => 'не прифаќа студенти во моментот';
+
+  @override
+  String get coachSendPM => 'испрати приватна порака';
+
+  @override
+  String get coachAboutMe => 'About me';
+
+  @override
+  String get coachPlayingExperience => 'Играчко искуство';
+
+  @override
+  String get coachTeachingExperience => 'Искуство во тренирање';
+
+  @override
+  String get coachOtherExperiences => 'други искуства';
+
+  @override
+  String get coachBestSkills => 'најдобри вештини';
+
+  @override
+  String get coachTeachingMethod => 'начин на тренирање';
+
+  @override
+  String get coachPublicStudies => 'Јавни студии';
+
+  @override
+  String get coachYoutubeVideos => 'Youtube видеа';
+
+  @override
+  String get coachAllCountries => 'All countries';
+
+  @override
+  String get coachLastLogin => 'Last login';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
+
+  @override
   String get contactContact => 'Контакт';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get searchSearch => 'Пребарај';
+
+  @override
+  String get searchSortBy => 'Подреди по';
 
   @override
   String get settingsSettings => 'Поставки';
@@ -7766,6 +7829,9 @@ class AppLocalizationsMk extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param\'s Blog';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Latest blog posts';
 
   @override
   String get variantStandard => 'Standard';

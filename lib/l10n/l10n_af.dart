@@ -1389,6 +1389,66 @@ class AppLocalizationsAf extends AppLocalizations {
   String get challengeInviteLichessUser => 'Of nooi \'n Lichess-gebruiker uit:';
 
   @override
+  String get coachLichessCoaches => 'Lichess afrigters';
+
+  @override
+  String get coachLocation => 'Ligging';
+
+  @override
+  String get coachLanguages => 'Tale';
+
+  @override
+  String get coachRating => 'Gradering';
+
+  @override
+  String get coachHourlyRate => 'Uurlikse prys';
+
+  @override
+  String get coachAvailability => 'Beskikbaarheid';
+
+  @override
+  String get coachAccepting => 'Aanvaar studente';
+
+  @override
+  String get coachNotAccepting => 'Aanvaar nie tans studente nie';
+
+  @override
+  String get coachSendPM => 'Stuur \'n privaat boodskap';
+
+  @override
+  String get coachAboutMe => 'Wie is ek?';
+
+  @override
+  String get coachPlayingExperience => 'Speel ervaring';
+
+  @override
+  String get coachTeachingExperience => 'Onderrig ervaring';
+
+  @override
+  String get coachOtherExperiences => 'Ander ervarings';
+
+  @override
+  String get coachBestSkills => 'Beste vaardighede';
+
+  @override
+  String get coachTeachingMethod => 'Leer metodes';
+
+  @override
+  String get coachPublicStudies => 'Publieke studies';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videos';
+
+  @override
+  String get coachAllCountries => 'Alle lande';
+
+  @override
+  String get coachLastLogin => 'Laaste aanmelding';
+
+  @override
+  String get coachLichessRating => 'Lichess-gradering';
+
+  @override
   String get contactContact => 'Kontak';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsAf extends AppLocalizations {
 
   @override
   String get searchSearch => 'Soek';
+
+  @override
+  String get searchSortBy => 'Sorteer volgens';
 
   @override
   String get settingsSettings => 'Instellings';
@@ -7766,6 +7829,9 @@ class AppLocalizationsAf extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param se webjoernaal';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Jongste webjoernaal inskrywings';
 
   @override
   String get variantStandard => 'Standard';

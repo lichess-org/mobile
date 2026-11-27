@@ -1389,6 +1389,66 @@ class AppLocalizationsHu extends AppLocalizations {
   String get challengeInviteLichessUser => 'Vagy hívj meg egy Lichess -felhasználót:';
 
   @override
+  String get coachLichessCoaches => 'Lichess edzők';
+
+  @override
+  String get coachLocation => 'Hely';
+
+  @override
+  String get coachLanguages => 'Nyelvek';
+
+  @override
+  String get coachRating => 'Értékszám';
+
+  @override
+  String get coachHourlyRate => 'Óradíj';
+
+  @override
+  String get coachAvailability => 'Rendelkezésre állás';
+
+  @override
+  String get coachAccepting => 'Fogad tanulókat';
+
+  @override
+  String get coachNotAccepting => 'Jelenleg nem fogad tanulókat';
+
+  @override
+  String get coachSendPM => 'Privát üzenet küldése';
+
+  @override
+  String get coachAboutMe => 'Rólam';
+
+  @override
+  String get coachPlayingExperience => 'Játéktapasztalat';
+
+  @override
+  String get coachTeachingExperience => 'Oktatói tapasztalat';
+
+  @override
+  String get coachOtherExperiences => 'Egyéb tapasztalat';
+
+  @override
+  String get coachBestSkills => 'Legjobb képességek';
+
+  @override
+  String get coachTeachingMethod => 'Oktatói módszertan';
+
+  @override
+  String get coachPublicStudies => 'Nyilvános tanulmányok';
+
+  @override
+  String get coachYoutubeVideos => 'YouTube videók';
+
+  @override
+  String get coachAllCountries => 'Az összes ország';
+
+  @override
+  String get coachLastLogin => 'Utolsó bejelentkezés';
+
+  @override
+  String get coachLichessRating => 'Lichess értékszám';
+
+  @override
   String get contactContact => 'Kapcsolat';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get searchSearch => 'Keresés';
+
+  @override
+  String get searchSortBy => 'Rendezés';
 
   @override
   String get settingsSettings => 'Beállítások';
@@ -7766,6 +7829,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param blogja';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Legutóbbi blogbejegyzések';
 
   @override
   String get variantStandard => 'Normál';

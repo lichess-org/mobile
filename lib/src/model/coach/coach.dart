@@ -1,0 +1,114 @@
+import 'package:deep_pick/deep_pick.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/blog/blog.dart';
+import 'package:lichess_mobile/src/model/study/study.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+
+part 'coach.freezed.dart';
+
+final RegExp _youtubeVideoIdRegex = RegExp(
+  r'(?:youtube\.com|youtu\.be)/(?:watch)?(?:\?v=)?([^"&?/ ]{11})',
+);
+
+IList<String> _parseYoutubeUrls(String text) {
+  return text
+      .split('\n')
+      .map(_youtubeVideoIdRegex.firstMatch)
+      .nonNulls
+      .map((match) => match[1]!)
+      .take(6)
+      .map((id) => 'https://www.youtube.com/watch?v=$id')
+      .toIList();
+}
+
+String youtubeThumbnailUrl(String videoUrl) {
+  final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
+  return id != null ? 'https://i.ytimg.com/vi/$id/maxresdefault.jpg' : videoUrl;
+}
+
+String youtubeFallbackThumbnailUrl(String videoUrl) {
+  final id = _youtubeVideoIdRegex.firstMatch(videoUrl)?[1];
+  return id != null ? 'https://i.ytimg.com/vi/$id/mqdefault.jpg' : videoUrl;
+}
+
+@freezed
+sealed class CoachPreview with _$CoachPreview {
+  const factory({
+    required LightUser user,
+    int? rating,
+    required IList<String> languages,
+    required int nbReviews,
+    required bool available,
+    required bool listed,
+    String? headline,
+    String? hourlyRate,
+    String? picture,
+  }) = _CoachPreview;
+
+  factory fromPick(RequiredPick pick) {
+    return CoachPreview(
+      user: pick('user').asLightUserOrThrow(),
+      rating: pick('coach', 'user', 'rating').asIntOrNull(),
+      languages: pick('coach', 'languages').asListOrEmpty((it) => it.asStringOrThrow()).toIList(),
+      nbReviews: pick('coach', 'nbReviews').asIntOrThrow(),
+      available: pick('coach', 'available').asBoolOrThrow(),
+      listed: pick('coach', 'listed').asBoolOrThrow(),
+      headline: pick('coach', 'profile', 'headline').asStringOrNull(),
+      hourlyRate: pick('coach', 'profile', 'hourlyRate').asStringOrNull(),
+      picture: pick('coach', 'picture').asStringOrNull(),
+    );
+  }
+}
+
+@freezed
+sealed class CoachProfile with _$CoachProfile {
+  const factory({
+    required LightUser user,
+    int? rating,
+    required IList<String> languages,
+    required int nbReviews,
+    required bool available,
+    required bool listed,
+    String? headline,
+    String? hourlyRate,
+    String? picture,
+    required IList<String> youtubeVideos,
+    required IList<StudyPageItem> studies,
+    required IList<BlogPost> posts,
+    String? description,
+    String? playingExperience,
+    String? teachingExperience,
+    String? otherExperience,
+    String? skills,
+    String? methodology,
+    String? youtubeChannel,
+  }) = _CoachProfile;
+
+  factory fromPick(RequiredPick pick) {
+    final profile = pick('coach', 'profile');
+    return CoachProfile(
+      user: pick('user').asLightUserOrThrow(),
+      rating: pick('coach', 'user', 'rating').asIntOrNull(),
+      languages: pick('coach', 'languages').asListOrEmpty((it) => it.asStringOrThrow()).toIList(),
+      nbReviews: pick('coach', 'nbReviews').asIntOrThrow(),
+      available: pick('coach', 'available').asBoolOrThrow(),
+      listed: pick('coach', 'listed').asBoolOrThrow(),
+      headline: profile('headline').asStringOrNull(),
+      hourlyRate: profile('hourlyRate').asStringOrNull(),
+      picture: pick('coach', 'picture').asStringOrNull(),
+      youtubeVideos: _parseYoutubeUrls(profile('youtubeVideos').asStringOrNull() ?? ''),
+      studies: pick('studies')
+          .asListOrEmpty((it) => StudyPageItem.fromJson(it.asMapOrThrow()))
+          .toIList(),
+      posts: pick('posts').asListOrEmpty(BlogPost.fromPick).toIList(),
+      description: profile('description').asStringOrNull(),
+      playingExperience: profile('playingExperience').asStringOrNull(),
+      teachingExperience: profile('teachingExperience').asStringOrNull(),
+      otherExperience: profile('otherExperience').asStringOrNull(),
+      skills: profile('skills').asStringOrNull(),
+      methodology: profile('methodology').asStringOrNull(),
+      youtubeChannel: profile('youtubeChannel').asStringOrNull(),
+    );
+  }
+}

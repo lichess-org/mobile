@@ -1411,6 +1411,66 @@ class AppLocalizationsRo extends AppLocalizations {
   String get challengeInviteLichessUser => 'Sau invitați un utilizator Lichess:';
 
   @override
+  String get coachLichessCoaches => 'Antrenori Lichess';
+
+  @override
+  String get coachLocation => 'Locație';
+
+  @override
+  String get coachLanguages => 'Limbi';
+
+  @override
+  String get coachRating => 'Rating';
+
+  @override
+  String get coachHourlyRate => 'Rata pe oră';
+
+  @override
+  String get coachAvailability => 'Disponibilitate';
+
+  @override
+  String get coachAccepting => 'Acceptă cursanți';
+
+  @override
+  String get coachNotAccepting => 'Nu acceptă studenți momentan';
+
+  @override
+  String get coachSendPM => 'Trimite un mesaj privat';
+
+  @override
+  String get coachAboutMe => 'Despre mine';
+
+  @override
+  String get coachPlayingExperience => 'Experiență';
+
+  @override
+  String get coachTeachingExperience => 'Experiență de predare';
+
+  @override
+  String get coachOtherExperiences => 'Alte experiențe';
+
+  @override
+  String get coachBestSkills => 'Cele mai bune abilități';
+
+  @override
+  String get coachTeachingMethod => 'Metodologia de predare';
+
+  @override
+  String get coachPublicStudies => 'Studii publice';
+
+  @override
+  String get coachYoutubeVideos => 'Videoclipuri pe YouTube';
+
+  @override
+  String get coachAllCountries => 'Orice țară';
+
+  @override
+  String get coachLastLogin => 'Ultima autentificare';
+
+  @override
+  String get coachLichessRating => 'Rating lichess';
+
+  @override
   String get contactContact => 'Contact';
 
   @override
@@ -3366,6 +3426,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get searchSearch => 'Căutare';
+
+  @override
+  String get searchSortBy => 'Sortare după';
 
   @override
   String get settingsSettings => 'Setări';
@@ -7858,6 +7921,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Blog-ul lui $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Ultimele postări pe blog';
 
   @override
   String get variantStandard => 'Standard';

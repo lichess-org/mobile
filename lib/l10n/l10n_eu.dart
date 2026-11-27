@@ -1389,6 +1389,66 @@ class AppLocalizationsEu extends AppLocalizations {
   String get challengeInviteLichessUser => 'Edo gonbidatu Lichesseko erabiltzaile bat:';
 
   @override
+  String get coachLichessCoaches => 'Lichess entrenatzaileak';
+
+  @override
+  String get coachLocation => 'Herria';
+
+  @override
+  String get coachLanguages => 'Hizkuntzak';
+
+  @override
+  String get coachRating => 'Puntuazioa';
+
+  @override
+  String get coachHourlyRate => 'Orduko tarifa';
+
+  @override
+  String get coachAvailability => 'Egoera';
+
+  @override
+  String get coachAccepting => 'Ikasleak onartzen i';
+
+  @override
+  String get coachNotAccepting => 'Orain ez du ikaslerik onartzen';
+
+  @override
+  String get coachSendPM => 'Mezu pribatua bidali';
+
+  @override
+  String get coachAboutMe => 'Niri buruz';
+
+  @override
+  String get coachPlayingExperience => 'Jokalari esperientzia';
+
+  @override
+  String get coachTeachingExperience => 'Entrenatzaile esperientzia';
+
+  @override
+  String get coachOtherExperiences => 'Beste esperientzia batzuk';
+
+  @override
+  String get coachBestSkills => 'Trebetasun nabarmenenak';
+
+  @override
+  String get coachTeachingMethod => 'Irakasteko metodologia';
+
+  @override
+  String get coachPublicStudies => 'Azterlan publikoak';
+
+  @override
+  String get coachYoutubeVideos => 'YouTubeko bideoak';
+
+  @override
+  String get coachAllCountries => 'Herrialde guztiak';
+
+  @override
+  String get coachLastLogin => 'Noiz sartu den azken aldiz';
+
+  @override
+  String get coachLichessRating => 'Lichesseko sailkapena';
+
+  @override
   String get contactContact => 'Harremana';
 
   @override
@@ -3338,6 +3398,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get searchSearch => 'Bilatu';
+
+  @override
+  String get searchSortBy => 'Honen arabera ordenatu';
 
   @override
   String get settingsSettings => 'Ezarpenak';
@@ -7766,6 +7829,9 @@ class AppLocalizationsEu extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param erabiltzailearen Bloga';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Blogeko azken sarrerak';
 
   @override
   String get variantStandard => 'Ohikoa';

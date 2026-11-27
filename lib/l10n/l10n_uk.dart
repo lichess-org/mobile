@@ -1433,6 +1433,66 @@ class AppLocalizationsUk extends AppLocalizations {
   String get challengeInviteLichessUser => 'Або запросіть користувача Lichess:';
 
   @override
+  String get coachLichessCoaches => 'Тренери Lichess';
+
+  @override
+  String get coachLocation => 'Місцезнаходження';
+
+  @override
+  String get coachLanguages => 'Мови';
+
+  @override
+  String get coachRating => 'Рейтинг';
+
+  @override
+  String get coachHourlyRate => 'Погодинна ставка';
+
+  @override
+  String get coachAvailability => 'Доступність';
+
+  @override
+  String get coachAccepting => 'Приймаю учнів';
+
+  @override
+  String get coachNotAccepting => 'На даний момент не приймаю учнів';
+
+  @override
+  String get coachSendPM => 'Надіслати приватне повідомлення';
+
+  @override
+  String get coachAboutMe => 'Про себе';
+
+  @override
+  String get coachPlayingExperience => 'Досвід гри';
+
+  @override
+  String get coachTeachingExperience => 'Досвід викладання';
+
+  @override
+  String get coachOtherExperiences => 'Інший досвід';
+
+  @override
+  String get coachBestSkills => 'Найкращі навички';
+
+  @override
+  String get coachTeachingMethod => 'Методологія викладання';
+
+  @override
+  String get coachPublicStudies => 'Публічні дослідження';
+
+  @override
+  String get coachYoutubeVideos => 'Відео на YouTube';
+
+  @override
+  String get coachAllCountries => 'Усі країни';
+
+  @override
+  String get coachLastLogin => 'Останній вхід';
+
+  @override
+  String get coachLichessRating => 'Рейтинг Lichess';
+
+  @override
   String get contactContact => 'Контакти';
 
   @override
@@ -3394,6 +3454,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get searchSearch => 'Пошук';
+
+  @override
+  String get searchSortBy => 'Сортувати по';
 
   @override
   String get settingsSettings => 'Налаштування';
@@ -7948,6 +8011,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String ublogXBlog(String param) {
     return 'Блог $param';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'Останні дописи у блозі';
 
   @override
   String get variantStandard => 'Стандартні шахи';

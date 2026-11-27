@@ -1389,6 +1389,66 @@ class AppLocalizationsHi extends AppLocalizations {
   String get challengeInviteLichessUser => 'Or invite a Lichess user:';
 
   @override
+  String get coachLichessCoaches => 'Lichess के कोच';
+
+  @override
+  String get coachLocation => 'स्थान';
+
+  @override
+  String get coachLanguages => 'भाषाएँ';
+
+  @override
+  String get coachRating => 'रेटिंग';
+
+  @override
+  String get coachHourlyRate => 'प्रति घंटा - दर';
+
+  @override
+  String get coachAvailability => 'उपलब्धता';
+
+  @override
+  String get coachAccepting => 'छात्रों को स्वीकार करना';
+
+  @override
+  String get coachNotAccepting => 'फिलहाल छात्रों को स्वीकार नहीं कर रहे हैं';
+
+  @override
+  String get coachSendPM => 'निजी संदेश भेजें';
+
+  @override
+  String get coachAboutMe => 'मेरे बारे में';
+
+  @override
+  String get coachPlayingExperience => 'खेल का अनुभव';
+
+  @override
+  String get coachTeachingExperience => 'पढ़ाने का तज़ुर्बा';
+
+  @override
+  String get coachOtherExperiences => 'अन्य अनुभव';
+
+  @override
+  String get coachBestSkills => 'सर्वश्रेष्ठ कौशल';
+
+  @override
+  String get coachTeachingMethod => 'शिक्षण पद्धति';
+
+  @override
+  String get coachPublicStudies => 'सार्वजनिक अध्ययन';
+
+  @override
+  String get coachYoutubeVideos => 'यूट्यूब वीडियो';
+
+  @override
+  String get coachAllCountries => 'All countries';
+
+  @override
+  String get coachLastLogin => 'Last login';
+
+  @override
+  String get coachLichessRating => 'Lichess rating';
+
+  @override
   String get contactContact => 'संपर्क';
 
   @override
@@ -3336,6 +3396,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get searchSearch => 'खोजें';
+
+  @override
+  String get searchSortBy => 'क्रमबद्ध करें';
 
   @override
   String get settingsSettings => 'व्यवस्था (सेटिंग्स)';
@@ -7764,6 +7827,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String ublogXBlog(String param) {
     return '$param का ब्लॉग';
   }
+
+  @override
+  String get ublogLatestBlogPosts => 'नवीनतम ब्लॉग पोस्ट';
 
   @override
   String get variantStandard => 'मानक';
