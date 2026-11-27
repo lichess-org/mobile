@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "902925578196",
+    "project_id": "lichess-dev",
+    "storage_bucket": "lichess-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:902925578196:android:aff6ae35b9a0ffe0d9f041",
+        "android_client_info": {
+          "package_name": "org.lichess.mobileV2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHhZMZadRMdS-jDbWIg5sa3vyU5YyK7yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
