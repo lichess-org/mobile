@@ -1,5 +1,6 @@
 import 'package:lichess_mobile/src/binding/binding.dart';
-import 'package:lichess_mobile/src/binding/crashlytics.dart';
+import 'package:lichess_mobile/src/model/crashlytics/crashlytics.dart';
+import 'package:lichess_mobile/src/model/crashlytics/crashlytics_noop.dart';
 
 /// Concrete implementation of [LichessBinding] for F-Droid.
 class FdroidLichessBinding() extends LichessBindingBase {

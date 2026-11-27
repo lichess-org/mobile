@@ -28,6 +28,12 @@ const kLichessTablebaseHost = String.fromEnvironment(
   defaultValue: 'tablebase.lichess.org',
 );
 
+const kLichessVapidPublicKey = String.fromEnvironment(
+  'LICHESS_VAPID_PUBLIC_KEY',
+  defaultValue:
+      'BGr5CL0QlEYa7qW7HLqe7DFkCeTsYMLsi1Db-5Vwt1QBIs6-WxN8066AjtP8S9u-w-CbleE8xWY-qQaNEMs7sAs',
+);
+
 const kLichessCustomUriSchemeName = 'org.lichess.mobile';
 
 const kLichessClientId = 'lichess_mobile';
