@@ -856,6 +856,7 @@ class const _GameBottomBar({
           ],
         ),
         BottomBarGroup(
+          navigation: true,
           children: [
             _MoveNavButton(id: id, forward: false),
             _MoveNavButton(id: id, forward: true),

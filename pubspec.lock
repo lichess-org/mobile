@@ -37,10 +37,10 @@ packages:
     dependency: transitive
     description:
       name: android_file_picker
-      sha256: ec3cf2a2c7a9b2bd56747e85f80efdd994e563049dfb0981a23903acfdd58cb5
+      sha256: b8462091dcdd075511a842272374be2232e917ee2a51ecdba4aca02bff529482
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   ansicolor:
     dependency: transitive
     description:
@@ -253,10 +253,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "7f8976ce1531399e42b4c5ad0937bd57bd93fbcff564f7d51c695be19850e977"
+      sha256: "9af7a54ce87cdcdf801cefac73e159862d355a256ea6c21a4f9597a16dd0ff86"
       url: "https://pub.dev"
     source: hosted
-    version: "1.10.1"
+    version: "1.10.2"
   cross_file:
     dependency: transitive
     description:
@@ -325,10 +325,10 @@ packages:
     dependency: transitive
     description:
       name: dbus
-      sha256: f7db8504e715b835f5ebe5fe74604ccd961d504c73389a5d8e81bafc2e2f3612
+      sha256: fe6b46eae35441227e9e750656d06a4f40c230fe96e4390da7d7ebc69a60f0b3
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.0"
+    version: "0.8.1"
   deep_pick:
     dependency: "direct main"
     description:
@@ -421,26 +421,26 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: c3780977700b8962c3b9b6a9aa4e2c988956893d70d4a4fa2d7adf4ec9b9eaee
+      sha256: "5b99250437a4d34ee2cdc0686924452103540eaa1c248094b63f07f9d7216f6c"
       url: "https://pub.dev"
     source: hosted
-    version: "13.4.0"
+    version: "13.4.1"
   file_picker_darwin:
     dependency: transitive
     description:
       name: file_picker_darwin
-      sha256: b7d3a6bd26a18c503d29070fc2d7b26fbfe918d08a6bcd984b6e806ff5ad923f
+      sha256: "34e3344225bccfa1d45a8af025da58702f13efecad67b763dc0eb2691f388afb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.1"
+    version: "2.5.2"
   file_picker_linux:
     dependency: transitive
     description:
       name: file_picker_linux
-      sha256: "9215ee8c672508cdd9a325202669f849e1baac883658626b3abed5d7777e6a4b"
+      sha256: cf3889644e8e54551f5c3a4f98b6b6ef5f0ef85c07d2a0c1a969538983be2f9b
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   file_picker_platform_interface:
     dependency: transitive
     description:
@@ -453,10 +453,10 @@ packages:
     dependency: transitive
     description:
       name: file_picker_web
-      sha256: "50749a6da2984fc29609e102ad4d80fd1d07e6895150f8e4922086167d9d45d8"
+      sha256: "97f7085e3c4f5724595bbd94e8f380f7a690e9066140a5fb711e97ac45a02008"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "4.2.2"
   file_selector_linux:
     dependency: transitive
     description:
@@ -578,18 +578,18 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_appauth
-      sha256: "6482ea76a8c617782574c33991bee0317fa1e699ddc833ce4fc3df88a672c7cb"
+      sha256: "0508c98ac15392bf572060d042ea0f52f3a92c42ebdd909867110e667c810e24"
       url: "https://pub.dev"
     source: hosted
-    version: "13.0.0"
+    version: "13.1.0"
   flutter_appauth_platform_interface:
     dependency: transitive
     description:
       name: flutter_appauth_platform_interface
-      sha256: c79452f9886a915569bc2e9df3f43af24ebb921cddf3c1f4d647b27db28bfb3e
+      sha256: "69dd2ab937a995e17428173bcbf97a11ca5be568f6e2518c3fcf28afb5a7148c"
       url: "https://pub.dev"
     source: hosted
-    version: "13.0.0"
+    version: "13.1.0"
   flutter_displaymode:
     dependency: "direct main"
     description:
@@ -610,10 +610,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: "7d37d69ded3028af4f22531a0097a3baa478a384dff2e23e873707c93df3b704"
+      sha256: "2b7579556c117b535ef83835798a7f3c4003dc892a888a4a99f2107bca7b6675"
       url: "https://pub.dev"
     source: hosted
-    version: "23.0.3"
+    version: "23.0.4"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
@@ -672,10 +672,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_onnxruntime
-      sha256: "94565ad2a3f6f92b2e09c1b274c8e5f47f7c0cda0675c5484d5e16a2c4761123"
+      sha256: "1e0f72a806808c73ea38231ffe14af8db4d27c535ffadadac4b66c29893148bd"
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.0"
+    version: "1.9.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -890,10 +890,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_ios
-      sha256: f4e5650a81b268af3886bc789216ff6d56bdfa79934f93f1a5a8a303b8f60f77
+      sha256: a4aeafbe049ad99882059f186862de6fd5296c708c5805277f6f684165268af1
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.13+15"
+    version: "0.8.13+16"
   image_picker_linux:
     dependency: transitive
     description:
@@ -946,18 +946,18 @@ packages:
     dependency: transitive
     description:
       name: jni
-      sha256: "2e91e6087291affd10b31b6c872f3e3ac7dc5d93b51b5ba485d930c8f08bde6c"
+      sha256: "19764f78f6b9e0d40f6395b04649d1046eb57f5ccf05afce50cc63e5a82777b0"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.2.1"
   jni_flutter:
     dependency: transitive
     description:
       name: jni_flutter
-      sha256: "0dd33d67797560f66e961a6053882d4df54bd345bf063b8fe7ea133f7ad8b191"
+      sha256: "586594ad345b403bda8a794b0b8a9e34298238b86c2a7d7f15160b092fe9ef3d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.4+1"
+    version: "1.1.0"
   jni_util:
     dependency: transitive
     description:
@@ -1034,10 +1034,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: "40c3f19a89b40166641cf205ff9ee883f45c0a54c1a0652e00bda8b07f82281c"
+      sha256: "639a658ef65fc976d81eab6a19106a6b226876c6d5f4b0ef1a19d067bb831e7a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.5"
+    version: "1.21.0"
   listen:
     dependency: transitive
     description:
@@ -1122,34 +1122,34 @@ packages:
     dependency: "direct main"
     description:
       name: multistockfish
-      sha256: "4c3ec47cb32368f19cc3e997d9cffcfbbec1a12bc9cc523cafd809922a7d513b"
+      sha256: eed43c758358f21ef01a141ae3ffd7fa1dabdbb6e4170116278b0c610df6ad80
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   multistockfish_chess:
     dependency: transitive
     description:
       name: multistockfish_chess
-      sha256: fada4413a8c9d211886ba5a9b9ed710f9c0773a9409e9aced3944bd0a62a32f5
+      sha256: "25b1aeaca88abeb9318e2e774b1c76015f5dc45f6e036298f13d04081108f5b1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.7.1"
   multistockfish_light:
     dependency: transitive
     description:
       name: multistockfish_light
-      sha256: f21a1c686254421731362bf40214f374370373dcfa8f909781fa70278a2abd33
+      sha256: "40c23c2b38f6ab3f6acdc7c585df1c19766857bb4ed9d349065196e75f0b68de"
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.1"
   multistockfish_variant:
     dependency: transitive
     description:
       name: multistockfish_variant
-      sha256: be519b8da20451a984d3b2adc814ee97bdef72e9eb3e608ec9c5e4e7ea44e56c
+      sha256: cfb8dc4c2a88a44c854612951aa3bb526cf869c9454a4d4ab4ccd19ca54a24f5
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   native_toolchain_c:
     dependency: transitive
     description:
@@ -1591,10 +1591,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "8765980411f9b6733534efe9d014fad0750fa649590598772c04692deb34886b"
+      sha256: "1ae2e821614e7b69628ecb64273e8bc5401b14ab166ee7ea0035c35bb136cbd7"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.1"
+    version: "3.9.2"
   stack_trace:
     dependency: transitive
     description:
@@ -1877,4 +1877,4 @@ packages:
     version: "3.1.4"
 sdks:
   dart: ">=3.14.0 <4.0.0"
-  flutter: "3.50.0"
+  flutter: "3.50.1"

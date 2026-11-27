@@ -7,6 +7,7 @@
   <string name="addToStudy" comment="Menu action in the analysis screen to add the current position or game to a study.">Lisa uuringusse</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kõik mängud</string>
   <string name="allowTakebacksAndHints" comment="Subtitle of the casual mode switch when playing against the offline computer.">Luba tagasivõtmised ja vihjed</string>
+  <string name="appLogs" comment="Settings entry and screen title showing the app logs stored on the device.">Rakenduse logid</string>
   <string name="amoledBlack" comment="Name of the pure black theme mode for AMOLED screens, shown in the app theme picker.">Amoled-must</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Kas oled kindel?</string>
   <string name="areYouSureDownloadNnue" comment="Confirmation dialog before downloading the Stockfish NNUE file. %s is the download size, e.g. '40MB'.">Kas oled kindel, et soovid alla laadida NNUE-faili (%s)?</string>
@@ -28,6 +29,7 @@
   <string name="customizeButton" comment="Text of a button, so translation should be short." maxLength="10">Kohanda</string>
   <string name="customizeHomeTip" comment="Shown in a widget on the home screen to let the user know that they can customize their homescreen">Nõuanne: võid avalehele lisada veel vidinaid või eemaldada need, mida enam ei vaja!</string>
   <string name="customizeHomeTipDismiss" comment="Hides the widget to customize the home screen.">Taganda</string>
+  <string name="deleteAllLogsConfirmation" comment="Title of the confirmation dialog asking whether to delete all stored logs.">Kas soovid kõik logid kustutada?</string>
   <string name="dangerZone" comment="Header of the settings section containing account deletion.">Ohutsoon</string>
   <string name="deleteYourAccount" comment="iOS-only settings entry that opens the account deletion page.">Kustuta oma konto</string>
   <string name="displayModeCompact" comment="Label of the game history display mode menu entry that switches to the compact game list.">Kompaktne</string>
@@ -46,6 +48,7 @@
   <string name="goodMoveButThereIsBetter" comment="Verdict shown in the offline computer game when the player's move is good but not the best move available.">Hea käik, aga on olemas parem</string>
   <string name="hello" comment="Label of the home screen 'Hello' widget in the home customization editor.">Tere</string>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kodu</string>
+  <string name="httpLogs" comment="Settings entry and screen title showing the network request logs stored on the device.">Võrgulogid</string>
   <string name="ifAccountMatchesCodeSent" comment="Shown after requesting an email login code. %1$s is the email address, %2$s is the code length.">Kui konto vastab aadressile %1$s, saadeti sellele %2$s märgikood. Vaata oma postkasti ja sisesta kood.</string>
   <string name="invalidOrExpiredLoginCode" comment="Error shown when an email login code is wrong or expired.">See kood on vigane või aegunud.</string>
   <string name="localDatabaseSize" comment="Settings screen entry showing the size of the local database.">Kohaliku andmebaasi suurus</string>
@@ -84,6 +87,7 @@
   <string name="practiceMode" comment="Offline computer game setting that enables practice mode.">Harjutuslaad</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Suurenda tiritud malendit</string>
   <string name="previousPage" comment="Shows the previous page, e.g. in tournament standings">Eelmine</string>
+  <string name="puzzleHistoryDescription" comment="Subtitle of the puzzle history entry on the puzzles tab.">Vaata üle oma varasemad puslede katsed.</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Kas soovid partii lõpetada?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Tulemused puuduvad, palun muuda filtreid</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Tulemused puuduvad. Mängi paar Puzzle Storm vooru.</string>
@@ -121,6 +125,7 @@
   <string name="settingsShowBorder" comment="Settings found in theme screen. If enabled a border will be shown around the board.">Näita piire</string>
   <string name="settingsTouchFeedback" comment="Entry in the settings. When enabled, the app will vibrate on some game events like move and capture.">Puutetagasiside</string>
   <string name="settingsTouchFeedbackSubtitle" comment="Help message for the touch feedback settings entry in main settings screen.">Kui lubatud, vibreerib seade lühidalt, kui liigutad või võtad lööd malendit.</string>
+  <string name="share" comment="Generic label of a button or menu action that shares something (a game, a position, a link...).">Jaga</string>
   <string name="shareChallengeUrl" comment="Bottom bar button that shares the open challenge URL.">Jaga väljakutse URL-i</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaga PGN</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaga mängu URL</string>
@@ -141,6 +146,7 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Süsteemi värvid</string>
   <string name="tablebaseOffline" comment="Message shown when the endgame tablebase is not available offline.">Lõppmängude andmebaas ei ole võrguühenduseta saadaval.</string>
   <string name="theme" comment="Graphic theme section in the global app settings.">Teema</string>
+  <string name="toBeAnnounced" comment="Label for a broadcast calendar section when the broadcast date has not been announced.">Teavitamisel</string>
   <string name="tooManyLoginAttempts" comment="Error shown when too many email login code requests were made.">Liiga palju katseid. Palun proovi hiljem uuesti.</string>
   <string name="tournamentCompleted" comment="Title of a tab in the tournament screen, showing tournaments that are already completed. Translation should be short ideally one word" maxLength="10">Lõpetatud</string>
   <string name="tournamentJumpToMyPage" comment="Accessibility description of a button that jumps to user's position in tournament standings">Mine minu lehele</string>

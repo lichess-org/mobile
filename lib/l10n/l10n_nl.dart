@@ -74,6 +74,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileClearButton => 'Wissen';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'De code verloopt na 5 minuten en kan slechts één keer gebruikt worden.';
 
   @override
@@ -390,7 +393,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsShapeDrawingSubtitle => 'Maak vormen door twee vingers te gebruiken: Houd één vinger op een leeg vakje en sleep een andere vinger om een vorm te tekenen.';
 
   @override
-  String get mobileSettingsShowBorder => 'Rand tonen';
+  String get mobileSettingsShowBorder => 'Rand weergeven';
 
   @override
   String get mobileSettingsTouchFeedback => 'Trillen bij aanraking';
@@ -485,7 +488,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileViewGame => 'Partij bekijken';
 
   @override
-  String get mobileViewLicenses => 'Licenties bekijken';
+  String get mobileViewLicenses => 'Licenties';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Wachten op een tegenstander...';
@@ -1280,6 +1283,9 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Vermeld deze stelling in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1307,7 +1313,7 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get challengeChallengeToPlay => 'Uitdagen voor een partij';
+  String get challengeChallengeToPlay => 'Uitdagen';
 
   @override
   String get challengeChallengeDeclined => 'Uitdaging geweigerd';
@@ -2418,9 +2424,6 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Zetbevestiging';
-
-  @override
-  String get preferencesMultipleChoices => 'Meerdere keuzes.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan tijdens een partij uitgeschakeld worden via het bordmenu';
@@ -4221,7 +4224,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get spectatorRoom => 'Toeschouwersruimte';
 
   @override
-  String get composeMessage => 'Een nieuw bericht schrijven';
+  String get composeMessage => 'Bericht';
 
   @override
   String get subject => 'Onderwerp';
@@ -4415,6 +4418,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get orUploadPgnFile => 'Of upload een PGN-bestand';
+
+  @override
+  String get selectImage => 'Afbeelding selecteren';
 
   @override
   String get continueFromHere => 'Ga vanaf hier verder';
@@ -5160,7 +5166,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get really => 'echt waar';
 
   @override
-  String get lichessUpdates => 'Lichess nieuws';
+  String get lichessUpdates => 'Lichess tijdlijn';
+
+  @override
+  String get allUpdates => 'Alle updates';
 
   @override
   String get contribute => 'Draag bij';

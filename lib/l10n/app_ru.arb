@@ -712,7 +712,6 @@
   "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Автоматически запрашивать ничью при трёхкратном повторении хода",
   "preferencesWhenTimeRemainingLessThanThirtySeconds": "Когда остаётся меньше 30 секунд",
   "preferencesMoveConfirmation": "Подтверждение хода",
-  "preferencesMultipleChoices": "Несколько вариантов.",
   "preferencesExplainCanThenBeTemporarilyDisabled": "Может быть отключено во время игры вместе с меню доски",
   "preferencesInCorrespondenceGames": "В игре по переписке",
   "preferencesCorrespondenceAndUnlimited": "По переписке и без ограничения времени",
@@ -1569,6 +1568,7 @@
   "xIsAFreeYLibreOpenSourceChessServer": "{param1} — бесплатный ({param2}) шахматный сервер с открытым исходным кодом без рекламы.",
   "really": "именно так",
   "lichessUpdates": "Обновления Lichess",
+  "allUpdates": "Все обновления",
   "contribute": "Внести вклад в развитие",
   "changelog": "Список изменений",
   "termsOfService": "Пользовательское соглашение",
@@ -1865,7 +1865,7 @@
   "mouseTricks": "Движения мышкой",
   "toggleLocalAnalysis": "Включить компьютерный анализ",
   "toggleAllAnalysis": "Переключить все способы компьютерного анализа",
-  "playComputerMove": "Play best computer move",
+  "playComputerMove": "Сыграть лучший ход по компьютеру",
   "analysisOptions": "Параметры анализа",
   "focusChat": "Переключиться в окно чата",
   "showHelpDialog": "Показать справку",
@@ -2239,7 +2239,7 @@
   "variantRacingKings": "Гонка королей",
   "variantRacingKingsTitle": "Проведите своего короля на другою сторону доски, чтобы победить.",
   "variantCrazyhouse": "Крейзихаус",
-  "variantCrazyhouseTitle": "Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.",
+  "variantCrazyhouseTitle": "Съеденные фигуры могут быть возвращены на доску вместо хода фигурой.",
   "variantFromPosition": "С позиции",
   "variantFromPositionTitle": "Стандартные шахматы с заданной позиции"
 }

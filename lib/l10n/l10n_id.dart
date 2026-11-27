@@ -74,6 +74,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get mobileClearButton => 'Hapus';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Kode berlaku selama 5 menit dan hanya bisa dipakai satu kali.';
 
   @override
@@ -1261,6 +1264,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2399,9 +2405,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Konfirmasi langkah';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dapat dimatikan selama permainan pada menu papan';
@@ -4393,6 +4396,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get orUploadPgnFile => 'Atau muat berkas PGN';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Lanjutkan dari sini';
 
   @override
@@ -5136,7 +5142,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get really => 'benar-benar';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Kontribusi';

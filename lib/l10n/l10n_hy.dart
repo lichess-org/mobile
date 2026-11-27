@@ -74,6 +74,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get mobileClearButton => 'Clear';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Քայլի հաստատում';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
@@ -4417,6 +4420,9 @@ class AppLocalizationsHy extends AppLocalizations {
   String get orUploadPgnFile => 'Կամ վերբեռնեք PGN ֆայլը';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Շարունակել այստեղից';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsHy extends AppLocalizations {
   String get really => 'հե՛նց այդպես';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Աջակցել զարգացմանը';
