@@ -285,7 +285,7 @@ class const _Body({required final User user, required final Perf perf}) extends 
             IconStatCard(
               icon: Icons.people_outline,
               label: context.l10n.averageOpponent,
-              value: data.avgOpponent == null ? '?' : _formatNumber(data.avgOpponent!.round()),
+              value: data.avgOpponent?.round().toString() ?? '?',
             ),
             cardSpace,
             IntrinsicHeight(
