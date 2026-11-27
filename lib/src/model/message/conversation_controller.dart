@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/message/message.dart';
 import 'package:lichess_mobile/src/model/message/message_repository.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -96,6 +97,7 @@ class ConversationController(final UserId userId) extends AsyncNotifier<Conversa
 
   void markAsRead() {
     _client.send('msgRead', userId.toString());
+    ref.read(notificationDismissalBusProvider).emit(ConversationRead(userId));
   }
 
   void setTyping(UserId destUserId) {

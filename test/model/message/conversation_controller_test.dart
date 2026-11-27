@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/message/conversation_controller.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 
@@ -118,6 +119,19 @@ Future<ProviderContainer> _makeContainer(String inboxJson, String userJson) {
 }
 
 void main() {
+  test('markAsRead emits a conversation read dismissal', () async {
+    final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);
+    final facts = <NotificationDismissal>[];
+    container.listen(notificationDismissalBusProvider, (_, _) {});
+    container.read(notificationDismissalBusProvider).stream.listen(facts.add);
+
+    container.read(conversationControllerProvider(_userId).notifier).markAsRead();
+    await Future<void>.delayed(Duration.zero);
+
+    expect(facts, [isA<ConversationRead>()]);
+    expect((facts.single as ConversationRead).conversationId, _userId);
+  });
+
   group('ConversationController blocking logic', () {
     test('isBlocked is false for a normal user that is not blocked', () async {
       final container = await _makeContainer(_inboxResponse, _userNotBlockedResponse);

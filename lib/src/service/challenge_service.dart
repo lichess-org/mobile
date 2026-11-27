@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_games_notifier.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/service/create_game_service.dart';
@@ -79,6 +80,7 @@ class ChallengeService(final Ref ref) {
 
   Future<void> _sendNotifications() async {
     final notificationService = ref.read(notificationServiceProvider);
+    final dismissalBus = ref.read(notificationDismissalBusProvider);
 
     final Iterable<ChallengeId> prevInwardIds =
         _previous?.inward.map((challenge) => challenge.id) ?? [];
@@ -87,9 +89,11 @@ class ChallengeService(final Ref ref) {
 
     // challenges that were canceled by challenger or expired
     await Future.wait(
-      prevInwardIds
-          .whereNot((challengeId) => currentInwardIds.contains(challengeId))
-          .map((id) async => await notificationService.cancel(id.value.hashCode)),
+      prevInwardIds.whereNot((challengeId) => currentInwardIds.contains(challengeId)).map((
+        id,
+      ) async {
+        dismissalBus.emit(ChallengeSettled(id));
+      }),
     );
 
     // new incoming challenges
@@ -182,6 +186,7 @@ class ChallengeService(final Ref ref) {
 
     final challengeRepo = ref.read(challengeRepositoryProvider);
     await challengeRepo.accept(id);
+    ref.read(notificationDismissalBusProvider).emit(ChallengeSettled(id));
     final fullId = await challengeRepo.show(id).then((challenge) => challenge.gameFullId);
 
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
@@ -208,6 +213,7 @@ class ChallengeService(final Ref ref) {
               isDestructiveAction: true,
               onPressed: () {
                 ref.read(challengeRepositoryProvider).decline(id, reason: reason);
+                ref.read(notificationDismissalBusProvider).emit(ChallengeSettled(id));
               },
             ),
           )

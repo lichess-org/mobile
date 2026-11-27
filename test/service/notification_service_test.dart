@@ -4,9 +4,12 @@ import 'dart:io';
 import 'package:fake_async/fake_async.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_dismissal.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_key.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/service/correspondence_service.dart';
@@ -16,6 +19,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../binding.dart';
 import '../model/auth/fake_auth_storage.dart';
+import '../model/notifications/fake_notification_display.dart';
 import '../test_container.dart';
 import '../test_helpers.dart';
 
@@ -347,6 +351,60 @@ void main() {
       await Future<void>.delayed(Duration.zero);
 
       expect(responses, isEmpty);
+    });
+  });
+
+  group('Dismissal bus:', () {
+    Future<({FakeNotificationDisplay display, ProviderContainer container})>
+    startWithRecordingDisplay() async {
+      final display = FakeNotificationDisplay();
+      final container = await makeContainer(
+        overrides: {
+          notificationDisplayProvider: notificationDisplayProvider.overrideWithValue(display),
+        },
+      );
+      container.read(notificationServiceProvider).start();
+      return (display: display, container: container);
+    }
+
+    test('clears a private-message notification when the conversation is read', () async {
+      final (:display, :container) = await startWithRecordingDisplay();
+      const conversationId = UserId('opponent');
+
+      container.read(notificationDismissalBusProvider).emit(const ConversationRead(conversationId));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(display.cancelCalls, [conversationId.hashCode]);
+    });
+
+    test('clears a correspondence notification when the game is no longer relevant', () async {
+      final (:display, :container) = await startWithRecordingDisplay();
+      const fullId = GameFullId('Fn9UvVKFsopx');
+
+      container.read(notificationDismissalBusProvider).emit(const GameNoLongerRelevant(fullId));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(display.cancelCalls, [fullId.hashCode]);
+    });
+
+    test('clears a challenge notification when the challenge is settled', () async {
+      final (:display, :container) = await startWithRecordingDisplay();
+      const challengeId = ChallengeId('H9fIRZUk');
+
+      container.read(notificationDismissalBusProvider).emit(const ChallengeSettled(challengeId));
+      await Future<void>.delayed(Duration.zero);
+
+      expect(display.cancelCalls, [challengeId.value.hashCode]);
+    });
+
+    test('notification keys keep the historical ids', () {
+      const conversationId = UserId('opponent');
+      const fullId = GameFullId('Fn9UvVKFsopx');
+      const challengeId = ChallengeId('H9fIRZUk');
+
+      expect(const ConversationKey(conversationId).id, conversationId.hashCode);
+      expect(const GameKey(fullId).id, fullId.hashCode);
+      expect(const ChallengeKey(challengeId).id, challengeId.value.hashCode);
     });
   });
 }

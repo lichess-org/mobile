@@ -9,6 +9,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_key.dart';
 import 'package:lichess_mobile/src/model/user/user.dart' show TemporaryBan;
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart' show relativeDate;
@@ -284,6 +285,9 @@ class const UnhandledFcmMessage(final Map<String, dynamic> data) extends FcmMess
 /// A notification shown to the user from the platform's notification system.
 @immutable
 sealed class const LocalNotification() {
+  /// The key used to clear this notification, or null if it is never cleared.
+  NotificationKey? get key => null;
+
   /// The unique identifier of the notification.
   int get id;
 
@@ -389,7 +393,10 @@ class const PlaybanNotification(final TemporaryBan playban) extends LocalNotific
   String get payloadType => 'playban';
 
   @override
-  int get id => playban.date.toIso8601String().hashCode;
+  NotificationKey get key => PlaybanKey(playban.date);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -442,7 +449,10 @@ class const NewMessageNotification(
   String get payloadType => 'newMessage';
 
   @override
-  int get id => conversationId.hashCode;
+  NotificationKey get key => ConversationKey(conversationId);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -496,7 +506,10 @@ class const CorresGameUpdateNotification(
   String get payloadType => 'corresGameUpdate';
 
   @override
-  int get id => fullId.hashCode;
+  NotificationKey get key => GameKey(fullId);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -548,7 +561,10 @@ class const CorresChallengeAcceptedNotification(
   String get payloadType => 'challengeAccept';
 
   @override
-  int get id => fullId.hashCode;
+  NotificationKey get key => GameKey(fullId);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -601,7 +617,10 @@ class const CorresChallengeCreatedNotification(
   String get payloadType => 'challengeCreate';
 
   @override
-  int get id => challengeId.hashCode;
+  NotificationKey get key => ChallengeKey(challengeId);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {
@@ -657,7 +676,10 @@ class const AnnounceNotification(
       );
 
   @override
-  int get id => notificationId;
+  NotificationKey get key => const AnnounceKey();
+
+  @override
+  int get id => key.id;
 
   @override
   NotificationChannel get channel => .announce;
@@ -715,7 +737,10 @@ class const ChallengeNotification(final Challenge challenge) extends LocalNotifi
   String get payloadType => 'challenge';
 
   @override
-  int get id => challenge.id.value.hashCode;
+  NotificationKey get key => ChallengeKey(challenge.id);
+
+  @override
+  int get id => key.id;
 
   @override
   Map<String, dynamic> get _concretePayload => {'challenge': challenge.toJson()};
