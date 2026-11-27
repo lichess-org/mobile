@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_slot.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 import 'package:lichess_mobile/src/model/engine/engine_transport.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_transport.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('EngineFactory');
@@ -53,15 +55,15 @@ class const EngineCreationAbandoned(final EngineSpec spec) implements Exception 
       'EngineCreationAbandoned: the $spec that arrived after its create had given up was disposed';
 }
 
-/// Creates engines, one per [EngineSlot].
+/// Creates engines, one per native [EngineSlot].
 ///
 /// This is the only place that knows a native engine takes a moment to let go of its slot: a
 /// create that follows a dispose waits for the previous engine to finish exiting, so callers never
 /// see the plugin refuse an engine as a result of ordinary provider churn.
-class EngineFactory({EngineConnector? connect}) {
-  final EngineConnector _connect = connect ?? _connectToPlugin;
+class EngineFactory({required EngineConnector connect}) {
+  final EngineConnector _connect = connect;
 
-  /// The engine holding each slot, until it reports that it is gone.
+  /// The engine holding each native slot, until it reports that it is gone.
   final Map<EngineSlot, Engine> _live = {};
 
   /// The create in flight on each slot, if there is one.
@@ -173,12 +175,14 @@ class EngineFactory({EngineConnector? connect}) {
       throw EngineCreationAbandoned(spec);
     }
 
-    _live[spec.slot] = engine;
-    unawaited(
-      engine.death.then((_) {
-        if (identical(_live[spec.slot], engine)) _live.remove(spec.slot);
-      }),
-    );
+    if (spec.slot.isNative) {
+      _live[spec.slot] = engine;
+      unawaited(
+        engine.death.then((_) {
+          if (identical(_live[spec.slot], engine)) _live.remove(spec.slot);
+        }),
+      );
+    }
 
     return engine;
   }
@@ -195,15 +199,19 @@ class _Attempt() {
   Future<void>? claim;
 }
 
-Future<EngineTransport> _connectToPlugin(EngineSpec spec) => switch (spec) {
+Future<EngineTransport> _connectTransport(EngineSpec spec, Ref ref) => switch (spec) {
   final StockfishSpec stockfish => StockfishTransport.connect(stockfish),
   final Lc0Spec lc0 => Lc0Transport.connect(lc0),
+  final ExternalEngineSpec external => ExternalEngineTransport.connect(
+    external,
+    ref.read(defaultClientProvider),
+  ),
 };
 
 /// The app's [EngineFactory].
 ///
 /// Overriding this is how tests get fake engines; nothing else in the app creates one.
 final engineFactoryProvider = Provider<EngineFactory>(
-  (ref) => EngineFactory(),
+  (ref) => EngineFactory(connect: (spec) => _connectTransport(spec, ref)),
   name: 'EngineFactoryProvider',
 );

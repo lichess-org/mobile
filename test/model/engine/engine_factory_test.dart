@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/engine/engine_failure.dart';
 import 'package:lichess_mobile/src/model/engine/engine_spec.dart';
 
 import 'fake_engine.dart';
+import 'fake_external_engines.dart';
 
 /// A minimal search, for checking which engine answers it.
 SearchRequest makeRequest() => const SearchRequest(
@@ -24,6 +25,9 @@ SearchRequest makeRequest() => const SearchRequest(
 /// A factory that starts [engine] instead of a real one.
 EngineFactory factoryFor(FakeEngine engine) => EngineFactory(connect: engine.connect);
 
+ExternalEngineSpec externalSpec(String id) =>
+    ExternalEngineSpec(testExternalEngine.copyWith(id: id));
+
 void main() {
   group('EngineFactory', () {
     test('starts an engine that answers its handshake', () async {
@@ -36,6 +40,20 @@ void main() {
 
       expect(started.spec, const StockfishSpec.light());
       expect(started.name.value, 'Stockfish 19');
+    });
+
+    test('two external engines can be live at once', () async {
+      final engine = FakeEngine();
+      final factory = factoryFor(engine);
+
+      final first = await factory.create(externalSpec('eei_aTKImBJOnv6j'));
+      addTearDown(first.dispose);
+      final second = await factory.create(externalSpec('eei_bMLJnCKPow7k'));
+      addTearDown(second.dispose);
+
+      expect(engine.sessions, hasLength(2));
+      expect(engine.quitCount, 0);
+      expect(second.spec, isNot(first.spec));
     });
 
     test('a create waits for the engine it replaces to finish exiting', () async {

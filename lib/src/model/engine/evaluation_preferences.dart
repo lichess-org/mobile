@@ -60,6 +60,10 @@ class EngineEvaluationPreferences()
   Future<void> setEvaluationFunction(ChessEnginePref enginePref) {
     return save(state.copyWith(enginePref: enginePref));
   }
+
+  Future<void> setExternalEngine(String? engineId) {
+    return save(state.copyWith(externalEngineId: engineId));
+  }
 }
 
 enum ChessEnginePref() {
@@ -102,6 +106,11 @@ sealed class const EngineEvaluationPrefState._()
     required Duration engineSearchTime,
     @JsonKey(defaultValue: ChessEnginePref.sfLight, unknownEnumValue: ChessEnginePref.sfLight)
     required ChessEnginePref enginePref,
+
+    /// The external engine to evaluate with, or null for the engine on this device.
+    ///
+    /// Kept when the engine is unavailable: the evaluator falls back to this device on its own.
+    String? externalEngineId,
   }) = _EngineEvaluationPrefState;
 
   static const defaults = EngineEvaluationPrefState(

@@ -34,6 +34,7 @@ String _engineNameFor(EngineSpec spec) => switch (spec) {
   StockfishSpec(flavor: StockfishFlavor.latestNoNNUE) => 'Stockfish 19',
   StockfishSpec(flavor: StockfishFlavor.variant) => 'Fairy-Stockfish',
   Lc0Spec() => 'Lc0 v0.32.1',
+  ExternalEngineSpec(:final engine) => engine.name,
 };
 
 /// Minimum depth for an eval to be accepted by the evaluation service.

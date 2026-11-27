@@ -1,7 +1,11 @@
+import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/engine/engine_utils.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine.dart';
+import 'package:lichess_mobile/src/model/engine/external_engine_repository.dart';
 import 'package:lichess_mobile/src/service/weights_service.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -75,6 +79,11 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final prefs = ref.watch(engineEvaluationPreferencesProvider);
+    final engines =
+        ref.watch(externalEnginesProvider).value ?? const IListConst<ExternalEngine>([]);
+    final externalEngine = engines.firstWhereOrNull(
+      (engine) => engine.id == prefs.externalEngineId,
+    );
 
     return PlatformScaffold(
       appBar: PlatformAppBar(title: Text(context.l10n.mobileChessEngine)),
@@ -91,28 +100,36 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
                   settingsLabel: Text(context.l10n.mobileChessEngine),
                   // The check tells apart the net that is on disk from the one still to download:
                   // it only means something for the latest engine, the light one ships with the app.
-                  settingsValue:
-                      prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == true
-                      ? '${prefs.enginePref.label} \u2713'
-                      : prefs.enginePref.label,
+                  settingsValue: switch (externalEngine) {
+                    final engine? => engine.name,
+                    null when prefs.enginePref == .sfLatest && _hasVerifiedNNUEFile == true =>
+                      '${prefs.enginePref.label} \u2713',
+                    null => prefs.enginePref.label,
+                  },
                   onTap: () {
-                    showChoicePicker(
+                    showChoicePicker<({ChessEnginePref local, ExternalEngine? external})>(
                       context,
-                      choices: ChessEnginePref.values,
-                      selectedItem: prefs.enginePref,
-                      labelBuilder: (ChessEnginePref t) => Text(t.label),
-                      onSelectedItemChanged: (ChessEnginePref? value) {
-                        ref
-                            .read(engineEvaluationPreferencesProvider.notifier)
-                            .setEvaluationFunction(value ?? ChessEnginePref.sfLight);
-                        if (value == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false) {
+                      choices: [
+                        for (final local in ChessEnginePref.values) (local: local, external: null),
+                        for (final engine in engines) (local: prefs.enginePref, external: engine),
+                      ],
+                      selectedItem: (local: prefs.enginePref, external: externalEngine),
+                      labelBuilder: (choice) => Text(choice.external?.name ?? choice.local.label),
+                      onSelectedItemChanged: (choice) async {
+                        final notifier = ref.read(engineEvaluationPreferencesProvider.notifier);
+                        await notifier.setExternalEngine(choice.external?.id);
+                        if (choice.external != null) return;
+                        await notifier.setEvaluationFunction(choice.local);
+                        if (choice.local == .sfLatest && _hasVerifiedNNUEFile == false) {
                           _startDownload();
                         }
                       },
                     );
                   },
                 ),
-                if (prefs.enginePref == ChessEnginePref.sfLatest && _hasVerifiedNNUEFile == false)
+                if (externalEngine == null &&
+                    prefs.enginePref == ChessEnginePref.sfLatest &&
+                    _hasVerifiedNNUEFile == false)
                   LoadingButtonBuilder(
                     initialFuture: _downloadNNUEFileFuture,
                     fetchData: () => ref
@@ -146,7 +163,9 @@ class _EngineSettingsScreenState() extends ConsumerState<EngineSettingsScreen> {
                       );
                     },
                   ),
-                if (_hasVerifiedNNUEFile == false && _hasUnusableNNUEFiles)
+                if (externalEngine == null &&
+                    _hasVerifiedNNUEFile == false &&
+                    _hasUnusableNNUEFiles)
                   ListTile(
                     trailing: const Icon(Icons.delete),
                     title: const Text('Delete unusable NNUE files'),
