@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -24,6 +23,7 @@ import 'package:lichess_mobile/src/tab_navigation.dart' show currentNavigatorKey
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:logging/logging.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 /// A provider for [CorrespondenceService].
 final correspondenceServiceProvider = Provider<CorrespondenceService>((Ref ref) {
@@ -134,10 +134,11 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
         .fetchGamesWithRegisteredMove(_authUser?.user.id)
         .then((games) => games.map((e) => e.$2).toList());
 
-    WebSocket.userAgent = ref.read(userAgentProvider);
-    final Map<String, String> wsHeaders = _authUser != null
-        ? {'Authorization': 'Bearer ${signBearerToken(_authUser!.token)}'}
-        : {};
+    final channelFactory = ref.read(webSocketChannelFactoryProvider);
+    final wsHeaders = {
+      'User-Agent': ref.read(userAgentProvider),
+      if (_authUser != null) 'Authorization': 'Bearer ${signBearerToken(_authUser!.token)}',
+    };
 
     int movesPlayed = 0;
 
@@ -146,15 +147,16 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
         continue;
       }
       final uri = lichessWSUri('/play/${gameToSync.fullId}/v6');
-      WebSocket? socket;
+      WebSocketChannel? channel;
       StreamSubscription<SocketEvent>? streamSubscription;
       try {
-        socket = await WebSocket.connect(
+        channel = await channelFactory.create(
           uri.toString(),
           headers: wsHeaders,
-        ).timeout(const Duration(seconds: 5));
+          timeout: const Duration(seconds: 5),
+        );
 
-        final eventStream = socket
+        final eventStream = channel.stream
             .where((e) => e != '0')
             .map((e) => SocketEvent.fromJson(jsonDecode(e as String) as Map<String, dynamic>));
 
@@ -183,7 +185,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
           _log.info(
             'Playing move ${gameToSync.registeredMoveAtPgn!.$2} on game ${gameToSync.id} now...',
           );
-          socket.add(
+          channel.sink.add(
             jsonEncode({
               't': 'move',
               'd': {'u': gameToSync.registeredMoveAtPgn!.$2.uci},
@@ -202,7 +204,7 @@ class CorrespondenceService(final Logger _log, {required final Ref ref}) {
         _log.severe('Failed to sync correspondence game ${gameToSync.id}', e, st);
       } finally {
         streamSubscription?.cancel();
-        socket?.close();
+        channel?.sink.close();
       }
     }
 

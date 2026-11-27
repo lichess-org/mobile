@@ -15,9 +15,11 @@ import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
+import 'package:lichess_mobile/src/network/cupertino_web_socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:web_socket_channel/adapter_web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -251,10 +253,10 @@ class SocketClient(
     }
     final uri = lichessWSUri(route.path, queryParameters.isNotEmpty ? queryParameters : null);
 
-    final Map<String, String> headers = authUser != null
-        ? {'Authorization': 'Bearer ${signBearerToken(authUser.token)}'}
-        : {};
-    WebSocket.userAgent = makeUserAgent(packageInfo, deviceInfo, sri, authUser?.user);
+    final headers = {
+      'User-Agent': makeUserAgent(packageInfo, deviceInfo, sri, authUser?.user),
+      if (authUser != null) 'Authorization': 'Bearer ${signBearerToken(authUser.token)}',
+    };
 
     _logger.info('Creating WebSocket connection to $route');
 
@@ -1078,7 +1080,16 @@ final webSocketChannelFactoryProvider = Provider<WebSocketChannelFactory>((Ref r
 ///
 /// These are the two [WebSocketChannelFactory.create] documents, and the only two that say nothing
 /// beyond that. Anything else means the server answered.
-bool _isTransportUnavailable(Object error) => error is SocketException || error is TimeoutException;
+bool _isTransportUnavailable(Object error) => switch (error) {
+  SocketException() || TimeoutException() => true,
+  CupertinoWebSocketException(:final isTransportUnavailable) => isTransportUnavailable,
+  _ => false,
+};
+
+/// Whether to open the WebSocket connections with `NSURLSession` on iOS rather than with `dart:io`.
+///
+/// On by default; `--dart-define=CUPERTINO_WEBSOCKET=false` turns it off, to compare the two.
+const _useCupertinoWebSocket = bool.fromEnvironment('CUPERTINO_WEBSOCKET', defaultValue: true);
 
 /// A factory to create a [WebSocketChannel].
 ///
@@ -1086,14 +1097,32 @@ bool _isTransportUnavailable(Object error) => error is SocketException || error 
 class const WebSocketChannelFactory() {
   /// Creates a [WebSocketChannel] from the given [url].
   ///
+  /// On iOS the connection goes through `NSURLSession` (see [CupertinoWebSocket]), so that it
+  /// follows the system proxy and VPN settings; elsewhere it is a `dart:io` [WebSocket].
+  ///
   /// Throws a [TimeoutException] if the connection takes too long.
-  /// Throws a [SocketException] if the connection fails.
+  /// Throws a [SocketException] (`dart:io`) or a [CupertinoWebSocketException] (iOS) if the
+  /// connection fails.
   Future<WebSocketChannel> create(
     String url, {
-    Map<String, dynamic>? headers,
+    Map<String, String> headers = const {},
     Duration timeout = const Duration(seconds: 10),
   }) async {
-    final socket = await WebSocket.connect(url, headers: headers).timeout(timeout);
+    if (_useCupertinoWebSocket && Platform.isIOS) {
+      final socket = await CupertinoWebSocket.connect(
+        Uri.parse(url),
+        headers: headers,
+        timeout: timeout,
+      );
+      return AdapterWebSocketChannel(socket);
+    }
+
+    // `dart:io` adds a `User-Agent` header to its own rather than replacing it.
+    final ioHeaders = Map.of(headers);
+    if (ioHeaders.remove('User-Agent') case final userAgent?) {
+      WebSocket.userAgent = userAgent;
+    }
+    final socket = await WebSocket.connect(url, headers: ioHeaders).timeout(timeout);
 
     return IOWebSocketChannel(socket);
   }

@@ -44,7 +44,7 @@ class ListenableFakeWebSocketChannelFactory(
   @override
   Future<WebSocketChannel> create(
     String url, {
-    Map<String, dynamic>? headers,
+    Map<String, String> headers = const {},
     Duration timeout = const Duration(seconds: 1),
   }) {
     final route = Uri(path: Uri.parse(url).path);
@@ -66,7 +66,7 @@ class const FakeWebSocketChannelFactory(
   @override
   Future<WebSocketChannel> create(
     String url, {
-    Map<String, dynamic>? headers,
+    Map<String, String> headers = const {},
     Duration timeout = const Duration(seconds: 1),
   }) {
     return Future.value(createFunction(Uri.parse(url)));
@@ -83,7 +83,7 @@ class const DelayedFakeWebSocketChannelFactory(
   @override
   Future<WebSocketChannel> create(
     String url, {
-    Map<String, dynamic>? headers,
+    Map<String, String> headers = const {},
     Duration timeout = const Duration(seconds: 1),
   }) {
     return Future.delayed(delay, () => createFunction(Uri.parse(url)));
