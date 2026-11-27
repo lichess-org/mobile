@@ -327,12 +327,12 @@ class _BodyState() extends ConsumerState<_Body> {
                           enabled: hasAjustedColors,
                           leading: Icon(
                             Icons.clear,
-                            color: hasAjustedColors ? lichessCustomColors.error : null,
+                            color: hasAjustedColors ? lichessCustomColors.red : null,
                           ),
                           title: Text(
                             context.l10n.boardReset,
                             style: TextStyle(
-                              color: hasAjustedColors ? lichessCustomColors.error : null,
+                              color: hasAjustedColors ? lichessCustomColors.red : null,
                             ),
                           ),
                           onTap: hasAjustedColors

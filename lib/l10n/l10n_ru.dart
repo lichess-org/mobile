@@ -74,6 +74,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileClearButton => 'Очистить';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Код истекает через 5 минут и может быть использован только один раз.';
 
   @override
@@ -1320,6 +1323,9 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2462,9 +2468,6 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Подтверждение хода';
-
-  @override
-  String get preferencesMultipleChoices => 'Несколько вариантов.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Может быть отключено во время игры вместе с меню доски';
@@ -4473,6 +4476,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get orUploadPgnFile => 'Или загрузите PGN-файл';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Продолжить с этой позиции';
 
   @override
@@ -5217,6 +5223,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get lichessUpdates => 'Обновления Lichess';
+
+  @override
+  String get allUpdates => 'Все обновления';
 
   @override
   String get contribute => 'Внести вклад в развитие';
@@ -6195,7 +6204,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get toggleAllAnalysis => 'Переключить все способы компьютерного анализа';
 
   @override
-  String get playComputerMove => 'Play best computer move';
+  String get playComputerMove => 'Сыграть лучший ход по компьютеру';
 
   @override
   String get analysisOptions => 'Параметры анализа';
@@ -7986,7 +7995,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get variantCrazyhouse => 'Крейзихаус';
 
   @override
-  String get variantCrazyhouseTitle => 'Срубленные фигуры могут быть возвращены на доску вместо хода фигурой.';
+  String get variantCrazyhouseTitle => 'Съеденные фигуры могут быть возвращены на доску вместо хода фигурой.';
 
   @override
   String get variantFromPosition => 'С позиции';

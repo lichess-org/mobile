@@ -198,7 +198,10 @@ class const ListSectionHeader({
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              child: Semantics(
+                headingLevel: 2,
+                child: DefaultTextStyle.merge(style: Styles.sectionTitle, child: title),
+              ),
             ),
             if (onTap != null)
               Row(

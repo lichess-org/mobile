@@ -74,6 +74,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get mobileClearButton => 'Löschen';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Der Code läuft nach 5 Minuten ab und kann nur einmal verwendet werden.';
 
   @override
@@ -952,7 +955,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastLiveBroadcasts => 'Live-Turnierübertragungen';
 
   @override
-  String get broadcastBroadcastCalendar => 'Sendekalender';
+  String get broadcastBroadcastCalendar => 'Übertragungskalender';
 
   @override
   String get broadcastNewBroadcast => 'Neue Liveübertragung';
@@ -1278,6 +1281,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'U$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Diese Stellung im Chat erwähnen';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2420,9 +2426,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Zugbestätigung';
 
   @override
-  String get preferencesMultipleChoices => 'Mehrere Auswahlmöglichkeiten.';
-
-  @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kann während einer Partie mittels Brettmenü deaktiviert werden';
 
   @override
@@ -3087,7 +3090,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get puzzleThemeKillBoxMateDescription => 'Ein Turm befindet sich neben dem gegnerischen König und wird durch die Dame unterstützt, welche ebenfalls die Fluchtfelder des Königs blockiert. Der Turm und die Dame halten den gegnerischen König in einer 3x3 \"Killbox\".';
 
   @override
-  String get puzzleThemePillsburysMate => 'Pillsburys Matt';
+  String get puzzleThemePillsburysMate => 'Pillsbury-Matt';
 
   @override
   String get puzzleThemePillsburyMateRookAndBishopDescription => 'Der Turm setzt den König Matt, während der Läufer hilft, ihn zu beschränken.';
@@ -4417,6 +4420,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get orUploadPgnFile => 'Oder lade eine PGN-Datei hoch';
 
   @override
+  String get selectImage => 'Bild auswählen';
+
+  @override
   String get continueFromHere => 'Von hier aus weiterspielen';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get really => 'wirklich';
 
   @override
-  String get lichessUpdates => 'Lichess-Updates';
+  String get lichessUpdates => 'Lichess-Feed';
+
+  @override
+  String get allUpdates => 'Alle Updates';
 
   @override
   String get contribute => 'Mitmachen';

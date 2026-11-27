@@ -708,6 +708,7 @@ class const _BroadcastGameBottomBar({
           },
         ),
         BottomBarGroup(
+          navigation: true,
           children: [
             RepeatButton(
               onLongPress: broadcastAnalysisState.canGoBack ? () => _moveBackward(ref) : null,

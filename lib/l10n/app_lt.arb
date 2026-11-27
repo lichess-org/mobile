@@ -1,4 +1,10 @@
 {
+  "mobileAcceptDraw": "Priimti lygiąsias?",
+  "mobileAccount": "Paskyra",
+  "mobileAccountPreferences": "Paskyros nuostatos",
+  "mobileAccountPreferencesHelp": "Šie nustatymai taikomi jūsų „Lichess“ paskyrai ir bus naudojami visuose įrenginiuose.",
+  "mobileAddToStudy": "Pridėti prie studijų",
+  "mobileAllowTakebacksAndHints": "Leisti atšaukti ėjimus ir rodyti patarimus",
   "mobileHomeTab": "Namai",
   "mobileOkButton": "OK",
   "mobileOverTheBoard": "Žaidimas lentoje",

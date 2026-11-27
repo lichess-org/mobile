@@ -74,6 +74,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileClearButton => '清空';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => '验证码 5 分钟后过期，且只能使用一次。';
 
   @override
@@ -1260,6 +1263,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => '在聊天中提及该局面';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2396,9 +2402,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => '着法确认';
-
-  @override
-  String get preferencesMultipleChoices => '多项选择。';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => '可在对局中通过棋盘菜单禁用';
@@ -4389,6 +4392,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get orUploadPgnFile => '或者上传 PGN 文件';
 
   @override
+  String get selectImage => '选择图像';
+
+  @override
   String get continueFromHere => '从此处继续';
 
   @override
@@ -5133,6 +5139,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lichessUpdates => 'Lichess 动态';
+
+  @override
+  String get allUpdates => '全部动态';
 
   @override
   String get contribute => '协助我们';
@@ -7456,8 +7465,7 @@ class AppLocalizationsZh extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
-      one: 'Paste your PGN text here, up to $count game.',
+      other: '在此处以 PGN 文本格式粘贴对局。每个对局将创建一个新章节。研习最多可包含 $count 个章节。',
     );
     return '$_temp0';
   }

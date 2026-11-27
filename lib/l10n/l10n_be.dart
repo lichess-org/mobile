@@ -74,6 +74,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobileClearButton => 'Ачысціць';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Тэрмін дзеяння кода — 5 хвілін. Код можна выкарыстаць толькі адзін раз.';
 
   @override
@@ -232,19 +235,19 @@ class AppLocalizationsBe extends AppLocalizations {
   String get mobilePerfShortClassical => 'Клясічныя';
 
   @override
-  String get mobilePerfShortCorrespondence => 'Corresp.';
+  String get mobilePerfShortCorrespondence => 'Г. па пер.';
 
   @override
-  String get mobilePerfShortCrazyhouse => 'Crazy';
+  String get mobilePerfShortCrazyhouse => 'Вар\'яцкі';
 
   @override
   String get mobilePerfShortFromPosition => 'З пазіцыі';
 
   @override
-  String get mobilePerfShortHorde => 'Horde';
+  String get mobilePerfShortHorde => 'Арда';
 
   @override
-  String get mobilePerfShortKingOfTheHill => 'KotH';
+  String get mobilePerfShortKingOfTheHill => 'Цар гары';
 
   @override
   String get mobilePerfShortPuzzle => 'Puzzle';
@@ -1318,6 +1321,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String broadcastUnderXEloTournament(String param) {
     return 'До$param';
   }
+
+  @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
 
   @override
   String broadcastNbBroadcasts(int count) {
@@ -2458,9 +2464,6 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Пацверджанне руху';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можа быць адключана падчас гульні з дапамогай меню дошкі';
@@ -4469,6 +4472,9 @@ class AppLocalizationsBe extends AppLocalizations {
   String get orUploadPgnFile => 'Або загрузіце PGN файл';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Працягнуць адсюль';
 
   @override
@@ -5212,7 +5218,10 @@ class AppLocalizationsBe extends AppLocalizations {
   String get really => 'чыстая праўда!';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Зрабіць унёсак';

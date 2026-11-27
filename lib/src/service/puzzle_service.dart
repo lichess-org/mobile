@@ -19,6 +19,12 @@ import 'package:result_extensions/result_extensions.dart';
 
 part 'puzzle_service.freezed.dart';
 
+/// Maximum number of solutions sent in a single solve batch request.
+///
+/// Lichess rejects a solve batch of 100 or more solutions with a 400 (`PuzzleForm.batch.isValid`
+/// in lila), so a larger backlog of offline solves is sent over several syncs.
+const kMaxSolvedPerBatch = 99;
+
 /// A provider for [PuzzleService].
 final puzzleServiceProvider = FutureProvider<PuzzleService>((Ref ref) {
   final nbOfflinePuzzles = ref.watch(
@@ -151,6 +157,11 @@ class PuzzleService(
     final unsolved = data?.unsolved ?? IList(const []);
     final solved = data?.solved ?? IList(const []);
 
+    // Send at most [kMaxSolvedPerBatch] solves per sync; the rest stay in storage and go out with
+    // the next syncs, one per puzzle played.
+    final solvedChunk = solved.take(kMaxSolvedPerBatch).toIList();
+    final unsentSolved = solved.skip(kMaxSolvedPerBatch).toIList();
+
     final deficit = max(0, queueLength - unsolved.length);
 
     // anonymous users can't solve puzzles, so their sync only ever downloads
@@ -173,8 +184,9 @@ class PuzzleService(
       final batchResponse = _ref.withClient(
         (client) => Result.capture(
           isSolving
-              ? PuzzleRepository(client)
-                    .solveBatch(nb: deficit, solved: solved, angle: angle, difficulty: difficulty)
+              ? PuzzleRepository(
+                  client,
+                ).solveBatch(nb: deficit, solved: solvedChunk, angle: angle, difficulty: difficulty)
               : PuzzleRepository(client)
                     .selectBatch(nb: deficit, angle: angle, difficulty: difficulty),
         ),
@@ -184,7 +196,7 @@ class PuzzleService(
           .fold(
             (value) => Result.value((
               PuzzleBatch(
-                solved: IList(const []),
+                solved: isSolving ? unsentSolved : IList(const []),
                 unsolved: IList([...unsolved, ...value.puzzles]),
               ),
               value.glicko,

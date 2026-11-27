@@ -74,6 +74,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileClearButton => 'सब हटाएं';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'कोड 5 मिनट बाद अमान्य हो जायेगा, और केवल एक बार इस्तेमाल हो सकता है।';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'चाल की पुष्टि करें';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'बोर्ड मेनू के साथ गेम के दौरान अक्षम किया जा सकता है';
@@ -4415,6 +4418,9 @@ class AppLocalizationsHi extends AppLocalizations {
   String get orUploadPgnFile => 'या PGN अपलोड करे|';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'यहाँ से जारी करें';
 
   @override
@@ -5158,7 +5164,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get really => 'सचमुच';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'सहयोग करें';

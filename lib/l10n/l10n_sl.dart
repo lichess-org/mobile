@@ -74,6 +74,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileClearButton => 'Počisti';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
@@ -1320,6 +1323,9 @@ class AppLocalizationsSl extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Omeni ta položaj v klepetu';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2462,9 +2468,6 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Potrditev poteze';
-
-  @override
-  String get preferencesMultipleChoices => 'Več možnosti.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Lahko ga onemogočite med igro z menijem plošče';
@@ -4473,6 +4476,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get orUploadPgnFile => 'Ali pa naložite datoteko PGN';
 
   @override
+  String get selectImage => 'Izberi sliko';
+
+  @override
   String get continueFromHere => 'Nadaljuj od tukaj';
 
   @override
@@ -5216,7 +5222,10 @@ class AppLocalizationsSl extends AppLocalizations {
   String get really => 'resnično';
 
   @override
-  String get lichessUpdates => 'Lichess updates';
+  String get lichessUpdates => 'Vir Lichess';
+
+  @override
+  String get allUpdates => 'Vse posodobitve';
 
   @override
   String get contribute => 'Prispevaj';

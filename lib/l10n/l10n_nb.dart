@@ -74,6 +74,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get mobileClearButton => 'Tøm';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koden utløper etter 5 minutter og kan bare brukes én gang.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Trekkbekreftelse';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan skrus av under partiene med menyen på brettet';
@@ -4417,6 +4420,9 @@ class AppLocalizationsNb extends AppLocalizations {
   String get orUploadPgnFile => 'Eller last opp en PGN-fil';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Fortsett herfra';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsNb extends AppLocalizations {
   String get really => 'virkelig';
 
   @override
-  String get lichessUpdates => 'Lichess-oppdateringer';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Bidra';

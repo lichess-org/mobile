@@ -90,8 +90,8 @@ class const GameListTile({
         : game.winner == null
         ? textShade(context, Styles.subtitleOpacity)
         : game.winner == youAre
-        ? context.lichessColors.good
-        : context.lichessColors.error;
+        ? context.lichessColors.green
+        : context.lichessColors.red;
 
     // The rating change when there is one, else a symbol of the result.
     final result = ratingDiff != null && !isAborted
@@ -151,19 +151,24 @@ class const GameListTile({
               const TextSpan(text: ' '),
             ],
             TextSpan(text: date),
-            if (!game.isImported) ...[
-              const TextSpan(text: '  '),
-              TextSpan(
-                text: result,
-                style: TextStyle(color: resultColor, fontWeight: FontWeight.w600),
-              ),
-            ],
           ],
         ),
       ),
-      trailing: me.analysis != null
-          ? Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.3))
-          : null,
+      trailing: game.isImported && me.analysis == null
+          ? null
+          : Row(
+              mainAxisSize: .min,
+              spacing: 8.0,
+              children: [
+                if (me.analysis != null)
+                  Icon(CupertinoIcons.chart_bar_alt_fill, color: textShade(context, 0.3)),
+                if (!game.isImported)
+                  Text(
+                    result,
+                    style: TextStyle(color: resultColor, fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+              ],
+            ),
     );
   }
 }
@@ -269,8 +274,8 @@ class const GameContextMenu({
                                   color: game.winner == null
                                       ? textShade(context, Styles.subtitleOpacity)
                                       : game.winner == mySide
-                                      ? context.lichessColors.good
-                                      : context.lichessColors.error,
+                                      ? context.lichessColors.green
+                                      : context.lichessColors.red,
                                 ),
                               ),
                             if (game.opening != null)

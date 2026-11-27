@@ -33,7 +33,7 @@ class const ChallengeListItem({
     final me = ref.watch(authControllerProvider)?.user;
     final isMyChallenge = me != null && me.id == challengerUser.id;
 
-    final color = isMyChallenge ? context.lichessColors.good.withValues(alpha: 0.2) : null;
+    final color = isMyChallenge ? context.lichessColors.green.withValues(alpha: 0.2) : null;
 
     final isFromPosition = challenge.variant == Variant.fromPosition;
 
@@ -61,7 +61,7 @@ class const ChallengeListItem({
           SwipeAction(
             icon: Icons.close,
             onPressed: onCancel!,
-            backgroundColor: context.lichessColors.error,
+            backgroundColor: context.lichessColors.red,
             foregroundColor: Colors.white,
             label: context.l10n.cancel,
           )
@@ -69,7 +69,7 @@ class const ChallengeListItem({
           SwipeAction(
             icon: Icons.close,
             onPressed: () => onDecline!(null),
-            backgroundColor: context.lichessColors.error,
+            backgroundColor: context.lichessColors.red,
             foregroundColor: Colors.white,
             label: context.l10n.decline,
           ),
@@ -77,7 +77,7 @@ class const ChallengeListItem({
           SwipeAction(
             icon: Icons.check,
             onPressed: onAccept!,
-            backgroundColor: context.lichessColors.good,
+            backgroundColor: context.lichessColors.green,
             foregroundColor: Colors.white,
             label: context.l10n.accept,
           ),

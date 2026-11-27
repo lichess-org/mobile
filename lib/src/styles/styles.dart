@@ -29,7 +29,6 @@ abstract class Styles() {
   static const subtitleOpacity = 0.7;
   static const timeControl = TextStyle(letterSpacing: 1.2);
   static const formLabel = TextStyle(fontWeight: FontWeight.bold);
-  static const formError = TextStyle(color: LichessColors.red);
   static const formDescription = TextStyle(fontSize: 12);
   static const noResultTextStyle = TextStyle(color: Colors.grey, fontSize: 20.0);
 
@@ -101,8 +100,8 @@ Color lighten(Color c, [double amount = .1]) {
 class const LichessCustomColors({
   required final Color cyan,
   required final Color brag,
-  required final Color good,
-  required final Color error,
+  required final Color green,
+  required final Color red,
   required final Color fancy,
   required final Color purple,
   required final Color primary,
@@ -111,8 +110,8 @@ class const LichessCustomColors({
   LichessCustomColors copyWith({
     Color? cyan,
     Color? brag,
-    Color? good,
-    Color? error,
+    Color? green,
+    Color? red,
     Color? fancy,
     Color? purple,
     Color? primary,
@@ -120,8 +119,8 @@ class const LichessCustomColors({
     return LichessCustomColors(
       cyan: cyan ?? this.cyan,
       brag: brag ?? this.brag,
-      good: good ?? this.good,
-      error: error ?? this.error,
+      green: green ?? this.green,
+      red: red ?? this.red,
       fancy: fancy ?? this.fancy,
       purple: purple ?? this.purple,
       primary: primary ?? this.primary,
@@ -136,8 +135,8 @@ class const LichessCustomColors({
     return LichessCustomColors(
       cyan: Color.lerp(cyan, other.cyan, t) ?? cyan,
       brag: Color.lerp(brag, other.brag, t) ?? brag,
-      good: Color.lerp(good, other.good, t) ?? good,
-      error: Color.lerp(error, other.error, t) ?? error,
+      green: Color.lerp(green, other.green, t) ?? green,
+      red: Color.lerp(red, other.red, t) ?? red,
       fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
       purple: Color.lerp(purple, other.purple, t) ?? purple,
       primary: Color.lerp(primary, other.primary, t) ?? primary,
@@ -148,8 +147,8 @@ class const LichessCustomColors({
     return copyWith(
       cyan: cyan.harmonizeWith(colorScheme.primary),
       brag: brag.harmonizeWith(colorScheme.primary),
-      good: good.harmonizeWith(colorScheme.primary),
-      error: error.harmonizeWith(colorScheme.primary),
+      green: green.harmonizeWith(colorScheme.primary),
+      red: red.harmonizeWith(colorScheme.primary),
       fancy: fancy.harmonizeWith(colorScheme.primary),
       purple: purple.harmonizeWith(colorScheme.primary),
       primary: primary.harmonizeWith(colorScheme.primary),
@@ -160,8 +159,8 @@ class const LichessCustomColors({
 const lichessCustomColors = LichessCustomColors(
   cyan: LichessColors.cyan,
   brag: LichessColors.brag,
-  good: LichessColors.good,
-  error: LichessColors.error,
+  green: LichessColors.green,
+  red: LichessColors.red,
   fancy: LichessColors.fancy,
   purple: LichessColors.purple,
   primary: LichessColors.primary,

@@ -74,6 +74,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mobileClearButton => 'Effacer';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Le code expire après 5 minutes et ne peut être utilisé qu\'une seule fois.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mentionner cette position dans le chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Confirmation de coup';
-
-  @override
-  String get preferencesMultipleChoices => 'Choix multiples.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Peut être désactivé pendant une partie grâce au menu de l\'échiquier';
@@ -4417,6 +4420,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get orUploadPgnFile => 'Ou téléverser un fichier PGN';
 
   @override
+  String get selectImage => 'Sélectionner une image';
+
+  @override
   String get continueFromHere => 'Continuer depuis cette position';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get really => 'pour de vrai';
 
   @override
-  String get lichessUpdates => 'Mises à jour de Lichess';
+  String get lichessUpdates => 'Nouvelles Lichess';
+
+  @override
+  String get allUpdates => 'Toutes les nouvelles';
 
   @override
   String get contribute => 'Contribuer';

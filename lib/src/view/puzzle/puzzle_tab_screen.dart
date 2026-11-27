@@ -489,7 +489,7 @@ class const PuzzleAnglePreview({
                         ref.invalidate(savedBatchesProvider);
                       }
                     },
-                    backgroundColor: context.lichessColors.error,
+                    backgroundColor: context.lichessColors.red,
                     foregroundColor: Colors.white,
                     label: context.l10n.delete,
                   ),

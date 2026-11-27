@@ -74,6 +74,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileClearButton => 'Tyhjennä';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Koodi vanhenee 5 minuutissa ja on kertakäyttöinen.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mainitse tämä asema chatissa';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1829,7 +1835,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get learnTheGameIsADraw => 'Peli päättyy tasan';
 
   @override
-  String get learnStalemateIntro => 'Kun pelaaja ei ole shakissa mutta hänellä ei ole laillista siirtoa, tilanne on patti. Peli päätty tasan, kumpikaan ei voita, kumpikaan ei häviä.';
+  String get learnStalemateIntro => 'Kun pelaaja ei ole shakissa mutta hänellä ei ole laillista siirtoa, tilanne on patti. Peli päättyy tasan; kumpikaan ei voita, kumpikaan ei häviä.';
 
   @override
   String get learnStalemateGoal => 'Mustan patittaminen:\n- Musta ei voi liikkua minnekään\n- Musta ei ole shakissa.';
@@ -2418,9 +2424,6 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Siirron vahvistus';
-
-  @override
-  String get preferencesMultipleChoices => 'Monivalinta.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Voidaan poistaa käytöstä pelin aikana lautavalikon kautta';
@@ -4417,6 +4420,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get orUploadPgnFile => 'Tai lataa PGN-tiedosto';
 
   @override
+  String get selectImage => 'Valitse kuva';
+
+  @override
   String get continueFromHere => 'Jatka tästä';
 
   @override
@@ -4767,7 +4773,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get descPrivate => 'Yksityinen kuvaus';
 
   @override
-  String get descPrivateHelp => 'Teksti, jonka vain joukkueen jäsenet näkevät. Tähän laadittu kuvaus korvaa joukkueen jäseneiden kohdalla julkisen kuvauksen.';
+  String get descPrivateHelp => 'Teksti, jonka vain joukkueen jäsenet näkevät. Tähän laadittu kuvaus korvaa joukkueen jäsenten kohdalla julkisen kuvauksen.';
 
   @override
   String get no => 'Ei';
@@ -5160,7 +5166,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get really => 'oikeasti';
 
   @override
-  String get lichessUpdates => 'Lichessin päivitykset';
+  String get lichessUpdates => 'Lichess-syöte';
+
+  @override
+  String get allUpdates => 'Kaikki päivitykset';
 
   @override
   String get contribute => 'Osallistu';

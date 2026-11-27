@@ -74,6 +74,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobileClearButton => 'Malplenigi';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'The code expires after 5 minutes and can only be used once.';
 
   @override
@@ -1280,6 +1283,9 @@ class AppLocalizationsEo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Mention this position in chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2418,9 +2424,6 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Konfirmo de movo';
-
-  @override
-  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Povas esti malebligita dum ludo kun la tabulo menuo';
@@ -4417,6 +4420,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get orUploadPgnFile => 'Aŭ alŝuti PGN-dosieron';
 
   @override
+  String get selectImage => 'Select image';
+
+  @override
   String get continueFromHere => 'Daŭrigi de ĉi tie';
 
   @override
@@ -5160,7 +5166,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get really => 'vere';
 
   @override
-  String get lichessUpdates => 'Ĝisdatigoj de Lichess';
+  String get lichessUpdates => 'Lichess feed';
+
+  @override
+  String get allUpdates => 'All updates';
 
   @override
   String get contribute => 'Kontribui';

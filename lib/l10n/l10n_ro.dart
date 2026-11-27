@@ -74,6 +74,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileClearButton => 'Resetare';
 
   @override
+  String get mobileClearMoves => 'Clear moves';
+
+  @override
   String get mobileCodeExpiresMessage => 'Codul expiră după 5 minute și poate fi folosit o singură dată.';
 
   @override
@@ -1300,6 +1303,9 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get broadcastMentionPositionInChat => 'Menționează această poziție în chat';
+
+  @override
   String broadcastNbBroadcasts(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2440,9 +2446,6 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get preferencesMoveConfirmation => 'Confirmare mutare';
-
-  @override
-  String get preferencesMultipleChoices => 'Alegere multiplă.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
@@ -4445,6 +4448,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get orUploadPgnFile => 'Sau încarcă un fișier PGN';
 
   @override
+  String get selectImage => 'Selectare imagine';
+
+  @override
   String get continueFromHere => 'Continuați de aici';
 
   @override
@@ -5188,7 +5194,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get really => 'pe bune';
 
   @override
-  String get lichessUpdates => 'Actualizări Lichess';
+  String get lichessUpdates => 'Noutăți Lichess';
+
+  @override
+  String get allUpdates => 'Toate actualizările';
 
   @override
   String get contribute => 'Contribuie';

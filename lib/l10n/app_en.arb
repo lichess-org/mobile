@@ -27,6 +27,7 @@
   "mobileChessEngine": "Chess engine",
   "mobileChooseCustomBackground": "Choose a custom background",
   "mobileClearButton": "Clear",
+  "mobileClearMoves": "Clear moves",
   "mobileCodeExpiresMessage": "The code expires after 5 minutes and can only be used once.",
   "mobileCodeFieldLabel": "Code",
   "mobileCodeLengthMessage": "The code is {param} characters long.",
@@ -707,6 +708,7 @@
       }
     }
   },
+  "broadcastMentionPositionInChat": "Mention this position in chat",
   "broadcastNbBroadcasts": "{count, plural, =1{{count} broadcast} other{{count} broadcasts}}",
   "@broadcastNbBroadcasts": {
     "placeholders": {
@@ -1247,7 +1249,6 @@
   "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Claim draw on threefold repetition automatically",
   "preferencesWhenTimeRemainingLessThanThirtySeconds": "When time remaining < 30 seconds",
   "preferencesMoveConfirmation": "Move confirmation",
-  "preferencesMultipleChoices": "Multiple choices.",
   "preferencesExplainCanThenBeTemporarilyDisabled": "Can be disabled during a game with the board menu",
   "preferencesInCorrespondenceGames": "Correspondence games",
   "preferencesCorrespondenceAndUnlimited": "Correspondence and unlimited",
@@ -2209,6 +2210,7 @@
   "pasteTheFenStringHere": "Paste the FEN text here",
   "pasteThePgnStringHere": "Paste the PGN text here",
   "orUploadPgnFile": "Or upload a PGN file",
+  "selectImage": "Select image",
   "continueFromHere": "Continue from here",
   "toStudy": "Study",
   "importGame": "Import game",
@@ -2645,7 +2647,8 @@
     }
   },
   "really": "really",
-  "lichessUpdates": "Lichess updates",
+  "lichessUpdates": "Lichess feed",
+  "allUpdates": "All updates",
   "contribute": "Contribute",
   "changelog": "Changelog",
   "termsOfService": "Terms of Service",

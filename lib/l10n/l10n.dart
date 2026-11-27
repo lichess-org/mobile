@@ -322,6 +322,12 @@ abstract class AppLocalizations {
   /// **'Clear'**
   String get mobileClearButton;
 
+  /// No description provided for @mobileClearMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear moves'**
+  String get mobileClearMoves;
+
   /// No description provided for @mobileCodeExpiresMessage.
   ///
   /// In en, this message translates to:
@@ -2313,6 +2319,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'U{param}'**
   String broadcastUnderXEloTournament(String param);
+
+  /// No description provided for @broadcastMentionPositionInChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Mention this position in chat'**
+  String get broadcastMentionPositionInChat;
 
   /// No description provided for @broadcastNbBroadcasts.
   ///
@@ -4473,12 +4485,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Move confirmation'**
   String get preferencesMoveConfirmation;
-
-  /// No description provided for @preferencesMultipleChoices.
-  ///
-  /// In en, this message translates to:
-  /// **'Multiple choices.'**
-  String get preferencesMultipleChoices;
 
   /// No description provided for @preferencesExplainCanThenBeTemporarilyDisabled.
   ///
@@ -8224,6 +8230,12 @@ abstract class AppLocalizations {
   /// **'Or upload a PGN file'**
   String get orUploadPgnFile;
 
+  /// No description provided for @selectImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select image'**
+  String get selectImage;
+
   /// No description provided for @continueFromHere.
   ///
   /// In en, this message translates to:
@@ -9613,8 +9625,14 @@ abstract class AppLocalizations {
   /// No description provided for @lichessUpdates.
   ///
   /// In en, this message translates to:
-  /// **'Lichess updates'**
+  /// **'Lichess feed'**
   String get lichessUpdates;
+
+  /// No description provided for @allUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'All updates'**
+  String get allUpdates;
 
   /// No description provided for @contribute.
   ///
