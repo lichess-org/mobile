@@ -20,6 +20,32 @@ void main() {
   String formatDate(int millis) => dateFormat.format(DateTime.fromMillisecondsSinceEpoch(millis));
 
   group('PlayableGame', () {
+    for (final (initial, emergency) in const [
+      (0, Duration(seconds: 2)),
+      (5, Duration(seconds: 2)),
+      (15, Duration(seconds: 3)),
+      (30, Duration(seconds: 6)),
+      (59, Duration(milliseconds: 11800)),
+      (60, Duration(seconds: 10)),
+      (90, Duration(milliseconds: 11250)),
+      (180, Duration(milliseconds: 22500)),
+      (480, Duration(seconds: 60)),
+      (600, Duration(seconds: 60)),
+    ]) {
+      for (final increment in [0, 5]) {
+        test('clock warning threshold for $initial seconds with $increment increment', () {
+          final json = jsonDecode(_unfinishedGameJson) as Map<String, dynamic>;
+          final clock = json['clock'] as Map<String, dynamic>;
+          clock['initial'] = initial;
+          clock['increment'] = increment;
+          clock['emerg'] = 10;
+          final game = PlayableGame.fromServerJson(json);
+
+          expect(game.meta.clock?.emergency, emergency);
+        });
+      }
+    }
+
     test('makePgn, unfinished game', () {
       final game = PlayableGame.fromServerJson(
         jsonDecode(_unfinishedGameJson) as Map<String, dynamic>,

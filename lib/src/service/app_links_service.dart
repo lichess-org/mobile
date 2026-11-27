@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_player_results_scree
 import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
+import 'package:lichess_mobile/src/view/practice/practice_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/view/study/study_screen.dart';
 import 'package:lichess_mobile/src/view/tournament/tournament_screen.dart';
@@ -174,8 +175,20 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
         final playerId = playerName != null ? UserId.fromUserName(playerName) : null;
         return [TournamentScreen.buildRoute(tournamentId, initialPlayerId: playerId)];
       case 'training':
-        final id = appLinkUri.pathSegments[1];
-        return [PuzzleScreen.buildRoute(angle: PuzzleAngle.fromKey('mix'), puzzleId: PuzzleId(id))];
+        final id = appLinkUri.pathSegments.getOrNull(1);
+        return [
+          PuzzleScreen.buildRoute(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzleId: id != null ? PuzzleId(id) : null,
+            openCasual: id != null,
+          ),
+        ];
+      case 'practice' when appLinkUri.pathSegments.length == 1:
+        return [PracticeScreen.buildRoute()];
+      case 'analysis' when appLinkUri.pathSegments.length == 1:
+        return [
+          AnalysisScreen.buildRoute(const AnalysisOptions.standalone(variant: Variant.standard)),
+        ];
       case 'editor':
         final orientation = appLinkUri.queryParameters['color'] == 'black'
             ? Side.black
@@ -242,6 +255,13 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
       case 'game':
         final gameRoutes = await _tryResolveGameLink(context, appLinkUri);
         if (gameRoutes != null) return gameRoutes;
+      // Legacy /gameid link, which lila still redirects to /game/gameid. It comes after the other
+      // cases so that a known route such as /training/white is never taken for a game.
+      case _ when _isLegacyGameLink(appLinkUri):
+        return await _tryResolveGameLink(
+          context,
+          appLinkUri.replace(pathSegments: ['game', ...appLinkUri.pathSegments]),
+        );
     }
 
     return null;
@@ -321,6 +341,13 @@ class AppLinksService(final Ref ref, {AppLinks? appLinks}) {
     }
     return false;
   }
+
+  /// Whether [appLinkUri] is a legacy `/gameid` or `/gameid/{color}` game link.
+  static bool _isLegacyGameLink(Uri appLinkUri) => switch (appLinkUri.pathSegments) {
+    // The length check comes first because the GameId constructor asserts it.
+    [final id] || [final id, 'black' || 'white'] => id.length == 8 && GameId(id).isValid,
+    _ => false,
+  };
 
   Future<List<Route<dynamic>>?> _tryResolveGameLink(BuildContext context, Uri appLinkUri) async {
     try {

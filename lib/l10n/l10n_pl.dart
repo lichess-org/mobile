@@ -30,6 +30,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Zezwalaj na cofanie ruchów i podpowiedzi';
 
   @override
+  String get mobileAppLogs => 'Logi aplikacji';
+
+  @override
   String get mobileAmoledBlack => 'Czysta czerń';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Wyłącz';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Czy chcesz usunąć wszystkie logi?';
+
+  @override
   String get mobileDangerZone => 'Strefa zagrożenia';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileHomeTab => 'Start';
 
   @override
+  String get mobileHttpLogs => 'Logi sieciowe';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'Jeśli konto pasuje do $param1, kod $param2 został do niego wysłany. Sprawdź swoją skrzynkę odbiorczą i wprowadź kod poniżej.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'Ten kod jest nieprawidłowy lub wygasł.';
-
-  @override
-  String get mobileLiveStreamers => 'Aktywni streamerzy';
 
   @override
   String get mobileLocalDatabaseSize => 'Rozmiar lokalnej bazy danych';
@@ -279,6 +285,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobilePreviousPage => 'Wróć';
 
   @override
+  String get mobilePuzzleHistoryDescription => 'Przejrzyj swoje wcześniejsze próby rozwiązania zadania.';
+
+  @override
   String get mobilePuzzleStormConfirmEndRun => 'Czy chcesz zakończyć tę serię?';
 
   @override
@@ -390,6 +399,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'Po włączeniu urządzenie delikatnie zawibruje, gdy wykonasz ruch lub zbijesz bierkę.';
 
   @override
+  String get mobileShare => 'Udostępnij';
+
+  @override
   String get mobileShareChallengeUrl => 'Udostępnij link do wyzwania';
 
   @override
@@ -448,6 +460,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get mobileTheme => 'Motyw';
+
+  @override
+  String get mobileToBeAnnounced => 'Do ogłoszenia';
 
   @override
   String get mobileTooManyLoginAttempts => 'Zbyt wiele prób. Spróbuj ponownie później.';
@@ -818,6 +833,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaNewTeamBattle => 'Nowa bitwa klubów';
 
   @override
+  String get arenaStartDate => 'Data rozpoczęcia';
+
+  @override
+  String get arenaEntryConditions => 'Warunki dołączenia';
+
+  @override
   String get arenaCustomStartDate => 'Niestandardowa data rozpoczęcia';
 
   @override
@@ -928,6 +949,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get arenaLeaguesAndStreamerBattles => 'Ligi & Bitwy Streamerów';
 
   @override
+  String get arenaAllowBotAccounts => 'Zezwalaj na konta botów';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Pozwól <a href=\'$param\' target=\'_blank\'>botom</a> dołączyć do turnieju i graj z ich silnikami. To często zniechęca prawdziwych graczy.';
+  }
+
+  @override
   String arenaDrawingWithinNbMoves(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -972,7 +1001,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastSubscribedBroadcasts => 'Subskrybowane transmisje';
 
   @override
-  String get broadcastAboutBroadcasts => 'O transmisji';
+  String get broadcastAboutBroadcasts => 'O transmisjach';
 
   @override
   String get broadcastHowToUseLichessBroadcasts => 'Jak korzystać z transmisji na Lichess.';
@@ -993,7 +1022,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastRoundName => 'Nazwa rundy';
 
   @override
-  String get broadcastTournamentName => 'Nazwa turnieju';
+  String get broadcastTournamentName => 'Nazwa wydarzenia';
 
   @override
   String get broadcastTournamentDescription => 'Krótki opis turnieju';
@@ -1003,7 +1032,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String broadcastFullDescriptionHelp(String param1, String param2) {
-    return 'Opcjonalny długi opis transmisji. $param1 jest dostępny. Długość musi być mniejsza niż $param2 znaków.';
+    return 'Opcjonalny długi opis transmisji. Możesz użyć $param1 dla dodatkowych opcji formatowania. Długość musi być mniejsza niż $param2 znaków.';
   }
 
   @override
@@ -1162,7 +1191,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get broadcastTournamentFormat => 'Format turnieju';
 
   @override
-  String get broadcastTournamentLocation => 'Lokalizacja turnieju';
+  String get broadcastTournamentLocation => 'Lokalizacja wydarzenia';
 
   @override
   String get broadcastTopPlayers => 'Najlepsi gracze';
@@ -1435,7 +1464,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesACoordinateAppears => 'Wyświetlą się współrzędne, a Ty musisz kliknąć odpowiednie pole.';
 
   @override
-  String get coordinatesASquareIsHighlightedExplanation => 'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. \"e4\").';
+  String get coordinatesASquareIsHighlightedExplanation => 'Na szachownicy podświetli się jedno z pól i musisz wprowadzić jego współrzędne (np. „e4”).';
 
   @override
   String get coordinatesYouHaveThirtySeconds => 'Masz 30 sekund, aby wskazać tak wiele pól, jak to możliwe!';
@@ -1462,7 +1491,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get coordinatesNameSquare => 'Nazwij pole';
 
   @override
-  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny & rzędy';
+  String get coordinatesPracticeOnlySomeFilesAndRanks => 'Poćwicz tylko niektóre kolumny i rzędy';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Wprowadź współrzędne';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Naciśnij $param aby rozpocząć';
+  }
 
   @override
   String get learnLearnChess => 'Ucz się szachów';
@@ -1989,7 +2026,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get learnRetry => 'Spróbuj jeszcze raz';
 
   @override
-  String get patronDonate => 'Przekaż datek';
+  String get patronDonate => 'Dotacja';
 
   @override
   String get patronLichessPatron => 'Patron Lichess';
@@ -2103,7 +2140,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get perfStatNow => 'teraz';
 
   @override
-  String get practiceMakesPerfect => 'czyni z Ciebie mistrza szachów';
+  String get practiceMakesPerfect => 'czynią z Ciebie mistrza szachów';
 
   @override
   String get practiceSignUpToSaveYourProgress => 'Zarejestruj się, aby zapisać swoje postępy';
@@ -2148,7 +2185,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStNamThePin => 'Związanie';
 
   @override
-  String get practiceStNamTheSkewer => 'Szpila';
+  String get practiceStNamTheSkewer => 'Rożen';
 
   @override
   String get practiceStNamTheFork => 'Widełki';
@@ -2208,7 +2245,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStNam7thRankRookPawn => 'Pion wieżowy na siódmej linii';
 
   @override
-  String get practiceStNamBasicRookEndgames => 'Podstawowe końcowki wieżowe';
+  String get practiceStNamBasicRookEndgames => 'Podstawowe końcówki wieżowe';
 
   @override
   String get practiceStNamIntermediateRookEndings => 'Średniozaawansowane końcówki wieżowe';
@@ -2229,10 +2266,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStDesInteractiveLesson => 'Interaktywna lekcja';
 
   @override
-  String get practiceStDesPinItToWinIt => 'Zwiąż, aby wygrać';
+  String get practiceStDesPinItToWinIt => 'Zwiąż, by wziąć';
 
   @override
-  String get practiceStDesYumSkewers => 'Mniam, szpile!';
+  String get practiceStDesYumSkewers => 'Mniam, rożen!';
 
   @override
   String get practiceStDesUseTheForkLuke => 'Niech widełki będą z tobą';
@@ -2268,7 +2305,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get practiceStDesLureAPieceToABadSquare => 'Zwab figurę na słabe pole';
 
   @override
-  String get practiceStDesPromoteButNotToAQueen => 'Promuj - ale nie do hetmana!';
+  String get practiceStDesPromoteButNotToAQueen => 'Promuj — ale nie do hetmana!';
 
   @override
   String get practiceStDesAPieceIsLostButItCanStillHelp => 'Figura stracona, ale nadal może być użyteczna';
@@ -2412,7 +2449,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'Automatyczna promocja na hetmana';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz <ctrl> podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz ctrl podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
 
   @override
   String get preferencesWhenPremoving => 'W czasie ruchu planowanego';
@@ -2427,7 +2464,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
 
   @override
-  String get preferencesMultipleChoices => 'Możesz wybrać kilka. ';
+  String get preferencesMultipleChoices => 'Możesz wybrać kilka.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
@@ -2523,7 +2560,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get preferencesInlineNotation => 'Notacja ciągła';
 
   @override
-  String get preferencesShowServerAnalysis => 'Pokaż analizę serwera';
+  String get preferencesShowMainlineAnalysis => 'Pokaż analizę głównej linii';
 
   @override
   String get preferencesShowBestMoveArrows => 'Pokaż strzałkę najlepszego ruchu';
@@ -2551,6 +2588,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Pokaż możliwość zaszachowania króla';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Pokaż złapane w pułapkę bierki';
 
   @override
   String get preferencesDisclosureMode => 'Włącz ukrywanie wariantów';
@@ -2956,9 +2996,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get puzzleThemeCastling => 'Roszada';
 
   @override
-  String get puzzleThemeEnPassant => 'Bicie w przelocie';
-
-  @override
   String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
 
   @override
@@ -3050,6 +3087,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'Taktyka w ostatniej fazie gry.';
+
+  @override
+  String get puzzleThemeEnPassant => 'Bicie w przelocie';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go, wykonawszy swoje początkowe posunięcie o dwa pola.';
@@ -3398,9 +3438,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'Rozumiem, że usunięte konta nie są możliwe do odzyskania';
-
-  @override
-  String get gameSetup => 'Ustawienia gry';
 
   @override
   String get challengeAFriend => 'Rzuć wyzwanie znajomemu';
@@ -3847,6 +3884,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get engineSettings => 'Ustawienia silnika';
+
+  @override
+  String get engine => 'Silnik';
 
   @override
   String get enginesFromStrongestToWeakest => 'Silniki szachowe od najmocniejszego do najsłabszego';
@@ -4475,6 +4515,11 @@ class AppLocalizationsPl extends AppLocalizations {
   String get noNetwork => 'Offline';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Znajomi online: $param1\nZnajomi grający: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'Ulubieni przeciwnicy';
 
   @override
@@ -4600,6 +4645,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get resume => 'Wznów';
+
+  @override
+  String get stop => 'Zatrzymaj';
 
   @override
   String get youArePlaying => 'Grasz!';
@@ -4841,9 +4889,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reason => 'Powód';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'Oszust';
 
   @override
@@ -4860,9 +4905,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'Szybciej przetwarzymy Twoje zgłoszenie, jeśli napiszesz do nas po angielsku.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5442,7 +5484,13 @@ class AppLocalizationsPl extends AppLocalizations {
   String get downloadImported => 'Pobierz zaimportowane';
 
   @override
+  String get downloadMyGames => 'Pobierz moje partie';
+
+  @override
   String get downloadAllGames => 'Pobierz wszystkie partie';
+
+  @override
+  String get downloadResults => 'Pobierz wyniki';
 
   @override
   String get crosstable => 'Wyniki spotkań';
@@ -6070,6 +6118,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get minimumRatedGames => 'Minimalna liczba partii rankingowych';
 
   @override
+  String get minimumAccountAge => 'Minimalny staż konta';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Nie dotyczy utytułowanych graczy.';
+
+  @override
   String get minimumRating => 'Minimalny ranking';
 
   @override
@@ -6209,7 +6263,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get showMeEverything => 'Pokaż mi wszystko';
 
   @override
-  String get lichessPatronInfo => 'Lichess jest organizacją niedochodową i całkowicie darmowym otwartym oprogramowaniem.\nWszystkie koszty operacyjne, rozwój i treści są finansowane wyłącznie z darowizn użytkowników.';
+  String get lichessPatronInfo => 'Lichess jest organizacją charytatywną i całkowicie darmowym otwartym oprogramowaniem. Nasze koszty operacyjne, rozwój i treść zależą od darowizn użytkowników. Bez naszej szczodrej społeczności nie bylibyśmy w stanie utrzymać serwisu. Dziękujemy za dołączenie do nas!';
 
   @override
   String get nothingToSeeHere => 'W tej chwili nie ma nic do zobaczenia.';
@@ -6240,6 +6294,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get clearSearch => 'Wyczyść wyszukiwanie';
+
+  @override
+  String searchInX(String param) {
+    return 'Szukaj w \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -7072,6 +7131,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyKick => 'Wyrzuć';
 
   @override
+  String get studyRemove => 'Usuń';
+
+  @override
   String get studyLeaveTheStudy => 'Opuść opracowanie';
 
   @override
@@ -7103,9 +7165,6 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis => 'Tylko współautorzy opracowania mogą prosić o analizę komputerową.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'Uzyskaj pełną, zdalną analizę komputerową głównego wariantu.';
 
   @override
   String get studyMakeSureTheChapterIsComplete => 'Upewnij się, że rozdział jest kompletny. O jego analizę możesz poprosić tylko raz.';
@@ -7326,9 +7385,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyStart => 'Rozpocznij';
 
   @override
-  String get studySave => 'Zapisz';
-
-  @override
   String get studyClearChat => 'Wyczyść czat';
 
   @override
@@ -7349,13 +7405,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyGoodMove => 'Dobry ruch';
 
   @override
-  String get studyMistake => 'Pomyłka';
-
-  @override
   String get studyBrilliantMove => 'Świetny ruch';
-
-  @override
-  String get studyBlunder => 'Błąd';
 
   @override
   String get studyInterestingMove => 'Interesujący ruch';
@@ -7531,7 +7581,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Zaimportuj partię z sieci';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Wklej adres URL partii<br>(na przykład lichess.org/7fHIU0XI), <br>aby załadować posunięcia partii do rozdziału.';
+  String get studyLoadGameFromTheWebText => 'Wklej adres URL partii<br>(jak lichess.org/game/7fHIU0XI)<br>, aby umieścić posunięcia partii w rozdziale.';
 
   @override
   String get studyFromFenStringTitle => 'Z zapisu FEN pozycji';
@@ -7562,6 +7612,27 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'Przegrana białych, ale czarne nie mogą wygrać';
+
+  @override
+  String get studyAnalysisEditor => 'Edytor analiz';
+
+  @override
+  String get studyClearLocal => 'Wyczyścić analizę lokalną?';
+
+  @override
+  String get studyClearPublished => 'Wyczyścić opublikowaną analizę?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Poproś o analizę na serwerze';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analizuj na swoim urządzeniu';
+
+  @override
+  String get studySearchChapters => 'Szukaj rozdziałów';
+
+  @override
+  String get studySearchGames => 'Szukaj partii';
 
   @override
   String studyNbChapters(int count) {
@@ -7607,10 +7678,8 @@ class AppLocalizationsPl extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Wklej tutaj swój PGN, max $count partii',
-      many: 'Wklej tutaj swój PGN, max $count partii',
-      few: 'Wklej tutaj swój PGN, max $count partie',
-      one: 'Wklej tutaj swój PGN, max $count partię',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }

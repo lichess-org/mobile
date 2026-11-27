@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/tab_navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -52,15 +53,15 @@ class const OpeningThemeScreen({super.key}) extends ConsumerWidget {
             semanticsLabel: 'Sort openings',
             actions: [
               ContextMenuAction(
-                icon: sort == PuzzleOpeningSort.popular ? Icons.check : null,
                 label: context.l10n.popularOpenings,
+                selected: sort == PuzzleOpeningSort.popular,
                 onPressed: () {
                   ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.popular;
                 },
               ),
               ContextMenuAction(
-                icon: sort == PuzzleOpeningSort.alphabetical ? Icons.check : null,
                 label: 'Alphabetical',
+                selected: sort == PuzzleOpeningSort.alphabetical,
                 onPressed: () {
                   ref.read(_openingsSortProvider.notifier).state = PuzzleOpeningSort.alphabetical;
                 },
@@ -154,10 +155,9 @@ class const _OpeningFamily({
                 style: TextStyle(color: textShade(context, 0.5)),
               ),
               onTap: () {
-                Navigator.of(
-                  context,
-                  rootNavigator: true,
-                ).push(PuzzleScreen.buildRoute(angle: PuzzleOpening(openingFamily.key)));
+                Navigator.of(context).pushHidingTabBar(
+                  PuzzleScreen.buildRoute(angle: PuzzleOpening(openingFamily.key)),
+                );
               },
             ),
     );
@@ -193,10 +193,8 @@ class const _OpeningTile({
           ? Text('$count', style: TextStyle(color: textShade(context, Styles.subtitleOpacity)))
           : null,
       onTap: () {
-        Navigator.of(
-          context,
-          rootNavigator: true,
-        ).push(PuzzleScreen.buildRoute(angle: PuzzleOpening(openingKey)));
+        Navigator.of(context)
+            .pushHidingTabBar(PuzzleScreen.buildRoute(angle: PuzzleOpening(openingKey)));
       },
     );
   }

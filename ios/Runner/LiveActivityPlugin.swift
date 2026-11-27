@@ -485,18 +485,16 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
 
   @available(iOS 16.2, *)
   private func observe(_ activity: Activity<GameActivityAttributes>) {
-    Task { [weak self] in
+    Task { @MainActor [weak self] in
       for await state in activity.activityStateUpdates {
-        await MainActor.run {
-          #if DEBUG
-            NSLog("LiveActivityPlugin: %@ state %@", activity.id, Self.name(of: state))
-          #endif
-          if state == .dismissed || state == .ended {
-            self?.forget(activity.id)
-          }
-          self?.channel.invokeMethod(
-            "onActivityState", arguments: ["id": activity.id, "state": Self.name(of: state)])
+        #if DEBUG
+          NSLog("LiveActivityPlugin: %@ state %@", activity.id, Self.name(of: state))
+        #endif
+        if state == .dismissed || state == .ended {
+          self?.forget(activity.id)
         }
+        self?.channel.invokeMethod(
+          "onActivityState", arguments: ["id": activity.id, "state": Self.name(of: state)])
       }
     }
   }
@@ -522,6 +520,7 @@ public final class LiveActivityPlugin: NSObject, FlutterPlugin {
   @available(iOS 16.2, *)
   private static func name(of state: ActivityState) -> String {
     switch state {
+    case .pending: return "pending"
     case .active: return "active"
     case .ended: return "ended"
     case .dismissed: return "dismissed"

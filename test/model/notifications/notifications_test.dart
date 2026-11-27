@@ -205,7 +205,7 @@ void main() {
         const RemoteMessage(
           data: {'lichess.type': 'challengeCreate', 'lichess.challengeId': 'challenging'},
         ),
-        ChallengeCreatedNotification,
+        CorresChallengeCreatedNotification,
       ),
       (
         const RemoteMessage(
@@ -215,7 +215,7 @@ void main() {
             'lichess.fullId': '9wlmxmibr9gh',
           },
         ),
-        ChallengeAcceptedNotification,
+        CorresChallengeAcceptedNotification,
       ),
       (
         broadcastMessage('/broadcast/tata-steel-masters/round-3/RAIoMC7L'),

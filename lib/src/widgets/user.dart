@@ -30,9 +30,10 @@ class const ConnectedIcon({
     return Tooltip(
       message: label,
       child: Icon(
-        isConnected ? Symbols.wifi : Symbols.wifi_off,
-        color: isConnected ? null : textShade(context, 0.3),
+        isConnected ? Symbols.circle : Symbols.wifi_off,
+        color: isConnected ? context.lichessColors.good : textShade(context, 0.3),
         size: size,
+        fill: 1,
       ),
     );
   }
@@ -40,8 +41,8 @@ class const ConnectedIcon({
 
 /// App bar title for the user and profile screens.
 ///
-/// Shows the user's avatar and name, with a subtitle displaying the online
-/// status, or the time they were last seen active if offline.
+/// Shows the user's avatar and name, with a subtitle displaying the online status, or the time they
+/// were last seen active if offline.
 class const UserAppBarTitleWidget({
   required final LightUser user,
   required final bool isOnline,
@@ -58,7 +59,7 @@ class const UserAppBarTitleWidget({
     return Row(
       mainAxisSize: .min,
       children: [
-        UserAvatar(user, radius: 16),
+        UserAvatar(user, radius: 20),
         const SizedBox(width: 8),
         Flexible(
           child: Column(
@@ -67,11 +68,20 @@ class const UserAppBarTitleWidget({
             children: [
               UserFullNameWidget(user: user, showFlair: false),
               if (isOnline)
-                Text(
-                  context.l10n.online,
-                  style: subtitleTextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  mainAxisSize: .min,
+                  spacing: 4,
+                  children: [
+                    const ConnectedIcon(isConnected: true, size: 10),
+                    Flexible(
+                      child: Text(
+                        context.l10n.online,
+                        style: subtitleTextStyle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 )
               else if (seenAt != null)
                 Text(
@@ -274,7 +284,7 @@ class UserFullNameWidget extends ConsumerWidget {
               color: ratingDiff! > 0
                   ? context.lichessColors.good
                   : ratingDiff! == 0
-                  ? context.lichessColors.brag
+                  ? textShade(context, Styles.subtitleOpacity)
                   : context.lichessColors.error,
             ),
           ),
@@ -303,7 +313,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
 
   @override
   Widget build(BuildContext context) {
-    final client = ref.watch(defaultClientProvider);
+    final client = ref.watch(imageClientProvider);
     final user = widget.user;
     final initial = user.name[0].toUpperCase();
     final showFlair = user.flair != null && !_errorLoadingFlair;
@@ -311,7 +321,7 @@ class _UserAvatarState() extends ConsumerState<UserAvatar> {
     return CircleAvatar(
       radius: widget.radius,
       foregroundImage: showFlair ? HttpNetworkImage(lichessFlairSrc(user.flair!), client) : null,
-      onForegroundImageError: user.flair != null
+      onForegroundImageError: showFlair
           ? (_, _) => setState(() => _errorLoadingFlair = true)
           : null,
       backgroundColor: showFlair

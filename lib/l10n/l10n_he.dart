@@ -30,6 +30,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileAllowTakebacksAndHints => 'Allow takebacks and hints';
 
   @override
+  String get mobileAppLogs => 'App logs';
+
+  @override
   String get mobileAmoledBlack => 'Amoled black';
 
   @override
@@ -97,6 +100,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileCustomizeHomeTipDismiss => 'Dismiss';
 
   @override
+  String get mobileDeleteAllLogsConfirmation => 'Do you want to delete all logs?';
+
+  @override
   String get mobileDangerZone => 'Danger zone';
 
   @override
@@ -155,15 +161,15 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileHomeTab => 'בית';
 
   @override
+  String get mobileHttpLogs => 'Network logs';
+
+  @override
   String mobileIfAccountMatchesCodeSent(String param1, String param2) {
     return 'If an account matches $param1, a $param2 character code was sent to it. Check your inbox and enter the code below.';
   }
 
   @override
   String get mobileInvalidOrExpiredLoginCode => 'This code is invalid or has expired.';
-
-  @override
-  String get mobileLiveStreamers => 'שדרנים בשידור חי';
 
   @override
   String get mobileLocalDatabaseSize => 'Local database size';
@@ -211,13 +217,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobilePerfShortAntichess => 'Antichess';
 
   @override
-  String get mobilePerfShortAtomic => 'Atomic';
+  String get mobilePerfShortAtomic => 'אטומי';
 
   @override
   String get mobilePerfShortBlitz => 'Blitz';
 
   @override
-  String get mobilePerfShortBullet => 'Bullet';
+  String get mobilePerfShortBullet => 'קליע';
 
   @override
   String get mobilePerfShortChess960 => '960';
@@ -241,19 +247,19 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobilePerfShortKingOfTheHill => 'KotH';
 
   @override
-  String get mobilePerfShortPuzzle => 'Puzzle';
+  String get mobilePerfShortPuzzle => 'פאזל';
 
   @override
-  String get mobilePerfShortRacingKings => 'Racing';
+  String get mobilePerfShortRacingKings => 'מירוץ';
 
   @override
-  String get mobilePerfShortRapid => 'Rapid';
+  String get mobilePerfShortRapid => 'זריז';
 
   @override
   String get mobilePerfShortThreeCheck => '3check';
 
   @override
-  String get mobilePerfShortUltraBullet => 'Ultra';
+  String get mobilePerfShortUltraBullet => 'אולטרה';
 
   @override
   String get mobilePgnCopied => 'PGN copied.';
@@ -277,6 +283,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobilePreviousPage => 'Previous';
+
+  @override
+  String get mobilePuzzleHistoryDescription => 'Review your past puzzle attempts.';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'האם לסיים את הסבב?';
@@ -390,6 +399,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsTouchFeedbackSubtitle => 'When enabled, the device will vibrate shortly when you move or capture a piece.';
 
   @override
+  String get mobileShare => 'Share';
+
+  @override
   String get mobileShareChallengeUrl => 'Share challenge URL';
 
   @override
@@ -448,6 +460,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get mobileTheme => 'עיצוב';
+
+  @override
+  String get mobileToBeAnnounced => 'To be announced';
 
   @override
   String get mobileTooManyLoginAttempts => 'Too many attempts. Please try again later.';
@@ -800,6 +815,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get arenaNewTeamBattle => 'קרב צוותים חדש';
 
   @override
+  String get arenaStartDate => 'Start date';
+
+  @override
+  String get arenaEntryConditions => 'Entry conditions';
+
+  @override
   String get arenaCustomStartDate => 'תאריך התחלה';
 
   @override
@@ -908,6 +929,14 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get arenaLeaguesAndStreamerBattles => 'Leagues & Streamer Battles';
+
+  @override
+  String get arenaAllowBotAccounts => 'Allow bot accounts';
+
+  @override
+  String arenaAllowBotAccountsDescription(String param) {
+    return 'Let <a href=\'$param\' target=\'_blank\'>bots</a> join the tournament and play with their engines. This often repels human players.';
+  }
 
   @override
   String arenaDrawingWithinNbMoves(int count) {
@@ -1440,6 +1469,14 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get coordinatesPracticeOnlySomeFilesAndRanks => 'תרגול של שורות וטורים מסוימים';
+
+  @override
+  String get coordinatesEnterTheCoordinate => 'Enter the coordinate';
+
+  @override
+  String coordinatesPressEnterToStart(String param) {
+    return 'Press $param to start';
+  }
 
   @override
   String get learnLearnChess => 'ללמוד שחמט';
@@ -2389,7 +2426,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesPromoteToQueenAutomatically => 'הכתרה אוטומטית למלכה';
 
   @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'לחצו על מקש <ctrl> בזמן הקידום כדי להשבית זמנית את ההכתרה האוטומטית';
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the ctrl key while promoting to temporarily disable auto-promotion';
 
   @override
   String get preferencesWhenPremoving => 'כאשר מבצעים קדם-מהלך';
@@ -2404,7 +2441,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesMoveConfirmation => 'אישור המהלכים';
 
   @override
-  String get preferencesMultipleChoices => 'Multiple choices. ';
+  String get preferencesMultipleChoices => 'Multiple choices.';
 
   @override
   String get preferencesExplainCanThenBeTemporarilyDisabled => 'ניתן לביטול במהלך המשחק באמצעות תפריט הלוח';
@@ -2500,7 +2537,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get preferencesInlineNotation => 'Inline notation';
 
   @override
-  String get preferencesShowServerAnalysis => 'Show server analysis';
+  String get preferencesShowMainlineAnalysis => 'Show mainline analysis';
 
   @override
   String get preferencesShowBestMoveArrows => 'Show best move arrows';
@@ -2528,6 +2565,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get preferencesShowCheckableKing => 'Show checkable king';
+
+  @override
+  String get preferencesShowTrappedPieces => 'Show trapped pieces';
 
   @override
   String get preferencesDisclosureMode => 'Enable variation hiding';
@@ -2926,9 +2966,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get puzzleThemeCastling => 'הצרחה';
 
   @override
-  String get puzzleThemeEnPassant => 'הכאה דרך הילוכו';
-
-  @override
   String get puzzleThemeCastlingDescription => 'הביאו את המלך למקום מבטחים, והכינו את הצריח להתקפה.';
 
   @override
@@ -3020,6 +3057,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get puzzleThemeEndgameDescription => 'טקטיקה במהלך השלב האחרון של המשחק.';
+
+  @override
+  String get puzzleThemeEnPassant => 'הכאה דרך הילוכו';
 
   @override
   String get puzzleThemeEnPassantAdjacentCaptureDescription => 'A tactic involving the en passant rule, where a pawn can capture an opposing pawn that has just moved next to it with its initial two-square move.';
@@ -3368,9 +3408,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get settingsDeleteAccountConfirmText => 'I understand that deleted accounts aren\'t recoverable';
-
-  @override
-  String get gameSetup => 'הגדרת משחק';
 
   @override
   String get challengeAFriend => 'זימון חבר למשחק';
@@ -3817,6 +3854,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get engineSettings => 'Engine settings';
+
+  @override
+  String get engine => 'Engine';
 
   @override
   String get enginesFromStrongestToWeakest => 'Engines from strongest to weakest';
@@ -4445,6 +4485,11 @@ class AppLocalizationsHe extends AppLocalizations {
   String get noNetwork => 'לא מחובר';
 
   @override
+  String friendsOnlineAndPlaying(String param1, String param2) {
+    return 'Friends online: $param1\nFriends playing: $param2';
+  }
+
+  @override
   String get favoriteOpponents => 'יריבים מועדפים';
 
   @override
@@ -4570,6 +4615,9 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get resume => 'המשך';
+
+  @override
+  String get stop => 'Stop';
 
   @override
   String get youArePlaying => 'את/ה משחק/ת!';
@@ -4811,9 +4859,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get reason => 'סיבה';
 
   @override
-  String get whatIsIheMatter => 'What\'s the matter?';
-
-  @override
   String get cheat => 'רמאות';
 
   @override
@@ -4830,9 +4875,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get processReportFasterInEnglish => 'We can process your report faster if you write in English.';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'Please provide at least one link to a game for review.';
 
   @override
   String by(String param) {
@@ -5412,7 +5454,13 @@ class AppLocalizationsHe extends AppLocalizations {
   String get downloadImported => 'הורד משחק מיובא';
 
   @override
+  String get downloadMyGames => 'Download my games';
+
+  @override
   String get downloadAllGames => 'הורדת כל המשחקים';
+
+  @override
+  String get downloadResults => 'Download results';
 
   @override
   String get crosstable => 'חשבון הנקודות';
@@ -6040,6 +6088,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get minimumRatedGames => 'מספר משחקים מדורגים מינימלי';
 
   @override
+  String get minimumAccountAge => 'Minimum account age';
+
+  @override
+  String get titledPlayersBypassRestriction => 'Titled players bypass this restriction.';
+
+  @override
   String get minimumRating => 'דירוג מינימלי';
 
   @override
@@ -6179,7 +6233,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get showMeEverything => 'הראו לי הכל';
 
   @override
-  String get lichessPatronInfo => 'ליצ\'ס הוא ארגון לטובת הכלל ותוכנת קוד פתוח חינמית.\nכל עלויות התפעול, הפיתוח והתוכן ממומנות אך ורק על ידי תרומות משתמשים.';
+  String get lichessPatronInfo => 'Lichess is a charity and entirely free/libre open source software. We depend on user donations to support our operating costs, development, and content. Without our generous community, we would not be able to keep the site running. Thank you for joining us!';
 
   @override
   String get nothingToSeeHere => 'אין כלום להצגה כאן, בינתיים.';
@@ -6210,6 +6264,11 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get clearSearch => 'ניקוי החיפוש';
+
+  @override
+  String searchInX(String param) {
+    return 'Search in \"$param\"';
+  }
 
   @override
   String thereAreNoResultsForX(String param) {
@@ -6999,6 +7058,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyKick => 'הסרה';
 
   @override
+  String get studyRemove => 'Remove';
+
+  @override
   String get studyLeaveTheStudy => 'צא/י מלוח הלמידה';
 
   @override
@@ -7030,9 +7092,6 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyOnlyContributorsCanRequestAnalysis => 'רק תורמי לוח הלמידה יכולים לבקש ניתוח ממוחשב.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'קבל/י ניתוח צד־שרת מלא של המסעים העיקריים (mainline).';
 
   @override
   String get studyMakeSureTheChapterIsComplete => 'ניתן לבקש ניתוח ממוחשב רק פעם אחת, ולכן ודאו שהפרק הושלם.';
@@ -7253,9 +7312,6 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyStart => 'שמירה';
 
   @override
-  String get studySave => 'שמירה';
-
-  @override
   String get studyClearChat => 'ניקוי הצ\'אט';
 
   @override
@@ -7276,13 +7332,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyGoodMove => 'מסע טוב';
 
   @override
-  String get studyMistake => 'טעות';
-
-  @override
   String get studyBrilliantMove => 'מסע מבריק';
-
-  @override
-  String get studyBlunder => 'טעות חמורה';
 
   @override
   String get studyInterestingMove => 'מסע מעניין';
@@ -7458,7 +7508,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get studyLoadGameFromTheWebTitle => 'Load a game from the web';
 
   @override
-  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/7fHIU0XI)<br>to load game moves in the chapter.';
+  String get studyLoadGameFromTheWebText => 'Paste a game URL<br>(like lichess.org/game/7fHIU0XI)<br>to load game moves in the chapter.';
 
   @override
   String get studyFromFenStringTitle => 'From a FEN string';
@@ -7489,6 +7539,27 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyWhiteDefeatBlackCanNotWin => 'הלבן הובס, אבל השחור אינו יכול לנצח';
+
+  @override
+  String get studyAnalysisEditor => 'Analysis editor';
+
+  @override
+  String get studyClearLocal => 'Clear local analysis?';
+
+  @override
+  String get studyClearPublished => 'Clear published analysis?';
+
+  @override
+  String get studyRequestAServerAnalysis => 'Request a server analysis';
+
+  @override
+  String get studyAnalyzeOnYourDevice => 'Analyse on your device';
+
+  @override
+  String get studySearchChapters => 'Search chapters';
+
+  @override
+  String get studySearchGames => 'Search games';
 
   @override
   String studyNbChapters(int count) {
@@ -7531,9 +7602,8 @@ class AppLocalizationsHe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'הדבק את טקסט הPGN שלך כאן, עד ל$count משחקים',
-      two: 'הדבק את טקסט הPGN שלך כאן, עד ל$count משחקים',
-      one: 'הדבק את טקסט הPGN שלך כאן, עד למשחק $count',
+      other: 'Paste games as PGN text here. For each game, a new chapter is created. The study can have up to $count chapters.',
+      one: 'Paste your PGN text here, up to $count game.',
     );
     return '$_temp0';
   }

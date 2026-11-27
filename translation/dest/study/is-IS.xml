@@ -48,7 +48,6 @@
   <string name="annotateWithGlyphs">Skýra með stafbrigðum</string>
   <string name="theChapterIsTooShortToBeAnalysed">Kaflinn er of stuttur til að hægt sé að greina hann.</string>
   <string name="onlyContributorsCanRequestAnalysis">Aðeins þátttakendur í stúderingu geta beðið um tölvugreiningu.</string>
-  <string name="getAFullComputerAnalysis">Fáðu ýtarlega tölvugreiningu á netþjóni á höfuðafbrigðinu.</string>
   <string name="makeSureTheChapterIsComplete">Gakktu úr skugga um að kaflanum sé lokið. Þú getur aðeins beðið um greiningu einu sinni.</string>
   <string name="allSyncMembersRemainOnTheSamePosition">Allir samstilltir meðlimir halda sama stað</string>
   <string name="shareChanges">Deila breytingum með áhorfendum og vista þær á netþjóninum</string>
@@ -99,10 +98,6 @@
   <string name="loadAPositionFromFen">Hlaða inn stöðu úr FEN</string>
   <string name="loadAGameFromPgn">Hlaða inn skákum úr PGN</string>
   <string name="automatic">Sjálfvirkt</string>
-  <plurals name="pasteYourPgnTextHereUpToNbGames" comment="It is possible to create multiple chapters in one go. Please try to convey this using a short translation.">
-    <item quantity="one">Límdu inn PGN-texta þinn hér, allt að %s skák</item>
-    <item quantity="other">Límdu inn skákir sem PGN-texta hér. Fyrir hverja skák er nýr kafli búinn til. Stúdering getur haft allt að %s kafla.</item>
-  </plurals>
   <string name="urlOfTheGame">Vefslóð skákanna, ein í hverri línu</string>
   <string name="createChapter">Búa til kafla</string>
   <string name="createStudy">Búa til stúderingu</string>
@@ -122,16 +117,13 @@
   <string name="noLetPeopleBrowseFreely">Nei: leyfa fólki að vafra frjálsmannlega</string>
   <string name="pinnedStudyComment">Fest athugasemd við stúderingu</string>
   <string name="start">Hefja</string>
-  <string name="save">Vista</string>
   <string name="clearChat">Strauja spjalli</string>
   <string name="deleteTheStudyChatHistory">Eyða spjallsögu stúderingar? Þessi aðgerð er óafturkallanleg!</string>
   <string name="deleteStudy">Eyða stúderingu</string>
   <string name="confirmDeleteStudy" comment="%s is replaced with the name of the study">Eyða allri stúderingu? Það er ekki aftur snúið! Sláðu inn nafn stúderingar í öryggisskyni: %s</string>
   <string name="whereDoYouWantToStudyThat">Hvar viltu stúdera það?</string>
   <string name="goodMove">Góður leikur</string>
-  <string name="mistake">Mistök</string>
   <string name="brilliantMove">Stórkostlegur leikur</string>
-  <string name="blunder">Afleikur</string>
   <string name="interestingMove">Áhugaverður leikur</string>
   <string name="dubiousMove" comment="dubiousMove&#10;A questionable move.">Vafasamur leikur</string>
   <string name="onlyMove" comment="onlyMove&#10;The only possible move. This is a label that can be placed in a study of a past game. It may not technically be the only move, but the only feasible one.">Eini leikurinn</string>

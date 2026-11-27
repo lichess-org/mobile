@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_layout.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/board_size_toggle_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_button.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
@@ -74,6 +75,93 @@ void main() {
             .isCurrentMove,
         isTrue,
       );
+    });
+
+    testWidgets('the bottom bar floats over the tab view on iOS only', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: AnalysisScreen(
+          options: AnalysisOptions.pgn(
+            id: const StringId('standalone'),
+            orientation: Side.white,
+            pgn: sanMoves,
+            isComputerAnalysisAllowed: false,
+            variant: Variant.standard,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(app);
+      await tester.pumpAndSettle();
+
+      final bottomInset = expectBottomBarOverTabView(tester);
+      // The moves scroll under the bar.
+      expect(
+        tester
+            .widget<SingleChildScrollView>(
+              find.descendant(
+                of: find.byType(TabBarView),
+                matching: find.byType(SingleChildScrollView),
+              ),
+            )
+            .padding,
+        EdgeInsets.only(bottom: bottomInset),
+      );
+    }, variant: kPlatformVariant);
+
+    group('board size toggle', () {
+      AnalysisScreen makeScreen() => AnalysisScreen(
+        options: AnalysisOptions.pgn(
+          id: const StringId('standalone'),
+          orientation: Side.white,
+          pgn: sanMoves,
+          isComputerAnalysisAllowed: false,
+          variant: Variant.standard,
+        ),
+      );
+
+      final toggleButton = find.byType(BoardSizeToggleButton);
+
+      testWidgets('switches between the full size board and the small board', (tester) async {
+        final app = await makeTestProviderScopeApp(tester, home: makeScreen());
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        // A phone opens with the full size board.
+        expect(toggleButton, findsOneWidget);
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isFalse);
+        expect(find.byIcon(CupertinoIcons.chevron_up), findsOneWidget);
+        final fullBoardSize = tester.getSize(find.byType(Chessboard)).width;
+
+        await tester.tap(toggleButton);
+        await tester.pumpAndSettle();
+
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isTrue);
+        expect(find.byIcon(CupertinoIcons.chevron_down), findsOneWidget);
+        expect(
+          tester.getSize(find.byType(Chessboard)).width,
+          moreOrLessEquals(fullBoardSize * kSmallBoardScale),
+        );
+
+        await tester.tap(toggleButton);
+        await tester.pumpAndSettle();
+
+        expect(tester.widget<BoardSizeToggleButton>(toggleButton).smallBoard, isFalse);
+        expect(tester.getSize(find.byType(Chessboard)).width, moreOrLessEquals(fullBoardSize));
+      }, variant: kPlatformVariant);
+
+      testWidgets('is not shown in landscape', (tester) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: makeScreen(),
+          surfaceSize: kTestSurfaceSize.flipped,
+        );
+        await tester.pumpWidget(app);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(toggleButton, findsNothing);
+      }, variant: kPlatformVariant);
     });
 
     testWidgets('move backwards and forward', (tester) async {
@@ -1166,8 +1254,8 @@ void main() {
     });
 
     group('Engine lines', () {
-      testWidgets('are displayed', (tester) async {
-        await makeEngineTestApp(tester);
+      testWidgets('are displayed if enabled', (tester) async {
+        await makeEngineTestApp(tester, showEngineLines: true);
         // ensure that the eval is displayed and pending eval throttle time is over
         await tester.pump(kRequestEvalDebounceDelay + kEngineEvalEmissionThrottleDelay);
         expect(find.byType(Engineline), findsOne);
@@ -1221,6 +1309,9 @@ void main() {
               EngineEvaluationPrefState.defaults
                   .copyWith(numEvalLines: 1, isEnabled: true)
                   .toJson(),
+            ),
+            PrefCategory.analysis.storageKey: jsonEncode(
+              AnalysisPrefs.defaults.copyWith(showEngineLines: true).toJson(),
             ),
           },
           home: const AnalysisScreen(

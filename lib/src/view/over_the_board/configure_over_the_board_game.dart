@@ -25,7 +25,7 @@ void showConfigureGameSheet(
   String? initialFen,
 }) {
   final double screenHeight = MediaQuery.heightOf(context);
-  showModalBottomSheet<void>(
+  showAdaptiveBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     isDismissible: isDismissible,
@@ -301,7 +301,7 @@ class _ConfigureOverTheBoardGameSheetState()
                     Navigator.pop(context);
                   }
                 : null,
-            child: Text(context.l10n.play, style: Styles.bold),
+            child: Text(context.l10n.play),
           ),
         ),
       ],
@@ -310,9 +310,8 @@ class _ConfigureOverTheBoardGameSheetState()
 }
 
 void showConfigureDisplaySettings(BuildContext context) {
-  showModalBottomSheet<void>(
+  showAdaptiveBottomSheet<void>(
     context: context,
-    isDismissible: true,
     showDragHandle: true,
     builder: (BuildContext context) {
       return const OverTheBoardDisplaySettings();

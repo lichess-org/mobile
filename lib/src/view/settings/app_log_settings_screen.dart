@@ -19,7 +19,7 @@ import 'package:share_plus/share_plus.dart';
 
 final Logger _logger = Logger('AppLogSettingsScreen');
 
-final _logDateFormatter = DateFormat.yMd().add_Hms();
+DateFormat get _logDateFormatter => DateFormat.yMd().add_Hms();
 
 class const AppLogSettingsScreen({super.key}) extends ConsumerStatefulWidget {
   static Route<dynamic> buildRoute() {
@@ -70,12 +70,13 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
     final logs = asyncState.value?.logs ?? [];
 
     return PlatformScaffold(
+      plainList: true,
       appBar: PlatformAppBar(
-        title: const Text('App Logs'),
+        title: Text(context.l10n.mobileAppLogs),
         actions: [
           if (logs.isNotEmpty)
             IconButton(
-              tooltip: context.l10n.studyShareAndExport,
+              tooltip: context.l10n.mobileShare,
               icon: const Icon(Icons.share),
               onPressed: () => launchShareDialog(
                 context,
@@ -84,12 +85,12 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
             ),
           if (asyncState.value?.isDeleteButtonVisible == true)
             IconButton(
-              tooltip: 'Delete all logs',
+              tooltip: context.l10n.mobileClearButton,
               icon: const Icon(Icons.delete_sweep),
               onPressed: () {
                 showConfirmDialog<dynamic>(
                   context,
-                  title: const Text('Delete all logs'),
+                  title: Text(context.l10n.mobileDeleteAllLogsConfirmation),
                   onConfirm: () {
                     ref.read(appLogServiceProvider).clear();
                     ref.read(appLogPaginatorProvider(_searchQuery).notifier).deleteAll();
@@ -107,6 +108,7 @@ class _AppLogSettingsScreenState() extends ConsumerState<AppLogSettingsScreen> {
                 Expanded(
                   child: PlatformSearchBar(
                     controller: _searchController,
+                    inAppBar: true,
                     hintText: context.l10n.searchSearch,
                     onChanged: (value) => setState(() {
                       _searchQuery = value.isEmpty ? null : value;

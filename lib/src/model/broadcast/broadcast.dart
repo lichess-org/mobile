@@ -118,6 +118,7 @@ typedef BroadcastTournamentInformation = ({
   BroadcastTournamentDates? dates,
   Uri? website,
   Uri? standings,
+  Uri? regulations,
 });
 
 typedef BroadcastTournamentDates = ({DateTime startsAt, DateTime? endsAt});
