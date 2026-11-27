@@ -165,18 +165,18 @@ packages:
     dependency: transitive
     description:
       name: built_collection
-      sha256: "44922ecebd8e3d0cef743dadd3b54df4e87e2a4c52a29465a1872aa9e192caa8"
+      sha256: "68c430bce63c47a00d7c978545777d2f6315bb1dbbb098d4f60cfd3148b8bc61"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.2"
+    version: "6.0.0"
   built_value:
     dependency: transitive
     description:
       name: built_value
-      sha256: f87ea98192116f7093cb214551ce1929caae0681fdba282b3d8b4462adee7bb7
+      sha256: c909bcf7b192256e8dc710efb11df369fdf069aa4f0615f49371d00eb0d7679f
       url: "https://pub.dev"
     source: hosted
-    version: "8.13.0"
+    version: "8.13.1"
   characters:
     dependency: transitive
     description:
@@ -1034,10 +1034,10 @@ packages:
     dependency: "direct main"
     description:
       name: liquid_glass_widgets
-      sha256: "639a658ef65fc976d81eab6a19106a6b226876c6d5f4b0ef1a19d067bb831e7a"
+      sha256: "59456545d6b079280643c54309e33f0e6c0eb27199ba49c3dbdb2da0592eb0ae"
       url: "https://pub.dev"
     source: hosted
-    version: "1.21.0"
+    version: "1.22.0"
   listen:
     dependency: transitive
     description:
