@@ -44,6 +44,7 @@ final _logger = Logger('App');
 
 const List<String> _kAndroidKidModeWidgetProviders = [
   'org.lichess.mobileV2.widgets.CommunityWidgetProvider',
+  'org.lichess.mobileV2.widgets.BlogWidgetProvider',
 ];
 const String _kIosAppGroupId = 'group.org.lichess.mobileV2.LichessWidgets';
 const List<String> _kIosBlogWidgetKinds = [

@@ -124,6 +124,9 @@ const UNTRANSLATED_ANDROID_STRINGS = {
   daily_puzzle_error: "Couldn't load puzzle",
   community_description: 'Shows news from the Community',
   no_community_news: 'No community news available',
+  blog_title: "Lichess's Blog",
+  blog_description: 'Shows blog news',
+  no_blog_news: 'No blog news',
 };
 
 const ANDROID_RES_DIR = path.join(ROOT, 'android', 'app', 'src', 'main', 'res');
